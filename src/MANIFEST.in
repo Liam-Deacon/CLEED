@@ -1,0 +1,5 @@
+include *.txt *.py *.rst
+recursive-include cleed-gui *.py *.txt *.rst *.pyw *.pyx
+recursive-include cleed-gui/gui *.ui *.py *.bat *.sh *.svg *.png *.qrc
+recursive-include cleed-gui/res *
+recursive-include cleed-gui/doc *

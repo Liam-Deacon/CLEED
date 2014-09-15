@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>980</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::CustomContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>CLEED-IV</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res/res.qrc">
+    <normaloff>:/CLEED_logo.png</normaloff>:/CLEED_logo.png</iconset>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>24</width>
+    <height>24</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="background">
+       <brush brushstyle="NoBrush">
+        <color alpha="255">
+         <red>160</red>
+         <green>160</green>
+         <blue>160</blue>
+        </color>
+       </brush>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>980</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="sessionMenu">
+     <property name="title">
+      <string>S&amp;ession</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res/res.qrc">
+       <normaloff>:/session.svg</normaloff>:/session.svg</iconset>
+     </property>
+     <addaction name="saveSessionAction"/>
+     <addaction name="restoreSessionAction"/>
+    </widget>
+    <widget class="QMenu" name="exportMenu">
+     <property name="title">
+      <string>&amp;Export</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res/res.qrc">
+       <normaloff>:/export.svg</normaloff>:/export.svg</iconset>
+     </property>
+     <addaction name="exportXYZAction"/>
+     <addaction name="exportIVCurvesAction"/>
+    </widget>
+    <widget class="QMenu" name="recentFilesMenu">
+     <property name="title">
+      <string>&amp;Recent</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res/res.qrc">
+       <normaloff>:/clock.svg</normaloff>:/clock.svg</iconset>
+     </property>
+    </widget>
+    <addaction name="newAction"/>
+    <addaction name="recentFilesMenu"/>
+    <addaction name="separator"/>
+    <addaction name="importAction"/>
+    <addaction name="exportMenu"/>
+    <addaction name="separator"/>
+    <addaction name="saveAction"/>
+    <addaction name="saveAsAction"/>
+    <addaction name="saveAllAction"/>
+    <addaction name="sessionMenu"/>
+    <addaction name="separator"/>
+    <addaction name="settingsAction"/>
+    <addaction name="separator"/>
+    <addaction name="printAction"/>
+    <addaction name="separator"/>
+    <addaction name="exitAction"/>
+   </widget>
+   <widget class="QMenu" name="editMenu">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="copyAction"/>
+    <addaction name="cutAction"/>
+    <addaction name="pasteAction"/>
+    <addaction name="selectAllAction"/>
+    <addaction name="separator"/>
+    <addaction name="undoAction"/>
+    <addaction name="redoAction"/>
+   </widget>
+   <widget class="QMenu" name="helpMenu">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="helpAction"/>
+    <addaction name="helpCleedAction"/>
+    <addaction name="separator"/>
+    <addaction name="updateAction"/>
+    <addaction name="separator"/>
+    <addaction name="aboutAction"/>
+    <addaction name="aboutQtAction"/>
+    <addaction name="separator"/>
+    <addaction name="contactAction"/>
+    <addaction name="websiteAction"/>
+   </widget>
+   <widget class="QMenu" name="viewMenu">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="hideMenu">
+     <property name="title">
+      <string>&amp;Hide</string>
+     </property>
+     <addaction name="hideAllAction"/>
+    </widget>
+    <widget class="QMenu" name="showMenu">
+     <property name="title">
+      <string>&amp;Show</string>
+     </property>
+     <addaction name="showAllAction"/>
+    </widget>
+    <widget class="QMenu" name="toolbarsMenu">
+     <property name="title">
+      <string>&amp;Toolbars</string>
+     </property>
+     <addaction name="mdiAction"/>
+    </widget>
+    <addaction name="showMenu"/>
+    <addaction name="hideMenu"/>
+    <addaction name="toolbarsMenu"/>
+    <addaction name="separator"/>
+    <addaction name="showExplorerAction"/>
+    <addaction name="showPropertiesAction"/>
+    <addaction name="showLogAction"/>
+   </widget>
+   <widget class="QMenu" name="processMenu">
+    <property name="title">
+     <string>&amp;Process</string>
+    </property>
+    <widget class="QMenu" name="scriptingMenu">
+     <property name="title">
+      <string>Scripting...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res/res.qrc">
+       <normaloff>:/hash.svg</normaloff>:/hash.svg</iconset>
+     </property>
+     <widget class="QMenu" name="recentScriptsMenu">
+      <property name="title">
+       <string>Recent</string>
+      </property>
+      <property name="icon">
+       <iconset resource="res/res.qrc">
+        <normaloff>:/clock.svg</normaloff>:/clock.svg</iconset>
+      </property>
+      <addaction name="separator"/>
+     </widget>
+     <addaction name="lastUsedScriptAction"/>
+     <addaction name="separator"/>
+     <addaction name="recentScriptsMenu"/>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="processIVCurvesAction"/>
+    <addaction name="generateAction"/>
+    <addaction name="scriptingMenu"/>
+   </widget>
+   <widget class="QMenu" name="windowMenu">
+    <property name="title">
+     <string>&amp;Window</string>
+    </property>
+    <addaction name="minimiseAction"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="editMenu"/>
+   <addaction name="viewMenu"/>
+   <addaction name="processMenu"/>
+   <addaction name="windowMenu"/>
+   <addaction name="helpMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="newAction"/>
+   <addaction name="openAction"/>
+   <addaction name="saveAction"/>
+   <addaction name="printAction"/>
+   <addaction name="separator"/>
+   <addaction name="copyAction"/>
+   <addaction name="cutAction"/>
+   <addaction name="pasteAction"/>
+   <addaction name="separator"/>
+   <addaction name="settingsAction"/>
+   <addaction name="separator"/>
+   <addaction name="helpAction"/>
+   <addaction name="contactAction"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidgetProjects">
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
+   <property name="toolTip">
+    <string>CLEED Projects</string>
+   </property>
+   <property name="statusTip">
+    <string>CLEED Projects</string>
+   </property>
+   <property name="windowTitle">
+    <string>Project Explorer</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_5">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QTreeWidget" name="treeWidgetFiles">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <column>
+        <property name="text">
+         <string>Projects</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidgetProperties">
+   <property name="windowTitle">
+    <string>Properties</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_6"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidgetLog">
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllDockWidgetAreas</set>
+   </property>
+   <property name="windowTitle">
+    <string>Log</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_10">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QTabWidget" name="tabWidgetLog">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tabOutput">
+        <attribute name="icon">
+         <iconset resource="res/res.qrc">
+          <normaloff>:/comment_alt2_stroke_28x32.png</normaloff>:/comment_alt2_stroke_28x32.png</iconset>
+        </attribute>
+        <attribute name="title">
+         <string>Output</string>
+        </attribute>
+        <attribute name="toolTip">
+         <string>Logging for GUI</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QTextEdit" name="textEditLog">
+           <property name="documentTitle">
+            <string>CLEED Log</string>
+           </property>
+           <property name="lineWrapMode">
+            <enum>QTextEdit::NoWrap</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabCommands">
+        <attribute name="icon">
+         <iconset resource="res/res.qrc">
+          <normaloff>:/hourglass.svg</normaloff>:/hourglass.svg</iconset>
+        </attribute>
+        <attribute name="title">
+         <string>Command History</string>
+        </attribute>
+        <attribute name="toolTip">
+         <string>list of commands to refer back to</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QListWidget" name="listWidgetCommands"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabProgress">
+        <attribute name="icon">
+         <iconset resource="res/res.qrc">
+          <normaloff>:/loop_alt2_32x28.png</normaloff>:/loop_alt2_32x28.png</iconset>
+        </attribute>
+        <attribute name="title">
+         <string>Progress</string>
+        </attribute>
+        <attribute name="toolTip">
+         <string>csearch progress for current model</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QTableWidget" name="tableProgress">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>561</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="textElideMode">
+            <enum>Qt::ElideRight</enum>
+           </property>
+           <column>
+            <property name="text">
+             <string>Iteration</string>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/loop_alt2_32x28.png</normaloff>:/loop_alt2_32x28.png</iconset>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Positions</string>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/atom_pos.svg</normaloff>:/atom_pos.svg</iconset>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Theta</string>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/theta.svg</normaloff>:/theta.svg</iconset>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Phi</string>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/phi.svg</normaloff>:/phi.svg</iconset>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Rf</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Shift</string>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/graph_shift_thick.svg</normaloff>:/graph_shift_thick.svg</iconset>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Rg</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Rt</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Time</string>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/clock.svg</normaloff>:/clock.svg</iconset>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="labelProgress">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Best:&lt;/span&gt; [# ]  Rp =  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>Display Graph</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="copyAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/copy.svg</normaloff>:/copy.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="cutAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/Scissors_icon_black.svg</normaloff>:/Scissors_icon_black.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="pasteAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/clipboard.svg</normaloff>:/clipboard.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="newAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/document_alt_stroke.svg</normaloff>:/document_alt_stroke.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New...</string>
+   </property>
+   <property name="toolTip">
+    <string>Create new...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="openAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/folder_fill.svg</normaloff>:/folder_fill.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open an existing file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="saveAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/save.svg</normaloff>:/save.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="saveSessionAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/sessionSave.svg</normaloff>:/sessionSave.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save S&amp;tate</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
+   </property>
+  </action>
+  <action name="restoreSessionAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/sessionRestore.svg</normaloff>:/sessionRestore.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Restore</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
+  <action name="settingsAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/wrench.svg</normaloff>:/wrench.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Properties</string>
+   </property>
+  </action>
+  <action name="printAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/print.svg</normaloff>:/print.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="exitAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/exit.svg</normaloff>:/exit.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="updateAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/rss_alt.svg</normaloff>:/rss_alt.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Update</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="helpAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/book.svg</normaloff>:/book.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="helpCleedAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/question.svg</normaloff>:/question.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;CLEED Help</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+F1</string>
+   </property>
+  </action>
+  <action name="aboutQtAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/qt.svg</normaloff>:/qt.svg</iconset>
+   </property>
+   <property name="text">
+    <string>About &amp;Qt</string>
+   </property>
+  </action>
+  <action name="contactAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/mail.svg</normaloff>:/mail.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Contact</string>
+   </property>
+   <property name="toolTip">
+    <string>Contact Developers</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="aboutAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/info.svg</normaloff>:/info.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="saveAllAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/saveAll.svg</normaloff>:/saveAll.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save A&amp;ll</string>
+   </property>
+  </action>
+  <action name="saveAsAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/saveAs.svg</normaloff>:/saveAs.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="hideAllAction">
+   <property name="text">
+    <string>&amp;All</string>
+   </property>
+  </action>
+  <action name="showAllAction">
+   <property name="text">
+    <string>&amp;All</string>
+   </property>
+  </action>
+  <action name="mdiAction">
+   <property name="text">
+    <string>&amp;MDI</string>
+   </property>
+  </action>
+  <action name="minimiseAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/fullscreen_exit_alt.svg</normaloff>:/fullscreen_exit_alt.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Minimise</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="websiteAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/link.svg</normaloff>:/link.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Visit Website</string>
+   </property>
+  </action>
+  <action name="showExplorerAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/folder_fill.svg</normaloff>:/folder_fill.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Show &amp;Explorer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+É</string>
+   </property>
+  </action>
+  <action name="showPropertiesAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/equalizer_32x32.png</normaloff>:/equalizer_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show &amp;Properties</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+P</string>
+   </property>
+  </action>
+  <action name="showLogAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/article.svg</normaloff>:/article.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Show &amp;Log</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+L</string>
+   </property>
+  </action>
+  <action name="processIVCurvesAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/graph_dash.svg</normaloff>:/graph_dash.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;IV curves</string>
+   </property>
+  </action>
+  <action name="generateAction">
+   <property name="text">
+    <string>Generate</string>
+   </property>
+  </action>
+  <action name="importAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/import.svg</normaloff>:/import.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Import...</string>
+   </property>
+   <property name="toolTip">
+    <string>Import model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="exportXYZAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/unitcell.svg</normaloff>:/unitcell.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;XYZ model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+X</string>
+   </property>
+  </action>
+  <action name="exportIVCurvesAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/graph_dash.svg</normaloff>:/graph_dash.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;IV curves</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+I</string>
+   </property>
+  </action>
+  <action name="undoAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/undo.svg</normaloff>:/undo.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="redoAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/redo2.svg</normaloff>:/redo2.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="selectAllAction">
+   <property name="text">
+    <string>&amp;Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="printPreviewAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/print_preview.svg</normaloff>:/print_preview.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Print Pre&amp;view</string>
+   </property>
+  </action>
+  <action name="lastUsedScriptAction">
+   <property name="icon">
+    <iconset resource="res/res.qrc">
+     <normaloff>:/spin.svg</normaloff>:/spin.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Last Used...</string>
+   </property>
+   <property name="toolTip">
+    <string>Launch Last Used Script</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+L</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="res/res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

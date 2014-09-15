@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   width="20px"
+   height="32px"
+   viewBox="0 0 20 32"
+   style="enable-background:new 0 0 20 32;"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lightbulb.svg"><metadata
+   id="metadata16"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs14" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="656"
+   inkscape:window-height="480"
+   id="namedview12"
+   showgrid="false"
+   inkscape:zoom="7.375"
+   inkscape:cx="10"
+   inkscape:cy="16"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg2" />
+<g
+   id="Layer_1">
+</g>
+<g
+   id="lightbulb"
+   style="fill:#84be0e;fill-opacity:1">
+	<g
+   id="g6"
+   style="fill:#84be0e;fill-opacity:1">
+		<path
+   style="fill:#84be0e;fill-opacity:1"
+   d="M10,4.008c3.312,0,6,2.699,6,6.016c0,1.895-0.863,3.637-2.375,4.773    c-2.256,1.707-3.168,3.594-3.482,5.18H9.857c-0.312-1.586-1.227-3.473-3.484-5.18c-1.508-1.137-2.375-2.879-2.375-4.773    C3.998,6.707,6.689,4.008,10,4.008 M10,0C4.477,0,0,4.488,0,10.023C0,13.305,1.545,16.172,3.969,18    c1.115,0.844,2.035,1.93,2.035,3.43v2.555H14V21.43c0-1.5,0.918-2.586,2.031-3.43C18.457,16.172,20,13.305,20,10.023    C20,4.488,15.523,0,10,0L10,0z"
+   id="path8" />
+		<rect
+   x="6.004"
+   y="27.992"
+   style="fill:#84be0e;fill-opacity:1"
+   width="7.996"
+   height="4.008"
+   id="rect10" />
+	</g>
+</g>
+</svg>

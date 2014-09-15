@@ -1,0 +1,5153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>617</width>
+    <height>635</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>LEED-PyV</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/cleed.ico</normaloff>:/cleed.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tab_Main">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>0</y>
+      <width>611</width>
+      <height>591</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab_overview">
+     <attribute name="title">
+      <string>Overview</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_Command_Centre">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>581</width>
+        <height>541</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Model Command Centre</string>
+      </property>
+      <widget class="QGroupBox" name="groupBox_ModelOptions">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>40</y>
+         <width>221</width>
+         <height>111</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Model Options</string>
+       </property>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Complete">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>60</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Mark as 'Completed'&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Halts further iterations of run &amp;amp; moves the run into the completed list&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/dialog-apply.png</normaloff>:/dialog-apply.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Remove">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>60</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Remove Run&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Stops run &amp;amp; removes it from model-tree&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/list-remove-4.png</normaloff>:/list-remove-4.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Delete">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>60</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Remove Run&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Stops run &amp;amp; removes it from model-tree&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/dialog-cancel-3.png</normaloff>:/dialog-cancel-3.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Add">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Add Run...&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Append a pre-configured model to the Model tree&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/list-add-4.png</normaloff>:/list-add-4.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Refresh">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>60</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Refresh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Gets Rp factor for selected model &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/view-refresh-4.png</normaloff>:/view-refresh-4.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Directory">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Open Folder...&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Displays model folder&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/folder.png</normaloff>:/folder.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_New">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;New Model&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create a new model...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/edit-copy-6.png</normaloff>:/edit-copy-6.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Export">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Export...&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Export selected completed model atoms into Jmol &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/document-export-4.png</normaloff>:/document-export-4.png</iconset>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Edit">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Edit Model...&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Alter input, bulk &amp;amp; ctrl files of selected model&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/document-edit.png</normaloff>:/document-edit.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Model_Import">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Import&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Import model from Jmol/gdis formats&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QTreeWidget" name="tree_Models">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>311</width>
+         <height>281</height>
+        </rect>
+       </property>
+       <property name="columnCount">
+        <number>1</number>
+       </property>
+       <column>
+        <property name="text">
+         <string>Models</string>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>localhost</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/computer-2.png</normaloff>:/computer-2.png</iconset>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">Active</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/gnome-schedule.png</normaloff>:/gnome-schedule.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Queued</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/player-time-2.png</normaloff>:/player-time-2.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Idle</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/media-playback-pause-4.png</normaloff>:/media-playback-pause-4.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stopped</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/dialog-block.png</normaloff>:/dialog-block.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Completed</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/dialog-apply.png</normaloff>:/dialog-apply.png</iconset>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>remote</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/network-idle.png</normaloff>:/network-idle.png</iconset>
+        </property>
+       </item>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_RunOptions">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>160</y>
+         <width>221</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Run Options</string>
+       </property>
+       <widget class="QCommandLinkButton" name="cmd_btn_Run_Stop">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Stop&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Halts selected run!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/media-playback-stop-8.png</normaloff>:/media-playback-stop-8.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Run_Pause">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Pause&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Saves best configuration to input file ready for relaunch&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/media-playback-pause-8.png</normaloff>:/media-playback-pause-8.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Run_Start">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Start&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Creates a new instance of csearch for selected model&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;NOTE will not start if # of active runs exceeds limit&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/media-playback-start-8.png</normaloff>:/media-playback-start-8.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Run_Loop">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Loop&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Continually re-run once finished&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/media-seek-forward-8.png</normaloff>:/media-seek-forward-8.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QCommandLinkButton" name="cmd_btn_Run_Queue">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>20</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Queue&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Add run to Queued tree&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/media-skip-forward-8.png</normaloff>:/media-skip-forward-8.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>330</y>
+         <width>171</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Recent Model History</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="table_History">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>350</y>
+         <width>561</width>
+         <height>192</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>561</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="textElideMode">
+        <enum>Qt::ElideRight</enum>
+       </property>
+       <column>
+        <property name="text">
+         <string>Iteration</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/view-refresh-2.png</normaloff>:/view-refresh-2.png</iconset>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Positions</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/geogebra.png</normaloff>:/geogebra.png</iconset>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Theta</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/theta.png</normaloff>:/theta.png</iconset>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Phi</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/phi.gif</normaloff>:/phi.gif</iconset>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Rf</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Shift</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/741px-Phase_shift.svg.png</normaloff>:/741px-Phase_shift.svg.png</iconset>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Rg</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Rt</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Time</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/ktimer.png</normaloff>:/ktimer.png</iconset>
+        </property>
+       </column>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_Information">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>240</y>
+         <width>221</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Information</string>
+       </property>
+       <widget class="QLabel" name="lbl_Info_Runtime">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>21</y>
+          <width>121</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Total Running Time</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_RpInfo">
+        <property name="geometry">
+         <rect>
+          <x>84</x>
+          <y>40</y>
+          <width>26</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;More info...&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Display detailed best fit information&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/help-contents.png</normaloff>:/help-contents.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>18</width>
+          <height>18</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbl_Info_Rp">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>21</y>
+          <width>71</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Best Rp</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="inp_Info_BestRp">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>41</y>
+          <width>71</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="lineWrapMode">
+         <enum>QTextEdit::NoWrap</enum>
+        </property>
+        <property name="lineWrapColumnOrWidth">
+         <number>0</number>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; color:#d8d8d8;&quot;&gt;Rp&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="inp_Info_RunTime">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>41</y>
+          <width>91</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="lineWrapMode">
+         <enum>QTextEdit::NoWrap</enum>
+        </property>
+        <property name="lineWrapColumnOrWidth">
+         <number>0</number>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; color:#bfbfbf;&quot;&gt;hh:mm:ss&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QSpinBox" name="spin_Total_Runs">
+       <property name="geometry">
+        <rect>
+         <x>503</x>
+         <y>325</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>2</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Allowed_Run_Total">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>328</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Total Allowed Active Runs</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_settings">
+     <attribute name="title">
+      <string>Settings</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_Settings_CLEED">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>441</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>CLEED</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <widget class="QLabel" name="lbl_CLEEDdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>25</y>
+         <width>241</width>
+         <height>15</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Path to cleed BIN directory:-</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_findBINdir">
+       <property name="geometry">
+        <rect>
+         <x>381</x>
+         <y>50</y>
+         <width>21</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inp_BINdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>45</y>
+         <width>371</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>/usr/bin/cleed_binaries</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_findPHASEdir">
+       <property name="geometry">
+        <rect>
+         <x>381</x>
+         <y>120</y>
+         <width>21</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inp_PHASEdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>115</y>
+         <width>371</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>/usr/bin/cleed_binaries/PHASE</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_PHASEdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>95</y>
+         <width>241</width>
+         <height>15</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Path to cleed PHASE directory:-</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_Settings_Models">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>441</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Models</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <widget class="QLabel" name="lbl_modelsdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>241</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Path to models root directory:-</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_findmodelrootdir">
+       <property name="geometry">
+        <rect>
+         <x>381</x>
+         <y>45</y>
+         <width>21</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inp_modelrootdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>371</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>/home/${USER}/cleed_models</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_Settings_Remote">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>370</y>
+        <width>481</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>Remote Execution</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <widget class="QLineEdit" name="inp_Remote_User">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>30</y>
+         <width>113</width>
+         <height>26</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_User">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>35</y>
+         <width>71</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Username:</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="chk_Remote">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>70</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Remote Login</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inp_Remote_Password">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>68</y>
+         <width>113</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Password">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>70</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Password:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Host">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>34</y>
+         <width>41</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Host:</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inp_Remote_Host">
+       <property name="geometry">
+        <rect>
+         <x>260</x>
+         <y>30</y>
+         <width>113</width>
+         <height>26</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_Remote_Test">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>30</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Test Connection&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Determines whether remote login successful&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/network-wired-3.png</normaloff>:/network-wired-3.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_Remote_Load">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>70</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Store&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Save Login Details&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-open-4.png</normaloff>:/document-open-4.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_Settings_MakeIV">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>280</y>
+        <width>441</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Make IV</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <widget class="QLabel" name="lbl_mkivdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>241</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Path to cleed mkiv directory:-</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_findmkivdir">
+       <property name="geometry">
+        <rect>
+         <x>381</x>
+         <y>45</y>
+         <width>21</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inp_mkivdir">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>371</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>/usr/bin/cleed_binaries</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="btn_Remote_Tunnel">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>400</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;SSH Tunnel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Provide additional login details for complex network infrastructures&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>:/network-idle.png</normaloff>:/network-idle.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_Remote_Store">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>440</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Store&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Save Login Details&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>:/document-save-5.png</normaloff>:/document-save-5.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="inp_Editor">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>320</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>kwrite</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_Editor">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>300</y>
+        <width>62</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Editor</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_mkiv">
+     <attribute name="title">
+      <string>Make IV</string>
+     </attribute>
+     <widget class="QToolBox" name="toolBox_mkiv">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>391</width>
+        <height>431</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="mkiv_input">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>100</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Input File</string>
+       </attribute>
+       <widget class="QTextEdit" name="txt_mkiv_input">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>391</width>
+          <height>371</height>
+         </rect>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="acceptRichText">
+         <bool>true</bool>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="mkiv_positions">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>391</width>
+         <height>377</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Positions File</string>
+       </attribute>
+       <widget class="QTextEdit" name="txt_mkiv_positions">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>391</width>
+          <height>371</height>
+         </rect>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QLineEdit" name="inp_modeldir_mkiv">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>351</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>/home/${USER}/cleed_models/test_model</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_CurrentModel_mkiv">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Model Directory:-</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_findmodeldir_mkiv">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>38</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>:/document-open-4.png</normaloff>:/document-open-4.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_mkiv_Actions">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>160</y>
+        <width>121</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Make IV Actions</string>
+      </property>
+      <widget class="QPushButton" name="btn_mkiv_Mask">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Create/Show Mask&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Displays Mask&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Mask</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/Drama-icon.png</normaloff>:/Drama-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>35</width>
+         <height>35</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_mkiv_ShowMesh">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Show Mesh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Displays superimposed mesh on top of reference image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Show Mesh</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/games-config-board.png</normaloff>:/games-config-board.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>18</width>
+         <height>18</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_mkiv_Check_IVs">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>260</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Check IVs</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/office-chart-line.png</normaloff>:/office-chart-line.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_mkiv_Convert">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>100</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Convert Images&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Change raw IV data images into TIFF format for mkiv&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Convert</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/archive-extract-2.png</normaloff>:/archive-extract-2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_mkiv_Run">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>220</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Run mkiv</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/system-2.png</normaloff>:/system-2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_mkiv_EditFile">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>180</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Configure</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/configure-2.png</normaloff>:/configure-2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_mkiv_Rename">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Rename/Renumber Images&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Changes naming scheme of orginal images&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Rename</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/format-wordwrap.png</normaloff>:/format-wordwrap.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_mkiv_Smooth">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>300</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Fourier Smooth&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;FFT to remove spikes in IV curves&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Smooth IVs</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/gvb.png</normaloff>:/gvb.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>110</y>
+        <width>100</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Overview</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>:/edit-find-4.png</normaloff>:/edit-find-4.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Phase Shifts</string>
+     </attribute>
+     <widget class="QTreeWidget" name="treeWidget_Phsh0">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>441</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <attribute name="headerDefaultSectionSize">
+       <number>225</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>phsh0 input</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>phsh0 output</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTreeWidget" name="treeWidget_Phsh1">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>200</y>
+        <width>441</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <attribute name="headerDefaultSectionSize">
+       <number>225</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>phsh1 input</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>phsh1 output</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTreeWidget" name="treeWidget_Phsh3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>390</y>
+        <width>441</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <attribute name="headerDefaultSectionSize">
+       <number>225</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>phsh3 input</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>phsh3 output</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+       </property>
+      </column>
+     </widget>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>10</y>
+        <width>131</width>
+        <height>551</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="step1">
+       <widget class="QGroupBox" name="groupBox_phsh0">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>120</width>
+          <height>351</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Step 1</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <widget class="QPushButton" name="btn_phsh0Add">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>90</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Add atorb&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Appends atorb file to list making up atomic.i&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#505050;&quot;&gt;If there are&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#505050;&quot;&gt; n &lt;/span&gt;&lt;span style=&quot; color:#505050;&quot;&gt;atoms in the &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#505050;&quot;&gt;unit cel&lt;/span&gt;&lt;span style=&quot; color:#505050;&quot;&gt;l then there&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#505050;&quot;&gt;should be &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#505050;&quot;&gt;n&lt;/span&gt;&lt;span style=&quot; color:#505050;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#505050;&quot;&gt;atorb&lt;/span&gt;&lt;span style=&quot; color:#505050;&quot;&gt; files &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#505050;&quot;&gt;in the order they appear&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#505050;&quot;&gt;in cluster.i&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Add atorb</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/distributions-scientific_linux.png</normaloff>:/distributions-scientific_linux.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh0Edit">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>55</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit atorb*&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select atorb file to be edited...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Edit atorb</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-6.png</normaloff>:/edit-6.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh0Run">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>125</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Run phsh0&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Executes phsh0 for each atorb file&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;identical inputs will be ignored, but&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;still appended to atomic.i &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Run phsh0</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/system-run-5.png</normaloff>:/system-run-5.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="Line" name="line">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>155</y>
+           <width>101</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh0Remove">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>175</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Remove file&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Removes selected atorb &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;entry from input list &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Remove  </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/list-remove-4.png</normaloff>:/list-remove-4.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh0Delete">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>209</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Delete File&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Deletes selected file from harddisk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Delete file</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-delete-2.png</normaloff>:/edit-delete-2.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh0Reset">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>242</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reset&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Reset all entries&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Reset    </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-undo-3.png</normaloff>:/edit-undo-3.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh0New">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;New atorb&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Creates new atorb file&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;for input into phsh0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>New atorb</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/document-new-6.png</normaloff>:/document-new-6.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_phsh0Model">
+         <property name="geometry">
+          <rect>
+           <x>14</x>
+           <y>310</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Model Name&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Appends string to output files&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#313131;&quot;&gt;i.e. &amp;quot;ZnO&amp;quot; will be added to:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#313131;&quot;&gt;atorb*_ZnO.i&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#313131;&quot;&gt;atomic_ZnO.i&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#313131;&quot;&gt;mufftin_ZnO.i&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#313131;&quot;&gt;phsh*_ZnO&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="Line" name="line_2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>273</y>
+           <width>101</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>290</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Model Name</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="step2">
+       <widget class="QGroupBox" name="groupBox_phsh1">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>120</width>
+          <height>441</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Step 2</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <widget class="QPushButton" name="btn_phsh1CalcMTZ">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>280</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Calc MTZ&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Computes the muffin tin potential for&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;both bulk &amp;amp; slab cluster files&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Calc MTZ</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/accessories-calculator-3.png</normaloff>:/accessories-calculator-3.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1Edit">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>88</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit atomic.i&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Edit atomic.i for phsh1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Edit atomic</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-6.png</normaloff>:/edit-6.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1Add">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>19</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Add at*.i&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Add at.i file to phsh1 input list...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Add at*.i  </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/text-x-script.png</normaloff>:/text-x-script.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1AddCluster">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>138</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Add Bulk&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Add bulk cluster.i file to phsh1 input list...&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#505050;&quot;&gt;NOTE: There can be only one bulk file - &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#505050;&quot;&gt;any new bulk file will replace the older one&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Add Bulk</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/dialog-more.png</normaloff>:/dialog-more.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>18</width>
+           <height>18</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1EditCluster">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>173</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit Bulk&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Edit bulk file for phsh1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Edit Bulk </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-2.png</normaloff>:/edit-2.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1EditSlab">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>245</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit Slab&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Edit slab file for phsh1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Edit Slab </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-2.png</normaloff>:/edit-2.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1AddSlab">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>210</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Add Slab&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Add slab cluster.i file to phsh1 input list...&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#505050;&quot;&gt;NOTE: There can be only one slab file - &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#505050;&quot;&gt;any new slab file will replace the older one&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Add Slab</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/dialog-more.png</normaloff>:/dialog-more.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>18</width>
+           <height>18</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="Line" name="line_3">
+         <property name="geometry">
+          <rect>
+           <x>11</x>
+           <y>116</y>
+           <width>101</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1GenerateAtomic">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>53</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Generate atomic.i&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create atomic.i from at*.i input files&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Combine   </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/katomic.png</normaloff>:/katomic.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1Remove">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>333</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Remove file&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Removes selected &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;entry from input list &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Remove  </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/list-remove-4.png</normaloff>:/list-remove-4.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="Line" name="line_7">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>313</y>
+           <width>101</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1Delete">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>367</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Delete File&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Deletes selected file from harddisk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Delete file</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-delete-2.png</normaloff>:/edit-delete-2.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh1Reset">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>400</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reset&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Reset all entries&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Reset    </string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-undo-3.png</normaloff>:/edit-undo-3.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="step3">
+       <widget class="QGroupBox" name="groupBox_phsh3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>120</width>
+          <height>401</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Step 3</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <widget class="QPushButton" name="btn_phsh3Edit">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit ph File&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Edit selected ph file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Edit ph File</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-6.png</normaloff>:/edit-6.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh3Add">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>56</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Add ph File&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Adds ph file to list of input files for phsh3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Add ph File</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/text-x-script.png</normaloff>:/text-x-script.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh3Run">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>96</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Run phsh3&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create raw phsh output files using phsh3&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;NOTE: lambda will be used&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Run phsh0</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/system-run-5.png</normaloff>:/system-run-5.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="spinBox_phsh3Lambda">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>152</y>
+           <width>41</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lambda max&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>13</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_3">
+         <property name="geometry">
+          <rect>
+           <x>21</x>
+           <y>155</y>
+           <width>46</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>λ max</string>
+         </property>
+        </widget>
+        <widget class="Line" name="line_4">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>128</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="Line" name="line_5">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>182</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh3Reformat">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>202</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reformat&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Reformats phsh output files for use with CLEED &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Reformat</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/emblem-what.png</normaloff>:/emblem-what.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh3ToPhase">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>240</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Add to PHASE library&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copies output files to current PHASE directory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>To PHASE</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/phaseshift.ico</normaloff>:/phaseshift.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+        <widget class="Line" name="line_6">
+         <property name="geometry">
+          <rect>
+           <x>14</x>
+           <y>276</y>
+           <width>91</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh3Remove">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>293</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Remove file&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Removes selected ph &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;entry from input list &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Remove</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/list-remove-4.png</normaloff>:/list-remove-4.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh3Delete">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>327</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Delete File&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Deletes selected file from harddisk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Delete file</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-delete-2.png</normaloff>:/edit-delete-2.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_phsh3Reset">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>360</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reset&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Reset all entries&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Reset</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/edit-undo-3.png</normaloff>:/edit-undo-3.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </widget>
+     <zorder>stackedWidget</zorder>
+     <zorder>treeWidget_Phsh0</zorder>
+     <zorder>treeWidget_Phsh1</zorder>
+     <zorder>treeWidget_Phsh3</zorder>
+    </widget>
+    <widget class="QWidget" name="tab_generate">
+     <attribute name="title">
+      <string>Generate Files</string>
+     </attribute>
+     <widget class="QLabel" name="lbl_CurrentModel_mkiv_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Model Directory:-</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="inp_modelDir_Generate">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>351</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>/home/${USER}/cleed_models/test_model</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_findmodelrootdir_Generate">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>38</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>:/document-open-4.png</normaloff>:/document-open-4.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_Generate_AutoConfig">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>391</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Automatic Configuration</string>
+      </property>
+      <widget class="QLabel" name="lbl_cLatticeParam">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>90</y>
+         <width>91</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>c lattice parameter</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_SurfaceAtoms">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>90</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string># surface atoms</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_aLatticeParam">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>91</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>a lattice parameter</string>
+       </property>
+      </widget>
+      <widget class="QDoubleSpinBox" name="dblSpin_latticeParam_a">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>60</y>
+         <width>62</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="decimals">
+        <number>3</number>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="combo_Stacking">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>30</y>
+         <width>91</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>hcp</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>fcc</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>bcc</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Simple Cubic</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Complex...</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Existing Model</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QDoubleSpinBox" name="dblSpin_latticeParam_c">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>90</y>
+         <width>62</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="decimals">
+        <number>3</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Elements">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>34</y>
+         <width>71</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string># elements</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Stacking">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>31</y>
+         <width>71</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Stacking Seq.</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spin_Bulk">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>90</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+       <property name="value">
+        <number>4</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_BulkAtoms">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>60</y>
+         <width>91</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string># bulk atoms</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spin_Elements">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>30</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spin_BulkAtoms">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>60</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_AutoGenerate">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>190</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Generate Template&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Automatically create a skeleton model template&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Generate</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/preferences-other-2.png</normaloff>:/preferences-other-2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="combo_Elements">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>120</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::DefaultContextMenu</enum>
+       </property>
+       <property name="maxVisibleItems">
+        <number>120</number>
+       </property>
+       <property name="maxCount">
+        <number>120</number>
+       </property>
+       <property name="minimumContentsLength">
+        <number>2</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_ElementTemplate">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>121</y>
+         <width>111</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Element Template</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_Element_Info">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>150</y>
+         <width>121</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;More info...&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Display detailed best fit information&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Element Info</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/applications-science-2.png</normaloff>:/applications-science-2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_gen_import">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>150</y>
+         <width>30</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Import Model&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Gets model&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="bnt_gen_export">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>190</y>
+         <width>30</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Model Export&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ouputs model&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-export-4.png</normaloff>:/document-export-4.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_BulkLayers">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>123</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>#  bulk layers</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spin_BulkLayers">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>120</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_ImmobileLayers">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>153</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>#  immobile layers</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spin_ImmobileLayers">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>150</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="combo_Freedoms">
+       <property name="geometry">
+        <rect>
+         <x>283</x>
+         <y>183</y>
+         <width>49</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>z only</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>x y z</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="lbl_SpatialFreedoms">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>185</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Spatial Freedom</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_batch">
+     <attribute name="title">
+      <string>Optimisation</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_Optimisation">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>431</width>
+        <height>451</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Change Variable</string>
+      </property>
+      <widget class="QComboBox" name="combo_Opt_Variable">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>111</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Specifies the variable type for Optimisation</string>
+       </property>
+       <item>
+        <property name="text">
+         <string extracomment="Angle Search">theta</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>phi</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string extracomment="Optimises Bulk dr1 Value">Bulk dr1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string extracomment="Optimises Surface dr1 Value">Surface dr1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string extracomment="Finds optimal vi parameter">vi</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string extracomment="Finds optimal vr parameter">vr</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="lbl_Batch_min">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>74</y>
+         <width>62</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Min</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Batch_max_3">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>74</y>
+         <width>62</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Max</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Batch_max_4">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>74</y>
+         <width>62</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Step</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Batch_Edit">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>120</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Template Folder:- </string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inp_Batch_modeldir">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>140</y>
+         <width>251</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Directory with *.inp &amp; *.bul files</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_Opt_findmodeldir_Batch">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>140</y>
+         <width>31</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>select model directory</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/document-open-4.png</normaloff>:/document-open-4.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spin_Opt_Datasets">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>30</y>
+         <width>50</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Batch_numberofsearches">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>33</y>
+         <width>71</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string># Datasets</string>
+       </property>
+      </widget>
+      <widget class="QTreeWidget" name="tree_Opt_TemplateFiles">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>180</y>
+         <width>391</width>
+         <height>101</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>Template Files</string>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>&lt;File 1&gt;</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QPushButton" name="btn_Opt_CreateBatch">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>400</y>
+         <width>114</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Create Batch</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/db_add.png</normaloff>:/db_add.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_Opt_QueueBatch">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>400</y>
+         <width>115</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Queue Batch</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/db_update.png</normaloff>:/db_update.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_BatchOptions">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>300</y>
+         <width>391</width>
+         <height>88</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Batch Options</string>
+       </property>
+       <widget class="QCheckBox" name="chk_MOSIX">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>121</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>MOSIX support</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>22</y>
+          <width>131</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Remote process</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="chk_Exports">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>20</y>
+          <width>101</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Add Exports</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="inp_Opt_BatchID">
+        <property name="geometry">
+         <rect>
+          <x>114</x>
+          <y>50</y>
+          <width>266</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lbl_Opt_BatchID">
+        <property name="geometry">
+         <rect>
+          <x>19</x>
+          <y>53</y>
+          <width>91</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Batch ID Name:-</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="btn_Opt_RemoveBatch">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>400</y>
+         <width>124</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Remove Batch</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/db_remove.png</normaloff>:/db_remove.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QDoubleSpinBox" name="dblSpin_Opt_Step">
+       <property name="geometry">
+        <rect>
+         <x>250</x>
+         <y>70</y>
+         <width>71</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="decimals">
+        <number>4</number>
+       </property>
+      </widget>
+      <widget class="QDoubleSpinBox" name="dblSpin_Opt_Max">
+       <property name="geometry">
+        <rect>
+         <x>145</x>
+         <y>70</y>
+         <width>71</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="decimals">
+        <number>4</number>
+       </property>
+      </widget>
+      <widget class="QDoubleSpinBox" name="dblSpin_Opt_Min">
+       <property name="geometry">
+        <rect>
+         <x>44</x>
+         <y>70</y>
+         <width>71</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="decimals">
+        <number>4</number>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>617</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menu_Recent_Models">
+     <property name="title">
+      <string>&amp;Recent Models</string>
+     </property>
+     <addaction name="actionRecent1"/>
+    </widget>
+    <addaction name="action_New"/>
+    <addaction name="action_Open"/>
+    <addaction name="menu_Recent_Models"/>
+    <addaction name="action_Import_model"/>
+    <addaction name="separator"/>
+    <addaction name="action_Save"/>
+    <addaction name="action_Save_As"/>
+    <addaction name="action_Save_All"/>
+    <addaction name="separator"/>
+    <addaction name="action_Settings"/>
+    <addaction name="action_Preferences"/>
+    <addaction name="separator"/>
+    <addaction name="action_Print"/>
+    <addaction name="separator"/>
+    <addaction name="action_Close"/>
+    <addaction name="separator"/>
+    <addaction name="action_Quit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_Undo"/>
+    <addaction name="action_Redo"/>
+    <addaction name="separator"/>
+    <addaction name="action_Cut"/>
+    <addaction name="action_Copy"/>
+    <addaction name="action_Paste"/>
+    <addaction name="action_Select_All"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_Help"/>
+    <addaction name="separator"/>
+    <addaction name="action_Update"/>
+    <addaction name="action_AboutCLEED"/>
+    <addaction name="action_About"/>
+    <addaction name="action_SendBugReport"/>
+   </widget>
+   <widget class="QMenu" name="menuMkiv">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>&amp;Make IV</string>
+    </property>
+    <widget class="QMenu" name="menuReflexes">
+     <property name="title">
+      <string>Refle&amp;xes</string>
+     </property>
+     <addaction name="action_Index"/>
+     <addaction name="action_Positions"/>
+    </widget>
+    <widget class="QMenu" name="menu_IV_Curves">
+     <property name="title">
+      <string>&amp;IV Curves</string>
+     </property>
+     <addaction name="action_Edit_Reflex"/>
+     <addaction name="action_Smooth_IV_Data"/>
+    </widget>
+    <addaction name="actionModel_Directory"/>
+    <addaction name="menuReflexes"/>
+    <addaction name="action_Run"/>
+    <addaction name="menu_IV_Curves"/>
+    <addaction name="action_Edit_Mask"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menuMkiv"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_New">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/text-x-generic-template.png</normaloff>:/text-x-generic-template.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_Open">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/folder.png</normaloff>:/folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/document-save-5.png</normaloff>:/document-save-5.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_Save_As">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/document-save-as-5.png</normaloff>:/document-save-as-5.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="action_Save_All">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/document-save-all.png</normaloff>:/document-save-all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save A&amp;s</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="action_Print">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/document-print-5.png</normaloff>:/document-print-5.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="action_Close">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/window-close.png</normaloff>:/window-close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save &amp;Close</string>
+   </property>
+  </action>
+  <action name="action_Quit">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/dialog-cancel-3.png</normaloff>:/dialog-cancel-3.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+Q</string>
+   </property>
+  </action>
+  <action name="action_Undo">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/edit-undo-3.png</normaloff>:/edit-undo-3.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="action_Redo">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/edit-redo-3.png</normaloff>:/edit-redo-3.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="action_Cut">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/edit-cut-6.png</normaloff>:/edit-cut-6.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="action_Copy">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/edit-copy-6.png</normaloff>:/edit-copy-6.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="action_Paste">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/edit-paste-3.png</normaloff>:/edit-paste-3.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="action_Select_All">
+   <property name="text">
+    <string>Select &amp;All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="action_Preferences">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/configure-4.png</normaloff>:/configure-4.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pre&amp;ferences...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="action_Settings">
+   <property name="text">
+    <string>S&amp;ettings...</string>
+   </property>
+  </action>
+  <action name="action_Update">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/system-software-update-4.png</normaloff>:/system-software-update-4.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Update</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+U</string>
+   </property>
+  </action>
+  <action name="action_Help">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/help.png</normaloff>:/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Help... </string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+H</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/help-contents.png</normaloff>:/help-contents.png</iconset>
+   </property>
+   <property name="text">
+    <string>About...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+A</string>
+   </property>
+  </action>
+  <action name="action_Import_model">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/document-import-2.png</normaloff>:/document-import-2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import model...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionModel_Directory">
+   <property name="text">
+    <string>&amp;Model Directory...</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="action_Index">
+   <property name="text">
+    <string>&amp;Indexes</string>
+   </property>
+  </action>
+  <action name="action_Positions">
+   <property name="text">
+    <string>&amp;Positions</string>
+   </property>
+  </action>
+  <action name="action_Run">
+   <property name="text">
+    <string>&amp;Run</string>
+   </property>
+  </action>
+  <action name="action_Edit_Reflex">
+   <property name="text">
+    <string>&amp;Trim IV Data</string>
+   </property>
+  </action>
+  <action name="action_Smooth_IV_Data">
+   <property name="text">
+    <string>&amp;Smooth IV Data</string>
+   </property>
+  </action>
+  <action name="action_Edit_Mask">
+   <property name="text">
+    <string>&amp;Edit Mask</string>
+   </property>
+  </action>
+  <action name="action_SendBugReport">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tools-report-bug.png</normaloff>:/tools-report-bug.png</iconset>
+   </property>
+   <property name="text">
+    <string>Send Bug Report</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+B</string>
+   </property>
+  </action>
+  <action name="action_AboutCLEED">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/help-hint.png</normaloff>:/help-hint.png</iconset>
+   </property>
+   <property name="text">
+    <string>About CLEED</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;About CLEED&lt;/span&gt;&lt;/p&gt;&lt;p&gt;http://www.reading.ac.uk/web/FILES/chemistry/Georg_Held_LEED_Description.pdf&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="statusTip">
+    <string/>
+   </property>
+  </action>
+  <action name="actionRecent1">
+   <property name="text">
+    <string>1</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>tab_Main</tabstop>
+  <tabstop>cmd_btn_Model_Import</tabstop>
+  <tabstop>cmd_btn_Model_Directory</tabstop>
+  <tabstop>cmd_btn_Model_New</tabstop>
+  <tabstop>cmd_btn_Model_Edit</tabstop>
+  <tabstop>cmd_btn_Model_Export</tabstop>
+  <tabstop>cmd_btn_Model_Add</tabstop>
+  <tabstop>cmd_btn_Model_Remove</tabstop>
+  <tabstop>cmd_btn_Model_Refresh</tabstop>
+  <tabstop>cmd_btn_Model_Complete</tabstop>
+  <tabstop>cmd_btn_Model_Delete</tabstop>
+  <tabstop>cmd_btn_Run_Start</tabstop>
+  <tabstop>cmd_btn_Run_Stop</tabstop>
+  <tabstop>cmd_btn_Run_Pause</tabstop>
+  <tabstop>cmd_btn_Run_Loop</tabstop>
+  <tabstop>cmd_btn_Run_Queue</tabstop>
+  <tabstop>inp_Info_BestRp</tabstop>
+  <tabstop>btn_RpInfo</tabstop>
+  <tabstop>inp_Info_RunTime</tabstop>
+  <tabstop>spin_Total_Runs</tabstop>
+  <tabstop>tree_Models</tabstop>
+  <tabstop>table_History</tabstop>
+  <tabstop>btn_findPHASEdir</tabstop>
+  <tabstop>inp_PHASEdir</tabstop>
+  <tabstop>btn_findmodelrootdir</tabstop>
+  <tabstop>inp_modelrootdir</tabstop>
+  <tabstop>inp_Remote_User</tabstop>
+  <tabstop>chk_Remote</tabstop>
+  <tabstop>inp_Remote_Password</tabstop>
+  <tabstop>inp_Remote_Host</tabstop>
+  <tabstop>btn_Remote_Test</tabstop>
+  <tabstop>btn_Remote_Load</tabstop>
+  <tabstop>btn_findmkivdir</tabstop>
+  <tabstop>inp_mkivdir</tabstop>
+  <tabstop>btn_Remote_Tunnel</tabstop>
+  <tabstop>btn_Remote_Store</tabstop>
+  <tabstop>inp_Editor</tabstop>
+  <tabstop>btn_findBINdir</tabstop>
+  <tabstop>txt_mkiv_input</tabstop>
+  <tabstop>txt_mkiv_positions</tabstop>
+  <tabstop>inp_modeldir_mkiv</tabstop>
+  <tabstop>btn_findmodeldir_mkiv</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>btn_mkiv_Mask</tabstop>
+  <tabstop>btn_mkiv_ShowMesh</tabstop>
+  <tabstop>btn_mkiv_Convert</tabstop>
+  <tabstop>btn_mkiv_Rename</tabstop>
+  <tabstop>btn_mkiv_EditFile</tabstop>
+  <tabstop>btn_mkiv_Run</tabstop>
+  <tabstop>btn_mkiv_Check_IVs</tabstop>
+  <tabstop>btn_mkiv_Smooth</tabstop>
+  <tabstop>inp_modelDir_Generate</tabstop>
+  <tabstop>btn_findmodelrootdir_Generate</tabstop>
+  <tabstop>dblSpin_latticeParam_a</tabstop>
+  <tabstop>combo_Stacking</tabstop>
+  <tabstop>dblSpin_latticeParam_c</tabstop>
+  <tabstop>spin_Bulk</tabstop>
+  <tabstop>spin_Elements</tabstop>
+  <tabstop>spin_BulkAtoms</tabstop>
+  <tabstop>btn_AutoGenerate</tabstop>
+  <tabstop>combo_Elements</tabstop>
+  <tabstop>btn_Element_Info</tabstop>
+  <tabstop>btn_gen_import</tabstop>
+  <tabstop>bnt_gen_export</tabstop>
+  <tabstop>spin_BulkLayers</tabstop>
+  <tabstop>spin_ImmobileLayers</tabstop>
+  <tabstop>combo_Freedoms</tabstop>
+  <tabstop>combo_Opt_Variable</tabstop>
+  <tabstop>inp_Batch_modeldir</tabstop>
+  <tabstop>btn_Opt_findmodeldir_Batch</tabstop>
+  <tabstop>spin_Opt_Datasets</tabstop>
+  <tabstop>tree_Opt_TemplateFiles</tabstop>
+  <tabstop>btn_Opt_CreateBatch</tabstop>
+  <tabstop>btn_Opt_QueueBatch</tabstop>
+  <tabstop>chk_MOSIX</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>chk_Exports</tabstop>
+  <tabstop>inp_Opt_BatchID</tabstop>
+  <tabstop>btn_Opt_RemoveBatch</tabstop>
+  <tabstop>dblSpin_Opt_Step</tabstop>
+  <tabstop>dblSpin_Opt_Max</tabstop>
+  <tabstop>dblSpin_Opt_Min</tabstop>
+  <tabstop>treeWidget_Phsh0</tabstop>
+  <tabstop>treeWidget_Phsh1</tabstop>
+  <tabstop>treeWidget_Phsh3</tabstop>
+  <tabstop>btn_phsh0New</tabstop>
+  <tabstop>btn_phsh0Edit</tabstop>
+  <tabstop>btn_phsh0Add</tabstop>
+  <tabstop>btn_phsh0Run</tabstop>
+  <tabstop>btn_phsh0Remove</tabstop>
+  <tabstop>btn_phsh0Delete</tabstop>
+  <tabstop>btn_phsh0Reset</tabstop>
+  <tabstop>lineEdit_phsh0Model</tabstop>
+  <tabstop>btn_phsh1Add</tabstop>
+  <tabstop>btn_phsh1GenerateAtomic</tabstop>
+  <tabstop>btn_phsh1Edit</tabstop>
+  <tabstop>btn_phsh1AddCluster</tabstop>
+  <tabstop>btn_phsh1EditCluster</tabstop>
+  <tabstop>btn_phsh1AddSlab</tabstop>
+  <tabstop>btn_phsh1EditSlab</tabstop>
+  <tabstop>btn_phsh1CalcMTZ</tabstop>
+  <tabstop>btn_phsh1Remove</tabstop>
+  <tabstop>btn_phsh1Delete</tabstop>
+  <tabstop>btn_phsh1Reset</tabstop>
+  <tabstop>btn_phsh3Edit</tabstop>
+  <tabstop>btn_phsh3Add</tabstop>
+  <tabstop>btn_phsh3Run</tabstop>
+  <tabstop>spinBox_phsh3Lambda</tabstop>
+  <tabstop>btn_phsh3Reformat</tabstop>
+  <tabstop>btn_phsh3ToPhase</tabstop>
+  <tabstop>btn_phsh3Remove</tabstop>
+  <tabstop>btn_phsh3Delete</tabstop>
+  <tabstop>btn_phsh3Reset</tabstop>
+  <tabstop>inp_BINdir</tabstop>
+ </tabstops>
+ <resources>
+  <include location="res/res.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>btn_phsh0Add</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addAtFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>168</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh0Delete</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>deletePhsh0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>287</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh0Edit</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>editAtorbFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh0New</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>newAtorbFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh0Remove</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>removePhsh0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh0Reset</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>resetPhsh0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh0Run</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>runPhsh0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1Add</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addAtorbFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1Delete</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>deletePhsh1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>445</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1AddCluster</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addPhshBulkFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1AddSlab</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addPhshSlabFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1Edit</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>editAtFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1EditCluster</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>editPhshBulkFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>251</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1EditSlab</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>editPhshSlabFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1GenerateAtomic</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>generateAtomicFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1CalcMTZ</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>calcMTZ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>358</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1Remove</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>removePhsh1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>411</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh1Reset</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>resetPhsh1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>478</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3Add</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addPhFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3Delete</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>deletePhsh3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>405</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3Edit</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>editPhFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3Reformat</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reformat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3Remove</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>removePhsh3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>371</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3Reset</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>resetPhsh3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>438</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3Run</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>runPhsh3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_phsh3ToPhase</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addToPhase()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>318</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_About</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>helpAbout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Update</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>helpUpdate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_AboutCLEED</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>helpCLEED()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_SendBugReport</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>helpReportBug()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Add</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelAdd()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Complete</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelMarkComplete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Delete</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelDelete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>543</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Directory</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelDirectory()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>423</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_New</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelNew()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Edit</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Export</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelExport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>543</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Import</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelImport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Refresh</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelRefresh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Model_Remove</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelRemove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>423</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Run_Loop</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelLoop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Run_Pause</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelPause()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>423</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Run_Queue</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelQueue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>543</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Run_Start</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelStart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmd_btn_Run_Stop</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelStop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_RpInfo</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reformat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>450</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_Total_Runs</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>activeRuns()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>542</x>
+     <y>388</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Preferences</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionPreferences()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>editPhFile()</slot>
+  <slot>addPhFile()</slot>
+  <slot>runPhsh3()</slot>
+  <slot>reformat()</slot>
+  <slot>addToPhase()</slot>
+  <slot>removePhsh3()</slot>
+  <slot>deletePhsh3()</slot>
+  <slot>resetPhsh3()</slot>
+  <slot>newAtorbFile()</slot>
+  <slot>editAtorbFile()</slot>
+  <slot>addAtorbFile()</slot>
+  <slot>runPhsh0()</slot>
+  <slot>removePhsh0()</slot>
+  <slot>deletePhsh0()</slot>
+  <slot>resetPhsh0()</slot>
+  <slot>updateModelName()</slot>
+  <slot>addAtFile()</slot>
+  <slot>generateAtomicFile()</slot>
+  <slot>editAtomicFile()</slot>
+  <slot>addPhshBulkFile()</slot>
+  <slot>editPhshBulkFile()</slot>
+  <slot>addPhshSlabFile()</slot>
+  <slot>editPhshSlabFile()</slot>
+  <slot>calcMTZ()</slot>
+  <slot>removePhsh1()</slot>
+  <slot>deletePhsh1()</slot>
+  <slot>resetPhsh1()</slot>
+  <slot>modelImport()</slot>
+  <slot>modelOpen()</slot>
+  <slot>modelNew()</slot>
+  <slot>modelEdit()</slot>
+  <slot>modelExport()</slot>
+  <slot>modelAdd()</slot>
+  <slot>modelRemove()</slot>
+  <slot>modelRefresh()</slot>
+  <slot>modelMarkComplete()</slot>
+  <slot>modelDelete()</slot>
+  <slot>modelStart()</slot>
+  <slot>modelStop()</slot>
+  <slot>modelQueue()</slot>
+  <slot>modelLoop()</slot>
+  <slot>modelRpInfo()</slot>
+  <slot>modelContextMenu(QPoint)</slot>
+  <slot>helpAbout()</slot>
+  <slot>helpUpdate()</slot>
+  <slot>helpCLEED()</slot>
+  <slot>helpReportBug()</slot>
+  <slot>editAtFile()</slot>
+  <slot>modelDirectory()</slot>
+  <slot>modelPause()</slot>
+  <slot>activeRuns()</slot>
+  <slot>actionPreferences()</slot>
+ </slots>
+</ui>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   width="32px"
+   height="32px"
+   viewBox="0 0 32 32"
+   style="enable-background:new 0 0 32 32;"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="rss_alt.svg"><metadata
+   id="metadata20"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs18" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="656"
+   inkscape:window-height="480"
+   id="namedview16"
+   showgrid="false"
+   inkscape:zoom="7.375"
+   inkscape:cx="16"
+   inkscape:cy="16"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg2" />
+<g
+   id="Layer_1"
+   style="fill:#84be0e;fill-opacity:1">
+</g>
+<g
+   id="rss_x5F_alt"
+   style="fill:#84be0e;fill-opacity:1">
+	<g
+   id="g6"
+   style="fill:#84be0e;fill-opacity:1">
+		<path
+   style="fill:#84be0e;fill-opacity:1"
+   d="M32,32h-4.57C27.43,16.875,15.125,4.572,0,4.572V0C17.641,0,32,14.355,32,32L32,32z"
+   id="path8" />
+		<path
+   style="fill:#84be0e;fill-opacity:1"
+   d="M22.855,32h-4.57c0-10.082-8.207-18.285-18.285-18.285V9.143C12.602,9.143,22.855,19.398,22.855,32    L22.855,32z"
+   id="path10" />
+		<path
+   style="fill:#84be0e;fill-opacity:1"
+   d="M13.715,32H9.141c0-5.043-4.098-9.141-9.141-9.141v-4.574C7.562,18.285,13.715,24.438,13.715,32    L13.715,32z"
+   id="path12" />
+		<path
+   style="fill:#84be0e;fill-opacity:1"
+   d="M4.57,32c0-2.523-2.043-4.57-4.57-4.57V32H4.57z"
+   id="path14" />
+	</g>
+</g>
+</svg>
