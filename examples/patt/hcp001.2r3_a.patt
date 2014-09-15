@@ -1,0 +1,8 @@
+# input file for pattern
+c (2r3 x 2r3) R30 
+1.732 -1.0     a1
+0.0    2.0     a2
+1.1          radius
+1            No of domains
+  4   2  M2
+  2   4  M2

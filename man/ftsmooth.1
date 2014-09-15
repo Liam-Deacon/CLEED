@@ -1,0 +1,122 @@
+.\" Process this file with 'groff -man -Tascii ftsmooth.1'
+.\" man page author: Liam Deacon (liam.deacon@diamond.ac.uk)
+.\"
+.TH ftsmooth 1 "MARCH 2014" CLEED User Manuals
+.\"===================================================================
+
+.SH NAME
+
+ftsmooth \- post-processing tool for IV curves
+
+.SH SYNTAX
+
+.B ftsmooth 
+\-i 
+.I <input_file>
+\-o 
+.I <output_file> 
+[
+.I OPTIONS...
+]
+
+.SH AVAILABILITY
+
+ftsmooth is available as part of the CLEED package and should be available on any platform where there is a GNU C compiler (GCC) tool chain. GCC is readily available on most Linux distributions, however Windows users can install MinGW, the minimalist GNU tool set for Windows.   
+
+.SH DESCRIPTION
+
+ftsmooth is a computer program written in C which performs simple processing operations such as Fourier smoothing on IV datasets.
+
+.SH OPTIONS
+
+ftsmooth -i <input> -o <output> (-m <mode> -c <cutoff> -t <tailoff> ...)
+
+mandatory arguments:
+
+	-i <input>	specify input xy data file to process.
+	--input <input>
+
+	-o <output>	specify output xy data file.
+	--output <output>
+
+optional arguments:
+.IP \-c
+.IP \-\-cutoff
+<cut>
+.RS
+enter a cut off value for Fourier transform.
+.br
+This should be between 0 and 1 (default=0.5).
+
+	-d		delete entries with negative y-values.
+	--delete
+
+	-h		display syntax help.
+	--help
+
+	-m <mode>	specify data smoothing operation mode (default='n').
+	--mode <mode>	options are: 's' smoothing, 'n' no-smoothing.
+
+	--range <bounds>
+	-r <bounds>	the accepted x-range for the data, specified by
+			 <bounds>. Upper & lower x-axis bounds must be decimals
+			and where <bounds> may take the following format:
+			"lb(1):ub(1),lb(2):ub(2),...,lb(N):ub(N)"
+			':' acts as a seperator between lb & ub
+			',' acts as a seperator between indicies
+			'i' or '*' will ignore bounds, i.e.
+			'0.2:10,0.5:*' will output data between 0.2 & max
+			e.g. "-r i 300" will only set the upper bound to 300.
+
+	-t <tail>	enter a tail-off value for fourier transform
+			(default=10).
+	--tailoff <tail>
+
+	--version	print version info.
+
+	-y (<offset>)	offset the y-axis data by the specified value
+	--yoffset	note: if no value is specified, the offset will
+			be minima = 0.
+
+
+ .\" Document here situations in which the program can be used, if there are uses that are not obvious.
+.SH EXAMPLES
+
+.SH FILES
+
+INPUT FILES: 
+.IP *.inp
+.RS
+The parameter input for the surface model. See 'INPUT_FILE' section for more information.
+.RE
+.IP *.bul
+.RS
+The bulk parameter file. See 'BULK_FILE' for more information.
+.RE
+.IP *.ctr
+.RS
+The control parameter file for R factor evaluation. See 'CONTROL_FILE' for more information.
+.RE
+.PP
+
+OUTPUT FILES:
+
+.SH AUTHOR
+
+Georg Held <g.held@reading.ac.uk>.
+
+.SH CONTACT
+
+Please email questions, bugs (ideally with fixes) or any suggestions to either Georg Held, Jacopo Ardini <j.ardini@pgr.reading.ac.uk> or Liam Deacon <liam.deacon@diamond.ac.uk>.
+
+.\"Document here things that work as designed but which may be unclear or surprising to the user. (This is the System V replacement for the BUGS category; you too can pretend your product has no bugs!)
+.\".SH CAVEATS
+
+.SH COPYRIGHT
+
+Copyright (C) 1995-2014 Georg Held
+.PP
+LICENSE
+.SH SEE ALSO
+
+caoi_leed(1), caoi_rfac(1), cleed_nsym(1), cleed_sym(1), crfac(1), csearch(1), debye(1), ftsmooth(1), latt(1), mkiv(1), phsh(1)

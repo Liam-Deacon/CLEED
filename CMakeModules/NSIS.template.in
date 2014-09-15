@@ -1,0 +1,1366 @@
+;@CPACK_PACKAGE_NAME@ installer script.
+
+;-----------------------------------------------------------------------------
+; Some installer script options (comment-out options not required)
+;-----------------------------------------------------------------------------
+!define OPTION_LICENSE_AGREEMENT
+!define OPTION_UAC_PLUGIN_ENHANCED
+!define OPTION_SECTION_SC_START_MENU
+!define OPTION_SECTION_SC_DESKTOP
+!define OPTION_SECTION_SC_QUICK_LAUNCH
+!define OPTION_FINISHPAGE
+!define OPTION_FINISHPAGE_LAUNCHER
+!define OPTION_FINISHPAGE_RELEASE_NOTES
+
+;-----------------------------------------------------------------------------
+; Some paths.
+;-----------------------------------------------------------------------------
+!define BUILD_PATH "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/build"
+!define SOURCE_PATH "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED"
+!define NSIS_BUILD_PATH "${BUILD_PATH}/_CPack_Packages/win32/NSIS"
+!define NSI_PATH "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/data/win32"
+!addplugindir "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/data/win32/Contrib/NSIS/Plugins"
+;-----------------------------------------------------------------------------
+; Installer version
+;-----------------------------------------------------------------------------
+!define VER_MAJOR "@CPACK_PACKAGE_VERSION_MAJOR@"
+!define VER_MINOR "@CPACK_PACKAGE_VERSION_MINOR@"
+!define VER_BUILD "@CPACK_PACKAGE_VERSION_PATCH@"
+!define REVISION  "@CPACK_PACKAGE_VERSION_TWEAK@"
+!define VERSION   "@CPACK_PACKAGE_VERSION@"
+
+;-----------------------------------------------------------------------------
+; Installer build timestamp.
+;-----------------------------------------------------------------------------
+!define /date BUILD_TIME "built on %Y/%m/%d at %I:%M %p"
+
+;-----------------------------------------------------------------------------
+; Initial installer setup and definitions.
+;-----------------------------------------------------------------------------
+Name "@CPACK_NSIS_PACKAGE_NAME@"
+Caption "@CPACK_PACKAGE_NAME@ Installer"
+BrandingText "@CPACK_PACKAGE_NAME@ ${VERSION} -- ${BUILD_TIME}"
+OutFile "@CPACK_TOPLEVEL_DIRECTORY@/@CPACK_OUTPUT_FILE_NAME@"
+InstallDir "$PROGRAMFILES\@CPACK_PACKAGE_INSTALL_DIRECTORY@"
+InstallDirRegKey HKCU "Software\@CPACK_PACKAGE_NAME@" ""
+InstType Standard
+InstType Full
+InstType Minimal
+CRCCheck On
+SetCompressor @CPACK_NSIS_COMPRESSOR@
+RequestExecutionLevel user ;Now using the UAC plugin.
+ReserveFile NSIS.InstallOptions.ini
+ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
+
+@CPACK_NSIS_SECTION_SELECTED_VARS@
+
+;-----------------------------------------------------------------------------
+; Include some required header files.
+;-----------------------------------------------------------------------------
+!include LogicLib.nsh ;Used by APPDATA uninstaller.
+!include nsDialogs.nsh ;Used by APPDATA uninstaller.
+!include MUI2.nsh ;Used by APPDATA uninstaller.
+!include InstallOptions.nsh ;Required by MUI2 to support old MUI_INSTALLOPTIONS.
+!include Memento.nsh ;Remember user selections.
+!include WinVer.nsh ;Windows version detection.
+!include WordFunc.nsh ;Used by VersionCompare macro function.
+!include UAC.nsh ;Used by the UAC elevation to install as user or admin.
+
+;-----------------------------------------------------------------------------
+; Other defines and functions
+;-----------------------------------------------------------------------------
+!define SHCNE_ASSOCCHANGED 0x08000000
+!define SHCNF_IDLIST 0
+
+Function RefreshShellIcons
+  ; By jerome tremblay - april 2003
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v \
+  (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+;-----------------------------------------------------------------------------
+; Memento selections stored in registry.
+;-----------------------------------------------------------------------------
+!define MEMENTO_REGISTRY_ROOT HKLM
+!define MEMENTO_REGISTRY_KEY Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@
+
+;-----------------------------------------------------------------------------
+; Modern User Interface (MUI) defintions and setup.
+;-----------------------------------------------------------------------------
+!define MUI_ABORTWARNING
+; MUI Settings / Icons
+!define MUI_ICON "${NSI_PATH}\Contrib\Graphics\Icons\orange-install-nsis.ico"
+!define MUI_UNICON "${NSI_PATH}\Contrib\Graphics\Icons\orange-uninstall-nsis.ico"
+; MUI Settings / Header
+!define MUI_HEADERIMAGE
+!define MUI_HEADERIMAGE_RIGHT
+!define MUI_HEADERIMAGE_BITMAP "${NSI_PATH}\Contrib\Graphics\Header\orange-r-nsis.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "${NSI_PATH}\Contrib\Graphics\Header\orange-uninstall-r-nsis.bmp"
+; MUI Settings / Wizard
+!define MUI_WELCOMEFINISHPAGE_BITMAP "${NSI_PATH}\Contrib\Graphics\Wizard\orange-nsis.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${NSI_PATH}\Contrib\Graphics\Wizard\orange-uninstall-nsis.bmp"
+!define MUI_WELCOMEPAGE_TITLE "@CPACK_PACKAGE_NAME@ ${VERSION} Setup$\r$\nInstaller"
+!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation.$\r$\n$\r$\n$_CLICK"
+!define MUI_COMPONENTSPAGE_SMALLDESC
+!define MUI_FINISHPAGE_TITLE "@CPACK_PACKAGE_NAME@ Install Completed"
+!define MUI_FINISHPAGE_LINK "Click here to visit the @CPACK_PACKAGE_NAME@ website."
+!define MUI_FINISHPAGE_LINK_LOCATION "@CPACK_PACKAGE_URL@"
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+!ifdef OPTION_FINISHPAGE_RELEASE_NOTES
+   !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
+   !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\NOTES.txt"
+   !define MUI_FINISHPAGE_SHOWREADME_TEXT "Show release notes"
+!endif
+!ifdef OPTION_FINISHPAGE_LAUNCHER
+   !define MUI_FINISHPAGE_NOAUTOCLOSE
+   !define MUI_FINISHPAGE_RUN
+   !define MUI_FINISHPAGE_RUN_TEXT "Open CLEED install directory"
+   !define MUI_FINISHPAGE_RUN_FUNCTION "Launch@CPACK_PACKAGE_NAME@"
+!endif
+
+;-----------------------------------------------------------------------------
+; Page macros.
+;-----------------------------------------------------------------------------
+!insertmacro MUI_PAGE_WELCOME
+!ifdef OPTION_LICENSE_AGREEMENT
+   !insertmacro MUI_PAGE_LICENSE "${SOURCE_PATH}/LICENSE.txt"
+!endif
+Page custom PageReinstall PageLeaveReinstall
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!ifdef OPTION_FINISHPAGE
+   !insertmacro MUI_PAGE_FINISH
+!endif
+!insertmacro MUI_UNPAGE_CONFIRM
+UninstPage custom un.UnPageUserAppData un.UnPageUserAppDataLeave
+!insertmacro MUI_UNPAGE_INSTFILES
+
+;-----------------------------------------------------------------------------
+; Other MUI macros.
+;-----------------------------------------------------------------------------
+!insertmacro MUI_LANGUAGE "English"
+
+##############################################################################
+#
+# FINISH PAGE LAUNCHER FUNCTIONS
+#
+##############################################################################
+
+Function Launch@CPACK_PACKAGE_NAME@
+   ;${UAC.CallFunctionAsUser} Launch@CPACK_PACKAGE_NAME@AsUser
+   Call Launch@CPACK_PACKAGE_NAME@AsUser
+FunctionEnd
+
+Function Launch@CPACK_PACKAGE_NAME@AsUser
+   Exec "Explorer.exe $\"$INSTDIR$\""
+FunctionEnd
+
+##############################################################################
+#
+# PROCESS HANDLING FUNCTIONS AND MACROS 
+#
+##############################################################################
+
+!macro CheckForProcess processName gotoWhenFound gotoWhenNotFound
+   Processes::FindProcess ${processName}
+   StrCmp $R0 "0" ${gotoWhenNotFound} ${gotoWhenFound}
+!macroend
+
+!macro ConfirmEndProcess processName
+   MessageBox MB_YESNO|MB_ICONEXCLAMATION \
+     "Found ${processName} process(s) which need to be stopped.$\nDo you want the installer to stop these for you?" \
+     IDYES process_${processName}_kill IDNO process_${processName}_ended
+   process_${processName}_kill:
+      DetailPrint "Killing ${processName} processes."
+      Processes::KillProcess ${processName}
+      Sleep 1500
+      StrCmp $R0 "1" process_${processName}_ended
+      DetailPrint "Process to kill not found!"
+   process_${processName}_ended:
+!macroend
+
+!macro CheckAndConfirmEndProcess processName
+   !insertmacro CheckForProcess ${processName} 0 no_process_${processName}_to_end
+   !insertmacro ConfirmEndProcess ${processName}
+   no_process_${processName}_to_end:
+!macroend
+
+!macro FileCopy FilePath TargetDir
+  CreateDirectory ``
+  CopyFiles `` ``
+!macroend
+
+
+Function Ensure@CPACK_PACKAGE_NAME@Shutdown
+   !insertmacro CheckAndConfirmEndProcess "caoi_leed.exe"
+   !insertmacro CheckAndConfirmEndProcess "caoi_rfac.exe"
+   !insertmacro CheckAndConfirmEndProcess "cleed-gui.exe"
+   !insertmacro CheckAndConfirmEndProcess "cleed_nsym.exe"
+   !insertmacro CheckAndConfirmEndProcess "cleed_sym.exe"
+   !insertmacro CheckAndConfirmEndProcess "csearch.exe"
+   !insertmacro CheckAndConfirmEndProcess "crfac.exe"
+   !insertmacro CheckAndConfirmEndProcess "phsh.py"
+   !insertmacro CheckAndConfirmEndProcess "ftsmooth.exe"
+   !insertmacro CheckAndConfirmEndProcess "mkiv.exe"
+FunctionEnd
+
+##############################################################################
+#
+# RE-INSTALLER FUNCTIONS
+#
+##############################################################################
+
+Function PageReinstall
+   ReadRegStr $R0 HKLM "Software\@CPACK_PACKAGE_NAME@" ""
+   StrCmp $R0 "" 0 +2
+   Abort
+
+   ;Detect version
+   ReadRegDWORD $R0 HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionMajor"
+   IntCmp $R0 ${VER_MAJOR} minor_check new_version older_version
+   minor_check:
+      ReadRegDWORD $R0 HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionMinor"
+      IntCmp $R0 ${VER_MINOR} build_check new_version older_version
+   build_check:
+      ReadRegDWORD $R0 HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionBuild"
+      IntCmp $R0 ${VER_BUILD} same_version new_version older_version
+
+   new_version:
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "An older version of @CPACK_PACKAGE_NAME@ is installed on your system. It is recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 2" "Text" "Uninstall before installing"
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 3" "Text" "Do not uninstall"
+      !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install @CPACK_PACKAGE_NAME@."
+      StrCpy $R0 "1"
+      Goto reinst_start
+
+   older_version:
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "A newer version of @CPACK_PACKAGE_NAME@ is already installed! It is not recommended that you install an older version. If you really want to install this older version, it is better to uninstall the current version first. Select the operation you want to perform and click Next to continue."
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 2" "Text" "Uninstall before installing"
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 3" "Text" "Do not uninstall"
+      !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install @CPACK_PACKAGE_NAME@."
+      StrCpy $R0 "1"
+      Goto reinst_start
+
+   same_version:
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "@CPACK_PACKAGE_NAME@ ${VERSION} is already installed.\r\nSelect the operation you want to perform and click Next to continue."
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 2" "Text" "Add/Reinstall components"
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 3" "Text" "Uninstall @CPACK_PACKAGE_NAME@"
+      !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose the maintenance option to perform."
+      StrCpy $R0 "2"
+
+   reinst_start:
+      !insertmacro INSTALLOPTIONS_DISPLAY "NSIS.InstallOptions.ini"
+FunctionEnd
+
+Function PageLeaveReinstall
+   !insertmacro INSTALLOPTIONS_READ $R1 "NSIS.InstallOptions.ini" "Field 2" "State"
+   StrCmp $R0 "1" 0 +2
+   StrCmp $R1 "1" reinst_uninstall reinst_done
+   StrCmp $R0 "2" 0 +3
+   StrCmp $R1 "1" reinst_done reinst_uninstall
+   reinst_uninstall:
+      ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "UninstallString"
+      HideWindow
+      ClearErrors
+      ExecWait '$R1 _?=$INSTDIR'
+      IfErrors no_remove_uninstaller
+      IfFileExists "$INSTDIR\@CPACK_PACKAGE_NAME@-gui.exe" no_remove_uninstaller
+      Delete $R1
+      RMDir $INSTDIR
+   no_remove_uninstaller:
+      StrCmp $R0 "2" 0 +3
+      #UAC::Unload
+      Quit
+      BringToFront
+   reinst_done:
+FunctionEnd
+
+##############################################################################
+#
+# INSTALLER SECTIONS
+#
+##############################################################################
+SectionGroup "@CPACK_PACKAGE_NAME@"
+
+    ${MementoSection} "Runtime" SEC_@CPACK_PACKAGE_NAME@_RUNTIME
+       SectionIn 1 2 3 RO
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ runtime essentials."
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\runtime\*"
+        
+    ${MementoSectionEnd}
+
+    ${MementoSection} "Examples" SEC_@CPACK_PACKAGE_NAME@_EXAMPLES
+       SectionIn 1 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ example files."
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\examples\*"
+        
+    ${MementoSectionEnd}
+    
+    ${MementoSection} "Phase Shifts" SEC_@CPACK_PACKAGE_NAME@_PHASE
+       SectionIn 1 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ phaseshifts file library."
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\phaseshifts\*"
+        
+    ${MementoSectionEnd}
+
+    ${MementoSection} "Documentation" SEC_@CPACK_PACKAGE_NAME@_DOCUMENTATION
+       SectionIn 1 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ documentation."
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\documentation\*"
+        
+    ${MementoSectionEnd}
+
+    ${MementoSection} "Explorer Integration" SEC_@CPACK_PACKAGE_NAME@_EXPLORER
+       SectionIn 1 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ Windows Explorer integration."
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\explorer\*"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\icons\*"
+       
+    ${MementoSectionEnd}
+    
+    
+SectionGroupEnd
+
+SectionGroup "Shortcuts"
+
+!ifdef OPTION_SECTION_SC_START_MENU
+   ${MementoSection} "Start Menu Program Group" SEC_START_MENU
+      SectionIn 1 2
+      SetDetailsPrint textonly
+      DetailPrint "Adding shortcuts for the @CPACK_PACKAGE_NAME@ program group to the Start Menu."
+      SetDetailsPrint listonly
+      SetShellVarContext all
+      RMDir /r "$SMPROGRAMS\@CPACK_PACKAGE_NAME@"
+      CreateDirectory "$SMPROGRAMS\@CPACK_PACKAGE_NAME@"
+      CreateShortCut "$SMPROGRAMS\@CPACK_PACKAGE_NAME@\LICENSE.lnk" "$INSTDIR\LICENSE.txt"
+      CreateShortCut "$SMPROGRAMS\@CPACK_PACKAGE_NAME@\@CPACK_PACKAGE_NAME@.lnk" "$INSTDIR\@CPACK_PACKAGE_NAME@-gui.exe"
+      CreateShortCut "$SMPROGRAMS\@CPACK_PACKAGE_NAME@\Release notes.lnk" "$INSTDIR\NOTES.txt"
+      CreateShortCut "$SMPROGRAMS\@CPACK_PACKAGE_NAME@\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+      SetShellVarContext current
+   ${MementoSectionEnd}
+!endif
+
+!ifdef OPTION_SECTION_SC_DESKTOP
+   ${MementoSection} "Desktop Shortcut" SEC_DESKTOP
+      SectionIn 1 2
+      SetDetailsPrint textonly
+      DetailPrint "Creating Desktop Shortcuts"
+      SetDetailsPrint listonly
+      CreateShortCut "$DESKTOP\@CPACK_PACKAGE_NAME@.lnk" "$INSTDIR"
+   ${MementoSectionEnd}
+!endif
+
+!ifdef OPTION_SECTION_SC_QUICK_LAUNCH
+   ${MementoSection} "Quick Launch Shortcut" SEC_QUICK_LAUNCH
+      SectionIn 1 2
+      SetDetailsPrint textonly
+      DetailPrint "Creating Quick Launch Shortcut"
+      SetDetailsPrint listonly
+      CreateShortCut "$QUICKLAUNCH\@CPACK_PACKAGE_NAME@.lnk" "$INSTDIR"
+   ${MementoSectionEnd}
+!endif
+
+SectionGroupEnd
+
+SectionGroup "Development"
+
+    ${MementoSection} "Source Code" SEC_@CPACK_PACKAGE_NAME@_SOURCE
+       SectionIn 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ source code"
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\source\*"   
+    
+    ${MementoSectionEnd}
+
+    ${MementoSection} "Static Libraries" SEC_@CPACK_PACKAGE_NAME@_LIBRARIES
+       SectionIn 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ static libraries"
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\libraries\*"
+        
+    ${MementoSectionEnd}
+    
+    ${MementoSection} "Header Files" SEC_@CPACK_PACKAGE_NAME@_HEADERS
+       SectionIn 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ C/C++ header files"
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\headers\*"
+        
+    ${MementoSectionEnd}
+
+    ${MementoSection} "GUI" SEC_@CPACK_PACKAGE_NAME@_GUI
+       SectionIn 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ gui components."
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+       File /r "${NSIS_BUILD_PATH}/@CPACK_PACKAGE_NAME@-${VERSION}-win32\gui\*"
+        
+    ${MementoSectionEnd}    
+    
+    ${MementoSection} "Extras" SEC_@CPACK_PACKAGE_NAME@_EXTRAS
+       SectionIn 2
+       SetDetailsPrint listonly
+
+       SetDetailsPrint textonly
+       DetailPrint "Installing @CPACK_PACKAGE_NAME@ extras."
+       SetDetailsPrint listonly
+       SetOutPath "$INSTDIR"
+        
+    ${MementoSectionEnd}
+    
+SectionGroupEnd
+
+${MementoSectionDone}
+
+; Installer section descriptions
+;--------------------------------
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@} "@CPACK_PACKAGE_NAME@ options."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_RUNTIME} "Core runtime components."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_EXAMPLES} "Include example models and files in 'examples' subdirectory."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_PHASE} "Install pre-made phase shifts into 'phase' subdirectory."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_DOCUMENTATION} "Include files for @CPACK_PACKAGE_NAME@ documentation."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_EXPLORER} "Add files for Windows Explorer shell integration."
+  
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_SOURCE} "Install source code for CLEED development."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_LIBRARIES} "Install static library archives."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_HEADERS} "C/C++ header files for the @CPACK_PACKAGE_NAME@ libraries."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_GUI} "Install (highly) experimental GUI frontends."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_@CPACK_PACKAGE_NAME@_EXTRA} "Extra components from 3rd parties."
+   
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_START_MENU} "@CPACK_PACKAGE_NAME@ program group."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_DESKTOP} "Desktop shortcut for @CPACK_PACKAGE_NAME@."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_QUICK_LAUNCH} "Quick Launch shortcut for @CPACK_PACKAGE_NAME@."
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+Section -post
+
+   ; Uninstaller file.
+   SetDetailsPrint textonly
+   DetailPrint "Writing Uninstaller"
+   SetDetailsPrint listonly
+   WriteUninstaller $INSTDIR\uninstall.exe
+
+   ; Registry keys required for installer version handling and uninstaller.
+   SetDetailsPrint textonly
+   DetailPrint "Writing Installer Registry Keys"
+   SetDetailsPrint listonly
+
+   ; Version numbers used to detect existing installation version for comparison.
+   WriteRegStr HKLM "Software\@CPACK_PACKAGE_NAME@" "" $INSTDIR
+   WriteRegDWORD HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionMajor" "${VER_MAJOR}"
+   WriteRegDWORD HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionMinor" "${VER_MINOR}"
+   WriteRegDWORD HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionRevision" "${REVISION}"
+   WriteRegDWORD HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionBuild" "${VER_BUILD}"
+
+   ; Add or Remove Programs entry.
+   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "InstallLocation" "$INSTDIR"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "DisplayName" "@CPACK_PACKAGE_NAME@"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "Publisher" "@CPACK_PACKAGE_VENDOR@"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "DisplayIcon" "$INSTDIR\Uninstall.exe,0"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "DisplayVersion" "${VERSION}"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "VersionMajor" "${VER_MAJOR}"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "VersionMinor" "${VER_MINOR}.${REVISION}"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "URLInfoAbout" "@CPACK_PACKAGE_URL@"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "HelpLink" "@CPACK_PACKAGE_ULR@"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "NoModify" "1"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "NoRepair" "1"
+
+   WriteRegExpandStr HKCR "@CPACK_PACKAGE_NAME@\DefaultIcon" "" $INSTDIR\bin\cleed_nsym.exe,1
+   WriteRegExpandStr HKCR "@CPACK_PACKAGE_NAME@\shell" "" "open"
+   WriteRegExpandStr HKCR "@CPACK_PACKAGE_NAME@\shell\open\command" "" '"explorer.exe" "$INSTDIR" "%1"'
+
+   ; Register CLEED environment variables
+   WriteRegExpandStr HKCU "Environment" "CLEED_HOME" "$INSTDIR"
+   WriteRegExpandStr HKCU "Environment" "CLEED_PHASE" "$INSTDIR\phase"
+   
+   ; Register latt protocol handler
+   WriteRegExpandStr HKCU "Software\Classes\.latt" "" "CLEED_lattice_file"
+   WriteRegExpandStr HKCR "Software\Classes\.latt" "" "CLEED_lattice_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_lattice_file" "" "CLEED Lattice file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_lattice_file" "" "CLEED Lattice file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_lattice_file\ShellNew" "" "$\"$INSTDIR\templates\new.latt$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_lattice_file\ShellNew" "" "$\"$INSTDIR\templates\new.latt$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_lattice_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-latt-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_lattice_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-latt-file.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_lattice_file\shell\latt" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_lattice_file\shell\latt" "" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_lattice_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_lattice_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_lattice_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_lattice_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_lattice_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_lattice_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   
+   ; Register patt protocol handler
+   WriteRegExpandStr HKCU "Software\Classes\.patt" "" "CLEED_pattern_file"
+   WriteRegExpandStr HKCR "Software\Classes\.patt" "" "CLEED_pattern_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pattern_file" "" "CLEED Pattern file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pattern_file" "" "CLEED Pattern file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pattern_file\ShellNew" "" "$\"$INSTDIR\templates\new.patt$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pattern_file\ShellNew" "" "$\"$INSTDIR\templates\new.patt$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pattern_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-patt-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pattern_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-patt-file.ico$\""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pattern_file\shell\phaseshifts" "MUIVerb" "Generate LEED pattern"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pattern_file\shell\phaseshifts" "MUIVerb" "Generate LEED pattern"
+      
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pattern_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pattern_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+
+      
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pattern_file\shell\Generate LEED pattern\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\patt.exe$\" $\"%0%$\""
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pattern_file\shell\Generate LEED pattern\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\patt.exe$\" $\"%0%$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\psfile\shell\Convert to PDF\command" "" "START /MIN /B CMD /C CALL $\"gswin32c.exe$\" -sDEVICE=pdfwrite -dPDFSETTINGS=/default -o $\"%0%.pdf$\" $\"%0%$\" && ren $\"%~d0%%~p0%%~n0%.ps.pdf$\" $\"%~d0%%~p0%%~n0%.pdf$\" && $\"%~d0%%~p0%%~n0%.pdf$\""
+   WriteRegExpandStr HKCR "Software\Classes\epsfile\shell\Convert to PDF\command" "" "START /MIN /B CMD /C CALL $\"gswin32c.exe$\" -sDEVICE=pdfwrite -dPDFSETTINGS=/default -o $\"%0%.pdf$\" $\"%0%$\" && ren $\"%~d0%%~p0%%~n0%.ps.pdf$\" $\"%~d0%%~p0%%~n0%.pdf$\" && $\"%~d0%%~p0%%~n0%.pdf$\""
+   
+   ; Phaseshifts handler
+   WriteRegExpandStr HKCU "Software\Classes\.phs" "" "CLEED_phaseshift_file"
+   WriteRegExpandStr HKCR "Software\Classes\.phs" "" "CLEED_phaseshift_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_phaseshift_file" "" "CLEED phase shifts file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_phaseshift_file" "" "CLEED phase shifts file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_phaseshift_file\DefaultIcon" "" "$\"$INSTDIR\icons\phaseshift.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_phaseshift_file\DefaultIcon" "" "$\"$INSTDIR\icons\phaseshift.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_phaseshift_file\shell\phaseshifts" "MUIVerb" "set CLEED_PHASE to here"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_phaseshift_file\shell\phaseshifts" "MUIVerb" "set CLEED_PHASE to here"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_phaseshift_file\shell\phaseshifts" "icon" "$\"$INSTDIR\bin\crfac.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_phaseshift_file\shell\phaseshifts" "icon" "$\"$INSTDIR\bin\crfac.exe$\",0"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_phaseshift_file\shell\phaseshifts\command" "" "setx CLEED_PHASE $\"%~d0%%~p0%$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_phaseshift_file\shell\phaseshifts\command" "" "setx CLEED_PHASE $\"%~d0%%~p0%$\""
+   
+   ; mkiv handler
+   WriteRegExpandStr HKCU "Software\Classes\.mkiv" "" "CLEED_mkiv_input_file"
+   WriteRegExpandStr HKCR "Software\Classes\.mkiv" "" "CLEED_mkiv_input_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_input_file" "" "CLEED mkiv input file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_input_file" "" "CLEED mkiv input file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_input_file\ShellNew" "" "$\"$INSTDIR\templates\new.mkiv$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_input_file\ShellNew" "" "$\"$INSTDIR\templates\new.mkiv$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_input_file\DefaultIcon" "" "$\"$INSTDIR\bin\mkiv.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_input_file\DefaultIcon" "" "$\"$INSTDIR\bin\mkiv.exe$\",0"  
+   
+   WriteRegExpandStr HKCU "Software\Classes\.posn" "" "CLEED_mkiv_position_file"
+   WriteRegExpandStr HKCR "Software\Classes\.posn" "" "CLEED_mkiv_position_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_position_file" "" "CLEED mkiv position file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_posiiton_file" "" "CLEED mkiv position file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_position_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv-pos.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_position_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv-pos.ico$\""  
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_position_file\ShellNew" "" "$\"$INSTDIR\templates\new.posn$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_position_file\ShellNew" "" "$\"$INSTDIR\templates\new.posn$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\.var" "" "CLEED_mkiv_variable_file"
+   WriteRegExpandStr HKCR "Software\Classes\.var" "" "CLEED_mkiv_variable_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_variable_file" "" "CLEED mkiv variable file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_variable_file" "" "CLEED mkiv variable file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_variable_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv-var.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_variable_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv-var.ico$\""  
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_variable_file\ShellNew" "" "$\"$INSTDIR\templates\new.var$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_variable_file\ShellNew" "" "$\"$INSTDIR\templates\new.var$\"" 
+   
+   WriteRegExpandStr HKCU "Software\Classes\.param" "" "CLEED_mkiv_parameter_file"
+   WriteRegExpandStr HKCR "Software\Classes\.param" "" "CLEED_mkiv_parameter_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_parameter_file" "" "CLEED mkiv parameter file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_parameter_file" "" "CLEED mkiv parameter file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_mkiv_parameter_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv-var.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_mkiv_parameter_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv-var.ico$\""  
+   
+   ### Register file extensions ###
+  
+   ; *.bsr
+   WriteRegExpandStr HKCU "Software\Classes\.bsr" "" "CLEED_bsr_file"
+   WriteRegExpandStr HKCR "Software\Classes\.bsr" "" "CLEED_bsr_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bsr_file" "" "CLEED bsr file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bsr_file" "" "CLEED bsr file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bsr_file\DefaultIcon" "" "$\"$INSTDIR\icons\bsr.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bsr_file\DefaultIcon" "" "$\"$INSTDIR\icons\bsr.ico$\""
+   
+   ; *.bmin
+   WriteRegExpandStr HKCU "Software\Classes\.bmin" "" "CLEED_bulk_min_file"
+   WriteRegExpandStr HKCR "Software\Classes\.bmin" "" "CLEED_bulk_min_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file" "" "CLEED bulk min file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file" "" "CLEED bulk min file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-bmin-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-bmin-file.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\shell\latt" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\shell\latt" "" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+      
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_min_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -i $\"%~d0%%~p0%%~n0%.pmin$\" -b $\"%0%$\" -f CLEED"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_min_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -i $\"%~d0%%~p0%%~n0%.pmin$\" -b $\"%0%$\" -f CLEED"
+   
+   ; *.bul Windows Explorer file handler
+   WriteRegExpandStr HKCU "Software\Classes\.bul" "" "CLEED_bulk_file"
+   WriteRegExpandStr HKCR "Software\Classes\.bul" "" "CLEED_bulk_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file" "" "CLEED bulk file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file" "" "CLEED bulk file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\ShellNew" "" "$\"$INSTDIR\templates\new.bul$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\ShellNew" "" "$\"$INSTDIR\templates\new.bul$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-bul-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-bul-file.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\shell\latt" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\shell\latt" "" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+      
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_bulk_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -i $\"%~d0%%~p0%%~n0%.inp$\" -b $\"%0%$\" -f CLEED"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_bulk_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -i $\"%~d0%%~p0%%~n0%.inp$\" -b $\"%0%$\" -f CLEED"
+   
+   ; *.ctr Windows Explorer file handler
+   WriteRegExpandStr HKCU "Software\Classes\.ctr" "" "CLEED_control_file"
+   WriteRegExpandStr HKCR "Software\Classes\.ctr" "" "CLEED_control_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\ShellNew" "" "$\"$INSTDIR\templates\new.ctr$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_control_file\ShellNew" "" "$\"$INSTDIR\templates\new.ctr$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file" "" "CLEED control file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_control_file" "" "CLEED control file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\DefaultIcon" "" "$\"$INSTDIR\icons\ctr.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_control_file\DefaultIcon" "" "$\"$INSTDIR\icons\ctr.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\shell\crfac" "icon" "$\"$INSTDIR\bin\crfac.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_control_file\shell\crfac" "icon" "$\"$INSTDIR\bin\crfac.exe$\",0"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\shell\crfac" "subcommands" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_control_file\shell\crfac" "subcommands" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\shell\crfac\shell\crfac" "MUIVerb" "Generate IV files"
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\shell\crfac\shell\crfac" "MUIVerb" "Generate IV files"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\shell\crfac\shell\crfac" "icon" "$\"$INSTDIR\icons\mkiv.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_control_file\shell\crfac\shell\crfac" "icon" "$\"$INSTDIR\icons\mkiv.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_control_file\shell\crfac\shell\crfac\command" "" "START $\"crfac$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\crfac.exe$\" -c $\"%0%$\" -t $\"%~d0%%~p0%%~n0%.res$\" -w $\"%~d0%%~p0%%~n0%.iv$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_control_file\shell\crfac\shell\crfac\command" "" "START $\"crfac$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\crfac.exe$\" -c $\"%0%$\" -t $\"%~d0%%~p0%%~n0%.res$\" -w $\"%~d0%%~p0%%~n0%.iv$\""
+   
+   ; *.dum
+   WriteRegExpandStr HKCU "Software\Classes\.dum" "" "CLEED_dummy_file"
+   WriteRegExpandStr HKCR "Software\Classes\.dum" "" "CLEED_dummy_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_dummy_file" "" "CLEED dummy file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_dummy_file" "" "CLEED dummy file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_dummy_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-dum-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_dummy_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-dum-file.ico$\""
+   
+   ; *.err
+   WriteRegExpandStr HKCU "Software\Classes\.err" "" "CLEED_error_file"
+   WriteRegExpandStr HKCR "Software\Classes\.err" "" "CLEED_error_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_error_file" "" "CLEED error log"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_error_file" "" "CLEED error log"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_error_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-err-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_error_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-err-file.ico$\""
+   
+   ; *.fsm
+   WriteRegExpandStr HKCU "Software\Classes\.fsm" "" "CLEED_fsm_file"
+   WriteRegExpandStr HKCR "Software\Classes\.fsm" "" "CLEED_fsm_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_fsm_file" "" "Fourier smoothed IV file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_fsm_file" "" "Fourier smoothed IV file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_fsm_file\DefaultIcon" "" "$\"$INSTDIR\icons\ftsmooth.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_fsm_file\DefaultIcon" "" "$\"$INSTDIR\icons\ftsmooth.ico$\""
+    
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_fsm_file\shell\ftsmooth" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_fsm_file\shell\ftsmooth" "" ""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_fsm_file\shell\ftsmooth" "MUIVerb" "Do Fourier smooth"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_fsm_file\shell\ftsmooth" "MUIVerb" "Do Fourier smooth"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_fsm_file\shell\ftsmooth" "icon" "$\"$INSTDIR\bin\ftsmooth.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_fsm_file\shell\ftsmooth" "icon" "$\"$INSTDIR\bin\ftsmooth.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_fsm_file\shell\ftsmooth\command" "" "START $\"ftsmooth '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\ftsmooth.exe$\" -i $\"%0%$\" -o $\"%~d0%%~p0%%~n0%.fsm$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_fsm_file\shell\ftsmooth\command" "" "START $\"ftsmooth '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\ftsmooth.exe$\" -i $\"%0%$\" -o $\"%~d0%%~p0%%~n0%.fsm$\""
+   
+   ; *.iv
+   WriteRegExpandStr HKCU "Software\Classes\.iv" "" "CLEED_iv_file"
+   WriteRegExpandStr HKCR "Software\Classes\.iv" "" "CLEED_iv_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_iv_file" "" "CLEED IV file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_iv_file" "" "CLEED IV file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_iv_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_iv_file\DefaultIcon" "" "$\"$INSTDIR\icons\mkiv.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_iv_file\shell\ftsmooth" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_iv_file\shell\ftsmooth" "" ""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_iv_file\shell\ftsmooth" "MUIVerb" "Do Fourier smooth"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_iv_file\shell\ftsmooth" "MUIVerb" "Do Fourier smooth"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_iv_file\shell\ftsmooth" "icon" "$\"$INSTDIR\bin\ftsmooth.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_iv_file\shell\ftsmooth" "icon" "$\"$INSTDIR\bin\ftsmooth.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_iv_file\shell\ftsmooth\command" "" "START $\"ftsmooth '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\ftsmooth.exe$\" -i $\"%0%$\" -o $\"%~d0%%~p0%%~n0%.fsm$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_iv_file\shell\ftsmooth\command" "" "START $\"ftsmooth '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\ftsmooth.exe$\" -i $\"%0%$\" -o $\"%~d0%%~p0%%~n0%.fsm$\""
+   
+   ; *.ini Windows Explorer file handler
+   WriteRegExpandStr HKCU "Software\Classes\inifile\shell\set_env\" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\inifile\shell\set_env\" "" ""
+
+   WriteRegExpandStr HKCU "Software\Classes\inifile\shell\set_env" "MUIVerb" "INI -> System Env"
+   WriteRegExpandStr HKCR "Software\Classes\inifile\shell\set_env" "MUIVerb" "INI -> System Env"
+   
+   WriteRegExpandStr HKCU "Software\Classes\inifile\shell\set_env" "icon" "$\"$WINDIR\System32\cmd.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\inifile\shell\set_env" "icon" "$\"$WINDIR\System32\cmd.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\inifile\shell\set_env\command" "" "START $\"set_env.exe '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.py$\" -i $\"%0%$\" -o $\"%~d0%%~p0%%~n0%.ini$\""
+   WriteRegExpandStr HKCR "Software\Classes\inifile\shell\set_env\command" "" "START $\"set_env.exe '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.py$\" -i $\"%0%$\" -o $\"%~d0%%~p0%%~n0%.ini$\""
+   
+   ; *.inp Windows Explorer file handler
+   WriteRegExpandStr HKCU "Software\Classes\.inp" "" "CLEED_input_file"
+   WriteRegExpandStr HKCR "Software\Classes\.inp" "" "CLEED_input_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file" "" "CLEED input file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file" "" "CLEED input file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-inp-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-inp-file.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\ShellNew" "" "$\"$INSTDIR\templates\new.inp$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\ShellNew" "" "$\"$INSTDIR\templates\new.inp$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch" "" ""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch" "icon" "$\"$INSTDIR\bin\csearch.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch" "icon" "$\"$INSTDIR\bin\csearch.exe$\",0"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch" "subcommands" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch" "subcommands" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_env" "MUIVerb" "System Environment Search"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_env" "MUIVerb" "System Environment Search"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_env" "icon" "$\"$INSTDIR\bin\csearch.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_env" "icon" "$\"$INSTDIR\bin\csearch.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_env\command" "" "START $\"csearch '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_env\command" "" "START $\"csearch '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_nsym" "MUIVerb" "Normal Search"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_nsym" "MUIVerb" "Normal Search"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_nsym" "icon" "$\"$INSTDIR\bin\cleed_nsym.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_nsym" "icon" "$\"$INSTDIR\bin\cleed_nsym.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_nsym\command" "" "START $\"csearch-nsym '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" -i $\"%~d0%%~p0%%~n0%.ini$\" -o $\"%~d0%%~p0%%~n0%.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_nsym\command" "" "START $\"csearch-nsym '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" -i $\"%~d0%%~p0%%~n0%.ini$\" -o $\"%~d0%%~p0%%~n0%.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_sym" "MUIVerb" "Symmetry Search"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_sym" "MUIVerb" "Symmetry Search"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_sym" "icon" "$\"$INSTDIR\bin\cleed_sym.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_sym" "icon" "$\"$INSTDIR\bin\cleed_sym.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_sym\command" "" "START $\"csearch-sym '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" -i $\"%~d0%%~p0%%~n0%.ini$\" -o $\"%~d0%%~p0%%~n0%.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_sym\command" "" "START $\"csearch-sym '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" -i $\"%~d0%%~p0%%~n0%.ini$\" -o $\"%~d0%%~p0%%~n0%.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_aoi" "MUIVerb" "Angle of Incidence Search"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_aoi" "MUIVerb" "Angle of Incidence Search"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_aoi" "icon" "$\"$INSTDIR\bin\caoi_leed.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_aoi" "icon" "$\"$INSTDIR\bin\caoi_leed.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_aoi\command" "" "START $\"csearch-aoi '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" $\"-x$\" $\"aoi$\" -i $\"%~d0%%~p0%%~n0%.ini$\" -o $\"%~d0%%~p0%%~n0%.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\csearch\shell\csearch_aoi\command" "" "START $\"csearch-aoi '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" $\"-x$\" $\"aoi$\" -i $\"%~d0%%~p0%%~n0%.ini$\" -o $\"%~d0%%~p0%%~n0%.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -i $\"%0%$\" 1^>$\"%~d0%%~p0%%~n0%.out$\" 2^>$\"%~d0%%~p0%%~n0%.err$\""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\latt" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\latt" "" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\latt" "icon" "$\"$INSTDIR\bin\latt.exe$\",0"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\latt" "MUIVerb" "Generate xyz lattice"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\latt\command" "" "START /MIN /B CMD /C CALL $\"$INSTDIR\bin\latt.exe$\" -i $\"%0%$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\cmd" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\cmd" "" ""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\cmd" "icon" "$\"$WINDIR\System32\cmd.exe$\",0" 
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\cmd" "icon" "$\"$WINDIR\System32\cmd.exe$\",0"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\cmd" "MUIVerb" "Command prompt..." 
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\cmd" "MUIVerb" "Command prompt..."
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\cmd\command" "" "CMD /K CALL cd $\"%~d0%%~p0%$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\cmd\command" "" "CMD /K CALL cd $\"%~d0%%~p0%$\""
+ 
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+      
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_input_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -b $\"%~d0%%~p0%%~n0%.bul$\" -i $\"%0%$\" -f CLEED"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_input_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -b $\"%~d0%%~p0%%~n0%.bul$\" -i $\"%0%$\" -f CLEED"
+ 
+    ; *.out
+   WriteRegExpandStr HKCU "Software\Classes\.out" "" "CLEED_output_file"
+   WriteRegExpandStr HKCR "Software\Classes\.out" "" "CLEED_output_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_output_file" "" "CLEED output log"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_output_file" "" "CLEED output log"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_output_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-out-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_output_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-out-file.ico$\""
+ 
+   ; *.par
+   WriteRegExpandStr HKCU "Software\Classes\.par" "" "CLEED_parameter_file"
+   WriteRegExpandStr HKCR "Software\Classes\.par" "" "CLEED_parameter_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_parameter_file" "" "CLEED parameter file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_parameter_file" "" "CLEED parameter file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_parameter_file\DefaultIcon" "" "$\"$INSTDIR\icons\bsr.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_parameter_file\DefaultIcon" "" "$\"$INSTDIR\icons\bsr.ico$\""
+   
+   ; *.pmin
+   WriteRegExpandStr HKCU "Software\Classes\.pmin" "" "CLEED_pmin_file"
+   WriteRegExpandStr HKCR "Software\Classes\.pmin" "" "CLEED_pmin_file"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pmin_file" "" "CLEED pmin file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pmin_file" "" "CLEED pmin file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pmin_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-pmin-file.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pmin_file\DefaultIcon" "" "$\"$INSTDIR\icons\cleed-pmin-file.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pmin_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pmin_file\shell\phaseshifts" "MUIVerb" "Generate phaseshifts"
+      
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pmin_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pmin_file\shell\phaseshifts" "icon" "$\"$INSTDIR\icons\phaseshifts.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_pmin_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -b $\"%~d0%%~p0%%~n0%.bmin$\" -i $\"%0%$\" -f CLEED"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_pmin_file\shell\phaseshifts\command" "" "START /MIN /B CMD /C CALL phsh.py -g -b $\"%~d0%%~p0%%~n0%.bmin$\" -i $\"%0%$\" -f CLEED"
+
+   ; *.res Windows Explorer file handler
+   WriteRegExpandStr HKCU "Software\Classes\.res" "" "CLEED_results_file"
+   WriteRegExpandStr HKCR "Software\Classes\.res" "" "CLEED_results_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file" "" "CLEED results file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file" "" "CLEED results file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file\DefaultIcon" "" "$\"$INSTDIR\icons\results.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file\DefaultIcon" "" "$\"$INSTDIR\icons\results.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file\shell\crfac" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file\shell\crfac" "" ""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file\shell\crfac" "icon" "$\"$INSTDIR\bin\crfac.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file\shell\crfac" "icon" "$\"$INSTDIR\bin\crfac.exe$\",0"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file\shell\crfac" "subcommands" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file\shell\crfac" "subcommands" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file\shell\crfac\shell\crfac" "MUIVerb" "Generate IV files"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file\shell\crfac\shell\crfac" "MUIVerb" "Generate IV files"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file\shell\crfac\shell\crfac" "icon" "$\"$INSTDIR\icons\mkiv.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file\shell\crfac\shell\crfac" "icon" "$\"$INSTDIR\icons\mkiv.ico$\""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_results_file\shell\crfac\shell\crfac\command" "" "START $\"crfac$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\crfac.exe$\" -t $\"%0%$\" -c $\"%~d0%%~p0%%~n0%.ctr$\" -w $\"%~d0%%~p0%%~n0%.iv$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_results_file\shell\crfac\shell\crfac\command" "" "START $\"crfac$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\crfac.exe$\" -t $\"%0%$\" -c $\"%~d0%%~p0%%~n0%.ctr$\" -w $\"%~d0%%~p0%%~n0%.iv$\""
+   
+   ; *.ver file Windows Explorer handler
+   WriteRegExpandStr HKCU "Software\Classes\.ver" "" "CLEED_vertex_file"
+   WriteRegExpandStr HKCR "Software\Classes\.ver" "" "CLEED_vertex_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\.vbk" "" "CLEED_vertex_file"
+   WriteRegExpandStr HKCR "Software\Classes\.vbk" "" "CLEED_vertex_file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_vertex_file" "" "CLEED vertex file"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_vertex_file" "" "CLEED vertex file"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_vertex_file\DefaultIcon" "" "$\"$INSTDIR\icons\vertices.ico$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_vertex_file\DefaultIcon" "" "$\"$INSTDIR\icons\vertices.ico$\""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_vertex_file\shell\csearch" "" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_vertex_file\shell\csearch" "" ""
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_vertex_file\shell\csearch" "icon" "$\"$INSTDIR\bin\csearch.exe$\",0"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_vertex_file\shell\csearch" "icon" "$\"$INSTDIR\bin\csearch.exe$\",0"
+
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_vertex_file\shell\csearch" "subcommands" ""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_vertex_file\shell\csearch" "subcommands" ""
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_vertex_file\shell\csearch\shell\csearch" "MUIVerb" "Resume"
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_vertex_file\shell\csearch\shell\csearch" "MUIVerb" "Resume"
+   
+   WriteRegExpandStr HKCU "Software\Classes\CLEED_vertex_file\shell\csearch\shell\csearch\command" "" "START $\"csearch '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" -i $\"%~d0%%~p0%*.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -v $\"%0%$\" -i $\"%~d0%%~p0%%~n0%.inp$\" 1^>^>$\"%~d0%%~p0%%~n0%.out$\" 2^>^>$\"%~d0%%~p0%%~n0%.err$\""
+   WriteRegExpandStr HKCR "Software\Classes\CLEED_vertex_file\shell\csearch\shell\csearch\command" "" "START $\"csearch '%~n0%'$\" /MIN /B CMD /C CALL $\"$INSTDIR\bin\set_env.exe$\" -i $\"%~d0%%~p0%*.ini$\" ^& $\"$INSTDIR\bin\csearch.exe$\" -v $\"%0%$\" -i $\"%~d0%%~p0%%~n0%.inp$\" 1^>^>$\"%~d0%%~p0%%~n0%.out$\" 2^>^>$\"%~d0%%~p0%%~n0%.err$\""
+   
+   ; make sure Windows knows about the changes
+   ;!insertmacro RefreshShellIcons
+   Call RefreshShellIcons 
+   SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000   
+   
+   SetDetailsPrint textonly
+   DetailPrint "Finished."
+SectionEnd
+
+##############################################################################
+# #
+# UNINSTALLER SECTION #
+# #
+##############################################################################
+
+Var UnPageUserAppDataDialog
+Var UnPageUserAppDataCheckbox
+Var UnPageUserAppDataCheckbox_State
+Var UnPageUserAppDataEditBox
+
+Function un.UnPageUserAppData
+   !insertmacro MUI_HEADER_TEXT "Uninstall @CPACK_PACKAGE_NAME@" "Remove @CPACK_PACKAGE_NAME@'s data folder from your computer."
+   nsDialogs::Create /NOUNLOAD 1018
+   Pop $UnPageUserAppDataDialog
+
+   ${If} $UnPageUserAppDataDialog == error
+      Abort
+   ${EndIf}
+
+   ${NSD_CreateLabel} 0 0 100% 12u "Do you want to delete @CPACK_PACKAGE_NAME@'s data folder?"
+   Pop $0
+
+   ${NSD_CreateText} 0 13u 100% 12u "$LOCALAPPDATA\@CPACK_PACKAGE_NAME@"
+   Pop $UnPageUserAppDataEditBox
+   SendMessage $UnPageUserAppDataEditBox ${EM_SETREADONLY} 1 0
+
+   ${NSD_CreateLabel} 0 46u 100% 24u "Leave unchecked to keep the data folder for later use or check to delete the data folder."
+   Pop $0
+
+   ${NSD_CreateCheckbox} 0 71u 100% 8u "Yes, delete this data folder."
+   Pop $UnPageUserAppDataCheckbox
+
+   nsDialogs::Show
+FunctionEnd
+
+Function un.UnPageUserAppDataLeave
+   ${NSD_GetState} $UnPageUserAppDataCheckbox $UnPageUserAppDataCheckbox_State
+FunctionEnd
+
+Section Uninstall
+   IfFileExists "$INSTDIR\@CPACK_PACKAGE_NAME@-gui.exe" @CPACK_PACKAGE_NAME@-gui_installed
+      MessageBox MB_YESNO "It does not appear that @CPACK_PACKAGE_NAME@ is installed in the directory '$INSTDIR'.$\r$\nContinue anyway (not recommended)?" IDYES @CPACK_PACKAGE_NAME@-gui_installed
+      Abort "Uninstall aborted by user"
+   @CPACK_PACKAGE_NAME@-gui_installed:
+
+   ; Delete registry keys.
+   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@"
+   DeleteRegValue HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionBuild"
+   DeleteRegValue HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionMajor"
+   DeleteRegValue HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionMinor"
+   DeleteRegValue HKLM "Software\@CPACK_PACKAGE_NAME@" "VersionRevision"
+   DeleteRegValue HKLM "Software\@CPACK_PACKAGE_NAME@" ""
+   DeleteRegKey HKLM "Software\@CPACK_PACKAGE_NAME@"
+
+   DeleteRegKey HKCR "@CPACK_PACKAGE_NAME@-gui"
+
+   ; Delete Environment variables
+   DeleteRegKey HKCU "Environment\CLEED_HOME"
+   DeleteRegKey HKCU "Environment\CLEED_PHASE"
+   
+   ; Unregister latt protocol handler
+   DeleteRegKey HKCU "Software\Classes\.latt" 
+   DeleteRegKey HKCR "Software\Classes\.latt" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_lattice_file"
+   DeleteRegKey HKCR "Software\Classes\CLEED_lattice_file"  
+   
+   ; Register patt protocol handler
+   DeleteRegKey HKCU "Software\Classes\.patt"
+   DeleteRegKey HKCR "Software\Classes\.patt"
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_pattern_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_pattern_file" 
+   
+   ; Phaseshifts handler
+   DeleteRegKey HKCU "Software\Classes\.phs" 
+   DeleteRegKey HKCR "Software\Classes\.phs" 
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_phaseshift_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_phaseshift_file" 
+      
+   ; mkiv handler
+   DeleteRegKey HKCU "Software\Classes\.mkiv" 
+   DeleteRegKey HKCR "Software\Classes\.mkiv" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_mkiv_input_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_mkiv_input_file" 
+   
+   DeleteRegKey HKCU "Software\Classes\.posn" 
+   DeleteRegKey HKCR "Software\Classes\.posn" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_mkiv_position_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_mkiv_posiiton_file" 
+   
+   DeleteRegKey HKCU "Software\Classes\.var" 
+   DeleteRegKey HKCR "Software\Classes\.var" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_mkiv_variable_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_mkiv_variable_file" 
+   
+   DeleteRegKey HKCU "Software\Classes\.param" 
+   DeleteRegKey HKCR "Software\Classes\.param" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_mkiv_parameter_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_mkiv_parameter_file" 
+      
+   ### Delete file extensions ###
+  
+   ; *.bsr
+   DeleteRegKey HKCU "Software\Classes\.bsr" 
+   DeleteRegKey HKCR "Software\Classes\.bsr" 
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_bsr_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_bsr_file" 
+      
+   ; *.bmin
+   DeleteRegKey HKCU "Software\Classes\.bmin" 
+   DeleteRegKey HKCR "Software\Classes\.bmin" 
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_bulk_min_file"
+   DeleteRegKey HKCR "Software\Classes\CLEED_bulk_min_file"
+      
+   ; *.bul Windows Explorer file handler
+   DeleteRegKey HKCU "Software\Classes\.bul" 
+   DeleteRegKey HKCR "Software\Classes\.bul" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_bulk_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_bulk_file" 
+   
+   ; *.ctr Windows Explorer file handler
+   DeleteRegKey HKCU "Software\Classes\.ctr" 
+   DeleteRegKey HKCR "Software\Classes\.ctr" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_control_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_control_file" 
+
+   ; *.dum
+   DeleteRegKey HKCU "Software\Classes\.dum" 
+   DeleteRegKey HKCR "Software\Classes\.dum" 
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_dummy_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_dummy_file" 
+   
+   ; *.err
+   DeleteRegKey HKCU "Software\Classes\.err"
+   DeleteRegKey HKCR "Software\Classes\.err"
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_error_file"
+   DeleteRegKey HKCR "Software\Classes\CLEED_error_file"
+      
+   ; *.fsm
+   DeleteRegKey HKCU "Software\Classes\.fsm" 
+   DeleteRegKey HKCR "Software\Classes\.fsm" 
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_fsm_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_fsm_file" 
+   
+   ; *.iv
+   DeleteRegKey HKCU "Software\Classes\.iv" 
+   DeleteRegKey HKCR "Software\Classes\.iv" 
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_iv_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_iv_file" 
+      
+   ; *.ini Windows Explorer file handler
+   DeleteRegKey HKCU "Software\Classes\inifile\shell\set_env\"
+   DeleteRegKey HKCR "Software\Classes\inifile\shell\set_env\"
+
+   ; *.inp Windows Explorer file handler
+   DeleteRegKey HKCU "Software\Classes\.inp" 
+   DeleteRegKey HKCR "Software\Classes\.inp" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_input_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_input_file" 
+
+   ; *.out
+   DeleteRegKey HKCU "Software\Classes\.out"
+   DeleteRegKey HKCR "Software\Classes\.out"
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_output_file"
+   DeleteRegKey HKCR "Software\Classes\CLEED_output_file"
+   
+   ; *.par
+   DeleteRegKey HKCU "Software\Classes\.par" 
+   DeleteRegKey HKCR "Software\Classes\.par" 
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_parameter_file"
+   DeleteRegKey HKCR "Software\Classes\CLEED_parameter_file"
+      
+   ; *.pmin
+   DeleteRegKey HKCU "Software\Classes\.pmin"
+   DeleteRegKey HKCR "Software\Classes\.pmin"
+
+   DeleteRegKey HKCU "Software\Classes\CLEED_pmin_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_pmin_file" 
+   
+   ; *.res Windows Explorer file handler
+   DeleteRegKey HKCU "Software\Classes\.res" 
+   DeleteRegKey HKCR "Software\Classes\.res" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_results_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_results_file" 
+   
+   ; *.ver file Windows Explorer handler
+   DeleteRegKey HKCU "Software\Classes\.ver" 
+   DeleteRegKey HKCR "Software\Classes\.ver" 
+   
+   DeleteRegKey HKCU "Software\Classes\.vbk" 
+   DeleteRegKey HKCR "Software\Classes\.vbk" 
+   
+   DeleteRegKey HKCU "Software\Classes\CLEED_vertex_file" 
+   DeleteRegKey HKCR "Software\Classes\CLEED_vertex_file"    
+   
+   ; Start menu shortcuts.
+   !ifdef OPTION_SECTION_SC_START_MENU
+      SetShellVarContext all
+      RMDir /r "$SMPROGRAMS\@CPACK_PACKAGE_NAME@"
+      SetShellVarContext current
+   !endif
+
+   ; Desktop shortcut.
+   !ifdef OPTION_SECTION_SC_DESKTOP
+      IfFileExists "$DESKTOP\@CPACK_PACKAGE_NAME@.lnk" 0 +2
+         Delete "$DESKTOP\@CPACK_PACKAGE_NAME@.lnk"
+   !endif
+
+   ; Quick Launch shortcut.
+   !ifdef OPTION_SECTION_SC_QUICK_LAUNCH
+      IfFileExists "$QUICKLAUNCH\@CPACK_PACKAGE_NAME@.lnk" 0 +2
+         Delete "$QUICKLAUNCH\@CPACK_PACKAGE_NAME@.lnk"
+   !endif
+
+   ; Remove all the Program Files.
+   RMDir /r $INSTDIR
+
+   ; Uninstall User Data if option is checked, otherwise skip.
+   ${If} $UnPageUserAppDataCheckbox_State == ${BST_CHECKED}
+      RMDir /r "$LOCALAPPDATA\@CPACK_PACKAGE_NAME@"
+   ${EndIf}
+
+   ; make sure windows knows about the change
+   SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+   
+   SetDetailsPrint textonly
+   DetailPrint "Finished."
+SectionEnd
+
+##############################################################################
+# #
+# NSIS Installer Event Handler Functions #
+# #
+##############################################################################
+
+Function .onInit
+   !insertmacro INSTALLOPTIONS_EXTRACT "NSIS.InstallOptions.ini"
+
+   ; Remove Quick Launch option from Windows 7, as no longer applicable - usually.
+   ${IfNot} ${AtMostWinVista}
+      SectionSetText ${SEC_QUICK_LAUNCH} "Quick Launch Shortcut (N/A)"
+      SectionSetFlags ${SEC_QUICK_LAUNCH} ${SF_RO}
+      SectionSetInstTypes ${SEC_QUICK_LAUNCH} 0
+   ${EndIf}
+
+   ${MementoSectionRestore}
+
+   UAC_Elevate:
+      !insertmacro UAC_RunElevated
+      StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
+      StrCmp 0 $0 0 UAC_Err ; Error?
+      StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
+      Quit
+
+   UAC_Err:
+      MessageBox MB_ICONSTOP "Unable to elevate, error $0"
+      Abort
+
+   UAC_ElevationAborted:
+      Abort
+
+   UAC_Success:
+      StrCmp 1 $3 +4 ;Admin?
+      StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
+      MessageBox MB_ICONSTOP "This installer requires admin access, try again"
+      goto UAC_Elevate
+
+   ; Prevent multiple instances.
+   System::Call 'kernel32::CreateMutexA(i 0, i 0, t "@CPACK_PACKAGE_NAME@-guiInstaller") i .r1 ?e'
+   Pop $R0
+   StrCmp $R0 0 +3
+      MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
+      Abort
+
+   ; Use available InstallLocation when possible. This is useful in the uninstaller
+   ; via re-install, which would otherwise use a default location - a bug.
+   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_NAME@" "InstallLocation"
+   StrCmp $R0 "" SkipSetInstDir
+   StrCpy $INSTDIR $R0
+   SkipSetInstDir:
+
+   ; Shutdown @CPACK_PACKAGE_NAME@ in case Add/Remove re-installer option used.
+   Call Ensure@CPACK_PACKAGE_NAME@Shutdown
+FunctionEnd
+
+Function .onInstSuccess
+   ${MementoSectionSave}
+   #UAC::Unload ;Must call unload!
+FunctionEnd
+
+Function .onInstFailed
+   #UAC::Unload ;Must call unload!
+FunctionEnd
+
+##############################################################################
+# #
+# NSIS Uninstaller Event Handler Functions #
+# #
+##############################################################################
+
+Function un.onInit
+   UAC_Elevate:
+      !insertmacro UAC_RunElevated
+      StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
+      StrCmp 0 $0 0 UAC_Err ; Error?
+      StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
+      Quit
+
+   UAC_Err:
+      MessageBox MB_ICONSTOP "Unable to elevate, error $0"
+      Abort
+
+   UAC_ElevationAborted:
+      Abort
+
+   UAC_Success:
+      StrCmp 1 $3 +4 ;Admin?
+      StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
+      MessageBox MB_ICONSTOP "This uninstaller requires admin access, try again"
+      goto UAC_Elevate
+
+   ; Prevent multiple instances.
+   System::Call 'kernel32::CreateMutexA(i 0, i 0, t "@CPACK_PACKAGE_NAME@-guiUninstaller") i .r1 ?e'
+   Pop $R0
+   StrCmp $R0 0 +3
+      MessageBox MB_OK|MB_ICONEXCLAMATION "This uninstaller is already running."
+      Abort
+FunctionEnd
+
+Function un.onUnInstSuccess
+   #UAC::Unload ;Must call unload!
+FunctionEnd
+
+Function un.onUnInstFailed
+   #UAC::Unload ;Must call unload!
+FunctionEnd

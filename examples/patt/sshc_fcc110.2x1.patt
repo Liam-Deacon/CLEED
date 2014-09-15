@@ -1,0 +1,8 @@
+# input file for pattern
+c fcc(110) - p(2x1)
+ 0.0    +1.0   a1
+-1.4142  0.0   a2
+1.803        radius
+1            No of domains
+  2   0  M1
+  0   1  M1

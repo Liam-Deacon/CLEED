@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Model</class>
+ <widget class="QWidget" name="Model">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>315</width>
+    <height>348</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit Model</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res/icons.qrc">
+    <normaloff>:/pencil_32x32.png</normaloff>:/pencil_32x32.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QComboBox" name="comboBox">
+       <property name="toolTip">
+        <string>Geometry</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Oblique p1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Oblique p2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Prim. Rect. pm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Prim. Rect. pg</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Cent. Rect. cm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Prim. Rect. p2mm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Prim. Rect. p2mg</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Prim. Rect, p2gg</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Cent. Rect. c2mm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Square p4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Square p4mm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Square p4gm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hexagonal p3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hexagonal p3m1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hexagonal p31m</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hexagonal p6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hexagonal p6mm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Custom</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="dblMultiply">
+       <property name="suffix">
+        <string> × basis</string>
+       </property>
+       <property name="decimals">
+        <number>4</number>
+       </property>
+       <property name="minimum">
+        <double>-100.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>100.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="toolSwap">
+       <property name="toolTip">
+        <string>Swap Basis Values</string>
+       </property>
+       <property name="text">
+        <string>&lt;-&gt;</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/transfer_32x24.png</normaloff>:/transfer_32x24.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="toolScaleToOne">
+       <property name="toolTip">
+        <string>Scale basis to 1</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/upload_24x32.png</normaloff>:/upload_24x32.png</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="labelA1">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;a&lt;span style=&quot; vertical-align:sub;&quot;&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="dblSpinA1">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;a&lt;span style=&quot; vertical-align:sub;&quot;&gt;1&lt;/span&gt; magnitude&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="statusTip">
+        <string>Basis vector 1 magnitude</string>
+       </property>
+       <property name="decimals">
+        <number>4</number>
+       </property>
+       <property name="minimum">
+        <double>-100.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>100.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.250000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelA2">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;a&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="dblSpinA2">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;a&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt; magnitude&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="statusTip">
+        <string>Basis vector 2 magnitude</string>
+       </property>
+       <property name="decimals">
+        <number>4</number>
+       </property>
+       <property name="singleStep">
+        <double>0.250000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelAlpha">
+       <property name="text">
+        <string>α</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="dblAlpha">
+       <property name="toolTip">
+        <string>Alpha angle </string>
+       </property>
+       <property name="suffix">
+        <string>º</string>
+       </property>
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <double>360.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>120.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="labelRadius">
+       <property name="text">
+        <string>Radius</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="dblRadius">
+       <property name="toolTip">
+        <string>Radius of screen in units of a</string>
+       </property>
+       <property name="decimals">
+        <number>2</number>
+       </property>
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.100000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelDomains">
+       <property name="text">
+        <string># Domains </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="domainsEdit">
+       <property name="toolTip">
+        <string>Number of domains</string>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="maxLength">
+        <number>3</number>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="labelRotation">
+       <property name="text">
+        <string>Rotation</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="dblRotation">
+       <property name="toolTip">
+        <string>Rotation</string>
+       </property>
+       <property name="suffix">
+        <string>º</string>
+       </property>
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="minimum">
+        <double>-180.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>180.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>5.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QLabel" name="labelA1XY">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;a&lt;span style=&quot; vertical-align:sub;&quot;&gt;1&lt;/span&gt; in cartezian coordinates&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-weight:600; vertical-align:sub;&quot;&gt;1&lt;/span&gt; = x , y&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="toolSwapXY1">
+       <property name="toolTip">
+        <string>x &lt;-&gt; y</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/loop_32x32.png</normaloff>:/loop_32x32.png</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <widget class="QLabel" name="labelA2XY">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;a&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt; in cartezian coordinates&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-weight:600; vertical-align:sub;&quot;&gt;2&lt;/span&gt; = x, y &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="toolSwapXY2">
+       <property name="toolTip">
+        <string>x &lt;-&gt; y</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/loop_32x32.png</normaloff>:/loop_32x32.png</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QTreeWidget" name="domainTree">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;List of superstructures to display&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>false</bool>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectItems</enum>
+       </property>
+       <column>
+        <property name="text">
+         <string>Superstructures</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QToolButton" name="toolAdd">
+         <property name="toolTip">
+          <string>Add Structure</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/plus_32x32.png</normaloff>:/plus_32x32.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolRemove">
+         <property name="toolTip">
+          <string>Remove Structure</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/minus_32x8.png</normaloff>:/minus_32x8.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolMerge">
+         <property name="toolTip">
+          <string>Merge Items</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/layers_32x28.png</normaloff>:/layers_32x28.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <action name="actionAddStructure">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/plus_32x32.png</normaloff>:/plus_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Add Structure</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Superstructure</string>
+   </property>
+  </action>
+  <action name="actionRemoveStructure">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/minus_32x8.png</normaloff>:/minus_32x8.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Remove Structure</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Superstructure</string>
+   </property>
+  </action>
+  <action name="actionUpdateBasis">
+   <property name="text">
+    <string>&amp;Update Basis</string>
+   </property>
+   <property name="toolTip">
+    <string>Update Basis</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="res/icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>comboBox</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>actionUpdateBasis</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -1,0 +1,14 @@
+# input file for pattern
+# 3 domains 
+c 3 Dom. (1.33 0 / -0.77 1.54)
+1.0 -1.732       a1
+1.0  1.732       a2
+1.7            radius
+3            No of domains
+#M1
+   1.332 0.000 M1
+  -0.769 1.538 M1
+#M2
+R120
+#M3
+R120

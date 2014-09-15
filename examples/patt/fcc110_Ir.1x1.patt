@@ -1,0 +1,8 @@
+# input file for pattern
+c (1x1)
+2.714   0.000    a1
+0.000   3.839    a2
+2.6    radius
+ 1            No of domains
+  1   0  M1
+  0   1  M1

@@ -1,0 +1,14 @@
+# input file for pattern
+# 3 domains of (2 0 / 1 2)
+c 1 Domain of c(2x4) : (2 2 / 1 -1)
+1.0 -1.732       a1
+1.0  1.732       a2
+1.51           radius
+1            No of domains
+#M1
+  2   2  M1
+  1  -1  M1
+#M2
+R120
+#M3
+R120

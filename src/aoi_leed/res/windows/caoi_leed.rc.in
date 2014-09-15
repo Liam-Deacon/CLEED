@@ -1,0 +1,26 @@
+id ICON "caoi_leed.ico"
+
+1 VERSIONINFO
+FILEVERSION     @AOI_LEED_VERSION_MAJOR@,@AOI_LEED_VERSION_MINOR@,@AOI_LEED_VERSION_PATCH@,0
+PRODUCTVERSION  @AOI_LEED_VERSION_MAJOR@,@AOI_LEED_VERSION_MINOR@,@AOI_LEED_VERSION_PATCH@,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "FileDescription", "Angle of Incidence LEED Wrapper Program"
+      VALUE "FileVersion", "@AOI_LEED_VERSION_MAJOR@.@AOI_LEED_VERSION_MINOR@"
+      VALUE "InternalName", "caoi_leed"
+      VALUE "LegalCopyright", "Georg Held & Zhasmina Zheleeva"
+      VALUE "OriginalFilename", "caoi_leed.exe"
+      VALUE "ProductName", "AOI_LEED"
+      VALUE "ProductVersion", "@AOI_LEED_VERSION_MAJOR@.@AOI_LEED_VERSION_MINOR@"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

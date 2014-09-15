@@ -1,0 +1,18 @@
+##############################################################################
+#                            MKIV POSITION FILE                              #
+##############################################################################
+#
+# This file contains the list of reference spots and their positions in the
+# reference image.
+#
+# The first line gives the number of references spots
+# Each subsequent pair of lines designates the (h,k) miller indices and the
+# centre of the spot (in pixels) in the reference image, respectively.
+#
+3
+2.000000  0.000000
+220.000000 120.000000
+-1.000000  2.000000
+160.000000 320.000000
+-1.000000 -1.000000
+470.000000 340.000000

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdvancedXYZ</class>
+ <widget class="QDialog" name="AdvancedXYZ">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>269</width>
+    <height>344</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Advanced output options</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res/icons.qrc">
+    <normaloff>:/preferences-system-4.png</normaloff>:/preferences-system-4.png</iconset>
+  </property>
+  <widget class="QPlainTextEdit" name="plainTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>241</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Enter Jmol script
+Comments will be removed automatically</string>
+   </property>
+   <property name="lineWrapMode">
+    <enum>QPlainTextEdit::NoWrap</enum>
+   </property>
+   <property name="plainText">
+    <string># Example Jmol script
+# NOTE: 
+# comments will be removed automatically
+# entries after '#' on a line will be ignored
+# new lines will be treated as ';'  
+
+# Global settings
+select *;color bonds lightgrey
+set bondRadiusMilliAngstroms 100 #125
+background white
+set antialiasdisplay true
+#zoom on;zoom 70
+set perspectiveDepth false
+set cameraDepth 10
+set diffusePercent 85 #no light spot
+set ambientPercent 60 #85 #maximum light
+
+# O specific
+select Oxygen;set percentVdwAtom 34
+
+# Zn specific
+select Zinc;set percentVdwAtom 22
+</string>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>310</y>
+     <width>237</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>13</y>
+     <width>151</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Jmol script commands</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>10</y>
+     <width>91</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>load script from file</string>
+   </property>
+   <property name="text">
+    <string>From file...</string>
+   </property>
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/text_x_script.ico</normaloff>:/text_x_script.ico</iconset>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="res/icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

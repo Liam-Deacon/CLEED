@@ -1,0 +1,9 @@
+# input file for pattern
+c Domains of (0.92 1.84 / -1.84 -0.92)
+1.0  1.732       a1
+1.0 -1.732       a2
+1.4           radius
+1            No of domains
+#M1
+  0.92   1.84 M1
+ -1.84 -0.92  M1

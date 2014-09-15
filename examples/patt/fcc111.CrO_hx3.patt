@@ -1,0 +1,13 @@
+# input file for pattern
+# 3 domains 
+c 2 Dom. hexagonal
+1.0 -1.732       a1
+1.0  1.732       a2
+1.7            radius
+2            No of domains
+#M1
+   1.25 0.00  M1
+   0.00 1.25  M1
+#M2
+  0.70   1.41  M1
+ -1.41  -0.70  M1

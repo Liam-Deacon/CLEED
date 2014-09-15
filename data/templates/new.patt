@@ -1,0 +1,17 @@
+##############################################################################
+#                         CLEED PATTERN INPUT FILE                           #
+##############################################################################
+#
+# Example  pattern input file 
+#
+# Lines beginning with 'c' are printed as comments
+#
+# Title:
+c (2x1) - 1 domain
+1.0  0.0            -> a1
+0.0  1.0            -> a2
+1.49                -> radius
+1                   -> number of domains
+  2.0  0.0          -> M1 superstructure matrix elements 11 & 12
+  0.0  1.0          -> M1 superstructure matrix elements 21 & 22
+R90                 -> matrix rotations

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=patt
+Comment=LEED pattern input file
+Icon=cleed_patt
+Terminal=true
+Type=Application
+Categories=Science;
+MimeType=application/x-cleed_patt-item;

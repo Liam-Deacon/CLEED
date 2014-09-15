@@ -1,0 +1,9 @@
+# input file for pattern
+c (3.0 1.5 / 1.5 3.0) = Y1
+0.0  -2.0   1.0 -1.732       a1
+1.732 1.0   1.0 +1.732       a2
+1.6           radius
+1            No of domains
+#M1
+  3.0   1.5 M1
+  1.5   3.0 M1

@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>set_env &mdash; CLEED 0.1.0-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/CLEED_logo.ico"/>
+    <link rel="top" title="CLEED 0.1.0-dev documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/CLEED_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">set_env</a><ul>
+<li><a class="reference internal" href="#syntax">Syntax</a><ul>
+<li><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="set-env">
+<span id="id1"></span><h1>set_env<a class="headerlink" href="#set-env" title="Permalink to this headline">¶</a></h1>
+<p>As <a class="reference internal" href="../LEED_programs.html#csearch"><em>csearch</em></a> requires setting environment variables in order to run, a small
+utility program <tt class="code docutils literal"><span class="pre">set_env</span></tt> is included to setup the CLEED environment for a
+given search.</p>
+<div class="section" id="syntax">
+<span id="set-env-syntax"></span><h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>set_env.py [-h] [-c] [-x &lt;ext&gt; [&lt;ext&gt; ...]] [-e &lt;env&gt; [&lt;env&gt; ...]]  [-i
+&lt;INI_FILE&gt;]   [-o   &lt;INI_FILE&gt;]   [--aoi-leed  &lt;AOI_LEED&gt;]  [--aoi-rfac
+&lt;AOI_RFAC&gt;] [--leed  &lt;LEED&gt;]  [--search  &lt;SEARCH&gt;]  [--sym  &lt;LEED_SYM&gt;]
+[--rfac &lt;RFAC&gt;] [--phsh &lt;PHSH&gt;] [-v] [-V]</pre>
+</div>
+<div class="section" id="options">
+<span id="set-env-options"></span><h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<p><tt class="code docutils literal"><span class="pre">-h</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--help</span></tt></p>
+<blockquote>
+<div>Show help message and exit.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-c</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--check</span></tt></p>
+<blockquote>
+<div>Perform post-processing checks to ensure
+all paths and executables are set correctly.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-x</span> <span class="pre">&lt;ext&gt;</span> <span class="pre">[&lt;ext&gt;</span> <span class="pre">...]</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--ext</span> <span class="pre">&lt;ext&gt;</span> <span class="pre">[&lt;ext&gt;</span> <span class="pre">...]</span></tt></p>
+<blockquote>
+<div>Set enabled extensions; can be any of &#8216;aoi&#8217;, &#8216;sym&#8217; or &#8216;phsh&#8217;.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-e</span> <span class="pre">&lt;env&gt;</span> <span class="pre">[&lt;env&gt;</span> <span class="pre">...]</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--env</span> <span class="pre">&lt;env&gt;</span> <span class="pre">[&lt;env&gt;</span> <span class="pre">...]</span></tt></p>
+<blockquote>
+<div>Set custom environment values of the form: &#8220;&lt;var&gt;:&lt;value&gt;&#8221;.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-i</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--input</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<blockquote>
+<div>Load custom environment from <tt class="code docutils literal"><span class="pre">&lt;INI_FILE&gt;</span></tt></div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-o</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--output</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<blockquote>
+<div><p>Save custom environment to <tt class="code docutils literal"><span class="pre">&lt;INI_FILE&gt;</span></tt> [default: &#8220;cleed.ini&#8221;].</p>
+<p>Note &lt;INI_FILE&gt; is always written.</p>
+</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--aoi-leed</span> <span class="pre">&lt;AOI_LEED&gt;</span></tt></p>
+<blockquote>
+<div>Path to angle of incidence LEED wrapper program [default: &#8220;caoi_leed&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--aoi-rfac</span> <span class="pre">&lt;AOI_RFAC&gt;</span></tt></p>
+<blockquote>
+<div>Path to angle of incidence R-Factor wrapper program [default: &#8220;caoi_rfac&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--leed</span> <span class="pre">&lt;LEED&gt;</span></tt></p>
+<blockquote>
+<div>Path to LEED program [default: &#8220;cleed_nsym&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--search</span> <span class="pre">&lt;SEARCH&gt;</span></tt></p>
+<blockquote>
+<div>Path to search program [default: &#8220;csearch&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--sym</span> <span class="pre">&lt;LEED_SYM&gt;</span></tt></p>
+<blockquote>
+<div>Path to symmetrised LEED program [default: &#8220;cleed_sym&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--rfac</span> <span class="pre">&lt;RFAC&gt;</span></tt></p>
+<blockquote>
+<div>Path to R-Factor program [default: &#8220;crfac&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--phsh</span> <span class="pre">&lt;PHSH&gt;</span></tt></p>
+<blockquote>
+<div>Path to phase shifts program [default: &#8220;phsh.py&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-v</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--verbose</span></tt></p>
+<blockquote>
+<div>Set verbose output.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-V</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--version</span></tt></p>
+<blockquote>
+<div>Show program version information and exit.</div></blockquote>
+</div>
+</div>
+<div class="section" id="examples">
+<span id="set-env-examples"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">set_env</span> <span class="o">--</span><span class="n">check</span>
+</pre></div>
+</div>
+<p>This will set the <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_HOME</span></tt>, <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt>,
+<span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_LEED</span></tt> (to &#8216;cleed_nsym&#8217;) and <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_RFAC</span></tt> (to &#8216;crfac&#8217;)
+environment variables and check to verify all paths are correct.</p>
+<div class="highlight-python"><pre>set_env --check --ext aoi sym phsh</pre>
+</div>
+<p>In addition to the above example, this will set the <span class="target" id="index-4"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CAOI_LEED</span></tt>,
+<span class="target" id="index-5"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CAOI_RFAC</span></tt> and <span class="target" id="index-6"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PHASESHIFTS_LEED</span></tt> environment variables.</p>
+<div class="highlight-python"><pre>set_env --env CLEED_PHASE:"~/cleed/phase"</pre>
+</div>
+<p>This will set the <span class="target" id="index-7"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt> environment variable to &#8220;~/cleed/phase&#8221;.</p>
+<div class="highlight-python"><pre>set_env -i env.ini --env CLEED_PHASE:"%APPDATA%/CLEED/phase" -o env.ini</pre>
+</div>
+<p>This will load the environment from env.ini, then set the <span class="target" id="index-8"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt>
+environment variable to &#8220;%APPDATA%/CLEED/phase&#8221; before re-writing <tt class="file docutils literal"><span class="pre">env.ini</span></tt>
+with the updated value.</p>
+</div>
+<div class="section" id="notes">
+<span id="set-env-notes"></span><h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>A crude bash version of <tt class="file docutils literal"><span class="pre">set_env.py</span></tt> is included in the CLEED
+package as <tt class="file docutils literal"><span class="pre">set_env.sh</span></tt> for environments without modern Python support.
+The bash version works in a similar fashion, however, it isn&#8217;t
+as rigorously tested and therefore your mileage may vary.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Georg Held, Liam Deacon &amp; collaborators.
+    </div>
+  </body>
+</html>

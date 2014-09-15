@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+ <mime-type type="application/x-cleed_ver-item">
+    <sub-class-of type="text/xml"/>
+    <sub-class-of type="application/xml"/>
+    <comment>CLEED vertex file</comment>
+    <icon>cleed_ver</icon>
+    <glob pattern=".ver" weight="50" />
+    <magic priority="90">
+          <match type="string" offset="2" value="!DOCTYPE CLEED VERTEX"/>
+    </magic>
+    <root-XML localName="cleed_ver" />
+  </mime-type>
+ </mime-info>

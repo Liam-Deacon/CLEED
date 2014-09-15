@@ -1,0 +1,134 @@
+.\" Process this file with 'groff -man -Tascii csearch.1'
+.\" man page author: Liam Deacon (liam.deacon@diamond.ac.uk)
+.\"
+.TH csearch 1 "MARCH 2014" CLEED User Manuals
+.\"===================================================================
+
+.SH NAME
+
+csearch \- search program for structure optimisation
+
+.SH SYNTAX
+
+.B csearch 
+\-i 
+.I <input_file> 
+[
+.I OPTIONS...
+]
+
+.SH AVAILABILITY
+
+csearch is available as part of the CLEED package and should be available on any platform where there is a GNU C compiler (GCC) tool chain. GCC is readily available on most Linux distributions, however Windows users can install MinGW, the minimalist GNU tool set for Windows.   
+
+.SH DESCRIPTION
+
+csearch is a computer program written in C which performs structure optimisation. It uses standard optimisation algorithms such as the downhill simplex method, Powell's method, simulated annealing and the genetic algorithm, which can be selected by the use in order to perform the search for the best fit geometry in N-dimensional parameter space (coordinates, angles, but not vibrational amplitudes). While the first two algorithms are strictly downhill\-orientated, i.e. will find only the nearest R factor minimum, the latter two algorithms should in principle provide a means of locating the global R factor minimum within the given constrains, at the expense of many more search steps. Within each search step a set of geometrical parameters is chosen by the algorithm depending on the R factor values achieved previously and in accordance with user\-specified symmetry constraints. The parameters are written to a file serving as input for the LEED program whose output is then fed into the R factor program, 
+.I crfac
+, in order to calculate an R factor value for the current parameter set.
+
+.SH OPTIONS
+
+.IP -i
+.I <input_file>
+.RS
+specifies the parameter input file and is the only mandatory option. The file contains all the geometric and non-geometric parameters need for the surface structure. The <input_file> filename without the extension is used as the "project name" by the program in order to create names for output files.
+.RE
+.IP -d
+.I <initial_dispacement> 
+.RS
+specifies the initial displacements from the start geometry for all parameters.
+.RE
+.IP -s
+.I <search_type>
+.RS
+specifies the search algorithm to be used for the structure optimisation. Possible arguments are:
+.br
+'ga' : genetic algorithm (not implemented yet)
+.br
+'po' : Powell's method
+.br
+'sa' : Simulated annealing
+.br
+'si' : Simplex algorithm
+'sx' : Simplex algorithm (alternative)
+.IP -v
+.I <vertex_file> 
+.RS
+allows the search to be restarted with the current simplex, provided the simplex algorithm is used. The argument 
+.I <vertex_file>
+ is the *.ver file produced by the program.
+.RE
+
+.SH ENVIRONMENT
+The program has been developed in a UNIX environment and uses a few UNIX specific features. The most important is the use of environment variables:
+.PP
+CLEED_HOME: parent directory of CLEED distribution.
+.PP
+CSEARCH_LEED: path of the program used for the LEED calculations. This may simply be 'csearch' if the parent directory of this program is in the system PATH variable.
+.PP
+CSEARCH_RFAC: path of the 
+.I crfac
+ program used for the R factor evaluation. This may simply be 'crfac' if the parent directory of this program is in the system PATH variable.
+.PP
+CLEED_PHASE: directory path of the phase shift files used in the surface and bulk models. Please refer to 
+.I phsh(1) 
+ for more information on generating phase shift files.
+.PP
+These variables can be set automatically by executing the 'set_env' script.
+
+
+ .\" Document here situations in which the program can be used, if there are uses that are not obvious.
+.SH EXAMPLES
+
+.SH NOTES
+
+The .inp, .bul and .ctr files all need the same filename prefix before the file extension. This prefix is also used in the output filenames.
+
+Typically, 50 to 100 eV of data is needed per geometry search parameter, e.g. for 1 atom with 3 parameters would require 150-300eV of data. This is because the precision (error bar) $RR$ depends on the energy range with a larger range leading to greater precision. For complex adsorbate structures or overlayer superstructures, more data is needed because there are more parameters to fit. One solution would be to go to higher experimental energies, however this leads to a loss of sensitivity, difficulties in resolving the LEED pattern (spots too close), vastly increased CLEED calculation times due to more scattering, as well as beam damage to the sample. As such an alternative route would be to use different angles of incidence. For more information see 
+.I caoi(1)
+
+.\"Document here all errors and other messages returned to the user. Include the cause and the recovery actions whenever appropriate and possible.
+.\".SH MESSAGES AND EXIT CALLS
+
+.\" Document here the significant changes in each release of the product.
+.\".SH HISTORY
+
+.SH FILES
+
+INPUT FILES: 
+.IP *.inp
+.RS
+The parameter input for the surface model. See 'INPUT_FILE' section for more information.
+.RE
+.IP *.bul
+.RS
+The bulk parameter file. See 'BULK_FILE' for more information.
+.RE
+.IP *.ctr
+.RS
+The control parameter file for R factor evaluation. See 'CONTROL_FILE' for more information.
+.RE
+.PP
+
+OUTPUT FILES:
+
+.SH AUTHOR
+
+Georg Held <g.held@reading.ac.uk>.
+
+.SH CONTACT
+
+Please email questions, bugs (ideally with fixes) or any suggestions to either Georg Held, Jacopo Ardini <j.ardini@pgr.reading.ac.uk> or Liam Deacon <liam.deacon@diamond.ac.uk>.
+
+.\"Document here things that work as designed but which may be unclear or surprising to the user. (This is the System V replacement for the BUGS category; you too can pretend your product has no bugs!)
+.\".SH CAVEATS
+
+.SH COPYRIGHT
+
+Copyright (C) 1995-2014 Georg Held
+.PP
+LICENSE
+.SH SEE ALSO
+
+caoi_leed(1), caoi_rfac(1), cleed_nsym(1), cleed_sym(1), crfac(1), csearch(1), debye(1), ftsmooth(1), latt(1), mkiv(1), phsh(1), set_env(1)  

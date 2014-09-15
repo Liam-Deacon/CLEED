@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=csearch
+Comment=Control file
+Icon=cleed_ctr
+Terminal=true
+Type=Application
+Categories=Science
+MimeType=application/x-cleed_ctr-item;

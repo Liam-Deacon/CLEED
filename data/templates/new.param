@@ -1,0 +1,50 @@
+ref_name = /home/gh10009/MKIV/MKIV_DEV/Pt531_clean_b.100 
+mask_name = /home/gh10009/MKIV/MKIV_DEV/mask.byte 
+nstart = 100 
+nstop = 105 
+n_step = 1 
+center = (360,285) 
+router = 225 
+rinner = 40 
+bg = YES 
+smoothcurrent = YES 
+kp_len_10 = 1.300000 
+ndom = 1 
+1.000000 0.000000 0.000000 1.000000 
+ndesi = 61 
+-1.000000 0.000000 
+-1.000000 1.000000 
+1.000000 -1.000000 
+1.000000 0.000000 
+0.000000 -1.000000 
+0.000000 1.000000 
+-2.000000 1.000000 
+2.000000 -1.000000 
+-2.000000 0.000000 
+	.
+	.
+	.
+
+cos_min = 0.60 
+cos_max = 0.90 
+verh = 1.40 
+acci = 0.95 
+accb = 0.70 
+distance = 60 
+update = 10 
+step = 3 
+trip_max = 999 
+scale_min = 10.0 
+range_min = 10.0 
+s2n_good = 0.500 
+s2n_bad = 0.100 
+ref_min = 10 
+sec_range = 3.0 
+s2n_ref = 1.20 
+ref_dev = 3.0 
+bas_rat = 0.60 
+range = 0.200 
+scale_a = 0.150 
+scale_b = 0.150 
+angle = 0.0 
+ratio = 0.10 

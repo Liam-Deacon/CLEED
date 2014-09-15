@@ -1,0 +1,8 @@
+# input file for pattern
+c expt labelling of Cu(531)-nonbar
+ 4.805846      0.0000  a1
++0.801465      4.73855 a2
+3.25         radius
+1            No of domains
+  1.0  0.0 M1
+  0.0  1.0 M1

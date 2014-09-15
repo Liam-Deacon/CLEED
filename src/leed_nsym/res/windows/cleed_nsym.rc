@@ -1,0 +1,26 @@
+id ICON "cleed_nsym.ico"
+
+1 VERSIONINFO
+FILEVERSION     2014,07,04,0
+PRODUCTVERSION  2014,07,04,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "FileDescription", "LEED theory program"
+      VALUE "FileVersion", "2014.@CLEED_NSYM_VERSION_MINOR"
+      VALUE "InternalName", "cleed_nsym"
+      VALUE "LegalCopyright", "Georg Held & collaborators"
+      VALUE "OriginalFilename", "cleed_nsym.exe"
+      VALUE "ProductName", "cleed_nsym"
+      VALUE "ProductVersion", "2014.@CLEED_NSYM_VERSION_MINOR"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

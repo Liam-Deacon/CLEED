@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>phsh &mdash; CLEED 0.1.0-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/CLEED_logo.ico"/>
+    <link rel="top" title="CLEED 0.1.0-dev documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/CLEED_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">phsh</a><ul>
+<li><a class="reference internal" href="#syntax">Syntax</a><ul>
+<li><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cleed-compatibility">CLEED compatibility</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="phsh">
+<span id="id1"></span><h1>phsh<a class="headerlink" href="#phsh" title="Permalink to this headline">¶</a></h1>
+<p><tt class="code docutils literal"><span class="pre">phsh.py</span></tt> is a Python based program used to quickly and easily
+generate the <tt class="file docutils literal"><span class="pre">*.phs</span></tt> files necessary for calculating the LEED-IV
+curves using <a class="reference internal" href="../LEED_programs.html#cleed"><em>cleed</em></a>.</p>
+<p>The <tt class="code docutils literal"><span class="pre">phsh.py</span></tt> script is placed into the system <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PATH</span></tt> during installation of the
+phaseshifts package. It can then be used from the command line, e.g. <tt class="code docutils literal"><span class="pre">phsh.py</span> <span class="pre">--help</span></tt>
+will produce a list of command line options:</p>
+<div class="highlight-python"><pre>.. _phsh_syntax:</pre>
+</div>
+<div class="section" id="syntax">
+<h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>phsh.py [-h] -b &lt;bulk_file&gt; -i &lt;slab_file&gt; [-t &lt;temp_dir&gt;] [-l &lt;lmax&gt;]
+        [-f &lt;format&gt;] [-S &lt;subdir&gt;] [-v] [-V]</pre>
+</div>
+<div class="section" id="options">
+<span id="phsh-options"></span><h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<p><tt class="code docutils literal"><span class="pre">-h</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--help</span></tt></dt>
+<dd>Show help message and exit.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-b</span> <span class="pre">&lt;bulk_file&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--bulk</span> <span class="pre">&lt;bulk_file&gt;</span></tt></dt>
+<dd>Path to MTZ bulk or CLEED <tt class="file docutils literal"><span class="pre">*.bul</span></tt> input file.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-i</span> <span class="pre">&lt;slab_file&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--slab</span> <span class="pre">&lt;slab_file&gt;</span></tt></dt>
+<dd>Path to MTZ slab or CLEED <tt class="file docutils literal"><span class="pre">*.inp</span></tt> input file.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-g</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--generate-only</span></tt></dt>
+<dd>Generate phase shifts, but do not launch <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PHASHSHIFTS_LEED</span></tt>
+sub-process.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-t</span> <span class="pre">&lt;temp_dir&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--tmpdir</span> <span class="pre">&lt;temp_dir&gt;</span></tt></dt>
+<dd>Temporary directory for intermediate file generation.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-l</span> <span class="pre">&lt;lmax&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--lmax</span> <span class="pre">&lt;lmax&gt;</span></tt></dt>
+<dd>Maximum angular momentum quantum number [default=10].</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-f</span> <span class="pre">&lt;format&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--format</span> <span class="pre">&lt;format&gt;</span></tt></dt>
+<dd>Use specific phase shift format i.e. &#8216;CLEED&#8217; [default=None].</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-S</span> <span class="pre">&lt;subdir&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--store</span> <span class="pre">&lt;subdir&gt;</span></tt></dt>
+<dd>Keep intermediate files in subdir when done.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-v</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--verbose</span></tt></dt>
+<dd>Set verbosity level [default: None].</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-V</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--version</span></tt></dt>
+<dd>Show program&#8217;s version information and exit.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="cleed-compatibility">
+<span id="phsh-compatibility"></span><h2>CLEED compatibility<a class="headerlink" href="#cleed-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to use this script to generate phase shift files iteratively
+during a geometry search for the CLEED package. In this manner phase shifts
+will be generated at the beginning of each cycle of the search.</p>
+<p>For this to work, the environment variable <span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_LEED</span></tt> must point to the
+<tt class="code docutils literal"><span class="pre">phsh.py</span></tt> script, which will invoke the LEED program in <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PHASESHIFT_LEED</span></tt>
+after execution. When operating in this mode, the following assumptions are made:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><tt class="code docutils literal"><span class="pre">-b</span> <span class="pre">&lt;bulk_file&gt;</span></tt> option not needed and the filename is assumed by
+changing the file extension of <cite>&lt;slab_file&gt;</cite> to &#8216;<em>.bul</em>&#8216;</li>
+<li><cite>-f CLEED</cite> format is implied.</li>
+<li>The generated phase shifts are stored in the directory set by the <cite>CLEED_PHASE</cite>
+environment variable.</li>
+<li><tt class="code docutils literal"><span class="pre">&lt;lmax&gt;</span></tt> is equal to 10, unless additional parameter syntax is given in the CLEED
+<tt class="file docutils literal"><span class="pre">*.inp</span></tt> file.</li>
+</ol>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the <span class="target" id="index-4"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PHASESHIFT_LEED</span></tt> environment variable is not found, but
+<span class="target" id="index-5"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt> is, however, found then the program will place the
+generated files in this directory unless a specific <cite>-S &lt;subdir&gt;</cite> is provided.</p>
+</div>
+</div>
+<div class="section" id="notes">
+<span id="phsh-notes"></span><h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>Copyright 2013-2014 Liam Deacon. All rights reserved.</p>
+<p>Licensed under the MIT license (see LICENSE file included in the
+<a class="reference external" href="https://pypi.python.org/pypi/phaseshifts">phaseshifts</a> package for details)</p>
+<p>Please send your feedback, including bugs notifications
+and fixes, to: <a class="reference external" href="mailto:liam&#46;deacon&#37;&#52;&#48;diamond&#46;ac&#46;uk">liam<span>&#46;</span>deacon<span>&#64;</span>diamond<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Georg Held, Liam Deacon &amp; collaborators.
+    </div>
+  </body>
+</html>

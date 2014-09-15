@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=csearch
+Comment=Bulk parameter file
+Icon=cleed_bul
+Terminal=true
+Type=Application
+Categories=Science
+MimeType=application/x-cleed_bul-item;

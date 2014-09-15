@@ -1,0 +1,10 @@
+# input file for pattern
+c fcc(100) c(4x2) + ( 7 1 / 0 2)
+1.0  0.0       a1
+0.0  1.0       a2
+1.4          radius
+2            No of domains
+  2  -1  M1
+  2   1  M1
+  7   1
+  0   2

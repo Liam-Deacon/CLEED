@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=csearch
+Comment=Bulk surface rotation file
+Icon=cleed_bsr
+Terminal=true
+Type=Application
+Categories=Science
+MimeType=application/x-cleed_bsr-item;

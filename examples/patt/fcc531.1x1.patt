@@ -1,0 +1,8 @@
+# input file for pattern
+c (531)
+ 6.2045        0.0000  a1
+-3.10225       3.67045 a2
+2.55         radius
+1            No of domains
+  1.0  0.0 M1
+  0.0  1.0 M1

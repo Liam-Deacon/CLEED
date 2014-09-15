@@ -1,0 +1,13 @@
+# input file for pattern
+c 3 Domains of (4  2 / 6 4)
+1.0  1.732       a1
+1.0 -1.732       a2
+0.51           radius
+3            No of domains
+#M1
+  2   4  M1
+  0  19  M1
+#M2
+R120
+#M3
+R120

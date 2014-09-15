@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=csearch
+Comment=Minimum parameter file
+Icon=cleed_pmin
+Terminal=true
+Type=Application
+Categories=Science;
+MimeType=application/x-cleed_pmin-item;

@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SuperstructureDialog</class>
+ <widget class="QDialog" name="SuperstructureDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>194</width>
+    <height>313</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Superlattice</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res/icons.qrc">
+    <normaloff>:/share_32x32.png</normaloff>:/share_32x32.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Superlattice</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QComboBox" name="comboSuperlattice">
+         <item>
+          <property name="text">
+           <string>None</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(1x1)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(1x2)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(2x1)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(2x2)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(3x1)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(3x2)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(3x3)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>p(7x7)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(2x2)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(4x2) [Square]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(4x2) [Hexagonal]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(4x4)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(6x2)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(8x2)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(√2x√2)R45º [Square]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(√5x√5)R26.6º [Square]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(2√2x√2)R45º [Square]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(3√2x√2)R45º [Square]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(5√2x√2)R45º [Square]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(√3x√3)R30º [Hexagonal]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(√7x√7)R19.1º [Hexagonal]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(2√3x2√3)R30º [Hexagonal]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(2√3x4)rect [Hexagonal]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>(5√3x2)rect [Hexagonal]</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>c(2√3x4)rect [Hexagonal]</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="labelMatrix">
+           <property name="text">
+            <string>Matrix</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolUnity">
+           <property name="toolTip">
+            <string>Create Unity Matrix</string>
+           </property>
+           <property name="text">
+            <string>1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkComm">
+           <property name="toolTip">
+            <string>Toggle Expitaxial Match</string>
+           </property>
+           <property name="text">
+            <string>Commensurate</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QDoubleSpinBox" name="dblSpinM11">
+           <property name="decimals">
+            <number>4</number>
+           </property>
+           <property name="minimum">
+            <double>-100.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>100.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="dblSpinM12">
+           <property name="decimals">
+            <number>4</number>
+           </property>
+           <property name="minimum">
+            <double>-100.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QDoubleSpinBox" name="dblSpinM21">
+           <property name="decimals">
+            <number>4</number>
+           </property>
+           <property name="minimum">
+            <double>-100.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>100.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="dblSpinM22">
+           <property name="decimals">
+            <number>4</number>
+           </property>
+           <property name="minimum">
+            <double>-100.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>100.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="labelDomains">
+     <property name="text">
+      <string>Domains</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QListWidget" name="listDomains"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QToolButton" name="toolAddRotation">
+         <property name="toolTip">
+          <string>Add Domain</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/plus_32x32.png</normaloff>:/plus_32x32.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolRemoveRotation">
+         <property name="toolTip">
+          <string>Remove Domain</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/minus_32x8.png</normaloff>:/minus_32x8.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolTranslation">
+         <property name="toolTip">
+          <string>Add Translation</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/transfer_32x24.png</normaloff>:/transfer_32x24.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolAuto">
+         <property name="toolTip">
+          <string>Auto Domains</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/cog_32x32.png</normaloff>:/cog_32x32.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolClear">
+         <property name="toolTip">
+          <string>Clear Domains</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res/icons.qrc">
+           <normaloff>:/denied_32x32.png</normaloff>:/denied_32x32.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <action name="actionUpdateMatrix">
+   <property name="text">
+    <string>Update Matrix</string>
+   </property>
+  </action>
+  <action name="actionUnityMatrix">
+   <property name="text">
+    <string>Unity Matrix</string>
+   </property>
+  </action>
+  <action name="actionUpdateComm">
+   <property name="text">
+    <string>UpdateComm</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="res/icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>comboSuperlattice</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>actionUpdateMatrix</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboSuperlattice</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>actionUpdateMatrix</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkComm</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>actionUpdateComm</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>120</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolUnity</sender>
+   <signal>clicked()</signal>
+   <receiver>actionUnityMatrix</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

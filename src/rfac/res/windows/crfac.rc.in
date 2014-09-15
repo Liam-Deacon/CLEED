@@ -1,0 +1,27 @@
+id ICON "crfac.ico"
+
+1 VERSIONINFO
+FILEVERSION     @CRFAC_VERSION_MAJOR@,@CRFAC_VERSION_MINOR@,@CRFAC_VERSION_PATCH@,0
+PRODUCTVERSION  @CRFAC_VERSION_MAJOR@,@CRFAC_VERSION_MINOR@,@CRFAC_VERSION_PATCH@,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "CompanyName", "Georg Held"
+      VALUE "FileDescription", "Generate LEED crfac"
+      VALUE "FileVersion", "@CRFAC_VERSION_MAJOR@.@CRFAC_VERSION_MINOR"
+      VALUE "InternalName", "crfac"
+      VALUE "LegalCopyright", "Georg Held & collaborators"
+      VALUE "OriginalFilename", "crfac.exe"
+      VALUE "ProductName", "crfac"
+      VALUE "ProductVersion", "@CRFAC_VERSION_MAJOR@.@CRFAC_VERSION_MINOR"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

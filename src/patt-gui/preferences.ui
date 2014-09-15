@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>preferences</class>
+ <widget class="QDialog" name="preferences">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>280</width>
+    <height>333</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Drawing Preferences</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res/icons.qrc">
+    <normaloff>:/cog_32x32.png</normaloff>:/cog_32x32.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTreeWidget" name="treeWidget">
+     <column>
+      <property name="text">
+       <string>Defaults</string>
+      </property>
+     </column>
+     <item>
+      <property name="text">
+       <string>General</string>
+      </property>
+      <property name="icon">
+       <iconset resource="res/icons.qrc">
+        <normaloff>:/equalizer_32x32.png</normaloff>:/equalizer_32x32.png</iconset>
+      </property>
+      <item>
+       <property name="text">
+        <string>Models Directory</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/folder_stroke_32x32.png</normaloff>:/folder_stroke_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Title</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/article_32x32.png</normaloff>:/article_32x32.png</iconset>
+       </property>
+       <item>
+        <property name="text">
+         <string>Colour</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Font</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/font_32x32.png</normaloff>:/font_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Position</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/cursor_32x32.png</normaloff>:/cursor_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Size</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/move_vertical_12x32.png</normaloff>:/move_vertical_12x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Text</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/article_32x32.png</normaloff>:/article_32x32.png</iconset>
+        </property>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Integer Spots</string>
+      </property>
+      <property name="icon">
+       <iconset resource="res/icons.qrc">
+        <normaloff>:/pattern_32x32.png</normaloff>:/pattern_32x32.png</iconset>
+      </property>
+      <item>
+       <property name="text">
+        <string>Edge</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/sun_stroke_32x32.png</normaloff>:/sun_stroke_32x32.png</iconset>
+       </property>
+       <item>
+        <property name="text">
+         <string>Brush</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/brush_32x32.png</normaloff>:/brush_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Colour</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Width</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/move_horizontal_32x12.png</normaloff>:/move_horizontal_32x12.png</iconset>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Fill</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/sun_fill_32x32.png</normaloff>:/sun_fill_32x32.png</iconset>
+       </property>
+       <item>
+        <property name="text">
+         <string>Colour</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Gradient Colour</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Style</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/target_32x32.png</normaloff>:/target_32x32.png</iconset>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Labels</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/at_32x32.png</normaloff>:/at_32x32.png</iconset>
+       </property>
+       <item>
+        <property name="text">
+         <string>Indices</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/labels_32x32.png</normaloff>:/labels_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Vectors</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/labels2_32x32.png</normaloff>:/labels2_32x32.png</iconset>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Shape</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/tri-up_32x32.png</normaloff>:/tri-up_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Size</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/fullscreen_alt_32x32.png</normaloff>:/fullscreen_alt_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Vectors</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/vectors_32x32.png</normaloff>:/vectors_32x32.png</iconset>
+       </property>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Superstructure</string>
+      </property>
+      <property name="icon">
+       <iconset resource="res/icons.qrc">
+        <normaloff>:/share_32x32.png</normaloff>:/share_32x32.png</iconset>
+      </property>
+      <item>
+       <property name="text">
+        <string>Domains</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/pattern2_32x32.png</normaloff>:/pattern2_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Edge</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/sun_stroke_32x32.png</normaloff>:/sun_stroke_32x32.png</iconset>
+       </property>
+       <item>
+        <property name="text">
+         <string>Brush</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/brush_32x32.png</normaloff>:/brush_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Colour</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Width</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/move_horizontal_32x12.png</normaloff>:/move_horizontal_32x12.png</iconset>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Fill</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/sun_fill_32x32.png</normaloff>:/sun_fill_32x32.png</iconset>
+       </property>
+       <item>
+        <property name="text">
+         <string>Colour</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Gradient Colour</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Style</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/target_32x32.png</normaloff>:/target_32x32.png</iconset>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Shape</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/tri-up_32x32.png</normaloff>:/tri-up_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Size</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/fullscreen_alt_32x32.png</normaloff>:/fullscreen_alt_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Vectors</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/vectors_32x32.png</normaloff>:/vectors_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Labels</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/at_32x32.png</normaloff>:/at_32x32.png</iconset>
+       </property>
+       <item>
+        <property name="text">
+         <string>Indices</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/labels_32x32.png</normaloff>:/labels_32x32.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Vectors</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/icons.qrc">
+          <normaloff>:/labels2_32x32.png</normaloff>:/labels2_32x32.png</iconset>
+        </property>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Electron Gun</string>
+      </property>
+      <property name="icon">
+       <iconset resource="res/icons.qrc">
+        <normaloff>:/screen_32x32.png</normaloff>:/screen_32x32.png</iconset>
+      </property>
+      <item>
+       <property name="text">
+        <string>Colour</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Rotation</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/spin_28x32.png</normaloff>:/spin_28x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Radius</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/cd_32x32.png</normaloff>:/cd_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Thickness</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/brush_increase_linewidth_32x32.png</normaloff>:/brush_increase_linewidth_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Visible</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/eye_32x24.png</normaloff>:/eye_32x24.png</iconset>
+       </property>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Screen</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Colour</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/color2_32x32.png</normaloff>:/color2_32x32.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Visible</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/eye_32x24.png</normaloff>:/eye_32x24.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Width</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/icons.qrc">
+         <normaloff>:/brush_increase_linewidth_32x32.png</normaloff>:/brush_increase_linewidth_32x32.png</iconset>
+       </property>
+      </item>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="res/icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,26 @@
+id ICON "caoi_rfac.ico"
+
+1 VERSIONINFO
+FILEVERSION     @AOI_RFAC_VERSION_MAJOR@,@AOI_RFAC_VERSION_MINOR@,@AOI_RFAC_VERSION_PATCH@,0
+PRODUCTVERSION  @AOI_RFAC_VERSION_MAJOR@,@AOI_RFAC_VERSION_MINOR@,@AOI_RFAC_VERSION_PATCH@,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "FileDescription", "Angle of Incidence RFAC Wrapper Program"
+      VALUE "FileVersion", "@AOI_RFAC_VERSION_MAJOR@.@AOI_RFAC_VERSION_MINOR@"
+      VALUE "InternalName", "caoi_rfac"
+      VALUE "LegalCopyright", "Georg Held & Zhasmina Zheleeva"
+      VALUE "OriginalFilename", "caoi_rfac.exe"
+      VALUE "ProductName", "AOI_RFAC"
+      VALUE "ProductVersion", "@AOI_RFAC_VERSION_MAJOR@.@AOI_RFAC_VERSION_MINOR@"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

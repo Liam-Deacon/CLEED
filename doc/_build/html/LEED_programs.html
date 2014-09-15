@@ -1,0 +1,678 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. LEED programs &mdash; CLEED 0.1.0-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/CLEED_logo.ico"/>
+    <link rel="top" title="CLEED 0.1.0-dev documentation" href="index.html" />
+    <link rel="next" title="3. Auxiliary Programs" href="aux_programs.html" />
+    <link rel="prev" title="1. CLEED package" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aux_programs.html" title="3. Auxiliary Programs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="1. CLEED package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/CLEED_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. LEED programs</a><ul>
+<li><a class="reference internal" href="#cleed">2.1. cleed</a><ul>
+<li><a class="reference internal" href="#description">2.1.1. Description</a><ul>
+<li><a class="reference internal" href="#cleed-sym">2.1.1.1. cleed_sym</a></li>
+<li><a class="reference internal" href="#cleed-nsym">2.1.1.2. cleed_nsym</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#syntax">2.1.2. Syntax</a><ul>
+<li><a class="reference internal" href="#options">2.1.2.1. Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment">2.1.3. Environment</a></li>
+<li><a class="reference internal" href="#examples">2.1.4. Examples</a></li>
+<li><a class="reference internal" href="#notes">2.1.5. Notes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#crfac">2.2. crfac</a><ul>
+<li><a class="reference internal" href="#crfac-syntax">2.2.1. Syntax</a><ul>
+<li><a class="reference internal" href="#crfac-options">2.2.1.1. Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">2.2.2. Environment</a></li>
+<li><a class="reference internal" href="#crfac-examples">2.2.3. Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#csearch">2.3. csearch</a><ul>
+<li><a class="reference internal" href="#csearch-syntax">2.3.1. Syntax</a><ul>
+<li><a class="reference internal" href="#csearch-options">2.3.1.1. Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#csearch-environment">2.3.2. Environment</a></li>
+<li><a class="reference internal" href="#id20">2.3.3. Examples</a></li>
+<li><a class="reference internal" href="#files">2.3.4. Files</a><ul>
+<li><a class="reference internal" href="#input-files">2.3.4.1. Input files</a></li>
+<li><a class="reference internal" href="#output-files">2.3.4.2. Output files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id21">2.3.5. Notes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#set-env">2.4. set_env</a><ul>
+<li><a class="reference internal" href="#set-env-syntax">2.4.1. Syntax</a><ul>
+<li><a class="reference internal" href="#set-env-options">2.4.1.1. Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#set-env-examples">2.4.2. Examples</a></li>
+<li><a class="reference internal" href="#set-env-notes">2.4.3. Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">1. CLEED package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aux_programs.html"
+                        title="next chapter">3. Auxiliary Programs</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="leed-programs">
+<span id="id1"></span><h1>2. LEED programs<a class="headerlink" href="#leed-programs" title="Permalink to this headline">¶</a></h1>
+<p>The CLEED package contains many command line programs that interact
+with one another to simulate and compare the LEED-IV curves with
+experimental data. The master program is <a class="reference internal" href="#csearch"><em>csearch</em></a>, however a lot of
+information is exchanged under the hood during any given structural search
+determination. The process is rather complex, but can hopefully be summarised
+in the figure below:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/program_cycle.png"><img alt="_images/program_cycle.png" src="_images/program_cycle.png" style="width: 528.0px; height: 396.0px;" /></a>
+<p class="caption">Figure 1. Program work flow for the CLEED package.</p>
+</div>
+<p>It is sometimes useful to manually run the individual programs and therefore
+what follows are notes to aid in the use of the CLEED programs.</p>
+<div class="section" id="cleed">
+<span id="id2"></span><h2>2.1. cleed<a class="headerlink" href="#cleed" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="description">
+<span id="cleed-description"></span><h3>2.1.1. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
+<p>In this <strong>LEED</strong> code, fully dynamical scattering theory has been implemented along
+the lines of algorithms described by Pendry (layer doubling between successive
+layers of atoms [43]) and Van Hove/Tong (combined space method for layers with
+more than one atom per unit cell [44]). The extensive use of dynamical memory
+allocation - an intrinsic feature of the C programming language - allows the
+memory requirements, even for large surface unit cells, to be kept small. It
+also allows a very flexible input format which does not impose any restrictions
+on the number of bulk layers and overlayers, nor on the number of atoms therein
+(other than the physically available memory). The input from the optimisation
+program to the LEED program is simply a set of atomic coordinates from which
+the program creates its own set of Bravais and/or composite layers. Scattering
+matrices are calculated for these layers and used to evaluate the amplitudes for
+multiple scattering between the layers.</p>
+<p>While the main emphasis in the first development stage of the code had been
+put on reducing the time needed for the giant matrix inversion, which is
+part of the combined space method, in the second stage the symmetries among
+beams were exploited in order to gain additional reductions in computing
+times.</p>
+<p>The scattering part of our implementation follows the algorithms developed by
+Van Hove and Tong [44]. A completely new development is the automated set up
+of the symmetry reduced list of beams according to the symmetry of the
+surface (most possible combinations of rotational and mirror symmetries).</p>
+<p>It does not include any linear approximations, such as tensor LEED [55][56],
+which are, in general, incompatible with global search strategies such as
+simulated annealing or the genetic algorithm, and can lead to errors even
+in downhill-orientated optimisations when the search path enters regimes of
+the parameter space where the approximation is inaccurate. It is, however
+planned to implement this as an option for locally confined searches in a
+future version.</p>
+<p>The input information required from the user is kept to a minimum; the
+program creates most of its parameters from the geometry input provided in
+the input files (<tt class="code docutils literal"><span class="pre">*.bul</span></tt> &amp; <tt class="code docutils literal"><span class="pre">*.inp</span></tt>). The distribution of atoms
+over different layers is performed by the program based on the atom
+coordinates and the minimum possible vertical distance (<tt class="code docutils literal"><span class="pre">MIN_DIST</span> <span class="pre">=</span> <span class="pre">1.1</span></tt>
+<span class="math">\(\text{\AA}\)</span>) between two layers. The list of beams (length of
+vectors in plane wave representation is created on the basis of the final
+energy and the minimum distance between the layers.</p>
+<p>To date there exists two versions of the <tt class="code docutils literal"><span class="pre">cleed</span></tt> program.</p>
+<div class="section" id="cleed-sym">
+<span id="id3"></span><h4>2.1.1.1. cleed_sym<a class="headerlink" href="#cleed-sym" title="Permalink to this headline">¶</a></h4>
+<p>The symmetrised version <tt class="code docutils literal"><span class="pre">cleed_sym</span></tt> makes use of mirror and rotational
+symmetries in the plane wave field and works thus with a reduced set of
+beams which can speed up the calculations significantly (up to a factor
+of 5 with respect to the non-symmetrised version). There are however some
+restrictions, the most important being that only the case of normal incidence
+and isotropic vibrations can be treated by the current version.</p>
+</div>
+<div class="section" id="cleed-nsym">
+<span id="id4"></span><h4>2.1.1.2. cleed_nsym<a class="headerlink" href="#cleed-nsym" title="Permalink to this headline">¶</a></h4>
+<p>The non-symmetrised version <tt class="code docutils literal"><span class="pre">cleed_nsym</span></tt> does not have these restictions.
+It is more flexible and can treat most cases of surface geometries, provided,
+there is at least one bulk inter-layer distance greater than <tt class="code docutils literal"><span class="pre">MIN_DIST</span></tt>
+= 1.1 <span class="math">\(\text{\AA}\)</span>.</p>
+<p>Both program versions can use the same input files, whereby <tt class="code docutils literal"><span class="pre">cleed_sym</span></tt>
+needs some additional information which is ignored by the vanilla
+<tt class="code docutils literal"><span class="pre">cleed</span></tt> (or sometimes <tt class="code docutils literal"><span class="pre">cleed_nsym</span></tt> or <tt class="code docutils literal"><span class="pre">nsym</span></tt>). In any case,
+it is strongly recommended to test the same input file with both programs in
+order to check the consistency. The relative intensities of equivalent beams
+should be identical down to 10 <sup>-8</sup>.</p>
+</div>
+</div>
+<div class="section" id="syntax">
+<span id="cleed-syntax"></span><h3>2.1.2. Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h3>
+<p>The general calling syntax of the LEED program is:</p>
+<div class="highlight-python"><pre>cleed -i &lt;parameter_file&gt; -b &lt;bulk_parameter_file&gt; -o &lt;results_file&gt;
+  -r &lt;storage_file&gt; -w &lt;storage_file&gt;</pre>
+</div>
+<p>The first argument (<tt class="code docutils literal"><span class="pre">-i</span> <span class="pre">&lt;parameter_file&gt;</span></tt>) specifying the parameter
+input file is the only mandatory argument. The file contains all the geometric
+and non-geometric parameters for the LEED calculations. A sample file is shown
+<em class="xref std std-ref">here</em>. Alternatively, the input can be split into two files, the parameter
+file and the bulk parameter file. The latter file (
+<tt class="code docutils literal"><span class="pre">-b</span> <span class="pre">&lt;bulk_parameter_file&gt;</span></tt>) contains all the parameters which are not
+varied during the optimisation. Consequently, the search program has to produce
+only the parameter file containing the optimised atom positions of the
+overlayer in each iteration step of an automated search.</p>
+<div class="section" id="options">
+<span id="cleed-options"></span><h4>2.1.2.1. Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h4>
+<p><tt class="code docutils literal"><span class="pre">-a</span> <span class="pre">&lt;ID_flag&gt;</span></tt></p>
+<blockquote>
+<div>defines whether only the average R factor is calculated (argument &#8216;<em>average</em>&#8216;
+is the default) or partial R factors for each subset of IV curves sharing
+a common ID number (argument &#8216;<em>all</em>&#8216;). Only the first two characters are significant.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-c</span> <span class="pre">&lt;control_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies the control file which defines the correlation between experimental
+and theoretical IV curves. Further information regarding the control file
+structure is provided in the CONTROL_FILE section.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-h</span></tt></p>
+<blockquote>
+<div>causes the program to show a short list of arguments.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-o</span> <span class="pre">&lt;output_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies the output file where the R factor values are written to (default: standard output).</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-r</span> <span class="pre">&lt;R_factor&gt;</span></tt></p>
+<blockquote>
+<div><p>specifies the R factor type to be calculated. Valid arguments are:</p>
+<ul class="simple">
+<li><tt class="code docutils literal"><span class="pre">r1</span></tt> : calculate <span class="math">\(R_1\)</span></li>
+<li><tt class="code docutils literal"><span class="pre">r2</span></tt> : calculate the mean-square displacement
+<span class="math">\(R_2 = {\sum {(c I_{\text{expt}} - I_{\text{theory}})}^ 2} / \sum{I_{\text{theory}}^2}\)</span>,
+where <span class="math">\(c\)</span> is a scaling factor.</li>
+<li><tt class="code docutils literal"><span class="pre">rb</span></tt> : (calculates <span class="math">\(R_{B1}\)</span> and <span class="math">\(R_{B2}\)</span>)</li>
+<li><tt class="code docutils literal"><span class="pre">rp</span></tt> : calculates the Pendry R factor <span class="math">\(R_p\)</span>. This provides the level of
+agreement on shape of curves, not the intensity by comparing logarithmic
+derivatives, <span class="math">\(R_p = \frac{1}{I(E)} \times \frac{\delta I(E)}{\delta E}\)</span>, and
+is the standard in I(V) analysis. The Pendry R factor is problematic with
+experimental noise as it is sensitive to positions of peaks, not intensity and
+therefore noisy data will result in extra &#8216;peaks&#8217;. The workaround for this
+is to smooth or average the experimental data using a tool such as <a class="reference internal" href="aux_programs.html#ftsmooth"><em>ftsmooth</em></a>.</li>
+</ul>
+</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-s</span> <span class="pre">&lt;shift1,shift2,shift3&gt;</span></tt></p>
+<blockquote>
+<div>defines the range (shift1 and shift2) and step width (shift3) of the energy
+shifts between the experimental and theoretical curves.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-t</span> <span class="pre">&lt;theoretical_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies the file containing the theoretical IV curves. This is the CLEED <tt class="file docutils literal"><span class="pre">*.res</span></tt>
+results file from the <tt class="code docutils literal"><span class="pre">csearch</span></tt> program. See <a class="reference internal" href="#csearch"><em>csearch</em></a> for more information.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-v</span> <span class="pre">&lt;optical_potential&gt;</span></tt></p>
+<blockquote>
+<div>specifies the value of the optical potential <span class="math">\(V_i\)</span> (in eV) used in the
+evaluation of Pendry&#8217;s R-factor (<span class="math">\(R_p\)</span>). <span class="math">\(2V_i\)</span> determines
+smallest resolvable features in the IV curves. The default is 4 eV, however
+in situations where the interlayer spacings are very small, such as for
+intermetallic compounds, <span class="math">\(V_i\)</span> may need to be increased (but
+should remain &lt;5eV).</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-V</span></tt></p>
+<blockquote>
+<div>give version and additional information about this program.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-w</span> <span class="pre">&lt;IV_output_prefix&gt;</span></tt></p>
+<blockquote>
+<div>causes the program to write all normalised IV curves as energy/intensity
+pairs to separate files so that they can be plotted. <tt class="code docutils literal"><span class="pre">&lt;IV_output_prefix&gt;</span></tt>
+specifies the base filename to which the letters &#8216;<em>e</em>&#8216; (experimental)
+or &#8216;<em>t</em>&#8216; (theoretical) as well as the number of the pair of curves is appended.</div></blockquote>
+</div>
+</div>
+<div class="section" id="environment">
+<h3>2.1.3. Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h3>
+<p>The program uses environment variables for calling other processes or for file paths and include:</p>
+<dl class="docutils">
+<dt><span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_HOME</span></tt></dt>
+<dd>File to be shown when the <tt class="code docutils literal"><span class="pre">-h</span></tt> option is chosen if set in the system environment.</dd>
+</dl>
+<p>Each variable has to be set using the <strong class="command">export</strong> or <strong class="command">setenv</strong> UNIX commands,
+for bash and c shells, respectively, before the program is called for the first
+time. In contrast, the <strong class="command">set</strong> is used on Windows machines for the current command window,
+however users of modern Windows operating systems (Win7 and up) may also use the
+<strong class="command">setx</strong> command to permanently store values.</p>
+<blockquote>
+<div>The <a class="reference internal" href="LEED_programs/set_env.html#set-env"><em>set_env</em></a> program can be used as an aid in setting up the CLEED environment.</div></blockquote>
+</div>
+<div class="section" id="examples">
+<span id="cleed-examples"></span><h3>2.1.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the following examples replace any <tt class="code docutils literal"><span class="pre">*.&lt;ext&gt;</span></tt> with the actual file name of
+the models or log files.</p>
+</div>
+<div class="highlight-python"><pre>cleed_nsym -c *.ctr -i *.inp -b *.bul 1&gt;*.out 2&gt;*.err &amp;</pre>
+</div>
+<p>This will start <a class="reference internal" href="LEED_programs/cleed.html#cleed-nsym"><em>cleed_nsym</em></a> as a detached process. Windows users should
+add <tt class="code docutils literal"><span class="pre">START</span> <span class="pre">/B</span></tt> to the beginning of the command instead of using <tt class="code docutils literal"><span class="pre">&amp;</span></tt>.</p>
+<div class="highlight-python"><pre>cleed_nsym -c *.ctr -i *.inp -b *.bul -v *.ver 1&gt;&gt;*.out 2&gt;&gt;*.err &amp;</pre>
+</div>
+<p>This will restart <a class="reference internal" href="LEED_programs/cleed.html#cleed-nsym"><em>cleed_nsym</em></a> from the last set of vertices and appends
+output to the <tt class="file docutils literal"><span class="pre">*.out</span></tt> and <tt class="file docutils literal"><span class="pre">*err</span></tt> log files.</p>
+</div>
+<div class="section" id="notes">
+<span id="cleed-notes"></span><h3>2.1.5. Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<p>Both <tt class="file docutils literal"><span class="pre">*.inp</span></tt> and <tt class="file docutils literal"><span class="pre">*.var</span></tt> input files contain the parameters in arbitrary sequence.
+The values are preceded by the parameter names that are mentioned above.
+If a parameter occurs more than one time, the last value is taken. If it doesn&#8217;t
+occur at all and a sensible value can be preset, the program takes such values.
+Be careful with that option because the program will not mention if you forget a
+value and it is preset by its own value. The used parameter values might be
+controlled in output file.</p>
+</div>
+</div>
+<div class="section" id="crfac">
+<span id="id5"></span><h2>2.2. crfac<a class="headerlink" href="#crfac" title="Permalink to this headline">¶</a></h2>
+<p>crfac performs a comparison between(theory) and experimental IV curves.
+The agreement is quantified in terms of the reliability factor (or R factor),
+which can vary between 0 (perfect fit) and 1 (uncorrelated). For most applications
+an acceptable R factor is &lt;0.1 for very simple models and &lt;0.3 for complicated
+structures. The program offers the choice between four different R-factors
+that can be used when minimising a structural search. These are <span class="math">\(R_1\)</span>,
+<span class="math">\(R_2\)</span>, <span class="math">\(R_p\)</span> and <span class="math">\(R_B\)</span>. The output R-factor value is the
+optimum achieved by shifting the energy axes of the experimental and theoretical I-V
+curves with respect to each other. This shift acts as a correction for any non-optimum
+value of the optical potential in the LEED calculations, which therefore need not be
+optimised by the csearch program. In this way, one dimension is eliminated from the search
+parameter space on which the search  program operates,  hence reducing the number of
+LEED calculations to be performed. The assignment of experimental and theoretical I-V
+curves  (or average  of  curves) for comparison, and of the relative weight that a
+particular I-V curve has in the overall R factor, is performed prior to the search.</p>
+<div class="section" id="crfac-syntax">
+<span id="id6"></span><h3>2.2.1. Syntax<a class="headerlink" href="#crfac-syntax" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">crfac</span> <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">control_file</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">t</span> <span class="o">&lt;</span><span class="n">theoretical_file</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">OPTIONS</span><span class="o">...</span> <span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="crfac-options">
+<span id="id7"></span><h4>2.2.1.1. Options<a class="headerlink" href="#crfac-options" title="Permalink to this headline">¶</a></h4>
+<p><tt class="code docutils literal"><span class="pre">-a</span> <span class="pre">&lt;ID_flag&gt;</span></tt></p>
+<blockquote>
+<div>defines whether only the average R-factor is calculated (&#8216;average&#8217;) or partial R factors for
+each subset of IV curves sharing a common ID number (&#8216;all&#8217;) [default: &#8216;average&#8217;]. Only the
+first two characters are significant.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-c</span> <span class="pre">&lt;control_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies the control file which defines the correlation between
+experimental and theoretical IV curves. Further information
+regarding the control file structure is provided in the <em class="xref std std-ref">control_file</em> section.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-h</span></tt></p>
+<blockquote>
+<div>causes the program to show a short list of arguments.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-o</span> <span class="pre">&lt;output_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies  the output file where the R factor values are written
+to [default: standard output].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-r</span> <span class="pre">&lt;R_factor&gt;</span></tt></p>
+<blockquote>
+<div>specifies the R-factor type to be calculated. Valid arguments
+are:</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-s</span> <span class="pre">&lt;shift1,shift2,shift3&gt;</span></tt></p>
+<blockquote>
+<div>defines the range (shift1 and shift2) and step width (shift3) of
+the energy shifts between the experimental and theoretical curves.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-t</span> <span class="pre">&lt;theoretical_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies the file containing the theoretical IV curves. This is
+the CLEED <a href="#id8"><span class="problematic" id="id9">*</span></a>.res results file from the csearch program. See <a class="reference internal" href="#csearch"><em>csearch</em></a>
+for more information.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-v</span>&nbsp; <span class="pre">&lt;optical_potential&gt;</span></tt></p>
+<blockquote>
+<div>specifies  the  value of the optical potential <span class="math">\(V_i\)</span> (in eV)
+used in the evaluation of Pendry&#8217;s R-factor (<span class="math">\(R_p\)</span>). <span class="math">\(2V_i\)</span>
+determines smallest resolvable features in the IV curves.
+The default is 4 eV, however in situations where the interlayer
+spacings are very small, such as for intermetallic compounds, <span class="math">\(V_i\)</span>
+may need to be increased (but should remain &lt; 5eV).</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-V</span></tt></p>
+<blockquote>
+<div>give version and additional information about this program.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-w</span>&nbsp; <span class="pre">&lt;IV_output_prefix&gt;</span></tt></p>
+<blockquote>
+<div>causes the program to write all normalised IV curves as
+energy/intensity pairs to separate files so that they can be
+plotted. &lt;IV_output_prefix&gt; specifies the base filename to which
+the  letters  &#8216;e&#8217; (experimental) or &#8216;t&#8217; (theoretical) as well as
+the number of the pair of curves is appended.</div></blockquote>
+</div>
+</div>
+<div class="section" id="id10">
+<h3>2.2.2. Environment<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">RF_HELP_FILE</span></tt></dt>
+<dd><p class="first">File to be shown when the -h option is chosen if set in the system environment.</p>
+<p class="last">This variable has to be set using the export or setenv UNIX commands, respectively,
+before the program is called for the first time.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="crfac-examples">
+<span id="id11"></span><h3>2.2.3. Examples<a class="headerlink" href="#crfac-examples" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><pre>crfac -w iv -c *.ctr -t *.res</pre>
+</div>
+<p>Creates  a  list  of experimental and theoretical IV curve files
+matching the regex pattern <em>&#8216;iv_[et]_[0-9]+?[0-9]+?[0-9]&#8217;</em>. This
+command  is  valid  if  there  is  only one <tt class="file docutils literal"><span class="pre">*.ctr</span></tt> and <tt class="file docutils literal"><span class="pre">*.res</span></tt> file
+within  the  directory (otherwise the full filenames are required). The IV files
+can then plotted using a graphing package such as gnuplot, qtiplot, veusz or xmgrace.</p>
+<div class="highlight-python"><pre>crfac -c *.ctr -t *.res -a all</pre>
+</div>
+<p>Prints a list of the individual R factors. Output can  be  redirected  to a file
+(e.g. by appending &#8216;&gt;rfac.txt&#8217; to the command) for a permanent record.</p>
+<div class="highlight-python"><pre>crfac -c *.ctr -t *.res</pre>
+</div>
+<p>Calculates the error (relative error) for the calculated R-factor. The relative error
+is given by: :<span class="math">\(RR = (\frac{8 V_i}{\delta E})^{\frac{1}{2}}\)</span>, where <span class="math">\(V_i\)</span>
+is the imaginary component of the optical potential and <span class="math">\(\delta E\)</span> is the energy
+range of the data. This provides the error bars, <span class="math">\(E = (1 + RR) * R_{\text{min}}\)</span>, where
+<span class="math">\(R_{\text{min}}\)</span> is the minimum R factor for the data.</p>
+</div>
+</div>
+<div class="section" id="csearch">
+<span id="id12"></span><h2>2.3. csearch<a class="headerlink" href="#csearch" title="Permalink to this headline">¶</a></h2>
+<p>csearch performs the LEED model structure optimisation. It uses standard
+optimisation  algorithms such as the downhill simplex method, Powell&#8217;s method,
+simulated annealing and the genetic algorithm, which can be selected by the
+use in order to perform the search for the best fit geometry in N-dimensional
+parameter space (coordinates, angles, but not vibrational amplitudes).
+While the first two algorithms are strictly downhill-orientated, i.e. will
+find only the nearest R factor minimum, the latter two algorithms should in
+principle provide a means of locating the global R factor minimum within
+the  given constrains, at the expense of many more search steps. Within
+each search step a set of geometrical parameters is chosen by the algorithm
+depending on the R factor values achieved previously and in accordance with
+user-specified symmetry constraints. The parameters are written to a file
+serving as input for the LEED program whose output is then fed into the R factor
+program, <a class="reference internal" href="#crfac"><em>crfac</em></a>, in order to calculate an R factor value for the current
+parameter set.</p>
+<div class="section" id="csearch-syntax">
+<span id="id13"></span><h3>2.3.1. Syntax<a class="headerlink" href="#csearch-syntax" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">csearch</span> <span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">input_file</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">OPTIONS</span><span class="o">...</span>  <span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="csearch-options">
+<span id="id14"></span><h4>2.3.1.1. Options<a class="headerlink" href="#csearch-options" title="Permalink to this headline">¶</a></h4>
+<p><tt class="code docutils literal"><span class="pre">-i</span> <span class="pre">&lt;input_file&gt;</span></tt></p>
+<blockquote>
+<div>Specifies the parameter input file and is the only mandatory
+option. The file contains all the  geometric  and  non-geometric
+parameters need for the surface structure. The <tt class="code docutils literal"><span class="pre">&lt;input_file&gt;</span></tt>
+filename without the extension is used as the &#8220;project name&#8221; by
+the program in order to create names for output files.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-d</span> <span class="pre">&lt;initial_dispacement&gt;</span></tt></p>
+<blockquote>
+<div>Specifies  the initial displacements from the start geometry for
+all parameters.</div></blockquote>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">-s</span> <span class="pre">&lt;search_type&gt;</span></tt></dt>
+<dd>Specifies the search algorithm to be used for the structure
+optimisation. Possible arguments are:</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-v</span> <span class="pre">&lt;vertex_file&gt;</span></tt></p>
+<blockquote>
+<div>Allows the search to be restarted with the current simplex, provided
+the simplex algorithm is used. The argument <tt class="code docutils literal"><span class="pre">&lt;vertex_file&gt;</span></tt>
+is the <tt class="file docutils literal"><span class="pre">*.ver</span></tt> file produced by the program.</div></blockquote>
+</div>
+</div>
+<div class="section" id="csearch-environment">
+<span id="id15"></span><h3>2.3.2. Environment<a class="headerlink" href="#csearch-environment" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_HOME</span></tt></dt>
+<dd>Parent directory of CLEED distribution.</dd>
+<dt><span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_LEED</span></tt></dt>
+<dd>Path of the program used for the LEED calculations. This
+may simply be &#8216;csearch&#8217; if the parent directory of this program is in
+the system <a href="#id16"><span class="problematic" id="id17">:envar:`PATH`</span></a> variable.</dd>
+<dt><span class="target" id="index-4"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_RFAC</span></tt></dt>
+<dd>Path of the crfac program  used  for the R factor evaluation. This may simply be &#8216;crfac&#8217;
+if the parent directory of this program is in the system <a href="#id18"><span class="problematic" id="id19">:envar:`PATH`</span></a> variable.</dd>
+<dt><span class="target" id="index-5"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt></dt>
+<dd>Directory path of the phase shift files used in  the  surface and bulk models.
+Please refer to <a class="reference internal" href="aux_programs/phsh.html#phsh"><em>phsh</em></a> for more information on generating phase shift files.</dd>
+</dl>
+<p>These  variables  can  be  set automatically by executing the &#8216;set_env&#8217; script.</p>
+</div>
+<div class="section" id="id20">
+<h3>2.3.3. Examples<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="files">
+<h3>2.3.4. Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="input-files">
+<h4>2.3.4.1. Input files<a class="headerlink" href="#input-files" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><tt class="file docutils literal"><span class="pre">*.inp</span></tt></dt>
+<dd>The parameter input for the surface model. See <em class="xref std std-ref">input_file</em> section
+for more information.</dd>
+<dt><tt class="file docutils literal"><span class="pre">*.bul</span></tt></dt>
+<dd>The bulk parameter file. See <em class="xref std std-ref">bulk_file</em> for more information.</dd>
+<dt><tt class="file docutils literal"><span class="pre">*.ctr</span></tt></dt>
+<dd>The  control  parameter  file for R factor evaluation. See
+<em class="xref std std-ref">control_file</em> for more information.</dd>
+</dl>
+</div>
+<div class="section" id="output-files">
+<h4>2.3.4.2. Output files<a class="headerlink" href="#output-files" title="Permalink to this headline">¶</a></h4>
+<p><tt class="file docutils literal"><span class="pre">*.bmin</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.dum</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.ver</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.par</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.pmin</span></tt></p>
+</div>
+</div>
+<div class="section" id="id21">
+<h3>2.3.5. Notes<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<p>The .inp, .bul and .ctr files all need the same filename prefix before
+the file extension. This prefix is also used in the output filenames.</p>
+<p>Typically, 50 to 100 eV of data is needed per geometry search parameter,
+e.g. for 1 atom with 3 parameters would require 150-300eV of data.
+This  is  because  the precision (error bar) <span class="math">\(RR\)</span> depends on the energy
+range with a larger range leading to greater precision. For complex
+adsorbate structures or overlayer superstructures, more data is needed
+because there are more parameters to fit. One solution would be to go
+to higher experimental energies, however this leads to a loss of sensitivity,
+difficulties in resolving the LEED pattern (i.e. the spots are too close together),
+vastly increased CLEED calculation times due to more scattering, as
+well as beam damage to the sample. As such an alternative route would
+be to use different angles of incidence. For more information
+see <em class="xref std std-ref">caoi_leed</em>.</p>
+</div>
+</div>
+<div class="section" id="set-env">
+<span id="id22"></span><h2>2.4. set_env<a class="headerlink" href="#set-env" title="Permalink to this headline">¶</a></h2>
+<p>As <a class="reference internal" href="#csearch"><em>csearch</em></a> requires setting environment variables in order to run, a small
+utility program <tt class="code docutils literal"><span class="pre">set_env</span></tt> is included to setup the CLEED environment for a
+given search.</p>
+<div class="section" id="set-env-syntax">
+<span id="id23"></span><h3>2.4.1. Syntax<a class="headerlink" href="#set-env-syntax" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><pre>set_env.py [-h] [-c] [-x &lt;ext&gt; [&lt;ext&gt; ...]] [-e &lt;env&gt; [&lt;env&gt; ...]]  [-i
+&lt;INI_FILE&gt;]   [-o   &lt;INI_FILE&gt;]   [--aoi-leed  &lt;AOI_LEED&gt;]  [--aoi-rfac
+&lt;AOI_RFAC&gt;] [--leed  &lt;LEED&gt;]  [--search  &lt;SEARCH&gt;]  [--sym  &lt;LEED_SYM&gt;]
+[--rfac &lt;RFAC&gt;] [--phsh &lt;PHSH&gt;] [-v] [-V]</pre>
+</div>
+<div class="section" id="set-env-options">
+<span id="id24"></span><h4>2.4.1.1. Options<a class="headerlink" href="#set-env-options" title="Permalink to this headline">¶</a></h4>
+<p><tt class="code docutils literal"><span class="pre">-h</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--help</span></tt></p>
+<blockquote>
+<div>Show help message and exit.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-c</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--check</span></tt></p>
+<blockquote>
+<div>Perform post-processing checks to ensure
+all paths and executables are set correctly.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-x</span> <span class="pre">&lt;ext&gt;</span> <span class="pre">[&lt;ext&gt;</span> <span class="pre">...]</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--ext</span> <span class="pre">&lt;ext&gt;</span> <span class="pre">[&lt;ext&gt;</span> <span class="pre">...]</span></tt></p>
+<blockquote>
+<div>Set enabled extensions; can be any of &#8216;aoi&#8217;, &#8216;sym&#8217; or &#8216;phsh&#8217;.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-e</span> <span class="pre">&lt;env&gt;</span> <span class="pre">[&lt;env&gt;</span> <span class="pre">...]</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--env</span> <span class="pre">&lt;env&gt;</span> <span class="pre">[&lt;env&gt;</span> <span class="pre">...]</span></tt></p>
+<blockquote>
+<div>Set custom environment values of the form: &#8220;&lt;var&gt;:&lt;value&gt;&#8221;.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-i</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--input</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<blockquote>
+<div>Load custom environment from <tt class="code docutils literal"><span class="pre">&lt;INI_FILE&gt;</span></tt></div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-o</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--output</span> <span class="pre">&lt;INI_FILE&gt;</span></tt></p>
+<blockquote>
+<div><p>Save custom environment to <tt class="code docutils literal"><span class="pre">&lt;INI_FILE&gt;</span></tt> [default: &#8220;cleed.ini&#8221;].</p>
+<p>Note &lt;INI_FILE&gt; is always written.</p>
+</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--aoi-leed</span> <span class="pre">&lt;AOI_LEED&gt;</span></tt></p>
+<blockquote>
+<div>Path to angle of incidence LEED wrapper program [default: &#8220;caoi_leed&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--aoi-rfac</span> <span class="pre">&lt;AOI_RFAC&gt;</span></tt></p>
+<blockquote>
+<div>Path to angle of incidence R-Factor wrapper program [default: &#8220;caoi_rfac&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--leed</span> <span class="pre">&lt;LEED&gt;</span></tt></p>
+<blockquote>
+<div>Path to LEED program [default: &#8220;cleed_nsym&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--search</span> <span class="pre">&lt;SEARCH&gt;</span></tt></p>
+<blockquote>
+<div>Path to search program [default: &#8220;csearch&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--sym</span> <span class="pre">&lt;LEED_SYM&gt;</span></tt></p>
+<blockquote>
+<div>Path to symmetrised LEED program [default: &#8220;cleed_sym&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--rfac</span> <span class="pre">&lt;RFAC&gt;</span></tt></p>
+<blockquote>
+<div>Path to R-Factor program [default: &#8220;crfac&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">--phsh</span> <span class="pre">&lt;PHSH&gt;</span></tt></p>
+<blockquote>
+<div>Path to phase shifts program [default: &#8220;phsh.py&#8221;].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-v</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--verbose</span></tt></p>
+<blockquote>
+<div>Set verbose output.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-V</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--version</span></tt></p>
+<blockquote>
+<div>Show program version information and exit.</div></blockquote>
+</div>
+</div>
+<div class="section" id="set-env-examples">
+<span id="id25"></span><h3>2.4.2. Examples<a class="headerlink" href="#set-env-examples" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">set_env</span> <span class="o">--</span><span class="n">check</span>
+</pre></div>
+</div>
+<p>This will set the <span class="target" id="index-6"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_HOME</span></tt>, <span class="target" id="index-7"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt>,
+<span class="target" id="index-8"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_LEED</span></tt> (to &#8216;cleed_nsym&#8217;) and <span class="target" id="index-9"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_RFAC</span></tt> (to &#8216;crfac&#8217;)
+environment variables and check to verify all paths are correct.</p>
+<div class="highlight-python"><pre>set_env --check --ext aoi sym phsh</pre>
+</div>
+<p>In addition to the above example, this will set the <span class="target" id="index-10"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CAOI_LEED</span></tt>,
+<span class="target" id="index-11"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CAOI_RFAC</span></tt> and <span class="target" id="index-12"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PHASESHIFTS_LEED</span></tt> environment variables.</p>
+<div class="highlight-python"><pre>set_env --env CLEED_PHASE:"~/cleed/phase"</pre>
+</div>
+<p>This will set the <span class="target" id="index-13"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt> environment variable to &#8220;~/cleed/phase&#8221;.</p>
+<div class="highlight-python"><pre>set_env -i env.ini --env CLEED_PHASE:"%APPDATA%/CLEED/phase" -o env.ini</pre>
+</div>
+<p>This will load the environment from env.ini, then set the <span class="target" id="index-14"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt>
+environment variable to &#8220;%APPDATA%/CLEED/phase&#8221; before re-writing <tt class="file docutils literal"><span class="pre">env.ini</span></tt>
+with the updated value.</p>
+</div>
+<div class="section" id="set-env-notes">
+<span id="id26"></span><h3>2.4.3. Notes<a class="headerlink" href="#set-env-notes" title="Permalink to this headline">¶</a></h3>
+<p>A crude bash version of <tt class="file docutils literal"><span class="pre">set_env.py</span></tt> is included in the CLEED
+package as <tt class="file docutils literal"><span class="pre">set_env.sh</span></tt> for environments without modern Python support.
+The bash version works in a similar fashion, however, it isn&#8217;t
+as rigorously tested and therefore your mileage may vary.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aux_programs.html" title="3. Auxiliary Programs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="1. CLEED package"
+             >previous</a> |</li>
+        <li><a href="index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Georg Held, Liam Deacon &amp; collaborators.
+    </div>
+  </body>
+</html>

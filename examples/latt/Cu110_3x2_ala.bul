@@ -1,0 +1,26 @@
+# Sample bulk geometry input file for
+c: Cu(110) + p(3x2)_Alanine
+# bulk unit cell parameters
+a1: 3.6150    0.0000    0.0000
+a2: 0.0000    2.5560    0.0000
+a3: 1.8050    1.2780   -1.2780
+#superstructure matrix
+m1: 2.  0.
+m2: 0.  3.
+#optical potentials
+vr: -14.00
+vi:   4.00
+# bulk positions
+#
+pb: Cu_met 0.0000    0.0000   0.0000 dr1 0.05
+#
+#energies
+ei: 25.0
+ef: 250.0
+es: 100.
+#angles of incidence
+it: 0.00
+ip: 0.00
+#epsilon, lmax
+ep: 1.e-2
+lm: 8

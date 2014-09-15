@@ -1,0 +1,15 @@
+##############################################################################
+#                            CLEED CONTROL FILE                              #
+##############################################################################
+#
+# Control file for R factor program CRFAC
+#
+# Parameter line input contains the following:
+#   ef=<experimental input file>
+#   ti=<corresponding indices in theoretical input file>
+#   id=<group ID>
+#   wt=<weighting>
+#   : = separator
+#
+# e.g.
+#   ef=nicu_11.iv:ti=(1.0,1.0):id=01:wt=1.

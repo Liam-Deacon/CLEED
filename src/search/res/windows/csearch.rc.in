@@ -1,0 +1,26 @@
+id ICON "csearch.ico"
+
+1 VERSIONINFO
+FILEVERSION     @CSEARCH_VERSION_MAJOR@,@CSEARCH_VERSION_MINOR@,@CSEARCH_VERSION_PATCH@,0
+PRODUCTVERSION  @CSEARCH_VERSION_MAJOR@,@CSEARCH_VERSION_MINOR@,@CSEARCH_VERSION_PATCH@,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "FileDescription", "LEED Search Program"
+      VALUE "FileVersion", "@CSEARCH_VERSION_MAJOR@.@CSEARCH_VERSION_MINOR@"
+      VALUE "InternalName", "csearch"
+      VALUE "LegalCopyright", "Georg Held & collaborators"
+      VALUE "OriginalFilename", "csearch.exe"
+      VALUE "ProductName", "CSEARCH"
+      VALUE "ProductVersion", "@CSEARCH_VERSION_MAJOR@.@CSEARCH_VERSION_MINOR@"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

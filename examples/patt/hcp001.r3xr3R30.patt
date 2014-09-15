@@ -1,0 +1,14 @@
+# input file for pattern
+c 
+c hcp (0001)-( !Uo!N3x !Uo!N3)R30°
+1.6248  -2.8142  a1
+1.6248   2.8142  a2
+3.0        radius
+1          No of domains
+#M1
+  2   1   M1
+ -1   1   M1
+#M2
+R60
+#M3
+R120

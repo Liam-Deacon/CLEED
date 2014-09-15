@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=csearch
+Comment=IV curve file
+Icon=cleed_iv
+Terminal=false
+Type=Application
+Categories=Science
+MimeType=application/x-cleed_iv-item;

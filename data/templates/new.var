@@ -1,0 +1,32 @@
+##############################################################################
+#                            MKIV VARIABLE FILE                              #
+##############################################################################
+#
+# This file contains some additional input data for mkiv
+#
+# Alternatively, for completeness the following parameters may be put into 
+# the *.mkiv input file
+#
+COS_MIN		0.60	> min cosine for basis-recalibration
+COS_MAX		0.90	> max cosine for basis-recalibration
+VERH		1.4	    > ratio bg-ellipse/int-ellipse axis
+ACCI		0.95	> min ratio int-ellipse/whole ellipse
+ACCB		0.7 	> min ratio bg-ellipse/whole ellipse
+DISTANCE	60	    > min distance for spots used for recalibration
+UPDATE		10	    > if QQ: files are flushed every 'UPDATE'th time 
+STEP		3	    > step-size for fimax 
+TRIP_MAX	999	    > max number of triples for recalibration
+SCALE_MIN	10.	    > min value for scale 
+RANGE_MIN	10.	    > min value for range 
+S2N_REF		1.2	    > min s/n ratio for reference spots
+S2N_GOOD	0.5  	> spots with better s/n are kept
+S2N_BAD		0.10 	> spots with worse s/n are 'bad'
+REF_MIN		10	    > min number of predef reference spots for recalib
+REF_DEV		3.0	    > if new_base - base > ref_dev -> same frame again
+BAS_RAT		0.6	    > base = bas_rat * newbase + (1-bas_rat) * base
+SEC_RANGE	3.0	    > range(2nd loop) = range(1st) / SEC_RANGE
+RANGE		0.200	> size of searching area in units of (1,0) basis-vector
+SCALE_A		0.150	> determines size of int. area in units of (1,0) basis vector.
+SCALE_B		0.150   > The int. area scales like the basis vectors - with sqrt(eV)
+ANGLE		0.0     > angle between elliptical integration area axis & horiz.
+RATIO		0.10    > ratio of LEED screen radius to distance of camera

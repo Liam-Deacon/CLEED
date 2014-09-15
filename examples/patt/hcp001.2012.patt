@@ -1,0 +1,12 @@
+c 3 Domains of (2 0 / 1 2) 
+1.0  1.732       a1
+1.0 -1.732       a2
+1.1           radius
+3            No of domains
+#M1
+  2   0  M1
+  1   2  M1
+#M2
+R120
+#M3
+R120

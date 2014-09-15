@@ -1,0 +1,73 @@
+#------------------------------------------------------------------------------
+#$Date: 2013-05-05 14:21:46 +0000 (Sun, 05 May 2013) $
+#$Revision: 85285 $
+#$URL: file:///home/coder/svn-repositories/cod/cif/9/00/00/9000085.cif $
+#------------------------------------------------------------------------------
+#
+# This file is available in the Crystallography Open Database (COD),
+# http://www.crystallography.net/. The original data for this entry
+# were provided the American Mineralogist Crystal Structure Database,
+# http://rruff.geo.arizona.edu/AMS/amcsd.php
+#
+# The file may be used within the scientific community so long as
+# proper attribution is given to the journal article from which the
+# data were obtained.
+#
+data_9000085
+loop_
+_publ_author_name
+'Evans, H. T.'
+'McKnight, E. T.'
+_publ_section_title
+;
+ New wurtzite polytypes from Joplin, Missouri
+;
+_journal_name_full               'American Mineralogist'
+_journal_page_first              1210
+_journal_page_last               1218
+_journal_volume                  44
+_journal_year                    1959
+_chemical_formula_sum            'S5 Zn5'
+_chemical_name_mineral           Wurtzite-10H
+_space_group_IT_number           186
+_symmetry_space_group_name_Hall  'P 6c -2c'
+_symmetry_space_group_name_H-M   'P 63 m c'
+_cell_angle_alpha                90
+_cell_angle_beta                 90
+_cell_angle_gamma                120
+_cell_length_a                   3.824
+_cell_length_b                   3.824
+_cell_length_c                   31.20
+_cell_volume                     395.113
+_exptl_crystal_density_diffrn    4.096
+_[local]_cod_chemical_formula_sum_orig 'Zn5 S5'
+_cod_database_code               9000085
+loop_
+_symmetry_equiv_pos_as_xyz
+x,y,z
+-x,-x+y,1/2+z
+x-y,x,1/2+z
+-y,-x,z
+-y,x-y,z
+x-y,-y,1/2+z
+-x,-y,1/2+z
+x,x-y,z
+-x+y,-x,z
+y,x,1/2+z
+y,-x+y,1/2+z
+-x+y,y,z
+loop_
+_atom_site_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+Zn1 0.00000 0.00000 0.00000
+Zn2 0.00000 0.00000 0.30000
+Zn3 0.33333 0.66667 0.10000
+Zn4 0.33333 0.66667 0.40000
+Zn5 0.33333 0.66667 0.70000
+S1 0.00000 0.00000 0.07500
+S2 0.00000 0.00000 0.37500
+S3 0.33333 0.66667 0.17500
+S4 0.33333 0.66667 0.47500
+S5 0.33333 0.66667 0.77500

@@ -1,0 +1,54 @@
+##############################################################################
+#                        CLEED SURFACE INPUT FILE                            #
+##############################################################################
+#
+# Surface parameter input file for
+c: <model_name>
+#
+# Example line syntax as follows: 
+#    a1: <a1_x>  <a1_y>   <a1_z>   -> a1 basis vector of unit cell in Angstroms
+#    a2: <a2_x>  <a2_y>   <a2_z>   -> a2 basic vector of unit cell in Angstroms
+#    m1:  <M11>  <M12>             -> superstructure matrix elements
+#    m2:  <M21>  <M22>             -> e.g. 1 0 | 0 1 corresponds to 1x1
+#    po: <phaseshift_file>  <x>  <y>  <z>  dr1  <Debye-Waller_factor>
+#    rm: <phaseshift_file> <r_min> -> minimum radius for species before penalties  
+#    zr: <z-min>  <z_max>          -> z-range of search before penalties
+#    sz: <flag>                    -> 0 = xyz search or 1 = z-only search
+#    sr: <n-fold> <x-pos> <y-pos>  -> [optional] centre of symmetry
+#
+# Additional notes:
+#   * Comment lines start with either 'c:' or '#'
+#   * Additional whitespace is discarded, e.g. 'rm: Ni_110 0.90' is equivalent 
+#     to 'rm:         Ni_110            0.90'
+#   * Unknown options preceding the colon are marked as warnings and ignored. 
+#     This is useful if you wish one input file to be compatible with multiple 
+#     programs in the CLEED package, e.g. latt, cleed_nsym & cleed_sym. 
+#   * The filepath given in <phaseshift_file> need only be a relative path 
+#     (excluding the '.phs' extension) from the directory stored in the 
+#     CLEED_PHASE environment variable.
+#
+#------------------------------------------------------------------------------
+# BEGIN INPUT
+#------------------------------------------------------------------------------ 
+
+#****************************
+#   Geometric parameters    *
+#****************************
+# surface unit cell parameters
+a1:
+a2:
+# superstructure matrix
+m1: 1  0
+m2: 0  1
+# symmetry (ignored in cleed_nsym)
+sr: 1  0.0  0.0
+# overlayers
+po: 
+
+#****************************
+#      SEARCH options       *
+#****************************
+# minimum radii of atoms in 
+rm: 
+# z-range
+sz: 1.00  9.00

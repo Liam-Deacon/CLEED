@@ -1,0 +1,2 @@
+*.FH10 -> Macromedia Freehand 10 Files
+*.PSD  -> Photoshop CS files

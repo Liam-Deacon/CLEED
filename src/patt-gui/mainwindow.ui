@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>608</width>
+    <height>556</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>pattern - LEED simulator</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res/icons.qrc">
+    <normaloff>:/pattern_32x32.png</normaloff>:/pattern_32x32.png</iconset>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QGraphicsView" name="graphicsView"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QRadioButton" name="radioRadius">
+            <property name="text">
+             <string>Radius</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioEnergy">
+            <property name="text">
+             <string>eV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="zoomSlider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumber">
+            <property name="lineWidth">
+             <number>1</number>
+            </property>
+            <property name="midLineWidth">
+             <number>0</number>
+            </property>
+            <property name="smallDecimalPoint">
+             <bool>false</bool>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>608</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menuOpenRecent">
+     <property name="title">
+      <string>Open &amp;Recent</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="actionOpen"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="menuOpenRecent"/>
+    <addaction name="actionClose"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionCopy"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionExport"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionContact"/>
+    <addaction name="actionAboutPattern"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string/>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="actionPreferences"/>
+   <addaction name="actionInput"/>
+   <addaction name="separator"/>
+   <addaction name="actionZoom"/>
+   <addaction name="actionRedraw"/>
+   <addaction name="actionTranslate"/>
+   <addaction name="actionRotate"/>
+   <addaction name="actionEditObjects"/>
+   <addaction name="separator"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionExport"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/folder_fill_32x32.png</normaloff>:/folder_fill_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/exit_128x128.png</normaloff>:/exit_128x128.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/cog_32x32.png</normaloff>:/cog_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Preferences</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/save_32x32.png</normaloff>:/save_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionZoom">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/magnifying_glass_32x32.png</normaloff>:/magnifying_glass_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom</string>
+   </property>
+   <property name="toolTip">
+    <string>Set magnification</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionContact">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/mail_32x32.png</normaloff>:/mail_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Contact</string>
+   </property>
+   <property name="toolTip">
+    <string>Contact/Report Bug...</string>
+   </property>
+  </action>
+  <action name="actionAboutPattern">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/info_16x32.png</normaloff>:/info_16x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About Pattern</string>
+   </property>
+   <property name="toolTip">
+    <string>About Pattern...</string>
+   </property>
+  </action>
+  <action name="actionRedraw">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/reload_alt_24x28.png</normaloff>:/reload_alt_24x28.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redraw</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionEditObjects">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/list_nested_32x28.png</normaloff>:/list_nested_32x28.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Edit Objects</string>
+   </property>
+   <property name="toolTip">
+    <string>Object Editor</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionTranslate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/move_32x32.png</normaloff>:/move_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Translate</string>
+   </property>
+   <property name="toolTip">
+    <string>(x,y) move</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionRotate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/spin_28x32.png</normaloff>:/spin_28x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rotate</string>
+   </property>
+   <property name="toolTip">
+    <string>Rotate</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionInput">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/pencil_32x32.png</normaloff>:/pencil_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Input</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/arrow_right_32x32.png</normaloff>:/arrow_right_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export...</string>
+   </property>
+   <property name="toolTip">
+    <string>Export Image</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="res/icons.qrc">
+     <normaloff>:/new_window_32x32.png</normaloff>:/new_window_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy to clipboard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="res/icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionClose</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>303</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

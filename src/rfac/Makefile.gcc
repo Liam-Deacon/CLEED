@@ -1,0 +1,259 @@
+#############################################################################
+# Makefile for building: crfac
+# Author: Liam Deacon (Email: liam.deacon@diamond.ac.uk) 
+# Project: CLEED  
+# Date: 2013-05-30
+# Notes: 
+#	* Assumes modern GNU gcc toolchain ( > 4.4.0 )
+#	* Windows users: install MinGW and add bin directory to PATH
+#   * Please uncomment/comment the appropriate sections to enable or disable
+#     OpenMP support and compiler optimisations (which affect portability)
+#############################################################################
+
+pkgname        = CLEED
+TARGET         = crfac
+PREFIX         = cleed
+	  
+#============================================================================
+#  GH/02.01.05
+#  makefile for search
+#============================================================================
+.SUFFIXES: .o .c .h
+#=============================================================================
+MYPRG = ..
+INCLUDEDIR = $(MYPRG)$(SEPERATOR)INCLUDE
+LIBDIR = .
+RFACDIR = $(MYPRG)/RFAC
+
+#==flags=====================================================================
+CCOMP = cc
+OPT = -O2
+WARNINGS = -Wall -Wextra
+CFLAGSSUB = -c $(OPT) $(WARNINGS) $(DEFINES) -I$(INCLUDEDIR) -L$(LIBDIR)
+CFLAGS = $(OPT) $(WARNINGS) $(DEFINES) -I$(INCLUDEDIR) -L$(LIBDIR)
+LDFLAGS = -lm
+#============================================================================
+# Uncomment to enable development debugging output to terminal
+DEFINES ?= -DCONTROL -DCONTROL_X -g
+#============================================================================
+# Disable extreme optimisations if experiencing stability problems
+# (uncomment to enable)
+#OPT = -O3 -march=native -mfpmath=sse -ffast-math -funroll-loops -std=gnu11
+OPT = -O3 -march=native -ffast-math -funroll-loops
+#============================================================================
+# OpenMP (uncomment to enable multicore support)
+#DEFINES += -D_USE_OPENMP 
+#OPT += -fopenmp 
+#============================================================================
+#  header files
+#
+FILES.h = $(INCLUDEDIR)/stddefs.h \
+          $(INCLUDEDIR)/rfac.h \
+          $(INCLUDEDIR)/crfac.h
+#============================================================================
+
+STDLIB =  bgets.o \
+          file2buffer.o
+
+RFACLIB = rfhelp.o \
+          rflines.o \
+          rfctr2out.o \
+          rfversion.o
+
+CRFACLIB= crfinput.o \
+          crfintindl.o\
+          crflorentz.o \
+          crfmklide.o \
+          crfmklist.o \
+          crfrdargs.o \
+          crfrdcleed.o \
+          crfrdexpt.o \
+          crfrmin.o \
+          crfrb.o \
+          crfrp.o \
+          crfr1.o \
+          crfr2.o \
+          crfsort.o \
+          crfspline.o \
+          crfsplint.o 
+
+MIXLIB  = 
+
+OBJ =     $(STDLIB) \
+          $(CRFACLIB) \
+          $(RFACLIB)
+
+#customise the following to best suite your system
+
+ifndef CONFIGURED
+ifdef ComSpec
+#setup Windows based commands
+CCC           ?= g++
+CFLAGS        ?= -c -Wall -O2 -mtune=native
+CHK_DIR_EXISTS?= if not exist
+CLASSPATH     ?=
+COPY           = cmd.exe /C copy /y
+COPY_FILE      = $(COPY)
+COPY_DIR       = xcopy -s -q -y -i
+DEL_FILE       = cmd.exe /C del /Q
+FC            ?= gfortran
+JCC           ?= javac
+JFLAGS        ?=
+LDFLAGS       ?=
+LS             = cmd /C dir /B
+MAKEFILE      ?= Makefile
+MKDIR          = cmd.exe /C mkdir
+MOVE           = cmd.exe /C move /Y
+SYMLINK       ?= $(COPY)
+RM             = $(DEL_FILE)
+RMDIR          = cmd.exe /C rmdir /S /Q
+EXE           ?= .exe
+
+bindir        ?= $(prefix)$(SEPERATOR)bin
+libexecdir    ?= $(prefix)$(SEPERATOR)libexec
+libdir        ?= $(libexecdir)
+localstatedir ?= $(prefix)$(SEPERATOR)var
+localedir     ?= $(datarootdir)$(SEPERATOR)locale
+datarootdir   ?= $(prefix)$(SEPERATOR)share
+datadir       ?= $(datarootdir)
+docdir        ?= $(datarootdir)$(SEPERATOR)doc$(SEPERATOR)$(pkgname)
+includedir    ?= $(prefix)$(SEPERATOR)include
+infodir       ?= $(datarootdir)$(SEPERATOR)info
+mandir        ?= $(datarootdir)$(SEPERATOR)man
+oldincludedir ?=
+prefix        ?= \"$(ProgramFiles)\"
+sbindir       ?=
+sharedstatedir?= $(prefix)$(SEPERATOR)com
+srcdir        ?= src
+sysconfdir    ?= $(prefix)$(SEPERATOR)etc
+
+#custom paths & files
+BIN_DIR       ?= bin$(SEPERATOR)
+EXAMPLES      ?= examples$(SEPERATOR)
+INSTALL_PATH  ?= $(prefix)$(SEPERATOR)
+INSTALL_NAME  ?= $(pkgname)$(SEPERATOR)
+LINK_PATH     ?= 
+LIB_EXT       ?= .dll
+LIB_DIR       ?= lib\\
+SRC           ?= src\\
+SEPERATOR     ?= \\
+
+else
+#check system using uname
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+#setup Linux based commands
+CC            ?= gcc
+CXX           ?= g++
+CFLAGS        ?= -c -Wall -O2 -mtune=native
+CHK_DIR_EXISTS?= if not exist
+CLASSPATH     ?=
+COPY           = cp --force
+COPY_FILE      = $(COPY)
+COPY_DIR       = cp -r
+DEL_FILE       = rm
+EXE           ?=
+FC            ?= gfortran
+JCC           ?= javac
+JFLAGS        ?=
+LDFLAGS       ?=
+LS             = ls -1
+MAKEFILE      ?= Makefile
+MKDIR          = mkdir -p
+MOVE           = mv
+SYMLINK        = ln -s
+RM             = rm -f
+RMDIR          = rm -rf
+
+#custom paths & files
+
+bindir        ?= $(prefix)/bin
+libexecdir    ?= $(prefix)/libexec
+libdir        ?= $(libexecdir)
+localstatedir ?= $(prefix)/var
+localedir     ?= $(datarootdir)/locale
+datarootdir   ?= $(prefix)/share
+datadir       ?= $(datarootdir)
+docdir        ?= $(datarootdir)/doc/$(pkgname)
+includedir    ?= $(prefix)/include
+infodir       ?= $(datarootdir)/info
+mandir        ?= $(datarootdir)/man
+oldincludedir ?=
+prefix        ?= /usr/local/
+sbindir       ?=
+sharedstatedir?= $(prefix)/com
+srcdir        ?= src/
+sysconfdir    ?= $(prefix)/etc
+
+BIN_DIR       ?= bin/
+EXAMPLES      ?= examples/
+INSTALL_PATH  ?= $(prefix)
+INSTALL_NAME  ?= $(pkgname)/
+LINK_PATH     ?= /usr/local/bin/
+LIB_EXT       ?= .a
+LIB_DIR       ?= lib/
+SRC           ?= src/
+SEPERATOR     ?= /
+
+endif
+endif
+endif
+
+#maintain compatibility with Georg's original makefile syntax
+ifdef CC
+CCOMP = $(CC)
+else
+CCOMP = cc
+endif
+
+#setup phony targets
+.PHONY = all clean install uninstall
+.DEFAULT = all
+
+all: $(TARGET)
+	@echo
+	@echo "---------------------------------------"
+	@echo "Completed compiling $(subst test,$(PREFIX),$(TARGET))$(EXE)"
+	@echo
+	
+$(TARGET): $(OBJ)
+	$(CCOMP) -o $(TARGET)$(EXE) $(CFLAGS) $(TARGET).c $(OBJ) $(LDFLAGS)
+	@-$(MKDIR) ..$(SEPERATOR)$(BIN_DIR)
+	-$(MOVE) $(TARGET)$(EXE) ..$(SEPERATOR)bin$(SEPERATOR)$(subst test,$(PREFIX),$(TARGET))$(EXE)
+
+%.o: $(TARGET).h
+	$(CCOMP) $(CFLAGSSUB) $(subst .o,.c,$@) -o $@
+
+install:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Installing files to $(INSTALL_PATH)$(INSTALL_NAME)..."
+	@echo
+	@-$(MKDIR) "$(INSTALL_PATH)$(INSTALL_NAME)$(BIN_DIR)"
+	@echo
+	@$(COPY) $(BIN_DIR)*$(EXE) "$(INSTALL_PATH)$(INSTALL_NAME)$(BIN_DIR)"
+	@echo
+	@echo "---------------------------------------"
+	@echo
+	
+uninstall:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Removing installed files from $(INSTALL_PATH)$(INSTALL_NAME)..."
+	@echo
+	@$(DEL_FILE) "$(INSTALL_PATH)$(INSTALL_NAME)$(BIN_DIR)$(TARGET)$(EXE)"
+	@echo
+	@echo "---------------------------------------"
+	@echo
+
+clean:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Cleaning up files..."
+	@echo
+	$(DEL_FILE) *.o
+	@echo 
+	@echo "Cleaned"
+	@echo "---------------------------------------"
+	@echo 

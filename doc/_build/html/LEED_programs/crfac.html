@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>crfac &mdash; CLEED 0.1.0-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/CLEED_logo.ico"/>
+    <link rel="top" title="CLEED 0.1.0-dev documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/CLEED_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">crfac</a><ul>
+<li><a class="reference internal" href="#syntax">Syntax</a><ul>
+<li><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment">Environment</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="crfac">
+<span id="id1"></span><h1>crfac<a class="headerlink" href="#crfac" title="Permalink to this headline">¶</a></h1>
+<p>crfac performs a comparison between(theory) and experimental IV curves.
+The agreement is quantified in terms of the reliability factor (or R factor),
+which can vary between 0 (perfect fit) and 1 (uncorrelated). For most applications
+an acceptable R factor is &lt;0.1 for very simple models and &lt;0.3 for complicated
+structures. The program offers the choice between four different R-factors
+that can be used when minimising a structural search. These are <span class="math">\(R_1\)</span>,
+<span class="math">\(R_2\)</span>, <span class="math">\(R_p\)</span> and <span class="math">\(R_B\)</span>. The output R-factor value is the
+optimum achieved by shifting the energy axes of the experimental and theoretical I-V
+curves with respect to each other. This shift acts as a correction for any non-optimum
+value of the optical potential in the LEED calculations, which therefore need not be
+optimised by the csearch program. In this way, one dimension is eliminated from the search
+parameter space on which the search  program operates,  hence reducing the number of
+LEED calculations to be performed. The assignment of experimental and theoretical I-V
+curves  (or average  of  curves) for comparison, and of the relative weight that a
+particular I-V curve has in the overall R factor, is performed prior to the search.</p>
+<div class="section" id="syntax">
+<span id="crfac-syntax"></span><h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">crfac</span> <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">control_file</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">t</span> <span class="o">&lt;</span><span class="n">theoretical_file</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">OPTIONS</span><span class="o">...</span> <span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="options">
+<span id="crfac-options"></span><h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<p><tt class="code docutils literal"><span class="pre">-a</span> <span class="pre">&lt;ID_flag&gt;</span></tt></p>
+<blockquote>
+<div>defines whether only the average R-factor is calculated (&#8216;average&#8217;) or partial R factors for
+each subset of IV curves sharing a common ID number (&#8216;all&#8217;) [default: &#8216;average&#8217;]. Only the
+first two characters are significant.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-c</span> <span class="pre">&lt;control_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies the control file which defines the correlation between
+experimental and theoretical IV curves. Further information
+regarding the control file structure is provided in the <em class="xref std std-ref">control_file</em> section.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-h</span></tt></p>
+<blockquote>
+<div>causes the program to show a short list of arguments.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-o</span> <span class="pre">&lt;output_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies  the output file where the R factor values are written
+to [default: standard output].</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-r</span> <span class="pre">&lt;R_factor&gt;</span></tt></p>
+<blockquote>
+<div>specifies the R-factor type to be calculated. Valid arguments
+are:</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-s</span> <span class="pre">&lt;shift1,shift2,shift3&gt;</span></tt></p>
+<blockquote>
+<div>defines the range (shift1 and shift2) and step width (shift3) of
+the energy shifts between the experimental and theoretical curves.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-t</span> <span class="pre">&lt;theoretical_file&gt;</span></tt></p>
+<blockquote>
+<div>specifies the file containing the theoretical IV curves. This is
+the CLEED <a href="#id2"><span class="problematic" id="id3">*</span></a>.res results file from the csearch program. See <a class="reference internal" href="csearch.html#csearch"><em>csearch</em></a>
+for more information.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-v</span>&nbsp; <span class="pre">&lt;optical_potential&gt;</span></tt></p>
+<blockquote>
+<div>specifies  the  value of the optical potential <span class="math">\(V_i\)</span> (in eV)
+used in the evaluation of Pendry&#8217;s R-factor (<span class="math">\(R_p\)</span>). <span class="math">\(2V_i\)</span>
+determines smallest resolvable features in the IV curves.
+The default is 4 eV, however in situations where the interlayer
+spacings are very small, such as for intermetallic compounds, <span class="math">\(V_i\)</span>
+may need to be increased (but should remain &lt; 5eV).</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-V</span></tt></p>
+<blockquote>
+<div>give version and additional information about this program.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-w</span>&nbsp; <span class="pre">&lt;IV_output_prefix&gt;</span></tt></p>
+<blockquote>
+<div>causes the program to write all normalised IV curves as
+energy/intensity pairs to separate files so that they can be
+plotted. &lt;IV_output_prefix&gt; specifies the base filename to which
+the  letters  &#8216;e&#8217; (experimental) or &#8216;t&#8217; (theoretical) as well as
+the number of the pair of curves is appended.</div></blockquote>
+</div>
+</div>
+<div class="section" id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">RF_HELP_FILE</span></tt></dt>
+<dd><p class="first">File to be shown when the -h option is chosen if set in the system environment.</p>
+<p class="last">This variable has to be set using the export or setenv UNIX commands, respectively,
+before the program is called for the first time.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<span id="crfac-examples"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>crfac -w iv -c *.ctr -t *.res</pre>
+</div>
+<p>Creates  a  list  of experimental and theoretical IV curve files
+matching the regex pattern <em>&#8216;iv_[et]_[0-9]+?[0-9]+?[0-9]&#8217;</em>. This
+command  is  valid  if  there  is  only one <tt class="file docutils literal"><span class="pre">*.ctr</span></tt> and <tt class="file docutils literal"><span class="pre">*.res</span></tt> file
+within  the  directory (otherwise the full filenames are required). The IV files
+can then plotted using a graphing package such as gnuplot, qtiplot, veusz or xmgrace.</p>
+<div class="highlight-python"><pre>crfac -c *.ctr -t *.res -a all</pre>
+</div>
+<p>Prints a list of the individual R factors. Output can  be  redirected  to a file
+(e.g. by appending &#8216;&gt;rfac.txt&#8217; to the command) for a permanent record.</p>
+<div class="highlight-python"><pre>crfac -c *.ctr -t *.res</pre>
+</div>
+<p>Calculates the error (relative error) for the calculated R-factor. The relative error
+is given by: :<span class="math">\(RR = (\frac{8 V_i}{\delta E})^{\frac{1}{2}}\)</span>, where <span class="math">\(V_i\)</span>
+is the imaginary component of the optical potential and <span class="math">\(\delta E\)</span> is the energy
+range of the data. This provides the error bars, <span class="math">\(E = (1 + RR) * R_{\text{min}}\)</span>, where
+<span class="math">\(R_{\text{min}}\)</span> is the minimum R factor for the data.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Georg Held, Liam Deacon &amp; collaborators.
+    </div>
+  </body>
+</html>

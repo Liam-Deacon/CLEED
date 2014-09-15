@@ -1,0 +1,27 @@
+id ICON "latt.ico"
+
+1 VERSIONINFO
+FILEVERSION     @LATT_VERSION_MAJOR@,@LATT_VERSION_MINOR@,@LATT_VERSION_PATCH@,0
+PRODUCTVERSION  @LATT_VERSION_MAJOR@,@LATT_VERSION_MINOR@,@LATT_VERSION_PATCH@,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "CompanyName", "Diamond Light Source Ltd."
+      VALUE "FileDescription", "Lattice generator"
+      VALUE "FileVersion", "@LATT_VERSION_MAJOR@.@LATT_VERSION_MINOR@"
+      VALUE "InternalName", "lattice"
+      VALUE "LegalCopyright", "Georg Held & Liam Deacon"
+      VALUE "OriginalFilename", "latt.exe"
+      VALUE "ProductName", "latt"
+      VALUE "ProductVersion", "@LATT_VERSION_MAJOR@.@LATT_VERSION_MINOR@"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

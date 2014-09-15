@@ -1,0 +1,174 @@
+--- origsrc/zlib-1.2.7/MINGW-PATCHES/zlib.README	1969-12-31 19:00:00 -0500
++++ src/zlib-1.2.7/MINGW-PATCHES/zlib.README	2012-05-13 02:56:25 -0400
+@@ -0,0 +1,171 @@
++mingw zlib
++===============================================================================
++zlib is a general purpose data compression library.  All the code is thread
++safe.  The data format used by the zlib library is described by RFCs (Request
++for Comments) 1950 to 1952 in the files http://www.ietf.org/rfc/rfc1950.txt
++(zlib format), rfc1951.txt (deflate format) and rfc1952.txt (gzip format).
++
++Release: zlib-1.2.7-1-mingw32
++
++Files:   zlib-1.2.7-1-mingw32-src.tar.lzma        (full source code)
++         zlib-1.2.7-1-mingw32-doc.tar.lzma        (FAQ and example code)
++         zlib-1.2.7-1-mingw32-lic.tar.lzma        (licensing terms)
++         zlib-1.2.7-1-mingw32-man.tar.lzma        (manpages)
++
++         libz-1.2.7-1-mingw32-dev.tar.lzma         (libraries and headers)
++         libz-1.2.7-1-mingw32-dll-1.tar.lzma       (redistributable DLL)
++
++         minizip-1.2.7-1-mingw32-bin.tar.lzma      (minizip utility)
++         libminizip-1.2.7-1-mingw32-dll-1.tar.lzma (redistributable DLL)
++         libminizip-1.2.7-1-mingw32-dev.tar.lzma   (libraries and headers)
++
++Notes:   This is a binary release of the zlib compression/decompression
++         library, compiled for use with mingw32 applications.
++
++         The source code is unchanged from that distributed by zlib.net,
++         with the exception of a minimal set of patches to the configure
++         script and makefile. This distribution also includes the add-on
++	 library libminizip and a sample minizip application, suitable
++	 for simple manipulations of zip-format archives.
++
++         The "src" tarball delivers the full unmodified source code from
++         zlib.net, with the addition of the above two files.
++
++         The "doc", "lic" and "man" tarballs provide the documentation
++         components, as identified above, abstracted from the source
++         tarball, and repackaged into a file hierarchy structure which
++         is suitable for installation into the user's installed MinGW
++         directory hierarchy; for a standard installation, they should
++         be unpacked into the C:\MinGW directory.
++
++         Developers of mingw32 applications, who wish to link to the
++         zlib libraries, will require at least the "dev" tarball; this
++         provides the libz.a static version of the library, libz.dll.a
++         import library, for linking to a DLL version of the library,
++         and the set of C language headers common to both.  The DLL
++         version of the library, libz-1.dll, is provided separately, by
++         the "dll-1" tarball.  (Note that both of these tarballs are
++         identified by a package name of "libz", rather than "zlib",
++         reflecting the actual names of the libraries they provide).
++         As in the case of the installable documentation, each of these
++         tarballs should be unpacked into the C:\MinGW directory.
++
++         Please note that the libz-1.dll delivered by this package
++         should be compatible with the standard zlib1.dll distributed by
++         zlib.net.  However, such compatibility has not been verified;
++         it also has an additional dependency on the shared gcc runtime
++         library libgcc_s_dw2-1.dll.  Hence, the DLL is distributed by
++         MinGW.org using the alternative name, libz-1.dll.
++
++Requires:
++  mingw32-libgcc-dll-1      4.6.2-1
++
++Build Requires:
++  mingw32-gcc-core-bin      4.6.2-1
++  mingw32-binutils-bin      2.22-1
++  mingw32-w32api-dev        3.17-2
++  mingw32-mgwport-bin       0.10.6-1
++  msys-core-bin             1.0.17-1
++  msys-coreutils-bin        5.97-3
++  msys-bash-bin             3.1.17-4
++  msys-patch-bin            2.6.1-1
++  msys-make-bin             3.82-5
++  msys-tar-bin              1.23-1
++  msys-bzip2-bin            1.0.5-2
++  msys-xz-bin               5.0.3-2
++  msys-lndir-bin            1.0.1-2
++  msys-wget-bin             1.12-1
++ 
++Canonical homepage:
++  http://zlib.net/
++
++Canonical download:
++  http://prdownloads.sourceforge.net/libpng/zlib-1.2.7.tar.bz2?download
++
++License:
++  Zlib
++
++Language:
++  C
++
++===============================================================================
++
++Build instructions:
++  unpack zlib-1.2.7-1-mingw32-src.tar.lzma
++  mgwport zlib-1.2.5-3.mgwport all
++
++This will create:
++  zlib-1.2.7-1-mingw32-doc.tar.lzma
++  zlib-1.2.7-1-mingw32-man.tar.lzma
++  zlib-1.2.7-1-mingw32-lic.tar.lzma
++  libz-1.2.7-1-mingw32-dev.tar.lzma
++  libz-1.2.7-1-mingw32-dll-1.tar.lzma
++  zlib-1.2.7-1-mingw32-src.tar.lzma
++  libminizip-1.2.7-1-mingw32-dev.tar.lzma
++  libminizip-1.2.7-1-mingw32-dll-1.tar.lzma
++  minizip-1.2.7-1-mingw32-bin.tar.lzma
++
++See `mgwport --help' for other options.
++
++===============================================================================
++
++Test suite results
++This section of this document is updated with each new release.
++No history is maintained here.
++
++$ mgwport zlib-$VER-$REL.mgwport check
++>>> Testing zlib-1.2.7-1
++hello world
++zlib version 1.2.7 = 0x1270, compile flags = 0x55
++uncompress(): hello, hello!
++gzread(): hello, hello!
++gzgets() after gzseek:  hello!
++inflate(): hello, hello!
++large_inflate(): OK
++after inflateSync(): hello, hello!
++inflate with dictionary: hello, hello!
++                *** zlib test OK ***
++hello world
++zlib version 1.2.7 = 0x1270, compile flags = 0x55
++uncompress(): hello, hello!
++gzread(): hello, hello!
++gzgets() after gzseek:  hello!
++inflate(): hello, hello!
++large_inflate(): OK
++after inflateSync(): hello, hello!
++inflate with dictionary: hello, hello!
++                *** zlib shared test OK ***
++hello world
++zlib version 1.2.7 = 0x1270, compile flags = 0x55
++uncompress(): hello, hello!
++gzread(): hello, hello!
++gzgets() after gzseek:  hello!
++inflate(): hello, hello!
++large_inflate(): OK
++after inflateSync(): hello, hello!
++inflate with dictionary: hello, hello!
++                *** zlib 64-bit test OK ***
++
++===============================================================================
++Port Notes:
++
++This mingw build of zlib supports 64 bit file access (large files).
++
++===============================================================================
++
++----------  zlib-1.2.7-1 -- 2012 May 13 -----------
++* Rebuild with gcc-4.6.2
++* Upgrade to latest upstream release
++
++----------  zlib-1.2.5-4 -- 2011 Sep 17 -----------
++* Rebuild with gcc-4.6.1
++
++----------  zlib-1.2.5-3 -- 2011 Aug 31 ----------- unreleased -----------
++* Adapt build system to use mgwport framework
++
++----------  zlib-1.2.5-2 -- 2011 Jun 08 ----------- unreleased -----------
++* Adapt build system to use pkgbuild/pkgbuild.ini framework.
++* Adopt patchset from cygwin's cross-build mingw-zlib package.
++
++----------  zlib-1.2.5-1 -- 2011 Apr 23 -----------
++* First zlib release with a changelog

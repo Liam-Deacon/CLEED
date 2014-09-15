@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+ <mime-type type="application/x-cleed_fsm-item">
+    <sub-class-of type="text/xml"/>
+    <sub-class-of type="application/xml"/>
+    <comment>CLEED Fourier smoothed IV curve file</comment>
+    <icon>cleed_fsm</icon>
+    <glob pattern=".fsm" weight="50" />
+    <magic priority="90">
+          <match type="string" offset="2" value="!DOCTYPE FOURIER SMOOTHED CURVE"/>
+    </magic>
+    <root-XML localName="cleed_fsm" />
+  </mime-type>
+ </mime-info>

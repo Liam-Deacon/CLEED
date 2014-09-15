@@ -1,0 +1,20 @@
+# Sample bulk geometry input file for TiO2
+# bulk unit cell parameters
+a1:     6.4965    0.0000   0.0000
+a2:     0.0000    2.9581   0.0000
+a3:     3.2482    0.0000   3.2482
+#superstructure matrix
+m1:  1.  0.
+m2:  0.  1.
+#
+pb: Ti   -3.2482    0.0000  -6.4965
+pb: Ti   0.0000    1.4791  -6.4965
+pb: O     0.0000    0.0000  -7.7613
+pb: O     0.0000    0.0000  -5.2317
+pb: O   -1.9834    1.4791  -6.4965
+pb: O     1.9834    1.4791  -6.4965
+#
+#
+il: 15 
+nl: 2
+

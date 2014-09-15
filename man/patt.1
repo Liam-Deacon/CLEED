@@ -1,0 +1,108 @@
+.\" Process this file with 'groff -man -Tascii patt.1'
+.\" man page author: Liam Deacon (liam.deacon@diamond.ac.uk)
+.\"
+.TH patt 1 "MARCH 2014" CLEED User Manuals
+.\"===================================================================
+
+.SH NAME
+
+patt \- generate LEED patterns
+
+.SH SYNOPSIS
+
+.B patt \-i <input> \-o <output> 
+.I [OPTIONS...]
+
+.SH AVAILABILITY
+
+patt is available as part of the CLEED package and should be available on any platform where there is a GNU C compiler (GCC) tool chain. GCC is readily available on most Linux distributions, however Windows users can install MinGW, the minimalist GNU tool set for Windows.   
+
+.SH DESCRIPTION
+
+patt is a computer program written in C which 
+
+.SH OPTIONS
+
+.IP -i
+.IP \-\-input 
+.I <filename>
+.RS
+followed by the filename prefix to input files [default='patt']. 
+.RE
+.IP -o
+.IP \-\-output
+.I <filename>
+.RS 
+followed by the filename prefix to output files [default='patt']. 
+.RE
+.IP -b
+.IP \-\-current 
+.I value
+.RS 
+followed by the beam current value. 
+.RE
+.IP -B
+.IP \-\-beam
+.I prefix
+.RS
+followed by the filename prefix for .raw and .smo files [default='beam']. 
+.RE
+.IP -h 
+.IP \-\-help 
+.RS 
+give more detailed information during computations. 
+.RE
+
+.IP \-q \-\-quiet \-\-quick
+.RS
+faster with no graphical output and only a few prints to stdout.
+.RE
+.IP -v 
+.IP --verbose 
+.RS 
+give more detailed information during program flow. 
+.RE
+
+.IP -V 
+.IP --version 
+.RS 
+give version and additional information about this program. 
+.RE
+
+.\" Document here situations in which the program can be used, if there are uses that are not obvious.
+.SH EXAMPLES
+
+.SH NOTES
+
+Both *.inp and *.var input files contain the parameters in arbitrary sequence. The values are preceded by the parameter names that are mentioned above. If a parameter occurs more than one time, the last value is taken. If it doesn't occur at all and a sensible value can be preset, the program takes such values. Be careful with that option because the program will not mention if you forget a value and it is preset by its own value. The used parameter values might be controlled in output file. 
+
+.\"Document here all errors and other messages returned to the user. Include the cause and the recovery actions whenever appropriate and possible.
+.\".SH MESSAGES AND EXIT CALLS
+
+.\" Document here the significant changes in each release of the product.
+.\".SH HISTORY
+
+.SH FILES
+
+INPUT FILES: 
+
+
+.SH AUTHOR
+
+Georg Held <g.held@reading.ac.uk>.
+
+.SH CONTACT
+
+Please email questions, bug fixes or any suggestions to either Georg Held or Liam Deacon <liam.deacon@diamond.ac.uk>.
+
+.\"Document here things that work as designed but which may be unclear or surprising to the user. (This is the System V replacement for the BUGS category; you too can pretend your product has no bugs!)
+.\".SH CAVEATS
+
+.SH COPYRIGHT
+
+Copyright (C) 1995-2014 Georg Held
+.PP
+LICENSE
+.SH SEE ALSO
+
+caoi_leed(1), caoi_rfac(1), cleed_nsym(1), cleed_sym(1), crfac(1), csearch(1), debye(1), ftsmooth(1), latt(1), mkiv(1), phsh(1)  

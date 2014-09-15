@@ -1,0 +1,189 @@
+.\" Process this file with 'groff -man -Tascii set_env.1'
+.\" man page author: Liam Deacon (liam.deacon@diamond.ac.uk)
+.\"
+.TH set_env 1 "MAY 2014" CLEED User Manuals
+.\"===================================================================
+
+.SH NAME
+
+set_env \- setup CLEED environment
+
+.SH DESCRIPTION
+
+set_env sets the environment in which CLEED is run. Program paths are checked 
+in the order: command line METAVAR > SYSTEM PATH > CLEED_HOME.  
+
+.SH SYNTAX
+
+.B set_env.py 
+[-h] [-c] [-x <ext> [<ext> ...]] [-e <env> [<env> ...]]
+[-i <INI_FILE>] [-o <INI_FILE>]
+[--aoi-leed <AOI_LEED>] [--aoi-rfac <AOI_RFAC>]
+[--leed <LEED>] [--search <SEARCH>] [--sym <LEED_SYM>]
+[--rfac <RFAC>] [--phsh <PHSH>] [-v] [-V]
+
+.SH OPTIONS
+
+.IP -h
+.IP --help
+.RS
+show this help message and exit.
+.RE
+.IP -c 
+.IP --check
+.RS
+perform post-processing checks to ensure all paths and executables are set correctly.
+.RE
+.IP -x 
+.I <ext> [<ext> ...]
+.IP --ext 
+.I <ext> [<ext> ...]
+.RS
+set enabled extensions; can be any of 'aoi', 'sym' or
+'phsh'. Note: Multiple extensions can be enabled simultaneously.
+.RE
+.IP -e 
+.I <env> [<env> ...]
+.IP --env
+.I <env> [<env> ...]
+.RS
+set custom environment values of the form: "<var>:<value>".
+.RE
+.IP -i
+.I <INI_FILE>
+.IP --input
+.I <INI_FILE>
+.RS
+load custom environment from <INI_FILE>.
+.RE
+.IP -o
+.I <INI_FILE>
+.IP --output
+.I <INI_FILE>
+.RS
+save custom environment to <INI_FILE> [default: "cleed.ini"]. Note <INI_FILE> is always written.
+.RE
+.IP --aoi-leed
+.I <AOI_LEED>
+.RS
+path to angle of incidence LEED program wrapper [default: "caoi_leed.exe"].
+.RE
+.IP --aoi-rfac
+.I <AOI_RFAC>
+.RS
+path to angle of incidence R-Factor wrapper program [default: "caoi_rfac.exe"].
+.RE
+.IP --leed 
+.I <LEED>
+.RS
+path to LEED program [default: "cleed_nsym.exe"].
+.RE
+.IP --search 
+.I <SEARCH>
+.RS
+path to search program [default: "csearch.exe"].
+.RE
+.IP --sym 
+.I <LEED_SYM>
+.RS 
+path to symmetrised LEED program [default:"cleed_sym.exe"].
+.RE
+.IP --rfac 
+.I <RFAC>
+.RS
+path to R-Factor program [default: "crfac.exe"].
+.RE
+.IP --phsh 
+.I <PHSH>
+.RS
+path to phase shifts program [default: "phsh.py"].
+.RE
+.IP -v
+.IP --verbose
+.RS
+set verbosity level [default: None].
+.RE
+.IP -V
+.IP --version
+.RS
+show program's version number and exit.
+.RE
+
+.SH EXAMPLES
+
+.B set_env --check
+.RS
+This will set the 
+.I CLEED_HOME
+,
+.I CLEED_PHASE
+,
+.I CSEARCH_LEED
+(to 'cleed_nsym') and 
+.I CSEARCH_RFAC
+(to 'crfac') environment variables and check to verify all paths are correct.
+.RE
+.PP
+.B set_env --check --ext aoi sym phsh 
+.RS
+In addition to the above example, this will set the 
+.I CAOI_LEED
+,
+.I CAOI_RFAC
+and 
+.I PHASESHIFTS_LEED
+environment variables.
+.RE
+.PP
+.B set_env --env "CLEED_PHASE":"~/cleed/phase"
+.RS
+This will set the 
+.I CLEED_PHASE
+environment variable to "~/cleed/phase"
+.RE
+.PP
+.B set_env -i "env.ini" --env "CLEED_PHASE":"%APPDATA%/CLEED/phase" -o "env.ini"
+.RS
+This will load the environment from 
+.I "env.ini"
+, then set the 
+.I CLEED_PHASE
+environment variable to 
+.I "%APPDATA%/CLEED/phase"
+before re-writing 
+.I "env.ini"
+with the updated value.
+.RE
+
+
+.SH AUTHOR
+
+Liam Deacon <liam.deacon@diamond.ac.uk>
+
+.SH AVAILABILITY
+
+set_env.py should run on any system with a Python interpreter installed.
+In circumstances where Python is unavailable, basic 'set_env' scripts are 
+available in bash and Windows batch, however they require
+manual editing to correctly set up the environment values and are not as
+dynamic as the Python version.
+
+.SH COPYRIGHT
+
+Copyright (c) 2014 Diamond Light Source Ltd. All rights reserved.
+
+.SH LICENSE
+
+Licensed under the Apache License 2.0
+.PP
+http://www.apache.org/licenses/LICENSE-2.0
+.PP
+Distributed on an "AS IS" basis without warranties
+or conditions of any kind, either express or implied.
+.PP
+Please send your feedback, including bug notifications 
+and fixes to: liam.deacon@diamond.ac.uk
+
+.SH SEE ALSO
+
+caoi_leed(1), caoi_rfac(1), cleed_nsym(1), cleed_sym(1), crfac(1), csearch(1), debye(1), ftsmooth(1), latt(1), mkiv(1), phsh(1)

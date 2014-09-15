@@ -1,0 +1,26 @@
+id ICON "patt.ico"
+
+1 VERSIONINFO
+FILEVERSION     @PATT_VERSION_MAJOR@,@PATT_VERSION_MINOR@,@PATT_VERSION_PATCH@,0
+PRODUCTVERSION  @PATT_VERSION_MAJOR@,@PATT_VERSION_MINOR@,@PATT_VERSION_PATCH@,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "FileDescription", "Generate LEED patterns"
+      VALUE "FileVersion", "@PATT_VERSION_MAJOR@.@PATT_VERSION_MINOR"
+      VALUE "InternalName", "pattern"
+      VALUE "LegalCopyright", "Georg Held & Liam Deacon"
+      VALUE "OriginalFilename", "patt.exe"
+      VALUE "ProductName", "patt"
+      VALUE "ProductVersion", "@PATT_VERSION_MAJOR@.@PATT_VERSION_MINOR"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

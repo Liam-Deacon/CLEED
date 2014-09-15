@@ -1,0 +1,866 @@
+%! 
+%% Creator: PATTERN - version 1.3 GH/01.06.94
+%%BoundingBox: 50 150 550 650 
+%%EndComments 
+ 300.0 400.0 translate
+/Times-Roman findfont 10 scalefont setfont
+ -200.0 -250.0 moveto (PATTERN - version 1.3 GH/01.06.94) show
+% # input file for pattern
+% Title 
+/Times-Roman findfont 20 scalefont setfont
+ -200.0 250.0 moveto ( c(2r3 x 4)Rect , (2r3 x 2r3) R30, (r7 x r7) R19
+) show
+% GS spots
+ 2.0 setlinewidth stroke
+ -157.5 90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 0.0 181.8 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+ -157.5 -90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 0.0 0.0 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 157.5 90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 0.0 -181.8 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 157.5 -90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+% SS spots
+ 2.0 setlinewidth stroke
+% # c(2r3 x 4)Rect
+% Domain No. 1
+ -157.5 90.9 4.5 0 360 arc stroke
+ -118.1 136.4 4.5 0 360 arc stroke
+ -78.7 181.8 4.5 0 360 arc stroke
+ -157.5 0.0 4.5 0 360 arc stroke
+ -118.1 45.5 4.5 0 360 arc stroke
+ -78.7 90.9 4.5 0 360 arc stroke
+ -39.4 136.4 4.5 0 360 arc stroke
+ 0.0 181.8 4.5 0 360 arc stroke
+ -157.5 -90.9 4.5 0 360 arc stroke
+ -118.1 -45.5 4.5 0 360 arc stroke
+ -78.7 0.0 4.5 0 360 arc stroke
+ -39.4 45.5 4.5 0 360 arc stroke
+ 0.0 90.9 4.5 0 360 arc stroke
+ 39.4 136.4 4.5 0 360 arc stroke
+ 78.7 181.8 4.5 0 360 arc stroke
+ -118.1 -136.4 4.5 0 360 arc stroke
+ -78.7 -90.9 4.5 0 360 arc stroke
+ -39.4 -45.5 4.5 0 360 arc stroke
+ 0.0 0.0 4.5 0 360 arc stroke
+ 39.4 45.5 4.5 0 360 arc stroke
+ 78.7 90.9 4.5 0 360 arc stroke
+ 118.1 136.4 4.5 0 360 arc stroke
+ -78.7 -181.8 4.5 0 360 arc stroke
+ -39.4 -136.4 4.5 0 360 arc stroke
+ 0.0 -90.9 4.5 0 360 arc stroke
+ 39.4 -45.5 4.5 0 360 arc stroke
+ 78.7 0.0 4.5 0 360 arc stroke
+ 118.1 45.5 4.5 0 360 arc stroke
+ 157.5 90.9 4.5 0 360 arc stroke
+ 0.0 -181.8 4.5 0 360 arc stroke
+ 39.4 -136.4 4.5 0 360 arc stroke
+ 78.7 -90.9 4.5 0 360 arc stroke
+ 118.1 -45.5 4.5 0 360 arc stroke
+ 157.5 0.0 4.5 0 360 arc stroke
+ 78.7 -181.8 4.5 0 360 arc stroke
+ 118.1 -136.4 4.5 0 360 arc stroke
+ 157.5 -90.9 4.5 0 360 arc stroke
+% Domain No. 2
+newpath
+-3.2 -185.1 moveto -3.2 -178.6 lineto 
+3.2 -178.6 lineto 3.2 -185.1 lineto
+closepath stroke 
+newpath
+-62.3 -173.7 moveto -62.3 -167.2 lineto 
+-55.8 -167.2 lineto -55.8 -173.7 lineto
+closepath stroke 
+newpath
+-121.3 -162.3 moveto -121.3 -155.8 lineto 
+-114.9 -155.8 lineto -114.9 -162.3 lineto
+closepath stroke 
+newpath
+75.5 -139.6 moveto 75.5 -133.1 lineto 
+82.0 -133.1 lineto 82.0 -139.6 lineto
+closepath stroke 
+newpath
+16.4 -128.2 moveto 16.4 -121.8 lineto 
+22.9 -121.8 lineto 22.9 -128.2 lineto
+closepath stroke 
+newpath
+-42.6 -116.9 moveto -42.6 -110.4 lineto 
+-36.1 -110.4 lineto -36.1 -116.9 lineto
+closepath stroke 
+newpath
+-101.7 -105.5 moveto -101.7 -99.0 lineto 
+-95.2 -99.0 lineto -95.2 -105.5 lineto
+closepath stroke 
+newpath
+-160.7 -94.2 moveto -160.7 -87.7 lineto 
+-154.2 -87.7 lineto -154.2 -94.2 lineto
+closepath stroke 
+newpath
+154.2 -94.2 moveto 154.2 -87.7 lineto 
+160.7 -87.7 lineto 160.7 -94.2 lineto
+closepath stroke 
+newpath
+95.2 -82.8 moveto 95.2 -76.3 lineto 
+101.7 -76.3 lineto 101.7 -82.8 lineto
+closepath stroke 
+newpath
+36.1 -71.4 moveto 36.1 -64.9 lineto 
+42.6 -64.9 lineto 42.6 -71.4 lineto
+closepath stroke 
+newpath
+-22.9 -60.1 moveto -22.9 -53.6 lineto 
+-16.4 -53.6 lineto -16.4 -60.1 lineto
+closepath stroke 
+newpath
+-82.0 -48.7 moveto -82.0 -42.2 lineto 
+-75.5 -42.2 lineto -75.5 -48.7 lineto
+closepath stroke 
+newpath
+-141.0 -37.3 moveto -141.0 -30.8 lineto 
+-134.5 -30.8 lineto -134.5 -37.3 lineto
+closepath stroke 
+newpath
+-200.1 -26.0 moveto -200.1 -19.5 lineto 
+-193.6 -19.5 lineto -193.6 -26.0 lineto
+closepath stroke 
+newpath
+173.9 -37.3 moveto 173.9 -30.8 lineto 
+180.4 -30.8 lineto 180.4 -37.3 lineto
+closepath stroke 
+newpath
+114.8 -26.0 moveto 114.8 -19.5 lineto 
+121.3 -19.5 lineto 121.3 -26.0 lineto
+closepath stroke 
+newpath
+55.8 -14.6 moveto 55.8 -8.1 lineto 
+62.3 -8.1 lineto 62.3 -14.6 lineto
+closepath stroke 
+newpath
+-3.2 -3.2 moveto -3.2 3.2 lineto 
+3.2 3.2 lineto 3.2 -3.2 lineto
+closepath stroke 
+newpath
+-62.3 8.1 moveto -62.3 14.6 lineto 
+-55.8 14.6 lineto -55.8 8.1 lineto
+closepath stroke 
+newpath
+-121.3 19.5 moveto -121.3 26.0 lineto 
+-114.8 26.0 lineto -114.8 19.5 lineto
+closepath stroke 
+newpath
+-180.4 30.8 moveto -180.4 37.3 lineto 
+-173.9 37.3 lineto -173.9 30.8 lineto
+closepath stroke 
+newpath
+193.6 19.5 moveto 193.6 26.0 lineto 
+200.1 26.0 lineto 200.1 19.5 lineto
+closepath stroke 
+newpath
+134.5 30.8 moveto 134.5 37.3 lineto 
+141.0 37.3 lineto 141.0 30.8 lineto
+closepath stroke 
+newpath
+75.5 42.2 moveto 75.5 48.7 lineto 
+82.0 48.7 lineto 82.0 42.2 lineto
+closepath stroke 
+newpath
+16.4 53.6 moveto 16.4 60.1 lineto 
+22.9 60.1 lineto 22.9 53.6 lineto
+closepath stroke 
+newpath
+-42.6 64.9 moveto -42.6 71.4 lineto 
+-36.1 71.4 lineto -36.1 64.9 lineto
+closepath stroke 
+newpath
+-101.7 76.3 moveto -101.7 82.8 lineto 
+-95.2 82.8 lineto -95.2 76.3 lineto
+closepath stroke 
+newpath
+-160.7 87.7 moveto -160.7 94.2 lineto 
+-154.2 94.2 lineto -154.2 87.7 lineto
+closepath stroke 
+newpath
+154.2 87.7 moveto 154.2 94.2 lineto 
+160.7 94.2 lineto 160.7 87.7 lineto
+closepath stroke 
+newpath
+95.2 99.0 moveto 95.2 105.5 lineto 
+101.7 105.5 lineto 101.7 99.0 lineto
+closepath stroke 
+newpath
+36.1 110.4 moveto 36.1 116.9 lineto 
+42.6 116.9 lineto 42.6 110.4 lineto
+closepath stroke 
+newpath
+-22.9 121.8 moveto -22.9 128.2 lineto 
+-16.4 128.2 lineto -16.4 121.8 lineto
+closepath stroke 
+newpath
+-82.0 133.1 moveto -82.0 139.6 lineto 
+-75.5 139.6 lineto -75.5 133.1 lineto
+closepath stroke 
+newpath
+114.9 155.8 moveto 114.9 162.3 lineto 
+121.3 162.3 lineto 121.3 155.8 lineto
+closepath stroke 
+newpath
+55.8 167.2 moveto 55.8 173.7 lineto 
+62.3 173.7 lineto 62.3 167.2 lineto
+closepath stroke 
+newpath
+-3.2 178.6 moveto -3.2 185.1 lineto 
+3.2 185.1 lineto 3.2 178.6 lineto
+closepath stroke 
+% Domain No. 3
+newpath
+157.5 95.5 moveto 154.5 88.6 lineto 
+160.5 88.6 lineto 
+ closepath stroke 
+newpath
+177.1 38.6 moveto 174.1 31.8 lineto 
+180.1 31.8 lineto 
+ closepath stroke 
+newpath
+196.8 -18.2 moveto 193.8 -25.0 lineto 
+199.8 -25.0 lineto 
+ closepath stroke 
+newpath
+78.7 140.9 moveto 75.7 134.1 lineto 
+81.7 134.1 lineto 
+ closepath stroke 
+newpath
+98.4 84.1 moveto 95.4 77.3 lineto 
+101.4 77.3 lineto 
+ closepath stroke 
+newpath
+118.1 27.3 moveto 115.1 20.5 lineto 
+121.1 20.5 lineto 
+ closepath stroke 
+newpath
+137.8 -29.5 moveto 134.8 -36.4 lineto 
+140.8 -36.4 lineto 
+ closepath stroke 
+newpath
+157.5 -86.4 moveto 154.5 -93.2 lineto 
+160.5 -93.2 lineto 
+ closepath stroke 
+newpath
+-0.0 186.4 moveto -3.0 179.5 lineto 
+3.0 179.5 lineto 
+ closepath stroke 
+newpath
+19.7 129.5 moveto 16.7 122.7 lineto 
+22.7 122.7 lineto 
+ closepath stroke 
+newpath
+39.4 72.7 moveto 36.4 65.9 lineto 
+42.4 65.9 lineto 
+ closepath stroke 
+newpath
+59.0 15.9 moveto 56.0 9.1 lineto 
+62.0 9.1 lineto 
+ closepath stroke 
+newpath
+78.7 -40.9 moveto 75.7 -47.7 lineto 
+81.7 -47.7 lineto 
+ closepath stroke 
+newpath
+98.4 -97.7 moveto 95.4 -104.5 lineto 
+101.4 -104.5 lineto 
+ closepath stroke 
+newpath
+118.1 -154.5 moveto 115.1 -161.4 lineto 
+121.1 -161.4 lineto 
+ closepath stroke 
+newpath
+-59.1 175.0 moveto -62.1 168.2 lineto 
+-56.1 168.2 lineto 
+ closepath stroke 
+newpath
+-39.4 118.2 moveto -42.4 111.4 lineto 
+-36.4 111.4 lineto 
+ closepath stroke 
+newpath
+-19.7 61.4 moveto -22.7 54.5 lineto 
+-16.7 54.5 lineto 
+ closepath stroke 
+newpath
+0.0 4.5 moveto -3.0 -2.3 lineto 
+3.0 -2.3 lineto 
+ closepath stroke 
+newpath
+19.7 -52.3 moveto 16.7 -59.1 lineto 
+22.7 -59.1 lineto 
+ closepath stroke 
+newpath
+39.4 -109.1 moveto 36.4 -115.9 lineto 
+42.4 -115.9 lineto 
+ closepath stroke 
+newpath
+59.1 -165.9 moveto 56.1 -172.7 lineto 
+62.1 -172.7 lineto 
+ closepath stroke 
+newpath
+-118.1 163.6 moveto -121.1 156.8 lineto 
+-115.1 156.8 lineto 
+ closepath stroke 
+newpath
+-98.4 106.8 moveto -101.4 100.0 lineto 
+-95.4 100.0 lineto 
+ closepath stroke 
+newpath
+-78.7 50.0 moveto -81.7 43.2 lineto 
+-75.7 43.2 lineto 
+ closepath stroke 
+newpath
+-59.0 -6.8 moveto -62.0 -13.6 lineto 
+-56.0 -13.6 lineto 
+ closepath stroke 
+newpath
+-39.4 -63.6 moveto -42.4 -70.5 lineto 
+-36.4 -70.5 lineto 
+ closepath stroke 
+newpath
+-19.7 -120.5 moveto -22.7 -127.3 lineto 
+-16.7 -127.3 lineto 
+ closepath stroke 
+newpath
+0.0 -177.3 moveto -3.0 -184.1 lineto 
+3.0 -184.1 lineto 
+ closepath stroke 
+newpath
+-157.5 95.5 moveto -160.5 88.6 lineto 
+-154.5 88.6 lineto 
+ closepath stroke 
+newpath
+-137.8 38.6 moveto -140.8 31.8 lineto 
+-134.8 31.8 lineto 
+ closepath stroke 
+newpath
+-118.1 -18.2 moveto -121.1 -25.0 lineto 
+-115.1 -25.0 lineto 
+ closepath stroke 
+newpath
+-98.4 -75.0 moveto -101.4 -81.8 lineto 
+-95.4 -81.8 lineto 
+ closepath stroke 
+newpath
+-78.7 -131.8 moveto -81.7 -138.6 lineto 
+-75.7 -138.6 lineto 
+ closepath stroke 
+newpath
+-196.8 27.3 moveto -199.8 20.5 lineto 
+-193.8 20.5 lineto 
+ closepath stroke 
+newpath
+-177.1 -29.5 moveto -180.1 -36.4 lineto 
+-174.1 -36.4 lineto 
+ closepath stroke 
+newpath
+-157.5 -86.4 moveto -160.5 -93.2 lineto 
+-154.5 -93.2 lineto 
+ closepath stroke 
+% # (2r3 x 2r3) R30
+% Domain No. 4
+newpath
+-183.7 40.9 moveto -186.7 47.7 lineto 
+-180.7 47.7 lineto 
+ closepath stroke 
+newpath
+-157.5 86.4 moveto -160.5 93.2 lineto 
+-154.5 93.2 lineto 
+ closepath stroke 
+newpath
+-131.2 131.8 moveto -134.2 138.6 lineto 
+-128.2 138.6 lineto 
+ closepath stroke 
+newpath
+-183.7 -50.0 moveto -186.7 -43.2 lineto 
+-180.7 -43.2 lineto 
+ closepath stroke 
+newpath
+-157.5 -4.5 moveto -160.5 2.3 lineto 
+-154.5 2.3 lineto 
+ closepath stroke 
+newpath
+-131.2 40.9 moveto -134.2 47.7 lineto 
+-128.2 47.7 lineto 
+ closepath stroke 
+newpath
+-105.0 86.4 moveto -108.0 93.2 lineto 
+-102.0 93.2 lineto 
+ closepath stroke 
+newpath
+-78.7 131.8 moveto -81.7 138.6 lineto 
+-75.7 138.6 lineto 
+ closepath stroke 
+newpath
+-52.5 177.3 moveto -55.5 184.1 lineto 
+-49.5 184.1 lineto 
+ closepath stroke 
+newpath
+-157.5 -95.5 moveto -160.5 -88.6 lineto 
+-154.5 -88.6 lineto 
+ closepath stroke 
+newpath
+-131.2 -50.0 moveto -134.2 -43.2 lineto 
+-128.2 -43.2 lineto 
+ closepath stroke 
+newpath
+-105.0 -4.5 moveto -108.0 2.3 lineto 
+-102.0 2.3 lineto 
+ closepath stroke 
+newpath
+-78.7 40.9 moveto -81.7 47.7 lineto 
+-75.7 47.7 lineto 
+ closepath stroke 
+newpath
+-52.5 86.4 moveto -55.5 93.2 lineto 
+-49.5 93.2 lineto 
+ closepath stroke 
+newpath
+-26.2 131.8 moveto -29.2 138.6 lineto 
+-23.2 138.6 lineto 
+ closepath stroke 
+newpath
+0.0 177.3 moveto -3.0 184.1 lineto 
+3.0 184.1 lineto 
+ closepath stroke 
+newpath
+-131.2 -140.9 moveto -134.2 -134.1 lineto 
+-128.2 -134.1 lineto 
+ closepath stroke 
+newpath
+-105.0 -95.5 moveto -108.0 -88.6 lineto 
+-102.0 -88.6 lineto 
+ closepath stroke 
+newpath
+-78.7 -50.0 moveto -81.7 -43.2 lineto 
+-75.7 -43.2 lineto 
+ closepath stroke 
+newpath
+-52.5 -4.5 moveto -55.5 2.3 lineto 
+-49.5 2.3 lineto 
+ closepath stroke 
+newpath
+-26.2 40.9 moveto -29.2 47.7 lineto 
+-23.2 47.7 lineto 
+ closepath stroke 
+newpath
+0.0 86.4 moveto -3.0 93.2 lineto 
+3.0 93.2 lineto 
+ closepath stroke 
+newpath
+26.2 131.8 moveto 23.2 138.6 lineto 
+29.2 138.6 lineto 
+ closepath stroke 
+newpath
+52.5 177.3 moveto 49.5 184.1 lineto 
+55.5 184.1 lineto 
+ closepath stroke 
+newpath
+-78.7 -140.9 moveto -81.7 -134.1 lineto 
+-75.7 -134.1 lineto 
+ closepath stroke 
+newpath
+-52.5 -95.5 moveto -55.5 -88.6 lineto 
+-49.5 -88.6 lineto 
+ closepath stroke 
+newpath
+-26.2 -50.0 moveto -29.2 -43.2 lineto 
+-23.2 -43.2 lineto 
+ closepath stroke 
+newpath
+0.0 -4.5 moveto -3.0 2.3 lineto 
+3.0 2.3 lineto 
+ closepath stroke 
+newpath
+26.2 40.9 moveto 23.2 47.7 lineto 
+29.2 47.7 lineto 
+ closepath stroke 
+newpath
+52.5 86.4 moveto 49.5 93.2 lineto 
+55.5 93.2 lineto 
+ closepath stroke 
+newpath
+78.7 131.8 moveto 75.7 138.6 lineto 
+81.7 138.6 lineto 
+ closepath stroke 
+newpath
+-52.5 -186.4 moveto -55.5 -179.5 lineto 
+-49.5 -179.5 lineto 
+ closepath stroke 
+newpath
+-26.2 -140.9 moveto -29.2 -134.1 lineto 
+-23.2 -134.1 lineto 
+ closepath stroke 
+newpath
+0.0 -95.5 moveto -3.0 -88.6 lineto 
+3.0 -88.6 lineto 
+ closepath stroke 
+newpath
+26.2 -50.0 moveto 23.2 -43.2 lineto 
+29.2 -43.2 lineto 
+ closepath stroke 
+newpath
+52.5 -4.5 moveto 49.5 2.3 lineto 
+55.5 2.3 lineto 
+ closepath stroke 
+newpath
+78.7 40.9 moveto 75.7 47.7 lineto 
+81.7 47.7 lineto 
+ closepath stroke 
+newpath
+105.0 86.4 moveto 102.0 93.2 lineto 
+108.0 93.2 lineto 
+ closepath stroke 
+newpath
+131.2 131.8 moveto 128.2 138.6 lineto 
+134.2 138.6 lineto 
+ closepath stroke 
+newpath
+0.0 -186.4 moveto -3.0 -179.5 lineto 
+3.0 -179.5 lineto 
+ closepath stroke 
+newpath
+26.2 -140.9 moveto 23.2 -134.1 lineto 
+29.2 -134.1 lineto 
+ closepath stroke 
+newpath
+52.5 -95.5 moveto 49.5 -88.6 lineto 
+55.5 -88.6 lineto 
+ closepath stroke 
+newpath
+78.7 -50.0 moveto 75.7 -43.2 lineto 
+81.7 -43.2 lineto 
+ closepath stroke 
+newpath
+105.0 -4.5 moveto 102.0 2.3 lineto 
+108.0 2.3 lineto 
+ closepath stroke 
+newpath
+131.2 40.9 moveto 128.2 47.7 lineto 
+134.2 47.7 lineto 
+ closepath stroke 
+newpath
+157.5 86.4 moveto 154.5 93.2 lineto 
+160.5 93.2 lineto 
+ closepath stroke 
+newpath
+52.5 -186.4 moveto 49.5 -179.5 lineto 
+55.5 -179.5 lineto 
+ closepath stroke 
+newpath
+78.7 -140.9 moveto 75.7 -134.1 lineto 
+81.7 -134.1 lineto 
+ closepath stroke 
+newpath
+105.0 -95.5 moveto 102.0 -88.6 lineto 
+108.0 -88.6 lineto 
+ closepath stroke 
+newpath
+131.2 -50.0 moveto 128.2 -43.2 lineto 
+134.2 -43.2 lineto 
+ closepath stroke 
+newpath
+157.5 -4.5 moveto 154.5 2.3 lineto 
+160.5 2.3 lineto 
+ closepath stroke 
+newpath
+183.7 40.9 moveto 180.7 47.7 lineto 
+186.7 47.7 lineto 
+ closepath stroke 
+newpath
+131.2 -140.9 moveto 128.2 -134.1 lineto 
+134.2 -134.1 lineto 
+ closepath stroke 
+newpath
+157.5 -95.5 moveto 154.5 -88.6 lineto 
+160.5 -88.6 lineto 
+ closepath stroke 
+newpath
+183.7 -50.0 moveto 180.7 -43.2 lineto 
+186.7 -43.2 lineto 
+ closepath stroke 
+% #r7 
+% Domain No. 5
+newpath
+-184.5 26.0 moveto -180.0 30.5 lineto 
+-175.4 26.0 lineto -180.0 21.4 lineto
+closepath stroke 
+newpath
+-162.0 90.9 moveto -157.5 95.5 lineto 
+-152.9 90.9 lineto -157.5 86.4 lineto
+closepath stroke 
+newpath
+-162.0 -90.9 moveto -157.5 -86.4 lineto 
+-152.9 -90.9 lineto -157.5 -95.5 lineto
+closepath stroke 
+newpath
+-139.5 -26.0 moveto -135.0 -21.4 lineto 
+-130.4 -26.0 lineto -135.0 -30.5 lineto
+closepath stroke 
+newpath
+-117.0 39.0 moveto -112.5 43.5 lineto 
+-107.9 39.0 lineto -112.5 34.4 lineto
+closepath stroke 
+newpath
+-94.5 103.9 moveto -90.0 108.4 lineto 
+-85.4 103.9 lineto -90.0 99.4 lineto
+closepath stroke 
+newpath
+-72.0 168.8 moveto -67.5 173.4 lineto 
+-62.9 168.8 lineto -67.5 164.3 lineto
+closepath stroke 
+newpath
+-117.0 -142.9 moveto -112.5 -138.3 lineto 
+-107.9 -142.9 lineto -112.5 -147.4 lineto
+closepath stroke 
+newpath
+-94.5 -77.9 moveto -90.0 -73.4 lineto 
+-85.4 -77.9 lineto -90.0 -82.5 lineto
+closepath stroke 
+newpath
+-72.0 -13.0 moveto -67.5 -8.4 lineto 
+-62.9 -13.0 lineto -67.5 -17.5 lineto
+closepath stroke 
+newpath
+-49.5 51.9 moveto -45.0 56.5 lineto 
+-40.4 51.9 lineto -45.0 47.4 lineto
+closepath stroke 
+newpath
+-27.0 116.9 moveto -22.5 121.4 lineto 
+-17.9 116.9 lineto -22.5 112.3 lineto
+closepath stroke 
+newpath
+-4.5 181.8 moveto -0.0 186.4 lineto 
+4.5 181.8 lineto -0.0 177.3 lineto
+closepath stroke 
+newpath
+-49.5 -129.9 moveto -45.0 -125.3 lineto 
+-40.4 -129.9 lineto -45.0 -134.4 lineto
+closepath stroke 
+newpath
+-27.0 -64.9 moveto -22.5 -60.4 lineto 
+-17.9 -64.9 lineto -22.5 -69.5 lineto
+closepath stroke 
+newpath
+-4.5 0.0 moveto 0.0 4.5 lineto 
+4.5 0.0 lineto 0.0 -4.5 lineto
+closepath stroke 
+newpath
+17.9 64.9 moveto 22.5 69.5 lineto 
+27.0 64.9 lineto 22.5 60.4 lineto
+closepath stroke 
+newpath
+40.4 129.9 moveto 45.0 134.4 lineto 
+49.5 129.9 lineto 45.0 125.3 lineto
+closepath stroke 
+newpath
+-4.5 -181.8 moveto 0.0 -177.3 lineto 
+4.5 -181.8 lineto 0.0 -186.4 lineto
+closepath stroke 
+newpath
+17.9 -116.9 moveto 22.5 -112.3 lineto 
+27.0 -116.9 lineto 22.5 -121.4 lineto
+closepath stroke 
+newpath
+40.4 -51.9 moveto 45.0 -47.4 lineto 
+49.5 -51.9 lineto 45.0 -56.5 lineto
+closepath stroke 
+newpath
+62.9 13.0 moveto 67.5 17.5 lineto 
+72.0 13.0 lineto 67.5 8.4 lineto
+closepath stroke 
+newpath
+85.4 77.9 moveto 90.0 82.5 lineto 
+94.5 77.9 lineto 90.0 73.4 lineto
+closepath stroke 
+newpath
+107.9 142.9 moveto 112.5 147.4 lineto 
+117.0 142.9 lineto 112.5 138.3 lineto
+closepath stroke 
+newpath
+62.9 -168.8 moveto 67.5 -164.3 lineto 
+72.0 -168.8 lineto 67.5 -173.4 lineto
+closepath stroke 
+newpath
+85.4 -103.9 moveto 90.0 -99.4 lineto 
+94.5 -103.9 lineto 90.0 -108.4 lineto
+closepath stroke 
+newpath
+107.9 -39.0 moveto 112.5 -34.4 lineto 
+117.0 -39.0 lineto 112.5 -43.5 lineto
+closepath stroke 
+newpath
+130.4 26.0 moveto 135.0 30.5 lineto 
+139.5 26.0 lineto 135.0 21.4 lineto
+closepath stroke 
+newpath
+152.9 90.9 moveto 157.5 95.5 lineto 
+162.0 90.9 lineto 157.5 86.4 lineto
+closepath stroke 
+newpath
+152.9 -90.9 moveto 157.5 -86.4 lineto 
+162.0 -90.9 lineto 157.5 -95.5 lineto
+closepath stroke 
+newpath
+175.4 -26.0 moveto 180.0 -21.4 lineto 
+184.5 -26.0 lineto 180.0 -30.5 lineto
+closepath stroke 
+% #M2 Sy: Spiegelung an der y-Achse
+% Domain No. 6
+newpath
+180.0 21.4 moveto 177.0 23.7 lineto 
+177.0 28.2 lineto 180.0 30.5 lineto
+183.0 28.2 lineto 183.0 23.7 lineto
+closepath stroke 
+newpath
+157.5 86.4 moveto 154.5 88.6 lineto 
+154.5 93.2 lineto 157.5 95.5 lineto
+160.5 93.2 lineto 160.5 88.6 lineto
+closepath stroke 
+newpath
+157.5 -95.5 moveto 154.5 -93.2 lineto 
+154.5 -88.6 lineto 157.5 -86.4 lineto
+160.5 -88.6 lineto 160.5 -93.2 lineto
+closepath stroke 
+newpath
+135.0 -30.5 moveto 132.0 -28.2 lineto 
+132.0 -23.7 lineto 135.0 -21.4 lineto
+138.0 -23.7 lineto 138.0 -28.2 lineto
+closepath stroke 
+newpath
+112.5 34.4 moveto 109.5 36.7 lineto 
+109.5 41.2 lineto 112.5 43.5 lineto
+115.5 41.2 lineto 115.5 36.7 lineto
+closepath stroke 
+newpath
+90.0 99.4 moveto 87.0 101.6 lineto 
+87.0 106.2 lineto 90.0 108.4 lineto
+93.0 106.2 lineto 93.0 101.6 lineto
+closepath stroke 
+newpath
+67.5 164.3 moveto 64.5 166.6 lineto 
+64.5 171.1 lineto 67.5 173.4 lineto
+70.5 171.1 lineto 70.5 166.6 lineto
+closepath stroke 
+newpath
+112.5 -147.4 moveto 109.5 -145.1 lineto 
+109.5 -140.6 lineto 112.5 -138.3 lineto
+115.5 -140.6 lineto 115.5 -145.1 lineto
+closepath stroke 
+newpath
+90.0 -82.5 moveto 87.0 -80.2 lineto 
+87.0 -75.7 lineto 90.0 -73.4 lineto
+93.0 -75.7 lineto 93.0 -80.2 lineto
+closepath stroke 
+newpath
+67.5 -17.5 moveto 64.5 -15.3 lineto 
+64.5 -10.7 lineto 67.5 -8.4 lineto
+70.5 -10.7 lineto 70.5 -15.3 lineto
+closepath stroke 
+newpath
+45.0 47.4 moveto 42.0 49.7 lineto 
+42.0 54.2 lineto 45.0 56.5 lineto
+48.0 54.2 lineto 48.0 49.7 lineto
+closepath stroke 
+newpath
+22.5 112.3 moveto 19.5 114.6 lineto 
+19.5 119.2 lineto 22.5 121.4 lineto
+25.5 119.2 lineto 25.5 114.6 lineto
+closepath stroke 
+newpath
+0.0 177.3 moveto -3.0 179.5 lineto 
+-3.0 184.1 lineto 0.0 186.4 lineto
+3.0 184.1 lineto 3.0 179.5 lineto
+closepath stroke 
+newpath
+45.0 -134.4 moveto 42.0 -132.1 lineto 
+42.0 -127.6 lineto 45.0 -125.3 lineto
+48.0 -127.6 lineto 48.0 -132.1 lineto
+closepath stroke 
+newpath
+22.5 -69.5 moveto 19.5 -67.2 lineto 
+19.5 -62.7 lineto 22.5 -60.4 lineto
+25.5 -62.7 lineto 25.5 -67.2 lineto
+closepath stroke 
+newpath
+-0.0 -4.5 moveto -3.0 -2.3 lineto 
+-3.0 2.3 lineto -0.0 4.5 lineto
+3.0 2.3 lineto 3.0 -2.3 lineto
+closepath stroke 
+newpath
+-22.5 60.4 moveto -25.5 62.7 lineto 
+-25.5 67.2 lineto -22.5 69.5 lineto
+-19.5 67.2 lineto -19.5 62.7 lineto
+closepath stroke 
+newpath
+-45.0 125.3 moveto -48.0 127.6 lineto 
+-48.0 132.1 lineto -45.0 134.4 lineto
+-42.0 132.1 lineto -42.0 127.6 lineto
+closepath stroke 
+newpath
+-0.0 -186.4 moveto -3.0 -184.1 lineto 
+-3.0 -179.5 lineto -0.0 -177.3 lineto
+3.0 -179.5 lineto 3.0 -184.1 lineto
+closepath stroke 
+newpath
+-22.5 -121.4 moveto -25.5 -119.2 lineto 
+-25.5 -114.6 lineto -22.5 -112.3 lineto
+-19.5 -114.6 lineto -19.5 -119.2 lineto
+closepath stroke 
+newpath
+-45.0 -56.5 moveto -48.0 -54.2 lineto 
+-48.0 -49.7 lineto -45.0 -47.4 lineto
+-42.0 -49.7 lineto -42.0 -54.2 lineto
+closepath stroke 
+newpath
+-67.5 8.4 moveto -70.5 10.7 lineto 
+-70.5 15.3 lineto -67.5 17.5 lineto
+-64.5 15.3 lineto -64.5 10.7 lineto
+closepath stroke 
+newpath
+-90.0 73.4 moveto -93.0 75.7 lineto 
+-93.0 80.2 lineto -90.0 82.5 lineto
+-87.0 80.2 lineto -87.0 75.7 lineto
+closepath stroke 
+newpath
+-112.5 138.3 moveto -115.5 140.6 lineto 
+-115.5 145.1 lineto -112.5 147.4 lineto
+-109.5 145.1 lineto -109.5 140.6 lineto
+closepath stroke 
+newpath
+-67.5 -173.4 moveto -70.5 -171.1 lineto 
+-70.5 -166.6 lineto -67.5 -164.3 lineto
+-64.5 -166.6 lineto -64.5 -171.1 lineto
+closepath stroke 
+newpath
+-90.0 -108.4 moveto -93.0 -106.2 lineto 
+-93.0 -101.6 lineto -90.0 -99.4 lineto
+-87.0 -101.6 lineto -87.0 -106.2 lineto
+closepath stroke 
+newpath
+-112.5 -43.5 moveto -115.5 -41.2 lineto 
+-115.5 -36.7 lineto -112.5 -34.4 lineto
+-109.5 -36.7 lineto -109.5 -41.2 lineto
+closepath stroke 
+newpath
+-135.0 21.4 moveto -138.0 23.7 lineto 
+-138.0 28.2 lineto -135.0 30.5 lineto
+-132.0 28.2 lineto -132.0 23.7 lineto
+closepath stroke 
+newpath
+-157.5 86.4 moveto -160.5 88.6 lineto 
+-160.5 93.2 lineto -157.5 95.5 lineto
+-154.5 93.2 lineto -154.5 88.6 lineto
+closepath stroke 
+newpath
+-157.5 -95.5 moveto -160.5 -93.2 lineto 
+-160.5 -88.6 lineto -157.5 -86.4 lineto
+-154.5 -88.6 lineto -154.5 -93.2 lineto
+closepath stroke 
+newpath
+-180.0 -30.5 moveto -183.0 -28.2 lineto 
+-183.0 -23.7 lineto -180.0 -21.4 lineto
+-177.0 -23.7 lineto -177.0 -28.2 lineto
+closepath stroke 
+ showpage

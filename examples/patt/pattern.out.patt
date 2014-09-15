@@ -1,0 +1,308 @@
+%! 
+%% Creator: PATTERN version 1.0
+%%BoundingBox: 270 198 306 234 
+%%EndComments 
+ 300.0 400.0 translate
+/Times-Roman findfont 10 scalefont setfont
+ -200.0 -250.0 moveto (PATTERN version 1.0 - GH/18.03.93) show
+% # 3 domains of (1 2 / 0 10) and 3 Domains of (1 2 / 0 11)
+% Title 
+/Times-Roman findfont 20 scalefont setfont
+ -200.0 250.0 moveto ( 3 Domains of (1 2 / 0 10) and 3 Domains of (1 2 / 0 11)
+) show
+% GS spots
+ 2.0 setlinewidth stroke
+ -161.9 -95.2 10.0 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 0.0 -190.5 10.0 0 360 arc gsave 0.00 setgray fill grestore stroke
+ -161.9 95.2 10.0 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 0.0 0.0 10.0 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 161.9 -95.2 10.0 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 0.0 190.5 10.0 0 360 arc gsave 0.00 setgray fill grestore stroke
+ 161.9 95.2 10.0 0 360 arc gsave 0.00 setgray fill grestore stroke
+% SS spots
+ 2.0 setlinewidth stroke
+% #M1
+% Domain No. 1
+ -132.5 147.2 5.0 0 360 arc stroke
+ -147.2 121.2 5.0 0 360 arc stroke
+ -161.9 95.2 5.0 0 360 arc stroke
+ -176.6 69.3 5.0 0 360 arc stroke
+ -191.3 43.3 5.0 0 360 arc stroke
+ 0.0 190.5 5.0 0 360 arc stroke
+ -14.7 164.5 5.0 0 360 arc stroke
+ -29.4 138.5 5.0 0 360 arc stroke
+ -44.2 112.6 5.0 0 360 arc stroke
+ -58.9 86.6 5.0 0 360 arc stroke
+ -73.6 60.6 5.0 0 360 arc stroke
+ -88.3 34.6 5.0 0 360 arc stroke
+ -103.0 8.7 5.0 0 360 arc stroke
+ -117.7 -17.3 5.0 0 360 arc stroke
+ -132.5 -43.3 5.0 0 360 arc stroke
+ -147.2 -69.3 5.0 0 360 arc stroke
+ -161.9 -95.2 5.0 0 360 arc stroke
+ 88.3 155.8 5.0 0 360 arc stroke
+ 73.6 129.9 5.0 0 360 arc stroke
+ 58.9 103.9 5.0 0 360 arc stroke
+ 44.2 77.9 5.0 0 360 arc stroke
+ 29.4 51.9 5.0 0 360 arc stroke
+ 14.7 26.0 5.0 0 360 arc stroke
+ 0.0 0.0 5.0 0 360 arc stroke
+ -14.7 -26.0 5.0 0 360 arc stroke
+ -29.4 -51.9 5.0 0 360 arc stroke
+ -44.2 -77.9 5.0 0 360 arc stroke
+ -58.9 -103.9 5.0 0 360 arc stroke
+ -73.6 -129.9 5.0 0 360 arc stroke
+ -88.3 -155.8 5.0 0 360 arc stroke
+ 161.9 95.2 5.0 0 360 arc stroke
+ 147.2 69.3 5.0 0 360 arc stroke
+ 132.5 43.3 5.0 0 360 arc stroke
+ 117.7 17.3 5.0 0 360 arc stroke
+ 103.0 -8.7 5.0 0 360 arc stroke
+ 88.3 -34.6 5.0 0 360 arc stroke
+ 73.6 -60.6 5.0 0 360 arc stroke
+ 58.9 -86.6 5.0 0 360 arc stroke
+ 44.2 -112.6 5.0 0 360 arc stroke
+ 29.4 -138.5 5.0 0 360 arc stroke
+ 14.7 -164.5 5.0 0 360 arc stroke
+ 0.0 -190.5 5.0 0 360 arc stroke
+ 191.3 -43.3 5.0 0 360 arc stroke
+ 176.6 -69.3 5.0 0 360 arc stroke
+ 161.9 -95.2 5.0 0 360 arc stroke
+ 147.2 -121.2 5.0 0 360 arc stroke
+ 132.5 -147.2 5.0 0 360 arc stroke
+% #M2
+% Domain No. 2
+ 191.3 43.3 5.0 0 360 arc stroke
+ 176.6 69.3 5.0 0 360 arc stroke
+ 161.9 95.2 5.0 0 360 arc stroke
+ 147.2 121.2 5.0 0 360 arc stroke
+ 132.5 147.2 5.0 0 360 arc stroke
+ 161.9 -95.2 5.0 0 360 arc stroke
+ 147.2 -69.3 5.0 0 360 arc stroke
+ 132.5 -43.3 5.0 0 360 arc stroke
+ 117.7 -17.3 5.0 0 360 arc stroke
+ 103.0 8.7 5.0 0 360 arc stroke
+ 88.3 34.6 5.0 0 360 arc stroke
+ 73.6 60.6 5.0 0 360 arc stroke
+ 58.9 86.6 5.0 0 360 arc stroke
+ 44.2 112.6 5.0 0 360 arc stroke
+ 29.4 138.5 5.0 0 360 arc stroke
+ 14.7 164.5 5.0 0 360 arc stroke
+ 0.0 190.5 5.0 0 360 arc stroke
+ 88.3 -155.8 5.0 0 360 arc stroke
+ 73.6 -129.9 5.0 0 360 arc stroke
+ 58.9 -103.9 5.0 0 360 arc stroke
+ 44.2 -77.9 5.0 0 360 arc stroke
+ 29.4 -51.9 5.0 0 360 arc stroke
+ 14.7 -26.0 5.0 0 360 arc stroke
+ 0.0 0.0 5.0 0 360 arc stroke
+ -14.7 26.0 5.0 0 360 arc stroke
+ -29.4 51.9 5.0 0 360 arc stroke
+ -44.2 77.9 5.0 0 360 arc stroke
+ -58.9 103.9 5.0 0 360 arc stroke
+ -73.6 129.9 5.0 0 360 arc stroke
+ -88.3 155.8 5.0 0 360 arc stroke
+ 0.0 -190.5 5.0 0 360 arc stroke
+ -14.7 -164.5 5.0 0 360 arc stroke
+ -29.4 -138.5 5.0 0 360 arc stroke
+ -44.2 -112.6 5.0 0 360 arc stroke
+ -58.9 -86.6 5.0 0 360 arc stroke
+ -73.6 -60.6 5.0 0 360 arc stroke
+ -88.3 -34.6 5.0 0 360 arc stroke
+ -103.0 -8.7 5.0 0 360 arc stroke
+ -117.7 17.3 5.0 0 360 arc stroke
+ -132.5 43.3 5.0 0 360 arc stroke
+ -147.2 69.3 5.0 0 360 arc stroke
+ -161.9 95.2 5.0 0 360 arc stroke
+ -132.5 -147.2 5.0 0 360 arc stroke
+ -147.2 -121.2 5.0 0 360 arc stroke
+ -161.9 -95.2 5.0 0 360 arc stroke
+ -176.6 -69.3 5.0 0 360 arc stroke
+ -191.3 -43.3 5.0 0 360 arc stroke
+% #M3
+% Domain No. 3
+ -58.9 -190.5 5.0 0 360 arc stroke
+ -29.4 -190.5 5.0 0 360 arc stroke
+ 0.0 -190.5 5.0 0 360 arc stroke
+ 29.4 -190.5 5.0 0 360 arc stroke
+ 58.9 -190.5 5.0 0 360 arc stroke
+ -161.9 -95.2 5.0 0 360 arc stroke
+ -132.5 -95.2 5.0 0 360 arc stroke
+ -103.0 -95.2 5.0 0 360 arc stroke
+ -73.6 -95.2 5.0 0 360 arc stroke
+ -44.2 -95.2 5.0 0 360 arc stroke
+ -14.7 -95.2 5.0 0 360 arc stroke
+ 14.7 -95.2 5.0 0 360 arc stroke
+ 44.2 -95.2 5.0 0 360 arc stroke
+ 73.6 -95.2 5.0 0 360 arc stroke
+ 103.0 -95.2 5.0 0 360 arc stroke
+ 132.5 -95.2 5.0 0 360 arc stroke
+ 161.9 -95.2 5.0 0 360 arc stroke
+ -176.6 0.0 5.0 0 360 arc stroke
+ -147.2 0.0 5.0 0 360 arc stroke
+ -117.7 0.0 5.0 0 360 arc stroke
+ -88.3 0.0 5.0 0 360 arc stroke
+ -58.9 0.0 5.0 0 360 arc stroke
+ -29.4 0.0 5.0 0 360 arc stroke
+ 0.0 0.0 5.0 0 360 arc stroke
+ 29.4 0.0 5.0 0 360 arc stroke
+ 58.9 0.0 5.0 0 360 arc stroke
+ 88.3 0.0 5.0 0 360 arc stroke
+ 117.7 0.0 5.0 0 360 arc stroke
+ 147.2 0.0 5.0 0 360 arc stroke
+ 176.6 0.0 5.0 0 360 arc stroke
+ -161.9 95.2 5.0 0 360 arc stroke
+ -132.5 95.2 5.0 0 360 arc stroke
+ -103.0 95.2 5.0 0 360 arc stroke
+ -73.6 95.2 5.0 0 360 arc stroke
+ -44.2 95.2 5.0 0 360 arc stroke
+ -14.7 95.2 5.0 0 360 arc stroke
+ 14.7 95.2 5.0 0 360 arc stroke
+ 44.2 95.2 5.0 0 360 arc stroke
+ 73.6 95.2 5.0 0 360 arc stroke
+ 103.0 95.2 5.0 0 360 arc stroke
+ 132.5 95.2 5.0 0 360 arc stroke
+ 161.9 95.2 5.0 0 360 arc stroke
+ -58.9 190.5 5.0 0 360 arc stroke
+ -29.4 190.5 5.0 0 360 arc stroke
+ 0.0 190.5 5.0 0 360 arc stroke
+ 29.4 190.5 5.0 0 360 arc stroke
+ 58.9 190.5 5.0 0 360 arc stroke
+% #M4
+% Domain No. 4
+ -129.5 152.4 5.0 0 360 arc stroke
+ -145.7 123.8 5.0 0 360 arc stroke
+ -161.9 95.2 5.0 0 360 arc stroke
+ -178.1 66.7 5.0 0 360 arc stroke
+ -194.3 38.1 5.0 0 360 arc stroke
+ 0.0 190.5 5.0 0 360 arc stroke
+ -16.2 161.9 5.0 0 360 arc stroke
+ -32.4 133.3 5.0 0 360 arc stroke
+ -48.6 104.8 5.0 0 360 arc stroke
+ -64.8 76.2 5.0 0 360 arc stroke
+ -81.0 47.6 5.0 0 360 arc stroke
+ -97.1 19.0 5.0 0 360 arc stroke
+ -113.3 -9.5 5.0 0 360 arc stroke
+ -129.5 -38.1 5.0 0 360 arc stroke
+ -145.7 -66.7 5.0 0 360 arc stroke
+ -161.9 -95.2 5.0 0 360 arc stroke
+ 97.1 171.4 5.0 0 360 arc stroke
+ 81.0 142.9 5.0 0 360 arc stroke
+ 64.8 114.3 5.0 0 360 arc stroke
+ 48.6 85.7 5.0 0 360 arc stroke
+ 32.4 57.1 5.0 0 360 arc stroke
+ 16.2 28.6 5.0 0 360 arc stroke
+ 0.0 0.0 5.0 0 360 arc stroke
+ -16.2 -28.6 5.0 0 360 arc stroke
+ -32.4 -57.1 5.0 0 360 arc stroke
+ -48.6 -85.7 5.0 0 360 arc stroke
+ -64.8 -114.3 5.0 0 360 arc stroke
+ -81.0 -142.9 5.0 0 360 arc stroke
+ -97.1 -171.4 5.0 0 360 arc stroke
+ 161.9 95.2 5.0 0 360 arc stroke
+ 145.7 66.7 5.0 0 360 arc stroke
+ 129.5 38.1 5.0 0 360 arc stroke
+ 113.3 9.5 5.0 0 360 arc stroke
+ 97.1 -19.0 5.0 0 360 arc stroke
+ 81.0 -47.6 5.0 0 360 arc stroke
+ 64.8 -76.2 5.0 0 360 arc stroke
+ 48.6 -104.8 5.0 0 360 arc stroke
+ 32.4 -133.3 5.0 0 360 arc stroke
+ 16.2 -161.9 5.0 0 360 arc stroke
+ 0.0 -190.5 5.0 0 360 arc stroke
+ 194.3 -38.1 5.0 0 360 arc stroke
+ 178.1 -66.7 5.0 0 360 arc stroke
+ 161.9 -95.2 5.0 0 360 arc stroke
+ 145.7 -123.8 5.0 0 360 arc stroke
+ 129.5 -152.4 5.0 0 360 arc stroke
+% #M5
+% Domain No. 5
+ 194.3 38.1 5.0 0 360 arc stroke
+ 178.1 66.7 5.0 0 360 arc stroke
+ 161.9 95.2 5.0 0 360 arc stroke
+ 145.7 123.8 5.0 0 360 arc stroke
+ 129.5 152.4 5.0 0 360 arc stroke
+ 161.9 -95.2 5.0 0 360 arc stroke
+ 145.7 -66.7 5.0 0 360 arc stroke
+ 129.5 -38.1 5.0 0 360 arc stroke
+ 113.3 -9.5 5.0 0 360 arc stroke
+ 97.1 19.0 5.0 0 360 arc stroke
+ 81.0 47.6 5.0 0 360 arc stroke
+ 64.8 76.2 5.0 0 360 arc stroke
+ 48.6 104.8 5.0 0 360 arc stroke
+ 32.4 133.3 5.0 0 360 arc stroke
+ 16.2 161.9 5.0 0 360 arc stroke
+ 0.0 190.5 5.0 0 360 arc stroke
+ 97.1 -171.4 5.0 0 360 arc stroke
+ 81.0 -142.9 5.0 0 360 arc stroke
+ 64.8 -114.3 5.0 0 360 arc stroke
+ 48.6 -85.7 5.0 0 360 arc stroke
+ 32.4 -57.1 5.0 0 360 arc stroke
+ 16.2 -28.6 5.0 0 360 arc stroke
+ 0.0 0.0 5.0 0 360 arc stroke
+ -16.2 28.6 5.0 0 360 arc stroke
+ -32.4 57.1 5.0 0 360 arc stroke
+ -48.6 85.7 5.0 0 360 arc stroke
+ -64.8 114.3 5.0 0 360 arc stroke
+ -81.0 142.9 5.0 0 360 arc stroke
+ -97.1 171.4 5.0 0 360 arc stroke
+ 0.0 -190.5 5.0 0 360 arc stroke
+ -16.2 -161.9 5.0 0 360 arc stroke
+ -32.4 -133.3 5.0 0 360 arc stroke
+ -48.6 -104.8 5.0 0 360 arc stroke
+ -64.8 -76.2 5.0 0 360 arc stroke
+ -81.0 -47.6 5.0 0 360 arc stroke
+ -97.1 -19.0 5.0 0 360 arc stroke
+ -113.3 9.5 5.0 0 360 arc stroke
+ -129.5 38.1 5.0 0 360 arc stroke
+ -145.7 66.7 5.0 0 360 arc stroke
+ -161.9 95.2 5.0 0 360 arc stroke
+ -129.5 -152.4 5.0 0 360 arc stroke
+ -145.7 -123.8 5.0 0 360 arc stroke
+ -161.9 -95.2 5.0 0 360 arc stroke
+ -178.1 -66.7 5.0 0 360 arc stroke
+ -194.3 -38.1 5.0 0 360 arc stroke
+% #M6
+% Domain No. 6
+ -32.4 -190.5 5.0 0 360 arc stroke
+ 0.0 -190.5 5.0 0 360 arc stroke
+ 32.4 -190.5 5.0 0 360 arc stroke
+ -161.9 -95.2 5.0 0 360 arc stroke
+ -129.5 -95.2 5.0 0 360 arc stroke
+ -97.1 -95.2 5.0 0 360 arc stroke
+ -64.8 -95.2 5.0 0 360 arc stroke
+ -32.4 -95.2 5.0 0 360 arc stroke
+ 0.0 -95.2 5.0 0 360 arc stroke
+ 32.4 -95.2 5.0 0 360 arc stroke
+ 64.8 -95.2 5.0 0 360 arc stroke
+ 97.1 -95.2 5.0 0 360 arc stroke
+ 129.5 -95.2 5.0 0 360 arc stroke
+ 161.9 -95.2 5.0 0 360 arc stroke
+ -194.3 0.0 5.0 0 360 arc stroke
+ -161.9 0.0 5.0 0 360 arc stroke
+ -129.5 0.0 5.0 0 360 arc stroke
+ -97.1 0.0 5.0 0 360 arc stroke
+ -64.8 0.0 5.0 0 360 arc stroke
+ -32.4 0.0 5.0 0 360 arc stroke
+ 0.0 0.0 5.0 0 360 arc stroke
+ 32.4 0.0 5.0 0 360 arc stroke
+ 64.8 0.0 5.0 0 360 arc stroke
+ 97.1 0.0 5.0 0 360 arc stroke
+ 129.5 0.0 5.0 0 360 arc stroke
+ 161.9 0.0 5.0 0 360 arc stroke
+ 194.3 0.0 5.0 0 360 arc stroke
+ -161.9 95.2 5.0 0 360 arc stroke
+ -129.5 95.2 5.0 0 360 arc stroke
+ -97.1 95.2 5.0 0 360 arc stroke
+ -64.8 95.2 5.0 0 360 arc stroke
+ -32.4 95.2 5.0 0 360 arc stroke
+ 0.0 95.2 5.0 0 360 arc stroke
+ 32.4 95.2 5.0 0 360 arc stroke
+ 64.8 95.2 5.0 0 360 arc stroke
+ 97.1 95.2 5.0 0 360 arc stroke
+ 129.5 95.2 5.0 0 360 arc stroke
+ 161.9 95.2 5.0 0 360 arc stroke
+ -32.4 190.5 5.0 0 360 arc stroke
+ 0.0 190.5 5.0 0 360 arc stroke
+ 32.4 190.5 5.0 0 360 arc stroke
+ showpage

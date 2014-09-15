@@ -1,0 +1,214 @@
+.\" Process this file with 'groff -man -Tascii cleed_nsym.1 2>/dev/null'
+.\" man page author: Liam Deacon (liam.deacon@diamond.ac.uk)
+.\"
+.TH cleed_nsym 1 "MARCH 2014" CLEED User Manuals
+.\"===================================================================
+
+.SH NAME
+
+cleed_nsym \- compare experimental and calculated IV curves
+
+.SH SYNTAX
+
+.B cleed_nsym
+\-c 
+.I <control_file> 
+\-t 
+.I <theoretical_file> 
+[
+.I OPTIONS...
+]
+
+.SH DESCRIPTION
+
+In this LEED code, fully dynamical scattering theory has been implemented along the lines of algorithms described by Pendry (layer doubling between successive layers of atoms
+
+Both program versions use the same input files, whereby cleed_sym needs some additional information, which is ignored by vanilla cleed (or sometimes cleed_nsym)
+
+.SH OPTIONS
+
+.IP -a
+.I <ID_flag>
+.RS
+defines whether only the average R factor is calculated (argument 'average' is the default) or partial R factors for each subset of IV curves sharing a common ID number (argument 'all'). Only the first two characters are significant.
+.RE
+.IP -c
+.I <control_file>
+.RS 
+specifies the control file which defines the correlation between experimental and theoretical IV curves. Further information regarding the control file structure is provided in the CONTROL_FILE section.
+
+.RE
+.IP -h 
+.RS 
+causes the program to show a short list of arguments. 
+.RE
+.IP -o
+.I <output_file>
+.RS
+specifies the output file where the R factor values are written to (default: standard output).
+.RE
+.IP -r
+.I <R_factor>
+.RS
+specifies the R factor type to be calculated. Valid arguments are:
+.br
+\'r1\' : calculate R1
+.br
+\'r2\' : calculate the mean-square displacement R2 = sum[(c * I_expt - I_theory)^2] / sum[I_theory^2], where c is a scaling factor.
+.br
+\'rb\' : (calculates RB1 and RB2)
+.br
+\'rp\' : calculates the Pendry R factor Rp. This provides the level of agreement on shape of curves, not the intensity by comparing logarithmic derivatives, Rp = [1 over I(E)] * [delta I(E) over delta E], and is the standard in I(V) analysis. The Pendry R factor is problematic with experimental noise as it is sensitive to positions of peaks, not intensity and therefore noisy data will result in extra 'peaks'. The workaround for this is to smooth or average the experimental data using a tool such as 
+.B ftsmooth
+.RE
+.IP -s
+.I <shift1,shift2,shift3>
+.RS
+defines the range (shift1 and shift2) and step width (shift3) of the energy shifts between the experimental and theoretical curves.
+.RE
+.IP -t
+.I <theoretical_file>
+.RS
+specifies the file containing the theoretical IV curves. This is the CLEED 
+.B *.res
+results file from the csearch program. See 
+.I csearch(1)
+for more information. 
+.RE
+.IP -v 
+.I <optical_potential>
+.RS 
+specifies the value of the optical potential Vi (in eV) used in the evaluation of Pendry's R-factor (Rp). 2Vi determines smallest resolvable features in the IV curves. The default is 4 eV, however in situations where the interlayer spacings are very small, such as for intermetallic compounds, Vi may need to be increased (but should remain <5eV). 
+.RE
+.IP -V 
+.RS 
+give version and additional information about this program. 
+.RE
+.IP -w
+.I <IV_output_prefix>
+.RS
+causes the program to write all normalised IV curves as energy/intensity pairs to separate files so that they can be plotted. <IV_output_prefix> specifies the base filename to which the letters 'e' (experimental) or 't' (theoretical) as well as the number of the pair of curves is appended.
+.RE
+
+.SH ENVIRONMENT
+The program has been developed in a UNIX environment and uses a few UNIX specific features. The most important is the use of environment variables.
+.PP
+.B RF_HELP_FILE
+.RS
+File to be shown when the -h option is chosen if set in the system environment. 
+.PP
+This variable has to be set using the 
+.I export
+or 
+.I setenv
+UNIX commands, respectively, before the program is called for the first time.
+.RE
+
+.\" Document here situations in which the program can be used, if there are uses that are not obvious.
+.SH EXAMPLES
+.B cleed -w "iv" -c *.ctr -t *.res
+.RS
+Creates a list of experimental and theoretical IV curve files matching the regex pattern 'iv_[et]_[0-9]+?[0-9]+?[0-9]'. This command is valid if there is only one *.ctr and *.res file within the directory (otherwise the full filenames are required). The IV files can then plotted using a graphing package such as gnuplot, qtiplot, veusz or xmgrace.
+.RE
+.PP
+.B cleed -c *.ctr -t *.res -a all
+.RS
+Prints a list of the individual R factors. Output can be redirected to a file (e.g. by appending '>rfac.txt' to the command) for a permanent record.
+.RE
+.PP
+.B cleed -c *.ctr -t *.res 
+.RS
+Calculates the error (relative error) for the calculated R factor. The relative error is given by: 
+.EQ
+RR = (8Vi over {delta E}) sup half
+.EN
+, where Vi is the imaginary component of the optical potential and dE is the energy range of the data. This provides the error bars, E = (1 + RR) * Rmin, where Rmin is the minimum R factor for the data. 
+.SH NOTES
+
+Both *.inp and *.var input files contain the parameters in arbitrary sequence. The values are preceded by the parameter names that are mentioned above. If a parameter occurs more than one time, the last value is taken. If it doesn't occur at all and a sensible value can be preset, the program takes such values. Be careful with that option because the program will not mention if you forget a value and it is preset by its own value. The used parameter values might be controlled in output file. 
+.\"Document here all errors and other messages returned to the user. Include the cause and the recovery actions whenever appropriate and possible.
+.\".SH MESSAGES AND EXIT CALLS
+.\" Document here the significant changes in each release of the product.
+.\".SH HISTORY
+
+.SH FILES
+
+INPUT FILES: 
+.PP
+.I *.ctr
+.RS
+The control file used by both csearch and cleed. This file contains the experimental curves to be evaluated against the theoretical ones. Each curve is a separate line (UNIX terminated) and take the form:
+.br
+ef=<experimental_filename>:ti=(<h>,<k>):id=<ID_number>:wt=<weighting>
+.PP
+The line syntax can be broken down into command character sequences as follows:
+.br
+.IP ef=
+.RS
+Experimental Filename: Specifies the path to the experimental IV curve. This is usually a relative path to ease readability. Also note that file paths containing spaces may not be read correctly resulting in an error.
+.RE
+.IP ti=
+.RS
+Theoretical Index: Specifies the Miller indices of the spot in terms of h and k. Both indices should be floating point numbers separated with a comma and enclosed in curved braces, i.e. '(' and ')'.
+.RE
+.IP id=
+.RS
+Identification: Sets a unique index (the <ID_number>) for each curve and is used primarily to help the user track the curves produced using the 'cleed -w' command. If none of the lines contain id=<ID_number> then the <ID_number> will be in the order in which the curves appear in the control file.
+.RE
+.IP wt=
+.RS
+Weighting: Provides a statistical weighting for each curve with a <weighting> value between 0.0 and 1.0 (default is 1.0).
+.RE
+.PP
+.B Notes: 
+.br
+* Each command sequence must be separated using a colon ':'. 
+.br
+* Lines starting with an '#' will be regarded as comments.
+.br
+* Check lines are terminated with '\n' (UNIX end-line character).
+.br
+* The final line of the file should be blank 
+.br 
+  (for compatibility with older versions which threw an error).
+.RE
+.PP
+.I *.res
+.RS
+The results file produced by the csearch program.
+.RE
+.PP
+OUTPUT FILES:
+.PP
+.I IV_curve_files
+.RS
+Generated using the '-w' option in the 
+.B cleed
+command. Experimental and theoretical curves are indicated with '_e' and '_t', respectively. The number specified by the 'id=' argument will be appended to the filename of each output curve for identification.
+.RE
+
+.SH AUTHOR
+
+Georg Held <g.held@reading.ac.uk>.
+
+.SH CONTACT
+
+Please email questions, bug fixes or any suggestions to either Georg Held, Jacopo Ardini <j.ardini@pgr.reading.ac.uk> or Liam Deacon <liam.deacon@diamond.ac.uk>.
+
+.\"Document here things that work as designed but which may be unclear or surprising to the user. (This is the System V replacement for the BUGS category; you too can pretend your product has no bugs!)
+.SH CAVEATS
+In older versions of the CLEED package, the control file must end with a blank line otherwise an error will occur.
+
+.SH COPYRIGHT
+
+Copyright (C) 1995-2014 Georg Held
+.PP
+LICENSE
+
+.SH AVAILABILITY
+
+cleed is available as part of the CLEED package and should be available on any platform where there is a GNU C compiler (GCC) tool chain. GCC is readily available on most Linux distributions, however Windows users can install MinGW, the minimalist GNU tool set for Windows.   
+
+.SH SEE ALSO
+
+caoi_leed(1), caoi_rfac(1), cleed_nsym(1), cleed_sym(1), crfac(1), csearch(1), debye(1), ftsmooth(1), latt(1), mkiv(1), phsh(1)

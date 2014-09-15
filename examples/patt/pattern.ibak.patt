@@ -1,0 +1,12 @@
+# 3 Domains of (1 2 / 0 17)
+#
+17  10       a1
+17 -10       a2
+21           radius
+3            number of domains
+  1   2      M1
+  0  11      M1
+ -2  -1      M2
+-11 -11      M2
+  1  -1      M3
+ 11   0      M3

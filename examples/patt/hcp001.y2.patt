@@ -1,0 +1,11 @@
+# input file for pattern
+c 2 Domains of (2.69 0.57 / 2.12 2.69) = Y2
+1.0 -1.732       a1
+1.0 +1.732       a2
+1.1           radius
+2            No of domains
+#M1
+  2.69   0.57 M1
+  2.12   2.69 M1
+#M2 Sy: Spiegelung an der y-Achse
+Sy

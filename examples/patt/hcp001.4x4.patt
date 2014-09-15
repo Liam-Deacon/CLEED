@@ -1,0 +1,8 @@
+# input file for pattern
+c (4 x 4)
+1.0 -1.732     a1
+1.0  1.732     a2
+1.1          radius
+1            No of domains
+  4   0  M1
+  0   4  M1

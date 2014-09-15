@@ -1,0 +1,25 @@
+id ICON "ftsmooth.ico"
+
+1 VERSIONINFO
+FILEVERSION     2014,07,04,0
+PRODUCTVERSION  2014,07,04,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "FileDescription", "Smooth Experimental IV Curves"
+      VALUE "FileVersion", "2014.07"
+      VALUE "InternalName", "ftsmooth"
+      VALUE "LegalCopyright", "Georg Held & collaborators"
+      VALUE "OriginalFilename", "ftsmooth.exe"
+      VALUE "ProductName", "FTSMOOTH"
+      VALUE "ProductVersion", "2014.07"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

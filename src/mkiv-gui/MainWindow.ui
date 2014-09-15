@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>529</width>
+    <height>462</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Extract-PyV</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="Res/res.qrc">
+    <normaloff>:/IV_128x128.png</normaloff>:/IV_128x128.png</iconset>
+  </property>
+  <property name="toolTip">
+   <string>Extract I(V) curves from a set of images</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetNoConstraint</enum>
+    </property>
+    <item>
+     <widget class="QStackedWidget" name="stack">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="page">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string extracomment="Testing"/>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QSlider" name="imageSlider">
+            <property name="minimum">
+             <number>-1</number>
+            </property>
+            <property name="maximum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>-1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_2">
+       <widget class="MatplotlibWidget" name="mplwidget">
+        <property name="geometry">
+         <rect>
+          <x>-10</x>
+          <y>-13</y>
+          <width>381</width>
+          <height>371</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="listIVs">
+        <property name="geometry">
+         <rect>
+          <x>359</x>
+          <y>0</y>
+          <width>151</width>
+          <height>361</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="lineWidth">
+         <number>1</number>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>529</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionExportIVs"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="actionClose"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionReportBug"/>
+    <addaction name="actionUpdate"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+    <addaction name="actionAboutQt"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionCopyRaw"/>
+   </widget>
+   <widget class="QMenu" name="menuExtract">
+    <property name="title">
+     <string>&amp;Process</string>
+    </property>
+    <addaction name="actionRename"/>
+    <addaction name="actionConvert"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddMask"/>
+    <addaction name="actionMarkReference"/>
+    <addaction name="actionMarkReflexes"/>
+    <addaction name="actionEditConfig"/>
+    <addaction name="separator"/>
+    <addaction name="actionExtract"/>
+    <addaction name="separator"/>
+    <addaction name="actionSmooth"/>
+    <addaction name="actionTrim"/>
+    <addaction name="actionOffset"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionImages"/>
+    <addaction name="actionIVs"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuExtract"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionPreferences"/>
+   <addaction name="separator"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionImages"/>
+   <addaction name="actionIVs"/>
+   <addaction name="separator"/>
+   <addaction name="actionRename"/>
+   <addaction name="actionConvert"/>
+   <addaction name="separator"/>
+   <addaction name="actionAddMask"/>
+   <addaction name="actionMarkReference"/>
+   <addaction name="actionExtract"/>
+   <addaction name="separator"/>
+   <addaction name="actionSmooth"/>
+   <addaction name="actionTrim"/>
+   <addaction name="actionOffset"/>
+   <addaction name="separator"/>
+   <addaction name="actionAbout"/>
+  </widget>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/folder_fill_32x32.png</normaloff>:/folder_fill_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Import...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/exit_32x32.png</normaloff>:/exit_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/save_32x32.png</normaloff>:/save_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save Config</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/wrench_32x32.png</normaloff>:/wrench_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Preferences</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/copy_32x32.png</normaloff>:/copy_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/info_16x32.png</normaloff>:/info_16x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Extract-PyV</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/font_32x32.png</normaloff>:/font_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Rename...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionConvert">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/convert_32x24.png</normaloff>:/convert_32x24.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Convert...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
+   </property>
+  </action>
+  <action name="actionExtract">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/extract_32x32.png</normaloff>:/extract_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>E&amp;xtract...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+X</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/book_32x32.png</normaloff>:/book_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help...</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionAddMask">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/mask_32x32.png</normaloff>:/mask_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Add Mask</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionCopyRaw">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/new_window_32x32.png</normaloff>:/new_window_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy (&amp;Raw)</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
+   </property>
+  </action>
+  <action name="actionMarkReference">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/share_32x32.png</normaloff>:/share_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Reference</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+M</string>
+   </property>
+  </action>
+  <action name="actionMarkReflexes">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/pattern_32x32.png</normaloff>:/pattern_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mark &amp;Reflexes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
+  <action name="actionEditConfig">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/pencil_32x32.png</normaloff>:/pencil_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Edit Configuration</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+E</string>
+   </property>
+  </action>
+  <action name="actionExportIVs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/export_32x32.png</normaloff>:/export_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Export IVs...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionReportBug">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/mail_32x32.png</normaloff>:/mail_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Email Developers</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+E</string>
+   </property>
+  </action>
+  <action name="actionImages">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/image_32x32.png</normaloff>:/image_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Images</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+I</string>
+   </property>
+  </action>
+  <action name="actionIVs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/IV_32x32.png</normaloff>:/IV_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>I&amp;Vs</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+V</string>
+   </property>
+  </action>
+  <action name="actionSmooth">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/smooth2_32x32.png</normaloff>:/smooth2_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Smooth</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
+   </property>
+  </action>
+  <action name="actionTrim">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/move_horizontal_32x12.png</normaloff>:/move_horizontal_32x12.png</iconset>
+   </property>
+   <property name="text">
+    <string>Region &amp;Trim</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+T</string>
+   </property>
+  </action>
+  <action name="actionOffset">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/move_vertical_12x32.png</normaloff>:/move_vertical_12x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Offset</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+O</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/undo_32x32.png</normaloff>:/undo_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/redo2_32x32.png</normaloff>:/redo2_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionUpdate">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/rss_alt_32x32.png</normaloff>:/rss_alt_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Update...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+U</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="icon">
+    <iconset resource="Res/res.qrc">
+     <normaloff>:/Qt_32x32.png</normaloff>:/Qt_32x32.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionLoad_Config">
+   <property name="text">
+    <string>Load Config</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MatplotlibWidget</class>
+   <extends>QWidget</extends>
+   <header>matplotlibwidget</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="Res/res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

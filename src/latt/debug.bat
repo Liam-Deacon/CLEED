@@ -1,0 +1,1 @@
+gdb -w --quiet --exec=new_latt.exe --command=latt.gdb --args new_latt.exe -h 1 -k 1 -l 1 -n Fe -a 1 -c 0. -t hcp -i "Ni111_2x2O.bul" 2>"debug.err"

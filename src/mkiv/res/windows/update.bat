@@ -1,0 +1,1 @@
+windres mkiv.rc -O coff -o mkiv.res

@@ -1,0 +1,477 @@
+.\" Process this file with 'groff -man -Tascii mkiv.1'
+.\" man page author: Liam Deacon (liam.deacon@diamond.ac.uk)
+.\"
+.TH mkiv 1 "MARCH 2014" CLEED User Manuals
+
+.SH NAME
+
+mkiv \- extract LEED IV curves from experimental data
+
+.SH SYNOPSIS
+
+.B mkiv 
+.I [OPTIONS...]
+
+.SH DESCRIPTION
+
+mkiv is a computer program written in C which allows for the extraction of IV curves of all beams (diffraction spots) simultaneously from a series of LEED images taken during the energy scan. The only input required is the superstructure matrix as well as the image positions and indices of at least three spots at an arbitrary energy. Within the program the spot positions at any given energy are then calculated from the reciprocal lattice vectors and the position of the (0,0) beam determined from the spot positions at the preceding energy.
+
+.SH OPTIONS
+
+.IP -i
+.IP \-\-input 
+.I prefix
+.RS
+followed by the filename prefix to input files [default='mkiv']. 
+.RE
+.IP -o
+.IP \-\-output
+.I prefix
+.RS 
+followed by the filename prefix to output files [default='mkiv']. 
+.RE
+.IP -b
+.IP \-\-current 
+.I value
+.RS 
+followed by the beam current value. 
+.RE
+.IP -B
+.IP \-\-beam
+.I prefix
+.RS
+followed by the filename prefix for .raw and .smo files [default='beam']. 
+.RE
+.IP -h 
+.IP \-\-help 
+.RS 
+give more detailed information during computations. 
+.RE
+
+.IP -q
+.IP --quiet
+.IP --quick
+.RS
+faster with no graphical output and only a few prints to stdout.
+.RE
+.IP -v 
+.IP --verbose 
+.RS 
+give more detailed information during program flow. 
+.RE
+
+.IP -V 
+.IP --version 
+.RS 
+give version and additional information about this program. 
+.RE
+
+.\"Document here all errors and other messages returned to the user. Include the cause and the recovery actions whenever appropriate and possible.
+.\".SH MESSAGES AND EXIT CALLS
+.\" Document here the significant changes in each release of the product.
+.\".SH HISTORY
+
+.SH FILES
+
+INPUT FILES: 
+.PP
+.I mkiv.inp 
+.RS 
+The primary input file used for determination of the output. See INPUT FILE section for more details. 
+.RE 
+.I mkiv.var 
+.RS 
+The variable input file used for fine tuning of the data extraction. See VARIABLE FILE section for more details. 
+.RE 
+.I mkiv.pos 
+.RS 
+The position input file with a list of the spot positions in pixels from the reference image. See POSITION FILE section for more details. 
+.RE    
+.I mask
+.RS
+A black and white image masking the areas that should be ignored in black. This file must be of the same dimensions (width x height) and format as the LEED image files. 
+.RE 
+.I LEED image files
+.RS 
+The sequence of experimental images used for extracting the IV data. The files should end in an extension of the form 
+.B .[0\-9]+?.[0\-9]+?[0\-9]
+which is the energy of the incident electron beam for a particular image. 
+.RE 
+.PP
+OUTPUT FILES:
+.PP
+.I *.ivdat
+.RS 
+The extracted I(V) output data. See IV DATA FILE section for more details. 
+.RE
+.I *.param
+.RS 
+The parameter file used as a log of the variables used for the data extraction. 
+.RE
+.I beam.raw
+.RS
+File containing the raw output from each of the spot beams. 
+.RE
+.I beam.smo
+.RS
+File contained smoothed output of beam.raw. 
+.RE
+.I mask.byte
+.RS
+Local copy of the mask file or else generated mask from ROUTER and RINNER.
+.RE
+
+.SH NOTES
+
+Both *.inp and *.var input files contain the parameters in arbitrary sequence. The values are preceded by the parameter names that are mentioned above. If a parameter occurs more than one time, the last value is taken. If it doesn't occur at all and a sensible value can be preset, the program takes such values. Be careful with that option because the program will not mention if you forget a value and it is preset by its own value. The used parameter values might be controlled in output file. 
+
+.SH INPUT FILE (INPUT)
+
+This file is the primary configuration file.
+.IP REF_NAME
+.RS
+The name of the reference LEED image that is used to calculate the basis. The coordinates must either be input at the beginning of the program or be present in the file 
+.I POSITION FILE.
+.PP
+The corresponding energy is drawn from the file header. The trunk of filename also serves as filename for the following LEED images. The extension .[0-9]+?[0-9]+?[0-9] will be exchanged by the according index number.
+.RE
+.IP NSTART
+.RS
+The first index of the LEED image sequence.
+.RE
+.IP NSTOP
+.RS
+The last index of the LEED image sequence.
+.RE
+.IP N_STEP
+.RS
+Determines the step width, may be used when calculating from high to low energies or for a fast run for test purposes.
+.RE
+.IP MASK_NAME
+.RS
+Part of the LEED image is covered by the electron gun and the support. This and the outer boundaries may by excluded from calculations by using the mask. The VIFF-image should be of type VFF_TYPE_BYTE, a value of 0 indicating covered areas and 255 indicating the visible screen. The file might be produced by illuminating the LEED-screen from the back and taking a picture like a regular LEED\-image. Then it may be converted into byte\-type and into mask-type using a threshold color-value.
+.RE
+.IP H_CENTER
+.IP C_CENTER
+.RS
+Determine the geometric center of the LEED-screen.
+.RE
+.IP ROUTER
+.IP RINNER
+.RS
+Determine the radius of the LEED-screen and the electron gun in the same way as the former program version. Must be set even when a mask is used and therefore are not taken into account. 
+.RE
+.IP BACKGROUND
+.I 2 or 3
+.RS
+<2 : not implemented anymore (former program versions)
+.br
+ 2 : performing background-subtraction
+.br
+ 3 : no background-treatment
+.RE
+.IP SMOOTH
+.I -1, 0 or >0
+.RS
+>0 : The value >0 is taken as constant beam\-current value
+.br
+ 0 : Beam\-current is taken as it is. 
+.br
+-1 : The beam\-current is smoothed (10 point backwards)
+.br
+.RE
+.IP KP_LEN_10
+.RS
+The parallel (to surface) length of the (1,0)\-vector in k\-space.
+.RE
+.IP NDOM
+.RS
+Number of superstructure domains.
+.RE
+.IP DOMAIN
+.RS
+Superstructure matrices in real\-space. Each domain preceded by the word DOMAIN.
+.RE
+.IP NDESIRE
+.RS
+Number of spots that are stored in mkiv.ivdat, followed by the Miller indices of the NDESIRE spots:
+.br
+h_1  k_1    > spot 1
+.br
+h_2  k_2    > spot 2, etc.
+.br
+ .	     .
+.br
+ .       .
+.PP Reference spots ( might be those of integral order ) are preceded by a 'r', spots that you wish to be excluded from evaluation are preceded by an 'e'.
+.RE
+
+.SH VARIABLE FILE (INPUT)
+
+This file contains additional configuration parameters for fine tuning the IV extraction process. The parameters available are:
+.IP COS_MIN
+.IP COS_MAX
+.RS
+The minimum and maximum value for the spots used for the recalculation of the basis. Diffraction spots close to the boundaries may be excluded this way.
+.RE
+.IP VERH
+.RS
+The ratio of the axes of the underground\-area to the integration\-area. VERH=1.4 indicates disks or elliptical areas with almost the same area of underground and signal.
+.RE
+.IP ACCI
+.IP ACCB
+.RS
+The minimum percentage of the integration and background area compared to the complete disk area that must be within masked area so that the intensity value is stored. A percentage < 1.0 allows an overlap of integration areas with screen\-boundaries.
+.RE
+.IP DISTANCE
+.RS
+Minimum distance between two spots that are used for basis recalculation. Bigger values lead to more exact basis, too big values may cause too few reference spots thus preventing sensible basis recalculation. The value must be scaled with the size of the LEED\-images, like SCALE_MIN, RANGE_MIN, ROUTER, RINNER and spot positions are given according to the resolution of the images.
+.RE
+.IP UPDATE
+.RS
+The output files are flushed only every UPDATE image (senseless if output is buffered).
+.RE
+.IP STEP
+.RS
+The routine fimax4 normally carries out the matrix\-weighted summation for every pixel within range. This time\-consuming habit isn't always sensible, therefore a step\-size may be used. STEP has no effect on the second run for the spots with bad signal\-to\-noise ratio. 
+.RE
+.IP TRIP_MAX
+.RS
+Gives the maximum of triples for basis recalculation. The routine 'calcbase' stops when the number of triples is exceeded.
+.RE
+.IP SCALE_MIN
+.RS
+This is a minimum value for the energy-dependent integration area (in pixels). Prevents the area from becoming too small with high energies. If applied, different k-space is integrated with different energies.
+.RE
+.IP RANGE_MIN
+.RS
+Same as SCALE_MIN, but for search area. Value should be in pixels.
+.RE
+.IP S2N_REF
+.RS
+A minimum threshold for the reference reflections (spots) used for basis recalculation.
+.RE
+.IP S2N_GOOD
+.RS
+Spots with lower signal\-to\-noise ratio are treated in the second run with smaller range.
+.RE
+.IP S2N_BAD
+.RS
+Serves to call spots 'bad', no other consequences.
+.RE
+.IP REF_MIN
+.RS
+A minimum number of reference spots to be taken into account. If less reference spots are found, all spots with a signal\-to\-noise ratio greater than S2N_REF are taken instead. Reference spots are indicated by a 'r' preceding the indices in file mkiv.inp .
+.RE
+.IP SEC_RANGE
+.RS
+Tells the ratio between the axes of search-area of first run to second run. spots with bad S2N are therefore searched within an  area determined by RANGE / SEC_RANGE.
+.RE
+.IP RANGE
+.RS
+Indicates the size of the searching area in units of the length of the (1,0) basis\-vector. The searching area therefore scales like the basis\-vectors with the square root of the energy.
+.RE
+.IP SCALE_A
+.IP SCALE_B
+.RS
+Determines the size of the integration area in units of the length of the (1,0) basis\-vector. The integration area therefore scales like the basis-vectors with the square root of the energy.
+.RE
+.IP ANGLE
+.RS
+Indicates the angle between elliptical integration area axis and horizontal.
+.RE
+.IP RATIO
+.RS
+This is the ratio of LEED\-screen radius to the distance of the camera to the LEED\-screen and is used within a geometrical correction formula. The finite distance of the camera and the spherical LEED\-screen lead to this distortion. The formula is used when calculating the spot positions and in reverse when recalculating the basis with the found spot positions at the end of each energy loop.
+.RE
+.IP <spots>
+.RS
+A list of diffraction spots are needed for mkiv to determine which reciprocal lattice indices should be extracted. They take the form: 'h k (d_par: d k_r: kx, ky, kz)', where h and k are the Miller indices of the spot. The bracketed line section is optional. Furthermore list entries which start with 'r' are used as reference indices in order to calculate the reciprocal lattice mesh (a minimum of 3 are required).
+
+.SH POSITION FILE (INPUT)
+
+A list of reference spot positions from the reference image are used to calculate the reciprocal lattice are provided in this file, which takes the following format:
+
+.SH IV DATA FILE (OUTPUT)
+
+This is a matrix of the energy (first column) and each spot reflection stated in the list of Miller indices within the *.inp file. The first two rows provide h and k for that column, respectively.
+
+.\" Document here situations in which the program can be used, if there are uses that are not obvious.
+.SH EXAMPLES
+.IP mkiv.inp:
+.RS
+# Contains necessary input data for evaluation of LEED images 
+.br
+# Take care that the data is consistent; 
+.br
+# e.g. number of desired spots and indices you specify. 
+.br
+REF_NAME    ~/Pt531_clean.100   > name of the reference image
+.br
+MASK_NAME   ~/mask.byte   > name of mask image (visible screen)
+.br
+NSTART      50      > number of first LEED image (in eV)
+.br
+NSTOP       205     > number of last LEED image (in eV)
+.br
+NSTEP       1       > step size for LEED images (in eV)
+.br
+H_CENTER    360     > horizontal centre of LEED screen
+.br
+V_CENTER    285     > vertical centre of LEED screen
+.br
+ROUTER      225     > radius of screen in pixels
+.br
+RINNER      40      > electron gun shade radius
+.br
+BACKGROUND  2       > background subtraction YES|NO = 2|1
+.br
+SMOOTH     -1       > smooth of beam current
+.br
+KP_LEN_10   1.3000  > k_parallel(1,0) for Pt{531}
+.br
+NDOM        1       > number of domains
+.br
+DOMAIN      1 0 0 1 > overlayer matrix
+.br
+NDESIRE	  13      > desired number of spots to process
+.br
+r -1.00  0.00    (d_par: 0.70     k_r: -0.54, -0.45,  0.00)
+.br
+r -1.00  1.00    (d_par: 0.70     k_r: -0.54,  0.45,  0.00)
+.br
+r  1.00 -1.00    (d_par: 0.70     k_r:  0.54, -0.45,  0.00)
+.br
+r  1.00  0.00    (d_par: 0.70     k_r:  0.54,  0.45,  0.00)
+.br
+r  0.00 -1.00    (d_par: 0.91     k_r:  0.00, -0.91,  0.00)
+.br
+r  0.00  1.00    (d_par: 0.91     k_r:  0.00,  0.91,  0.00)
+.br
+r -1.00 -1.00    (d_par: 1.46     k_r: -0.54, -1.36,  0.00)
+.br
+  -2.00  1.00    (d_par: 1.07     k_r: -1.07,  0.00,  0.00)
+.br
+   2.00 -1.00    (d_par: 1.07     k_r:  1.07, -0.00,  0.00)
+.br
+  -2.00  0.00    (d_par: 1.40     k_r: -1.07, -0.91,  0.00)
+.br
+   2.00  0.00    (d_par: 1.40     k_r:  1.07,  0.91,  0.00)
+.br
+  -2.00  2.00    (d_par: 1.40     k_r: -1.07,  0.91,  0.00)
+.br
+   2.00 -2.00    (d_par: 1.40     k_r:  1.07, -0.91,  0.00)
+.br
+.RE
+.PP
+.IP mkiv.var:
+.RS
+# This file contains some additional input data for mkiv
+.br
+COS_MIN     0.60    > min cosine for basis-recalibration
+.br
+COS_MAX     0.90    > max cosine for basis-recalibration
+.br
+VERH        1.4     > ratio bg-ellipse/int-ellipse axis
+.br
+ACCI        0.95    > min ratio int-ellipse/whole ellipse
+.br
+ACCB        0.7     > min ratio bg-ellipse/whole ellipse
+.br
+DISTANCE    60      > min distance for spots in recalibration
+.br
+UPDATE      10      > files are flushed every UPDATE'th time 
+.br
+STEP        3       > step-size for fimax 
+.br
+TRIP_MAX    999     > max number of triples for recalibration
+.br
+SCALE_MIN   10.0    > min value for scale 
+.br
+RANGE_MIN   10.0    > min value for range 
+.br
+S2N_REF     1.2     > min s/n ratio for reference spots
+.br
+S2N_GOOD    0.5     > spots with better s/n are kept
+.br
+S2N_BAD     0.10    > spots with worse s/n are 'bad'
+.br
+REF_MIN     10      > min no. predef reference spots for recalib
+.br
+REF_DEV     3.0     > if new_base - base > ref_dev -> same frame
+.br
+BAS_RAT     0.6     > base = bas_rat*newbase + (1-bas_rat)*base
+.br
+SEC_RANGE   3.0     > range(2nd loop) = range(1st) / SEC_RANGE
+.br
+RANGE       0.200   > search area size in (1,0) basis units
+.br
+SCALE_A     0.150   > determines size of int. area in units of 
+.br
+SCALE_B     0.150   > (1,0) basis vector & scales with sqrt(eV)
+.br
+ANGLE       0.0     > angle between int. area axis & horiz.
+.br
+RATIO       0.10    > LEED screen radius : camera distance
+.RE
+.PP
+.IP mkiv.pos:
+.RS
+3            > NREF (no. reference spots); must be > 2
+.br
+  2.0   0.0  > h_1 k_1
+.br
+220.0 120.0  > x_1 y_1
+.br
+ -1.0   2.0  > h_2 k_2
+.br
+160.0 320.0  > x_2 y_2
+.br
+ -1.0  -1.0  > h_3 k_3
+.br
+470.0 340.0  > x_3 y_3
+.RE
+
+.SH BACKGROUND INFORMATION
+
+The real space surface unit mesh can be worked out from the geometry of the LEED pattern, including any superstructure used by ordered adsorbates. It is the spot intensities, however, that carry information about the atomic positions in the unit cell. Therefore, for complete LEED analysis, intensity\-energy (IV) curves are measured for each diffraction beam.
+.PP
+The use of LEED as a structural tool requires using trial and error geometries for the surface atoms, aided by a suitable search strategy that optimises the agreement between theoretical and experimental IV curves, until a satisfactory fit between them is obtained. The process is much like that used in X\-ray crystallography, however, the strong multiple scattering present in LEED IV spectra is recognised as a severe obstacle for direct methods. To that effect, the agreement between calculated and experimental data is quantified by a reliability factor (R\-factor), which is used to summarise the reliability of the structural result in an absolute sense and to provide a basis for comparison with other structural determinations of the same surface and with results obtained for other surfaces. 
+.PP
+It is important to note that there is no way to ensure that the correct geometry has not been missed in the list of plausible geometries. Just as with X\-ray diffraction, one is never sure that the "best" structure found cannot be improved upon by a completely different structure.
+.PP
+.I References 
+.PP
+* S.Y.Tong, Surface Science 299/300 (1994) 358\-374
+.br
+* S.Y.Tong, H. Huang and X.Q.Guo, Phys. Rev. Lett 69 (1992) 3654
+.br
+* M.A. Van Hove, W.H. Weinberg, C.M. Chan, Low\-Energy Electron Diffraction, Springer Series in Surface Sciences 6, Springer Verlang 1986
+.br
+* G.Held, S. Uremovic, C. Stellwag, D. Menzel, Rev. Sci. Instrum. 67 (1996) 378
+
+.SH AUTHOR
+
+Georg Held <g.held@reading.ac.uk>.
+
+.SH CONTACT
+
+Please email questions, bug fixes or any suggestions to either Georg Held or Liam Deacon <liam.deacon@diamond.ac.uk>.
+
+.SH CAVEATS
+
+mkiv currently only supports 8 or 16 bit TIFF files and relies on a conversion to the archaic xvimage format for the image matrix data.
+
+.SH COPYRIGHT
+
+Copyright (C) YEAR COPYRIGHT_HOLDER 
+.PP
+LICENSE
+
+.SH AVAILABILITY
+
+mkiv is available as part of the CLEED package and should be available on any platform where there is a GNU C compiler (GCC) tool chain. GCC is readily available on most Linux distributions, however Windows users can install MinGW, the minimalist GNU tool set for Windows.   
+
+.SH SEE ALSO
+
+caoi_leed(1), caoi_rfac(1), cleed_nsym(1), cleed_sym(1), crfac(1), csearch(1), debye(1), ftsmooth(1), latt(1), mkiv(1), phsh(1), set_env(1)

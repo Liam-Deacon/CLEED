@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PreferencesDialog</class>
+ <widget class="QDialog" name="PreferencesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>319</width>
+    <height>219</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Preferences</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="Res/res.qrc">
+    <normaloff>:/wrench_32x32.png</normaloff>:/wrench_32x32.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout"/>
+ </widget>
+ <resources>
+  <include location="Res/res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

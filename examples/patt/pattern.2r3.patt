@@ -1,0 +1,190 @@
+%! 
+%% Creator: PATTERN - version 1.3 GH/01.06.94
+%%BoundingBox: 50 150 550 650 
+%%EndComments 
+ 300.0 400.0 translate
+/Times-Roman findfont 10 scalefont setfont
+ -200.0 -250.0 moveto (PATTERN - version 1.3 GH/01.06.94) show
+% # input file for pattern
+% Title 
+/Times-Roman findfont 20 scalefont setfont
+ -200.0 250.0 moveto ( (2r3 x 2r3) R30 
+) show
+% GS spots
+ 2.0 setlinewidth stroke
+ -157.5 90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+/Times-Roman findfont 18.2 scalefont setfont 
+-171.1 102.0 moveto (-1,0) show stroke
+ 0.0 181.8 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+/Times-Roman findfont 18.2 scalefont setfont 
+-13.6 192.9 moveto (-1,1) show stroke
+ -157.5 -90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+/Times-Roman findfont 18.2 scalefont setfont 
+-171.1 -79.8 moveto (0,-1) show stroke
+ 0.0 0.0 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+/Times-Roman findfont 18.2 scalefont setfont 
+-13.6 11.1 moveto (0,0) show stroke
+ 157.5 90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+/Times-Roman findfont 18.2 scalefont setfont 
+143.8 102.0 moveto (0,1) show stroke
+ 0.0 -181.8 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+/Times-Roman findfont 18.2 scalefont setfont 
+-13.6 -170.7 moveto (1,-1) show stroke
+ 157.5 -90.9 9.1 0 360 arc gsave 0.00 setgray fill grestore stroke
+/Times-Roman findfont 18.2 scalefont setfont 
+143.8 -79.8 moveto (1,0) show stroke
+% SS spots
+ 2.0 setlinewidth stroke
+% Domain No. 1
+ -183.7 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-197.3 52.0 moveto (-5/6, -1/3) show stroke
+ -157.5 90.9 4.5 0 360 arc stroke
+ -131.2 136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-144.9 142.9 moveto (-7/6, 1/3) show stroke
+ -183.7 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-197.3 -38.9 moveto (-1/3, -5/6) show stroke
+ -157.5 0.0 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-171.1 6.5 moveto (-1/2, -1/2) show stroke
+ -131.2 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-144.9 52.0 moveto (-2/3, -1/6) show stroke
+ -105.0 90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-118.6 97.5 moveto (-5/6, 1/6) show stroke
+ -78.7 136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-92.4 142.9 moveto (-1, 1/2) show stroke
+ -52.5 181.8 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-66.1 188.4 moveto (-7/6, 5/6) show stroke
+ -157.5 -90.9 4.5 0 360 arc stroke
+ -131.2 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-144.9 -38.9 moveto (-1/6, -2/3) show stroke
+ -105.0 0.0 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-118.6 6.5 moveto (-1/3, -1/3) show stroke
+ -78.7 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-92.4 52.0 moveto (-1/2, 0) show stroke
+ -52.5 90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-66.1 97.5 moveto (-2/3, 1/3) show stroke
+ -26.2 136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-39.9 142.9 moveto (-5/6, 2/3) show stroke
+ 0.0 181.8 4.5 0 360 arc stroke
+ -131.2 -136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-144.9 -129.8 moveto (1/3, -7/6) show stroke
+ -105.0 -90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-118.6 -84.4 moveto (1/6, -5/6) show stroke
+ -78.7 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-92.4 -38.9 moveto (0, -1/2) show stroke
+ -52.5 0.0 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-66.1 6.5 moveto (-1/6, -1/6) show stroke
+ -26.2 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-39.9 52.0 moveto (-1/3, 1/6) show stroke
+ 0.0 90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-13.6 97.5 moveto (-1/2, 1/2) show stroke
+ 26.2 136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+12.6 142.9 moveto (-2/3, 5/6) show stroke
+ 52.5 181.8 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+38.8 188.4 moveto (-5/6, 7/6) show stroke
+ -78.7 -136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-92.4 -129.8 moveto (1/2, -1) show stroke
+ -52.5 -90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-66.1 -84.4 moveto (1/3, -2/3) show stroke
+ -26.2 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-39.9 -38.9 moveto (1/6, -1/3) show stroke
+ 0.0 0.0 4.5 0 360 arc stroke
+ 26.2 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+12.6 52.0 moveto (-1/6, 1/3) show stroke
+ 52.5 90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+38.8 97.5 moveto (-1/3, 2/3) show stroke
+ 78.7 136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+65.1 142.9 moveto (-1/2, 1) show stroke
+ -52.5 -181.8 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-66.1 -175.3 moveto (5/6, -7/6) show stroke
+ -26.2 -136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-39.9 -129.8 moveto (2/3, -5/6) show stroke
+ 0.0 -90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+-13.6 -84.4 moveto (1/2, -1/2) show stroke
+ 26.2 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+12.6 -38.9 moveto (1/3, -1/6) show stroke
+ 52.5 0.0 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+38.8 6.5 moveto (1/6, 1/6) show stroke
+ 78.7 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+65.1 52.0 moveto (0, 1/2) show stroke
+ 105.0 90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+91.3 97.5 moveto (-1/6, 5/6) show stroke
+ 131.2 136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+117.6 142.9 moveto (-1/3, 7/6) show stroke
+ 0.0 -181.8 4.5 0 360 arc stroke
+ 26.2 -136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+12.6 -129.8 moveto (5/6, -2/3) show stroke
+ 52.5 -90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+38.8 -84.4 moveto (2/3, -1/3) show stroke
+ 78.7 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+65.1 -38.9 moveto (1/2, 0) show stroke
+ 105.0 0.0 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+91.3 6.5 moveto (1/3, 1/3) show stroke
+ 131.2 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+117.6 52.0 moveto (1/6, 2/3) show stroke
+ 157.5 90.9 4.5 0 360 arc stroke
+ 52.5 -181.8 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+38.8 -175.3 moveto (7/6, -5/6) show stroke
+ 78.7 -136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+65.1 -129.8 moveto (1, -1/2) show stroke
+ 105.0 -90.9 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+91.3 -84.4 moveto (5/6, -1/6) show stroke
+ 131.2 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+117.6 -38.9 moveto (2/3, 1/6) show stroke
+ 157.5 0.0 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+143.8 6.5 moveto (1/2, 1/2) show stroke
+ 183.7 45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+170.1 52.0 moveto (1/3, 5/6) show stroke
+ 131.2 -136.4 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+117.6 -129.8 moveto (7/6, -1/3) show stroke
+ 157.5 -90.9 4.5 0 360 arc stroke
+ 183.7 -45.5 4.5 0 360 arc stroke
+/Times-Roman findfont 9.1 scalefont setfont 
+170.1 -38.9 moveto (5/6, 1/3) show stroke
+ showpage

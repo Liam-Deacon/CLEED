@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+ <mime-type type="application/x-cleed_iv-item">
+    <sub-class-of type="text/xml"/>
+    <sub-class-of type="application/xml"/>
+    <comment>CLEED IV curve file</comment>
+    <icon>cleed_iv</icon>
+    <glob pattern=".iv" weight="50" />
+    <magic priority="90">
+          <match type="string" offset="2" value="!DOCTYPE CLEED IV CURVE"/>
+    </magic>
+    <root-XML localName="cleed_iv" />
+  </mime-type>
+ </mime-info>

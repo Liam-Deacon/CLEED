@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=csearch
+Comment=LEED results file
+Icon=cleed_res
+Terminal=true
+Type=Application
+Categories=Science;
+MimeType=application/x-cleed_res-item;

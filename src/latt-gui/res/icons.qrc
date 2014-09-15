@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>window-close-3.png</file>
+        <file>archive-extract-2.png</file>
+        <file>configure-2.png</file>
+        <file>help.png</file>
+        <file>help-contents.png</file>
+        <file>help-hint.png</file>
+        <file>text_x_script.ico</file>
+        <file>preferences-system-4.png</file>
+        <file>document-save-7.png</file>
+        <file>folder.png</file>
+        <file>lattice.ico</file>
+        <file>dialog-question.png</file>
+        <file>lattice.png</file>
+    </qresource>
+</RCC>

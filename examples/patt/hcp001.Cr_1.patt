@@ -1,0 +1,11 @@
+# input file for pattern
+c (0.924   0.116 / 0.116   0.924)
+1.0 -1.732     a1
+1.0  1.732     a2
+1.9         radius
+3            No of domains
+# M1
+  0.924   0.116  M1
+  0.116   0.924  M1
+R 120
+R 120

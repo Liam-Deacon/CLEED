@@ -1,0 +1,64 @@
+##############################################################################
+#                          CLEED BULK INPUT FILE                             #
+##############################################################################
+#
+# Bulk parameter input file for
+c: <model_name>
+#
+# Example line syntax as follows: 
+#    a1: <a1_x>  <a1_y>   <a1_z>   -> a1 basis vector of unit cell in Angstroms
+#    a2: <a2_x>  <a2_y>   <a2_z>   -> a2 basic vector of unit cell in Angstroms
+#    a3: <a3_x>  <a3_y>   <a3_z>   -> a3 basic vector of unit cell in Angstroms
+#    pb: <phaseshift_file> <x> <y> <z> dr1 <Debye-Waller_factor> -> bulk atom
+#    ip: <phi>       -> Azimuthal angle of incidence with respect to x-axis
+#    it: <theta>     -> Polar angle of incidence with respect to surface normal
+#    ep: <epsilon>   -> convergence criterion of lattice sums & layer doubling
+#    lm: <l_max>     -> Maximum angular momentum quantum number 0 <= l_max < 19
+#    vr: <V_real>    -> Real part of the optical potential in eV (normally ~13)
+#    vi: <V_imag>    -> Imaginary part of the optical potential in eV (~4+/-1)
+#    ei: <e_min>     -> 1st energy in loop for which intensities are calculated
+#    ef: <e_max>     -> Final energy in loop (in eV)
+#    es: <e_step>    -> Energy step in loop; determines theory granularity
+#
+# Additional notes:
+#   * Comment lines start with either 'c:' or '#'
+#   * Additional whitespace is discarded, e.g. 'rm: Ni_110 0.90' is equivalent 
+#     to 'rm:         Ni_110            0.90'
+#   * Unknown options preceding the colon are marked as warnings and ignored. 
+#     This is useful if you wish one input file to be compatible with multiple 
+#     programs in the CLEED package, e.g. latt, cleed_nsym & cleed_sym. 
+#   * The filepath given in <phaseshift_file> need only be a relative path 
+#     (excluding the '.phs' extension) from the directory stored in the 
+#     CLEED_PHASE environment variable.
+#
+#------------------------------------------------------------------------------
+# BEGIN INPUT
+#------------------------------------------------------------------------------ 
+
+#****************************
+#   Geometric parameters    *
+#****************************
+# bulk unit cell parameters
+a1:
+a2:
+a3:
+
+#****************************
+#    LEED theory options    *
+#****************************
+# optical potentials
+vr: -13.00
+vi:   4.50
+
+# energies
+ei:
+ef:
+es:
+lm: 8
+
+#****************************
+#      SEARCH options       *
+#****************************
+it: 0.
+ip: 0.
+ep: 1.e-4

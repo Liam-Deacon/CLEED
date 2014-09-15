@@ -1,0 +1,36 @@
+syntax:
+pattern -i <input> -o <output> -ni -rs <spot size> -rg <spot size>
+
+-i <input>: specify input file.
+-o <output>: specify input file.
+-ni (no argument): do not print spot indices.
+-ns (no argument): do not use different symbols for superstructure spots.
+-rs <spot size>: spot size of SS spots.
+-rg <spot size>: spot size of GS spots.
+
+Der Input sieht folgendermassen aus:
+
+<Anfang Input>
+c 2 Domains of (3 2 / -2 1) = (r7 x r7)
+1.0  1.732    a1  <realer Gittervektor>
+1.0 -1.732    a2  <realer Gittervektor>
+1.5           radius <Radius = laengster rez. Gittervektor * radius>
+2             Zahl der Domaenen
+#M1
+  3   2  M1   <erste Domaene>
+ -2   1  M1
+#M2
+Sy            <zweite Domaene: Spiegelung der ersten an der y-Achse>
+<Ende Input>
+
+#      - Kommentar
+c      - Kommentar (erscheint im Plot als Ueberschrift)
+
+Moegliche Darstellungen der SS-Matrix:
+
+m11 m12  (Tatsaechliche Matrix)
+m21 m22
+
+R<phi> - Drehung der vorherigen SS um <phi> Grad
+Sx     - Spiegelung der vorherigen SS an der x-Achse
+Sy     - Spiegelung der vorherigen SS an der y-Achse

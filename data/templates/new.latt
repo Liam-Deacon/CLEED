@@ -1,0 +1,52 @@
+##############################################################################
+#                        CLEED LATTICE INPUT FILE                            #
+##############################################################################
+#
+# latt parameter input file for
+c: <model_name>
+#
+# Example line syntax as follows: 
+#    a1: <a1_x>  <a1_y>   <a1_z>   -> a1 basis vector of unit cell in Angstroms
+#    a2: <a2_x>  <a2_y>   <a2_z>   -> a2 basic vector of unit cell in Angstroms
+#    a3: <a3_x>  <a3_y>   <a3_z>   -> a3 basic vector of unit cell in Angstroms
+#    pb: <phaseshift_file> <x> <y> <z> [...] -> atom & position in unit cell 
+#    il: <i>     -> Number of repeat cells within layer e.g. i*a1, i*a2 
+#    nl: <n>     -> Number of layers e.g. n*a3
+#    mh: <h>     -> h Miller index (may not be implemented)
+#    mk: <k>     -> k Miller index (may not be implemented)
+#    ml: <l>     -> l Miller index (may not be implemented)
+#
+# Additional notes:
+#   * Comment lines start with either 'c:' or '#'
+#   * Additional whitespace is discarded, e.g. 'a1: 0. 1. 0.' is equivalent 
+#     to 'a1:         0.            1.               0.'
+#   * Unknown options preceding the colon are marked as warnings and ignored. 
+#     This is useful if you wish one input file to be compatible with multiple 
+#     programs in the CLEED package, e.g. latt, cleed_nsym & cleed_sym. 
+#   * Although <phaseshift_file> may be used, only the string segment before the
+#     first '_' is used, so 'O_H2O' becomes simply 'O' 
+#
+#------------------------------------------------------------------------------
+# BEGIN INPUT
+#------------------------------------------------------------------------------ 
+
+# basis vectors
+a1:  -1.43769337  2.49015797  5.67289618
+a2:  -1.43769337 -2.49015797  5.67289618
+a3:   2.87538675   .00000000  5.67289618
+
+# atoms in unit cell
+pb: Ca   .00000000   .00000000   .00000000
+pb: Ca   .00000000   .00000000  8.50934427
+pb: C    .00000000   .00000000  4.25467213
+pb: C    .00000000  -.00000000 12.76401640
+pb: O  -1.04807847   .60510839  4.25467213
+pb: O   1.04807847   .60510839  4.25467213
+pb: O    .00000000 -1.21021677  4.25467213
+pb: O  -1.82730828  -.60510839  7.09112022
+pb: O    .38961490  1.88504958  7.09112022
+pb: O   1.43769337 -1.27994119  7.09112022
+
+# layer parameters
+il: 40.
+nl: 3

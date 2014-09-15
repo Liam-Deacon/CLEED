@@ -1,0 +1,1 @@
+for /f %v in (reg query "HKEY_CURRENT_USER\Software\CLEED_input_file") do reg delete %v

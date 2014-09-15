@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+ <mime-type type="application/x-bsr-item">
+    <sub-class-of type="text/xml"/>
+    <sub-class-of type="application/xml"/>
+    <comment>CLEED bulk surface rotation file</comment>
+    <icon>cleed_bsr</icon>
+    <glob pattern=".bsr" weight="50" />
+    <magic priority="90">
+          <match type="string" offset="2" value="!DOCTYPE CLEED BSR"/>
+    </magic>
+    <root-XML localName="cleed_bsr" />
+  </mime-type>
+ </mime-info>

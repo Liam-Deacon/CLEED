@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>341</width>
+    <height>470</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit Config</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="Res/res.qrc">
+    <normaloff>:/pencil_32x32.png</normaloff>:/pencil_32x32.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QToolButton" name="btnLoad">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Load&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Open a configuration file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Res/res.qrc">
+         <normaloff>:/folder_fill_32x32.png</normaloff>:/folder_fill_32x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnSave">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Save&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Store configuration on disk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Res/res.qrc">
+         <normaloff>:/save_32x32.png</normaloff>:/save_32x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnUndo">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Redo&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Res/res.qrc">
+         <normaloff>:/undo_32x32.png</normaloff>:/undo_32x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnRedo">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Redo&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Res/res.qrc">
+         <normaloff>:/redo2_32x32.png</normaloff>:/redo2_32x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>3</number>
+     </property>
+     <widget class="QWidget" name="tabConfig">
+      <attribute name="icon">
+       <iconset resource="Res/res.qrc">
+        <normaloff>:/wrench_32x32.png</normaloff>:/wrench_32x32.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Config</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_13">
+       <item>
+        <widget class="QGroupBox" name="groupProcessing">
+         <property name="title">
+          <string>Processing</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <widget class="QCheckBox" name="checkBkgndSub">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Background Subtraction&lt;/span&gt;&lt;/p&gt;&lt;p&gt;This will remove any linear background from the extracted IV curve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Background Subtraction</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QCheckBox" name="checkSmooth">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Smooth Beam&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Apply smoothing to the extracted IV.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Smooth Beam</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkMask">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Apply Mask&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Use mask image to ignore undesired areas.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Apply Mask</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupGeometry">
+         <property name="title">
+          <string>Geometry</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="labelGun">
+              <property name="text">
+               <string>Gun Radius In Pixels</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinGun">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Gun Radius&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Radius of the e-gun in pixels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_10">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="labelScreen">
+              <property name="text">
+               <string>Screen Radius In Pixels</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinScreen">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Screen Radius&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Radius of the screen in pixels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <item>
+             <widget class="QLabel" name="labelCentre">
+              <property name="text">
+               <string>Middle Of Screen</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinMiddleX"/>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinMiddleY"/>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_13">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="labelKPar">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;K parallel&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Determines degree of movement towards centre.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;K&lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:sub;&quot;&gt;//&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;=0 gives no movement.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;K&lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:sub;&quot;&gt;//&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;=2.65 is the value for W{1 0 0}&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;|K&lt;span style=&quot; vertical-align:sub;&quot;&gt;//&lt;/span&gt;|&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="dblKPar">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;K parallel&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Determines degree of movement towards centre.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;K&lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:sub;&quot;&gt;//&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;=0 gives no movement.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;K&lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:sub;&quot;&gt;//&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;=2.65 is the value for W{1 0 0}&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_11">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupPaths">
+         <property name="title">
+          <string>Paths</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_12">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
+              <item>
+               <widget class="QLabel" name="labelReference">
+                <property name="text">
+                 <string>Reference Image</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QToolButton" name="btnReference">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="Res/res.qrc">
+                  <normaloff>:/share_32x32.png</normaloff>:/share_32x32.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEditReference">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reference Path&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Filepath string of reference image.&lt;/p&gt;&lt;p&gt;This should be the image for  determining the geometry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <item>
+               <widget class="QLabel" name="labelMask">
+                <property name="text">
+                 <string>Mask Path</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QToolButton" name="btnMask">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="Res/res.qrc">
+                  <normaloff>:/mask_32x32.png</normaloff>:/mask_32x32.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEditMask">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Mask Filepath&lt;/span&gt;&lt;/p&gt;&lt;p&gt;This is the filepath string to the image used for masking the electron gun and other undesired elements. The mask file should be of the same format as the sequence images and should also be a 2-bit black &amp;amp; white image with black signifying the areas to ignore. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+      <zorder>labelScreen</zorder>
+      <zorder>groupProcessing</zorder>
+      <zorder>groupGeometry</zorder>
+      <zorder>groupPaths</zorder>
+     </widget>
+     <widget class="QWidget" name="tabSpots">
+      <attribute name="icon">
+       <iconset resource="Res/res.qrc">
+        <normaloff>:/pattern_128x128.png</normaloff>:/pattern_128x128.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Spots</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QListWidget" name="listWidget">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Known Reflexes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;This is a list of all known reflexes (spots). Marked spots are used for referencing the other reflexes. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QToolButton" name="btnAdd">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Res/res.qrc">
+               <normaloff>:/plus_32x32.png</normaloff>:/plus_32x32.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="btnRemove">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Res/res.qrc">
+               <normaloff>:/minus_32x8.png</normaloff>:/minus_32x8.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QToolButton" name="btnTop">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Res/res.qrc">
+               <normaloff>:/upload_24x32.png</normaloff>:/upload_24x32.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="btnUp">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Res/res.qrc">
+               <normaloff>:/tri-up_32x32.png</normaloff>:/tri-up_32x32.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="btnDown">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Res/res.qrc">
+               <normaloff>:/tri-down_32x32.png</normaloff>:/tri-down_32x32.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="btnBottom">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Res/res.qrc">
+               <normaloff>:/download_24x32.png</normaloff>:/download_24x32.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="labelReflexes">
+           <property name="text">
+            <string>No. Reflexes</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinReflexes">
+           <property name="maximum">
+            <number>200</number>
+           </property>
+           <property name="value">
+            <number>18</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_12">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabDomains">
+      <attribute name="icon">
+       <iconset resource="Res/res.qrc">
+        <normaloff>:/pattern2_32x32.png</normaloff>:/pattern2_32x32.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Domains</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Overlayer Matrix</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboMatrix">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Overlayer Matrix&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Quick select superstructure&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>p(1×1)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>p(1×2)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>p(2×1)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>p(2×2)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>p(3×1)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>p(3×2)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>p(3×3)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>p(7×7)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(2×2)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(4×2)</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/square_32x32.png</normaloff>:/square_32x32.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(4×2)</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/hexagon.png</normaloff>:/hexagon.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(4×4)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(6×2)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(8×2)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(√2×√2)R45°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/square_32x32.png</normaloff>:/square_32x32.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(√5×√5)R26.6°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/square_32x32.png</normaloff>:/square_32x32.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(2√2×2√2)R45°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/square_32x32.png</normaloff>:/square_32x32.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(3√2×√2)R45°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/square_32x32.png</normaloff>:/square_32x32.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(5√2×√2)R45°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/square_32x32.png</normaloff>:/square_32x32.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(√3×√3)R30°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/hexagon.png</normaloff>:/hexagon.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(√7×√7)R19.1°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/hexagon.png</normaloff>:/hexagon.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(2√3×2√3)R30°</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/hexagon.png</normaloff>:/hexagon.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(2√3×4)rect</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/hexagon.png</normaloff>:/hexagon.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>(5√3×2)rect</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/hexagon.png</normaloff>:/hexagon.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>c(2√3×4)rect</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Res/res.qrc">
+              <normaloff>:/hexagon.png</normaloff>:/hexagon.png</iconset>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLineEdit" name="lineM11">
+             <property name="toolTip">
+              <string>M11</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineM12">
+             <property name="toolTip">
+              <string>M12</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QLineEdit" name="lineM21">
+             <property name="toolTip">
+              <string>M21</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineM22">
+             <property name="toolTip">
+              <string>M22</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="labelDomains">
+           <property name="text">
+            <string>No. Domains</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBox">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Domains&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The number of domains in the pattern.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="value">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabEdit">
+      <attribute name="icon">
+       <iconset resource="Res/res.qrc">
+        <normaloff>:/pencil_32x32.png</normaloff>:/pencil_32x32.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Text Edit</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPlainTextEdit" name="plainTextEdit">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Raw Configuration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="Res/res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,8 @@
+# input file for pattern
+c correct theoretical labelling Cu(531)-bar
+-3.6737818  -4.37824275 a1
+ 4.4270908   0.015679084 a2
+2.55         radius
+1            No of domains
+  1.0  0.0 M1
+  0.0  1.0 M1

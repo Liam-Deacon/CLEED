@@ -1,0 +1,11 @@
+# input file for pattern
+c fcc(111) - (r7 x r7) R19 - 1 domain
+ 0.000  2.0      a1
+-1.732 -1.0      a2
+1.399         radius
+1            No of domains
+#M1
+  2  -1  M1
+  1   3  M1
+#M2 Sy: Spiegelung an der y-Achse
+Sy

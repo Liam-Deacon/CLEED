@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+ <mime-type type="application/x-cleed_bmin-item">
+    <sub-class-of type="text/xml"/>
+    <sub-class-of type="application/xml"/>
+    <comment>CLEED bulk minimised file</comment>
+    <icon>cleed_bmin</icon>
+    <glob pattern=".bmin" weight="50" />
+    <magic priority="90">
+          <match type="string" offset="2" value="!DOCTYPE CLEED BULK MIN"/>
+    </magic>
+    <root-XML localName="cleed_bmin" />
+  </mime-type>
+ </mime-info>

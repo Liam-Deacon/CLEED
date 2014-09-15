@@ -1,0 +1,26 @@
+id ICON "patt-gui.ico"
+
+1 VERSIONINFO
+FILEVERSION     @PATT_GUI_VERSION_MAJOR@,@PATT_GUI_VERSION_MINOR@,@PATT_GUI_VERSION_PATCH@,0
+PRODUCTVERSION  @PATT_GUI_VERSION_MAJOR@,@PATT_GUI_VERSION_MINOR@,@PATT_GUI_VERSION_PATCH@,0
+FILEFLAGS 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "FileDescription", "Generate LEED patt-guierns"
+      VALUE "FileVersion", "@PATT_GUI_VERSION_MAJOR@.@PATT_GUI_VERSION_MINOR"
+      VALUE "InternalName", "patt-guiern"
+      VALUE "LegalCopyright", "Georg Held & Liam Deacon"
+      VALUE "OriginalFilename", "patt-gui.exe"
+      VALUE "ProductName", "patt-gui"
+      VALUE "ProductVersion", "@PATT_GUI_VERSION_MAJOR@.@PATT_GUI_VERSION_MINOR"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

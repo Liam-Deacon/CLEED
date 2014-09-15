@@ -1,0 +1,2 @@
+This directory contains man pages to be installed on Linux systems. 
+The man pages can be viewed with the 'groff -man -Tascii <filename>' command.

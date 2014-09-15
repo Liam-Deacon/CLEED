@@ -1,0 +1,7 @@
+
+CMake
+    * 2014-05-24: added initial support for OpenCL
+    
+CLEED
+    * 2014-05-24: replaced floating point '==' & '!=' comparisons as they are unsafe.
+    * 2014-05-27: added preliminary Cython compilation support.

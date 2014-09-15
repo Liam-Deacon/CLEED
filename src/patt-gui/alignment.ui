@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>181</width>
+    <height>166</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QToolButton" name="AlignTL">
+     <property name="toolTip">
+      <string>Align Top-Right</string>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_top_left_32x32.png</normaloff>:/arrow_top_left_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QToolButton" name="AlignT">
+     <property name="toolTip">
+      <string>Align Top-Middle</string>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_up_32x32.png</normaloff>:/arrow_up_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QToolButton" name="AlignTR">
+     <property name="toolTip">
+      <string>Align Top-Right</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_top_right_32x32.png</normaloff>:/arrow_top_right_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QToolButton" name="alignML">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_left_32x32.png</normaloff>:/arrow_left_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QToolButton" name="alignM">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/stop_32x32.png</normaloff>:/stop_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QToolButton" name="alignMR">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_right_32x32.png</normaloff>:/arrow_right_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QToolButton" name="alignBL">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_bottom_left_32x32.png</normaloff>:/arrow_bottom_left_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QToolButton" name="alignBM">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_down_32x32.png</normaloff>:/arrow_down_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QToolButton" name="alignBR">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res/icons.qrc">
+       <normaloff>:/arrow_bottom_right_32x32.png</normaloff>:/arrow_bottom_right_32x32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="res/icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

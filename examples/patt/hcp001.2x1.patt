@@ -1,0 +1,10 @@
+# input file for pattern
+c 3 Domain of (2 x 1) 
+1.0 -1.732     a1
+1.0  1.732     a2
+2.0        radius
+3            No of domains
+  1   1  M1
+ -1   1  M1
+R120
+R120

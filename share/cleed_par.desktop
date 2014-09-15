@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=csearch
+Comment=Parameter output file
+Icon=cleed_par
+Terminal=true
+Type=Application
+Categories=Science
+MimeType=application/x-cleed_par-item;

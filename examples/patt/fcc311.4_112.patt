@@ -1,0 +1,8 @@
+# input file for pattern
+c fcc(311) (4 -1 / 1 2)
+ 1.0  0.000     a1
+-0.5  1.732     a2
+1.1          radius
+1            No of domains
+  4  -1  M2
+  1   2  M2

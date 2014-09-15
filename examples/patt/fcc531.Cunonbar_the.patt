@@ -1,0 +1,8 @@
+# input file for pattern
+c correct theoretical labelling Cu(531)-nonbar
+ 3.67378187  -4.37824275   a1
+ 0.75331537   4.36255600   a2
+2.55         radius
+1            No of domains
+  1.0  0.0 M1
+  0.0  1.0 M1

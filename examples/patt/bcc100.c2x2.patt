@@ -1,0 +1,9 @@
+# input file for pattern
+c c(2x2)
+1.0  0.0       a1
+0.0  1.0       a2
+1.49         radius
+1            No of domains
+  1.0  1.0 M1
+  1.0 -1.0 M1
+Sx

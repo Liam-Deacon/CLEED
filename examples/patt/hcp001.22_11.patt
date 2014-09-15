@@ -1,0 +1,9 @@
+# input file for pattern
+c (22 11 / 11 22) = Y1
+0.0  -2.0      a1
+1.732 1.0      a2
+1.1           radius
+1            No of domains
+#M1
+  22.0   11.0 M1
+  11.0   22.0 M1

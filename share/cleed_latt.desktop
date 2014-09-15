@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+GenericName=CLEED
+Name=latt
+Comment=Lattice input file
+Icon=cleed_latt
+Terminal=true
+Type=Application
+Categories=Science;
+MimeType=application/x-cleed_latt-item;

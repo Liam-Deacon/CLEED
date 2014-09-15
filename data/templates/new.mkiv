@@ -1,0 +1,112 @@
+##############################################################################
+#                               MKIV INPUT FILE                              #
+##############################################################################
+#
+# This file contains necessary input data for the evaluation of LEED-images
+# Take care that the data is consistent; e.g. the number of desired
+# reflexes and the number of indices you specify.   
+# Exit with <ESC> ZZ !
+# Notes: * ROUTER and RINNER are used to create a mask if none available
+#        * Line comments start with '#'
+#        * comments starting with '>' are ignored if all values 
+#          are previously stated on input line
+#
+REF_NAME	/path/to/ref_image 	> name of the reference image
+MASK_NAME	/path/to/mask.byte	> name of file containing mask (visible screen)
+NSTART		100		> number of first leed image
+NSTOP		105		> number of last leed image
+NSTEP		1		> stepsize for leed images
+H_CENTER	360		> horiz. component of center of LEED-screen
+V_CENTER	285		> vertical component of center of LEED-screen
+ROUTER		225		> radius of screen in pixels
+RINNER		40	    > radius of electron gun shade
+BACKGROUND	2		> background substraction (YES|NO = 2|1)
+SMOOTH	   -1	    > smooth beam current (YES|NO = 1|-1)
+KP_LEN_10	1.3000	> length of k-parallel(1,0) for surface
+NDOM		1		> number of domains
+DOMAIN		1 0 0 1 > overlayer matrix
+NDESIRE		61		> number of reflexes
+
+# Begin complicated spot indexing:
+r -1.00   0.00   (d_par: 0.70   k_r: -0.54, -0.45,  0.00)
+r -1.00   1.00   (d_par: 0.70   k_r: -0.54,  0.45,  0.00)
+r  1.00  -1.00   (d_par: 0.70   k_r:  0.54, -0.45,  0.00)
+r  1.00   0.00   (d_par: 0.70   k_r:  0.54,  0.45,  0.00)
+r  0.00  -1.00   (d_par: 0.91   k_r:  0.00, -0.91,  0.00)
+r  0.00   1.00   (d_par: 0.91   k_r:  0.00,  0.91,  0.00)
+r -2.00   1.00   (d_par: 1.07   k_r: -1.07,  0.00,  0.00)
+r  2.00  -1.00   (d_par: 1.07   k_r:  1.07, -0.00,  0.00)
+r -2.00   0.00   (d_par: 1.40   k_r: -1.07, -0.91,  0.00)
+r  2.00   0.00   (d_par: 1.40   k_r:  1.07,  0.91,  0.00)
+r -2.00   2.00   (d_par: 1.40   k_r: -1.07,  0.91,  0.00)
+r  2.00  -2.00   (d_par: 1.40   k_r:  1.07, -0.91,  0.00)
+r -1.00  -1.00   (d_par: 1.46   k_r: -0.54, -1.36,  0.00)
+r -1.00   2.00   (d_par: 1.46   k_r: -0.54,  1.36,  0.00)
+r  1.00  -2.00   (d_par: 1.46   k_r:  0.54, -1.36,  0.00)
+r  1.00   1.00   (d_par: 1.46   k_r:  0.54,  1.36,  0.00)
+r -3.00   1.00   (d_par: 1.67   k_r: -1.61, -0.45,  0.00)
+r -3.00   2.00   (d_par: 1.67   k_r: -1.61,  0.45,  0.00)
+r  3.00  -2.00   (d_par: 1.67   k_r:  1.61, -0.45,  0.00)
+r  3.00  -1.00   (d_par: 1.67   k_r:  1.61,  0.45,  0.00)
+   0.00  -2.00   (d_par: 1.81   k_r:  0.00, -1.81,  0.00)
+   0.00   2.00   (d_par: 1.81   k_r:  0.00,  1.81,  0.00)
+  -3.00   0.00   (d_par: 2.10   k_r: -1.61, -1.36,  0.00)
+  -2.00  -1.00   (d_par: 2.10   k_r: -1.07, -1.81,  0.00)
+   2.00   1.00   (d_par: 2.10   k_r:  1.07,  1.81,  0.00)
+   3.00   0.00   (d_par: 2.10   k_r:  1.61,  1.36,  0.00)
+  -3.00   3.00   (d_par: 2.10   k_r: -1.61,  1.36,  0.00)
+  -2.00   3.00   (d_par: 2.11   k_r: -1.07,  1.81,  0.00)
+   2.00  -3.00   (d_par: 2.11   k_r:  1.07, -1.81,  0.00)
+   3.00  -3.00   (d_par: 2.10   k_r:  1.61, -1.36,  0.00)
+  -4.00   2.00   (d_par: 2.14   k_r: -2.14,  0.00,  0.00)
+   4.00  -2.00   (d_par: 2.14   k_r:  2.14, -0.00,  0.00)
+  -4.00   1.00   (d_par: 2.33   k_r: -2.14, -0.91,  0.00)
+   4.00  -1.00   (d_par: 2.33   k_r:  2.14,  0.91,  0.00)
+  -4.00   3.00   (d_par: 2.33   k_r: -2.14,  0.91,  0.00)
+  -1.00  -2.00   (d_par: 2.33   k_r: -0.54, -2.26,  0.00)
+   1.00   2.00   (d_par: 2.33   k_r:  0.54,  2.26,  0.00)
+   4.00  -3.00   (d_par: 2.33   k_r:  2.14, -0.91,  0.00)
+  -1.00   3.00   (d_par: 2.33   k_r: -0.54,  2.26,  0.00)
+   1.00  -3.00   (d_par: 2.33   k_r:  0.54, -2.26,  0.00)
+  -5.00   2.00   (d_par: 2.72   k_r: -2.68, -0.45,  0.00)
+   5.00  -2.00   (d_par: 2.72   k_r:  2.68,  0.45,  0.00)
+  -5.00   3.00   (d_par: 2.72   k_r: -2.68,  0.45,  0.00)
+   5.00  -3.00   (d_par: 2.72   k_r:  2.68, -0.45,  0.00)
+   0.00  -3.00   (d_par: 2.72   k_r:  0.00, -2.72,  0.00)
+   0.00   3.00   (d_par: 2.72   k_r:  0.00,  2.72,  0.00)
+  -3.00  -1.00   (d_par: 2.78   k_r: -1.61, -2.26,  0.00)
+   3.00   1.00   (d_par: 2.78   k_r:  1.61,  2.26,  0.00)
+  -3.00   4.00   (d_par: 2.78   k_r: -1.61,  2.26,  0.00)
+   3.00  -4.00   (d_par: 2.78   k_r:  1.61, -2.26,  0.00)
+  -4.00   0.00   (d_par: 2.81   k_r: -2.14, -1.81,  0.00)
+   4.00   0.00   (d_par: 2.81   k_r:  2.14,  1.81,  0.00)
+  -4.00   4.00   (d_par: 2.81   k_r: -2.14,  1.81,  0.00)
+   4.00  -4.00   (d_par: 2.81   k_r:  2.14, -1.81,  0.00)
+  -2.00  -2.00   (d_par: 2.92   k_r: -1.07, -2.72,  0.00)
+   2.00   2.00   (d_par: 2.92   k_r:  1.07,  2.72,  0.00)
+  -2.00   4.00   (d_par: 2.92   k_r: -1.07,  2.72,  0.00)
+   2.00  -4.00   (d_par: 2.92   k_r:  1.07, -2.72,  0.00)
+  -5.00   1.00   (d_par: 3.00   k_r: -2.68, -1.36,  0.00)
+   5.00  -1.00   (d_par: 3.00   k_r:  2.68,  1.36,  0.00)
+  -5.00   4.00   (d_par: 3.00   k_r: -2.68,  1.36,  0.00)
+   5.00  -4.00   (d_par: 3.00   k_r:  2.68, -1.36,  0.00)
+
+# Alternatively use simple indexing:
+r  0.000 -1.000  ( 13.1) > The 'r' designates reference spot:
+r  0.000  1.000  ( 13.1) > each ref. spot's position must be
+r -1.000  0.000  ( 13.1) > specified in the *.pos file
+r  1.000  0.000  ( 13.1)
+r -1.000  1.000  ( 13.1)
+r  1.000 -1.000  ( 13.1)
+   1.000  1.000  ( 39.4) > the brackets indicates energy?
+  -1.000 -1.000  ( 39.4)
+   1.000 -2.000  ( 39.4)
+  -1.000  2.000  ( 39.4)
+  -2.000  1.000  ( 39.4)
+   2.000 -1.000  ( 39.4)
+   0.000  2.000  ( 52.6)
+  -2.000  0.000  ( 52.6)
+   2.000  0.000  ( 52.6)
+   0.000 -2.000  ( 52.6)
+  -2.000  2.000  ( 52.6)
+   2.000 -2.000  ( 52.6)

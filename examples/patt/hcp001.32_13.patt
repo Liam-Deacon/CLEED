@@ -1,0 +1,19 @@
+# input file for pattern
+c 6 Domains of (3 2 / -1 3)
+1.0  1.732       a1
+1.0 -1.732       a2
+1.1           radius
+6            No of domains
+#M1
+  3   2  M1
+ -1   3  M1
+#M2 R120 - Drehung um 120 deg.
+R120
+#M3 R120 - Drehung um 240 deg.
+R120
+#M4 Sy: Spiegelung an der y-Achse
+Sy
+#M5 R120 - Drehung um 120 deg.
+R120
+#M6 R120 - Drehung um 240 deg.
+R120

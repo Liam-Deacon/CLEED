@@ -1,0 +1,11 @@
+# input file for pattern
+c 
+c hcp (0001)-(1x1)
+-1.6248  -2.8142  a1
+-1.6248  2.8142  a2
+2.1        radius
+1            No of domains
+  1   0  M1
+  0   1  M1
+R60
+R60
