@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="100%"
+   height="100%"
+   viewBox="0 0 128 128"
+   id="svg2">
+  <defs
+     id="defs17" />
+  <g
+     transform="translate(-66.38,-391.32)"
+     id="layer1">
+    <path
+       d="M 95.556,452.65 H 165.26 V 508.1 H 95.556 v -55.45 z"
+       id="path7304"
+       style="fill:none" />
+    <path
+       d="m 98.38,481.8 c 27.68,3.04 41.16,12.11 48,24 h -48 v -24 z"
+       id="path7300"
+       style="fill:#84be0e;fill-opacity:1;stroke:#84be0e;stroke-opacity:1" />
+    <path
+       d="m 165.47,483.22 c -27.68,3.05 -41.16,12.12 -48,24 h 48 v -24 z"
+       id="path7302"
+       style="fill:#84be0e;fill-opacity:1;stroke:#84be0e;stroke-opacity:1" />
+    <path
+       d="M 96.506,452.65 H 166.21 V 508.1 H 96.506 v -55.45 z"
+       id="rect7265"
+       style="fill:none;stroke:#84be0e;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       d="M 95.533,452.36 74.568,438.38 v 76.87 l 20.965,-6.99 v -55.9 z"
+       id="path7270"
+       style="fill:none;stroke:#84be0e;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       d="m 74.568,473.32 20.965,6.99"
+       id="path7272"
+       style="stroke:#84be0e;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <g
+       transform="matrix(-0.87354,0,0,0.87354,244.37,82.571)"
+       id="g7278">
+      <path
+         d="M 24,32 0,16 v 88 L 24,96 V 32 z"
+         transform="translate(66.38,391.32)"
+         id="path7280"
+         style="fill:none;stroke:#84be0e;stroke-width:5.72383642;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         d="m 0,56 24,8"
+         transform="translate(66.38,391.32)"
+         id="path7282"
+         style="stroke:#84be0e;stroke-width:5.72383642;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <g
+       transform="matrix(1.716707,0,0,1.716707,112.41389,394.67593)"
+       id="Layer_1"
+       style="fill:#84be0e;fill-opacity:1" />
+    <g
+       transform="matrix(1.716707,0,0,1.716707,112.41389,394.67593)"
+       id="reload"
+       style="fill:#84be0e;fill-opacity:1">
+      <g
+         id="g6"
+         style="fill:#84be0e;fill-opacity:1">
+        <path
+           d="m 20,16 c 0,4.41 -3.586,8 -8,8 C 7.586,24 4,20.41 4,16 4,11.59 7.586,8 12,8 l 2.359,0.027 -1.164,1.164 2.828,2.828 L 22.035,6 16.023,0 13.195,2.828 14.375,4 H 12 C 5.375,4 0,9.371 0,16 c 0,6.629 5.375,12 12,12 6.625,0 12,-5.371 12,-12 h -4 z"
+           id="path8"
+           style="fill:#84be0e;fill-opacity:1" />
+      </g>
+    </g>
+  </g>
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title></dc:title>
+        <dc:date>2009-03-15T15:21:16</dc:date>
+        <dc:description>A simple window icon.</dc:description>
+        <dc:source>http://openclipart.org/detail/22313/window-icon-by-pitr-22313</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>pitr</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>architecture</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>contour</rdf:li>
+            <rdf:li>household</rdf:li>
+            <rdf:li>icon</rdf:li>
+            <rdf:li>image</rdf:li>
+            <rdf:li>landscape</rdf:li>
+            <rdf:li>media</rdf:li>
+            <rdf:li>minimalistic</rdf:li>
+            <rdf:li>png</rdf:li>
+            <rdf:li>public domain</rdf:li>
+            <rdf:li>simple</rdf:li>
+            <rdf:li>svg</rdf:li>
+            <rdf:li>window</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

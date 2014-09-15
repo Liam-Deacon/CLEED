@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. CLEED package &mdash; CLEED 0.1.0-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/CLEED_logo.ico"/>
+    <link rel="top" title="CLEED 0.1.0-dev documentation" href="index.html" />
+    <link rel="next" title="2. LEED programs" href="LEED_programs.html" />
+    <link rel="prev" title="CLEED" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="LEED_programs.html" title="2. LEED programs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CLEED"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/CLEED_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. CLEED package</a><ul>
+<li><a class="reference internal" href="#introduction">1.1. Introduction</a></li>
+<li><a class="reference internal" href="#installation">1.2. Installation</a></li>
+<li><a class="reference internal" href="#getting-started">1.3. Getting Started</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">CLEED</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="LEED_programs.html"
+                        title="next chapter">2. LEED programs</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cleed-package">
+<span id="package"></span><h1>1. CLEED package<a class="headerlink" href="#cleed-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<span id="id1"></span><h2>1.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>CLEED is a computational package for Low Energy Electron Diffraction (LEED) IV analysis. It fits
+experimental IV data curves with those simulated by the <a class="reference internal" href="LEED_programs.html#cleed"><em>cleed</em></a> program and a &#8216;goodness&#8217; of fit is made
+with the R-Factor program <a class="reference internal" href="LEED_programs.html#crfac"><em>crfac</em></a>. Optimisation of the input parameters is performed by <a class="reference internal" href="LEED_programs.html#csearch"><em>csearch</em></a>.</p>
+<p>A (still rather incomplete) documentation of the program package can be found
+in the <a class="reference download internal" href="_downloads/CLEED_Manual.pdf"><tt class="xref download docutils literal"><span class="pre">manual</span></tt></a>, but it is probably best to send me an email, with all
+input files, to &lt;<a class="reference external" href="mailto:g&#46;held&#37;&#52;&#48;reading&#46;ac&#46;uk">g<span>&#46;</span>held<span>&#64;</span>reading<span>&#46;</span>ac<span>&#46;</span>uk</a>&gt; when you encounter any problems (I am sure you will ...)</p>
+</div>
+<div class="section" id="installation">
+<span id="id2"></span><h2>1.2. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>In order to target as many different systems in the simplest way the CLEED package has been
+developed using <a class="reference external" href="http://www.cmake.org/">CMake</a> as a dependency tracking and makefile generation program. CMake is
+available on all major desktop platforms and a <a class="reference external" href="http://www.cmake.org/cmake/resources/software.html">GUI</a> is also available for Windows users.</p>
+<p>Use the following command in order to install CLEED for your system:</p>
+<div class="highlight-python"><pre>cd /path/to/cleed/source
+cmake -G &lt;generator-name&gt; --build build/ -i
+cd build/
+&lt;make&gt; install</pre>
+</div>
+<p>Where <tt class="code docutils literal"><span class="pre">&lt;generator-name&gt;</span></tt> is the target platform e.g. &#8220;Unix Makefiles&#8221; or &#8220;MinGW Makefiles&#8221;.
+&lt;make&gt; is usually <strong class="command">make</strong> (Unix/GNU Linux) or <strong class="command">mingw32-make</strong> (Windows). The &#8216;<tt class="code docutils literal"><span class="pre">-i</span></tt>&#8216; option is
+voluntary, but is useful if you wish to be lead through the setup in a step-by-step fashion.</p>
+<p>Note Windows users will require <a class="reference external" href="http://sourceforge.net/projects/mingw/">MinGW</a> installed (other
+compiler tool chains such as <a class="reference external" href="http://www.visualstudio.com/">MSVC</a> and
+<a class="reference external" href="http://cygwin.com/index.html">Cygwin</a> have not been tested).</p>
+<p>If you are unable to compile the programs, pre-compiled packages are also available.</p>
+</div>
+<div class="section" id="getting-started">
+<h2>1.3. Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>On other operating systems check the compatibility of the trigonometric functions
+and data type used for real in <tt class="file docutils literal"><span class="pre">real.h</span></tt> (in the <tt class="file docutils literal"><span class="pre">include</span></tt> directory)</p>
+<p>We have had a few problems on OSs different from DEC alpha with the
+symmetrised version of CLEED (<a class="reference internal" href="LEED_programs.html#cleed-sym"><em>cleed_sym</em></a>), therefore this is currently not supported
+in this distribution, but the non-symmetrised version should be running okay.</p>
+<p>A set of sample input files for Er/Si(111) (no expt. IV curves), Benzene on Ru(0001)
+and O and Cu/Ni(111) can be found in under SIER, RUBENZ, NIO and NICU in the <tt class="file docutils literal"><span class="pre">examples/</span></tt>
+directory of the CLEED installation.</p>
+<p>There are three files for each search (in addition to phase shifts and experimental data)
+which have to be created by the user:</p>
+<ol class="arabic simple">
+<li>&lt;bul_file&gt; <tt class="code docutils literal"><span class="pre">*.bul</span></tt>
+Bulk geometry and non-geometric parameters</li>
+<li>&lt;inp_file&gt; <tt class="code docutils literal"><span class="pre">*.inp</span></tt>
+Specifies start geometry for the search and search parameters (symmetry etc.)</li>
+<li>&lt;ctr_file&gt; <tt class="code docutils literal"><span class="pre">*.ctr</span></tt>
+Specifies correspondence between theoretical and experimental IV curves.</li>
+</ol>
+<p>A detailed description of the file format can be found in <a class="reference download internal" href="_downloads/CLEED_Manual.pdf"><tt class="xref download docutils literal"><span class="pre">the</span> <span class="pre">pdf</span> <span class="pre">manual</span></tt></a>,
+but it is probably easiest to use one of the sample input files and modify it.
+All other files are created by the programs.
+The search can be monitored through the <tt class="code docutils literal"><span class="pre">*.log</span></tt> file; at each point of the search the
+current best fit geometries and IV curves can be found in <tt class="code docutils literal"><span class="pre">*.rmin</span></tt> and <tt class="code docutils literal"><span class="pre">*.pmin</span></tt>.</p>
+<p>These files are all described in the <a class="reference download internal" href="_downloads/CLEED_manual.pdf"><tt class="xref download docutils literal"><span class="pre">CLEED</span> <span class="pre">manual</span></tt></a>.</p>
+<p>The phase shift input must have the same format as for the <a class="reference external" href="http://www.icts.hkbu.edu.hk/surfstructinfo/SurfStrucInfo_files/leed/leedpack.html">VanHove/Tong programs</a> with a
+first line added that contains the number of energies <span class="math">\(n_{eng}\)</span> and the
+maximum angular momentum quantum number <span class="math">\(l_{max}\)</span>.  For each type of atoms
+there must be a separate file in the directory &#8216;phase/&#8217; called &lt;atom&gt;.phs. The directory
+is passed to the LEED program through the environment variable <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt>.
+The Python <a class="reference external" href="https://pypi.python.org/pypi/phaseshifts">phaseshifts</a> provides a simple
+script (<tt class="file docutils literal"><span class="pre">phsh.py</span></tt>) to generate the necessary phase shifts from the CLEED <tt class="file docutils literal"><span class="pre">*.inp</span></tt> and <tt class="file docutils literal"><span class="pre">*.bul</span></tt>
+files (see the phaseshifts documentation for further information):</p>
+<div class="highlight-python"><pre>phsh.py -i *.inp -b *.bul</pre>
+</div>
+<p>Before starting any program 3 environment variables have to be set:</p>
+<ul class="simple">
+<li><span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt> (see above)</li>
+<li><span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_LEED</span></tt> (path to executable LEED-IV program: normally cleed_nsym)</li>
+<li><span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_RFAC</span></tt> (path to executable R factor program: crfac)</li>
+</ul>
+<p>A shell script doing this can be found in &#8216;bin/set_env&#8217; (again, the directory path
+of the parent directory must be changed in this file). For users with a Python
+interpreter installed, the script &#8216;set_env.py&#8217; allows much more sophisticated setups,
+for more details see:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">set_env</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>The search is started by:</p>
+<div class="highlight-python"><pre>csearch -i &lt;inp_file&gt;</pre>
+</div>
+<p><a class="reference internal" href="LEED_programs.html#csearch"><em>csearch</em></a> is a master program that calls the LEED-IV program (<a class="reference internal" href="LEED_programs.html#cleed-nsym"><em>cleed_nsym</em></a>) and the
+R factor program (<a class="reference internal" href="LEED_programs.html#crfac"><em>crfac</em></a>) to calculate IV curves and R factors for a given trial
+structure and optimises the geometry parameters of the surface geometry in order to
+minimise the R factor using the simplex method (other search methods are currently tested).</p>
+<p>The LEED-IV program can be called outside the search using:</p>
+<div class="highlight-python"><pre>cleed_nsym -i &lt;par_file&gt; -b &lt;bul_file&gt; -o &lt;res_file&gt; &gt; &lt;out_file&gt;</pre>
+</div>
+<p>&lt;par_file&gt; is usually created by the search program. It contains only the
+positions of the overlayer atoms that are optimised during the search. An example is
+given in &#8216;examples/NIO&#8217;. The LEED-IV program produces a lot of control output (written
+to stdout). Therefore it is best to redirect stdout to a file using the <tt class="code docutils literal"><span class="pre">&gt;</span></tt> command.
+It is best to check the LEED-IV program separately first, after you have made any
+alterations to the input file.</p>
+<p>In order to test the R factor program separately, call it by:</p>
+<div class="highlight-python"><pre>crfac -c &lt;ctr_file&gt; -t &lt;output_file_from_cleed&gt;</pre>
+</div>
+<p>On Linux machines, for the search it is recommended to use the <tt class="code docutils literal"><span class="pre">nohup</span></tt> command together
+with &#8216;&amp;&#8217; which runs the search in the background:</p>
+<div class="highlight-python"><pre>nohup csearch -i &lt;inp_file&gt; &gt; &lt;out_file&gt; 2&gt; &lt;err_file&gt; &amp;</pre>
+</div>
+<p>In the NiO111_2x2O example each iteration takes about 90-100s (2.4 GHz Linux PC), the
+final R factor after convergence should be around 0.1322 and it takes around 183
+iteration to get there from the start geometry specified in Ni111_2x2O.inp
+(see attached <tt class="code docutils literal"><span class="pre">*.log</span></tt> file).</p>
+<p>The example in NICU leads to an R factor of 0.0633 after 63 iterations (<em>ca</em> 15s cpu
+time per iteration).</p>
+<p>All information necessary to restart the search at the current position is stored in
+<tt class="code docutils literal"><span class="pre">*.ver</span></tt>. If the search stops for any reason, e.g. because it has reached the limit
+of iterations (currently 2000), it can be restarted by:</p>
+<div class="highlight-python"><pre>nohup csearch -i &lt;inp_file&gt; -v &lt;ver_file&gt; 1&gt; &lt;out_file&gt; 2&gt; &lt;err_file&gt; &amp;</pre>
+</div>
+<p>GOOD LUCK</p>
+<p><em>&#8211; Georg Held &#8211;</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="LEED_programs.html" title="2. LEED programs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CLEED"
+             >previous</a> |</li>
+        <li><a href="index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Georg Held, Liam Deacon &amp; collaborators.
+    </div>
+  </body>
+</html>

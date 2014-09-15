@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="100%"
+   height="100%"
+   viewBox="0 0 340 340.08093"
+   id="svg2">
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18" />
+  <g
+     transform="matrix(0.66176471,0,0,0.66176471,-15.343579,-81.855748)"
+     id="g4"
+     style="fill:#84be0e;fill-opacity:1">
+    <path
+       d="m 193.42857,474.97408 v 160 h 340 v -160 h -340 z m 300,40 v 80 h -260 v -80 h 260 z"
+       id="path6"
+       style="fill:#84be0e;fill-opacity:1;fill-rule:evenodd" />
+    <path
+       d="m 473.42857,294.89315 -220,0.0937 v 220 h 40 v -180.0937 l 140.40625,-0.34375 v 0.34375 h -0.40625 v 180.08093 l 40,-0.0184 v -220.0625 z"
+       id="path8"
+       style="fill:#84be0e;fill-opacity:1;fill-rule:evenodd" />
+    <path
+       d="m 413.43047,354.90398 -100.4062,0.3437 v -0.3437 h 0.2905 v 40 h 100.1157 v -40 z"
+       id="path10"
+       style="fill:#84be0e;fill-opacity:1;fill-rule:evenodd" />
+    <path
+       d="m 413.83667,414.90398 -100.4062,0.3437 v -0.3437 h 0.2905 v 40 h 100.1157 v -40 z"
+       id="path12"
+       style="fill:#84be0e;fill-opacity:1;fill-rule:evenodd" />
+    <path
+       d="m 473.42857,534.97408 -220,0.3437 v -0.3437 l 0.002,0.4749 -0.002,39.5251 h 220 v -40 z"
+       id="path14"
+       style="fill:#84be0e;fill-opacity:1;fill-rule:evenodd" />
+  </g>
+  <g
+     transform="matrix(5.46875,0,0,5.46875,-1981.3566,-712.38978)"
+     id="g4845">
+    <path
+       d="m 378.70603,130.7616 c -8.836,0 -16,11.844 -16,11.844 0,0 7.164,12.156 16,12.156 8.836,0 16,-12.156 16,-12.156 0,0 -7.164,-11.844 -16,-11.844 z m 0,20 c -4.418,0 -8,-3.582 -8,-8 0,-4.418 3.582,-8 8,-8 4.418,0 8,3.582 8,8 0,4.418 -3.582,8 -8,8 z"
+       id="path8-7"
+       style="fill:#84be0e;fill-opacity:1" />
+    <circle
+       cx="16"
+       cy="12.016"
+       r="4"
+       transform="translate(362.70603,130.7616)"
+       id="circle10"
+       style="fill:#84be0e;fill-opacity:1" />
+  </g>
+</svg>

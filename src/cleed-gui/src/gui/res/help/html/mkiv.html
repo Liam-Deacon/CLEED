@@ -1,0 +1,545 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>7. mkiv &mdash; CLEED 0.1.0-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/CLEED_logo.ico"/>
+    <link rel="top" title="CLEED 0.1.0-dev documentation" href="index.html" />
+    <link rel="next" title="8. phsh" href="phsh.html" />
+    <link rel="prev" title="6. patt" href="patt.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="phsh.html" title="8. phsh"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="patt.html" title="6. patt"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/CLEED_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">7. mkiv</a><ul>
+<li><a class="reference internal" href="#background-information">7.1. Background Information</a></li>
+<li><a class="reference internal" href="#syntax">7.2. Syntax</a><ul>
+<li><a class="reference internal" href="#options">7.2.1. Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#files">7.3. Files</a><ul>
+<li><a class="reference internal" href="#input-files">7.3.1. Input files</a></li>
+<li><a class="reference internal" href="#output-files">7.3.2. Output files</a></li>
+<li><a class="reference internal" href="#input-file-input">7.3.3. Input file (input)</a></li>
+<li><a class="reference internal" href="#variable-file-input">7.3.4. Variable file (input)</a></li>
+<li><a class="reference internal" href="#position-file-input">7.3.5. Position file (input)</a></li>
+<li><a class="reference internal" href="#iv-data-file-output">7.3.6. IV data file (output)</a></li>
+<li><a class="reference internal" href="#input-examples">7.3.7. Input examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes">7.4. Notes</a><ul>
+<li><a class="reference internal" href="#references">7.4.1. References</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#caveats">7.5. Caveats</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="patt.html"
+                        title="previous chapter">6. patt</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="phsh.html"
+                        title="next chapter">8. phsh</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="mkiv">
+<span id="id1"></span><h1>7. mkiv<a class="headerlink" href="#mkiv" title="Permalink to this headline">¶</a></h1>
+<p><tt class="code docutils literal"><span class="pre">mkiv</span></tt> - extract LEED IV curves from experimental data</p>
+<p><tt class="code docutils literal"><span class="pre">mkiv</span></tt> is a program which extracts IV curves of all beams
+(diffraction  spots) simultaneously from a series of LEED images
+taken during the energy scan. The only input required is the
+superstructure matrix as well as the image positions and indices of
+at least three spots at an arbitrary energy. Within the program the
+spot positions at any given energy are then calculated from the
+reciprocal lattice vectors and the position of the (0,0) beam
+determined from the spot positions at the preceding energy.</p>
+<div class="section" id="background-information">
+<span id="mkiv-background-information"></span><h2>7.1. Background Information<a class="headerlink" href="#background-information" title="Permalink to this headline">¶</a></h2>
+<p>The real space surface unit mesh can be worked out from the geometry of
+the LEED pattern, including any superstructure used by ordered
+adsorbates. It is the spot intensities, however, that carry information
+about the atomic positions in the unit cell. Therefore, for complete
+LEED  analysis, intensity-energy (IV) curves are measured for each
+diffraction beam.</p>
+<p>The use of LEED as a structural tool requires  using  trial  and  error
+geometries  for  the surface atoms, aided by a suitable search strategy
+that optimises the agreement between theoretical  and  experimental  IV
+curves, until a satisfactory fit between them is obtained. The process
+is much like that used in X-ray crystallography,  however,  the  strong
+multiple scattering present in LEED IV spectra is recognised as a
+severe obstacle for direct methods.  To that effect, the agreement
+between calculated and experimental data is quantified by a reliability
+factor (R-factor), which is used to summarise the reliability of the
+structural result in an absolute sense and to provide a basis for comparison
+with other structural determinations of the same surface and
+with results obtained for other surfaces.</p>
+<p>It is important to note that there is no way to ensure that the correct
+geometry has not been missed in the list of plausible geometries. Just
+as with X-ray diffraction, one is never sure that the &#8220;best&#8221; structure
+found cannot be improved upon by a completely different structure.</p>
+</div>
+<div class="section" id="syntax">
+<span id="mkiv-syntax"></span><h2>7.2. Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mkiv</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="options">
+<span id="mkiv-options"></span><h3>7.2.1. Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<p><tt class="code docutils literal"><span class="pre">-i</span> <span class="pre">&lt;input_prefix&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--input</span> <span class="pre">&lt;input_prefix&gt;</span></tt></dt>
+<dd>The filename prefix to input files [default=&#8217;mkiv&#8217;].</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-o</span> <span class="pre">&lt;output_prefix&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--output</span> <span class="pre">&lt;output_prefix&gt;</span></tt></dt>
+<dd>The output filename prefix for the output files [default=&#8217;mkiv&#8217;].</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-b</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--current</span> <span class="pre">&lt;value&gt;</span></tt></dt>
+<dd>Beam current value.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-B</span> <span class="pre">&lt;beam_prefix&gt;</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--beam</span> <span class="pre">prefix</span></tt></dt>
+<dd>The filename prefix for <tt class="file docutils literal"><span class="pre">.raw</span></tt> and <tt class="file docutils literal"><span class="pre">.smo</span></tt> files [default=&#8217;beam&#8217;].</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-h</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--help</span></tt></dt>
+<dd>Print help text and exit.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-q</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">--quiet</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--quick</span></tt></dt>
+<dd>Faster with no graphical output and only a few prints to stdout.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-v</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--verbose</span></tt></dt>
+<dd>Give more detailed information during program flow.</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-V</span></tt></p>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">--version</span></tt></dt>
+<dd>Provide version and additional information about this program.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="files">
+<span id="mkiv-files"></span><h2>7.3. Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="input-files">
+<span id="mkiv-input-files"></span><h3>7.3.1. Input files<a class="headerlink" href="#input-files" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="file docutils literal"><span class="pre">mkiv.inp</span></tt></dt>
+<dd>The primary input file used for determination of the output. See
+<a class="reference internal" href="#mkiv-input-file"><em>input file</em></a> section for more details.</dd>
+<dt><tt class="file docutils literal"><span class="pre">mkiv.var</span></tt></dt>
+<dd>The variable input file used for fine tuning of the data extraction.
+See <a class="reference internal" href="#mkiv-variable-file"><em>variable file</em></a> section for more details.</dd>
+<dt><tt class="file docutils literal"><span class="pre">mkiv.pos</span></tt></dt>
+<dd>The position input file with a list of  the  spot  positions  in
+pixels from the reference image. See <a class="reference internal" href="#mkiv-position-file"><em>position file</em></a>
+section for more details.</dd>
+<dt><tt class="file docutils literal"><span class="pre">&lt;mask_file&gt;</span></tt></dt>
+<dd>A black and white image masking the areas that should be ignored
+in black. This file must be of the same dimensions (width <span class="math">\(\times\)</span>
+height) and format as the LEED image files.</dd>
+<dt><tt class="file docutils literal"><span class="pre">&lt;LEED_image_files&gt;</span></tt></dt>
+<dd>The sequence of experimental images used for extracting the IV data.
+The files should end in an extension of the form <tt class="code docutils literal"><span class="pre">.[0-9]+?.[0-9]+?[0-9]</span></tt>
+which is the energy of the incident electron beam for a particular image.</dd>
+</dl>
+</div>
+<div class="section" id="output-files">
+<span id="mkiv-output-files"></span><h3>7.3.2. Output files<a class="headerlink" href="#output-files" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="file docutils literal"><span class="pre">*.ivdat</span></tt></dt>
+<dd>The extracted I(V) output data. See <a class="reference internal" href="#mkiv-data-file"><em>IV data file</em></a>
+section for more details.</dd>
+<dt><tt class="file docutils literal"><span class="pre">*.param</span></tt></dt>
+<dd>The parameter file used as a log of the variables used for the data extraction.</dd>
+<dt><tt class="file docutils literal"><span class="pre">beam.raw</span></tt></dt>
+<dd>File containing the raw output from each of the spot beams.</dd>
+<dt><tt class="file docutils literal"><span class="pre">beam.smo</span></tt></dt>
+<dd>File contained smoothed output of beam.raw.</dd>
+<dt><tt class="file docutils literal"><span class="pre">mask.byte</span></tt></dt>
+<dd>Local copy of the mask file or else generated mask from <em class="xref std std-option">ROUTER</em>
+and <em class="xref std std-option">RINNER</em>.</dd>
+</dl>
+</div>
+<div class="section" id="input-file-input">
+<span id="mkiv-input-file"></span><h3>7.3.3. Input file (input)<a class="headerlink" href="#input-file-input" title="Permalink to this headline">¶</a></h3>
+<p>This file is the primary configuration file.</p>
+<dl class="docutils">
+<dt><em class="xref std std-option">REF_NAME</em></dt>
+<dd><p class="first">The name of the reference LEED image that is used to calculate
+the basis. The coordinates must either be input at the beginning
+of the program or be present in the file
+<a class="reference internal" href="#mkiv-position-file"><em>position file</em></a>.</p>
+<p class="last">The  corresponding  energy  is  drawn  from the file header. The
+trunk of filename also serves as filename for the following LEED
+images. The extension <tt class="code docutils literal"><span class="pre">.[0-9]+?[0-9]+?[0-9]</span></tt> will be exchanged by
+the according index number.</p>
+</dd>
+<dt><em class="xref std std-option">NSTART</em></dt>
+<dd>The first index of the LEED image sequence.</dd>
+<dt><em class="xref std std-option">NSTOP</em></dt>
+<dd>The last index of the LEED image sequence.</dd>
+<dt><em class="xref std std-option">N_STEP</em></dt>
+<dd>Determines the step width, may be used when calculating from
+high to low energies or for a fast run for test purposes.</dd>
+<dt><em class="xref std std-option">MASK_NAME</em></dt>
+<dd>Part of the LEED image is covered by the electron gun and the
+support. This and the outer boundaries may by excluded from
+calculations by using the mask. The VIFF-image should be of type
+VFF_TYPE_BYTE, a value of 0 indicating covered areas and 255
+indicating the visible  screen. The file might be produced by
+illuminating the LEED-screen from the back and taking a picture
+like a regular LEED-image. Then it may be converted into
+byte-type and into mask-type using a threshold color-value.</dd>
+</dl>
+<p><em class="xref std std-option">H_CENTER</em></p>
+<dl class="docutils">
+<dt><em class="xref std std-option">C_CENTER</em></dt>
+<dd>Determine the geometric center of the LEED-screen.</dd>
+</dl>
+<p><em class="xref std std-option">ROUTER</em></p>
+<dl class="docutils">
+<dt><em class="xref std std-option">RINNER</em></dt>
+<dd>Determine the radius of the LEED-screen and the electron gun in
+the same way as the former program version. Must be set even
+when a mask is used and therefore are not taken into account.</dd>
+<dt><em class="xref std std-option">BACKGROUND</em></dt>
+<dd>2 or 3
+&lt;2 - not implemented anymore (former program versions)
+2  - performing background-subtraction
+3  - no background-treatment</dd>
+<dt><em class="xref std std-option">SMOOTH</em></dt>
+<dd>&gt;0 - The value &gt;0 is taken as constant beam-current value
+0  - Beam-current is taken as it is.
+-1 - The beam-current is smoothed (10 point backwards)</dd>
+<dt><em class="xref std std-option">KP_LEN_10</em></dt>
+<dd>The parallel (to surface) length of the (1,0)-vector in k-space.</dd>
+<dt><em class="xref std std-option">NDOM</em></dt>
+<dd>Number of superstructure domains.</dd>
+<dt><em class="xref std std-option">DOMAIN</em></dt>
+<dd>Superstructure matrices in real-space. Each domain preceded by
+the word <em class="xref std std-option">DOMAIN</em>.</dd>
+<dt><em class="xref std std-option">NDESIRE</em></dt>
+<dd>Number  of  spots that are stored in <tt class="file docutils literal"><span class="pre">mkiv.ivdat</span></tt>, followed by the
+Miller indices of the <em class="xref std std-option">NDESIRE</em> spots:
+<span class="math">\(h_1\)</span>  <span class="math">\(k_1\)</span>    &gt; spot 1
+<span class="math">\(h_2\)</span>  <span class="math">\(k_2\)</span>    &gt; spot 2, etc.
+.       .
+.       .</dd>
+</dl>
+</div>
+<div class="section" id="variable-file-input">
+<span id="mkiv-variable-file"></span><h3>7.3.4. Variable file (input)<a class="headerlink" href="#variable-file-input" title="Permalink to this headline">¶</a></h3>
+<p>This file contains additional configuration parameters for fine tuning
+the IV extraction process. The parameters available are:</p>
+<p><em class="xref std std-option">COS_MIN</em></p>
+<dl class="docutils">
+<dt><em class="xref std std-option">COS_MAX</em></dt>
+<dd>The minimum and maximum value for the spots used for the recalculation
+of the basis. Diffraction spots close to the boundaries
+may be excluded this way.</dd>
+<dt><em class="xref std std-option">VERH</em></dt>
+<dd>The ratio of the axes of the underground-area to the integration-area.
+:option:<a href="#id2"><span class="problematic" id="id3">`</span></a>VERH`=1.4 indicates disks or elliptical areas with almost the same
+area of underground and signal.</dd>
+</dl>
+<p><em class="xref std std-option">ACCI</em></p>
+<dl class="docutils">
+<dt><em class="xref std std-option">ACCB</em></dt>
+<dd>The  minimum  percentage  of the integration and background area
+compared to the complete disk area that must  be  within  masked
+area so that the intensity value is stored. A percentage &lt; 1.0
+allows an overlap of integration areas with screen-boundaries.</dd>
+<dt><em class="xref std std-option">DISTANCE</em></dt>
+<dd>Minimum distance between two  spots  that  are  used  for  basis
+recalculation. Bigger values lead to more exact basis, too big
+values may cause too few reference spots thus preventing  sensible
+basis recalculation. The value must be scaled with the size
+of the LEED-images, like <em class="xref std std-option">SCALE_MIN</em>, <em class="xref std std-option">RANGE_MIN</em>,
+<em class="xref std std-option">ROUTER</em>, <em class="xref std std-option">RINNER</em> and spot positions are given
+according to the resolution of the images.</dd>
+<dt><em class="xref std std-option">UPDATE</em></dt>
+<dd>The output files are flushed only every UPDATE image (senseless
+if output is buffered).</dd>
+<dt><em class="xref std std-option">STEP</em></dt>
+<dd>The routine <tt class="code docutils literal"><span class="pre">fimax4</span></tt> normally carries out the matrix-weighted
+summation for every pixel within range. This time-consuming habit
+isn&#8217;t  always  sensible, therefore a step-size may be used. STEP
+has no effect on the second run for the spots with bad signal-to-noise
+ratios.</dd>
+<dt><em class="xref std std-option">TRIP_MAX</em></dt>
+<dd>Gives  the  maximum of triples for basis recalculation. The rou-
+tine <tt class="code docutils literal"><span class="pre">calcbase</span></tt> stops when the number of triples is exceeded.</dd>
+<dt><em class="xref std std-option">SCALE_MIN</em></dt>
+<dd>This is a minimum value for the energy-dependent integration
+area (in pixels). Prevents the area from becoming too small with
+high energies. If applied, different k-space is integrated  with
+different energies.</dd>
+<dt><em class="xref std std-option">RANGE_MIN</em></dt>
+<dd>Same as <em class="xref std std-option">SCALE_MIN</em>, but for search area. Value should be in pixels.</dd>
+<dt><em class="xref std std-option">S2N_REF</em></dt>
+<dd>A minimum threshold for the reference reflections (spots) used
+for basis recalculation.</dd>
+<dt><em class="xref std std-option">S2N_GOOD</em></dt>
+<dd>Spots with lower signal-to-noise ratio are treated in the second
+run with smaller range.</dd>
+<dt><em class="xref std std-option">S2N_BAD</em></dt>
+<dd>Serves to call spots &#8216;bad&#8217;, no other consequences.</dd>
+<dt><em class="xref std std-option">REF_MIN</em></dt>
+<dd>A minimum number of reference spots to be taken into account. If
+less reference spots are found, all spots with a signal-to-noise
+ratio greater than <em class="xref std std-option">S2N_REF</em> are taken instead. Reference spots
+are indicated by a &#8216;r&#8217; preceding the indices in file <tt class="file docutils literal"><span class="pre">mkiv.inp</span></tt>.</dd>
+<dt><em class="xref std std-option">SEC_RANGE</em></dt>
+<dd>Tells  the ratio between the axes of search-area of first run to
+second run. spots with bad S2N are therefore searched within an
+area determined by <em class="xref std std-option">RANGE</em> / <em class="xref std std-option">SEC_RANGE</em>.</dd>
+<dt><em class="xref std std-option">RANGE</em></dt>
+<dd>Indicates  the size of the searching area in units of the length
+of the (1,0) basis-vector. The searching area therefore scales
+like the basis-vectors with the square root of the energy.</dd>
+</dl>
+<p><em class="xref std std-option">SCALE_A</em></p>
+<dl class="docutils">
+<dt><em class="xref std std-option">SCALE_B</em></dt>
+<dd>Determines the size of the integration area in units of the
+length of the (1,0) basis-vector. The integration area therefore
+scales like the basis-vectors with the square root of the energy.</dd>
+<dt><em class="xref std std-option">ANGLE</em></dt>
+<dd>Indicates the angle between elliptical integration area axis and
+horizontal.</dd>
+<dt><em class="xref std std-option">RATIO</em></dt>
+<dd>This  is  the ratio of LEED-screen radius to the distance of the
+camera to the LEED-screen and is used within a geometrical correction
+formula. The finite  distance  of  the camera and the
+spherical LEED-screen lead to this distortion. The formula is
+used when calculating the spot positions and in reverse when
+recalculating the basis with the found spot positions at the end
+of each energy loop.</dd>
+<dt><em class="xref std std-option">&lt;spots&gt;</em></dt>
+<dd>A list of diffraction spots are needed for <tt class="code docutils literal"><span class="pre">mkiv</span></tt> to determine
+which reciprocal lattice indices should be extracted. They take
+the form: <tt class="code docutils literal"><span class="pre">h</span>&nbsp; <span class="pre">k</span> <span class="pre">(d_par:</span> <span class="pre">d</span> <span class="pre">k_r:</span> <span class="pre">kx,</span> <span class="pre">ky,</span> <span class="pre">kz)</span></tt>, where h and k are
+the Miller indices of the spot. The bracketed line section is
+optional. Furthermore list entries which start with &#8216;r&#8217; are used
+as reference indices in order to calculate the reciprocal lattice
+mesh (a minimum of 3 are required).</dd>
+</dl>
+</div>
+<div class="section" id="position-file-input">
+<span id="mkiv-position-file"></span><h3>7.3.5. Position file (input)<a class="headerlink" href="#position-file-input" title="Permalink to this headline">¶</a></h3>
+<p>A list of reference spot positions from the reference image are used to
+calculate the reciprocal lattice are provided in this file, which takes
+the following format:</p>
+</div>
+<div class="section" id="iv-data-file-output">
+<span id="mkiv-data-file"></span><h3>7.3.6. IV data file (output)<a class="headerlink" href="#iv-data-file-output" title="Permalink to this headline">¶</a></h3>
+<p>This is a matrix of the energy (first column) and each spot reflection
+stated in the list of Miller indices within the <tt class="file docutils literal"><span class="pre">*.inp</span></tt> file.
+The first two rows provide h and k for that column, respectively.</p>
+</div>
+<div class="section" id="input-examples">
+<span id="mkiv-input-examples"></span><h3>7.3.7. Input examples<a class="headerlink" href="#input-examples" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><tt class="file docutils literal"><span class="pre">mkiv.inp</span></tt>:</p>
+<div class="highlight-python"><pre># Contains necessary input data for evaluation of LEED images
+# Take care that the data is consistent;
+# e.g. number of desired spots and indices you specify.
+REF_NAME    ~/Pt531_clean.100   &gt; name of the reference image
+MASK_NAME   ~/mask.byte   &gt; name of mask image (visible screen)
+NSTART      50      &gt; number of first LEED image (in eV)
+NSTOP       205     &gt; number of last LEED image (in eV)
+NSTEP       1       &gt; step size for LEED images (in eV)
+H_CENTER    360     &gt; horizontal centre of LEED screen
+V_CENTER    285     &gt; vertical centre of LEED screen
+ROUTER      225     &gt; radius of screen in pixels
+RINNER      40      &gt; electron gun shade radius
+BACKGROUND  2       &gt; background subtraction YES|NO = 2|1
+SMOOTH     -1       &gt; smooth of beam current
+KP_LEN_10   1.3000  &gt; k_parallel(1,0) for Pt{531}
+NDOM        1       &gt; number of domains
+DOMAIN      1 0 0 1 &gt; overlayer matrix
+NDESIRE     13      &gt; desired number of spots to process
+r -1.00  0.00    (d_par: 0.70     k_r: -0.54, -0.45,  0.00)
+r -1.00  1.00    (d_par: 0.70     k_r: -0.54,  0.45,  0.00)
+r  1.00 -1.00    (d_par: 0.70     k_r:  0.54, -0.45,  0.00)
+r  1.00  0.00    (d_par: 0.70     k_r:  0.54,  0.45,  0.00)
+r  0.00 -1.00    (d_par: 0.91     k_r:  0.00, -0.91,  0.00)
+r  0.00  1.00    (d_par: 0.91     k_r:  0.00,  0.91,  0.00)
+r -1.00 -1.00    (d_par: 1.46     k_r: -0.54, -1.36,  0.00)
+-2.00  1.00    (d_par: 1.07     k_r: -1.07,  0.00,  0.00)
+ 2.00 -1.00    (d_par: 1.07     k_r:  1.07, -0.00,  0.00)
+-2.00  0.00    (d_par: 1.40     k_r: -1.07, -0.91,  0.00)
+ 2.00  0.00    (d_par: 1.40     k_r:  1.07,  0.91,  0.00)
+-2.00  2.00    (d_par: 1.40     k_r: -1.07,  0.91,  0.00)
+ 2.00 -2.00    (d_par: 1.40     k_r:  1.07, -0.91,  0.00)</pre>
+</div>
+</li>
+<li><p class="first"><tt class="file docutils literal"><span class="pre">mkiv.var</span></tt>:</p>
+<div class="highlight-python"><pre># This file contains some additional input data for mkiv
+COS_MIN     0.60    &gt; min cosine for basis-recalibration
+COS_MAX     0.90    &gt; max cosine for basis-recalibration
+VERH        1.4     &gt; ratio bg-ellipse/int-ellipse axis
+ACCI        0.95    &gt; min ratio int-ellipse/whole ellipse
+ACCB        0.7     &gt; min ratio bg-ellipse/whole ellipse
+DISTANCE    60      &gt; min distance for spots in recalibration
+UPDATE      10      &gt; files are flushed every UPDATE'th time
+STEP        3       &gt; step-size for fimax
+TRIP_MAX    999     &gt; max number of triples for recalibration
+SCALE_MIN   10.0    &gt; min value for scale
+RANGE_MIN   10.0    &gt; min value for range
+S2N_REF     1.2     &gt; min s/n ratio for reference spots
+S2N_GOOD    0.5     &gt; spots with better s/n are kept
+S2N_BAD     0.10    &gt; spots with worse s/n are 'bad'
+REF_MIN     10      &gt; min no. predef reference spots for recalib
+REF_DEV     3.0     &gt; if new_base - base &gt; ref_dev -&gt; same frame
+BAS_RAT     0.6     &gt; base = bas_rat*newbase + (1-bas_rat)*base
+SEC_RANGE   3.0     &gt; range(2nd loop) = range(1st) / SEC_RANGE
+RANGE       0.200   &gt; search area size in (1,0) basis units
+SCALE_A     0.150   &gt; determines size of int. area in units of
+SCALE_B     0.150   &gt; (1,0) basis vector &amp; scales with sqrt(eV)
+ANGLE       0.0     &gt; angle between int. area axis &amp; horiz.
+RATIO       0.10    &gt; LEED screen radius : camera distance</pre>
+</div>
+</li>
+<li><p class="first"><tt class="file docutils literal"><span class="pre">mkiv.pos</span></tt>:</p>
+<div class="highlight-python"><pre>3            &gt; NREF (no. reference spots); must be &gt; 2
+  2.0   0.0  &gt; h_1 k_1
+220.0 120.0  &gt; x_1 y_1
+ -1.0   2.0  &gt; h_2 k_2
+160.0 320.0  &gt; x_2 y_2
+ -1.0  -1.0  &gt; h_3 k_3
+470.0 340.0  &gt; x_3 y_3</pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="notes">
+<span id="mkiv-notes"></span><h2>7.4. Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>Both <tt class="file docutils literal"><span class="pre">*.inp</span></tt> and <tt class="file docutils literal"><span class="pre">*.var</span></tt> input files contain the parameters
+in arbitrary sequence. The values are preceded by the parameter names that
+are mentioned above. If a parameter occurs more than one time, the last value
+is taken. If it doesn&#8217;t occur at all and a sensible value can be preset,
+the program takes such values. Be careful with that option because
+the program will not mention if you forget a value and it is preset by
+its own value. The used parameter values might be controlled in output
+file.</p>
+<div class="section" id="references">
+<span id="mkiv-references"></span><h3>7.4.1. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>S.Y.Tong, <em>Surface Science</em> <strong>299/300</strong> (1994) 358-374</li>
+<li>S.Y.Tong, H. Huang and X.Q.Guo, <em>Phys. Rev. Lett</em> <strong>69</strong> (1992) 3654</li>
+<li>M.A. Van Hove, W.H. Weinberg, C.M. Chan, <em>Low-Energy Electron Diffraction</em>,
+Springer Series in Surface Sciences 6, Springer Verlang 1986</li>
+<li>G.Held, S. Uremovic, C. Stellwag, D. Menzel, <em>Rev. Sci. Instrum.</em> <strong>67</strong>
+(1996) 378</li>
+</ul>
+</div>
+</div>
+<div class="section" id="caveats">
+<span id="mkiv-caveats"></span><h2>7.5. Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
+<p><tt class="code docutils literal"><span class="pre">mkiv</span></tt> currently only supports 8 or 16 bit TIFF files and relies on a
+conversion to the archaic xvimage format for the image matrix data. Work is
+currently in progress to develop a modern version using Python and Qt to allow
+easier use and flexibility.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="phsh.html" title="8. phsh"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="patt.html" title="6. patt"
+             >previous</a> |</li>
+        <li><a href="index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Georg Held, Liam Deacon &amp; collaborators.
+    </div>
+  </body>
+</html>

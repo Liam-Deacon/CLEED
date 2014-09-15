@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>csearch &mdash; CLEED 0.1.0-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/CLEED_logo.ico"/>
+    <link rel="top" title="CLEED 0.1.0-dev documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/CLEED_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">csearch</a><ul>
+<li><a class="reference internal" href="#syntax">Syntax</a><ul>
+<li><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment">Environment</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#files">Files</a><ul>
+<li><a class="reference internal" href="#input-files">Input files</a></li>
+<li><a class="reference internal" href="#output-files">Output files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="csearch">
+<span id="id1"></span><h1>csearch<a class="headerlink" href="#csearch" title="Permalink to this headline">¶</a></h1>
+<p>csearch performs the LEED model structure optimisation. It uses standard
+optimisation  algorithms such as the downhill simplex method, Powell&#8217;s method,
+simulated annealing and the genetic algorithm, which can be selected by the
+use in order to perform the search for the best fit geometry in N-dimensional
+parameter space (coordinates, angles, but not vibrational amplitudes).
+While the first two algorithms are strictly downhill-orientated, i.e. will
+find only the nearest R factor minimum, the latter two algorithms should in
+principle provide a means of locating the global R factor minimum within
+the  given constrains, at the expense of many more search steps. Within
+each search step a set of geometrical parameters is chosen by the algorithm
+depending on the R factor values achieved previously and in accordance with
+user-specified symmetry constraints. The parameters are written to a file
+serving as input for the LEED program whose output is then fed into the R factor
+program, <a class="reference internal" href="crfac.html#crfac"><em>crfac</em></a>, in order to calculate an R factor value for the current
+parameter set.</p>
+<div class="section" id="syntax">
+<span id="csearch-syntax"></span><h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">csearch</span> <span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">input_file</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">OPTIONS</span><span class="o">...</span>  <span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="options">
+<span id="csearch-options"></span><h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<p><tt class="code docutils literal"><span class="pre">-i</span> <span class="pre">&lt;input_file&gt;</span></tt></p>
+<blockquote>
+<div>Specifies the parameter input file and is the only mandatory
+option. The file contains all the  geometric  and  non-geometric
+parameters need for the surface structure. The <tt class="code docutils literal"><span class="pre">&lt;input_file&gt;</span></tt>
+filename without the extension is used as the &#8220;project name&#8221; by
+the program in order to create names for output files.</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">-d</span> <span class="pre">&lt;initial_dispacement&gt;</span></tt></p>
+<blockquote>
+<div>Specifies  the initial displacements from the start geometry for
+all parameters.</div></blockquote>
+<dl class="docutils">
+<dt><tt class="code docutils literal"><span class="pre">-s</span> <span class="pre">&lt;search_type&gt;</span></tt></dt>
+<dd>Specifies the search algorithm to be used for the structure
+optimisation. Possible arguments are:</dd>
+</dl>
+<p><tt class="code docutils literal"><span class="pre">-v</span> <span class="pre">&lt;vertex_file&gt;</span></tt></p>
+<blockquote>
+<div>Allows the search to be restarted with the current simplex, provided
+the simplex algorithm is used. The argument <tt class="code docutils literal"><span class="pre">&lt;vertex_file&gt;</span></tt>
+is the <tt class="file docutils literal"><span class="pre">*.ver</span></tt> file produced by the program.</div></blockquote>
+</div>
+</div>
+<div class="section" id="environment">
+<span id="csearch-environment"></span><h2>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_HOME</span></tt></dt>
+<dd>Parent directory of CLEED distribution.</dd>
+<dt><span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_LEED</span></tt></dt>
+<dd>Path of the program used for the LEED calculations. This
+may simply be &#8216;csearch&#8217; if the parent directory of this program is in
+the system <a href="#id2"><span class="problematic" id="id3">:envar:`PATH`</span></a> variable.</dd>
+<dt><span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CSEARCH_RFAC</span></tt></dt>
+<dd>Path of the crfac program  used  for the R factor evaluation. This may simply be &#8216;crfac&#8217;
+if the parent directory of this program is in the system <a href="#id4"><span class="problematic" id="id5">:envar:`PATH`</span></a> variable.</dd>
+<dt><span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CLEED_PHASE</span></tt></dt>
+<dd>Directory path of the phase shift files used in  the  surface and bulk models.
+Please refer to <a class="reference internal" href="../aux_programs/phsh.html#phsh"><em>phsh</em></a> for more information on generating phase shift files.</dd>
+</dl>
+<p>These  variables  can  be  set automatically by executing the &#8216;set_env&#8217; script.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="input-files">
+<h3>Input files<a class="headerlink" href="#input-files" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="file docutils literal"><span class="pre">*.inp</span></tt></dt>
+<dd>The parameter input for the surface model. See <em class="xref std std-ref">input_file</em> section
+for more information.</dd>
+<dt><tt class="file docutils literal"><span class="pre">*.bul</span></tt></dt>
+<dd>The bulk parameter file. See <em class="xref std std-ref">bulk_file</em> for more information.</dd>
+<dt><tt class="file docutils literal"><span class="pre">*.ctr</span></tt></dt>
+<dd>The  control  parameter  file for R factor evaluation. See
+<em class="xref std std-ref">control_file</em> for more information.</dd>
+</dl>
+</div>
+<div class="section" id="output-files">
+<h3>Output files<a class="headerlink" href="#output-files" title="Permalink to this headline">¶</a></h3>
+<p><tt class="file docutils literal"><span class="pre">*.bmin</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.dum</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.ver</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.par</span></tt></p>
+<p><tt class="file docutils literal"><span class="pre">*.pmin</span></tt></p>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>The .inp, .bul and .ctr files all need the same filename prefix before
+the file extension. This prefix is also used in the output filenames.</p>
+<p>Typically, 50 to 100 eV of data is needed per geometry search parameter,
+e.g. for 1 atom with 3 parameters would require 150-300eV of data.
+This  is  because  the precision (error bar) <span class="math">\(RR\)</span> depends on the energy
+range with a larger range leading to greater precision. For complex
+adsorbate structures or overlayer superstructures, more data is needed
+because there are more parameters to fit. One solution would be to go
+to higher experimental energies, however this leads to a loss of sensitivity,
+difficulties in resolving the LEED pattern (i.e. the spots are too close together),
+vastly increased CLEED calculation times due to more scattering, as
+well as beam damage to the sample. As such an alternative route would
+be to use different angles of incidence. For more information
+see <em class="xref std std-ref">caoi_leed</em>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">CLEED</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Georg Held, Liam Deacon &amp; collaborators.
+    </div>
+  </body>
+</html>
