@@ -85,7 +85,3 @@ const Coordinate Basis::getA3()
   return xyz;
 }
 
-double **Basis::calculateRotationMatrix()
-{
-  return ::normal_get_rotation_matrix(this->basis);
-}

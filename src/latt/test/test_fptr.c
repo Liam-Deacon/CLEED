@@ -11,12 +11,12 @@ typedef void (*pftr)();
 
 void print_1()
 {
-  fprint("printf\n")
+  printf("printf\n");
 }
 
 void print_2(FILE *f)
 {
-  fprintf(stdout, "fprintf\n")
+  fprintf(stdout, "fprintf\n");
 }
 
 void print(FILE *f)
@@ -26,6 +26,5 @@ void print(FILE *f)
 
 int main()
 {
-  void *print
-
+  return 0;
 }
