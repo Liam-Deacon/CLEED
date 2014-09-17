@@ -2,4 +2,4 @@
 
 Debug/
 CMakeFiles/
-build/
+build/*
