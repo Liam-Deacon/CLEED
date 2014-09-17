@@ -422,7 +422,7 @@ coord_t *lattice_get_surface_normal(const lattice_t *lat, const coord_t *a1,
 }
 
 void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2, 
-        coord_t *a3, coord_t *nor, coord_t *bas, char *bas_name, int *n_bas)
+        coord_t *a3, coord_t *nor, coord_t *bas, char *bas_name, size_t *n_bas)
 {
   
   *n_bas = 1;
@@ -591,7 +591,7 @@ miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat)
 }
 
 void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3, 
-                  coord_t *nor, coord_t *bas, char *bas_name, int *n_bas)
+                  coord_t *nor, coord_t *bas, char *bas_name, size_t *n_bas)
 {
 
   FILE *inp_stream = stdin;

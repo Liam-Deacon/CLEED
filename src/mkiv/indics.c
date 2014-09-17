@@ -8,7 +8,7 @@
 /**************************************************************************/
 
 #include "mkiv.h"
-#include "file_funcs.h"
+#include "file_functs.h"
 #include <strings.h>
 #include <ctype.h>
 
@@ -233,7 +233,7 @@ CS/23.8.93
 
 /* Neccessary conversions for plotting ( -> 1 byte = 256 colors) */
      VPRINT("conversion to 1_BYTE\n");
-     QQ lvconvert(image, VFF_TYP_1_BYTE, 1, 0, 255., 1., 0);
+     QQ lvconvert(image, 1, 1, 0, 255., 1., 0);
   
 /* Draw the mask or rinner, router and the center of the image */
      VPRINT("draw LEED-screen boundaries \n");
@@ -244,7 +244,7 @@ CS/23.8.93
      QQ system("editimage -i ima.byte -use_cmap 0 -x 490 -y 10 -update 3 &");
 
 /* Input of undesired reflexes */
-     man_inp(&nexcl,excl,verb);
+     man_inp(&nexcl, excl, verb);
 	
 /* Allocate memory for the input reference spots for the first frame */
      spot = (struct spot *)malloc( 20* sizeof(struct spot));

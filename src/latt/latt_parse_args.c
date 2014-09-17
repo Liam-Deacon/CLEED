@@ -73,19 +73,19 @@ void latt_parse_args(int argc, char *argv[], lattice_t *latt)
       /* nlayers */
       if ARG_IS("--max-layers")
 	  {
-        ARG_PARSE_INT(latt->max_layers);
+        ARG_PARSE_UINT(latt->max_layers);
 	  }
 
       /* ncells */
 	  if ARG_IS("--max-cells")
 	  {
-        ARG_PARSE_INT(latt->max_cells);
+        ARG_PARSE_UINT(latt->max_cells);
       }
 
       /* natoms */
 	  if ARG_IS("--max-atoms")
 	  {
-        ARG_PARSE_INT(latt->max_atoms);
+        ARG_PARSE_UINT(latt->max_atoms);
 	  }
 	
       /* h */

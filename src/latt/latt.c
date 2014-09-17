@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   
   int n1, n2, n3;
   
-  int n_bas=0, i_bas;
+  size_t n_bas=0, i_bas;
   size_t i_atom, j_atom;
   
   double faux_x, faux_y, faux_z, faux_len;
@@ -42,15 +42,17 @@ int main(int argc, char *argv[])
   double b1_len = 0., b2_len = 0., b3_len = 0.;
   double nor_len = 0.0;
   
-  int ind[3][3] = { {0, 0}, {0, 0}, {0, 0} };
+  double ind[3][3] = { {0., 0.}, {0., 0.}, {0., 0.} };
   miller_hkl_t miller;
   
   /* variables for print out */
   double dist_min, dist_max;
   
-  int n_max, n_atoms;
+  size_t n_max;
   int i_pass;
   
+  size_t n_atoms;
+
   FILE *out_stream;
   
   lattice_t *lat = lattice_init(1);
@@ -237,7 +239,7 @@ int main(int argc, char *argv[])
   coord_set(b3, 0., 0., -(lat->max_disp_z) * lat->a_nn); /* -10. * a_nn; */
   b3_len = COORD_MAGNITUDE(b3);
 
-  n_max = (int) lat->max_disp_z * 2; /* n_max = 20; */
+  n_max = lat->max_disp_z * 2; /* n_max = 20; */
 
   #if (DEBUG == 1)
   lattice_debug(lat);
@@ -435,20 +437,20 @@ int main(int argc, char *argv[])
   
 
   fprintf(inf_stream, "\n Final vectors:\n");
-  fprintf(inf_stream, " b1 = (%7.3f; %7.3f; %7.3f): [%d; %d; %d]\n", 
+  fprintf(inf_stream, " b1 = (%7.3f; %7.3f; %7.3f): [%3.3f; 3.3%f; 3.3%f]\n",
                       b1->x, b1->y, b1->z, ind[0][0], ind[0][1], ind[0][2]);
-  fprintf(inf_stream, " b2 = (%7.3f; %7.3f; %7.3f): [%d; %d; %d]\n", 
+  fprintf(inf_stream, " b2 = (%7.3f; %7.3f; %7.3f): [%3.3f; 3.3%f; 3.3%f]\n",
                       b2->x, b2->y, b2->z, ind[1][0], ind[1][1], ind[1][2]);
-  fprintf(inf_stream, " b3 = (%7.3f; %7.3f; %7.3f): [%d; %d; %d]\n", 
+  fprintf(inf_stream, " b3 = (%7.3f; %7.3f; %7.3f): [%3.3f; 3.3%f; 3.3%f]\n",
                       b3->x, b3->y, b3->z, ind[2][0], ind[2][1], ind[2][2]);
   fprintf(inf_stream, " Basis:\n" );
   
   fprintf(ctr_stream, "\n Final vectors:\n");
-  fprintf(ctr_stream, " b1 = (%7.3f; %7.3f; %7.3f): [%d; %d; %d]\n", 
+  fprintf(ctr_stream, " b1 = (%7.3f; %7.3f; %7.3f): [%3.3f; 3.3%f; 3.3%f]\n",
                       b1->x, b1->y, b1->z, ind[0][0], ind[0][1], ind[0][2]);
-  fprintf(ctr_stream, " b2 = (%7.3f; %7.3f; %7.3f): [%d; %d; %d]\n", 
+  fprintf(ctr_stream, " b2 = (%7.3f; %7.3f; %7.3f): [%3.3f; %3.3f; %3.3f]\n",
                       b2->x, b2->y, b2->z, ind[1][0], ind[1][1], ind[1][2]);
-  fprintf(ctr_stream, " b3 = (%7.3f; %7.3f; %7.3f): [%d; %d; %d]\n", 
+  fprintf(ctr_stream, " b3 = (%7.3f; %7.3f; %7.3f): [%3.3f; %3.3f; %3.3f]\n",
                       b3->x, b3->y, b3->z, ind[2][0], ind[2][1], ind[2][2]);
   
   fprintf(ctr_stream, " Basis:\n" );
@@ -482,7 +484,7 @@ int main(int argc, char *argv[])
 /* cycle through layers */
   if (lat->max_layers == 0) 
   {
-    lat->max_layers = (int)( rint (-3. * lat->a_nn / (b3->z) ) );
+    lat->max_layers = ( rint (-3. * lat->a_nn / (b3->z) ) );
   }
 
   faux->x = lat->image_len / b1->x;

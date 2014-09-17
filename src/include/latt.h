@@ -60,6 +60,7 @@ Changes:
 #define ARG_ISH(x,y) (strncmp(argv[i_arg], x, y) == 0)
 #endif
 
+
 #ifdef DEBUG
 
 #define ARG_PARSE_FLOAT(x)                                                  \
@@ -83,11 +84,32 @@ else                                                                        \
   exit(INVALID_ARGUMENT_ERROR);                                             \
 }
 
-#define ARG_PARSE_INT(x)                                                  \
+#define ARG_PARSE_INT(x)                                                    \
 if (i_arg < argc)                                                           \
 {                                                                           \
   i_arg++;                                                                  \
-  x = (int) atoi(argv[i_arg]);                                            \
+  x = (int) atoi(argv[i_arg]);                                              \
+  continue;                                                                 \
+}                                                                           \
+else                                                                        \
+{                                                                           \
+  fprintf(stderr, "*** error (latt): invalid argument '%s' for '%s'\n",     \
+          argv[i_arg], argv[i_arg-1]);                                      \
+  fprintf(stderr, "debug info: argc = %i; i_arg = %i\n", argc, i_arg);      \
+  fprintf(stderr, "\n"                                                      \
+          "===========================================================\n"   \
+          "i\t|\targv[i]\n"                                                 \
+          "-----------------------------------------------------------\n"); \
+  for (i_arg = 1; i_arg < argc; i_arg++)                                    \
+    fprintf(stderr, "%i\t|\t%s\n", i_arg, argv[i_arg]);                     \
+  exit(INVALID_ARGUMENT_ERROR);                                             \
+}
+
+#define ARG_PARSE_UINT(x)                                                   \
+if (i_arg < argc)                                                           \
+{                                                                           \
+  i_arg++;                                                                  \
+  x = (size_t) atoi(argv[i_arg]);                                           \
   continue;                                                                 \
 }                                                                           \
 else                                                                        \
@@ -121,11 +143,11 @@ else                                                                        \
   exit(INVALID_ARGUMENT_ERROR);                                             \
 }
 
-#define ARG_PARSE_INT(x)                                                  \
+#define ARG_PARSE_INT(x)                                                    \
 if (i_arg < argc)                                                           \
 {                                                                           \
   i_arg++;                                                                  \
-  x = (int) atoi(argv[i_arg]);                                            \
+  x = atoi(argv[i_arg]);                                     	            \
   continue;                                                                 \
 }                                                                           \
 else                                                                        \
@@ -135,6 +157,22 @@ else                                                                        \
   exit(INVALID_ARGUMENT_ERROR);                                             \
 }
 
-#endif
+
+#define ARG_PARSE_UINT(x)                                                   \
+if (i_arg < argc)                                                           \
+{                                                                           \
+  i_arg++;                                                                  \
+  x = (size_t) atoi(argv[i_arg]);                                     	    \
+  continue;                                                                 \
+}                                                                           \
+else                                                                        \
+{                                                                           \
+  fprintf(stderr, "*** error (latt): invalid argument for '%s'\n",          \
+          argv[i_arg-1]);                                                   \
+  exit(INVALID_ARGUMENT_ERROR);                                             \
+}
+
+
+#endif /* DEBUG */
                                         
 #endif /* _LATT_H */
