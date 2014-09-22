@@ -21,9 +21,9 @@ Changes:
 Intensity data as there can be no negative intensities
 NOTE: mkiv often produces negative data
  */
-int rm_neg_data(double *x, double *fx, int n_x)
+size_t rm_neg_data(double *x, double *fx, size_t n_x)
 {
-  int ix, it, n_t, N;
+  size_t ix, it, n_t, N;
   double *trim_x, *trim_fx;
   
   n_t = n_x;

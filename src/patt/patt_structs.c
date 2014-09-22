@@ -1,6 +1,6 @@
 #include "patt.h"
 
-struct _matrix_2x2
+typedef struct _matrix_2x2
 {
   double M11;
   double M12;
@@ -9,7 +9,7 @@ struct _matrix_2x2
 
 } matrix_default = {0., 0., 0., 0.};
 
-typedef _matrix_2x2 matrix_2x2;
+typedef struct _matrix_2x2 matrix_2x2_t;
 
 struct _vector_xy
 {
@@ -17,17 +17,15 @@ struct _vector_xy
   double y;
 } xy_vector_default = {0., 0.};
 
-typedef _vector_xy vector_xy;
+typedef struct _vector_xy vector_xy_t;
 
-struct _pattern
+typedef struct pattern
 {
   char *title;
-  vector_xy a1;
-  vector_xy a2;
-  matrix_2x2 M_GS;
-  matrix_2x2 *M_SS;
+  vector_xy_t a1;
+  vector_xy_t a2;
+  matrix_2x2_t M_GS;
+  matrix_2x2_t *M_SS;
   size_t n_domains;
   double radius;
-};
-
-typedef _pattern pattern;
+} pattern_t;

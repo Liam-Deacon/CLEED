@@ -248,10 +248,10 @@ class Pattern {
     void setBasisVectorA2(double x, double y);
     int setNumberOfDomains(std::size_t ndom);
     void setRadius(double radius);
-    void setSuperStructureMatrix(Matrix_2x2 mat, std::size_t domain);
+    void setSuperStructureMatrix(Matrix2x2 mat, std::size_t domain);
     void setSquare(bool isSquare);
     
-    const string getTitle();
+    const std::string getTitle();
     size_t getNumberOfDomains();
     double getRadius();
     const std::list<double> getBasisVectorA1();

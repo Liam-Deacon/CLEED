@@ -58,7 +58,7 @@ pattern_t *pattern_alloc(size_t n_domains)
     pat->M_SS = NULL;
   }
   pat->n_domains = n_domains;
-  return pat;
+  return(pat);
 }
 
 pattern_t *pattern_init(size_t n_domains)
@@ -82,18 +82,22 @@ pattern_t *pattern_init(size_t n_domains)
   pat->a2.x = 0.;
   pat->a2.y = 0.;
   
-  return pat;
+  return(pat);
 }
 
 void pattern_free(pattern_t *pat)
 {
-  free(pat->title);
-  free(pat->M_SS);
+  if (pat->title != NULL)
+  {
+	free(pat->title);
+  }
+  if (pat->M_SS != NULL) free(pat->M_SS);
   free(pat);
+  pat = NULL;
 }
 
 double pattern_get_radius(pattern_t *pat)
-{ return pat->radius;}
+{ return(pat->radius);}
 
 void pattern_set_a1(pattern_t *pat, basis_vector_t *a1)
 { pat->a1.x = a1->x; pat->a1.y = a1->y;}
@@ -108,7 +112,7 @@ int pattern_set_max_domains(pattern_t *pat, size_t n_domains)
 { 
   char *str = pat->title;
   pattern_t *t = pat;
-  int tmp;
+  pattern_t *tmp;
   
   if (n_domains > pat->n_domains) /* grow the number of elements */
   {
@@ -121,27 +125,27 @@ int pattern_set_max_domains(pattern_t *pat, size_t n_domains)
     else
     {
       pat->M_SS = temp;
-      return -3;
+      return(-3);
     }
     
-    tmp = realloc(pat, sizeof(pattern_t) + n_domains*sizeof(matrix_2x2_t));
+    tmp = realloc(pat, sizeof(pattern_t) + (n_domains*sizeof(matrix_2x2_t)));
     if (tmp == NULL)
     {
       pat = t;
-      return -2;
+      return(-2);
     }
     
     pat->title = str;
     
-    return 0;
+    return(0);
   } else {
-    return 0;
+    return(0);
   }
-  return -1;
+  return(-1);
 }
 
 size_t pattern_get_n_domains(pattern_t *pat)
-{ return pat->n_domains;}
+{ return(pat->n_domains);}
 
 void pattern_set_title(pattern_t *pat, char *title)
 {
@@ -151,7 +155,7 @@ void pattern_set_title(pattern_t *pat, char *title)
 }
 
 const char *pattern_get_title(pattern_t *pat)
-{ return pat->title;}
+{ return(pat->title);}
 
 pattern_t *pattern_read(FILE *file)
 {
@@ -244,6 +248,7 @@ pattern_t *pattern_read(FILE *file)
   sscanf(line_buffer, "%u", &n_dom);
 
   /* allocate memory for pattern */
+  pat = pattern_init(n_dom);
   err = pattern_set_max_domains(pat, n_dom); 
   if (err)
   {
@@ -351,7 +356,7 @@ pattern_t *pattern_read(FILE *file)
     
   } /* i_dom */
   
-  return pat;
+  return(pat);
 }
 
 void pattern_printf(FILE *stream, pattern_t *pat)
@@ -384,13 +389,13 @@ void pattern_set_superstructure_matrix(pattern_t *pat,
 
 const matrix_2x2_t *get_superstructure_matrix(const pattern_t *pat, size_t domain)
 {
-  if (domain < pat->n_domains) return &pat->M_SS[domain]; 
-  else return NULL;
+  if (domain < pat->n_domains) return(&pat->M_SS[domain]);
+  else return(NULL);
 }
 
 bool pattern_domain_is_commensurate(const pattern_t *pat, size_t domain)
 {
-  if (domain > pat->n_domains) return false;
+  if (domain > pat->n_domains) return(false);
   else
   {
     double m11, m12, m21, m22;
@@ -398,10 +403,10 @@ bool pattern_domain_is_commensurate(const pattern_t *pat, size_t domain)
     m12 = pat->M_SS[domain].M12;
     m21 = pat->M_SS[domain].M21;
     m22 = pat->M_SS[domain].M22;
-    return !( ( fabs(m11) - (int)(fabs(m11)+0.1) > 0.05) || 
+    return(!( ( fabs(m11) - (int)(fabs(m11)+0.1) > 0.05) ||
               ( fabs(m12) - (int)(fabs(m12)+0.1) > 0.05) || 
               ( fabs(m21) - (int)(fabs(m21)+0.1) > 0.05) || 
-              ( fabs(m22) - (int)(fabs(m22)+0.1) > 0.05) );
+              ( fabs(m22) - (int)(fabs(m22)+0.1) > 0.05) ));
   }
 }
 
@@ -487,7 +492,7 @@ spots_t *pattern_calculate_substrate_spots(const pattern_t *pat)
     }
   }
   
-  return spots;
+  return(spots);
   
 }
 
@@ -498,23 +503,19 @@ spots_t *calculate_superstructure_spots(const pattern_t *pat, size_t domain)
   double b1[2], b2[2];                /* superstructure basis vectors */
   double xi, yi;
   double x=0, y=0;
-  double aux1, aux2;
+  double aux1;
   float det;                          /* Det of SS-matrix */
-  int det_int;                        /* Det of SS-matrix */
   int smax_1, smax_2;
   double ind_1, ind_2;                /* SS index */
-  double ind_1_int, ind_2_int;        /* SS index */
   double m11, m12, m21, m22;
   double radius = pat->radius;
   double spot_radius = SPOT_GS;
   bool commensurate;
   
   int h, k, h_max, k_max;
-  int s1, s2, s_max1, s_max2;
+  int s1, s2;
   size_t i_spot = 0, n_spots = 0;
-  
-  int imax_1, imax_2;
-  
+
   bool rs_flag = false;
 
   if (domain > pat->n_domains) 
@@ -592,6 +593,9 @@ spots_t *calculate_superstructure_spots(const pattern_t *pat, size_t domain)
     }
   }
   
+  /* initialise spots */
+  spots = spots_init(n_spots);
+
   if (!commensurate)
   {
   
@@ -677,11 +681,11 @@ spots_t *calculate_superstructure_spots(const pattern_t *pat, size_t domain)
   else printf("commensurate\n");
   #endif
   
-  return spots;
+  return(spots);
   
 }
 
 bool pattern_is_square(const pattern_t *pat)
 {
-  return pat->square;
+  return(pat->square);
 }

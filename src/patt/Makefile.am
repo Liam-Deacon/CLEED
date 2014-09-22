@@ -3,4 +3,5 @@
 
 bin_PROGRAMS = patt
 
-patt_SOURCES = patt.c patt_help.c
+patt_SOURCES =              \
+	patt.c patt_help.c

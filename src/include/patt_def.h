@@ -20,6 +20,7 @@ extern "C" {
 #include "spots.h"
 #include "coord.h"
 #include "patt_colors.h"
+#include "pattern.h"
 
 #ifndef STRSZ
   #define STRSZ 128
@@ -48,6 +49,18 @@ typedef enum {
   PATT_UNKNOWN_SCHEME
 } patt_color_scheme_t;
 
+typedef enum {
+  PATT_SUCCESS=0,
+  PATT_READ_ERROR,
+  PATT_WRITE_ERROR,
+  PATT_COLOR_ERROR,
+  PATT_FORMAT_ERROR,
+  PATT_ALLOC_ERROR,
+  PATT_DEALLOC_ERROR,
+  PATT_SHAPE_ERROR,
+  PATT_UNKNOWN_ERROR
+} patt_error_t;
+
 /*! \def OFF_H
  *  \brief Height offset for drawing.
  */
@@ -63,6 +76,8 @@ typedef enum {
 #define MAX_RADIUS 200.
 
 #define MAX_INPUT_FILES 6
+
+#define MAX_DOMAINS 128
 
 #define GREY_GS    0.
 
@@ -112,7 +127,7 @@ typedef struct text_t
   double y;
   double size;
   bool visible;
-  int color;
+  patt_color_rgb_t color;
 } text_t;
 extern text_t text_default;
 
@@ -143,7 +158,7 @@ typedef struct vector_t
   double y1;
   double x2;
   double y2;
-  int color;
+  patt_color_rgb_t color;
   double linewidth;
   double head_size;
 } vector_t;
@@ -157,7 +172,9 @@ typedef struct drawing_t
   text_t legend[MAX_INPUT_FILES];
   gun_t gun;
   screen_t screen;
-  int color;
+  patt_color_scheme_t color_scheme;
+  patt_format_t format;
+  spots_t spots[2];
   int energy;
   bool show_overlap;
   bool show_vectors;

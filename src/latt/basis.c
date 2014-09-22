@@ -31,7 +31,8 @@ basis_t *basis_init_vectors(const coord_t *a1,
 
 void basis_free(basis_t *basis)
 {
-  free(basis);
+  if (basis != NULL)
+    free(basis);
   basis = NULL;
 }
 

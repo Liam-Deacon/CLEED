@@ -6,6 +6,7 @@ ZZ/03.03.08
      makes .ctr file for each angle of incidence
 
 Changes:
+  LD/18.09.2014 - changed lengthctr, ictr and num to type size_t from int
 
 *********************************************************************/
 
@@ -23,54 +24,52 @@ int ctrinp(char *filectr)
 
   FILE *fpf;
   FILE *fp;
-  int lenghtctr;
-  int ictr;
-  int num;
+  size_t lenghtctr = 0;
+  size_t ictr;
+  size_t num;
 
   strncpy(stringctr, filectr, STRSIZE);
 
   if ((fp = fopen(filectr,"r")) == NULL)
   {
-#ifdef ERROR
-    fprintf(STDERR,
-      "*** error (caoi_rfac_ctr): could not open output file \"%s\"\n",
-      filectr);
-#endif
+	#ifdef ERROR
+      fprintf(STDERR, "*** error (caoi_rfac_ctr): "
+    		  "could not open output file \"%s\"\n", filectr);
+	#endif
     exit(1);
   }
 
-  lenghtctr = strlen(filectr)-4;
+  if (strlen(filectr) > 3) lenghtctr = strlen(filectr) - 4;
 
 /*****************************************************************************
  For N-th  angle pair makes ....ia_N.ctr
 ******************************************************************************/
 
-  for (ictr=0; ictr<sa; ictr++)
+  for (ictr = 0; ictr < sa; ictr++)
   {
     rewind(fp);
     strncpy(stringctr, filectr ,STRSIZE);
-    sprintf(stringctr+lenghtctr,"ia_%d.ctr",ictr+1 );   
+    sprintf(stringctr+lenghtctr, "ia_%u.ctr", ictr+1);
 
     if ((fpf=fopen(stringctr,"w")) == NULL)
     {
-#ifdef ERROR
-      fprintf(STDERR,
-      "*** error (caoi_rfac_ctr): could not open output file \"%s\"\n",
-      stringctr);
-#endif
-     exit(1);
+	  #ifdef ERROR
+    	fprintf(STDERR, "*** error (caoi_rfac_ctr): "
+    			"could not open output file \"%s\"\n", stringctr);
+	  #endif
+      exit(1);
     }
 
     while (fgets(stringctr, STRSIZE, fp))
     {
-      if (!strncasecmp(stringctr,"ia:",3))
+      if (!strncasecmp(stringctr, "ia:", 3))
         {
-          sscanf(stringctr+3," %d ",&num);
+          sscanf(stringctr+3, " %u ", &num);
 
           if ((ictr+1) == num)
           {
-            sscanf(stringctr+3," %d %s",&num,workstr);
-            fprintf(fpf,"%s\n",workstr); 
+            sscanf(stringctr+3, " %u %s", &num,workstr);
+            fprintf(fpf, "%s\n", workstr);
           }
 
         }

@@ -17,13 +17,13 @@ Changes:
 *					Fourier Transformation						*
 *****************************************************************/
 /* This subroutine performs the Fourier smoothing of the data */
-int ftsmooth(FILE *out_stream, double *x, double *fx, int n_x, 
+int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
 	  double cutoff, double tailoff, int stdout_flag)
 {
 
-  int i_x;
-  int i_k, n_k;
-  int N;
+  size_t i_x;
+  size_t i_k, n_k;
+  size_t N;
 
   double *k, *fk_s, *fk_c; 
 
@@ -68,14 +68,15 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, int n_x,
 /* parameters for k */
 
   faux = cutoff * (1. + 3. / sqrt(tailoff) );    /* (empirical) */
-  n_k  = (int) rint(n_x * 1.5 * faux) + 1;
+  n_k  = (n_x*(size_t)rint(1.5 * faux)) + 1;
 
-  fprintf(out_stream,"# cutoff: %.3f, tailoff: %.3f => k range: %.3f\n",
+  fprintf(out_stream, "# cutoff: %.3f, tailoff: %.3f => k range: %.3f\n",
 			   cutoff, tailoff, faux);
   if (!stdout_flag)
+  {
     printf("#> cutoff: %.3f, tailoff: %.3f => k range: %.3f\n",
             cutoff, tailoff, faux);
-
+  }
   k_step = PI/x_max;
   k_max  = 1.5 * n_x * PI / x_max;
 
@@ -85,9 +86,10 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, int n_x,
 
 /* initialize k and fk_s/c */
 
-  N = (n_k-(n_k%STRSZ))*2; /* use blocks of 128^i */
-  if(N<=0) N=STRSZ;
-  k =  (double *) malloc (N * sizeof(double) );
+  N = (n_k-(n_k % STRSZ))*2; /* use blocks of 128^i */
+  if(N <= 0) N = STRSZ;
+
+  k = (double *) malloc (N * sizeof(double) );
   fk_s = (double *) malloc (N * sizeof(double) );
   fk_c = (double *) malloc (N * sizeof(double) );
 

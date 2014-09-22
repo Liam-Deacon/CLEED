@@ -20,6 +20,7 @@ ftsmooth_la_SOURCES =                       \
     ftsmooth_debug.c                        \
     ftsmooth_help.c                         \
     ftsmooth_parse_args.c                   \
+    ftsmooth_main.c                         \
     offset_data.c                           \
     print_data.c                            \
     read_data.c                             \

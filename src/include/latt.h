@@ -25,10 +25,10 @@ Changes:
 #define PROG "latt"
 #define PROG_COPYRIGHT "Copyright (C) 1994-2014 Georg Held\n" \
 "Copyright (C) 2013-2014 Liam Deacon"
-#define PROG_LICENSE ""
-#define PROG_VERSION "-- "
+#define PROG_LICENSE "GPL v3.0"
+#define PROG_VERSION "Debug"
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
-#define PROG_MAINTAINER " <>" 
+#define PROG_MAINTAINER "Liam Deacon (liam.deacon@diamond.ac.uk)"
 #define PROG_SHORTDESC "Lattice generator"
 
 /* platform information */

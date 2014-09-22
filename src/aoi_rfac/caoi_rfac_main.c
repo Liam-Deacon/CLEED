@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
 
 {
 
-  int i;
+  size_t i;
   int i_arg;
-  int length;
+  size_t length = 0;
   int iaux;
   char linebuffer[STRSIZE];
   char string[STRSIZE];
@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
   m_rfac_shift_range = -10.;
   p_rfac_shift_range =  10.;
   rfac_shift_step = 0.5;
-  strncpy(rfac_type,"rp", STRSIZE);
-  strncpy(res_file,"---", STRSIZE);
-  strncpy(ctr_file,"---", STRSIZE);
+  strncpy(rfac_type, "rp", STRSIZE);
+  strncpy(res_file, "---", STRSIZE);
+  strncpy(ctr_file, "---", STRSIZE);
   iaux = 0;
 /*********************************************************************
   Decode arguments:
@@ -68,8 +68,8 @@ int main(int argc, char *argv[])
   if (argc < 2) 
   {
       #ifdef ERROR
-      fprintf(STDERR,"*** error (caoi_rfac_main): syntax error\n");
-      usage(STDERR);
+	  	fprintf(STDERR, "*** error (caoi_rfac_main): syntax error\n");
+	  	usage(STDERR);
       #endif
       exit(1);
   }
@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
     if(*argv[i_arg] != '-')
     {
       #ifdef ERROR
-      fprintf(STDERR,"*** error (caoi_rfac_main):\tsyntax error:\n");
-      fprintf(STDERR,"\tusage: \tcaoi_rfac -t <res_file> -c <ctr_file>");
+    	fprintf(STDERR, "*** error (caoi_rfac_main):\tsyntax error:\n");
+    	fprintf(STDERR, "\tusage: \tcaoi_rfac -t <res_file> -c <ctr_file>");
       #endif
       exit(1);
     }
@@ -124,7 +124,8 @@ int main(int argc, char *argv[])
       {
         i_arg++;
 	
-        sscanf(argv[i_arg],"%f,%f,%f", &m_rfac_shift_range, &p_rfac_shift_range, &rfac_shift_step);
+        sscanf(argv[i_arg], "%f,%f,%f", &m_rfac_shift_range,
+        		&p_rfac_shift_range, &rfac_shift_step);
 	
       } /* -s */
       
@@ -157,8 +158,8 @@ int main(int argc, char *argv[])
   if(strncmp(res_file, "---", 3) == 0)
   {
     #ifdef ERROR
-    fprintf(STDERR,
-        "*** error (caoi_rfac_main): no .res file (option -t) specified\n");
+	  fprintf(STDERR, "*** error (caoi_rfac_main):"
+			  " no .res file (option -t) specified\n");
     #endif
     exit(1);
   }
@@ -166,8 +167,8 @@ int main(int argc, char *argv[])
   if(strncmp(ctr_file, "---", 3) == 0)
   {
     #ifdef ERROR
-    fprintf(STDERR,
-        "*** error (caoi_rfac_main): no .ctr file (option -t) specified\n");
+	  fprintf(STDERR, "*** error (caoi_rfac_main): "
+			  "no .ctr file (option -t) specified\n");
     #endif
     exit(1);
   }
@@ -176,28 +177,29 @@ int main(int argc, char *argv[])
 /***********************************************************************
  Read sa value from the .bul file 
 ************************************************************************/
-
-  length = strlen(ctr_file) - 4;        /* assume 3 char file extension */
-  strncpy(proj_name,ctr_file,length);
-  strncpy(string,ctr_file,length);
-  sprintf(string+length,".bul");
+  if (strlen(ctr_file) > 3)
+  {
+	length = strlen(ctr_file) - 4;     /* assume 3 char file extension */
+  }
+  strncpy(proj_name, ctr_file, length);
+  strncpy(string, ctr_file, length);
+  sprintf(string+length, ".bul");
 
 
   if ((fp = fopen(string,"r")) == NULL)
   {
     #ifdef ERROR
-    fprintf(STDERR,
-      "*** error (caoi_rfac_main): could not open output file \"%s\"\n",
-      string);
+	  fprintf(STDERR, "*** error (caoi_rfac_main): "
+			  "could not open output file \"%s\"\n", string);
     #endif
     exit(1);
   }
 
-  while (fgets(linebuffer,STRSIZE,fp))
+  while (fgets(linebuffer, STRSIZE, fp))
   {
-    if (!strncasecmp(linebuffer,"sa:",3)) 
+    if (!strncasecmp(linebuffer, "sa:", 3))
     {
-      iaux = sscanf(linebuffer+3," %d",&sa);
+      iaux = sscanf(linebuffer+3, " %u", &sa);
     }
   }  /*while*/
 
@@ -205,14 +207,14 @@ int main(int argc, char *argv[])
 
 /************ Makes .ctr file for each angle **********/
 
-  strncpy(string,ctr_file,length);
-  sprintf(string+length,".ctr");
+  strncpy(string, ctr_file,length);
+  sprintf(string+length, ".ctr");
   ctrinp(string);
 
 /********** Calls rfac progam sa times ********************/
 
 
-  for (i=0;i<sa;i++)
+  for (i=0; i<sa; i++)
   {
 
     strncpy(string,proj_name,STRSIZE);
@@ -245,17 +247,16 @@ int main(int argc, char *argv[])
   averfac=0;
   sum=0;
 
-  for (i=0;i<sa;i++)
+  for (i=0; i<sa; i++)
   {
-    strncpy(string,proj_name,STRSIZE);
-    sprintf(string+length,"ia_%d.dum",i+1);
+    strncpy(string, proj_name, STRSIZE);
+    sprintf(string+length, "ia_%d.dum", i+1);
 
     if ((fpp = fopen(string,"r")) == NULL)
     {
       #ifdef ERROR
-      fprintf(STDERR,
-        "*** error (caoi_rfac_main): could not open output file \"%s\"\n",
-        string);
+    	fprintf(STDERR, "*** error (caoi_rfac_main): "
+    			"could not open output file \"%s\"\n", string);
       #endif
       exit(1);
     }
@@ -263,7 +264,7 @@ int main(int argc, char *argv[])
     while (fgets(linebuffer,STRSIZE,fpp)!= NULL)
     {
       iaux = sscanf(linebuffer, 
-                    "%f %f %f %f", &rfac, &faux, &shift , &enrange);
+                    "%f %f %f %f", &rfac, &faux, &shift, &enrange);
     }  /*while*/
 
 
@@ -277,7 +278,7 @@ int main(int argc, char *argv[])
   } /*for*/
 
 
-  avershift = (avershift/sa);
+  avershift = (avershift/(float)sa);
   averfac = (averfac/sum);
   averenr = (sum);
   sterror = sqrtf(1/sum1);

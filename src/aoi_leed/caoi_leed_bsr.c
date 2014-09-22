@@ -19,48 +19,50 @@ Changes:
 void bsrinp (char *filebsr, int number)
 {
   int i_ang;
-  int length;
   int num;
+  size_t length = 0;
 
- float ip, it;
+  float ip, it;
 
- char linebuffer[STRSIZE];
- char helpstring[STRSIZE];
+  char linebuffer[STRSIZE];
+  char helpstring[STRSIZE];
 
- FILE *readstream;
- FILE *writestream;
+  FILE *readstream;
+  FILE *writestream;
 
- printf("*** sa: %d ***\n", number);
- fprintf(STDERR,
-    "***%s***\n", filebsr);
+  printf("*** sa: %d ***\n", number);
+
+  #ifdef DEBUG
+    fprintf(STDERR, "***%s***\n", filebsr);
+  #endif
+
 /***********************************************************************
  Open .bsr file for reading
 ***********************************************************************/
 
 
- if ((readstream = fopen (filebsr, "r")) == NULL)
-   {
+  if ((readstream = fopen (filebsr, "r")) == NULL)
+  {
     #ifdef ERROR
-    fprintf(STDERR,
-    "*** error (caoi_leed_bsr): can not open file %s\n", filebsr);
+      fprintf(STDERR, "*** error (caoi_leed_bsr): can not open file %s\n",
+              filebsr);
     #endif
     exit(1);
-   }
+  }
 
 
 /***********************************************************************
  Makes sa ia_i.bsr files for each angle of incidence
 ***********************************************************************/
 
- length = strlen(filebsr) - 4;
- fprintf(STDERR,
-    "***length = %d***\n", length);
-
+  if (strlen(filebsr) > 4) length = strlen(filebsr) - 4;
+  #ifdef DEBUG
+    fprintf(STDERR, "***length = %d***\n", length);
+  #endif
 
   for (i_ang = 0; i_ang < number; i_ang ++)
   {
-    fprintf(STDERR,
-        "*** i_ang: %d ***\n", i_ang);
+    fprintf(STDERR, "*** i_ang: %d ***\n", i_ang);
     rewind(readstream);
     strncpy(linebuffer, filebsr, length);
     fprintf(STDERR, "***%s***\n", linebuffer);

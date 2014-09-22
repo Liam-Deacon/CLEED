@@ -14,13 +14,15 @@ extern "C" {
 
 char *fget_nocomm(char *buffer, FILE *in_stream, FILE *out_stream);
 
+int decode_vectors(int spot_type, bool *do_vectors, char *argv,
+                   size_t str_length);
+
 int ps_print_substitute(FILE *output, char *str);
 
 void ps_add_vectors(FILE *out_stream);
 
-int decode_vectors(int spot_type, int *do_vectors, char *argv, int str_length);
-
-char *ps_color(int colour_flag, int ifile, int nfiles, int spot_type, int i_dom);
+char *ps_color(int colour_flag, int ifile, int nfiles,
+               int spot_type, int i_dom);
 
 int ps_draw_finalize(FILE *out_stream, int gun_flag, float gun_thickness,
 	float gun_radians, float screen_thickness, int screen_flag,
@@ -43,19 +45,20 @@ int ps_draw_screen(FILE *out_stream, float edge_thickness, int fill);
 int ps_draw_spot(FILE *out_stream, float x, float y,
 	float spot_size, int shape, char *colour, char *fill);
 
-int ps_draw_vectors(FILE *out_stream, int i_dom, int ii, char *colour, float *a1, float *a2,
-		float spot_radius, char dummystr[][STRSZ], int spot, char *vectors_str);	
+int ps_draw_vectors(FILE *out_stream, int i_dom, int ii, char *colour,
+                    float *a1, float *a2, float spot_radius,
+                    char dummystr[][STRSZ], int spot, char *vectors_str);
 	
 void ps_set_linewidth(FILE* file, double width);
     
-int nice_frac(int *zahler, int *nenner);
+int nice_frac(int *numerator, int *denominator);
 
 int magick_ps2png(char *filename_in, char *filename_out);
 
 
 /* patt specific functions */
-int parse_patt_args(int argc, char *argv[], drawing_t *drawing, 
-                    int *format, char *output_filename);
+int patt_args(int argc, char *argv[], drawing_t *drawing, char *output_filename);
+int patt_draw(FILE *out_stream, const drawing_t *drawing);
 void patt_usage(FILE *output);
 void patt_info();
                     

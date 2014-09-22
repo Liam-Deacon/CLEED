@@ -1,34 +1,34 @@
 /*========================================================================*/
 
-int nice_frac(int *zahler, int *nenner)
+int nice_frac(int *numerator, int *denominator)
 
 /*
  make nicer fractions
  return values:
  0: zero
- 1: interger number;
+ 1: integer number;
  2: fraction;
 */
 
 {
 int i, ggt, number;
 
- if (*zahler == 0)
+ if (*numerator == 0)
  return (0);
 
- if (*nenner < 0) number = - *nenner/2;
- else             number =   *nenner/2;
+ if (*denominator < 0) number = - *denominator/2;
+ else             number =   *denominator/2;
  
  for (ggt = 1, i = 2; i <= number; i++)
  {
-  if( (*zahler % i == 0 ) && (*nenner % i == 0) ) ggt = i;
+  if( (*numerator % i == 0 ) && (*denominator % i == 0) ) ggt = i;
  }
- *zahler /= ggt;
- *nenner /= ggt;
+ *numerator /= ggt;
+ *denominator /= ggt;
 
- if (*zahler % *nenner == 0)
+ if (*numerator % *denominator == 0)
  {
-  *zahler /= *nenner;
+  *numerator /= *denominator;
   return(1);
  }
  else

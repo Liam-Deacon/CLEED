@@ -28,9 +28,9 @@ extern "C" {
 #include <MagickWand>
 #endif
 
-#include <patt_ver.h>
-#include <patt_def.h>
-#include <patt_func.h>
+#include "patt_ver.h"
+#include "patt_def.h"
+#include "patt_func.h"
 
 #endif /* _PATT_H */
 

@@ -5,13 +5,14 @@ include file for angle of incidence additions
  - type definitions
  - constant values
 *********************************************************************/
+#ifndef RFAC_AOI_H
+#define RFAC_AOI_H
+
+#include <string.h>
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
-
-#ifndef RFAC_AOI_H
-#define RFAC_AOI_H
 
 #ifndef STRSIZE
 #define STRSIZE 256
@@ -48,15 +49,17 @@ extern "C" {
 /*********************************************************************
 include global values for multiple datasets
 *********************************************************************/
-int sa;
-int ctrinp (char filectr[STRSIZE]);
-char proj_name[STRSIZE];
+size_t sa;	  /*! global memory variable for number of aoi datasets */
+int ctrinp(char filectr[STRSIZE]);
+char proj_name[STRSIZE]; /* global memory variable for storing
+													   project name */
+
 
 /*********************************************************************
 END
 *********************************************************************/
-#endif /* RFAC_AOI_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* RFAC_AOI_H */

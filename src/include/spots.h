@@ -165,9 +165,9 @@ void spots_set_radius(spots_t *spots, double radius);
 void spots_set_visible(spots_t *spots, bool visible);
 void spots_set_indexing(spots_t *spots, bool indexing);
 
-patt_color_rgb_t *spots_get_color(const spots_t *spots);
-patt_shape_t *spots_get_shape(const spots_t *spots);
-patt_stroke_t *spots_get_stroke_style(const spots_t *spots);
+patt_color_rgb_t spots_get_color(const spots_t *spots);
+patt_shape_t spots_get_shape(const spots_t *spots);
+patt_stroke_t spots_get_stroke_style(const spots_t *spots);
 bool spots_get_fill(const spots_t *spots); 
 bool spots_get_visible(const spots_t *spots);
 double spots_get_stroke_width(const spots_t *spots);

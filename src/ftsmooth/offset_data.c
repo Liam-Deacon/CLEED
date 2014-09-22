@@ -18,10 +18,10 @@ Changes:
 *							OFFSET DATA								*
 *********************************************************************/
 /* subroutine to offset f(x) values */
-int offset_data(double *x, double *fx, int n_x, double offset,
-		int offset_flag)
+int offset_data(double *x, double *fx, size_t n_x, double offset,
+				   int offset_flag)
 {
-  int i;
+  size_t i;
   double xmin = DBL_MAX;
   double ymin = DBL_MAX;
 
@@ -30,7 +30,7 @@ int offset_data(double *x, double *fx, int n_x, double offset,
   {
     case OFFSET_X_TO_VALUE:
       /* offset f(x) by offset */
-	  for (i=0;i<n_x;i++) 
+	  for (i=0; i<n_x; i++)
 	    x[i] = x[i] + offset;
       break;
 	 
@@ -39,14 +39,14 @@ int offset_data(double *x, double *fx, int n_x, double offset,
       #ifdef _USE_OPENMP
       #pragma omp parallel for
       #endif
-	  for (i=0;i<n_x;i++) 
+	  for (i=0; i<n_x; i++)
 	    if (x[i] < xmin) xmin = x[i];
 	 
       /* offset f(x) by ymin */
       #ifdef _USE_OPENMP
 	  #pragma omp parallel for
       #endif
-      for (i=0;i<n_x;i++) 
+      for (i=0; i<n_x; i++)
 	    x[i] = x[i] - xmin;
 	  break;
     
@@ -61,14 +61,14 @@ int offset_data(double *x, double *fx, int n_x, double offset,
       #ifdef _USE_OPENMP
       #pragma omp parallel for
       #endif
-	  for (i=0;i<n_x;i++) 
+	  for (i=0; i<n_x; i++)
 	    if (fx[i] < ymin) ymin = fx[i];
 	 
       /* offset f(x) by ymin */
       #ifdef _USE_OPENMP
 	  #pragma omp parallel for
       #endif
-      for (i=0;i<n_x;i++) 
+      for (i=0; i<n_x; i++)
 	    fx[i] = fx[i] - ymin;
 	  break;
 	  

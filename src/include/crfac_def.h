@@ -11,6 +11,7 @@ GH/25.09.92
 GH/03.03.93
 GH/10.08.95 - Create (copy from rfdefines.h and rftypes.h)
 GH/10.08.95 - modify structure crargs (output)
+LD/18.09.2014 - Added typedef to structs
 
 *********************************************************************/
 
@@ -25,73 +26,73 @@ extern "C" {
  structures and types 
 *********************************************************************/
 
-struct crelist 
+typedef struct crelist
 {
- real energy;      /* energy value in expt. IV curve */
- real intens;      /* intensity value in expt. IV curve */
- real deriv2;      /* second derivative used in cubic spline */
-};
+  real energy;      /* energy value in expt. IV curve */
+  real intens;      /* intensity value in expt. IV curve */
+  real deriv2;      /* second derivative used in cubic spline */
+} crelist_t;
 
-struct rfspot 
+typedef struct rfspot
 {
- real index1;      /* 1st index */
- real index2;      /* 2nd index */
- real f_val1;      /* can be used for length in k space e.g. */
- real f_val2;      /* can be used for intensity e.g. */
- int i_val1;        /* arbitrary use */
- int i_val2;        /* arbitrary use */
-};
+  real index1;      /* 1st index */
+  real index2;      /* 2nd index */
+  real f_val1;      /* can be used for length in k space e.g. */
+  real f_val2;      /* can be used for intensity e.g. */
+  int i_val1;        /* arbitrary use */
+  int i_val2;        /* arbitrary use */
+} rfspot_t;
 
-struct crivcur 
+typedef struct crivcur
 {
-/* general */
- int     group_id;           /* assignment to a certain group of 
+  /* general */
+  int     group_id;           /* assignment to a certain group of
                                 curves e.g. integral/superstructure */
- struct rfspot  spot_id;     /* set of spot indices (label) */
- real   eng_0;              /* energy of beam appearance (1.1) */
+  struct rfspot  spot_id;     /* set of spot indices (label) */
+  real   eng_0;               /* energy of beam appearance (1.1) */
 
-/* theroretical data */
- struct crelist *the_list;   /* theo. IV curve */
- int     the_leng;           /* number of data pairs in IV list */
- int     the_equidist;       /* indicates equidistant energies */
- int     the_sort;           /* indicates sorted energies */
- int     the_smooth;         /* indicates that smoothing has been done */
- int     the_spline;         /* indicates that cubic spline has been prepared */
- real    the_first_eng;      /* first energy in theo. list */
- real    the_last_eng;       /* last energy in theo. list */
- real    the_max_int;        /* max. intensity value in list */
+  /* theroretical data */
+  crelist_t *the_list;          /* theo. IV curve */
+  int       the_leng;           /* number of data pairs in IV list */
+  int       the_equidist;       /* indicates equidistant energies */
+  int       the_sort;           /* indicates sorted energies */
+  int       the_smooth;         /* indicates that smoothing has been done */
+  int       the_spline;         /* indicates that cubic spline has been prepared */
+  real      the_first_eng;      /* first energy in theo. list */
+  real      the_last_eng;       /* last energy in theo. list */
+  real      the_max_int;        /* max. intensity value in list */
 
 /* experimental data */
- struct crelist *exp_list;   /* expt. IV curve */
- int     exp_leng;           /* number of data pairs in IV list */
- int     exp_equidist;       /* indicates equidistant energies */
- int     exp_sort;           /* indicates sorted energies */
- int     exp_smooth;         /* indicates that smoothing has been done */
- int     exp_spline;         /* indicates that cubic spline has been prepared */
- real    exp_first_eng;      /* first energy in expt. list */
- real    exp_last_eng;       /* last energy in expt. list */
- real    exp_max_int;        /* max. intensity value in list */
+  crelist_t *exp_list;        /* expt. IV curve */
+  int     exp_leng;           /* number of data pairs in IV list */
+  int     exp_equidist;       /* indicates equidistant energies */
+  int     exp_sort;           /* indicates sorted energies */
+  int     exp_smooth;         /* indicates that smoothing has been done */
+  int     exp_spline;         /* indicates that cubic spline has been prepared */
+  real    exp_first_eng;      /* first energy in expt. list */
+  real    exp_last_eng;       /* last energy in expt. list */
+  real    exp_max_int;        /* max. intensity value in list */
 
 /* R factor */
- real    overlap;            /* Energy overlap */
- real    weight;             /* relative weight in average */
- real    rfac;               /* R-factor */
-};
+  real    overlap;            /* Energy overlap */
+  real    weight;             /* relative weight in average */
+  real    rfac;               /* R-factor */
+} crivcur_t;
 
-struct crargs 
+typedef struct crargs
 {
- char  *ctrfile;             /* input control file */
- char  *thefile;             /* input theory file */
- char  *outfile;             /* output file */
- char  *iv_file;             /* file name for IV curves */
- int   iv_out;               /* flag for output of IV curves */
- int   r_type;               /* R factor type */
- real  s_ini;                /* shift of energy axes */
- real  s_fin;                /* shift of energy axes */
- real  s_step;               /* shift of energy axes */
- real  vi;                   /* imaginary part of optical potential */
- int   all_groups;           /* flag: print R-factors of all group ID's */
-};
+  char  *ctrfile;             /* input control file */
+  char  *thefile;             /* input theory file */
+  char  *outfile;             /* output file */
+  char  *iv_file;             /* file name for IV curves */
+  int   iv_out;               /* flag for output of IV curves */
+  int   r_type;               /* R factor type */
+  real  s_ini;                /* shift of energy axes */
+  real  s_fin;                /* shift of energy axes */
+  real  s_step;               /* shift of energy axes */
+  real  vi;                   /* imaginary part of optical potential */
+  int   all_groups;           /* flag: print R-factors of all group ID's */
+} crargs_t;
 
 /*********************************************************************
  general definitions / constants
@@ -139,9 +140,12 @@ struct crargs
 /*********************************************************************
  End of include file
 *********************************************************************/
-#endif /* CRFAC_DEF_H */
-
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* CRFAC_DEF_H */
+
+
+

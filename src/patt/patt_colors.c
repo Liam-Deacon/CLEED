@@ -13,6 +13,26 @@ const patt_color_rgb_t grays[NUM_GRAYS] = {
     {0.7, 0.7, 0.7}, {0.8, 0.8, 0.8}, {0.9, 0.9, 0.9}
 };
 
+const patt_color_rgb_t PATT_BLACK = {0, 0, 0};
+const patt_color_rgb_t PATT_RED = {1, 0, 0};
+const patt_color_rgb_t PATT_BLUE = {0, 1, 0};
+const patt_color_rgb_t PATT_GREEN = {0, 1, 0};
+const patt_color_rgb_t PATT_MAGENTA = {1, 0, 1};
+const patt_color_rgb_t PATT_LIGHT_BLUE = {0, 1, 1};
+const patt_color_rgb_t PATT_ORANGE = {1, 0.7, 0};
+const patt_color_rgb_t PATT_CYAN = {0.08, 0.92, 0.92};
+const patt_color_rgb_t PATT_YELLOW = {1, 1, 0};
+const patt_color_rgb_t PATT_PURPLE = {0.7, 0.3, 1};
+const patt_color_rgb_t PATT_GRAY = {0.5, 0.5, 0.5};
+const patt_color_rgb_t PATT_DARK_RED = {0.7, 0.1, 0};
+const patt_color_rgb_t PATT_DARK_CYAN = {0, 0.67, 0.67};
+const patt_color_rgb_t PATT_DARK_GRAY = {0.25, 0.25, 0.25};
+const patt_color_rgb_t PATT_DARK_GREEN = {0, 0.5, 0};
+const patt_color_rgb_t PATT_DARK_ORANGE = {1, 0.7, 0};
+const patt_color_rgb_t PATT_GOLD = {0.83, 0.83, 0.17};
+const patt_color_rgb_t PATT_BROWN = {0.7, 0.3, 0};
+const patt_color_rgb_t PATT_WHITE = {1, 1, 1};
+
 patt_color_rgb_t *patt_get_named_color(char *color)
 {
   patt_color_rgb_t *patt_color;

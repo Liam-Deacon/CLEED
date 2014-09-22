@@ -15,7 +15,8 @@ coord_t *coord_init()
 
 void coord_free(coord_t *pos)
 {
-  free(pos);
+  if (pos != NULL)
+	free(pos);
   pos = NULL;
 }
 

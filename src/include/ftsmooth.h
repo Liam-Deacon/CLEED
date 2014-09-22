@@ -77,26 +77,26 @@ extern "C" {
 #define OFFSET_Y_TO_ZERO  4   /* offset flag: make ymin = 0 */
 #define INVALID_ARGUMENT_ERROR -1
 /* function prototypes */
-int ftsmooth(FILE *out_stream, double *x, double *fx, int n_x, 
+int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
         double cutoff, double tailoff, int stdout_flag);
         
 void ftsmooth_usage(FILE *output);
 
 void ftsmooth_info();
 
-int read_data(FILE *in_stream, FILE *out_stream, double *x, double *fx);
+size_t read_data(FILE *in_stream, FILE *out_stream, double *x, double *fx);
 
-int offset_data(double *x, double *fx, int n_x, double offset, 
-        int offset_flag);
+int offset_data(double *x, double *fx, size_t n_x, double offset,
+        		int offset_flag);
         
-int trim_data(double *x, double *fx, int n_x, double *lbound, 
-        double *ubound, int n_r);
+size_t trim_data(double *x, double *fx, size_t n_x, double *lbound,
+        		 double *ubound, size_t n_r);
 
-int rm_neg_data(double *x, double *fx, int n_x);
+size_t rm_neg_data(double *x, double *fx, size_t n_x);
 
-int print_data(FILE *out_stream, double *x, double *fx, int n_x);
+int print_data(FILE *out_stream, double *x, double *fx, size_t n_x);
 
-int decode_ranges(double *lbound, double *ubound, int *i_r, char *argv);
+int decode_ranges(double *lbound, double *ubound, size_t *i_r, char *argv);
 
 void debug(char *debug_str, char *tag, int argc, char *argv[], 
 	  FILE *in_stream, FILE *out_stream, 
@@ -109,7 +109,7 @@ int parse_args(int argc, char *argv[],
 	  FILE *in_stream, FILE *out_stream, 
 	  int *stdin_flag, int *stdout_flag,
 	  double *cutoff, double *tailoff, char *mode,
-	  int *offset_flag, double *offset, int *range_flag, int *i_r,
+	  int *offset_flag, double *offset, int *range_flag, size_t *i_r,
 	  double *lbound, double *ubound, int *del_flag);
       
 /* globals */

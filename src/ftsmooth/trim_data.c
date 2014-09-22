@@ -18,12 +18,12 @@ Changes:
 *							TRIM DATA								*
 *********************************************************************/
 /* subroutine to trim x range */
-int trim_data(double *x, double *fx, int n_x, 
-	  double *lbound, double *ubound, int n_r)
+size_t trim_data(double *x, double *fx, size_t n_x,
+	  double *lbound, double *ubound, size_t n_r)
 {
-  int ix, ir, it, n_t;
+  size_t ix, ir, it, n_t;
   int write_x;
-  int N;
+  size_t N;
   double *trim_x, *trim_fx;
   
   n_t = n_x;

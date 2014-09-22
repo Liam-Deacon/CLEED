@@ -24,6 +24,8 @@
 								<option id="gnu.both.asm.option.include.paths.390712988" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CLEED/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/patt}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GTK_BASEPATH}/include/cairo&quot;"/>
+									<listOptionValue builtIn="false" value="../%GTK_BASEPATH%/include/cairo"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.707306058" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -33,22 +35,35 @@
 								<option id="gnu.c.compiler.option.include.paths.1108717476" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CLEED/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/patt}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GTK_BASEPATH}/include/cairo&quot;"/>
+									<listOptionValue builtIn="false" value="../%GTK_BASEPATH%/include/cairo"/>
 								</option>
-								<option id="gnu.c.compiler.option.dialect.std.1044265406" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.dialect.flags.179825403" superClass="gnu.c.compiler.option.dialect.flags" value="-std=gnu99" valueType="string"/>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.53957103" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+								<option id="gnu.c.compiler.option.dialect.std.1044265406" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.dialect.flags.179825403" name="Other dialect flags" superClass="gnu.c.compiler.option.dialect.flags" value="-std=gnu99" valueType="string"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.53957103" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="DEBUG=1"/>
 								</option>
-								<option id="gnu.c.compiler.option.optimization.level.827873497" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.level.1601382095" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.gprof.1637728891" superClass="gnu.c.compiler.option.debugging.gprof" value="true" valueType="boolean"/>
-								<option id="gnu.c.compiler.option.warnings.pedantic.1848417991" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
-								<option id="gnu.c.compiler.option.warnings.extrawarn.1070514383" superClass="gnu.c.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
-								<option id="gnu.c.compiler.option.warnings.wconversion.554895042" superClass="gnu.c.compiler.option.warnings.wconversion" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.optimization.level.827873497" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.none" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.debugging.level.1601382095" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.debugging.gprof.1637728891" name="Generate gprof information (-pg)" superClass="gnu.c.compiler.option.debugging.gprof" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.warnings.pedantic.1848417991" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.warnings.extrawarn.1070514383" name="Extra warnings (-Wextra)" superClass="gnu.c.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.warnings.wconversion.554895042" name="Implicit conversion warnings (-Wconversion)" superClass="gnu.c.compiler.option.warnings.wconversion" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1916442353" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1629724982" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
-								<option id="gnu.c.link.option.ldflags.1367550951" superClass="gnu.c.link.option.ldflags" value="-pg" valueType="string"/>
+								<option id="gnu.c.link.option.ldflags.1367550951" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-pg" valueType="string"/>
+								<option id="gnu.c.link.option.paths.877976682" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;../%MINGW%\lib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../%QWT%\lib&quot;"/>
+									<listOptionValue builtIn="false" value="../%GTK_BASEPATH%/lib"/>
+									<listOptionValue builtIn="false" value="&quot;${GTK_BASEPATH}/lib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../%MINGW%\lib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../%QWT%\lib&quot;"/>
+								</option>
+								<option id="gnu.c.link.option.libs.1899065290" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="cairo"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1226892701" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -57,6 +72,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.754556099" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="patt_structs.c|patt_pdf_write_title.c|patt_pdf_draw_spot.c|patt_pdf_draw_init.c|patt_pdf_draw_finialize.c|test|patt_ps_*.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -80,4 +98,5 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

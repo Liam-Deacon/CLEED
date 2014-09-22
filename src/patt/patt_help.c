@@ -17,7 +17,7 @@ Changes:
 #include <stdio.h>
 
 /* Print Patt usage */
-void usage(FILE *output) 
+void patt_usage(FILE *output)
 {
    fprintf(output,"syntax:\npatt ");
    fprintf(output,"-i <input> -o <output> (-ni -rs <spot size> -rg <spot size> ...)\n\n");
@@ -95,7 +95,7 @@ void usage(FILE *output)
    
 }
 
-void info()
+void patt_info()
 {
     printf("%s - version %s (%s)\n", PROG, PROG_VERSION, PROG_PLAT);
     printf("\n%s\n", PROG_SHORTDESC);

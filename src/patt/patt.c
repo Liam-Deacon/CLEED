@@ -71,100 +71,42 @@ NOTES
 #include <ctype.h>
 
 #include "patt.h"
+#include "patt_def.h"
 
 /*========================================================================*/
 
 int main(int argc, char *argv[])
 {
 
-int i;
+  char *output_filename = (char*) malloc(MAX_PATH*sizeof(char));
 
-float translate[2] = {0, 0};        /* x,y offset for text */
+  /* Preset out_stream */
+  FILE *out_stream = stdout;
+  FILE *in_stream = stdin;
 
-char title_str[STRSZ];
-char fill_gs[6] = "fill";
-char fill_ss[6] = "fill";
+  drawing_t *drawing = &drawing_default;
 
-size_t i_dom = 0;
-size_t n_dom = 0;
+  patt_args(argc, argv, drawing, output_filename);
 
-float spot_gs = RADIUS_GS;          /* substrate spot size */
-float spot_ss = RADIUS_SS;          /* superstructure spot size */
-float ix, iy, x, y; 
+  if (strlen(output_filename))
+  {
+    if ((out_stream = fopen(output_filename, "w")) == NULL)
+    {
+      fprintf(stderr, "***error (patt_main): "
+              "cannot write to '%s'!\n", output_filename);
+      exit(PATT_WRITE_ERROR);
+    }
+  }
+  patt_draw(out_stream, (const drawing_t*) &drawing);
 
-float radius;
-int i_line_offset;
-char comm;                          /* commensurate or not */
-char text[STRSZ];
-char text2[STRSZ];
-char dummystr[5][STRSZ];
-char vectors_str[STRSZ*8];
-char output_filename[STRSZ*2];
+  fclose(out_stream);
 
-char* footnote = NULL;
-
-int do_gs_vectors[MAX_INPUT_FILES];
-int do_ss_vectors[MAX_INPUT_FILES][STRSZ];
-int do_gs_indices[MAX_INPUT_FILES];
-int do_ss_indices[MAX_INPUT_FILES];
-
-
-/* drawing default options */
-
-int stdin_flag = 1;                 /* input is from stdin pipe by default */
-int overlap_flag = 0;               /* overlap GS spots with SS spot strokes */
-int color_flag = PATT_COLOR;        /* PATT_COLOR for rgb (default) */
-int vectors_flag = 0;               /* draw basis vectors */
-int ev_flag = 0;
-int rg_flag = 0;
-int rs_flag = 0;
-int format = PATT_PS;               /* output file format */
-
-/* Preset out_stream */
- out_stream = stdout;
- in_stream = stdin;
- in_streams[0] = stdin;
-
- i_line_offset = 0;                 /* title line y-offset */
- 
- strcpy(vectors_str, "\0");
- 
- /* loop over input files */
- for (i=0;i<MAX_INPUT_FILES;i++)
- {
-   strcpy(dummystr[i], "\0");
-   do_gs_vectors[i] = 0;
-   do_gs_indices[i] = 1;
-   do_ss_indices[i] = 1;
-   
-   /* loop over domains */
-   for (ii=0;ii<STRSZ;ii++)
-	 do_ss_vectors[i][ii] = 0;
-     
- }
- strcpy(title_str,"\0");
-
-/*
- Check command line and decode arguments
-*/
-
-drawing_t *drawing;
-pattern_t *pat = pattern_init();
-
-patt_args(argv, argc, &drawing, &format);
-
-patt_draw(&drawing, format);
-
-return 0;
+  return(PATT_SUCCESS);
 
 } /* main */
 
-int patt_draw(FILE *out_stream, drawing_t *drawing, int format)
+int patt_draw(FILE *out_stream, const drawing_t *drawing)
 {
-  size_t i;
-  FILE *in_stream;
-  pattern_t *pat; 
-  patt_color_rgb_t *color = PATT_BLACK;
   
   #ifdef _USE_CAIRO
   cairo_surface_t *surface;
@@ -291,219 +233,11 @@ int patt_draw(FILE *out_stream, drawing_t *drawing, int format)
   cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
   
-  return 0;
-  
   #else /* _USE_CAIRO */
   
   #endif
   
-    default:
-      /**************** use old PostScript routines ***************************/
-      /* write initial lines to output */
-      ps_draw_init(out_stream, ifiles, title_str, pos_title, footnote, pos_footnote,
-                   screen_flag, screen_thickness, fill_screen, ev_flag, eV, pos_ev,
-                   clip_flag, vectors_flag); 
-                   
-      for (i = 0; i < drawing->nfiles; i++)
-      {
-      
-        /* create section header */
-        fprintf(out_stream, "\n"
-                "%%======================================================================="
-                "\n%% BEGIN SECTION %i:\n"
-                "%%======================================================================="
-                "\n\n", i+1);
-        if (fileno(in_stream) != fileno(stdin))
-            in_stream = fopen(drawing->filename[i], "r");
-            
-        if (in_stream == NULL)
-        {
-            fprintf(stderr, "error (patt_draw): cannot read file '%s'\n", 
-                    drawing->filename[i])
-            exit(1);
-        }
-        
-        /* read comment */
-        
-        
-        ps_draw_title(in_stream, out_stream, i, drawing->nfiles,
-                      ps_color(color_flag, i, drawing->nfiles, SPOT_GS, 0), 
-                      &i_line_offset);
-        
-        /* set draw routines for reciprocal lattice vectors */
-        if ((drawing->show_vectors) && (do_gs_vectors[ii]))
-        ps_draw_vectors(out_stream, -1, ii, 
-                     ps_color(color_flag, ii, ifiles, SPOT_GS, 0),
-                     a1, a2, spot_gs, dummystr, SPOT_GS, vectors_str);
-          
-        fprintf(out_stream, "%% radius: %.1f\n%%\n", radius);
-
-        /* print position of GS spots to output */
-        fprintf(out_stream,"%s\n","% GS spots");
-        fprintf(out_stream,"%s\n", ps_color(color_flag, ii, ifiles, SPOT_GS, 0));
-        fprintf(out_stream," %.1f setlinewidth stroke\n", LINE_WIDTH);
-
-        
-        if (strlen(drawing->eV.text) > 0)
-        {
-          /* calculate radius of Ewald construction at given energy */
-          lambda = sqrt(2*9.11*1.6018*atof(drawing->eV.text))/6.62;
-          lambda /= 2*M_PI;
-          radius = lambda;
-        }
-        
-        for each GS_spot:
-           /* draw spot */
-           fprintf(out_stream,
-             " %.1f %.1f %.1f 0 360 arc gsave %s %s grestore stroke\n", 
-            ix, iy, spot_gs, ps_color(color_flag, ii, ifiles, SPOT_GS, i_dom), 
-            fill_gs);
-            
-            /* draw label */
-            sprintf(text, "%d,%d",i1,i2);
-            fprintf(out_stream, "/Times-Roman findfont %.1f scalefont setfont \n",
-                    spot_gs*2);
-            fprintf(out_stream, "%.1f %.1f moveto (%s) show stroke\n", 
-                       ix - 1.5*spot_gs, iy + spot_gs + 4., text);
-                       
-        /* loop over domains */
-
-        fprintf(out_stream, "%s\n","% SS spots");
-        ps_set_linewidth(out_stream, LINE_WIDTH);
-        
-          /* Print comments to outputs */
-          fprintf(out_stream,"%s Domain No. %d\n","%", i_dom+1);
-          printf("%d:\tDet: %.1f\n",i_dom+1, det);
-          printf("N = (%5.1f %5.1f)\n", N11, N12);
-          printf("    (%5.1f %5.1f)\n", N21, N22);
-          printf("M = (%5.1f %5.1f)\t(M^-1)t = (%5.2f %5.2f)",
-                m11,  m12,              aux1*m22,-aux1*m21);
-          printf("\tb1* = (%6.2f)\tb2* = (%6.2f)\n", b1[0]/radius, b2[0]/radius);
-          printf("    (%5.1f %5.1f)\t          (%5.2f %5.2f)",
-                m21,  m22,             -aux1*m12, aux1*m11);
-          printf("\t      (%6.2f)\t      (%6.2f)\n", b1[1]/radius, b2[1]/radius);
-
-          for each domain:
-            
-          
-          
-            for each spot:
-                if (symbols)
-                {
-                 ps_draw_spot(out_stream, x, y, spot_ss, i_dom, 
-                    ps_color(color_flag, ii, ifiles, SPOT_SS, i_dom), fill_ss);
-                }
-                else
-                {
-                 ps_draw_spot(out_stream, x, y, spot_ss, 0,
-                    ps_color(color_flag, ii, ifiles, SPOT_SS, i_dom), fill_ss);
-                }
-                
-                       /* check if integral order spot */
-        if ((index) && (do_ss_indices[ii]) &&
-            ((fabs(ind_1*aux1) - (int)(fabs(ind_1*aux1)+0.1) > 0.05) ||
-            (fabs(ind_2*aux1) - (int)(fabs(ind_2*aux1)+0.1) > 0.05) ))
-        {
-          fprintf(out_stream,"/Times-Roman findfont %.1f scalefont setfont \n",
-                  spot_ss*2);
-  
-          if (!commensurate) 
-          {
-            /* incommensurate */
-           fprintf(out_stream, "%.1f %.1f moveto (%.2f,%.2f) show stroke\n",
-                   x - 4*spot_ss, y + spot_ss + 4., ind_1*aux1, ind_2*aux1); 
-           printf("incommensurate\n");
-           fprintf(out_stream, "%s Mult scatt. \n", "%");
-          }
-          else
-          {
-            /* commensurate (fractions) */
-
-            ind_1_int = (int) (ind_1*1.01);
-            ind_2_int = (int) (ind_2*1.01);
-            det_int =   (int) (det*1.01);
-
-            switch (nice_frac(&ind_1_int, &det_int))
-            {
-              case(0):
-              {
-                sprintf(text, "0, ");
-                break;
-              } 
-            
-              case(1):
-              {
-                sprintf(text, "%d, ", ind_1_int);
-                break;
-              }
-            
-              case(2):
-              {
-                sprintf(text, "%d/%d, ", ind_1_int, det_int);
-                break;
-              }
-            }
-
-            det_int = (int) (det*1.01);
-            switch (nice_frac(&ind_2_int, &det_int))
-            {
-              case(0):
-              {
-                sprintf(text2, "0");
-                break;
-              }
-            
-              case(1):
-              {
-                sprintf(text2, "%d", ind_2_int);
-                break;
-              }
-          
-              case(2):
-              {
-                sprintf(text2, "%d/%d", ind_2_int, det_int);
-                break;
-              }
-            }
-      
-          fprintf(out_stream,"%.1f %.1f moveto (%s%s) show stroke\n", 
-                  x - 3*spot_ss, y + spot_ss + 2., text, text2);
-          }
-        }
-        
-            /* print domain lattice vectors */
-            if ((vectors_flag) && (do_ss_vectors[ii][i_dom]))
-            {
-                ps_draw_vectors(out_stream, i_dom, ii, 
-                     ps_color(color_flag, ii, ifiles, SPOT_SS, i_dom),
-                     b1, b2, spot_ss, dummystr, SPOT_SS, vectors_str);
-            }
-        
-        /* final drawing strokes */ 
-          ps_draw_finalize(out_stream, gun_flag, gun_thickness, gun_radians,
-            screen_thickness, screen_flag, vectors_flag, vectors_str,
-            ifiles, ev_flag, eV, title_str);
-          fclose(out_stream);         
-
-        /* clean up */
-        if (fileno(in_stream) != fileno(stdin)) 
-          fclose(in_stream);
-      }
-      break;
-  }
-  
-}
-
-int patt_draw_*(drawing_t *drawing)
-{
-  for (i = 0; i < drawing->nfiles; i++)
-  {
-  
-  
-  
-  }
-
-
+  return(PATT_SUCCESS);
 }
 
 

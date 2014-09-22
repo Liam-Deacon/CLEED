@@ -3,4 +3,10 @@
 
 bin_PROGRAMS = latt
 
-latt_SOURCES = latt.c latt_help.c
+latt_SOURCES =                 \
+    basis.c                    \
+    coord.c                    \
+    latt.c                     \
+    latt_help.c                \
+    latt_parse_args.c          \
+    lattice.c                

@@ -24,11 +24,7 @@ Changes:
 #include <stdlib.h>
 
 #include "crfac.h"
-
-/*
-#define CONTROL
-#define CONTROL_X
-*/
+#include "crfac_def.h"
 
 #define ERROR
 
@@ -111,7 +107,7 @@ char line_buffer[STRSZ],    /* buffer for a single command line */
 #ifdef CONTROL_X
  fprintf(STDCTR,"(cr_input): n_cur = %d\n", n_cur);
 #endif
- cur_list = (struct crivcur *) calloc(n_cur, sizeof(struct crivcur));
+ cur_list = (crivcur_t*) calloc(n_cur, sizeof(crivcur_t));
 
 /*********************************************************************
  Scan through control file.

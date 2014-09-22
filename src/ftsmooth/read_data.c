@@ -18,11 +18,11 @@ Changes:
 *							READ DATA							*
 *****************************************************************/
 /* subroutine to read input data stream */
-int read_data(FILE *in_stream, 
+size_t read_data(FILE *in_stream,
 	  FILE *out_stream, double *x, double *fx)
 {
-  int i_x;
-  int N;     /* array max size */
+  size_t i_x;
+  size_t N;     /* array max size */
 
   N = STRSZ; /* 128 elements is (semi-)sensible amount for LEED-IV datasets */
   

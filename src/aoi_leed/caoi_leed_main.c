@@ -21,7 +21,7 @@ Changes:
 int main (int argc, char *argv[])
 {
   int i_arg;
-  int length;
+  size_t length;
   /* int sa; */     /* should be defined as global variable in caoi_leed.h */
   int i_ang;
 
@@ -59,15 +59,15 @@ Decode arguments:
   {
     if(*argv[i_arg] != '-')
     {
-#ifdef ERROR
-      fprintf(STDERR,"*** error (caoi_leed_main):\tsyntax error:\n");
-      fprintf(STDERR,"\tusage: \n\t"
-        "caoi_leed" 
-          "-b <bsr_file>" 
-          "-i <par_file>"
-          "-v <vertex_file>"
-          "-o <res_file>""\n");
-#endif
+	  #ifdef ERROR
+    	fprintf(STDERR,"*** error (caoi_leed_main):\tsyntax error:\n");
+    	fprintf(STDERR,"\tusage: \n\t"
+    			"caoi_leed"
+    			"-b <bsr_file>"
+    			"-i <par_file>"
+    			"-v <vertex_file>"
+    			"-o <res_file>""\n");
+	  #endif
       exit(1);
     }
     else
@@ -121,10 +121,10 @@ Decode arguments:
 
   if(strncmp(par_file, "---", 3) == 0)
   {
-#ifdef ERROR
-    fprintf(STDERR,
-    "*** error (caoi_leed_main): no parameter file (option -i) specified\n");
-#endif
+	#ifdef ERROR
+	  fprintf(STDERR, "*** error (caoi_leed_main): "
+			  "no parameter file (option -i) specified\n");
+	#endif
     exit(1);
   }
 
@@ -138,47 +138,45 @@ Decode arguments:
 
 ******************************************************************/
 
- length = strlen(par_file) - 4;
- strncpy(linebuffer, par_file, length);
- sprintf(linebuffer+length,".bsr");
+  length = strlen(par_file) - 4;
+  strncpy(linebuffer, par_file, length);
+  sprintf(linebuffer+length,".bsr");
 
- if ((inp_stream = fopen(linebuffer,"r")) == NULL)
-    {
-#ifdef ERROR
-      fprintf(STDERR,
-      "*** error (caoi_leed_main): could not open output file \"%s\"\n",
-      linebuffer);
-#endif
-     exit(1);
-    } 
+  if ((inp_stream = fopen(linebuffer,"r")) == NULL)
+  {
+	#ifdef ERROR
+      fprintf(STDERR, "*** error (caoi_leed_main): "
+    		  "could not open output file \"%s\"\n", linebuffer);
+	#endif
+    exit(1);
+  }
 
- while (fgets(linebuffer,STRSIZE,inp_stream))
-    {
-      if (!strncasecmp(linebuffer, "sa:", 3)) {sscanf(linebuffer+3,"%d",&sa);}
-    }
+  while (fgets(linebuffer,STRSIZE,inp_stream))
+  {
+    if (!strncasecmp(linebuffer, "sa:", 3)) {sscanf(linebuffer+3,"%d",&sa);}
+  }
 
- if (sa == 999)
-    {
-#ifdef ERROR
+  if (sa == 999)
+  {
+	#ifdef ERROR
       fprintf(STDERR,
       "*** error (caoi_leed_main): could not read sa: from the .bsr file");
-#endif
-     exit(1);
-    }
+	#endif
+    exit(1);
+  }
 
-fclose(inp_stream);
+  fclose(inp_stream);
 
 /*****************************************************************
  Makes new .bsr file for each angle of incidence
   - calls the function bulinp()
 ******************************************************************/
 
-bsrinp(bsr_file, sa);
+  bsrinp(bsr_file, sa);
 
-#ifdef CONTROL_X
-fprintf(STDERR,
-   "*** caoi_leed_main: sa = %d ***\n", sa);
-#endif
+  #ifdef CONTROL_X
+  	fprintf(STDERR, "*** caoi_leed_main: sa = %d ***\n", sa);
+  #endif
 
 /*****************************************************************
  Calls cleed_nsym program for each angle of incidence
@@ -219,11 +217,10 @@ fprintf(STDERR,
 
   if ((write_stream = fopen(linebuffer,"w")) == NULL)
   {
-#ifdef ERROR
-    fprintf(STDERR,
-      "*** error (caoi_leed_main): could not open output file \"%s\"\n",
-      linebuffer);
-#endif
+	#ifdef ERROR
+      fprintf(STDERR, "*** error (caoi_leed_main): "
+    		  "could not open output file \"%s\"\n", linebuffer);
+	#endif
     exit(1);
   }
 
@@ -233,11 +230,10 @@ fprintf(STDERR,
     sprintf(helpstring + length, "ia_%d.res", i_ang + 1);
     if ((read_stream = fopen(helpstring,"r")) == NULL)
     {
-#ifdef ERROR
-      fprintf(STDERR,
-        "*** error (caoi_leed_main): could not open output file \"%s\"\n",
-        helpstring);
-#endif
+	  #ifdef ERROR
+        fprintf(STDERR, "*** error (caoi_leed_main): "
+        		"could not open output file \"%s\"\n", helpstring);
+	  #endif
       exit(1);
     }
 

@@ -25,7 +25,7 @@ int parse_args(int argc, char *argv[],
 	  FILE *in_stream, FILE *out_stream, 
 	  int *stdin_flag, int *stdout_flag,
 	  double *cutoff, double *tailoff, char *mode,
-	  int *offset_flag, double *offset, int *range_flag, int *i_r,
+	  int *offset_flag, double *offset, int *range_flag, size_t *i_r,
 	  double *lbound, double *ubound, int *del_flag)
 {
  int i_arg;
@@ -178,7 +178,7 @@ int parse_args(int argc, char *argv[],
 *********************************************************************/
 /* subroutine to decode argv range argument into seperate ranges
 returns the dimension of the lower and upper bound matricies*/
-int decode_ranges(double *lbound, double *ubound, int *i_r, char *argv)
+int decode_ranges(double *lbound, double *ubound, size_t *i_r, char *argv)
 /* 
 Encoding as follows: 
   
@@ -201,7 +201,6 @@ Encoding as follows:
   
   pos = 0; 
   islowerbound = 1; /* first entry is lower bound */
-  if(*i_r<0) *i_r=0; 
   
   ubound[0] = DBL_MAX;
   lbound[0] = DBL_MIN;
@@ -235,9 +234,9 @@ Encoding as follows:
 			printf("%s\n", str);
 		  }
 		  
-		  ubound = (double *) realloc(ubound,(*i_r+1)*sizeof(double));
-		  lbound = (double *) realloc(lbound,(*i_r+1)*sizeof(double));
-		  *i_r =(*i_r)+1;
+		  ubound = (double *) realloc(ubound, (*i_r+1)*sizeof(double));
+		  lbound = (double *) realloc(lbound, (*i_r+1)*sizeof(double));
+		  *i_r = (*i_r)+1;
 		  islowerbound = (islowerbound+1) % 2;
 		  strcpy(str, "\0");
 		  break;

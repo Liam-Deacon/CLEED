@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
   
   double faux_x, faux_y, faux_z, faux_len;
   
-  char *bas_name = malloc(sizeof(char) * NAMSZ);
+  char *bas_name = calloc(NAMSZ, sizeof(char));
   
   double b1_len = 0., b2_len = 0., b3_len = 0.;
   double nor_len = 0.0;
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
   /* variables for print out */
   double dist_min, dist_max;
   
-  size_t n_max;
+  int n_max;
   int i_pass;
   
   size_t n_atoms;
