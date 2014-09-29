@@ -7,12 +7,12 @@ Changes:
          
 ****************************************************************************/
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 #ifndef PATT_DEF_H
 #define PATT_DEF_H
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+  extern "C" {
+#endif
 
 #include <limits.h>
 #include <stdbool.h>
@@ -21,6 +21,7 @@ extern "C" {
 #include "coord.h"
 #include "patt_colors.h"
 #include "pattern.h"
+#include "basis.h"
 
 #ifndef STRSZ
   #define STRSZ 128
@@ -32,6 +33,7 @@ extern "C" {
  */
 typedef enum {
   PATT_PS_OLD,
+  PATT_EPS,
   PATT_PS,
   PATT_PNG,
   PATT_PDF,
@@ -51,6 +53,7 @@ typedef enum {
 
 typedef enum {
   PATT_SUCCESS=0,
+  PATT_ARGUMENT_ERROR,
   PATT_READ_ERROR,
   PATT_WRITE_ERROR,
   PATT_COLOR_ERROR,
@@ -60,6 +63,12 @@ typedef enum {
   PATT_SHAPE_ERROR,
   PATT_UNKNOWN_ERROR
 } patt_error_t;
+
+
+#define PATT_PAGE_HEIGHT 800.
+#define PATT_PAGE_WIDTH 600.
+
+#define ARROW_ANGLE 0.5
 
 /*! \def OFF_H
  *  \brief Height offset for drawing.
@@ -81,33 +90,6 @@ typedef enum {
 
 #define GREY_GS    0.
 
-/* define postscript colours */
-#define PSRED "1 0 0 setrgbcolor"			    /* red */
-#define PSDKRED "0.7 0.1 0 setrgbcolor"		    /* dark red */
-#define PSGREEN "0 1 0 setrgbcolor"			    /* green */
-#define PSBLUE "0 0 1 setrgbcolor"			    /* blue */
-#define PSDKBLUE "0 0 0.5 setrgbcolor"		    /* dark blue */
-#define PSLTBLUE "0 1 1 setrgbcolor"		    /* light blue */
-#define PSMAGENTA "1 0 1 setrgbcolor"		    /* magenta */
-#define PSYELLOW "1 1 0 setrgbcolor"		    /* yellow */
-#define PSWHITE "1 1 1 setrgbcolor"			    /* white */
-#define PSBLACK "0 0 0 setrgbcolor"			    /* black */
-#define PSORANGE "1.0 0.7 0.0 setrgbcolor"	    /* orange */
-#define PSDKORANGE "1 0.33 0 setrgbcolor"	    /* dark orange */
-#define PSPURPLE "0.7 0.3 1.0 setrgbcolor"	    /* purple */
-#define PSBROWN "0.7 0.3 0.0 setrgbcolor"	    /* brown */
-#define PSDKGREEN "0.0 0.5 0.0 setrgbcolor"	    /* dark green */
-#define PSGREY "0.5 setgray"				    /* grey */
-#define PSDKGREY "0.25 setgray"				    /* dark grey */
-#define PSLTGREY "0.75 setgray"				    /* light grey */
-#define PSGOLD "0.83 0.83 0.17 setrgbcolor"     /* 'gold' */
-#define PSDKCYAN "0 0.67 0.67 setrgbcolor"      /* dark cyan */
-#define PSCYAN "0.08 0.92 0.92 setrgbcolor"     /* cyan */
-
-#define EDGE_COLOR "0.55 1 0.55 setrgbcolor"
-#define SCREEN_COLOR "0.85 1 0.85 setrgbcolor"
-#define GUN_COLOR "0 0 0 setrgbcolor"
-
 /* alter the following list for order of preference */
 #define NUM_SUBS 54
 
@@ -122,22 +104,26 @@ Pattern Structures
 
 typedef struct text_t 
 {
-  char *label;
+  patt_color_rgb_t color;
+  double alpha;
+  char label[BUFSIZ];
   double x;
   double y;
   double size;
   bool visible;
-  patt_color_rgb_t color;
 } text_t;
 extern text_t text_default;
 
 typedef struct screen_t 
 {
-  double radius;        /* screen radius (default is MAX_RADIUS)*/
-  double stroke_width;  /* screen edge thickness */
-  bool clip;            /* clip pattern to radius for screen */
-  bool fill;            /* background fill of screen */
-  bool visible;         /* show screen */
+  double alpha;             /* % alpha transparency of screen (if supported) */
+  patt_color_rgb_t stroke_color;
+  patt_color_rgb_t fill_color;
+  double radius;            /* screen radius (default is MAX_RADIUS)*/
+  double stroke_width;      /* screen edge thickness */
+  bool clip;                /* clip pattern to radius for screen */
+  bool fill;                /* background fill of screen */
+  bool visible;             /* show screen */
 } screen_t;
 extern screen_t screen_default;
 
@@ -145,10 +131,13 @@ typedef struct gun_t
 {
   double x;
   double y;
+  double stroke_width;
+  patt_color_rgb_t color;
   double radius;
   double angle;      /* in radians */
   bool fill;
   bool visible;
+  double alpha;
 } gun_t;
 extern gun_t gun_default; 
 
@@ -161,11 +150,14 @@ typedef struct vector_t
   patt_color_rgb_t color;
   double linewidth;
   double head_size;
+  double alpha;
 } vector_t;
 extern vector_t vector_default; 
 
 typedef struct drawing_t 
 {
+  basis_t basis_gs[MAX_INPUT_FILES];
+  basis_t basis_ss[MAX_INPUT_FILES][MAX_DOMAINS];
   text_t eV;
   text_t title;
   text_t footnote;
@@ -183,19 +175,22 @@ typedef struct drawing_t
   bool fill_gs;
   bool fill_ss;
   bool show_gs_vectors[MAX_INPUT_FILES];
-  bool show_ss_vectors[MAX_INPUT_FILES][STRSZ];
+  bool show_ss_vectors[MAX_INPUT_FILES][MAX_DOMAINS];
   bool show_gs_indices[MAX_INPUT_FILES];
-  bool show_ss_indices[MAX_INPUT_FILES][STRSZ];
+  bool show_ss_indices[MAX_INPUT_FILES][MAX_DOMAINS];
   size_t n_files;
   char input_files[MAX_INPUT_FILES][PATH_MAX];
+  char output_filename[PATH_MAX];
+  bool std_in;
+  bool std_out;
+  bool interactive;
 } drawing_t;
 extern drawing_t drawing_default;
-
-
-
-
-#endif /* PATT_DEF_H */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* PATT_DEF_H */
+
+

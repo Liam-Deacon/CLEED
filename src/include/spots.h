@@ -5,14 +5,10 @@
 #include <stdbool.h>
 #include "patt_colors.h"
 
-/*! \def SPOT_GS
- *  \brief Indexing of substrate spots.
- */
-#define SPOT_GS 0
-/*! \def SPOT_SS
- *  \brief Indexing of superstructure spots.
- */
-#define SPOT_SS 1
+enum {
+  SPOT_GS=0   /*!< Indexing of substrate spots. */,
+  SPOT_SS     /*!< Indexing of superstructure spots. */
+};
 
 #define RADIUS_GS 10.
 #define RADIUS_SS  5.

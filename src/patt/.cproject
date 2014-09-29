@@ -42,6 +42,7 @@
 								<option id="gnu.c.compiler.option.dialect.flags.179825403" name="Other dialect flags" superClass="gnu.c.compiler.option.dialect.flags" value="-std=gnu99" valueType="string"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.53957103" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="DEBUG=1"/>
+									<listOptionValue builtIn="false" value="_USE_CAIRO=1"/>
 								</option>
 								<option id="gnu.c.compiler.option.optimization.level.827873497" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.1601382095" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
@@ -63,7 +64,9 @@
 								</option>
 								<option id="gnu.c.link.option.libs.1899065290" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="cairo"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="m"/>
 								</option>
+								<option id="gnu.c.link.option.debugging.gprof.1748524830" name="Generate gprof information (-pg)" superClass="gnu.c.link.option.debugging.gprof" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1226892701" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -73,7 +76,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="patt_structs.c|patt_pdf_write_title.c|patt_pdf_draw_spot.c|patt_pdf_draw_init.c|patt_pdf_draw_finialize.c|test|patt_ps_*.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="patt_structs.c|patt_pdf_write_title.c|patt_pdf_draw_spot.c|patt_pdf_draw_init.c|patt_pdf_draw_finialize.c|test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

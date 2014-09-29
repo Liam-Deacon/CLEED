@@ -21,16 +21,16 @@ spots_t spots_default = {.radius=RADIUS_GS, .stroke_style=0, .stroke_width=1.,
                         };
                   
 drawing_t drawing_default = {
-        .title = {.x = -(MAX_RADIUS), .y = (MAX_RADIUS+150.), .size = 26.,},
+        .title = {.x = -(MAX_RADIUS), .y = (MAX_RADIUS+150.), .size = 26., },
         .footnote = {.x = -(MAX_RADIUS), .y = -(MAX_RADIUS+50.), .size = 10.,},
         .color_scheme=PATT_COLOR_SCHEME,
         .show_overlap=false,
         .show_vectors=false,
         .show_indices=true,
         .symbols=true,
-        .energy=0,
-        .fill_gs=1.,
-        .fill_ss=1.};
+        .energy=0.,
+        .fill_gs=true,
+        .fill_ss=true};
         
 matrix_2x2_t matrix_2x2_default = {0., 0., 0., 0.};
 

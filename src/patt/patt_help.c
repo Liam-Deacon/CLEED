@@ -68,7 +68,7 @@ void patt_usage(FILE *output)
    fprintf(output,"--title -t\tTitle for figure.\n");
    fprintf(output,"--clip -c\tClip to edge of screen.\n");
    fprintf(output,"--version\tprint version info.\n");
-   fprintf(output,"\nThe input is as follows:\n\n<Input file>\n");
+   fprintf(output,"\n\nThe input is as follows:\n\n<Input file>\n");
    fprintf(output,"\nc 2 Domains of (3 2 / -2 1) = (r7 x r7)\n");
    fprintf(output,"1.0  1732 \ta1 <real lattice vector>\n");
    fprintf(output,"1.0 -1732 \ta2 <real lattice vector>\n");

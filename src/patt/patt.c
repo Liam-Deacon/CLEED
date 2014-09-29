@@ -62,185 +62,58 @@ NOTES
 */
 /***************************************************************************/
 
-#include <string.h>
+#include <ctype.h>
+#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include <float.h>
-#include <strings.h>
-#include <ctype.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "patt.h"
 #include "patt_def.h"
+
 
 /*========================================================================*/
 
 int main(int argc, char *argv[])
 {
-
-  char *output_filename = (char*) malloc(MAX_PATH*sizeof(char));
-
-  /* Preset out_stream */
-  FILE *out_stream = stdout;
-  FILE *in_stream = stdin;
-
   drawing_t *drawing = &drawing_default;
 
-  patt_args(argc, argv, drawing, output_filename);
+  patt_args(argc, argv, drawing);
 
-  if (strlen(output_filename))
+  if (isatty(fileno(stdin)) || drawing->interactive == true) /* interactive terminal */
   {
-    if ((out_stream = fopen(output_filename, "w")) == NULL)
-    {
-      fprintf(stderr, "***error (patt_main): "
-              "cannot write to '%s'!\n", output_filename);
-      exit(PATT_WRITE_ERROR);
-    }
+    return(patt_session(drawing));
   }
-  patt_draw(out_stream, (const drawing_t*) &drawing);
+  else /* stdin a pipe or file */
+  {
+    return(patt_draw((const drawing_t*) drawing));
+  }
 
-  fclose(out_stream);
 
   return(PATT_SUCCESS);
 
 } /* main */
 
-int patt_draw(FILE *out_stream, const drawing_t *drawing)
+int patt_session(const drawing_t *drawing)
 {
-  
-  #ifdef _USE_CAIRO
-  cairo_surface_t *surface;
-  cairo_t *cr;
-  
-  /* create surface */
-  switch (format)
+  char buf[BUFSIZ];
+  char u;
+
+  printf("%s [%s] - %s\n", PROG, PROG_VERSION, PROG_SHORTDESC);
+  printf("%s\n", PROG_COPYRIGHT);
+  printf("This program is released under the terms of the %s\n", PROG_LICENSE);
+  printf("\nType 'help' to get started...\n\n");
+
+  while(gets(buf))
   {
-    case PATT_PNG:
-      surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 
-                                           PATT_PAGE_WIDTH, PATT_PAGE_HEIGHT);
-      break;
-    
-    case PATT_PDF:
-      surface = cairo_pdf_surface_create(drawing->output_filename, 
-                                         PATT_PAGE_WIDTH, PATT_PAGE_HEIGHT);
-      break;
-    
-    case PATT_SVG:
-      surface = cairo_svg_surface_create(drawing->output_filename, 
-                                         PATT_PAGE_WIDTH, PATT_PAGE_HEIGHT);
-      break;
-    
-    case PATT_EPS: case PATT_PS: default:
-      surface = cairo_ps_surface_create(drawing->output_filename, 
-                                        PATT_PAGE_WIDTH, PATT_PAGE_HEIGHT);
-      if (format == PATT_EPS) cairo_ps_surface_set_eps(surface, TRUE);
-      cairo_ps_surface_dsc_comment (surface, "%%Title: %s", drawing->title.text);
-      cairo_ps_surface_dsc_comment (surface, "%%Copyright: Copyright (C) "
-                                    "2013-2014 Georg Held & Liam Deacon")
-      cairo_ps_surface_dsc_comment (surface, "%%Creator: %s - Version %s", 
-                                    PROG, PROG_VERSION);
-      break;
+    if (strncmp("quit", buf, 1) == 0) exit(PATT_SUCCESS);
+
+    if (strncmp("help", buf, 1) == 0) patt_usage(stdout);
+
   }
-  cr = cairo_create(surface);
-  
-  /* set origin to center of image */
-  cairo_translate(cr, PATT_PAGE_WIDTH, PATT_PAGE_HEIGHT);
-  
-  /* set options */
-  cairo_select_font_face(cr, "Serif", CAIRO_FONT_SLANT_NORMAL, 
-                         CAIRO_FONT_WEIGHT_NORMAL);
-
-  cairo_set_font_size(cr, 13);
-  
-  
-  /***************************** STRUCTURE LOOP ****************************/
-  for (i_file = 0; i_file < drawing->n_files; i_file++)
-  {
-    pattern_t *pat = pattern_read(drawing->input_files[i_file]);
-    
-    /* draw substrate structure */
-    spots_t *gs_spots = pattern_calculate_substrate_spots(pat);
-
-    switch (drawing->color)
-    {
-      case PATT_GRAYSCALE_SCHEME:
-        color = grays[i_file % NUM_GRAYS];
-        break;
-      case PATT_COLOR_SCHEME:
-        color = colors[i_file % NUM_COLORS][SPOT_GS];
-        breal;
-      case PATT_BLACK_SCHEME:
-        color = PATT_BLACK;
-        break;
-    }
-
-    /* set spot properties */
-    cairo_set_source_rgb(cr, color.red, color.green, color.blue);
-    cairo_set_line_width(cr, gs_spots->stroke_width);
-    
-    for (i_spot = 0; i_spot < gs_spots->n_spots; i_spot++)
-    {
-      /*! DRAW HERE */      
-      patt_draw_cairo_spot(cr, gs_spots->spots[i_spot], 
-                           gs_spots->radius, spots_get_shape(gs_spots));
-      if (gs_spots.fill == true) cairo_fill(cr);
-      if (gs_spots.indexing == true)
-      {
-        patt_draw_cairo_label(cr, gs_spots->spots[i_spot]);  
-      }
-    
-    }
-  
-    /* draw superstructure spots */
-    if (drawing->color == PATT_COLOR_SCHEME)
-    {
-      color = colors[i_file % NUM_COLORS][SPOT_SS];
-      cairo_set_source_rgb(cr, color.red, color.green, color.blue);
-    }
-      
-    cairo_set_line_width(cr, ss_spots->stroke_width);
-    cairo_set_font_size(cr, abs(ss_spots->font_size));
-    for (i_domain = 0; i_domain < pat->n_domains; i_domain++)
-    {
-      spots_t *ss_spots = pattern_calculate_superstructure_spots(pat, i_domain);
-      
-      spots_set_shape(ss_spots, i_domain);
-      ss_spots->font_size = 12;
-      ss_spots->radius = RADIUS_SS;
-      
-      for (i_spot = 0; i_spot < ss_spots->n_spots; i_spot++)
-      {
-        /*! DRAW HERE */
-        patt_draw_cairo_spot(cr, ss_spots->spots[i_spot], 
-                           ss_spots->radius, spots_get_shape(ss_spots));
-        if (gs_spots.fill == true) cairo_fill(cr);
-        if (gs_spots.indexing == true)
-        {
-          patt_draw_cairo_label(cr, ss_spots->spots[i_spot]);  
-        }
-      }
-      
-      spots_free(ss_spots);
-    }
-  
-    spots_free(gs_spots);
-    pattern_free(pat);
-  
-  } /* for i_file */
-  
-  /* clean up */
-  cairo_destroy (cr);
-  cairo_surface_finish (surface);
-  cairo_surface_destroy (surface);
-  
-  #else /* _USE_CAIRO */
-  
-  #endif
-  
   return(PATT_SUCCESS);
 }
-
-
 
 /****************************************************************************/
 

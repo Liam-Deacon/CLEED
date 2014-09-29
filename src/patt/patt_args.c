@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <strings.h>
 #include <ctype.h>
@@ -5,27 +6,22 @@
 #include "patt.h"
 #include "pattern.h"
 
-int patt_args(int argc, char *argv[],
-              drawing_t *drawing, char *output_filename)
+int patt_args(int argc, char *argv[], drawing_t *drawing)
 {
 
   int i_arg, ii, jj;
   FILE *f;
-  
-  if (argc < 2)
-  {
-    fprintf(stderr, "\nsyntax error:\n");
-    patt_usage(stderr);
-    exit(1);
-  }
- 
+
+  drawing->std_in = true;
+  drawing->std_out = true;
+
   for (i_arg = 1; i_arg < argc; i_arg++)
   {
     if (*argv[i_arg] != '-')
     {
       fprintf(stderr, "\nsyntax error:\n");
       patt_usage(stderr);
-      exit(1);
+      exit(PATT_ARGUMENT_ERROR);
     }
     else
     {
@@ -224,6 +220,7 @@ int patt_args(int argc, char *argv[],
             
           }
           i_arg++;
+          drawing->std_in = false;
         }
       }
 
@@ -232,7 +229,7 @@ int patt_args(int argc, char *argv[],
           (strcmp(argv[i_arg], "--output") == 0))
       {
         i_arg++;
-        strcpy(output_filename, argv[i_arg]);
+        strcpy(drawing->output_filename, argv[i_arg]);
         if ((f = fopen(argv[i_arg], "w")) == NULL)
         {
           fprintf(stderr, "***error (patt): failed to open '%s'\n",
@@ -240,6 +237,7 @@ int patt_args(int argc, char *argv[],
           exit(PATT_WRITE_ERROR);
         }
         fclose(f);
+        drawing->std_out = false;
       }
 
       /* Do not print indices */
@@ -345,7 +343,7 @@ int patt_args(int argc, char *argv[],
        if (i_arg+1 < argc)
        {
          i_arg++;
-         drawing->footnote.label = "";
+         strcpy(drawing->footnote.label, "");
          strcat(drawing->footnote.label, argv[i_arg]);
          strcat(drawing->footnote.label, "\0");
        }
@@ -382,21 +380,21 @@ int patt_args(int argc, char *argv[],
          drawing->format = PATT_UNKNOWN_FORMAT;
 
          #ifdef CAIRO_HAS_PS_SURFACE
-         if (strcasecmp(argv[i_arg], "ps") == 0) drawing->format = PATT_PS;
+           if (strcasecmp(argv[i_arg], "ps") == 0) drawing->format = PATT_PS;
          #else
-         *format = PATT_PS_OLD;
+           drawing->format = PATT_PS_OLD;
          #endif /* CAIRO_HAS_PS_SURFACE */
 
          #ifdef CAIRO_HAS_IMAGE_SURFACE
-         if (strcasecmp(argv[i_arg], "png") == 0) drawing->format = PATT_PNG;
+           if (strcasecmp(argv[i_arg], "png") == 0) drawing->format = PATT_PNG;
          #endif /* CAIRO_HAS_IMAGE_SURFACE */
 
          #ifdef CAIRO_HAS_PDF_SURFACE
-         if (strcasecmp(argv[i_arg], "pdf") == 0) drawing->format = PATT_PDF;
+           if (strcasecmp(argv[i_arg], "pdf") == 0) drawing->format = PATT_PDF;
          #endif /* CAIRO_HAS_PDF_SURFACE */
 
          #ifdef CAIRO_HAS_SVG_SURFACE
-         if (strcasecmp(argv[i_arg], "svg") == 0) drawing->format = PATT_SVG;
+           if (strcasecmp(argv[i_arg], "svg") == 0) drawing->format = PATT_SVG;
          #endif /* CAIRO_HAS_SVG_SURFACE */
          
          #endif /* _USE_CAIRO */
@@ -427,6 +425,11 @@ int patt_args(int argc, char *argv[],
       exit(PATT_SUCCESS);
     }
 
+    if ((strcmp(argv[i_arg], "-I") == 0) ||
+        (strcmp(argv[i_arg], "--interactive") == 0))
+    {
+      drawing->interactive = true;
+    }
   } /* else */
 
   }  /* for i_arg */

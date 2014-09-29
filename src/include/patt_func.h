@@ -1,14 +1,18 @@
 /* patt_func.h */
 
+#ifndef PATT_FUNC_H
+#define PATT_FUNC_H
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
-#ifndef PATT_FUNC_H
-#define PATT_FUNC_H
-
 #include "patt_def.h"
 #include <stdbool.h>
+
+#ifdef _USE_CAIRO
+#include <cairo.h>
+#endif
 
 /* declare function prototypes & constants */
 
@@ -53,17 +57,51 @@ void ps_set_linewidth(FILE* file, double width);
     
 int nice_frac(int *numerator, int *denominator);
 
-int magick_ps2png(char *filename_in, char *filename_out);
-
 
 /* patt specific functions */
-int patt_args(int argc, char *argv[], drawing_t *drawing, char *output_filename);
-int patt_draw(FILE *out_stream, const drawing_t *drawing);
-void patt_usage(FILE *output);
+int patt_session(const drawing_t *drawing);
+int patt_args(int argc, char *argv[], drawing_t *drawing);
+const char *patt_color_get_name(const patt_color_rgb_t *color);
+const char *patt_color_get_ps_string(const patt_color_rgb_t *color);
+bool patt_color_is_equal(const patt_color_rgb_t *dst,
+                         const patt_color_rgb_t *src);
+int patt_draw(const drawing_t *drawing);
+
+int patt_draw_ps(const drawing_t *drawing);
+int patt_draw_ps_finish(FILE *file_ptr, const drawing_t *drawing);
+int patt_draw_ps_gun(FILE *file_ptr, const gun_t *gun);
+int patt_draw_ps_init(FILE *file_ptr, const drawing_t *drawing);
+int patt_draw_ps_label(FILE *file_ptr, const spots_t *group, const spot_t *spot);
+int patt_draw_ps_screen(FILE *file_ptr, const screen_t *screen);
+int patt_draw_ps_spot(FILE *file_ptr, spot_t *spot, double spot_size,
+                      patt_shape_t shape, const patt_color_rgb_t *color,
+                      bool fill);
+int patt_draw_ps_vectors(FILE *file_ptr, const drawing_t *drawing);
+int patt_draw_ps_vector_funcs(FILE *file_ptr);
+
+patt_color_rgb_t *patt_get_named_color(const char *color);
 void patt_info();
-                    
-#endif /* PATT_FUNC_H */
+void patt_usage(FILE *output);
+
+
+
+#ifdef _USE_CAIRO
+int patt_draw_cairo(const drawing_t *drawing);
+void patt_draw_cairo_arrow(cairo_t *cr, double x1, double y1, double x2,
+                           double y2, double stroke_width, double head_size);
+void patt_draw_cairo_gun(cairo_t *cr, const gun_t *gun);
+void patt_draw_cairo_label(cairo_t *cr, const spot_t *spot);
+void patt_draw_cairo_screen(cairo_t *cr, const screen_t *screen);
+void patt_draw_cairo_spot(cairo_t *cr, spot_t *spot,
+                          double spot_size, patt_shape_t shape);
+void patt_draw_cairo_text(cairo_t *cr, const text_t *text,
+                    cairo_font_slant_t slant, cairo_font_weight_t weight);
+
+#endif
+
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* PATT_FUNC_H */

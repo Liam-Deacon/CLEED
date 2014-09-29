@@ -2,20 +2,16 @@
 #include "patt.h"
 
 /* write title routine to output */
-int ps_draw_title(FILE *in_stream, FILE *out_stream, int ii, int ifiles,
-		char *color, int *i_line_offset)
+int patt_draw_ps_title(FILE *in_stream, FILE *out_stream, size_t ii,
+                       size_t ifiles, char *color, int *i_line_offset)
 {	
   int step;
-  int lineno;
- 
-  lineno = 0;
+  size_t lineno = 0;
  
   fget_nocomm(line_buffer, in_stream, out_stream); 
  
-  if (ifiles > 1)
-    step = 25;
-  else
-    step = -25;
+  if (ifiles > 1) step = 25;
+  else step = -25;
  
   /* read all c-comment lines and output accordingly */ 
   while (line_buffer[0] == 'c')
@@ -36,9 +32,8 @@ int ps_draw_title(FILE *in_stream, FILE *out_stream, int ii, int ifiles,
     lineno++;
   }
  
-   if (!lineno) 
-     fprintf(out_stream, "/Title%i {} def %%dummy\n", ii); 
+   if (!lineno) fprintf(out_stream, "/Title%i {} def %%dummy\n", ii);
  
-  return 0;
+  return(PATT_SUCCESS);
  
 }

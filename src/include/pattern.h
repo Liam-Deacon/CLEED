@@ -228,7 +228,8 @@ spots_t *pattern_calculate_substrate_spots(const pattern_t *pat);
  * Allocate memory for pattern_t structure with \a n_domains, 
  * but do not initialise any members of pattern_t other than \a n_domains.
  */
-spots_t *pattern_calculate_superstructure_spots(const pattern_t *pat, size_t domain);
+spots_t *pattern_calculate_superstructure_spots(const pattern_t *pat,
+                                                size_t domain);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */

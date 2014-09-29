@@ -2,38 +2,38 @@
 #include "patt.h"
 
 /* final drawing strokes */ 
-int ps_draw_finalize(FILE *out_stream, int gun_flag, float gun_thickness,
-	float gun_radians, float screen_thickness, int screen_flag,
-	int vectors_flag, char *vectors_str, int ifiles, int ev_flag,
-	float eV, char *title_str)
+int patt_draw_ps_finish(FILE *file_ptr, const drawing_t *drawing)
 {
-  int ii;
+  size_t ii;
   
-  fprintf(out_stream, "\n"
+  fprintf(file_ptr, "\n"
     "%%======================================================================="
     "\n\n");
     
-  if (gun_flag)
-   ps_draw_gun(out_stream, gun_thickness*0.5, gun_thickness*3,
-			gun_radians, screen_thickness, screen_flag);
-  if (vectors_flag)
-	fprintf(out_stream, "%s\n", vectors_str);
-  if (screen_flag)
-	ps_draw_screen(out_stream, screen_thickness, 0);
-  
-  fprintf(out_stream,"grestore\n");
-  fprintf(out_stream,"%%Print Titles\n");
-  for (ii=0;ii<ifiles;ii++)
+  if (drawing->gun.visible)
   {
-	fprintf(out_stream,"Title%i ",ii);
+    patt_draw_ps_gun(file_ptr, &drawing->gun);
   }
-  fprintf(out_stream,"\n");
-  if (ev_flag)
-    fprintf(out_stream, "add_eV\n");
-  if (*title_str != '\0')
-	fprintf(out_stream, "title\n");
-  fprintf(out_stream,"footnote\n"); 
-  fprintf(out_stream,"\nshowpage\n"); 
-  fprintf(out_stream,"%%EOF");
-  return 0;
+  //if (drawing->show_vectors) fprintf(file_ptr, "%s\n", vectors_str);
+  if (drawing->screen.visible)
+  {
+    patt_draw_ps_screen(file_ptr, &drawing->screen);
+  }
+
+  fprintf(file_ptr, "grestore\n");
+  fprintf(file_ptr, "%%Print Titles\n");
+  for (ii=0; ii<drawing->n_files; ii++)
+  {
+    fprintf(file_ptr, "Title%i ", ii);
+  }
+  fprintf(file_ptr, "\n");
+
+  if (drawing->eV.visible) fprintf(file_ptr, "add_eV\n");
+  if (drawing->title.label[0] != '\0') fprintf(file_ptr, "title\n");
+
+  fprintf(file_ptr, "footnote\n");
+  fprintf(file_ptr, "\nshowpage\n");
+  fprintf(file_ptr, "%%EOF");
+
+  return(PATT_SUCCESS);
 }

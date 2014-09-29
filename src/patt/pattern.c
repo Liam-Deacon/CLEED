@@ -89,7 +89,7 @@ void pattern_free(pattern_t *pat)
 {
   if (pat->title != NULL)
   {
-	free(pat->title);
+    free(pat->title);
   }
   if (pat->M_SS != NULL) free(pat->M_SS);
   free(pat);
@@ -496,7 +496,8 @@ spots_t *pattern_calculate_substrate_spots(const pattern_t *pat)
   
 }
 
-spots_t *calculate_superstructure_spots(const pattern_t *pat, size_t domain)
+spots_t *pattern_calculate_superstructure_spots(const pattern_t *pat,
+                                                size_t domain)
 {
   spots_t *spots;
   double a1[2], a2[2];                /* substrate basis vectors */

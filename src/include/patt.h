@@ -23,11 +23,6 @@ extern "C" {
 #define VERSION "PATTERN - version 1.4 (2014.07.04 - )"
 #define NOTES "Pattern is part of the CLEED package by Georg Held\n\t(contact g.held@reading.ac.uk)"
 
-#ifdef USE_MAGICK
-#include <MagickCore>
-#include <MagickWand>
-#endif
-
 #include "patt_ver.h"
 #include "patt_def.h"
 #include "patt_func.h"

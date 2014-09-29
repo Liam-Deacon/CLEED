@@ -16,7 +16,7 @@ Changes:
 #define PROG "PATTERN"
 #define PROG_COPYRIGHT "Copyright (C) 1994-2014 Georg Held\n" \
 "Copyright (C) 2013-2014 Liam Deacon"
-#define PROG_LICENSE ""
+#define PROG_LICENSE "GNU General Public License v3.0"
 #define PROG_VERSION "2014.04.27 "
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
 #define PROG_MAINTAINER "Liam Deacon (liam.deacon@diamond.ac.uk)" 

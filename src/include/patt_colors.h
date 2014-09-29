@@ -27,6 +27,7 @@ typedef struct patt_color_rgb_t
 extern const char colors[NUM_COLORS][2][30];
 extern const patt_color_rgb_t grays[NUM_GRAYS];
 
+/* named colors */
 extern const patt_color_rgb_t PATT_BLACK;
 extern const patt_color_rgb_t PATT_RED;
 extern const patt_color_rgb_t PATT_BLUE;
@@ -47,6 +48,12 @@ extern const patt_color_rgb_t PATT_GOLD;
 extern const patt_color_rgb_t PATT_BROWN;
 extern const patt_color_rgb_t PATT_WHITE;
 
+/* special colors */
+extern const patt_color_rgb_t PATT_EDGE_COLOR;
+extern const patt_color_rgb_t PATT_SCREEN_COLOR;
+extern const patt_color_rgb_t PATT_GUN_COLOR;
+
+
 /*! \fn patt_color_rgb_t *patt_get_enum_color(int color);
  *  \brief Retrieve a color from a given enum value.
  *  \param color The color from an enum value.
@@ -59,7 +66,10 @@ patt_color_rgb_t *patt_get_enum_color(int color);
  *  \param *color the color name string.
  *  \return patt_color_rgb_t* pointer to color struct.
  */
-patt_color_rgb_t *patt_get_named_color(char *color);
+patt_color_rgb_t *patt_color_from_name(const char *color);
+
+void patt_color_copy(patt_color_rgb_t *new_color,
+                     const patt_color_rgb_t *old_color);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C"  */

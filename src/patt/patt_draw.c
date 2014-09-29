@@ -5,90 +5,19 @@
 #include "spots.h"
 #include "patt.h"
 
-void patt_draw_cairo_spot(cairo_t *cr, spot_t *spot,
-                          double spot_size, patt_shape_t shape)
-/*
- draw spots in different shapes:
-  0: circle
-  1: square
-  2: triangle
-*/
-  
+int patt_draw(const drawing_t *drawing)
 {
-  double x = spot->x, y = spot->y;
-  int delta;
 
-  switch(shape)
-  {
-    case(PATT_SQUARE):
+  #ifdef _USE_CAIRO
+    return(patt_draw_cairo(drawing));
+  #else /* _USE_CAIRO */
+    if ((drawing->format == PATT_PS_OLD) ||
+        (drawing->format == PATT_UNKNOWN_FORMAT))
     {
-      /* square */
-      spot_size /= 1.4;
-      cairo_move_to(cr, x, y);
-      cairo_rectangle(cr, x - spot_size, y - spot_size, 
-                          x + spot_size, y + spot_size);
-      break;
+      return(patt_draw_ps(out_stream, drawing));
     }
-    case(PATT_TRIANGLE_UP):
-    {
-      /* up triangle */
-      delta = spot_size * 0.866;
-      cairo_new_path(cr);
-      cairo_move_to(cr, x, y + spot_size);
-      cairo_line_to(cr, x - delta, y - (0.5* spot_size));
-      cairo_line_to(cr, x + spot_size, y + spot_size);
-      cairo_line_to(cr, x + delta, y - (0.5* spot_size));
-      cairo_close_path(cr);
-      break;
-    }
-    case(PATT_TRIANGLE_DOWN):
-    {
-      /* down triangle */
-      delta = spot_size * 0.866;
-      cairo_new_path(cr);
-      cairo_move_to(cr, x, y - spot_size);
-      cairo_line_to(cr, x - delta, y + (0.5* spot_size));
-      cairo_line_to(cr, x + delta, y + (0.5 * spot_size));
-      cairo_close_path(cr);
-      break;
-    }
-    case(PATT_DIAMOND):
-    {
-      /* diamond */
-      cairo_new_path(cr);
-      cairo_move_to(cr, x - spot_size, y);
-      cairo_line_to(cr, x, y + spot_size);
-      cairo_line_to(cr, x + spot_size, y);
-      cairo_line_to(cr, x, y - spot_size);
-      cairo_close_path(cr);
-      break;
-    }
-    case(PATT_HEXAGON):
-    {
-      /* hexagon */
-      delta = spot_size * 0.866;
-      cairo_new_path(cr);
-      cairo_move_to(cr, x, y - spot_size);
-      cairo_line_to(cr, x - delta, y - (0.5*spot_size));
-      cairo_line_to(cr, x - delta, y + (0.5*spot_size));
-      cairo_line_to(cr, x, y + spot_size);
-      cairo_line_to(cr, x + delta, y + (0.5*spot_size));
-      cairo_line_to(cr, x + delta, y - (0.5*spot_size));
-      cairo_close_path(cr);
-      break;
-    }
-    case(PATT_CIRCLE): default:
-    {
-      cairo_arc(cr, x, y, spot_size, 0, 2 * M_PI);
-      break;
-    }
-  }  /* switch */
+  #endif
+
+  return(PATT_FORMAT_ERROR);
 }
 
-void patt_draw_cairo_label(cairo_t *cr, spot_t *spot)
-{
-  cairo_text_extents_t extents;
-  cairo_text_extents(cr, spot->label, &extents);
-  cairo_move_to(cr, spot->x - extents.width/2, spot->y + extents.height/2);
-  cairo_show_text(cr, spot->label);
-}
