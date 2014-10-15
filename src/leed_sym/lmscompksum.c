@@ -16,7 +16,7 @@
 
 /*===================================================================*/
 
-mat leed_ms_comp_k_sum(mat Maux,leed_beam_t *beam,leed_atom_t *atom,
+mat leed_ms_comp_k_sum(mat Maux,leed_beam_t *beam,leed_atom *atom,
              int type ,int l_max, int sign)
 
 /*===================================================================*/

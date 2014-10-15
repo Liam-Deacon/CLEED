@@ -1,19 +1,30 @@
 /*********************************************************************
-GH/27.09.00
+ *                           LEED_VER_SYM.H
+ *
+ *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: provides versioning information for LEED program with
+ *              symmetry optimisations.
+ *
+ * Changes:
+ *    GH/2000.09.27 - creation
+ *    LD/2014.06.26 - branch from leed_ver.h for leed_sym program.
+ *
+ *********************************************************************/
 
-include file for 
- - current version of LEED program
-
-Changes:
-GH/27.09.00 - create
-*********************************************************************/
+#ifndef LEED_VER_H
+#define LEED_VER_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
-
-#ifndef LEED_VER_H
-#define LEED_VER_H
 
 #ifdef LEED_VERSION
 #undef LEED_VERSION
@@ -30,9 +41,9 @@ extern "C" {
 /* additional program information */
 #define PROG "cleed_sym"
 #define PROG_COPYRIGHT "Copyright (C) 1994-2014 Georg Held\n" \
-"Copyright (C) 1999-2000 Wolfgang Brown" \
+"Copyright (C) 1999-2000 Wolfgang Braun" \
 "Copyright (C) 2014 Liam Deacon"
-#define PROG_LICENSE ""
+#define PROG_LICENSE "GNU General Public License v3"
 #define PROG_VERSION "2014.07.04 "
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
 #define PROG_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 
@@ -52,9 +63,8 @@ extern "C" {
 #define PROG_PLAT "Unix"
 #endif
 
-
-#endif /* LEED_VER_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* LEED_VER_H */

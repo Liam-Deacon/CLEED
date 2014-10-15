@@ -1,15 +1,22 @@
-/*********************************************************************
-ZZ/03.03.08
-  file contains functions:
-
-  main (03.03.08)
-     Main program for CAOI_LEED program 
-     (calls cleed program for each angle of incidence)
-
-Changes:
- LD/25.04.14 - added help() and info() 
-
-*********************************************************************/
+/************************************************************************
+ *                        CAOI_LEED_MAIN.C
+ *
+ *  Copyright 2008-2014 Zhasmina Zheleeva
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Description:  file contains functions
+ *   main()
+ *     Main program for CAOI_LEED program
+ *     (calls cleed program for each angle of incidence)
+ *
+ * Changes:
+ *   ZZ/2008.03.03 - creation
+ *   LD/2014.10.09 - changed filename length to FILENAME_MAX
+ *********************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,12 +29,11 @@ int main (int argc, char *argv[])
 {
   int i_arg;
   size_t length;
-  /* int sa; */     /* should be defined as global variable in caoi_leed.h */
-  int i_ang;
+  size_t i_ang;
 
-  char bsr_file[STRSIZE];
-  char par_file[STRSIZE];
-  char res_file[STRSIZE];
+  char bsr_file[FILENAME_MAX];
+  char par_file[FILENAME_MAX];
+  char res_file[FILENAME_MAX];
 
   char linebuffer[STRSIZE];
   char helpstring[STRSIZE];
@@ -43,9 +49,9 @@ int main (int argc, char *argv[])
 
   sa = 999;
 
-  strncpy(bsr_file,"---", STRSIZE);
-  strncpy(par_file,"---", STRSIZE);
-  strncpy(res_file,"leed.res", STRSIZE);
+  strncpy(bsr_file, "---", FILENAME_MAX);
+  strncpy(par_file, "---", FILENAME_MAX);
+  strncpy(res_file, "leed.res", FILENAME_MAX);
 
 /*****************************************************************
 Decode arguments:
@@ -53,7 +59,11 @@ Decode arguments:
  -i parameter file for overlayer
  -o project name for output file
 ******************************************************************/
-  if (argc < 2) {usage(STDERR);exit(1);}
+  if (argc < 2)
+  {
+    usage(STDERR);
+    exit(1);
+  }
 
   for (i_arg = 1; i_arg < argc; i_arg++)
   {
@@ -93,21 +103,21 @@ Decode arguments:
       if(strncmp(argv[i_arg], "-b", 2) == 0)
       {
         i_arg++;
-        strncpy(bsr_file,argv[i_arg],STRSIZE);
+        strncpy(bsr_file, argv[i_arg], FILENAME_MAX);
       }
 
       /* Read parameter input file */
       if(strncmp(argv[i_arg], "-i", 2) == 0)
       {
         i_arg++;
-        strncpy(par_file,argv[i_arg],STRSIZE);
+        strncpy(par_file, argv[i_arg], FILENAME_MAX);
       }
 
       /* Read vertex file */
       if(strncmp(argv[i_arg], "-o", 2) == 0)
       {
         i_arg++;
-        strncpy(res_file, argv[i_arg], STRSIZE);
+        strncpy(res_file, argv[i_arg], FILENAME_MAX);
       }
 
     } /* else */
@@ -130,7 +140,7 @@ Decode arguments:
 
   if(strncmp(bsr_file, "---", 3) == 0)
   {
-    strncpy(bsr_file, par_file, STRSIZE);
+    strncpy(bsr_file, par_file, FILENAME_MAX);
   }
 
 /*****************************************************************
@@ -140,7 +150,7 @@ Decode arguments:
 
   length = strlen(par_file) - 4;
   strncpy(linebuffer, par_file, length);
-  sprintf(linebuffer+length,".bsr");
+  sprintf(linebuffer+length, ".bsr");
 
   if ((inp_stream = fopen(linebuffer,"r")) == NULL)
   {
@@ -151,9 +161,12 @@ Decode arguments:
     exit(1);
   }
 
-  while (fgets(linebuffer,STRSIZE,inp_stream))
+  while (fgets(linebuffer, STRSIZE, inp_stream))
   {
-    if (!strncasecmp(linebuffer, "sa:", 3)) {sscanf(linebuffer+3,"%d",&sa);}
+    if (!strncasecmp(linebuffer, "sa:", 3))
+    {
+      sscanf(linebuffer+3, "%u", &sa);
+    }
   }
 
   if (sa == 999)
@@ -187,7 +200,7 @@ Decode arguments:
 
     /* append "ia_<i_ang>" to par_file */
     strncpy(linebuffer, par_file, length);
-    sprintf(linebuffer + length, "ia_%d", i_ang + 1);
+    sprintf(linebuffer + length, "ia_%u", i_ang + 1);
 
     /* execute cleed program held in CAOI_LEED environment variable */
     sprintf(helpstring,            /* note the quotations in next line */
@@ -227,7 +240,7 @@ Decode arguments:
   for (i_ang = 0; i_ang < sa; i_ang ++)
   {
     strncpy(helpstring, par_file, length);
-    sprintf(helpstring + length, "ia_%d.res", i_ang + 1);
+    sprintf(helpstring + length, "ia_%u.res", i_ang + 1);
     if ((read_stream = fopen(helpstring,"r")) == NULL)
     {
 	  #ifdef ERROR

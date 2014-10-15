@@ -22,7 +22,7 @@ GH/04.09.97 - use memcpy for copying beams.
 
 int leed_beam_get_selection(leed_beam_t ** p_beams_out, 
               leed_beam_t * beams_in,
-              leed_var_t *v_par, 
+              leed_var *v_par, 
               real dmin)
 
 /************************************************************************
@@ -42,7 +42,7 @@ int leed_beam_get_selection(leed_beam_t ** p_beams_out,
                 loop. The list must be terminated by "F_END_OF_LIST" in the 
                 structure element "k_par".
 
-  leed_var_t *v_par - (input)
+  leed_var *v_par - (input)
                 All necessary parameters that change during the energy loop 
                 (for details see "leed_def.h").
                 used: 

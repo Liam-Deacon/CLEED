@@ -7,7 +7,7 @@
 
 int pdf_draw_init(HPDF_Doc *pdf, int ifiles, char *title_str,
 	float *pos_title, char *footnote, float *pos_footnote, int screen_flag,
-	float screen_thickness, int fill_screen, int ev_flag,
+	float screenhickness, int fill_screen, int ev_flag,
 	float eV, float *pos_ev, int clip_flag, int vectors_flag)
 {
   pdf = HPDF_New (error_handler, NULL);
@@ -56,7 +56,7 @@ int pdf_draw_init(HPDF_Doc *pdf, int ifiles, char *title_str,
  fprintf(out_stream,"%s %.1f %.1f moveto (%s) show\n} def\n",
    PSBLACK, pos_footnote[0], pos_footnote[1], footnote );
  if (screen_flag)
-   ps_draw_screen(out_stream, screen_thickness, fill_screen);
+   ps_draw_screen(out_stream, screenhickness, fill_screen);
  if (ev_flag) 
  {
  fprintf(out_stream,"/add_eV {%%add electron energy label\n"); 
@@ -66,12 +66,12 @@ int pdf_draw_init(HPDF_Doc *pdf, int ifiles, char *title_str,
  }
  if (clip_flag)
    fprintf(out_stream,"%s %.1f 0 moveto 0 0 %.1f 0 360 arc clip\n",
-     PSWHITE, MAX_RADIUS+(screen_thickness-1), 
-     MAX_RADIUS+(screen_thickness-1));
+     PSWHITE, MAX_RADIUS+(screenhickness-1), 
+     MAX_RADIUS+(screenhickness-1));
    fprintf(out_stream,
      "0. setlinewidth 1 1 1 setrgbcolor 204.0 0"
      " moveto 0 0 %.1f 0 360 arc stroke\n",
-	 MAX_RADIUS+(screen_thickness-1));
+	 MAX_RADIUS+(screenhickness-1));
      
  if(vectors_flag)
 	 pdf_add_vectors(&pdf);

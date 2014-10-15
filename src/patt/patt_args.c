@@ -6,7 +6,7 @@
 #include "patt.h"
 #include "pattern.h"
 
-int patt_args(int argc, char *argv[], drawing_t *drawing)
+int patt_args(int argc, char *argv[], patt_drawing *drawing)
 {
 
   int i_arg, ii, jj;
@@ -188,7 +188,7 @@ int patt_args(int argc, char *argv[], drawing_t *drawing)
       /* Use black only */
       if(strcmp(argv[i_arg], "--black") == 0)
       {
-        drawing->color_scheme = PATT_BLACK_SCHEME;
+        drawing->color_scheme = PATT_MONOCHROME_SCHEME;
       }
 
       /* Open input file(s) */

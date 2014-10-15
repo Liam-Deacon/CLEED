@@ -77,7 +77,7 @@ NOTES
 
 int main(int argc, char *argv[])
 {
-  drawing_t *drawing = &drawing_default;
+  patt_drawing *drawing = &drawing_default;
 
   patt_args(argc, argv, drawing);
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
   }
   else /* stdin a pipe or file */
   {
-    return(patt_draw((const drawing_t*) drawing));
+    return(patt_draw((const patt_drawing*) drawing));
   }
 
 
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
 } /* main */
 
-int patt_session(const drawing_t *drawing)
+int patt_session(const patt_drawing *drawing)
 {
   char buf[BUFSIZ];
   char u;

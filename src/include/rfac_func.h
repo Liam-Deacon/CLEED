@@ -1,110 +1,129 @@
 /*********************************************************************
-GH/11.08.95
+ *                           RFAC_FUNC.H
+ *
+ *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/1995.08.11 - creation
+ *   LD/2014.10.09 - changed struct declarations to their typedef
+ *                   equivalents.
+ *                 - added some Doxygen markup
+ *********************************************************************/
 
-functions used for the r-factor program
-*********************************************************************/
+/*! \file rfac_func.h
+ *  \brief Header file for function prototypes used in the R factor program.
+ */
+
+#ifndef RFAC_FUNC_H
+#define RFAC_FUNC_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
-#ifndef RFAC_FUNC_H
-#define RFAC_FUNC_H
+#include "rfac_def.h"
 
-int    bgets( char *, long, long, char *); /* get string from buffer */
-char * file2buffer( char *);               /* copy file to buffer */ 
-struct rfargs rf_rdargs (int, char * *);   /* read argument list */
+/*********************************************************************
+ * General routines (utility functions)
+ *********************************************************************/
 
-/* 
- count lines (all in file rflines.c)
-*/
-int   rf_lines( char *);                   /* count lines */
-int   rf_clines( char *);                  /* count comment lines */
-int   rf_nclines( char *);                 /* count data lines */
+int bgets(const char *, long, long, char *);  /*!< get string from buffer */
+char *file2buffer(const char *);              /*!< copy file to buffer */
+rfac_args rf_rdargs(int, char **);            /*!< read argument list */
 
-/*
- read data from files
-*/
-char * rf_version( char * );               /* current program version */
-void rf_help(FILE *);                            /* help function */
+size_t rf_lines(const char *);               /*!< count lines */
+size_t rf_clines(const char *);              /*!< count comment lines */
+size_t rf_nclines(const char *);             /*!< count data lines */
 
-struct rfivcur *rf_input( char * );        /* general input routine */
-struct rfelist *rf_rdexpt( struct rfivcur *, char *);       
-					   /* input of expt. data */
-struct rftlist *rf_rdthe( struct rfivcur *, char *);       
-					   /* input of the. data */
-struct rftlist *rf_rdvh_beams( struct rfivcur *, char *, char *);  
-					   /* input of the. data */
-int rf_intindl( char *, struct rfspot *, int);   
-					   /* line interpreter */
-/*
- data output
-*/
+char *rf_version(char *);                    /*!< current program version */
+void rf_help(FILE *);                        /*!< help function */
+void rf_info();                              /*!< version information, etc. */
 
-int rf_output(struct rfargs * ,  struct rfrfac * , int , int);
-					   /* general output function */
-int rf_ctr2out(char *, FILE * );           /* copy control file to output */
+/*!
+ * line interpreter
+ */
+void rf_intindl(char *, rfac_spot *, size_t);
 
-/*
- r_factors
-*/
-/*
-struct rfrfac *rf_cmpr( struct rfivcur *, struct rfargs *, int *, int, float);
-*/
+/*********************************************************************
+ * data output
+ *********************************************************************/
 
-int rf_cmpr( struct rfrfac **, struct rfivcur *, 
-                        struct rfargs *, int *, int, float);
-					   /* compute all R-factors */
-double rf_r1( struct rfivcur *, struct rfref *, int);
-					   /* R1 factor */
-double rf_r2( struct rfivcur *, struct rfref *, int);
-					   /* R2 factor */
-double rf_rb( struct rfivcur *, struct rfref *, int);
-					   /* Rb1/2 factors */
-double rf_rg( struct rfivcur *, struct rfref *, float, int);
-					   /* Rg factor */
-double rf_rp( struct rfivcur *, struct rfref *, float, int);
-					   /* Pendry's R factor */
+/*!
+ * copy control file to output
+ */
+int rf_ctr2out(char *, FILE * );
 
-double rf_rk1( struct rfivcur *, struct rfref *, int);
-					   /* R1 factor I(k) */
-double rf_rk2( struct rfivcur *, struct rfref *, int);
-					   /* R2 factor  I(k) */
-double rf_rkb( struct rfivcur *, struct rfref *, int);
-					   /* Rb1/2 factors  I(k) */
-double rf_rkg( struct rfivcur *, struct rfref *, int);
-					   /* Rg factor  I(k) */
-double rf_rkp( struct rfivcur *, struct rfref *, float, int);
-					   /* Pendry's R factor  I(k) */
-void rf_rres( struct rfrfac * );           /* reset rfrfac */
-int rf_rsw( char *, struct rfrswitch * );  /* set rf switches */
-void rf_rswall ( int, struct rfrswitch * );/* set all rf switches (in
-					      file "rfrsw.c" */
-struct rfmin *rf_fdmin(struct rfrfac *, struct rfmin *, int, int);
-					   /* find min. R factor */
-int rf_prmin(struct rfmin *, struct rfargs *);
+/*! general output function */
+int rf_output(rfac_args *,  rfac *, size_t, size_t);
 
-/* 
- smoothing etc.
-*/
-struct rfref rf_reflist( struct rfivcur *, float, float);
-					   /* set up reference */
-int rf_tsort( struct rfivcur *);           /* sort theoretical IV curve */
-int rf_lorentz( struct rfivcur * , float, char *);
-                                           /* smooth IV curves */
+/*********************************************************************
+ * data input
+ *********************************************************************/
 
-/************************/
+/* general input routine */
+rfac_ivcur *rf_input(const char *, const char *);
 
-/* new */
-int cr_cmpr( struct rfrfac **, struct rfivcur *, 
-                        struct rfargs *, int *, int, float);
-struct rfivcur *cr_input( char *, char *);
-struct rftlist *cr_rdcleed( struct rfivcur *, char *, char *);
-int cr_output(struct rfargs * ,  struct rfrfac * , int , int);
-					   /* general output function */
+rfac_iv_data *rf_rdcleed(rfac_ivcur *, char *, char *);
 
-#endif /* RFAC_FUNC_H */
-                       
+/* read input of experimental data */
+rfac_iv_data *rf_rdexpt(rfac_ivcur *, const char *);
+
+/* read input of theoretical data */
+rfac_iv_data *rf_rdthe(rfac_ivcur *, char *);
+
+/* read input of theoretical data */
+rfac_iv *rf_rdvh_beams(rfac_ivcur *, char *, char *);
+
+/*********************************************************************
+ * sort, spline, smooth
+ *********************************************************************/
+int rf_sort(rfac_ivcur *);                     /* sort theoretical IV curve */
+int rf_lorentz(rfac_ivcur *, real, const char *);
+                                               /* smooth IV curves */
+void rf_spline(rfac_iv *);                     /* prepare cubic spline */
+real rf_splint(real, rfac_iv_data *, size_t);  /* prepare cubic spline */
+
+/*********************************************************************
+ * r_factors
+ *********************************************************************/
+size_t rf_mklide(real *, real *, real *, real , real,
+                 rfac_iv_data *, size_t, rfac_iv_data *, size_t);
+
+/* prepare comparison */
+size_t rf_mklist(real *, real *, real *, real,
+                 rfac_iv_data *, size_t, rfac_iv_data *, size_t);
+
+/* R1 factor */
+real rf_r1(const real *, const real *, const real *);
+
+/* R2 factor */
+real rf_r2(const real *, const real *, const real *);
+
+/* Rb1 factor */
+real rf_rb(const real *, const real *, const real *);
+
+/* Pendry's R factor */
+real rf_rp(const real *, const real *, const real *, real);
+
+/* Minimum R factor */
+real rf_rmin(rfac_ivcur *, rfac_args *, real *, real *, real *);
+
+/*********************************************************************
+ * low-level routines
+ *********************************************************************/
+
+rfac_iv *rfac_iv_init();
+rfac_iv *rfac_iv_alloc(size_t n_eng);
+void rfac_iv_free(rfac_iv*);
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* RFAC_FUNC_H */

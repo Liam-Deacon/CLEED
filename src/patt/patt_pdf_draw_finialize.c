@@ -3,20 +3,20 @@
 #include "patt.h"
 
 /* final drawing strokes */ 
-int pdf_draw_finalize(HPDF_Doc *pdf, int gun_flag, float gun_thickness,
-	float gun_radians, float screen_thickness, int screen_flag,
+int pdf_draw_finalize(HPDF_Doc *pdf, int gun_flag, float patt_gunhickness,
+	float gun_radians, float screenhickness, int screen_flag,
 	int vectors_flag, char *vectors_str, int ifiles, int ev_flag,
 	float eV, char *title_str)
 {
   int ii;
       
   if (gun_flag)
-   pdf_draw_gun(&pdf, gun_thickness*0.5, gun_thickness*3,
-			gun_radians, screen_thickness, screen_flag);
+   pdf_draw_gun(&pdf, patt_gunhickness*0.5, patt_gunhickness*3,
+			gun_radians, screenhickness, screen_flag);
   if (vectors_flag)
 	fprintf(out_stream, "%s\n", vectors_str);
   if (screen_flag)
-	ps_draw_screen(out_stream, screen_thickness, 0);
+	ps_draw_screen(out_stream, screenhickness, 0);
   
   fprintf(out_stream,"grestore\n");
   for (ii=0;ii<ifiles;ii++)

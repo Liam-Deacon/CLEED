@@ -1,5 +1,5 @@
 /************************************************************************
- * basis.h
+ *                            BASIS.H
  *
  *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
  *
@@ -11,7 +11,7 @@
  * Description: Header provides basis vectors data type and associated 
  *              functions.
  * Change Log:
- *   2014/07/30 - Creation
+ *   LD/2014.07.30 - Creation
  ************************************************************************/
  
 #ifndef BASIS_H
@@ -20,7 +20,7 @@
 #include "coord.h"
 #include "miller_index.h"
 
-#define BASIS_VECTOR_PTR(basis, i)  (basis->a+(i*sizeof(coord_t)))
+#define BASIS_VECTOR_PTR(basis, i)  (basis->a+(i*sizeof(coord)))
 
 #define CALC_ROTATION_MATRIX(normal, R)                                         \
 {                                                                               \
@@ -73,39 +73,39 @@
 extern "C" {
 #endif
 
-/*! \struct basis_t
+/*! \struct basis
  *  \brief structure for the three basis vectors a1, a2, & a3. */
 typedef struct {
-  coord_t a[3];
-} basis_t; 
+  coord a[3];
+} basis; 
 
-basis_t *basis_matrix_rotate(basis_t *a, double **R);
-basis_t *basis_ptr_rotate(basis_t *a, double *R[]);
-basis_t *basis_angle_rotate(const basis_t *a, double alpha, double beta, double gamma);
+basis *basis_matrix_rotate(basis *a, double **R);
+basis *basis_ptr_rotate(basis *a, double *R[]);
+basis *basis_angle_rotate(const basis *a, double alpha, double beta, double gamma);
 
-basis_t *basis_rotate_basis(const basis_t *basis, double **R);
-coord_t *basis_rotate_normal(const coord_t *nor, double **R);
-coord_t *basis_rotate_vector_list(const coord_t *list, size_t n, double **R);
-basis_t *basis_rotate_parallel_to_x_axis_rhs(const basis_t *basis, double **R);
-basis_t *basis_init();
-void basis_free(basis_t *basis);
-void basis_copy(basis_t *dst, const basis_t *src);
-basis_t *basis_init_vectors(const coord_t *a1, const coord_t *a2, const coord_t *a3);
+basis *basis_rotate_basis(const basis *basis, double **R);
+coord *basis_rotate_normal(const coord *nor, double **R);
+coord *basis_rotate_vector_list(const coord *list, size_t n, double **R);
+basis *basis_rotate_parallel_to_x_axis_rhs(const basis *basis, double **R);
+basis *basis_init();
+void basis_free(basis *basis);
+void basis_copy(basis *dst, const basis *src);
+basis *basis_init_vectors(const coord *a1, const coord *a2, const coord *a3);
 
-coord_t *basis_get_a1(const basis_t *basis);
-coord_t *basis_get_a2(const basis_t *basis);
-coord_t *basis_get_a3(const basis_t *basis);
-void basis_get_vectors(const basis_t *basis, coord_t *a1, coord_t *a2, coord_t *a3);
-coord_t *basis_get_normal(const basis_t *basis, const miller_hkl_t *hkl);
-size_t basis_get_allocated_size(const basis_t *basis);
+coord *basis_get_a1(const basis *basis);
+coord *basis_get_a2(const basis *basis);
+coord *basis_get_a3(const basis *basis);
+void basis_get_vectors(const basis *basis, coord *a1, coord *a2, coord *a3);
+coord *basis_get_normal(const basis *basis, const miller_hkl *hkl);
+size_t basis_get_allocated_size(const basis *basis);
 
-void basis_set_a1(basis_t *basis, const coord_t *a1);
-void basis_set_a2(basis_t *basis, const coord_t *a2);
-void basis_set_a3(basis_t *basis, const coord_t *a3);
-void basis_set_vectors(basis_t *basis, const coord_t *a1, const coord_t *a2, const coord_t *a3);
+void basis_set_a1(basis *basis, const coord *a1);
+void basis_set_a2(basis *basis, const coord *a2);
+void basis_set_a3(basis *basis, const coord *a3);
+void basis_set_vectors(basis *basis, const coord *a1, const coord *a2, const coord *a3);
 
-void basis_printf(FILE *f, const basis_t *basis);
-double **normal_get_rotation_matrix(const coord_t *normal);
+void basis_printf(FILE *f, const basis *basis);
+double **normal_get_rotation_matrix(const coord *normal);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
@@ -115,7 +115,7 @@ namespace cleed {
 class Basis {
   public:
     Basis();
-    Basis(basis_t *a);
+    Basis(basis *a);
     ~Basis();
     
     /* setters */
@@ -140,7 +140,7 @@ class Basis {
     void rotate(double alpha, double beta, double gamma);
     
   protected:
-    basis_t *basis;
+    basis *basis;
     
     friend class Coordinate;
 };

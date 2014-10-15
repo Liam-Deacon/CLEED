@@ -19,7 +19,7 @@ enum {
 #endif
 
 /* shapes */
-/*! \enum patt_shape_t 
+/*! \enum patt_shape 
  */
 typedef enum {
   PATT_CIRCLE,          /*!< circle shape */
@@ -29,10 +29,10 @@ typedef enum {
   PATT_DIAMOND,         /*!< diamond shape */
   PATT_HEXAGON,         /*!< hexagon shape */
   PATT_SHAPE_UNKNOWN    /*!< unknown shape */
-} patt_shape_t;
+} patt_shape;
 
 /* stroke styles */
-/*! \enum patt_stroke_t
+/*! \enum patt_stroke
  */
 typedef enum {
   PATT_SOLID_STROKE,    /*!< solid stroke */
@@ -40,139 +40,139 @@ typedef enum {
   PATT_DOTTED_STROKE,   /*!< dotted stroke */
   PATT_DASHDOT_STROKE,  /*!< dashdot stroke */
   PATT_NO_STROKE        /*!< no stroke */
-} patt_stroke_t;
+} patt_stroke;
 
-/*! \struct spot_t
+/*! \struct spot
  *  \brief LEED spot structure.
  */
-typedef struct spot_t
+typedef struct spot
 {
   char* label;          /*!< spot label */
-  miller_hkl_t index;   /*!< spot index */
+  miller_hkl index;   /*!< spot index */
   double x;             /*!< x position of spot */
   double y;             /*!< y position of spot */
-} spot_t;
+} spot;
 
-/*! \struct spots_t
+/*! \struct spots
  *  \brief LEED spot list structure.
  *
  * List structure for LEED spots. Contains members to control drawing 
  * of spots group.
  */
-typedef struct spots_t
+typedef struct spots
 {
   bool fill;                    /*!< flag to determine if spots are filled */
   bool visible;                 /*!< flag to determine if spots are shown */
   bool indexing;                /*!< flag to determine is labels are shown */
-  patt_color_rgb_t color;       /*!< color of drawn spots */
-  patt_shape_t shape;           /*!< shape of drawn spots */
+  patt_color_rgb color;         /*!< color of drawn spots */
+  patt_shape shape;             /*!< shape of drawn spots */
   double stroke_width;          /*!< stroke width of drawn spots */
-  patt_stroke_t stroke_style;   /*!< stroke type of drawn spots */
+  patt_stroke stroke_style;     /*!< stroke type of drawn spots */
   double font_size;             /*!< font size of labels */
   char *font_name;              /*!< font face for label text */
   double radius;                /*!< radius of spots */
   int flag;                     /*!< extra switch */
-  spot_t *spots;                /*!< array of spots */
+  spot *spots;                  /*!< array of spots */
   size_t n_spots;               /*!< maximum number of spots in array */
   size_t allocated_size;        /*!< allocated number of spots for array */
-} spots_t;
+} spots;
 
-extern spot_t spot_default; 
+extern spot spot_default; 
 
-/* spots_t functions */
-/*! \fn spots_t *spots_alloc(size_t n_spots)
+/* spots functions */
+/*! \fn spots *spots_alloc(size_t n_spots)
  *  \brief Allocate memory for spots. 
  *  \param n_spots Size of array to allocate to memory.
- *  \return \sa spots_t* Pointer to spots_t structure.
+ *  \return \sa spots* Pointer to spots structure.
  *
  * Allocate memory for array of spots of size \a n_spots.
  */
-spots_t *spots_alloc(size_t n_spots);
+spots *spots_alloc(size_t n_spots);
 
-/*! \fn spots_t *spots_init(size_t n_spots)
- *  \brief Initialise a \a spots_t structure. 
+/*! \fn spots *spots_init(size_t n_spots)
+ *  \brief Initialise a \a spots structure. 
  *  \param n_spots Size of array to allocate to memory.
- *  \return \sa spots_t* Pointer to spots_t structure.
+ *  \return \sa spots* Pointer to spots structure.
  *
  * Allocate memory for array of spots of size \a n_spots.
  * Set structure members to default valves.
  */
-spots_t *spots_init(size_t n_spots);
+spots *spots_init(size_t n_spots);
 
-/*! \fn void spots_free(spots_t *spots)
- *  \brief Free memory of a \a spots_t structure. 
- *  \param *spots Pointer to spots_t object to free from memory.
+/*! \fn void spots_free(spots *spots)
+ *  \brief Free memory of a \a spots structure. 
+ *  \param *spots Pointer to spots object to free from memory.
  *
- * Free memory of a \a spots_t structure.
+ * Free memory of a \a spots structure.
  */
-void spots_free(spots_t *spots);
+void spots_free(spots *spots);
 
-/*! \fn int spots_list_realloc(spots_t *spots, size_t size)
- *  \brief Resize a \a spots_t structure. 
- *  \param *spots Pointer to spots_t structure. 
+/*! \fn int spots_list_realloc(spots *spots, size_t size)
+ *  \brief Resize a \a spots structure. 
+ *  \param *spots Pointer to spots structure. 
  *  \param size Size of array to allocate to memory.
  *  \return success of realloc.
  *
  */
-int spots_list_realloc(spots_t *spots, size_t size);
+int spots_list_realloc(spots *spots, size_t size);
 
-/*! \fn void spots_append(spots_t *spots, spot_t spot)
+/*! \fn void spots_append(spots *spots, spot spot)
  *  \brief Add a \a spot to the \a spots list.
- *  \param *spots Pointer to spots_t structure. 
- *  \param spot spot_t struct.
+ *  \param *spots Pointer to spots structure. 
+ *  \param spot spot struct.
  *
  */
-void spots_append(spots_t *spots, spot_t spot);
+void spots_append(spots *spots, spot spot);
 
-/*! \fn void spots_set_list(spots_t *spots, spot_t *spot, size_t n_spots)
+/*! \fn void spots_set_list(spots *spots, spot *spot, size_t n_spots)
  *  \brief Assign a \a spot array to the \a spots struct.
- *  \param *spots Pointer to spots_t structure. 
- *  \param *spot Array of spot_t.
+ *  \param *spots Pointer to spots structure. 
+ *  \param *spot Array of spot.
  *
  */
-void spots_set_list(spots_t *spots, spot_t *spot, size_t n_spots);
+void spots_set_list(spots *spots, spot *spot, size_t n_spots);
 
-/*! \fn void spots_set_color(spots_t *spots, patt_color_rgb_t color)
+/*! \fn void spots_set_color(spots *spots, patt_color_rgb color)
  *  \brief Set \a color of the \a spots struct.
- *  \param *spots Pointer to spots_t structure. 
- *  \param *color A patt_color_rgb_t struct.
+ *  \param *spots Pointer to spots structure. 
+ *  \param *color A patt_color_rgb struct.
  *
  */
-void spots_set_color(spots_t *spots, patt_color_rgb_t color);
+void spots_set_color(spots *spots, patt_color_rgb color);
 
-/*! \fn void spots_set_color(spots_t *spots, double red, double green, double blue)
+/*! \fn void spots_set_color(spots *spots, double red, double green, double blue)
  *  \brief Set color of the \a spots struct using individual RGB channels.
- *  \param *spots Pointer to spots_t structure. 
+ *  \param *spots Pointer to spots structure. 
  *  \param red Fraction of red color.
  *  \param green Fraction of green color.
  *  \param blue Fraction of blue color.
  *
  */
-void spots_set_color_rgb(spots_t *spots, 
+void spots_set_color_rgb(spots *spots, 
                          double red, double green, double blue);
 
-void spots_set_fill(spots_t *spots, bool fill);
-void spots_set_shape(spots_t *spots, patt_shape_t shape);
-void spots_set_stroke_width(spots_t *spots, double stroke_width);
-void spots_set_stroke_style(spots_t *spots, int stroke_style);
-void spots_set_font_size(spots_t *spots, double font_size);
-void spots_set_font_name(spots_t *spots, char *font_name);  
-void spots_set_radius(spots_t *spots, double radius);
-void spots_set_visible(spots_t *spots, bool visible);
-void spots_set_indexing(spots_t *spots, bool indexing);
+void spots_set_fill(spots *spots, bool fill);
+void spots_set_shape(spots *spots, patt_shape shape);
+void spots_set_stroke_width(spots *spots, double stroke_width);
+void spots_set_stroke_style(spots *spots, int stroke_style);
+void spots_set_font_size(spots *spots, double font_size);
+void spots_set_font_name(spots *spots, char *font_name);  
+void spots_set_radius(spots *spots, double radius);
+void spots_set_visible(spots *spots, bool visible);
+void spots_set_indexing(spots *spots, bool indexing);
 
-patt_color_rgb_t spots_get_color(const spots_t *spots);
-patt_shape_t spots_get_shape(const spots_t *spots);
-patt_stroke_t spots_get_stroke_style(const spots_t *spots);
-bool spots_get_fill(const spots_t *spots); 
-bool spots_get_visible(const spots_t *spots);
-double spots_get_stroke_width(const spots_t *spots);
-double spots_get_font_size(const spots_t *spots);
-const char* spots_get_font_name(const spots_t *spots);  
-double spots_get_radius(const spots_t *spots);
-size_t spots_get_n_spots(const spots_t *spots);
-const spot_t *spots_get_list(const spots_t *spots);
-bool spots_show_indexing(const spots_t *spots);
+patt_color_rgb spots_get_color(const spots *spots);
+patt_shape spots_get_shape(const spots *spots);
+patt_stroke spots_get_stroke_style(const spots *spots);
+bool spots_get_fill(const spots *spots); 
+bool spots_get_visible(const spots *spots);
+double spots_get_stroke_width(const spots *spots);
+double spots_get_font_size(const spots *spots);
+const char* spots_get_font_name(const spots *spots);  
+double spots_get_radius(const spots *spots);
+size_t spots_get_n_spots(const spots *spots);
+const spot *spots_get_list(const spots *spots);
+bool spots_show_indexing(const spots *spots);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
@@ -242,9 +242,9 @@ class Spot {
     
   protected:
     /*!
-     * Wrapped spot_t C structure. 
+     * Wrapped spot C structure. 
      */
-    spot_t spot;  
+    spot spot;  
 };
 
 /*! \class
@@ -282,7 +282,7 @@ class Spots {
     const list<Spot> getSpotList();    
     
   protected:
-    spots_t spots;
+    spots spots;
 };
 
 } /* namespace cleed */

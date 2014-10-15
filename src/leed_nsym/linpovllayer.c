@@ -22,7 +22,7 @@ Changes:
 #include "leed_def.h"
 
 
-int leed_inp_overlayer(leed_cryst_t *par, leed_atom_t * atom_list)
+int leed_inp_overlayer(leed_cryst_t *par, leed_atom * atom_list)
 
 /************************************************************************
 
@@ -38,7 +38,7 @@ int leed_inp_overlayer(leed_cryst_t *par, leed_atom_t * atom_list)
      parameters of the bulk except atom positions and types.
      Output will be written to structure element layers.
 
- leed_atom_t *atom_list (input)
+ leed_atom *atom_list (input)
      structure that contains all geometrical and nongeometrical
      parameters of the atoms to be grouped (see "leed_def.h").
      (The list of atoms must be ordered according to their z coordinate,
@@ -276,8 +276,8 @@ real vaux[4];
          i_layer);
 #endif
 
- if( (par->layers = (leed_layer_t *) 
-      malloc( i_layer * sizeof(leed_layer_t) ) ) == NULL)
+ if( (par->layers = (leed_layer *) 
+      malloc( i_layer * sizeof(leed_layer) ) ) == NULL)
  {
 #ifdef ERROR
    fprintf(STDERR,
@@ -345,7 +345,7 @@ real vaux[4];
 #endif
 
    par->layers[i].atoms =
-     (leed_atom_t *) malloc( no_of_atoms[i] * sizeof(leed_atom_t) );
+     (leed_atom *) malloc( no_of_atoms[i] * sizeof(leed_atom) );
 
    for( i_d = 0, i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
    {

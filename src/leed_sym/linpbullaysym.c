@@ -25,7 +25,7 @@ Changes:
 #endif
 
 int leed_leed_inp_bul_layer_sym(leed_cryst_t *par, 
-                  leed_atom_t * atom_list, real *a3)
+                  leed_atom * atom_list, real *a3)
 
 /************************************************************************
 
@@ -41,7 +41,7 @@ int leed_leed_inp_bul_layer_sym(leed_cryst_t *par,
      parameters of the bulk except atom positions and types.
      Output will be written to structure element layers.
 
- leed_atom_t *atom_list (input)
+ leed_atom *atom_list (input)
      structure that contains all geometrical and non-geometrical
      parameters of the atoms to be grouped (see "leed_def.h").
      (The list of atoms must be ordered according to their z coordinate,
@@ -283,8 +283,8 @@ real vaux[4];
 *************************************************************************/
 
      for (j=0; atom_list[j].layer == 0; j++);
-       atom_list = ( leed_atom_t *) realloc( 
-                 atom_list, (n_atoms+j+2) * sizeof(leed_atom_t) );
+       atom_list = ( leed_atom *) realloc( 
+                 atom_list, (n_atoms+j+2) * sizeof(leed_atom) );
 
    /*******************************************************
     Reset atom_list:
@@ -389,7 +389,7 @@ real vaux[4];
 
  
  par->layers =
-       (leed_layer_t *) malloc( (i_layer+1) * sizeof(leed_layer_t) );
+       (leed_layer *) malloc( (i_layer+1) * sizeof(leed_layer) );
 
 
  for(i = 0 ; i < i_layer ; i++)
@@ -457,7 +457,7 @@ real vaux[4];
    par->layers[j].atoms
 **************************************************************************/
    par->layers[j].atoms =
-     (leed_atom_t *) malloc(no_of_atoms[i] * sizeof(leed_atom_t) );
+     (leed_atom *) malloc(no_of_atoms[i] * sizeof(leed_atom) );
 
    for( i_c = 0, i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
    {

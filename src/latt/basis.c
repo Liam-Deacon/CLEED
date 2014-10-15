@@ -8,43 +8,43 @@
 #define TOLERANCE 1E-2
 #endif
 
-basis_t *basis_init()
+basis *basis_init()
 {
-  basis_t *basis = (basis_t*) malloc(sizeof(basis_t));
+  basis *_basis = (basis*) malloc(sizeof(basis));
   
-  coord_set(&basis->a[0], 0., 0., 0.);
-  coord_set(&basis->a[1], 0., 0., 0.);
-  coord_set(&basis->a[2], 0., 0., 0.);
+  coord_set(&_basis->a[0], 0., 0., 0.);
+  coord_set(&_basis->a[1], 0., 0., 0.);
+  coord_set(&_basis->a[2], 0., 0., 0.);
   
-  return (basis);
+  return(_basis);
 }
 
-basis_t *basis_init_vectors(const coord_t *a1, 
-                            const coord_t *a2, const coord_t *a3)
+basis *basis_init_vectors(const coord *a1, 
+                            const coord *a2, const coord *a3)
 {
-  basis_t *basis = (basis_t*) malloc(sizeof(basis_t));
+  basis *_basis = (basis*) malloc(sizeof(basis));
  
-  basis_set_vectors(basis, a1, a2, a3);
+  basis_set_vectors(_basis, a1, a2, a3);
   
-  return (basis);
+  return(_basis);
 }
 
-void basis_free(basis_t *basis)
+void basis_free(basis *_basis)
 {
-  if (basis != NULL)
-    free(basis);
-  basis = NULL;
+  if (_basis != NULL)
+    free(_basis);
+  _basis = NULL;
 }
 
-void basis_set_vectors(basis_t *basis, const coord_t *a1, 
-                       const coord_t *a2, const coord_t *a3)
+void basis_set_vectors(basis *basis, const coord *a1, 
+                       const coord *a2, const coord *a3)
 {
   coord_set(&basis->a[0], a1->x, a1->y, a1->z);
   coord_set(&basis->a[1], a2->x, a2->y, a2->z);
   coord_set(&basis->a[2], a3->x, a3->y, a3->z);
 }
 
-void basis_printf(FILE *f, const basis_t *basis)
+void basis_printf(FILE *f, const basis *basis)
 { 
   if (basis != NULL)
   {
@@ -61,28 +61,28 @@ void basis_printf(FILE *f, const basis_t *basis)
   }
 }
 
-void basis_copy(basis_t *dst, const basis_t *src)
+void basis_copy(basis *dst, const basis *src)
 {
-  const basis_t *tmp =  (const basis_t*) src;
+  const basis *tmp =  (const basis*) src;
   basis_set_vectors(dst, &tmp->a[0], &tmp->a[1], &tmp->a[2]);
 }
 
-size_t basis_get_allocated_size(const basis_t *basis)
+size_t basis_get_allocated_size(const basis *basis)
 {
-	return (sizeof(basis)/sizeof(basis_t));
+	return (sizeof(basis)/sizeof(basis));
 }
 
-void basis_get_vectors(const basis_t *basis, coord_t *a1, 
-                       coord_t *a2, coord_t *a3)
+void basis_get_vectors(const basis *basis, coord *a1, 
+                       coord *a2, coord *a3)
 {
   coord_copy(a1, &basis->a[0]);
   coord_copy(a2, &basis->a[1]);
   coord_copy(a3, &basis->a[2]);
 }
 
-coord_t *basis_rotate_normal(const coord_t *nor, double **R)
+coord *basis_rotate_normal(const coord *nor, double **R)
 {
-  coord_t *new_normal = coord_init();
+  coord *new_normal = coord_init();
 
   coord_set(new_normal,
                 R[0][0] * nor->x + R[0][1] * nor->y + R[0][2] * nor->z,
@@ -91,15 +91,15 @@ coord_t *basis_rotate_normal(const coord_t *nor, double **R)
   return (new_normal);
 }
 
-coord_t *basis_rotate_vector_list(const coord_t *list, size_t n, double **R)
+coord *basis_rotate_vector_list(const coord *list, size_t n, double **R)
 {
   size_t i;
   double faux_x, faux_y, faux_z;
-  coord_t *rotated_list;
+  coord *rotated_list;
   
   if (n > 0)
   {
-    rotated_list = (coord_t*) malloc(sizeof(coord_t) * n);
+    rotated_list = (coord*) malloc(sizeof(coord) * n);
   }
   else {
     return NULL;
@@ -121,28 +121,28 @@ coord_t *basis_rotate_vector_list(const coord_t *list, size_t n, double **R)
   return (rotated_list);
 }
 
-basis_t *basis_rotate_basis(const basis_t *basis, double **R)
+basis *basis_rotate_basis(const basis *_basis, double **R)
 {
-  basis_t *new_basis;
-  coord_t *faux = coord_init();
+  basis *new_basis;
+  coord *faux = coord_init();
 
   new_basis = basis_init();
   
-  coord_copy(faux, &basis->a[0]);
+  coord_copy(faux, &_basis->a[0]);
   
   coord_set(&new_basis->a[0], 
                 R[0][0] * faux->x + R[0][1] * faux->y + R[0][2] * faux->z,
                 R[1][0] * faux->x + R[1][1] * faux->y + R[1][2] * faux->z,
                 R[2][0] * faux->x + R[2][1] * faux->y + R[2][2] * faux->z);
 
-  coord_copy(faux, &basis->a[1]);
+  coord_copy(faux, &_basis->a[1]);
   
   coord_set(&new_basis->a[1], 
                 R[0][0] * faux->x + R[0][1] * faux->y + R[0][2] * faux->z,
                 R[1][0] * faux->x + R[1][1] * faux->y + R[1][2] * faux->z,
                 R[2][0] * faux->x + R[2][1] * faux->y + R[2][2] * faux->z);
 
-  coord_copy(faux, &basis->a[2]);
+  coord_copy(faux, &_basis->a[2]);
   
   coord_set(&new_basis->a[2], 
                 R[0][0] * faux->x + R[0][1] * faux->y + R[0][2] * faux->z,
@@ -152,15 +152,15 @@ basis_t *basis_rotate_basis(const basis_t *basis, double **R)
   return (new_basis);
 }
 
-basis_t *basis_angle_rotate(const basis_t *a, double alpha, 
+basis *basis_angle_rotate(const basis *a, double alpha, 
                             double beta, double gamma)
 {
-  basis_t *new_basis = NULL;
+  basis *new_basis = NULL;
 
   return (new_basis);
 }
 
-double **normal_get_rotation_matrix(const coord_t *normal)
+double **normal_get_rotation_matrix(const coord *normal)
 {
  double faux_x;
  double normal_len;
@@ -205,71 +205,71 @@ double **normal_get_rotation_matrix(const coord_t *normal)
  return (R);
 }
 
-basis_t *basis_rotate_parallel_to_x_axis_rhs(const basis_t *basis, double **R)
+basis *basis_rotate_parallel_to_x_axis_rhs(const basis *_basis, double **R)
 {
   double faux_x;
-  basis_t *rot_basis = basis_init();
+  basis *rot_basis = basis_init();
   
-  faux_x = sqrt(basis->a[0].x*basis->a[0].x + basis->a[0].y*basis->a[0].y);
+  faux_x = sqrt(_basis->a[0].x*_basis->a[0].x + _basis->a[0].y*_basis->a[0].y);
 
-  R[0][0] = basis->a[0].x / faux_x;
-  R[0][1] = basis->a[0].y / faux_x;
+  R[0][0] = _basis->a[0].x / faux_x;
+  R[0][1] = _basis->a[0].y / faux_x;
 
   R[1][0] = -R[0][1];
   R[1][1] = R[0][0];
   
   /* rotate lattice vectors b1, b2, b3 such that b1 || x-axis */
-  rot_basis->a[0].x = R[0][0] * basis->a[0].x + R[0][1] * basis->a[0].y;
-  rot_basis->a[0].y = R[1][0] * basis->a[0].x + R[1][1] * basis->a[0].y;
+  rot_basis->a[0].x = R[0][0] * _basis->a[0].x + R[0][1] * _basis->a[0].y;
+  rot_basis->a[0].y = R[1][0] * _basis->a[0].x + R[1][1] * _basis->a[0].y;
 
-  rot_basis->a[1].x = R[0][0] * basis->a[1].x + R[0][1] * basis->a[1].y;
-  rot_basis->a[1].y = R[1][0] * basis->a[1].x + R[1][1] * basis->a[1].y;
+  rot_basis->a[1].x = R[0][0] * _basis->a[1].x + R[0][1] * _basis->a[1].y;
+  rot_basis->a[1].y = R[1][0] * _basis->a[1].x + R[1][1] * _basis->a[1].y;
 
-  rot_basis->a[2].x = R[0][0] * basis->a[2].x + R[0][1] * basis->a[2].y;
-  rot_basis->a[2].y = R[1][0] * basis->a[2].x + R[1][1] * basis->a[2].y;
+  rot_basis->a[2].x = R[0][0] * _basis->a[2].x + R[0][1] * _basis->a[2].y;
+  rot_basis->a[2].y = R[1][0] * _basis->a[2].x + R[1][1] * _basis->a[2].y;
   
   return (rot_basis);
 }
 
-coord_t *basis_get_a1(const basis_t *basis)
+coord *basis_get_a1(const basis *basis)
 {
-  coord_t *a1 = (coord_t*) &basis->a[0];
+  coord *a1 = (coord*) &basis->a[0];
   return (a1);
 }
 
-coord_t *basis_get_a2(const basis_t *basis)
+coord *basis_get_a2(const basis *basis)
 {
-  coord_t *a2 = (coord_t*) &basis->a[1];
+  coord *a2 = (coord*) &basis->a[1];
   return (a2);
 }
 
-coord_t *basis_get_a3(const basis_t *basis)
+coord *basis_get_a3(const basis *basis)
 {
-  coord_t *a3 = (coord_t*) &basis->a[2];
+  coord *a3 = (coord*) &basis->a[2];
   return (a3);
 }
 
-void basis_set_a1(basis_t *basis, const coord_t *a1)
+void basis_set_a1(basis *basis, const coord *a1)
 {
   coord_copy(&basis->a[0], a1);
 }
 
-void basis_set_a2(basis_t *basis, const coord_t *a2)
+void basis_set_a2(basis *basis, const coord *a2)
 {
   coord_copy(&basis->a[1], a2);
 }
 
-void basis_set_a3(basis_t *basis, const coord_t *a3)
+void basis_set_a3(basis *basis, const coord *a3)
 {
   coord_copy(&basis->a[2], a3);
 }
 
-coord_t *basis_get_normal(const basis_t *basis, const miller_hkl_t *hkl)
+coord *basis_get_normal(const basis *basis, const miller_hkl *hkl)
 {
-  const coord_t *a1 = BASIS_VECTOR_PTR(basis, 0);
-  const coord_t *a2 = BASIS_VECTOR_PTR(basis, 1);
-  const coord_t *a3 = BASIS_VECTOR_PTR(basis, 2);
-  coord_t *normal = coord_init();
+  const coord *a1 = BASIS_VECTOR_PTR(basis, 0);
+  const coord *a2 = BASIS_VECTOR_PTR(basis, 1);
+  const coord *a3 = BASIS_VECTOR_PTR(basis, 2);
+  coord *normal = coord_init();
   
   if (normal == NULL) return NULL;
 

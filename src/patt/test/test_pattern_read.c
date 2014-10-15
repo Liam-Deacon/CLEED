@@ -5,8 +5,8 @@
 int main(int argc, char *argv[])
 {
   size_t i;
-  pattern_t *pat = pattern_init(0);
-  spots_t *spots;
+  pattern *pat = pattern_init(0);
+  spots *spots;
   if (pat != NULL)
   {
     pattern_read(pat, stdin);

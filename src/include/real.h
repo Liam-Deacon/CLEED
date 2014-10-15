@@ -1,16 +1,27 @@
 /*********************************************************************
-GH/02.10.95
+ *                           REAL.H
+ *
+ *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: include file for type definition "real".
+ *
+ * Changes:
+ *   GH/1995.10.02 - creation
+ *   LD/2014.10.09 - added inclusion guards and C linkage for C++
+ *********************************************************************/
 
-include file for type definition "real"
-
-*********************************************************************/
 /*
   Definitions in connection with the type of "real"
 */
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
+#ifndef REAL_H
+#define REAL_H
 
 /* define DOUBLE if neither FLOAT nor DOUBLE have been defined before. */
 #ifndef REAL_IS_DOUBLE
@@ -19,10 +30,9 @@ extern "C" {
 #endif
 #endif
 
-/* alternatives: 
-#define REAL_IS_DOUBLE     
-#define REAL_IS_FLOAT 
-*/
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
 
 /************************************************
 *************************************************
@@ -138,3 +148,5 @@ extern "C" {
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* REAL_H */

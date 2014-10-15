@@ -4,7 +4,7 @@
 #include <math.h>
 #include "lattice.h"
 
-void lattice_debug(const lattice_t *lat)
+void lattice_debug(const lattice *lat)
 {
   printf("(h, k, l) = (%7.4f, %7.4f, %7.4f)\n", 
          lat->vec_h, lat->vec_k, lat->vec_l);
@@ -22,7 +22,7 @@ void lattice_debug(const lattice_t *lat)
 /********************************************************
  Write list of atoms to output file
 ********************************************************/
-void lattice_printf(FILE *output, const lattice_t *lat)
+void lattice_printf(FILE *output, const lattice *lat)
 {
   size_t i_atom;
   char padding[2];
@@ -67,13 +67,13 @@ void lattice_printf(FILE *output, const lattice_t *lat)
 
 }
 
-lattice_t *lattice_alloc(size_t n_atoms)
+lattice *lattice_alloc(size_t n_atoms)
 {
-  lattice_t *lat = (lattice_t*) malloc(sizeof(lattice_t));
+  lattice *lat = (lattice*) malloc(sizeof(lattice));
   if (lat == NULL) return NULL;
-  lat->atoms = (atom_t*) malloc(sizeof(atom_t) * (n_atoms+1));
-  lat->input_filename = (char*) malloc(sizeof(char) * PATH_MAX);
-  lat->output_filename = (char*) malloc(sizeof(char) * PATH_MAX);
+  lat->atoms = (atom*) malloc(sizeof(atom) * (n_atoms+1));
+  lat->input_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
+  lat->output_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
   lat->script = (char*) malloc(sizeof(char) * STRSZ * STRSZ);
   if (lat->atoms == NULL)
   {
@@ -88,10 +88,10 @@ lattice_t *lattice_alloc(size_t n_atoms)
   return (lat);
 }
 
-lattice_t *lattice_init(size_t n_atoms)
+lattice *lattice_init(size_t n_atoms)
 {
   size_t i_atom;
-  lattice_t *lat = lattice_alloc(n_atoms);
+  lattice *lat = lattice_alloc(n_atoms);
   
   if (lat == NULL) return NULL;
   
@@ -124,12 +124,12 @@ lattice_t *lattice_init(size_t n_atoms)
   return (lat);
 }
 
-int lattice_realloc(lattice_t *lat, size_t size)
+int lattice_realloc(lattice *lat, size_t size)
 {
-  lattice_t *result;
-  atom_t *temp = lat->atoms;
+  lattice *result;
+  atom *temp = lat->atoms;
   
-  result = (lattice_t*) realloc(lat->atoms, sizeof(atom_t) * (size+1));
+  result = (lattice*) realloc(lat->atoms, sizeof(atom) * (size+1));
   if (!result)
   { 
     lat->atoms = temp;
@@ -141,7 +141,7 @@ int lattice_realloc(lattice_t *lat, size_t size)
   return (LATTICE_OPERATION_SUCCESS);
 }
 
-void lattice_free(lattice_t *lat)
+void lattice_free(lattice *lat)
 {
   /* clean up linked lists */
   free(lat->input_filename);
@@ -154,12 +154,12 @@ void lattice_free(lattice_t *lat)
   lat->output_filename = NULL;
   lat->script = NULL;
 
-  /* clean up lattice_t struct */
+  /* clean up lattice struct */
   free(lat);
   lat = NULL;
 }
 
-void lattice_free_atom_list(lattice_t *lat)
+void lattice_free_atom_list(lattice *lat)
 {
   size_t i_atom;
   
@@ -169,11 +169,11 @@ void lattice_free_atom_list(lattice_t *lat)
   }
 }
 
-int lattice_set_atom(lattice_t *lat, const atom_t *atom, size_t index)
+int lattice_set_atom(lattice *lat, const atom *atom, size_t index)
 {
   if (index >= lat->allocated_atoms) 
   {
-    return (LATTICE_ATOM_INDEX_OUT_OF_RANGE_FAILURE);
+    return (LATTICE_ATOM_INDEX_OUT_OF_RANGE);
   }
  
   lat->atoms[index].element = (char *) malloc(sizeof(char) * 
@@ -186,7 +186,7 @@ int lattice_set_atom(lattice_t *lat, const atom_t *atom, size_t index)
   return (LATTICE_OPERATION_SUCCESS);
 }
 
-int lattice_set_atom_list(lattice_t *lat, const atom_t *atoms, size_t n_atoms)
+int lattice_set_atom_list(lattice *lat, const atom *atoms, size_t n_atoms)
 {
   size_t i_atom;
   
@@ -221,18 +221,18 @@ int lattice_set_atom_list(lattice_t *lat, const atom_t *atoms, size_t n_atoms)
   return (LATTICE_OPERATION_SUCCESS);
 }
 
-int lattice_set_input_filename(lattice_t *lat, const char *filename)
+int lattice_set_input_filename(lattice *lat, const char *filename)
 {
   if (lat->input_filename == NULL)
   {
-    lat->input_filename = (char*) malloc(sizeof(char) * PATH_MAX);
+    lat->input_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
     if (lat->input_filename == NULL) return (LATTICE_STRING_ALLOC_FAILURE);
   }
   if (filename != NULL) strcpy(lat->input_filename, filename);
   return (LATTICE_OPERATION_SUCCESS);
 }
 
-int lattice_set_script(lattice_t *lat, const char *script)
+int lattice_set_script(lattice *lat, const char *script)
 {
   if (lat->script == NULL)
   {
@@ -243,112 +243,112 @@ int lattice_set_script(lattice_t *lat, const char *script)
   return (LATTICE_OPERATION_SUCCESS);
 }
 
-int lattice_set_output_filename(lattice_t *lat, const char *filename)
+int lattice_set_output_filename(lattice *lat, const char *filename)
 {
   if (lat->output_filename == NULL)
   {
-    lat->output_filename = (char*) malloc(sizeof(char) * PATH_MAX);
+    lat->output_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
     if (lat->output_filename == NULL) return (LATTICE_STRING_ALLOC_FAILURE);
   }
   if (filename != NULL) strcpy(lat->output_filename, filename);
   return (LATTICE_OPERATION_SUCCESS);
 }
 
- double lattice_get_a(const lattice_t *lat)
+ double lattice_get_a(const lattice *lat)
 {
   return (lat->a_latt);
 }
 
- double lattice_get_b(const lattice_t *lat)
+ double lattice_get_b(const lattice *lat)
 {
   return (lat->b_latt);
 }
 
- double lattice_get_c(const lattice_t *lat)
+ double lattice_get_c(const lattice *lat)
 {
   return (lat->c_latt);
 }
 
- double lattice_get_max_disp(const lattice_t *lat)
+ double lattice_get_max_disp(const lattice *lat)
 {
   return (lat->max_disp);
 }
 
- double lattice_get_max_disp_z(const lattice_t *lat)
+ double lattice_get_max_disp_z(const lattice *lat)
 {
   return (lat->max_disp_z);
 }
 
- size_t lattice_get_max_layers(const lattice_t *lat)
+ size_t lattice_get_max_layers(const lattice *lat)
 {
   return (lat->max_layers);
 }
 
- size_t lattice_get_max_cells(const lattice_t *lat)
+ size_t lattice_get_max_cells(const lattice *lat)
 {
   return (lat->max_cells);
 }
 
- double lattice_get_h(const lattice_t *lat)
+ double lattice_get_h(const lattice *lat)
 {
   return (lat->vec_h);
 }
 
- double lattice_get_k(const lattice_t *lat)
+ double lattice_get_k(const lattice *lat)
 {
   return (lat->vec_k);
 }
 
- double lattice_get_l(const lattice_t *lat)
+ double lattice_get_l(const lattice *lat)
 {
   return (lat->vec_l);
 }
 
- const char *lattice_get_input_filename(const lattice_t *lat)
+ const char *lattice_get_input_filename(const lattice *lat)
 {  
   const char *filename = (const char*) lat->input_filename;
   return (filename);
 }
 
- const char *lattice_get_output_filename(const lattice_t *lat)
+ const char *lattice_get_output_filename(const lattice *lat)
 {
   const char *filename = (const char*) lat->output_filename;
   return (filename);
 }
 
- size_t lattice_get_n_atoms(const lattice_t *lat)
+ size_t lattice_get_n_atoms(const lattice *lat)
 {
   return (lat->n_atoms);
 }
 
-atom_t *lattice_get_atom(const lattice_t *lat, size_t index)
+atom *lattice_get_atom(const lattice *lat, size_t index)
 {
-  atom_t *atom = (atom_t*) malloc(sizeof(atom_t));
+  atom *_atom = (atom*) malloc(sizeof(atom));
   
   if (index >= lat->n_atoms) return NULL;
   
-  atom->x = lat->atoms[index].x;
-  atom->x = lat->atoms[index].y;
-  atom->x = lat->atoms[index].z;
+  _atom->x = lat->atoms[index].x;
+  _atom->x = lat->atoms[index].y;
+  _atom->x = lat->atoms[index].z;
   if (strlen(lat->atoms[index].element) > 0)
   {
-    atom->element = (char*) malloc(sizeof(char) * 
+    _atom->element = (char*) malloc(sizeof(char) *
                                 strlen(lat->atoms[index].element));
-    strcpy(atom->element, lat->atoms[index].element);
+    strcpy(_atom->element, lat->atoms[index].element);
   }
   
-  return (atom);
+  return(_atom);
 }
 
- const atom_t *lattice_get_atom_list(const lattice_t *lat)
+ const atom *lattice_get_atom_list(const lattice *lat)
 {
-  const atom_t *atoms = (const atom_t*) lat->atoms;
+  const atom *atoms = (const atom*) lat->atoms;
   return (atoms);
 }
 
-void lattice_atom_index_swap(const lattice_t *lat, size_t i, size_t j)
+void lattice_atom_index_swap(const lattice *lat, size_t i, size_t j)
 {
-  atom_t *temp_atom = (atom_t*) malloc(sizeof(atom_t));
+  atom *temp_atom = (atom*) malloc(sizeof(atom));
   temp_atom->element = (char*) malloc(sizeof(char) * NAMSZ);  
   
   if (i > lat->n_atoms || j > lat->n_atoms) return;
@@ -369,8 +369,8 @@ void lattice_atom_index_swap(const lattice_t *lat, size_t i, size_t j)
   strncpy( lat->atoms[i].element, temp_atom->element, NAMSZ );
 }
 
-coord_t *lattice_get_surface_normal(const lattice_t *lat, const coord_t *a1,
-                                    const coord_t *a2, const coord_t *a3)
+coord *lattice_get_surface_normal(const lattice *lat, const coord *a1,
+                                    const coord *a2, const coord *a3)
 {
   double h = lat->vec_h;
   double k = lat->vec_k;
@@ -381,7 +381,7 @@ coord_t *lattice_get_surface_normal(const lattice_t *lat, const coord_t *a1,
   fprintf(stderr, "** debug (lattice_get_surface_normal): malloc");
   #endif
   
-  coord_t *normal = (coord_t*) malloc(sizeof(coord_t));
+  coord *normal = (coord*) malloc(sizeof(coord));
   
   if (normal == NULL) return NULL;
 
@@ -421,8 +421,8 @@ coord_t *lattice_get_surface_normal(const lattice_t *lat, const coord_t *a1,
   return (normal);
 }
 
-void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2, 
-        coord_t *a3, coord_t *nor, coord_t *bas, char *bas_name, size_t *n_bas)
+void lattice_setup(lattice *lat, coord *a1, coord *a2, 
+        coord *a3, coord *nor, coord *bas, char *bas_name, size_t *n_bas)
 {
   
   *n_bas = 1;
@@ -459,7 +459,7 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     ********************************************************/
 
     *n_bas = 2;
-    realloc((coord_t*) bas, sizeof(coord_t) * (*n_bas));
+    realloc((coord*) bas, sizeof(coord) * (*n_bas));
     realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
     
     strncpy(bas_name, lat->atoms[0].element, NAMSZ);
@@ -479,7 +479,7 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     coord_set(a2, 0.5 * a,  sqrt(0.75) * a, 0.);
     coord_set(a3, 0., 0., c);
 
-    coord_set(bas+sizeof(coord_t), 0.0, sqrt(1./3.) * a, 0.5 * c);
+    coord_set(bas+sizeof(coord), 0.0, sqrt(1./3.) * a, 0.5 * c);
 
     lat->a_nn = a;
 
@@ -513,7 +513,7 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     ********************************************************/
 
     *n_bas = 2;
-    realloc((coord_t*) bas, sizeof(coord_t) * (*n_bas));
+    realloc((coord*) bas, sizeof(coord) * (*n_bas));
     realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
     
     strncpy (bas_name, lat->atoms[0].element, NAMSZ);
@@ -575,10 +575,10 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
 
 }
 
-miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat)
+miller_hkl *lattice_get_miller_hkl(const lattice *lat)
 {
-  miller_hkl_t *hkl;
-  if (! (hkl = (miller_hkl_t*) malloc(sizeof(miller_hkl_t))))
+  miller_hkl *hkl;
+  if (! (hkl = (miller_hkl*) malloc(sizeof(miller_hkl))))
   {
     return NULL;
   }
@@ -590,14 +590,14 @@ miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat)
   return (hkl);
 }
 
-void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3, 
-                  coord_t *nor, coord_t *bas, char *bas_name, size_t *n_bas)
+void lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3, 
+                  coord *nor, coord *bas, char *bas_name, size_t *n_bas)
 {
 
   FILE *inp_stream = stdin;
-  coord_t faux = {.x=0., .y=0., .z=0.};
+  coord faux = {.x=0., .y=0., .z=0.};
   size_t i_bas = 0;
-  coord_t b1, b2;
+  coord b1, b2;
   double R[2][2];
   char line_buffer[STRSZ];
   char faux_name[NAMSZ];
@@ -629,7 +629,7 @@ void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
   
   *n_bas = MAX_INP_ATOMS;
   
-  realloc((coord_t*) bas, sizeof(coord_t) * (*n_bas));
+  realloc((coord*) bas, sizeof(coord) * (*n_bas));
   realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
   
   R[0][0] = R[1][1] = 1.;

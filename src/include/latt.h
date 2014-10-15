@@ -1,10 +1,23 @@
-/****************************************************************************
-                        LATT.H (Georg Held 01.05.06)
-                        
-Changes:
- LD/29.04.14 - Added header for latt.c                 
-         
-****************************************************************************/
+/************************************************************************
+ *                           LATT.H
+ *
+ *  Copyright 2006-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: Header file for latt (Lattice generator)
+ *
+ * Changes:
+ *   LD/29.04.14 - Creation; header info taken from for latt.c
+ *               - Added PROG* defines for program information and
+ *                 ARG* macros for CLI argument evaluation.
+ ************************************************************************/
+
 #ifndef LATT_H
 #define LATT_H
 
@@ -25,7 +38,7 @@ Changes:
 #define PROG "latt"
 #define PROG_COPYRIGHT "Copyright (C) 1994-2014 Georg Held\n" \
 "Copyright (C) 2013-2014 Liam Deacon"
-#define PROG_LICENSE "GPL v3.0"
+#define PROG_LICENSE "GNU General Public License v3"
 #define PROG_VERSION "Debug"
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
 #define PROG_MAINTAINER "Liam Deacon (liam.deacon@diamond.ac.uk)"
@@ -147,7 +160,7 @@ else                                                                        \
 if (i_arg < argc)                                                           \
 {                                                                           \
   i_arg++;                                                                  \
-  x = atoi(argv[i_arg]);                                     	            \
+  x = atoi(argv[i_arg]);                                     	              \
   continue;                                                                 \
 }                                                                           \
 else                                                                        \

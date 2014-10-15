@@ -2,7 +2,7 @@
 #include "patt.h"
 
 /* write initial lines to output */
-int patt_draw_ps_init(FILE *file_ptr, const drawing_t *drawing)
+int patt_draw_ps_init(FILE *file_ptr, const patt_drawing *drawing)
 {
 
   fprintf(file_ptr, "%%!PS-Adobe-3.0 \n");
@@ -49,10 +49,11 @@ int patt_draw_ps_init(FILE *file_ptr, const drawing_t *drawing)
   if (drawing->eV.visible)
   {
     fprintf(file_ptr,"/add_eV {%%add electron energy label\n");
-    fprintf(file_ptr,"/Times-ItalicBold findfont %f scalefont setfont\n");
+    fprintf(file_ptr, "/Times-ItalicBold findfont %f scalefont setfont\n",
+            drawing->eV.size);
     fprintf(file_ptr,"%s %.1f %.1f moveto (%.0feV) show\n} def\n",
             patt_color_get_ps_string(&PATT_BLACK), drawing->eV.x,
-            drawing->eV.y, drawing->eV.size, atof(drawing->eV.label));
+            drawing->eV.y, atof(drawing->eV.label));
   }
   if (drawing->screen.clip)
   {
@@ -64,7 +65,7 @@ int patt_draw_ps_init(FILE *file_ptr, const drawing_t *drawing)
             " moveto 0 0 %.1f 0 360 arc stroke\n",
             MAX_RADIUS+(drawing->screen.stroke_width-1));
   }
-  if (drawing->show_vectors) patt_draw_ps_vectors_funcs(file_ptr);
+  if (drawing->show_vectors) patt_draw_ps_vector_funcs(file_ptr);
 
   return(PATT_SUCCESS);
 }

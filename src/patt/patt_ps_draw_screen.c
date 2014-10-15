@@ -2,7 +2,7 @@
 #include "patt.h"
 
 /* draw screen */
-int patt_draw_ps_screen(FILE *file_ptr, const screen_t *screen)
+int patt_draw_ps_screen(FILE *file_ptr, const patt_screen *screen)
 {
 	fprintf(file_ptr, "%% Screen\n");
 	fprintf(file_ptr, "0 0 moveto %.1f setlinewidth stroke\n",

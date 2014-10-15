@@ -8,11 +8,11 @@
 #include "patt.h"
 #include <strings.h>
 
-int patt_draw_ps(const drawing_t *drawing)
+int patt_draw_ps(const patt_drawing *drawing)
 {
   size_t i_file, i_spot, i_domain;
-  patt_color_rgb_t color = PATT_BLACK;
-  pattern_t *pat = NULL;
+  patt_color_rgb color = PATT_BLACK;
+  pattern *pat = NULL;
   FILE *f = NULL;
   FILE *out_stream = NULL;
   char title[strlen(drawing->title.label)+10];
@@ -58,7 +58,7 @@ int patt_draw_ps(const drawing_t *drawing)
       }
     }
     /* draw substrate structure */
-    spots_t *gs_spots = pattern_calculate_substrate_spots(pat);
+    spots *gs_spots = pattern_calculate_substrate_spots(pat);
 
     switch (drawing->color_scheme)
     {
@@ -69,7 +69,7 @@ int patt_draw_ps(const drawing_t *drawing)
         patt_color_copy(&color, patt_color_from_name(
                                        colors[i_file % NUM_COLORS][SPOT_GS]));
         break;
-      case PATT_BLACK_SCHEME: default:
+      case PATT_MONOCHROME_SCHEME: default:
         color = PATT_BLACK;
         break;
     }
@@ -96,7 +96,7 @@ int patt_draw_ps(const drawing_t *drawing)
     /* draw superstructure spots */
     for (i_domain = 0; i_domain < pat->n_domains; i_domain++)
     {
-      spots_t *ss_spots = pattern_calculate_superstructure_spots(pat, i_domain);
+      spots *ss_spots = pattern_calculate_superstructure_spots(pat, i_domain);
 
       //cairo_set_line_width(cr, ss_spots->stroke_width);
       //cairo_set_font_size(cr, abs(ss_spots->font_size));
@@ -133,7 +133,7 @@ int patt_draw_ps(const drawing_t *drawing)
   return(PATT_SUCCESS);
 }
 
-int patt_draw_ps_label(FILE *file_ptr, const spots_t *group, const spot_t *spot)
+int patt_draw_ps_label(FILE *file_ptr, const spots *group, const spot *spot)
 {
   fprintf(file_ptr, "%.1f %.1f moveto (%s) show stroke\n",
           spot->x - 4*group->radius, spot->y - 4*group->radius, spot->label);

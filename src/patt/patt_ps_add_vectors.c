@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 /* add lattice vector postscript subroutines */
-void patt_draw_ps_vectors_funcs(FILE *file_ptr)
+void patt_draw_ps_vector_funcs(FILE *file_ptr)
 {
   /* print section banner */
   fprintf(file_ptr, "%%=======================================================================\n");

@@ -49,8 +49,8 @@
 
 
 int leed_ms_compl ( mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
-               leed_var_t *v_par, 
-               leed_layer_t * layer,
+               leed_var *v_par, 
+               leed_layer * layer,
                leed_beam_t * beams)
 
 /************************************************************************
@@ -66,18 +66,18 @@ int leed_ms_compl ( mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
               Rpm  k(-) -> k(+) (reflection matrix)
               Rmp  k(+) -> k(-) (reflection matrix)
 
-   leed_var_t v_par - (input) parameters which vary during the energy 
+   leed_var v_par - (input) parameters which vary during the energy 
               loop. Used: k_in    (parallel components of the incoming beam), 
                           l_max   (max. l quantum number), 
                           tl      (atomic scattering factors), 
                           epsilon (smallesti relative wave amplitude to 
                                    be considered).
    
-   leed_layer_t * layer - (input) list containing all relevant 
+   leed_layer * layer - (input) list containing all relevant 
               information about the composite layer. Used in this function:
 
               int natoms: number of atoms in the layer.
-              leed_atom_t * atoms: positions, and scattering properties 
+              leed_atom * atoms: positions, and scattering properties 
                      of all atoms.
               real a_lat[5]: lattice vectors:
                      a_lat[1] = a1_x, a_lat[2] = a2_x,
@@ -153,7 +153,7 @@ real z_plane;                   /* z coordinate ofo the most populated plane */
 
 real *ptr_r, *ptr_i, *ptr_end;
 
-leed_atom_t * atoms;        /* atomic positions and scattering properties */
+leed_atom * atoms;        /* atomic positions and scattering properties */
 
 mat Ylm;                        /* spherical harmonics (for exit beams) */
 mat Llm_ij, Llm_ji;             /* interlayer lattice sums */
@@ -243,7 +243,7 @@ fprintf(STDERR," *** error (leed_ms_compl): invalid input matrix (4th argument)\
 */
 
  n_atoms = layer->natoms;
- atoms = (leed_atom_t *) calloc(n_atoms+1, sizeof(leed_atom_t) );
+ atoms = (leed_atom *) calloc(n_atoms+1, sizeof(leed_atom) );
 
  n_type = (atoms+0)->type;;
  z_min = z_max = (atoms+0)->pos[3];

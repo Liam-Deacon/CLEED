@@ -335,11 +335,11 @@ struct png_struct_def
 
 #if defined(__TURBOC__) && !defined(_Windows) && !defined(__FLAT__)
 /* For the Borland special 64K segment handler */
-   png_bytepp offset_table_ptr;
-   png_bytep offset_table;
-   png_uint_16 offset_table_number;
-   png_uint_16 offset_table_count;
-   png_uint_16 offset_table_count_free;
+   png_bytepp offsetable_ptr;
+   png_bytep offsetable;
+   png_uint_16 offsetable_number;
+   png_uint_16 offsetable_count;
+   png_uint_16 offsetable_count_free;
 #endif
 
 #ifdef PNG_READ_QUANTIZE_SUPPORTED

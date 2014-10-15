@@ -21,8 +21,8 @@ GH/07.07.03 - removed unused variables, make matrices non-static.
 /*======================================================================*/
 
 int leed_ms_sym ( mat *p_Tpp, mat *p_Rpm,
-                   leed_var_t *v_par,
-                   leed_layer_t * layer,
+                   leed_var *v_par,
+                   leed_layer * layer,
                    leed_beam_t * beams)
 
 /************************************************************************
@@ -36,17 +36,17 @@ int leed_ms_sym ( mat *p_Tpp, mat *p_Rpm,
               Tpp  k(+) -> k(+) and k(-) -> k(-) (transmission matrix)
               Rpm  k(-) -> k(+) and k(+) -> k(-) (reflection matrix)
 
-   leed_var_t v_par - (input) parameters which vary during the energy
+   leed_var v_par - (input) parameters which vary during the energy
               loop. Used: k_in    (parallel components of the incoming beam),
                           l_max   (max. l quantum number),
                           tl      (atomic scattering factors),
                           epsilon (smallesti relative wave amplitude to
                                    be considered).
 
-   leed_layer_t * layer - (input) list containing all relevant
+   leed_layer * layer - (input) list containing all relevant
               information about the Bravais layer. Used in this function:
 
-              leed_atom_t * atoms: scattering properties of the atoms.
+              leed_atom * atoms: scattering properties of the atoms.
               real a_lat[5]: lattice vectors:
                      a_lat[1] = a1_x, a_lat[2] = a2_x,
                      a_lat[3] = a1_y, a_lat[4] = a2_y;

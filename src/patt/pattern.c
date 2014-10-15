@@ -41,13 +41,13 @@ CHANGE-LOG
 #include <math.h>
 
 
-pattern_t *pattern_alloc(size_t n_domains)
+pattern *pattern_alloc(size_t n_domains)
 {
-  pattern_t *pat = (pattern_t*) malloc(sizeof(pattern_t));
+  pattern *pat = (pattern*) malloc(sizeof(pattern));
   if (pat == NULL) return NULL;
   if (n_domains > 0)
   {
-    pat->M_SS = (matrix_2x2_t*) malloc(sizeof(matrix_2x2_t) * (n_domains+1));
+    pat->M_SS = (matrix_2x2*) malloc(sizeof(matrix_2x2) * (n_domains+1));
     if (pat->M_SS == NULL)
     {
       free(pat);
@@ -61,13 +61,13 @@ pattern_t *pattern_alloc(size_t n_domains)
   return(pat);
 }
 
-pattern_t *pattern_init(size_t n_domains)
+pattern *pattern_init(size_t n_domains)
 { 
-  pattern_t *pat = (pattern_t*) malloc(sizeof(pattern_t));
+  pattern *pat = (pattern*) malloc(sizeof(pattern));
   if (pat == NULL)
     return NULL;
   
-  pat->M_SS = (matrix_2x2_t*) malloc(sizeof(matrix_2x2_t) * (n_domains+1));
+  pat->M_SS = (matrix_2x2*) malloc(sizeof(matrix_2x2) * (n_domains+1));
   if (pat->M_SS == NULL)
   {
     free(pat);
@@ -85,7 +85,7 @@ pattern_t *pattern_init(size_t n_domains)
   return(pat);
 }
 
-void pattern_free(pattern_t *pat)
+void pattern_free(pattern *pat)
 {
   if (pat->title != NULL)
   {
@@ -96,28 +96,28 @@ void pattern_free(pattern_t *pat)
   pat = NULL;
 }
 
-double pattern_get_radius(pattern_t *pat)
+double pattern_get_radius(pattern *pat)
 { return(pat->radius);}
 
-void pattern_set_a1(pattern_t *pat, basis_vector_t *a1)
+void pattern_set_a1(pattern *pat, basis_vector *a1)
 { pat->a1.x = a1->x; pat->a1.y = a1->y;}
 
-void pattern_set_a2(pattern_t *pat, basis_vector_t *a2)
+void pattern_set_a2(pattern *pat, basis_vector *a2)
 { pat->a2.x = a2->x; pat->a2.y = a2->y;}
 
-void pattern_set_radius(pattern_t *pat, double radius)
+void pattern_set_radius(pattern *pat, double radius)
 { pat->radius = radius;}
 
-int pattern_set_max_domains(pattern_t *pat, size_t n_domains)
+int pattern_set_max_domains(pattern *pat, size_t n_domains)
 { 
   char *str = pat->title;
-  pattern_t *t = pat;
-  pattern_t *tmp;
+  pattern *t = pat;
+  pattern *tmp;
   
   if (n_domains > pat->n_domains) /* grow the number of elements */
   {
-    matrix_2x2_t *temp = pat->M_SS;
-    (matrix_2x2_t*) realloc(pat->M_SS, n_domains*sizeof(matrix_2x2_t));
+    matrix_2x2 *temp = pat->M_SS;
+    (matrix_2x2*) realloc(pat->M_SS, n_domains*sizeof(matrix_2x2));
     
     /* check if realloc successful */
     if (pat->M_SS != NULL)
@@ -128,7 +128,7 @@ int pattern_set_max_domains(pattern_t *pat, size_t n_domains)
       return(-3);
     }
     
-    tmp = realloc(pat, sizeof(pattern_t) + (n_domains*sizeof(matrix_2x2_t)));
+    tmp = realloc(pat, sizeof(pattern) + (n_domains*sizeof(matrix_2x2)));
     if (tmp == NULL)
     {
       pat = t;
@@ -144,24 +144,24 @@ int pattern_set_max_domains(pattern_t *pat, size_t n_domains)
   return(-1);
 }
 
-size_t pattern_get_n_domains(pattern_t *pat)
+size_t pattern_get_n_domains(pattern *pat)
 { return(pat->n_domains);}
 
-void pattern_set_title(pattern_t *pat, char *title)
+void pattern_set_title(pattern *pat, char *title)
 {
   if (pat->title != NULL) free(pat->title);
   pat->title = (char *)malloc(sizeof(char) * strlen(title));
   strcpy(pat->title, title);
 }
 
-const char *pattern_get_title(pattern_t *pat)
+const char *pattern_get_title(pattern *pat)
 { return(pat->title);}
 
-pattern_t *pattern_read(FILE *file)
+pattern *pattern_read(FILE *file)
 {
-  pattern_t *pat;
-  basis_vector_t a1;
-  basis_vector_t a2;
+  pattern *pat;
+  basis_vector a1;
+  basis_vector a2;
   double radius;
   size_t n_dom;
   size_t i_dom;
@@ -359,7 +359,7 @@ pattern_t *pattern_read(FILE *file)
   return(pat);
 }
 
-void pattern_printf(FILE *stream, pattern_t *pat)
+void pattern_printf(FILE *stream, pattern *pat)
 {
   size_t i;
 
@@ -377,8 +377,8 @@ void pattern_printf(FILE *stream, pattern_t *pat)
   }
 }
 
-void pattern_set_superstructure_matrix(pattern_t *pat, 
-        matrix_2x2_t *mat, size_t domain)
+void pattern_set_superstructure_matrix(pattern *pat, 
+        matrix_2x2 *mat, size_t domain)
 {
   if (domain >= pat->n_domains) return;
   pat->M_SS[domain].M11 = mat->M11; 
@@ -387,13 +387,13 @@ void pattern_set_superstructure_matrix(pattern_t *pat,
   pat->M_SS[domain].M22 = mat->M22;
 }
 
-const matrix_2x2_t *get_superstructure_matrix(const pattern_t *pat, size_t domain)
+const matrix_2x2 *get_superstructure_matrix(const pattern *pat, size_t domain)
 {
   if (domain < pat->n_domains) return(&pat->M_SS[domain]);
   else return(NULL);
 }
 
-bool pattern_domain_is_commensurate(const pattern_t *pat, size_t domain)
+bool pattern_domain_is_commensurate(const pattern *pat, size_t domain)
 {
   if (domain > pat->n_domains) return(false);
   else
@@ -410,14 +410,14 @@ bool pattern_domain_is_commensurate(const pattern_t *pat, size_t domain)
   }
 }
 
-/*! \fn spots_t *pattern_calculate_substrate_spots(const pattern_t *pat)
+/*! \fn spots *pattern_calculate_substrate_spots(const pattern *pat)
  *  \brief Calculate LEED spots substrate 
- *  \param *pat Pointer to pattern_t structure.
+ *  \param *pat Pointer to pattern structure.
  *
  */ 
-spots_t *pattern_calculate_substrate_spots(const pattern_t *pat)
+spots *pattern_calculate_substrate_spots(const pattern *pat)
 {
-  spots_t *spots;
+  spots *spots;
   double a1[2];
   double a2[2];
   double xi, yi;
@@ -496,10 +496,10 @@ spots_t *pattern_calculate_substrate_spots(const pattern_t *pat)
   
 }
 
-spots_t *pattern_calculate_superstructure_spots(const pattern_t *pat,
+spots *pattern_calculate_superstructure_spots(const pattern *pat,
                                                 size_t domain)
 {
-  spots_t *spots;
+  spots *spots;
   double a1[2], a2[2];                /* substrate basis vectors */
   double b1[2], b2[2];                /* superstructure basis vectors */
   double xi, yi;
@@ -686,7 +686,7 @@ spots_t *pattern_calculate_superstructure_spots(const pattern_t *pat,
   
 }
 
-bool pattern_is_square(const pattern_t *pat)
+bool pattern_is_square(const pattern *pat)
 {
   return(pat->square);
 }

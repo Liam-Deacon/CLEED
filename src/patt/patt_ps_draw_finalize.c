@@ -2,7 +2,7 @@
 #include "patt.h"
 
 /* final drawing strokes */ 
-int patt_draw_ps_finish(FILE *file_ptr, const drawing_t *drawing)
+int patt_draw_ps_finish(FILE *file_ptr, const patt_drawing *drawing)
 {
   size_t ii;
   

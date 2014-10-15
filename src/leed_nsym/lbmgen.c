@@ -29,7 +29,7 @@ WB/27.02.98 - change eng_max to eng_max - vr when calculating k_max
 #endif
 
 int leed_beam_gen(leed_beam_t ** p_beams, leed_cryst_t *c_par, 
-           leed_var_t *v_par, real eng_max)
+           leed_var *v_par, real eng_max)
 
 /************************************************************************
 
@@ -41,7 +41,7 @@ int leed_beam_gen(leed_beam_t ** p_beams, leed_cryst_t *c_par,
                 included at the current energy.
   leed_cryst_t *c_par - all necessary structural parameters (for details
                 see "leed_def.h").
-  leed_var_t *v_par - all necessary parameters that change during the 
+  leed_var *v_par - all necessary parameters that change during the 
                 energy loop (for details see "leed_def.h").
                 used: 
                 real vr - real part of optical potential

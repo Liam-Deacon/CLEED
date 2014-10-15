@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   double nor_len = 0.0;
   
   double ind[3][3] = { {0., 0.}, {0., 0.}, {0., 0.} };
-  miller_hkl_t miller;
+  miller_hkl miller;
   
   /* variables for print out */
   double dist_min, dist_max;
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
   FILE *out_stream;
   
-  lattice_t *lat = lattice_init(1);
+  lattice *lat = lattice_init(1);
   
   /********************************************************
    * Preset input / output streams
@@ -147,13 +147,13 @@ int main(int argc, char *argv[])
 /***********************************************************
     BEGIN CALCULATIONS
 ************************************************************/
-  coord_t *a1 = coord_init();
-  coord_t *a2 = coord_init();
-  coord_t *a3 = coord_init();  
-  coord_t *nor = coord_init();
-  coord_t *bas = coord_init();
+  coord *a1 = coord_init();
+  coord *a2 = coord_init();
+  coord *a3 = coord_init();  
+  coord *nor = coord_init();
+  coord *bas = coord_init();
   
-  basis_t *a = basis_init();
+  basis *a = basis_init();
   
   lattice_setup(lat, a1, a2, a3, nor, bas, bas_name, &n_bas);
   
@@ -209,14 +209,14 @@ int main(int argc, char *argv[])
  Rotate lattice vectors and basis vectors
 ********************************************************/
 
-  basis_t *rot_a = basis_rotate_basis(a, R);
-  coord_t *rot_nor = basis_rotate_normal(nor, R);
+  basis *rot_a = basis_rotate_basis(a, R);
+  coord *rot_nor = basis_rotate_normal(nor, R);
 
-  coord_t *rot_bas = basis_rotate_vector_list(bas, n_bas, R);
+  coord *rot_bas = basis_rotate_vector_list(bas, n_bas, R);
   
-  coord_t *b1 = coord_init();
-  coord_t *b2 = coord_init();
-  coord_t *b3 = coord_init();
+  coord *b1 = coord_init();
+  coord *b2 = coord_init();
+  coord *b3 = coord_init();
 
   fprintf(ctr_stream, "\n First rotation:\n" );
   basis_printf(ctr_stream, rot_a);
@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
   fprintf(stderr, "n1 n2 n3 x y z within_limits?\n");
   #endif 
   
-  coord_t *faux = coord_init();
+  coord *faux = coord_init();
   
   for(n1 = -n_max; n1 <= n_max; n1 ++)
   {
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
 
   fprintf(ctr_stream, "\n interm vectors (1):\n");
   
-  basis_t *b = basis_init_vectors(b1, b2, b3);
+  basis *b = basis_init_vectors(b1, b2, b3);
   
   basis_printf(ctr_stream, b);
 

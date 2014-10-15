@@ -1,18 +1,26 @@
 /*********************************************************************
-GH/15.08.95
-
-include file for SEARCH program.
- - type definitions
- - constant values
- - function prototypes
-*********************************************************************/
+ *                           SEARCH.H
+ *
+ *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: master include file search program.
+ *
+ * Changes:
+ *   GH/1995.08.15 - creation
+ *********************************************************************/
+#ifndef SEARCH_H
+#define SEARCH_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
-#ifndef SEARCH_H
-#define SEARCH_H
 
 /*********************************************************************
  Other (basic) includes
@@ -51,8 +59,8 @@ char *sr_project;
  End of include file 
 *********************************************************************/
 
-#endif /* SEARCH_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* SEARCH_H */

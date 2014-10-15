@@ -1,15 +1,28 @@
 /*********************************************************************
-GH/03.09.97
+ *                           GH_STDDEF.H
+ *
+ *  Copyright 2006-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: Header file for constants and macros generally used
+ *              throughout the CLEED code.
+ *
+ * Changes:
+ *   GH/1997.09.03 - creation
+ *
+ ********************************************************************/
 
-constants and macros generally used
-*********************************************************************/
+#ifndef STD_DEF_H
+#define STD_DEF_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
-
-#ifndef STD_DEF_H
-#define STD_DEF_H
 
 /*********************************************************************
  define machine
@@ -121,9 +134,8 @@ extern "C" {
 #define ODD(n)    ((n)%2)
 #define M1P(n)    (((n)%2)?(-1.):(1.))
 
-
-#endif
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* GH_STDDEF_H */

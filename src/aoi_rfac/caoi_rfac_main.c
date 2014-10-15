@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
   char string[STRSIZE];
   FILE *fp;
   FILE *fpp;
-  char res_file[STRSIZE];                 /* input/output files */
-  char ctr_file[STRSIZE];
+  char res_file[FILENAME_MAX];                 /* input/output files */
+  char ctr_file[FILENAME_MAX];
   char rfac_type[STRSIZE];
   float m_rfac_shift_range;
   float p_rfac_shift_range;
@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
   p_rfac_shift_range =  10.;
   rfac_shift_step = 0.5;
   strncpy(rfac_type, "rp", STRSIZE);
-  strncpy(res_file, "---", STRSIZE);
-  strncpy(ctr_file, "---", STRSIZE);
+  strncpy(res_file, "---", FILENAME_MAX);
+  strncpy(ctr_file, "---", FILENAME_MAX);
   iaux = 0;
 /*********************************************************************
   Decode arguments:
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
       {
         i_arg++;
         printf("\n%s\n",argv[i_arg]);
-        strncpy(res_file, argv[i_arg], STRSIZE);
+        strncpy(res_file, argv[i_arg], FILENAME_MAX);
         printf("\n%s\n",res_file);
       } /* -t */
 
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
       {
         i_arg++;
         printf("\n%s\n",argv[i_arg]);
-        strncpy(ctr_file, argv[i_arg], STRSIZE);
+        strncpy(ctr_file, argv[i_arg], FILENAME_MAX);
         printf("\n%s\n",ctr_file);
       } /* -i */
 
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
 
 /************ Makes .ctr file for each angle **********/
 
-  strncpy(string, ctr_file,length);
+  strncpy(string, ctr_file, length);
   sprintf(string+length, ".ctr");
   ctrinp(string);
 
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
   for (i=0; i<sa; i++)
   {
     strncpy(string, proj_name, STRSIZE);
-    sprintf(string+length, "ia_%d.dum", i+1);
+    sprintf(string+length, "ia_%u.dum", i+1);
 
     if ((fpp = fopen(string,"r")) == NULL)
     {
@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
     }  /*while*/
 
 
-    fprintf(STDERR, "\nR%d = %f\n", i+1, rfac);
+    fprintf(STDERR, "\nR%u = %f\n", i+1, rfac);
     avershift = avershift + shift;
     averfac=averfac+rfac*enrange;
     sum = sum + enrange;
@@ -287,31 +287,14 @@ int main(int argc, char *argv[])
           "\n%f %f %f %f     #     Rp  RR  shift range\n", 
           averfac, sterror, avershift, averenr);
 
-/************** Open proj_name.dum file and write the average R factor **********************/
-/*******************************************************************************************
-  strncpy(string,proj_name,STRSIZE);
-  sprintf(string+length,".dum");
-
- if ((fp = fopen(string,"w")) == NULL)
-    {
-#ifdef ERROR
-      fprintf(STDERR,
-      "*** error (caoi_rfac_main): could not open output file \"%s\"\n",
-      string);
-#endif
-     exit(1);
-    }
- fprintf(fp, "<R> = %f\n", averfac);
- fprintf(fp, "\n%f %f %f %f     #     Rp  RR  shift range\n", averfac, sterror, avershift, averenr);
-
-************************************************************************************************/
+/* Open proj_name.dum file and write the average R factor */
   printf("\n%f %f %f %f     #     Rp  RR  shift range\n", 
             averfac, sterror, avershift, averenr);
   exit(0);
   
   iaux = iaux * 1; /* remove warning */
 
-  return 0;
+  return(0);
   
 } /*main*/
 

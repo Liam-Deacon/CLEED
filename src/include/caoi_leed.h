@@ -1,24 +1,40 @@
-/*********************************************************************
-ZZ/03.03.2008
+/************************************************************************
+ *                           CAOI_LEED.H
+ *
+ *  Copyright 2008-2014 Zhasmina Zheleeva
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Description:  include file for angle of incidence additions
+ *   - type definitions
+ *   - constant values
+ *
+ * Changes:
+ *   ZZ/2008.03.23 - Creation
+ *   LD/2014.10.07 - Added PROG* definitions, C++ wrapper and some
+ *                   Doxygen markup
+ *
+ ************************************************************************/
 
-include file for angle of incidence additions
- - type definitions
- - constant values
-*********************************************************************/
+#ifndef LEED_AOI_H
+#define LEED_AOI_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
-#ifndef LEED_AOI_H
-#define LEED_AOI_H
+#include <stdio.h>
 
 #ifndef STRSIZE
-#define STRSIZE 256
+#define STRSIZE 256       /*!< maximum length of string */
 #endif
 
 #ifndef STDERR
-#define STDERR stderr
+#define STDERR stderr     /*!< error stream for output */
 #endif
 
 #define PROG "cleed_aoi"
@@ -48,14 +64,23 @@ extern "C" {
 /*********************************************************************
 include global values for multiple datasets
 *********************************************************************/
-int sa;
-void bsrinp (char *filebsr, int number);
+/*!
+ *  \brief provides the number of multiple a datasets
+ */
+size_t sa;
+
+/*! \fn bsrinp(char \param *filebsr, int \param number)
+ *  \param *filebsr The .bsr file to read from & write to.
+ *  \param number The set number for multiple datasets.
+ */
+void bsrinp(char *filebsr, size_t number);
 
 /*********************************************************************
 END
 *********************************************************************/
-#endif /* LEED_AOI_H */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* LEED_AOI_H */

@@ -49,7 +49,7 @@ static int l_max_c = UNUSED;
 /*======================================================================*/
 /*======================================================================*/
 
-mat r_ylm( mat Ylm, real x, real phi, int l_max )
+mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
 
 /************************************************************************
 
@@ -218,7 +218,7 @@ real x_2, sum;
 /*======================================================================*/
 /*======================================================================*/
 
-mat c_ylm( mat Ylm, real z_r, real z_i, real phi, int l_max )
+mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
 
 /************************************************************************
 
@@ -313,8 +313,8 @@ real sum_r, sum_i;
 #ifdef WARNING
    if(l_max_coef != UNUSED)
    {
-     fprintf(STDWAR,"*** warning (c_ylm): recalculating coefficients: ");
-     fprintf(STDWAR,"old l_max: %d, new: %d\n", l_max_coef, l_max);
+     fprintf(STDWAR, "*** warning (c_ylm): recalculating coefficients: ");
+     fprintf(STDWAR, "old l_max: %d, new: %d\n", l_max_coef, l_max);
    }
 #endif
    mk_ylm_coef(l_max);
@@ -432,7 +432,7 @@ real sum_r, sum_i;
 /*======================================================================*/
 /*======================================================================*/
 
-int mk_ylm_coef(int l_max)
+int mk_ylm_coef(size_t l_max)
 
 /************************************************************************
 
@@ -446,9 +446,10 @@ int mk_ylm_coef(int l_max)
 int i;
 int iaux;
 int index;                   /* index */
-int i_mem;                   /* number of memory blocks allocated */
+size_t i_mem;                   /* number of memory blocks allocated */
 
-int l, m, lamb;
+size_t l;
+int m, lamb;
 
 double *fac;
 
@@ -473,7 +474,7 @@ real sgn;                    /* sign of the coefficients */
  if (coef == NULL)
    coef = (real *) calloc(i_mem * MEM_BLOCK , sizeof(real) );
  else
-   coef = (real *) realloc( coef, i_mem * MEM_BLOCK * sizeof(real) );
+   coef = (real *) realloc(coef, i_mem * MEM_BLOCK * sizeof(real) );
 
 /* 
  loop over l 
@@ -506,7 +507,7 @@ real sgn;                    /* sign of the coefficients */
        i_mem ++;
        coef = (real *)realloc( coef, i_mem * MEM_BLOCK * sizeof(real) );
 #ifdef CONTROL_MK
-       fprintf(STDCTR,"(mk_ylm_coef): reallocate coef: %d\n", i_mem);
+       fprintf(STDCTR, "(mk_ylm_coef): reallocate coef: %d\n", i_mem);
 #endif
      }
 
@@ -516,7 +517,7 @@ real sgn;                    /* sign of the coefficients */
                      (real) ( fac[2*lamb] / 
                              (fac[lamb] * fac[l - lamb] * fac[2*lamb -l -m]));
 #ifdef CONTROL_MK
-       fprintf(STDCTR,"l:%2d, m:%2d, lamb:%2d, coef[%2d]:%7.3f\n", 
+       fprintf(STDCTR, "l:%2d, m:%2d, lamb:%2d, coef[%2d]:%7.3f\n",
                l,m,lamb,index, coef[index]);
 #endif
        sgn = -sgn;
@@ -533,7 +534,7 @@ real sgn;                    /* sign of the coefficients */
 
 #ifdef WARNING
 /* Write memory size to warning output */
-       fprintf(STDCTR,"(mk_ylm_coef): coef[%d] (%d bytes) for l_max = %d\n",
+       fprintf(STDCTR, "(mk_ylm_coef): coef[%d] (%d bytes) for l_max = %d\n",
                index, i_mem * MEM_BLOCK * sizeof(real), l_max_coef);
 #endif
 

@@ -1,13 +1,27 @@
-/*********************************************************************
-ZZ/03.03.2008
-
-include file for angle of incidence additions
- - type definitions
- - constant values
-*********************************************************************/
+/************************************************************************
+ *                           CAOI_RFAC.H
+ *
+ *  Copyright 2008-2014 Zhasmina Zheleeva
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Description:  include file for angle of incidence additions
+ *   - type definitions
+ *   - constant values
+ *
+ * Changes:
+ *   ZZ/2008.03.23 - Creation
+ *   LD/2014.10.07 - Added PROG* definitions and C++ wrapper
+ *
+ ************************************************************************/
 #ifndef RFAC_AOI_H
 #define RFAC_AOI_H
 
+#include <stdio.h>
 #include <string.h>
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
@@ -49,11 +63,16 @@ extern "C" {
 /*********************************************************************
 include global values for multiple datasets
 *********************************************************************/
-size_t sa;	  /*! global memory variable for number of aoi datasets */
-int ctrinp(char filectr[STRSIZE]);
-char proj_name[STRSIZE]; /* global memory variable for storing
-													   project name */
-
+size_t sa;	  /*!< global memory variable for number of aoi datasets */
+char proj_name[FILENAME_MAX]; /*!< global memory variable for storing
+													     * project name */
+/*! \fn
+ *  \brief
+ *  \return integer value representing success (zero) or error (non-zero)
+ *  code.
+ *  \param char filectr
+ */
+int ctrinp(const char filectr[FILENAME_MAX]);
 
 /*********************************************************************
 END

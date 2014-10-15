@@ -27,7 +27,7 @@
 
 int leed_output_beam_list(leed_beam_t ** p_beams_out, 
                leed_beam_t *beams_all, 
-               leed_energy_t *eng, 
+               leed_energy *eng, 
                FILE * outfile)
 
 /************************************************************************

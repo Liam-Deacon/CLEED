@@ -9,7 +9,7 @@
    Note: more than 10 input files is not currently supported as the conversion
    is done using single characters (i.e. "0"-"9")
 */
-int decode_vectors(int spot_type, bool *do_vectors,
+int decode_vectors(int spotype, bool *do_vectors,
                    char *argv, size_t str_length)
 {
   size_t pos, jj, val[2], imax;
@@ -21,8 +21,8 @@ int decode_vectors(int spot_type, bool *do_vectors,
   val[1] = 0;
   ichar[1] = '\0';
   
-  if (spot_type == SPOT_GS) imax = MAX_INPUT_FILES;
-  if (spot_type == SPOT_SS) imax = STRSZ;
+  if (spotype == SPOT_GS) imax = MAX_INPUT_FILES;
+  if (spotype == SPOT_SS) imax = STRSZ;
 	
 	while ((argv[pos] != '\0') && (pos < str_length))
 	{

@@ -22,7 +22,7 @@ Creation:
 #define MIN_DIST 2.0
 #endif
 
-int leed_inp_overlayer_sym(leed_cryst_t *par,leed_atom_t * atom_list) 
+int leed_inp_overlayer_sym(leed_cryst_t *par,leed_atom * atom_list) 
 
 /************************************************************************
 
@@ -38,7 +38,7 @@ int leed_inp_overlayer_sym(leed_cryst_t *par,leed_atom_t * atom_list)
      parameters of the overlayer except atom positions and types.
      Output will be written to structure element layers.
 
- leed_atom_t *atom_list (input)
+ leed_atom *atom_list (input)
      structure that contains all geometrical and nongeometrical
      parameters of the atoms to be grouped (see "leed_def.h").
      (The list of atoms must be ordered according to their z coordinate,
@@ -268,7 +268,7 @@ real vaux[2];
 *************************************************************************/
  
  par->layers =
-       (leed_layer_t *) malloc( (i_layer + 1) * sizeof(leed_layer_t) );
+       (leed_layer *) malloc( (i_layer + 1) * sizeof(leed_layer) );
 
  for(i = 0 ; i < i_layer ; i++)
  {
@@ -323,7 +323,7 @@ real vaux[2];
    par->layers[j].atoms
 **************************************************************************/
    par->layers[i].atoms =
-     (leed_atom_t *) malloc(par->layers[i].natoms * sizeof(leed_atom_t) );
+     (leed_atom *) malloc(par->layers[i].natoms * sizeof(leed_atom) );
 
    for( i_c = 0, i_atoms = 0; i_atoms < n_atoms ; i_atoms ++)
    {

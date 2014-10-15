@@ -1,14 +1,22 @@
-/*********************************************************************
-ZZ/03.03.08
-  file contains functions:
-
-  ctrinp (03.03.08)
-     makes .ctr file for each angle of incidence
-
-Changes:
-  LD/18.09.2014 - changed lengthctr, ictr and num to type size_t from int
-
-*********************************************************************/
+/************************************************************************
+ *                        CAOI_RFAC_CTR.C
+ *
+ *  Copyright 2008-2014 Zhasmina Zheleeva
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Description:  file contains functions
+ *  ctrinp()
+ *    Makes .ctr file for each angle of incidence
+ *
+ * Changes:
+ *   ZZ/2008.03.03 - creation
+ *   LD/18.09.2014 - changed lengthctr, ictr & num to size_t from int
+ *********************************************************************/
 
 #include "caoi_rfac.h"
 #include <stdio.h>
@@ -17,9 +25,9 @@ Changes:
 
 /*======================================================================*/
 
-int ctrinp(char *filectr)
+int ctrinp(const char *filectr)
 {
-  char stringctr[STRSIZE];
+  char stringctr[FILENAME_MAX];
   char workstr[STRSIZE];
 
   FILE *fpf;
@@ -30,7 +38,7 @@ int ctrinp(char *filectr)
 
   strncpy(stringctr, filectr, STRSIZE);
 
-  if ((fp = fopen(filectr,"r")) == NULL)
+  if ((fp = fopen(filectr, "r")) == NULL)
   {
 	#ifdef ERROR
       fprintf(STDERR, "*** error (caoi_rfac_ctr): "
@@ -48,7 +56,7 @@ int ctrinp(char *filectr)
   for (ictr = 0; ictr < sa; ictr++)
   {
     rewind(fp);
-    strncpy(stringctr, filectr ,STRSIZE);
+    strncpy(stringctr, filectr, FILENAME_MAX);
     sprintf(stringctr+lenghtctr, "ia_%u.ctr", ictr+1);
 
     if ((fpf=fopen(stringctr,"w")) == NULL)
@@ -68,7 +76,7 @@ int ctrinp(char *filectr)
 
           if ((ictr+1) == num)
           {
-            sscanf(stringctr+3, " %u %s", &num,workstr);
+            sscanf(stringctr+3, " %u %s", &num, workstr);
             fprintf(fpf, "%s\n", workstr);
           }
 
@@ -76,7 +84,7 @@ int ctrinp(char *filectr)
 
       else
       {
-        fprintf(fpf,"%s",stringctr);
+        fprintf(fpf, "%s", stringctr);
       }
 
     } /*while*/

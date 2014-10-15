@@ -4,8 +4,8 @@
 
 int main()
 {
-	coord_t *pos = coord_init();
-	coord_t *a = malloc(sizeof(coord_t));
+	coord *pos = coord_init();
+	coord *a = malloc(sizeof(coord));
 
 	coord_set_x(pos, 1.);
 	coord_set_y(pos, 2.);

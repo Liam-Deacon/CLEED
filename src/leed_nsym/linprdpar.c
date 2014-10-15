@@ -33,8 +33,8 @@ CHANGES:
 
 /********************************************************************/
 
-int leed_inp_leed_read_par(leed_var_t ** p_var_par,
-              leed_energy_t ** p_eng_par, 
+int leed_inp_leed_read_par(leed_var ** p_var_par,
+              leed_energy ** p_eng_par, 
               leed_cryst_t * bulk_par,
               char *in_file)
 /*********************************************************************
@@ -42,8 +42,8 @@ int leed_inp_leed_read_par(leed_var_t ** p_var_par,
 
   INPUT:
  
-  leed_var_t ** p_var_par 
-  leed_energy_t ** p_eng_list 
+  leed_var ** p_var_par 
+  leed_energy ** p_eng_list 
   leed_cryst_t * bulk_par  bulk crystal parameters (must contain
             valid values for vr and vi). Function leed_inp_read_bul must be
             called before leed_inp_leed_read_par.
@@ -90,8 +90,8 @@ int leed_inp_leed_read_par(leed_var_t ** p_var_par,
 
 *********************************************************************/
 {
-leed_var_t *var_par;
-leed_energy_t *eng_par;
+leed_var *var_par;
+leed_energy *eng_par;
 
 int i_str;                      /* counter variables */
 int i_c;                        /* dummy variables */
@@ -111,7 +111,7 @@ char linebuffer[STRSZ];         /* input buffer */
    fprintf(STDCTR,"(leed_inp_leed_read_par): allocate var_par\n");
 #endif
    var_par = *p_var_par = 
-                (leed_var_t *)malloc( sizeof(leed_var_t) );
+                (leed_var *)malloc( sizeof(leed_var) );
  }
  else
    var_par = *p_var_par;
@@ -119,7 +119,7 @@ char linebuffer[STRSZ];         /* input buffer */
  if (*p_eng_par == NULL) 
  {
    eng_par = *p_eng_par = 
-                (leed_energy_t *)malloc( sizeof(leed_energy_t) );
+                (leed_energy *)malloc( sizeof(leed_energy) );
  }
  else
    eng_par = *p_eng_par;

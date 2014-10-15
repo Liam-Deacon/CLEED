@@ -65,7 +65,7 @@ SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};ALL;
 
 # Branch
 SET(SOURCE_BRANCH "Development")
-SET(LICENSE "")
+SET(LICENSE "GNU General Public License v3")
 
 # Project options
 OPTION(WITH_PHASESHIFTS "Set to ON to download and integrate PhaseShifts Python package" ON)

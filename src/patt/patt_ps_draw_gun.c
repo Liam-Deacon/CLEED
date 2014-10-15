@@ -4,7 +4,7 @@
 
 
 /* draw electron gun */
-int patt_draw_ps_gun(FILE *file_ptr, const gun_t *gun)
+int patt_draw_ps_gun(FILE *file_ptr, const patt_gun *gun)
 {
 	fprintf(file_ptr, "%% Electron gun\n");
 	fprintf(file_ptr, "%s\n", patt_color_get_ps_string(&PATT_GUN_COLOR));

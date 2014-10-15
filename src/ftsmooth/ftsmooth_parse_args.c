@@ -1,6 +1,5 @@
 /*********************************************************************
-LD/24.04.14
-                        FTSMOOTH_PARSE_ARGS
+                        FTSMOOTH_PARSE_ARGS.C
 
   file contains functions:
 
@@ -11,7 +10,7 @@ LD/24.04.14
      decode string arguments into x ranges
   
 Changes:
-
+  LD/2014.04.24 - creation (split from ftsmooth.c)
 *********************************************************************/
 
 #include "ftsmooth.h"
@@ -120,13 +119,15 @@ int parse_args(int argc, char *argv[],
 	     case '*': case 'z':
 		   *offset_flag = OFFSET_Y_TO_ZERO;
 	       break;
-		 case '-': /* check argument */
-		   if (strlen(argv[i_arg])-1) /* check for command options */
+
+	     case '-': /* check argument */
+	       if (strlen(argv[i_arg])-1) /* check for command options */
 		     if ((isalpha(argv[i_arg][1])) || (argv[i_arg][1] == '-'))
-			 {
-			    *offset_flag = OFFSET_Y_TO_ZERO;
-				break;
-			 }			 
+		     {
+		       *offset_flag = OFFSET_Y_TO_ZERO;
+		     }
+	       break;
+
 	     default:
 		   *offset = (double)atof(argv[i_arg]);	   
 	   }
@@ -261,8 +262,7 @@ Encoding as follows:
     pos++;
   }
   
-  if(!islowerbound)
-	ubound[*i_r-1] = DBL_MAX;
+  if(!islowerbound) ubound[*i_r-1] = DBL_MAX;
   
-  return 0;
+  return(0);
 }

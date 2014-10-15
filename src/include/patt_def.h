@@ -1,11 +1,22 @@
-/****************************************************************************
-                        PATT_VER.H 
-                        
-    version information for patt
-
-Changes:
-         
-****************************************************************************/
+/*********************************************************************
+ *                           PATT_DEF.H
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: include file for patt. It contains:
+ *  - enums
+ *  - structs
+ *  - defines
+ *
+ * Changes:
+ *   LD/2014.08.23 - header created by split from patt.c
+ *********************************************************************/
 
 #ifndef PATT_DEF_H
 #define PATT_DEF_H
@@ -24,68 +35,94 @@ Changes:
 #include "basis.h"
 
 #ifndef STRSZ
-  #define STRSZ 128
+  #define STRSZ 128   /*! maximum length of string */
 #endif
 
 /* formats */
-/*! \enum patt_format_t
- *  \brief Output format of generated LEED pattern.
+/*! \enum patt_format
+ *  \brief Indicates output format of generated LEED pattern.
  */
 typedef enum {
-  PATT_PS_OLD,
-  PATT_EPS,
-  PATT_PS,
-  PATT_PNG,
-  PATT_PDF,
-  PATT_SVG,
-  PATT_UNKNOWN_FORMAT
-} patt_format_t;
+  PATT_PS_OLD,        /*!< Use old postscript backend */
+  PATT_EPS,           /*!< Encapsulated postscript output */
+  PATT_PS,            /*!< Postscript output */
+  PATT_PNG,           /*!< Portable network graphics output */
+  PATT_PDF,           /*!< Portable document format output */
+  PATT_SVG,           /*!< Scalable vector graphics output */
+  PATT_UNKNOWN_FORMAT /*!< Unknown output format */
+} patt_format;
 
-/*! \enum patt_color_scheme_t
- *  \brief Color scheme for LEED pattern.
+/*! \enum patt_color_scheme
+ *  \brief Indicates color scheme for LEED pattern.
  */
 typedef enum {
-  PATT_BLACK_SCHEME,
-  PATT_GRAYSCALE_SCHEME,
-  PATT_COLOR_SCHEME,
-  PATT_UNKNOWN_SCHEME
-} patt_color_scheme_t;
+  PATT_MONOCHROME_SCHEME,   /*!< Black and white output only */
+  PATT_GRAYSCALE_SCHEME,    /*!< Grayscale output only */
+  PATT_COLOR_SCHEME,        /*!< Color output enabled */
+  PATT_UNKNOWN_SCHEME       /*!< Invalid color scheme */
+} patt_color_scheme;
 
+/*! \enum patt_error
+ *  \brief patt return codes.
+ */
 typedef enum {
-  PATT_SUCCESS=0,
-  PATT_ARGUMENT_ERROR,
-  PATT_READ_ERROR,
-  PATT_WRITE_ERROR,
-  PATT_COLOR_ERROR,
-  PATT_FORMAT_ERROR,
-  PATT_ALLOC_ERROR,
-  PATT_DEALLOC_ERROR,
-  PATT_SHAPE_ERROR,
-  PATT_UNKNOWN_ERROR
-} patt_error_t;
+  PATT_SUCCESS=0,         /*!< function success */
+  PATT_ARGUMENT_ERROR,    /*!< invalid argument error */
+  PATT_READ_ERROR,        /*!< error reading from file */
+  PATT_WRITE_ERROR,       /*!< error writing to file */
+  PATT_COLOR_ERROR,       /*!< invalid color error */
+  PATT_FORMAT_ERROR,      /*!< invalid format error */
+  PATT_ALLOC_ERROR,       /*!< unable to allocate memory error */
+  PATT_DEALLOC_ERROR,     /*!< unable to free memory error */
+  PATT_SHAPE_ERROR,       /*!< invalid shape error */
+  PATT_UNKNOWN_ERROR      /*!< unknown error */
+} patt_error;
 
-
+/*! \def PATT_PAGE_HEIGHT
+ *  \brief Height of bounding box for drawing.
+ */
 #define PATT_PAGE_HEIGHT 800.
+
+/*! \def PATT_PAGE_WIDTH
+ *  \brief Width of bounding box for drawing.
+ */
 #define PATT_PAGE_WIDTH 600.
 
+/*! \def ARROW_ANGLE
+ *  \brief Default angle for drawing arrow heads.
+ */
 #define ARROW_ANGLE 0.5
 
 /*! \def OFF_H
  *  \brief Height offset for drawing.
  */
+
 #define OFF_H      400.
 /*! \def OFF_W
  *  \brief Width offset for drawing. 
  */
 #define OFF_W      300.
+
 /*! \def LINE_WIDTH
- *  \brief Default linewidth for drawing 
+ *  \brief Default line width for drawing.
  */
 #define LINE_WIDTH 2.
+
+/*! \def MAX_RADIUS
+ *  \brief Maximum radius for pattern (analogous to the Ewald sphere).
+ */
 #define MAX_RADIUS 200.
 
+/*! \def MAX_INPUT_FILES
+ *  \brief Number of possible input files to be simultaneously rendered
+ *         in the drawing.
+ */
 #define MAX_INPUT_FILES 6
 
+/*! \def MAX_DOMAINS
+ *  \brief The maximum number of allowed super-structure domains
+ *   per substrate pattern.
+ */
 #define MAX_DOMAINS 128
 
 #define GREY_GS    0.
@@ -102,95 +139,115 @@ char line_buffer[STRSZ];
 Pattern Structures
 *******************************************************/
 
-typedef struct text_t 
+/*! \struct patt_text
+ *  \brief Struct for displaying text label.
+ */
+typedef struct patt_text 
 {
-  patt_color_rgb_t color;
-  double alpha;
-  char label[BUFSIZ];
-  double x;
-  double y;
-  double size;
-  bool visible;
-} text_t;
-extern text_t text_default;
+  patt_color_rgb color;   /*!< color of text label */
+  double alpha;           /*!< alpha transparency (0. to 1. is 0 to 100%) */
+  char label[BUFSIZ];     /*!< text string to be displayed */
+  double x;               /*!< x-position for text */
+  double y;               /*!< y-position for text */
+  double size;            /*!< text size */
+  bool visible;           /*!< show text */
+} patt_text;
+extern patt_text text_default;
 
-typedef struct screen_t 
-{
-  double alpha;             /* % alpha transparency of screen (if supported) */
-  patt_color_rgb_t stroke_color;
-  patt_color_rgb_t fill_color;
-  double radius;            /* screen radius (default is MAX_RADIUS)*/
-  double stroke_width;      /* screen edge thickness */
-  bool clip;                /* clip pattern to radius for screen */
-  bool fill;                /* background fill of screen */
-  bool visible;             /* show screen */
-} screen_t;
-extern screen_t screen_default;
 
-typedef struct gun_t 
+/*! \struct screen
+ *  \brief Struct for containing LEED screen drawing parameters.
+ */
+typedef struct patt_screen
 {
-  double x;
-  double y;
-  double stroke_width;
-  patt_color_rgb_t color;
-  double radius;
-  double angle;      /* in radians */
-  bool fill;
-  bool visible;
-  double alpha;
-} gun_t;
-extern gun_t gun_default; 
+  double alpha;           /*!< % alpha transparency of screen (if supported) */
+  patt_color_rgb stroke_color;  /*!< line color of screen */
+  patt_color_rgb fill_color;    /*!< fill color of screen */
+  double radius;          /*!< screen radius (default is MAX_RADIUS)*/
+  double stroke_width;    /*!< screen edge thickness */
+  bool clip;              /*!< clip pattern to radius for screen */
+  bool fill;              /*!< background fill of screen */
+  bool visible;           /*!< show screen */
+} patt_screen;
+extern patt_screen screen_default;
 
-typedef struct vector_t
+
+/*! \struct patt_gun
+ *  \brief Struct for containing electron gun drawing parameters.
+ */
+typedef struct patt_gun 
 {
-  double x1;
-  double y1;
-  double x2;
-  double y2;
-  patt_color_rgb_t color;
-  double linewidth;
+  double x;                 /*!< x-axis centre for gun */
+  double y;                 /*!< y-axis centre for gun */
+  double stroke_width;      /*!< line width of drawing strokes */
+  patt_color_rgb color;     /*!< fill color of electron gun */
+  double radius;            /*!< radius of gun */
+  double angle;             /*!< angle, in radians, where gun support to be shown */
+  bool fill;                /*!< determines whether to fill in gun */
+  bool visible;             /*!< determines gun visibility */
+  double alpha;             /*!< fractional alpha transparency (0. to 1.) */
+} patt_gun;
+extern patt_gun gun_default; 
+
+
+/*! \struct patt_vector
+ *  \brief Struct for containing basis vector drawing details.
+ */
+typedef struct patt_vector
+{
+  double x1;                /*!< initial x-coordinate for vector */
+  double y1;                /*!< initial y-coordinate for vector */
+  double x2;                /*!< final x-coordinate for vector */
+  double y2;                /*!< final y-coordinate for vector */
+  double alpha;             /*!< fractional alpha transparency from 0. to 1. */
+  patt_color_rgb color;     /*!< color of basis vector */
+  double linewidth;         /*!< line width of basis vector */
   double head_size;
-  double alpha;
-} vector_t;
-extern vector_t vector_default; 
 
-typedef struct drawing_t 
+} patt_vector;
+extern patt_vector vector_default; 
+
+
+/*! \struct patt_drawing
+ *  \brief Master struct for containing all drawing parameters.
+ */
+typedef struct patt_drawing 
 {
-  basis_t basis_gs[MAX_INPUT_FILES];
-  basis_t basis_ss[MAX_INPUT_FILES][MAX_DOMAINS];
-  text_t eV;
-  text_t title;
-  text_t footnote;
-  text_t legend[MAX_INPUT_FILES];
-  gun_t gun;
-  screen_t screen;
-  patt_color_scheme_t color_scheme;
-  patt_format_t format;
-  spots_t spots[2];
-  int energy;
-  bool show_overlap;
-  bool show_vectors;
-  bool show_indices;             /* show indices in output */
-  bool symbols;                  /* use different superstructures symbols */
-  bool fill_gs;
-  bool fill_ss;
+  basis basis_gs[MAX_INPUT_FILES];
+  basis basis_ss[MAX_INPUT_FILES][MAX_DOMAINS];
+  patt_text eV;                      /*!< label for energy if used */
+  patt_text title;                   /*!< label for drawing title */
+  patt_text footnote;                /*!< label for drawing footnote */
+  patt_text legend[MAX_INPUT_FILES]; /*!< legend for drawing */
+  patt_gun gun;                      /*!< electron gun drawing details */
+  patt_screen screen;                /*!< LEED screen drawing details */
+  patt_color_scheme color_scheme;    /*!< color scheme for drawing */
+  patt_format format;         /*!< format for output file e.g. svg or pdf */
+  spots spots[2];             /*!< container for drawing style for both
+                               *   GS_SPOTS (subtrate) and
+                               *   SS_SPOTS (superstructure) */
+  size_t energy;              /*!< energy for simulating Ewald sphere */
+  bool show_overlap;          /*!< show spots on top of gun and edge of screen */
+  bool show_vectors;          /*!< show basis vectors in output drawing */
+  bool show_indices;          /*!< show Miller indices in output drawing */
+  bool symbols;               /*!< use different symbols for each domain */
+  bool fill_gs;               /*!< fill in substrate spots with spot color */
+  bool fill_ss;               /*!< fill in superstructure spots */
   bool show_gs_vectors[MAX_INPUT_FILES];
   bool show_ss_vectors[MAX_INPUT_FILES][MAX_DOMAINS];
   bool show_gs_indices[MAX_INPUT_FILES];
   bool show_ss_indices[MAX_INPUT_FILES][MAX_DOMAINS];
   size_t n_files;
-  char input_files[MAX_INPUT_FILES][PATH_MAX];
-  char output_filename[PATH_MAX];
-  bool std_in;
-  bool std_out;
-  bool interactive;
-} drawing_t;
-extern drawing_t drawing_default;
+  char input_files[MAX_INPUT_FILES][FILENAME_MAX];
+  char output_filename[FILENAME_MAX];
+  bool std_in;              /*!< indicates whether to use stdin as input */
+  bool std_out;             /*!< indicates whether to use stdout as output */
+  bool interactive;         /*!< indicates whether to run patt interactively */
+} patt_drawing;
+extern patt_drawing drawing_default;
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
 
 #endif /* PATT_DEF_H */
-
-

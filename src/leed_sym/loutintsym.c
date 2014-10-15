@@ -2,7 +2,7 @@
   GH/11.08.95 
   file contains function:
 
-  leed_output_iint_sym(mat Amp, leed_beam_t *beams, leed_var_t *par, FILE * outfile)
+  leed_output_iint_sym(mat Amp, leed_beam_t *beams, leed_var *par, FILE * outfile)
 
  Intensity output function
 
@@ -22,7 +22,7 @@
 #endif
 
 int leed_output_iint_sym(mat Amp, leed_beam_t *beams_now, leed_beam_t *beams_all,
-            leed_var_t *par, FILE * outfile)
+            leed_var *par, FILE * outfile)
 
 /************************************************************************
 

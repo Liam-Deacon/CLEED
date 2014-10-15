@@ -1,22 +1,30 @@
 /*********************************************************************
-LD/24.04.14
-  header for functions:
+ *                           PROG_HELP.H
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: Header file for function prototypes:
+ *  - usage()
+ *    Provides syntax help and other information before exiting
+ *  - info()
+ *    Provides version information then exits
+ *
+ * Changes:
+ *   LD/2014.04.14 - creation
+ *********************************************************************/
 
-  usage (24.04.14)
-     Provides syntax help and other information before exiting
-
-  info (24.04.14)
-     Provides version information then exits
-  
-Changes:
-
-*********************************************************************/
+#ifndef PROG_HELP_H
+#define PROG_HELP_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
-
-#ifndef PROG_HELP_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,8 +35,8 @@ void usage_sym(FILE *output);
 void info();
 void info_sym();
 
-#endif /* PROG_HELP_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* PROG_HELP_H */

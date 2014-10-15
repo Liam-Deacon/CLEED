@@ -30,8 +30,8 @@ GH/08.08.95 - Creation (copy from leed_write_par).
 
 int leed_read_par( leed_cryst_t ** p_bulk_par,
               leed_phs_t   ** p_phs_shifts,
-              leed_var_t   ** p_par,
-              leed_energy_t   ** p_eng,
+              leed_var   ** p_par,
+              leed_energy   ** p_eng,
               leed_beam_t  ** p_beams,
               FILE* file)
 /*********************************************************************
@@ -41,9 +41,9 @@ int leed_read_par( leed_cryst_t ** p_bulk_par,
 
    leed_cryst_t ** p_bulk_par - (input) bulk parameters.
    leed_phs_t   ** p_phs_shifts - (input) phase shifts.
-   leed_var_t   ** p_par - (input) other parameters necessary to control
+   leed_var   ** p_par - (input) other parameters necessary to control
               the program.
-   leed_energy_t   ** p_eng - (input) energy parameters.
+   leed_energy   ** p_eng - (input) energy parameters.
    leed_beam_t  ** p_beams - (input) all output beams used at the highest 
               energy.
    FILE* file - (input) pointer to input file.
@@ -75,8 +75,8 @@ unsigned int tot_size;
 
 leed_cryst_t *bulk_par;
 leed_phs_t   *phs_shifts;
-leed_var_t   *par;
-leed_energy_t   *eng;
+leed_var   *par;
+leed_energy   *eng;
 leed_beam_t  *beams;
 
 /********************************************************************
@@ -123,7 +123,7 @@ leed_beam_t  *beams;
 
  number = bulk_par->nlayers;
  if( ( bulk_par->layers = 
-       (leed_layer_t *) malloc( number * sizeof(leed_layer_t) ))
+       (leed_layer *) malloc( number * sizeof(leed_layer) ))
      == NULL)
  {
    ERR_MESS0("*** error (leed_read_par): allocation error (bulk layers)\n");
@@ -134,13 +134,13 @@ leed_beam_t  *beams;
 #endif
 
 /* read layers */
- if( fread(bulk_par->layers, sizeof(leed_layer_t), number, file) 
+ if( fread(bulk_par->layers, sizeof(leed_layer), number, file) 
      != (unsigned int) bulk_par->nlayers )
  {
    ERR_MESS0(
    "*** error (leed_read_par): output error while reading bulk layers\n");
  }
- tot_size += sizeof(leed_layer_t) * number;
+ tot_size += sizeof(leed_layer) * number;
 
 /* atoms */
  for(i = 0; i < (unsigned int) bulk_par->nlayers; i ++)
@@ -148,7 +148,7 @@ leed_beam_t  *beams;
 /* allocate */
    number = (bulk_par->layers + i)->natoms;
    if( ( (bulk_par->layers + i)->atoms = 
-         (leed_atom_t *) malloc( number * sizeof(leed_atom_t) ))
+         (leed_atom *) malloc( number * sizeof(leed_atom) ))
        == NULL)
    {
      ERR_MESS1("*** error (leed_read_par): allocation error (bulk atoms)(%d)\n", i);
@@ -160,14 +160,14 @@ leed_beam_t  *beams;
 
 /* read */
    if( fread( (bulk_par->layers + i)->atoms, 
-               sizeof(leed_atom_t), number, file) 
+               sizeof(leed_atom), number, file) 
        != number )
    {
      ERR_MESS1(
  "*** error (leed_read_par): output error while reading atoms of bulk layer %d\n",
              i);
    }
-   tot_size += sizeof(leed_atom_t) * number;
+   tot_size += sizeof(leed_atom) * number;
  }
 
 /* Set comments pointer to NULL */
@@ -302,7 +302,7 @@ leed_beam_t  *beams;
 /* allocate memory for par */
  if( par == NULL)
  {
-   if( ( par = (leed_var_t *) malloc( sizeof(leed_var_t) ))
+   if( ( par = (leed_var *) malloc( sizeof(leed_var) ))
        == NULL)
    {
      ERR_MESS0(
@@ -311,12 +311,12 @@ leed_beam_t  *beams;
  }
 
 /* read parameters */
- if( fread(par, sizeof(leed_var_t), 1, file) != 1 )
+ if( fread(par, sizeof(leed_var), 1, file) != 1 )
  {
    ERR_MESS0(
    "*** error (leed_read_par): input error while reading control parameters\n");
  }
- tot_size += sizeof(leed_var_t) * 1;
+ tot_size += sizeof(leed_var) * 1;
 
 /************************************************************************
   Read energy parameters from file.
@@ -326,7 +326,7 @@ leed_beam_t  *beams;
 /* allocate memory for eng */
  if( eng == NULL)
  {
-   if( ( eng = (leed_energy_t *) malloc( sizeof(leed_energy_t) ))
+   if( ( eng = (leed_energy *) malloc( sizeof(leed_energy) ))
        == NULL)
    {
      ERR_MESS0("*** error (leed_read_par): allocation error (energy parameters)\n");
@@ -334,12 +334,12 @@ leed_beam_t  *beams;
  }
 
 /* read parameters */
- if( fread(eng, sizeof(leed_energy_t), 1, file) != 1 )
+ if( fread(eng, sizeof(leed_energy), 1, file) != 1 )
  {
    ERR_MESS0(
    "*** error (leed_read_par): input error while reading energy parameters\n");
  }
- tot_size += sizeof(leed_energy_t) * 1;
+ tot_size += sizeof(leed_energy) * 1;
 
 #ifdef CONTROL
  fprintf(STDCTR,

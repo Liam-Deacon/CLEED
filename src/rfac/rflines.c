@@ -1,15 +1,45 @@
-int rf_lines( char *buffer)
-/*
- count '\r' and '\n' in buffer.
- 
- return value: number of lines.
-*/
+/*********************************************************************
+ *                           RFLINES.C
+ *
+ *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/1995.08.11 - creation
+ *   LD/2014.10.09 - added some Doxygen markup
+ *                 - changed functions to return size_t
+ *                 - now using size_t for counting rather than long to
+ *                   help portability.
+ *********************************************************************/
+
+/*! \file rflines.c
+ *
+ * Implementation file for \ref rf_lines, \ref rf_nclines and \ref rf_clines
+ * C functions.
+ */
+
+#include <stdio.h>
+
+/*!
+ * \fn rf_lines
+ *
+ * Count '\r' and '\n' in \p buffer.
+ *
+ * \param *buffer pointer to string constant containing lines to count.
+ *
+ * \return number of lines.
+ */
+size_t rf_lines(const char *buffer)
 {
- int lines;
- long i;
+ size_t lines, i;
 
  lines = 0;
- for(i = 0L; buffer[i] != '\0'; i++)
+ for(i = 0; buffer[i] != '\0'; i++)
   if ( (buffer[i] == '\n') || (buffer[i] == '\r') )
   {
    lines ++;
@@ -17,21 +47,25 @@ int rf_lines( char *buffer)
  return(lines);
 }
 /**********************************************************************/
-int rf_nclines( char *buffer)
-/*
- count '\r' and '\n' in buffer. (count lines without comment.)
 
- return value: number of lines.
-*/
+/*!
+ * \fn rf_nclines
+ *
+ * Count '\r' and '\n' in \p buffer, but exclude comment lines.
+ *
+ * \param *buffer pointer to string constant containing lines to count.
+ *
+ * \return number of lines without comments.
+ */
+size_t rf_nclines(const char *buffer)
 {
- int lines, comm;
- long i;
+ size_t lines, comm, i;
 
  lines = 0;
  if (buffer[0] == '#') comm = 1;
  else                  comm = 0;
 
- for(i = 0L; buffer[i] != '\0'; i++)
+ for(i = 0; buffer[i] != '\0'; i++)
   if ( (buffer[i] == '\n') || (buffer[i] == '\r') )
   {
    lines ++;
@@ -40,20 +74,25 @@ int rf_nclines( char *buffer)
  return(lines-comm);
 }
 /**********************************************************************/
-int rf_clines( char *buffer)
-/*
- count '\r' and '\n' in buffer.
-	       if 1 count comment lines,
- return value: number of lines.
-*/
+
+/*!
+ * \fn rf_clines
+ *
+ * Count '\r' and '\n' in \p buffer.
+ * If 1st character in line is '#' then add to count.
+ *
+ * \param *buffer pointer to string constant containing lines to count.
+ *
+ * \return number of comment lines.
+ */
+size_t rf_clines(const char *buffer)
 {
- int comm;
- long i;
+ size_t comm, i;
 
  if (buffer[0] == '#') comm = 1;
  else                  comm = 0;
 
- for(i = 0L; buffer[i] != '\0'; i++)
+ for(i = 0; buffer[i] != '\0'; i++)
  {
   if ( (buffer[i] == '\n') || (buffer[i] == '\r') )
   {

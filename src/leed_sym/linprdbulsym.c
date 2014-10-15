@@ -117,8 +117,8 @@ real vaux[4];                 /* dummy vector */
 leed_cryst_t *bulk_par;   /* use *bulk_par instead of the pointer 
                                  p_bulk_par */
 
-leed_atom_t atom_aux;     /* used for sorting atoms */
-leed_atom_t *atoms_rd;    /* this vector of structure atom_str is
+leed_atom atom_aux;     /* used for sorting atoms */
+leed_atom *atoms_rd;    /* this vector of structure atom_str is
                                  used to read and treat the input atomic
                                  properties and will be copied into bulk_par
                                  afterwards */
@@ -142,7 +142,7 @@ leed_atom_t *atoms_rd;    /* this vector of structure atom_str is
   - set symmetry flags to no symmetry.
 ********************************************************************/
 
- atoms_rd = (leed_atom_t *)malloc(2 * sizeof(leed_atom_t) );
+ atoms_rd = (leed_atom *)malloc(2 * sizeof(leed_atom) );
  i_atoms = 0;
 
  bulk_par->m_plane = (real *)malloc( sizeof(real));
@@ -400,8 +400,8 @@ leed_atom_t *atoms_rd;    /* this vector of structure atom_str is
          break;
        }
 
-       atoms_rd = ( leed_atom_t *) realloc( 
-                   atoms_rd, (i_atoms+2) * sizeof(leed_atom_t) );
+       atoms_rd = ( leed_atom *) realloc( 
+                   atoms_rd, (i_atoms+2) * sizeof(leed_atom) );
 
 #ifdef REAL_IS_DOUBLE
        iaux = sscanf(linebuffer+i_str+3 ," %s %lf %lf %lf %s %lf %lf %lf",
@@ -981,9 +981,9 @@ leed_atom_t *atoms_rd;    /* this vector of structure atom_str is
    {
      if( atoms_rd[i].pos[3] < atoms_rd[j].pos[3])
      {
-       memcpy(&atom_aux,  atoms_rd+j, sizeof(leed_atom_t));
-       memcpy(atoms_rd+j, atoms_rd+i, sizeof(leed_atom_t));
-       memcpy(atoms_rd+i, &atom_aux,  sizeof(leed_atom_t));
+       memcpy(&atom_aux,  atoms_rd+j, sizeof(leed_atom));
+       memcpy(atoms_rd+j, atoms_rd+i, sizeof(leed_atom));
+       memcpy(atoms_rd+i, &atom_aux,  sizeof(leed_atom));
      }
    }
 

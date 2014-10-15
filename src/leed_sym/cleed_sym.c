@@ -55,8 +55,8 @@ leed_beam_t *beams_all;
 leed_beam_t *beams_out;
 leed_beam_t *beams_now;
 leed_beam_t *beams_set;
-leed_var_t *v_par;
-leed_energy_t *eng;
+leed_var *v_par;
+leed_energy *eng;
 
 mat Tpp,   Tmm,   Rpm,   Rmp;
 mat Tpp_s, Tmm_s, Rpm_s, Rmp_s;
@@ -280,7 +280,7 @@ FILE *res_stream;
      leed_inp_read_bul_sym(&bulk, &phs_shifts, bul_file);
      leed_inp_leed_read_par(&v_par, &eng, bulk, bul_file);
      leed_read_overlayer_sym(&over, &phs_shifts, bulk, par_file);
-     n_set = leed_beam_gen_sym(&beams_all, bulk, over, v_par, eng->fin);
+     n_set = leed_beam_gen_sym(&beams_all, bulk, over, v_par, eng->final);
      break; 
    }
 
@@ -289,7 +289,7 @@ FILE *res_stream;
      leed_inp_read_bul_sym(&bulk, &phs_shifts, bul_file);
      leed_inp_leed_read_par(&v_par, &eng, bulk, bul_file);
      leed_read_overlayer_sym(&over, &phs_shifts, bulk, par_file);
-     n_set = leed_beam_gen_sym(&beams_all, bulk, over, v_par, eng->fin);
+     n_set = leed_beam_gen_sym(&beams_all, bulk, over, v_par, eng->final);
 
 #ifdef CONTROL_IO
       fprintf(STDCTR, "(%s): Write parameters to file \"%s\"\n", LEED_NAME, pro_name);
@@ -301,9 +301,10 @@ FILE *res_stream;
 
    case(FLAG_READ):
    {
-#ifdef CONTROL_IO
-      fprintf(STDCTR, "(%s): Read parameters from file \"%s\"\n", LEED_NAME, pro_name);
-#endif
+     #ifdef CONTROL_IO
+       fprintf(STDCTR, "(%s): Read parameters from file \"%s\"\n",
+               LEED_NAME, pro_name);
+     #endif
      leed_read_par(&bulk, &phs_shifts, &v_par, &eng, &beams_all, pro_stream);
      leed_read_overlayer_sym(&over, &phs_shifts, bulk, par_file);
 
@@ -312,10 +313,9 @@ FILE *res_stream;
 
    default:
    {
-#ifdef ERROR
-     fprintf(STDERR,
-     "*** error (%s): unsupported ctr_flag\n", LEED_NAME);
-#endif
+     #ifdef ERROR
+       fprintf(STDERR, "*** error (%s): unsupported ctr_flag\n", LEED_NAME);
+     #endif
      exit(1);
    }
  }  /* switch */
@@ -340,10 +340,13 @@ FILE *res_stream;
  Energy Loop
 *********************************************************************/
 
-  for( energy = eng->ini; energy <= eng->fin + E_TOLERANCE; energy += eng->stp)
+  for(energy = eng->initial;
+      energy <= eng->final + E_TOLERANCE;
+      energy += eng->step)
   {
     leed_par_update(v_par, phs_shifts, energy);
-    n_beams_now = leed_beam_get_selection(&beams_now, beams_all, v_par, bulk->dmin);
+    n_beams_now = leed_beam_get_selection(&beams_now, beams_all,
+                                          v_par, bulk->dmin);
 
 #ifdef CONTROL
       fprintf(STDCTR, "(%s):\n\t => E = %.1f eV (%d beams used) <=\n\n",
@@ -394,7 +397,7 @@ FILE *res_stream;
         fprintf(STDCTR, "(%s periodic): bulk layer %d/%d, set %d/%d\n", 
                 LEED_NAME, 0, bulk->nlayers - 1, i_set, n_set - 1);
 #endif
-        if( (bulk->layers + 0)->natoms == 1)
+        if( (bulk->layers + 0)->n_atoms == 1)
         {
           leed_ms_sym( &Tpp, &Rpm, 
                     v_par, (bulk->layers + 0), beams_set);
@@ -410,7 +413,7 @@ FILE *res_stream;
      /* calculate scattering matrices for bottom-most bulk layer */
         for(i_layer = 1; 
             ( (bulk->layers+i_layer)->periodic == 1) && 
-            (i_layer < bulk->nlayers); 
+            (i_layer < bulk->n_layers);
             i_layer ++)
         {
 #ifdef CONTROL_FLOW
@@ -422,7 +425,7 @@ FILE *res_stream;
       Calculate scattering matrices R/T_s for a single bulk layer 
        - single Bravais layer or composite layer
     ****************************************************************/
-          if( (bulk->layers + i_layer)->natoms == 1)
+          if( (bulk->layers + i_layer)->n_atoms == 1)
           {
             leed_ms_sym( &Tpp_s, &Rpm_s, 
                       v_par, (bulk->layers + i_layer), beams_set);
@@ -464,13 +467,13 @@ FILE *res_stream;
      not periodic
       - single Bravais layer or composite layer
    ********************************************************************/
-        if( i_layer == bulk->nlayers - 1 )
+        if( i_layer == bulk->n_layers - 1 )
         {
 #ifdef CONTROL_FLOW
         fprintf(STDCTR, "(%s): bulk layer %d/%d, set %d/%d\n", 
                 LEED_NAME, i_layer, bulk->nlayers - 1, i_set, n_set - 1);
 #endif
-          if( (bulk->layers + i_layer)->natoms == 1)
+          if( (bulk->layers + i_layer)->n_atoms == 1)
           {
             leed_ms_sym( &Tpp_s, &Rpm_s,
                       v_par, (bulk->layers + i_layer), beams_set);
@@ -531,7 +534,7 @@ FILE *res_stream;
   Loop over all overlayer layers
 *********************************************************************/
 
-    for(i_layer = 0; i_layer < over->nlayers; i_layer ++)
+    for(i_layer = 0; i_layer < over->n_layers; i_layer ++)
     {
 #ifdef CONTROL_FLOW
       fprintf(STDCTR, "(%s): overlayer %d/%d\n", 
@@ -541,7 +544,7 @@ FILE *res_stream;
      Calculate scattering matrices for a single overlayer layer
       - single Bravais layer or composite layer
    ************************************************************/
-      if( (over->layers + i_layer)->natoms == 1)
+      if( (over->layers + i_layer)->n_atoms == 1)
       {
         leed_ms_sym( &Tpp_s, &Rpm_s,
                   v_par, (over->layers + i_layer), beams_now);
@@ -570,7 +573,7 @@ FILE *res_stream;
       {
         for(i_c = 1; i_c <= 3; i_c ++)
         {
-          vec[i_c] = (bulk->layers + bulk->nlayers - 1)->vec_to_next[i_c]
+          vec[i_c] = (bulk->layers + bulk->n_layers - 1)->vec_to_next[i_c]
                      + (over->layers + 0)->vec_from_last[i_c];
         }
 

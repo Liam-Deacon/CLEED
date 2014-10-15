@@ -1,4 +1,4 @@
-The development of the LEED-IV program package “CLEED” was started by G. Held in 1995, when he
+﻿The development of the LEED-IV program package “CLEED” was started by G. Held in 1995, when he
 was PDRA in Prof. D. A. King’s group at the University of Cambridge (hence ‘C’-LEED [1]). Further
 development and improvement of the code took place at the Universities of Würzburg and Erlangen
 (Germany) and is currently part of the LEED activities in the Held group.
@@ -6,7 +6,7 @@ development and improvement of the code took place at the Universities of Würzb
 The MAIN AUTHORS are (and/or have been):
 
     * Georg Held - Primary author
-    * Wolfgang Brown - Symmetry (cleed_sym) code
+    * Wolfgang Braun - Symmetry (cleed_sym) code
     * Zhasmina Zheleeva - Angle of Incidence (caoi_*) code
     * Liam Deacon - CMake, Windows port, multi-threading & code tidying
     

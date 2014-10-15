@@ -14,13 +14,13 @@
 #include <string.h>
 #include <math.h>
 
-int patt_draw_cairo(const drawing_t *drawing)
+int patt_draw_cairo(const patt_drawing *drawing)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
   size_t i_file, i_spot, i_domain;
-  patt_color_rgb_t color = PATT_BLACK;
-  pattern_t *pat = NULL;
+  patt_color_rgb color = PATT_BLACK;
+  pattern *pat = NULL;
   FILE *f = NULL;
 
   char *copyright = (char*) malloc((BUFSIZ)*sizeof(char));
@@ -102,7 +102,7 @@ int patt_draw_cairo(const drawing_t *drawing)
       }
     }
     /* draw substrate structure */
-    spots_t *gs_spots = pattern_calculate_substrate_spots(pat);
+    spots *gs_spots = pattern_calculate_substrate_spots(pat);
 
     switch (drawing->color_scheme)
     {
@@ -113,7 +113,7 @@ int patt_draw_cairo(const drawing_t *drawing)
         patt_color_copy(&color, patt_color_from_name(
                                        colors[i_file % NUM_COLORS][SPOT_GS]));
         break;
-      case PATT_BLACK_SCHEME: default:
+      case PATT_MONOCHROME_SCHEME: default:
         color = PATT_BLACK;
         break;
     }
@@ -141,7 +141,7 @@ int patt_draw_cairo(const drawing_t *drawing)
     /* draw superstructure spots */
     for (i_domain = 0; i_domain < pat->n_domains; i_domain++)
     {
-      spots_t *ss_spots = pattern_calculate_superstructure_spots(pat, i_domain);
+      spots *ss_spots = pattern_calculate_superstructure_spots(pat, i_domain);
 
       cairo_set_line_width(cr, ss_spots->stroke_width);
       cairo_set_font_size(cr, abs(ss_spots->font_size));
@@ -235,8 +235,8 @@ int patt_draw_cairo(const drawing_t *drawing)
   return(PATT_SUCCESS);
 }
 
-void patt_draw_cairo_spot(cairo_t *cr, spot_t *spot,
-                          double spot_size, patt_shape_t shape)
+void patt_draw_cairo_spot(cairo_t *cr, spot *spot,
+                          double spot_size, patt_shape shape)
 /*
  draw spots in different shapes:
   0: circle
@@ -315,7 +315,7 @@ void patt_draw_cairo_spot(cairo_t *cr, spot_t *spot,
   }  /* switch */
 }
 
-void patt_draw_cairo_label(cairo_t *cr, const spot_t *spot)
+void patt_draw_cairo_label(cairo_t *cr, const spot *spot)
 {
   cairo_text_extents_t extents;
   cairo_text_extents(cr, spot->label, &extents);
@@ -354,9 +354,9 @@ void patt_draw_cairo_arrow(cairo_t *cr, double x1, double y1, double x2,
 
 }
 
-void patt_draw_cairo_gun(cairo_t *cr, const gun_t *gun)
+void patt_draw_cairo_gun(cairo_t *cr, const patt_gun *gun)
 {
-  patt_color_rgb_t color = gun->color;
+  patt_color_rgb color = gun->color;
 
   cairo_set_source_rgba(cr, color.red, color.blue, color.green, gun->alpha);
   cairo_set_line_width(cr, gun->stroke_width);
@@ -375,7 +375,7 @@ void patt_draw_cairo_gun(cairo_t *cr, const gun_t *gun)
   cairo_fill(cr);
 }
 
-void patt_draw_cairo_screen(cairo_t *cr, const screen_t *screen)
+void patt_draw_cairo_screen(cairo_t *cr, const patt_screen *screen)
 {
   cairo_move_to(cr, 0., 0.);
   cairo_set_line_width(cr, screen->stroke_width);
@@ -394,7 +394,7 @@ void patt_draw_cairo_screen(cairo_t *cr, const screen_t *screen)
   }
 }
 
-void patt_draw_cairo_text(cairo_t *cr, const text_t *text,
+void patt_draw_cairo_text(cairo_t *cr, const patt_text *text,
                         cairo_font_slant_t slant, cairo_font_weight_t weight)
 {
   cairo_save(cr);

@@ -6,9 +6,8 @@
 
 #include "basis_vector.h"
 /* draw reciprocal space vectors to PS file */
-int patt_draw_ps_vectors(FILE *file_ptr, const drawing_t *drawing)
+int patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
 {
-
   size_t i_dom;
   int ii;
   char *color;

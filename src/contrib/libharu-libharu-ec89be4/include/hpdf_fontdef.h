@@ -300,7 +300,7 @@ typedef struct _HPDF_TTFontDefAttr_Rec {
     HPDF_TTF_NamingTable     name_tbl;
     HPDF_TTF_LongHorMetric  *h_metric;
     HPDF_UINT16              num_h_metric;
-    HPDF_TTF_OffsetTbl       offset_tbl;
+    HPDF_TTF_OffsetTbl       offsetbl;
     HPDF_TTF_CmapRange       cmap;
     HPDF_UINT16              fs_type;
     HPDF_BYTE                sfamilyclass[2];

@@ -3,7 +3,7 @@
 #include <strings.h>
 #include <stdbool.h>
 
-const char *patt_color_get_ps_string(const patt_color_rgb_t *color)
+const char *patt_color_get_ps_string(const patt_color_rgb *color)
 {
   char *str = (char*) malloc(sizeof(char)* 1024);
   sprintf(str, "%.6e %.6e %.6e setrgbcolor",
@@ -11,8 +11,8 @@ const char *patt_color_get_ps_string(const patt_color_rgb_t *color)
   return(str);
 }
 
-int patt_draw_ps_spot(FILE *file_ptr, spot_t *spot, double spot_size,
-                      patt_shape_t shape, const patt_color_rgb_t *color, bool fill)
+int patt_draw_ps_spot(FILE *file_ptr, spot *spot, double spot_size,
+                      patt_shape shape, const patt_color_rgb *color, bool fill)
 /*
  draw spots in different shapes:
   0: circle

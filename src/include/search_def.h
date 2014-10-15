@@ -1,97 +1,112 @@
 /*********************************************************************
-GH/20.09.95
+ *                       SEARCH_DEF.H
+ *
+ *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *
+ * Description: include file for search program. It defines:
+ *  - additional data structures and type definitions
+ *  - constant values
+ *
+ * Changes:
+ *   GH/1995.08.16 - Create (copy from srdefines.h )
+ *   GH/1995.09.20 - Include parameters for R factor program here
+ *   GH/2006.06.20 - Change number of iterations in amoeba to 2000.
+ *   LD/2014.04.29 - Removed RFAC_PRG & LEED_PRG from defines as no longer used.
+ *   LD/2014.06.15 - Added conditional defines if compiling with '_USE_GSL'
+ *   LD/2014.10.09 - Added typedefs to structs.
+ *                 - Added some Doxygen markup.
+ *********************************************************************/
 
- Include file for SEARCH
-
-  - additional data structures and type definitions
-  - constant values
-
-Changes:
-GH/16.08.95 - Create (copy from srdefines.h )
-GH/20.09.95 - Include parameters for R factor program here
-GH/20.06.06 - Change number of iterations in amoeba to 2000.
-LD/29.04.14 - Removed RFAC_PRG & LEED_PRG from defines as no longer used.
-
-*********************************************************************/
+#ifndef SEARCH_DEF_H
+#define SEARCH_DEF_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
-#ifndef SEARCH_DEF_H
-#define SEARCH_DEF_H
 
 /*********************************************************************
- structures and types 
-*********************************************************************/
+ * structures and types
+ *********************************************************************/
 
-/*
-  struct sr_atom_str contains all properties of a single atom
-  (part of file leed_def.h, define only if this file is not included)
-*/
+/*!
+ * \struct sr_atom_str
+ *
+ * This structure contains all properties of a single atom.
+ */
 
-struct sratom_str
+typedef struct sratom_str
 {
- int type;         /* type reference, terminator */
- int  ref;         /* reference to symmetry equivalent atom */
- int nref;         /* number of equivalent atoms */
- char name[STRSZ]; /* atomic symbol (reference to phase shifts) */
- real r_min;       /* min. radius */
+ int type;         /*!< type reference, terminator */
+ int ref;          /*!< reference to symmetry equivalent atom */
+ size_t n_ref;     /*!< number of equivalent atoms */
+ char name[STRSZ]; /*!< atomic symbol (reference to phase shifts) */
+ real r_min;       /*!< min. radius */
 
- real x;          /* offset for x position */
- real y;          /* offset for y position */
- real z;          /* offset for z position */
- real dr;         /* offset for thermal vibrations */
+ real x;          /*!< offset for x position */
+ real y;          /*!< offset for y position */
+ real z;          /*!< offset for z position */
+ real dr;         /*!< offset for thermal vibrations */
 
- real *x_par;     /* coefficients used to determine shifts in x */
- real *y_par;     /* coefficients used to determine shifts in y */
- real *z_par;     /* coefficients used to determine shifts in z */
- real *dr_par;    /* coefficients used to determine shifts in dr */
-};
+ real *x_par;     /*!< coefficients used to determine shifts in x */
+ real *y_par;     /*!< coefficients used to determine shifts in y */
+ real *z_par;     /*!< coefficients used to determine shifts in z */
+ real *dr_par;    /*!< coefficients used to determine shifts in dr */
+} search_atom;
 
-struct search_str
+/*!
+ * Structure for containing all the parameters of a given search.
+ */
+typedef struct search_str
 {
- int n_par;       /* number of independent parameters */
+ size_t n_par;       /*!< number of independent parameters */
 
 /* coordinate search: */
- int n_par_geo;   /* number of geometrical parameters in search */ 
+ size_t n_par_geo;   /*!< number of geometrical parameters in search */
 
 
- real x_min;      /* minimum rel. x shift */
- real y_min;      /* minimum rel. y shift */
- real z_min;      /* minimum z value */
+ real x_min;         /*!< minimum rel. x shift */
+ real y_min;         /*!< minimum rel. y shift */
+ real z_min;         /*!< minimum z value */
 
- real x_max;      /* maximum rel. x shift */
- real y_max;      /* maximum rel. y shift */
- real z_max;      /* maximum z value */
+ real x_max;         /*!< maximum rel. x shift */
+ real y_max;         /*!< maximum rel. y shift */
+ real z_max;         /*!< maximum z value */
 
- real b_lat[5];   /* basis vectors of the real 2-dim unit cell stored as
-                     standard matrix (b1,b2): b1x = b_lat[1], b2x = b_lat[2]
-                                              b1y = b_lat[3], b2y = b_lat[4] 
-                  */
+ real b_lat[5];   /*!< basis vectors of the real 2-dim unit cell stored as
+                   * standard matrix (b1,b2): b1x = b_lat[1], b2x = b_lat[2]
+                   *                          b1y = b_lat[3], b2y = b_lat[4]
+                   */
 /* angle search */
- int sr_angle;    /* flag for the angle search */
- int i_par_theta; /* number of search parameter for theta */ 
- int i_par_phi;   /* number of search parameter for phi */ 
- real theta_0;    /* theta start value */
- real phi_0;      /* phi start value */
+ bool sr_angle;       /*!< flag for the angle search */
+ size_t i_par_theta; /*!< number of search parameter for theta */
+ size_t i_par_phi;   /*!< number of search parameter for phi */
+ real theta_0;       /*!< theta start value */
+ real phi_0;         /*!< phi start value */
 
 
-/* symmeties of search */
- int z_only;           /* xyz search or z search only */
- int rot_deg;          /* degree of rot. symmetry */
- real rot_axis[3];     /* rotational axis */
- real mir_point[3];    /* point in mirror plane */
- real mir_dir[3];      /* direction of mirror plane */
+/* symmetries of search */
+ bool z_only;          /*!< xyz search or z search only */
+ size_t rot_deg;       /*!< degree of rot. symmetry */
+ real rot_axis[3];     /*!< rotational axis */
+ real mir_point[3];    /*!< point in mirror plane */
+ real mir_dir[3];      /*!< direction of mirror plane */
 
 /* R factor */
- char rf_type[16];     /* R factor type */
- real rf_range;        /* shift range for R factor */
-};
+ char rf_type[16];     /*!< R factor type */
+ real rf_range;        /*!< shift range for R factor */
+} search;
 
 /*********************************************************************
- special definitions
-*********************************************************************/
+ * special definitions
+ *********************************************************************/
 
 /*
   search 
@@ -236,10 +251,11 @@ struct search_str
     exit(-1);
 
 /*********************************************************************
- End of include file
-*********************************************************************/
-#endif /* SEARCH_DEF_H */
+ * End of include file
+ *********************************************************************/
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* SEARCH_DEF_H */

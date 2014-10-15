@@ -63,8 +63,8 @@ leed_beam_t *beams_all;
 leed_beam_t *beams_out;
 leed_beam_t *beams_now;
 leed_beam_t *beams_set;
-leed_var_t *v_par;
-leed_energy_t *eng;
+leed_var *v_par;
+leed_energy *eng;
 
 mat Tpp,   Tmm,   Rpm,   Rmp;
 mat Tpp_s, Tmm_s, Rpm_s, Rmp_s;

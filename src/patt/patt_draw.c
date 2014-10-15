@@ -5,7 +5,7 @@
 #include "spots.h"
 #include "patt.h"
 
-int patt_draw(const drawing_t *drawing)
+int patt_draw(const patt_drawing *drawing)
 {
 
   #ifdef _USE_CAIRO

@@ -11,6 +11,10 @@ Changes:
 
 *********************************************************************/
 
+/*!
+ * \fn
+ */
+
 #include "ftsmooth.h"
 
 #ifdef DEBUG
@@ -18,7 +22,7 @@ Changes:
 *						DEBUG VALUES							*
 *****************************************************************/
 /* subroutine to print variables to aid in debugging  */
-void debug(char *debug_str, char *tag, int argc, char *argv[], 
+void ftsmooth_debug(char *debug_str, char *tag, int argc, char *argv[],
 	  FILE *in_stream, FILE *out_stream, 
 	  int *stdin_flag, int *stdout_flag,
 	  double *cutoff, double *tailoff, char *mode,

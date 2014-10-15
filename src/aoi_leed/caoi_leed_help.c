@@ -1,16 +1,22 @@
-/*********************************************************************
-LD/24.04.14
-  file contains functions:
-
-  usage (24.04.14)
-     Provides syntax help and other information before exiting
-
-  info (24.04.14)
-     Provides version information then exits
-  
-Changes:
-
-*********************************************************************/
+/************************************************************************
+ *                        CAOI_LEED_HELP.C
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Description:  file contains functions
+ *   usage()
+ *     Provides syntax help and other information before exiting
+ *   info()
+ *     Provides version information then exits
+ *
+ * Changes:
+ *   LD/2014.04.14 - creation
+ *********************************************************************/
 
 #include "caoi_leed.h"
 #include "proghelp.h"

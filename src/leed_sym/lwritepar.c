@@ -39,8 +39,8 @@ GH/08.08.95 - Creation (copy from leed_read_overlayer).
 
 int leed_write_par(leed_cryst_t *bulk_par,
               leed_phs_t   *phs_shifts,
-              leed_var_t   *par,
-              leed_energy_t   *eng,
+              leed_var   *par,
+              leed_energy   *eng,
               leed_beam_t  *beams,
               FILE* file)
 
@@ -51,9 +51,9 @@ int leed_write_par(leed_cryst_t *bulk_par,
 
    leed_cryst_t *bulk_par - (input) bulk parameters.
    leed_phs_t   *phs_shifts - (input) phase shifts.
-   leed_var_t   *par - (input) other parameters necessary to control
+   leed_var   *par - (input) other parameters necessary to control
               the program.
-   leed_energy_t   *eng - (input) energy parameters.
+   leed_energy   *eng - (input) energy parameters.
    leed_beam_t  *beams - (input) all output beams used at the highest 
               energy.
    FILE* file - (input) pointer to output file.
@@ -97,7 +97,7 @@ size_t tot_size;
  tot_size += sizeof(leed_cryst_t) * 1;
 
 /* layers */
- if( fwrite(bulk_par->layers, sizeof(leed_layer_t), 
+ if( fwrite(bulk_par->layers, sizeof(leed_layer), 
             bulk_par->nlayers, file) != (unsigned int) bulk_par->nlayers )
  {
  #ifdef ERROR
@@ -105,13 +105,13 @@ size_t tot_size;
     "output error while writing bulk layers\n");
 #endif
  }
- tot_size += sizeof(leed_layer_t) * bulk_par->nlayers;
+ tot_size += sizeof(leed_layer) * bulk_par->nlayers;
 
 /* atoms */
  for(i = 0; i < (unsigned int) bulk_par->nlayers; i ++)
  {
    if( fwrite( (bulk_par->layers + i)->atoms, 
-               sizeof(leed_atom_t), 
+               sizeof(leed_atom), 
                (bulk_par->layers + i)->natoms, file) 
        != (unsigned int) (bulk_par->layers + i)->natoms )
    {
@@ -120,7 +120,7 @@ size_t tot_size;
         "output error while writing atoms of bulk layer %d\n", i);
    #endif
    }
-   tot_size += sizeof(leed_atom_t) * (bulk_par->layers + i)->natoms;
+   tot_size += sizeof(leed_atom) * (bulk_par->layers + i)->natoms;
  }
 
 /********************************************************************
@@ -211,14 +211,14 @@ size_t tot_size;
 *************************************************************************/
 
 /* parameters */
- if( fwrite(par, sizeof(leed_var_t), 1, file) != 1 )
+ if( fwrite(par, sizeof(leed_var), 1, file) != 1 )
  {
 #ifdef ERROR
    ERR_MESS0("*** error (leed_write_par): "
     "output error while writing control parameters\n");
 #endif
  }
- tot_size += sizeof(leed_var_t) * 1;
+ tot_size += sizeof(leed_var) * 1;
 
 /************************************************************************
   Write energy parameters to file.
@@ -226,14 +226,14 @@ size_t tot_size;
 *************************************************************************/
 
 /* parameters */
- if( fwrite(eng, sizeof(leed_energy_t), 1, file) != 1 )
+ if( fwrite(eng, sizeof(leed_energy), 1, file) != 1 )
  {
  #ifdef ERROR
    ERR_MESS0("*** error (leed_write_par): "
     "output error while writing energy parameters\n");
 #endif
  }
- tot_size += sizeof(leed_energy_t) * 1;
+ tot_size += sizeof(leed_energy) * 1;
 
 /************************************************************************
   Write beam list to file.

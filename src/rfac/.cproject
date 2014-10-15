@@ -69,6 +69,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="rfoutput.c|rfctr2out.c|crfsplint.c|crfrp.c|crfrb.c|crfr2.c|crfr1.c|crfmklist.c|crfmklide.c|crfintindl.c|crfoutput.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -140,6 +143,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="rfoutput.c|rfctr2out.c|crfsplint.c|crfspline.c|crfsort.c|crfrp.c|crfrmin.c|crfrdexpt.c|crfrdcleed.c|crfrdargs.c|crfrb.c|crfr2.c|crfr1.c|crfmklist.c|crfmklide.c|crflorentz.c|crfintindl.c|crfinput.c|bgets.c|crfoutput.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

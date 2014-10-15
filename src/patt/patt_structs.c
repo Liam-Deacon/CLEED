@@ -9,7 +9,7 @@ typedef struct _matrix_2x2
 
 } matrix_default = {0., 0., 0., 0.};
 
-typedef struct _matrix_2x2 matrix_2x2_t;
+typedef struct _matrix_2x2 matrix_2x2;
 
 struct _vector_xy
 {
@@ -24,8 +24,8 @@ typedef struct pattern
   char *title;
   vector_xy_t a1;
   vector_xy_t a2;
-  matrix_2x2_t M_GS;
-  matrix_2x2_t *M_SS;
+  matrix_2x2 M_GS;
+  matrix_2x2 *M_SS;
   size_t n_domains;
   double radius;
-} pattern_t;
+} pattern;

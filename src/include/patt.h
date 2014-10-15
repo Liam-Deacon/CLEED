@@ -21,7 +21,8 @@ extern "C" {
 #include <stdio.h>
 
 #define VERSION "PATTERN - version 1.4 (2014.07.04 - )"
-#define NOTES "Pattern is part of the CLEED package by Georg Held\n\t(contact g.held@reading.ac.uk)"
+#define NOTES "Pattern is part of the CLEED package by Georg Held"\
+"\n\t(contact g.held@reading.ac.uk)"
 
 #include "patt_ver.h"
 #include "patt_def.h"

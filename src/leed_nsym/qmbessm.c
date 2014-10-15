@@ -27,7 +27,7 @@
 /*======================================================================*/
 /*======================================================================*/
 
-mat c_bess ( mat Jl, real z_r, real z_i, int l_max )
+mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
 
 /************************************************************************
 
@@ -85,26 +85,26 @@ mat c_bess ( mat Jl, real z_r, real z_i, int l_max )
 
 *************************************************************************/
 {
-int l, l_int, l_start;                      /* quantum number l */
+  size_t l, l_int, l_start;                      /* quantum number l */
 
-real faux_r, faux_i;
-real z_inv_r, z_inv_i;
-real z_2_r, z_2_i, pref_r, pref_i;
-real sin_r, sin_i, cos_r, cos_i;
+  real faux_r, faux_i;
+  real z_inv_r, z_inv_i;
+  real z_2_r, z_2_i, pref_r, pref_i;
+  real sin_r, sin_i, cos_r, cos_i;
 
-real *F_r, *F_i;
+  real *F_r, *F_i;
 
- if (l_max < 1) l_max = 1;   /* we need at least that much storage */
+  if (l_max < 1) l_max = 1;   /* we need at least that much storage */
 
 /*
-  Allocate memory for Jl
-*/
- Jl = matalloc( Jl, (l_max+1), 1, NUM_COMPLEX );
+ *Allocate memory for Jl
+ */
+  Jl = matalloc( Jl, (l_max+1), 1, NUM_COMPLEX );
 
 /************************************************************************
- z == 0.:
- All Jl except J0 (= 1.) are zero.
-************************************************************************/
+ * z == 0.:
+ * All Jl except J0 (= 1.) are zero.
+ ************************************************************************/
  if( IS_EQUAL_REAL(z_r, 0.) && IS_EQUAL_REAL(z_i, 0.) )
  {
    Jl->rel[1] = 1.;
@@ -118,16 +118,16 @@ real *F_r, *F_i;
  }
 
 /************************************************************************
- z != 0.:
- Use Miller's device to calculate Jl up to l_max.
-************************************************************************/
+ * z != 0.:
+ * Use Miller's device to calculate Jl up to l_max.
+ ************************************************************************/
 
  /*
-  Some often used values:
-  z_inv = 1/z
-  z_2   = z^2
-  sin(z), cos(z)
-*/
+  * Some often used values:
+  *   z_inv = 1/z
+  *   z_2   = z^2
+  *   sin(z), cos(z)
+  */
  cri_div(&z_inv_r, &z_inv_i, 1., 0., z_r, z_i); 
  cri_mul(&z_2_r, &z_2_i, z_r, z_i, z_r, z_i);
 
@@ -194,7 +194,7 @@ real *F_r, *F_i;
  Jl is stored in Jl->r/iel[l+1]
 ************************************************************************/
 
- l_int = (int) cri_abs(z_r, z_i);
+ l_int = (size_t) cri_abs(z_r, z_i);
  l_int = MIN(l_int, l_max);
 
 /* calculate Jl by upwards recurrence */
@@ -254,12 +254,12 @@ real *F_r, *F_i;
    {
      cri_mul(Jl->rel+l+1, Jl->iel+l+1, pref_r, pref_i, F_r[l+1], F_i[l+1]);
 #ifdef CONTROL
-     fprintf(STDCTR,"(c_bess-m): (m)J(%d) = (%.3e,%.3e)\n",
+     fprintf(STDCTR, "(c_bess-m): (m)J(%d) = (%.3e,%.3e)\n",
              l, Jl->rel[l+1], Jl->iel[l+1]);
 #endif
    }
 #ifdef CONTROL
-     fprintf(STDCTR,"(c_bess-m): l_start = %d, pref = (%.3e,%.3e)\n", 
+     fprintf(STDCTR, "(c_bess-m): l_start = %d, pref = (%.3e,%.3e)\n",
              l_start, pref_r, pref_i);
 #endif
    free(F_r);

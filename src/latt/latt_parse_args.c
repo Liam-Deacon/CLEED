@@ -5,10 +5,10 @@
 #include <strings.h>
 #include <limits.h>
 
-void latt_parse_args(int argc, char *argv[], lattice_t *latt)
+void latt_parse_args(int argc, char *argv[], lattice *latt)
 {
   int i_arg; 
-  atom_t *atom_list = (atom_t*) malloc(sizeof(atom_t));
+  atom *atom_list = (atom*) malloc(sizeof(atom));
   char *at_name = (char*) malloc(sizeof(char) * NAMSZ);
   
   if (latt == NULL) latt = lattice_init(1);
@@ -125,10 +125,10 @@ void latt_parse_args(int argc, char *argv[], lattice_t *latt)
      
         if (latt->input_filename == NULL)
         {
-          latt->input_filename = (char*) malloc(sizeof(char) * PATH_MAX);
+          latt->input_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
         }
      
-        strncpy(latt->input_filename, argv[i_arg], PATH_MAX);
+        strncpy(latt->input_filename, argv[i_arg], FILENAME_MAX);
         strcat(latt->input_filename, "\0");
         latt->latt_type = LAT_INP;
       }
@@ -199,7 +199,7 @@ void latt_parse_args(int argc, char *argv[], lattice_t *latt)
         if (i_arg >= argc) break;
         if (latt->output_filename == NULL)
         {
-          latt->output_filename = (char*) malloc(sizeof(char) * PATH_MAX);
+          latt->output_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
         }
         strcpy(latt->output_filename, argv[i_arg]);
         strcat(latt->output_filename, "\0");

@@ -2,7 +2,7 @@
   GH/20.09.95 
   file contains function:
 
-  leed_par_update_nd(leed_var_t *v_par, leed_phs_t *phs_shifts,
+  leed_par_update_nd(leed_var *v_par, leed_phs_t *phs_shifts,
             real energy)
 
  Update all parameters, that change during the energy loop.
@@ -28,7 +28,7 @@ GH/20.09.95 - optional variable vi (structure var_str has changed).
 
 
 
-int leed_par_update_nd(leed_var_t *v_par, 
+int leed_par_update_nd(leed_var *v_par, 
               leed_phs_t *phs_shifts, real energy)
 
 /************************************************************************
@@ -37,7 +37,7 @@ int leed_par_update_nd(leed_var_t *v_par,
  
  INPUT:
 
-  leed_var_t *v_par - all parameters that change during the 
+  leed_var *v_par - all parameters that change during the 
                 energy loop (for details see "leed_def.h").
                 The parameter structure must exist and must be preset already.
   leed_phs_t *phs_shifts - phase shifts (will be handed to function
@@ -46,7 +46,7 @@ int leed_par_update_nd(leed_var_t *v_par,
 
  RETURN VALUES:
 
-  leed_var_t *v_par
+  leed_var *v_par
   (The function returns its first argument.)
 
  DESIGN:

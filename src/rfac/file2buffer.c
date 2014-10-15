@@ -1,16 +1,22 @@
-/********************************************************************
-  GH/12.10.00
-   
-     char *file2buffer (char *filename)
+/*********************************************************************
+ *                       FILE2BUFFER.C
+ *
+ *  Copyright 1992-2014 Georg Held
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/1992.09.25 - Creation
+ *   GH/1993.09.08 - include uncompress (uses system call)
+ *   GH/2000.10.12 - replace open, lseek, read by fopen, fseek, fread
+ ********************************************************************/
 
-Changes:
-
-  GH/25.09.92 - Creation
-  GH/08.09.93 - include uncompress
-  GH/12.10.00 - replace open, lseek, read by fopen, fseek, fread
-********************************************************************/
-
-#define ERROR
+/*! \file file2buffer.c
+ *  \brief Implementation file for \ref file2buffer function.
+ */
 
 #include <stdio.h>
 #include <stddef.h>
@@ -20,100 +26,115 @@ Changes:
 #include <strings.h>
 #include <malloc.h>
 
-
-char *file2buffer (char *filename)
-
-/********************************************************************
- open file specified by filename and copy the content of the file
- to a nullterminated buffer.
-
- input: file name.
- return value: pointer to the buffer.
+/*!
+ * \fn file2buffer
+ *
+ * Open file specified by filename and copy the content of the file
+ * to a null terminated buffer.
+ *
+ * \param filename string containing name of file to copy into memory
+ * buffer.
+ *
+ * \return pointer to the buffer.
 ********************************************************************/
-
+char *file2buffer(const char *filename)
 {
- char *buffer;
- char line_buffer[256];
- char uncomp;                     /* flag, if file was uncompressed */
+  char *buffer;
+  char uncomp_filename[FILENAME_MAX];
+  char line_buffer[256];
+  char uncomp;                     /* flag, if file was uncompressed */
 
- int len;
- long int nbytes;
- size_t   ntest;
+  size_t len;
+  long int nbytes;
+  size_t ntest;
 
- FILE *in_stream;
+  FILE *in_stream;
 
- uncomp =0;
- len = strlen(filename);
-/* 
- - open file;
- - try uncompressing, if not successful otherwise
-*/
- if( strcmp((filename+len-2),".Z") != 0 )
- {
-  if ((in_stream = fopen(filename, "r") ) == NULL)
+  uncomp = 0;
+  len = strlen(filename);
+  /*
+   * - open file;
+   * - try uncompressing, if not successful otherwise
+   */
+
+  if( strcmp((filename+len-2), ".Z") != 0 )
   {
-#ifdef ERROR
-   printf(" *** could not open \"%s\"\n", filename);
-   fclose(in_stream);
-/*   exit(1); */
-#endif
-/* try uncompressing */
-   printf(" *** trying to uncompress \"%s.Z\"\n", filename);
-   sprintf(line_buffer,"uncompress \"%s.Z\"",filename);
-   if (system(line_buffer))
-   {
-#ifdef ERROR
-    printf(" *** error: uncompressing was also unsuccessful!\n");
-    fclose(in_stream);
-    exit(1);
-#endif
-   } /* if system.. */
-   else
-   {
-    if ((in_stream = fopen (filename, "r") ) == NULL)
+    if ((in_stream = fopen(filename, "r") ) == NULL)
     {
-#ifdef ERROR
-     printf(" *** error: could not open \"%s\"\n", filename);
-     fclose(in_stream);
-     exit(1);
-#endif
-    }
-   uncomp = 1;
-/* uncompressed filename is stored in filename */
-   } /* else */
-  }  /* if first open failed */
- }   /* if != .Z */
- else
- {
-/* uncompressed filename is stored in filename */
-  strncpy(line_buffer,filename, len-2);
-  line_buffer[len-2] = '\0';
-  strcpy(filename,line_buffer);
+      #ifdef ERROR
+      printf(" *** could not open \"%s\"\n", filename);
+      fclose(in_stream);
+      /*   exit(1); */
+      #endif
 
-/* uncompress */
-  printf("\tuncompress \t\"%s.Z\" > \"%s\" \n",filename,filename);
-  sprintf(line_buffer,"uncompress \"%s.Z\"",filename);
-  if (system(line_buffer))
-  {
-#ifdef ERROR
-   printf(" *** error: uncompressing was unsuccessful!\n");
-   exit(1);
-#endif
-  } /* if system.. */
+      /* try uncompressing */
+      printf(" *** trying to uncompress \"%s.Z\"\n", filename);
+      sprintf(line_buffer, "uncompress \"%s.Z\"", filename);
+      if (system(line_buffer))
+      {
+        #ifdef ERROR
+        printf(" *** error: uncompression was also unsuccessful!\n");
+        fclose(in_stream);
+        exit(1);
+        #endif
+      } /* if system.. */
+      else
+      {
+        if ((in_stream = fopen (filename, "r") ) == NULL)
+        {
+          #ifdef ERROR
+          printf(" *** error: could not open \"%s\"\n", filename);
+          fclose(in_stream);
+          exit(1);
+          #endif
+        }
+
+        uncomp = 1;
+        /* uncompressed filename is stored in filename */
+
+      } /* else */
+
+    }  /* if first open failed */
+
+  }   /* if != .Z */
   else
   {
-   if ((in_stream = fopen (filename, "r") ) == NULL)
-   {
-#ifdef ERROR
-    printf(" *** error: could not open \"%s\"\n",line_buffer);
-    fclose(in_stream);
-    exit(1);
-#endif
-   }
-   uncomp = 1;
-/* uncompressed filename is stored in filename */
-  } /* else */
- }  /* else (.Z) */
+    /* uncompressed filename is stored in filename */
+    strncpy(line_buffer, filename, len-2);
+    line_buffer[len-2] = '\0';
+    strcpy(uncomp_filename, line_buffer);
+
+    /* uncompress */
+    printf("\tuncompress \t\"%s.Z\" > \"%s\" \n", filename, filename);
+    sprintf(line_buffer, "uncompress \"%s.Z\"", filename);
+    if (system(line_buffer))
+    {
+
+      #ifdef ERROR
+      printf(" *** error: uncompressing was unsuccessful!\n");
+      exit(1);
+      #endif
+
+    } /* if system.. */
+    else
+    {
+      if ((in_stream = fopen (filename, "r") ) == NULL)
+      {
+
+        #ifdef ERROR
+        printf(" *** error: could not open \"%s\"\n", line_buffer);
+        fclose(in_stream);
+        exit(1);
+        #endif
+
+      }
+
+      uncomp = 1;
+      /* uncompressed filename is stored in filename */
+
+    } /* else */
+
+  }  /* else (.Z) */
 
 /************************************************************ 
  - set file pointer to end of file and find size of file.
@@ -121,64 +142,67 @@ char *file2buffer (char *filename)
  - allocate memory for buffer.
 ************************************************************/
 
- fseek (in_stream, 0L, SEEK_END);
- nbytes = ftell(in_stream);
- fseek (in_stream, 0L, SEEK_SET);
+  fseek (in_stream, 0L, SEEK_END);
+  nbytes = ftell(in_stream);
+  fseek (in_stream, 0L, SEEK_SET);
 
-#ifdef CONTROL
- fprintf(stdout, "(file2buffer): \"%s\" has %ld bytes \n", filename, nbytes);
-#endif
+  #ifdef CONTROL
+  fprintf(stdout, "(file2buffer): \"%s\" has %ld bytes \n", filename, nbytes);
+  #endif
 
- buffer = (char *)malloc((size_t)nbytes*13 + 2);
- if (buffer == NULL)
- {
-#ifdef ERROR
-  printf(">file2buffer: *** error occurred allocating memory for \"%s\"\n",
+  buffer = (char *)malloc((size_t)nbytes*13 + 2);
+  if (buffer == NULL)
+  {
+    #ifdef ERROR
+    printf(">file2buffer: *** error occurred allocating memory for \"%s\"\n",
           filename);
-  printf("                  (filesize: %ld)\n", nbytes+1);
-#endif
-  fclose(in_stream);
-  exit(1);
- }
+    printf("                  (filesize: %ld)\n", nbytes+1);
+    #endif
+    fclose(in_stream);
+    exit(1);
+  }
 
 /************************************************************ 
- Read file to buffer
-************************************************************/
+ * Read file to buffer
+ ************************************************************/
 
- if ( (signed int)(ntest = fread(buffer, 1, nbytes, in_stream) ) == nbytes) 
- {
-  buffer[nbytes] = '\0';
-  buffer[nbytes+1] = '\0';
-
-#ifdef CONTROL  /* control output, if required */
-  fprintf(stdout,"(file2buffer): %ld bytes read from \"%s\"\n",
-	 nbytes, filename);
-  /* fprintf(stdout,"(file2buffer): %s",buffer); */
-#endif
-
-  if (uncomp) 
+  if ( (signed int)(ntest = fread(buffer, 1, nbytes, in_stream) ) == nbytes)
   {
-   printf("\tcompress \t\"%s\" > \"%s.Z\"\n",filename,filename);
-   sprintf(line_buffer,"compress \"%s\"",filename);
-   system(line_buffer);
+    buffer[nbytes] = '\0';
+    buffer[nbytes+1] = '\0';
+
+    #ifdef CONTROL  /* control output, if required */
+    fprintf(stdout, "(file2buffer): %ld bytes read from \"%s\"\n",
+           nbytes, filename);
+    #endif
+
+    if (uncomp)
+    {
+      printf("\tcompress \t\"%s\" > \"%s.Z\"\n", filename, filename);
+      sprintf(line_buffer,"compress \"%s\"", filename);
+      system(line_buffer);
+    }
+    fclose(in_stream);
+
+    return(buffer);
   }
-  fclose(in_stream);
-  return(buffer);
- }
- else
- {
-#ifdef ERROR
-  printf(">file2buffer: %d of %ld bytes read from \"%s\"\n",
-	 ntest, nbytes, filename);
-#endif
-  free(buffer);
-  if (uncomp) 
+  else
   {
-   printf("\tcompress \t\"%s\" > \"%s.Z\"\n",filename,filename);
-   sprintf(line_buffer,"compress \"%s\"",filename);
-   system(line_buffer);
+
+    #ifdef ERROR
+    printf(">file2buffer: %d of %ld bytes read from \"%s\"\n",
+           ntest, nbytes, filename);
+    #endif
+
+    free(buffer);
+    if (uncomp)
+    {
+      printf("\tcompress \t\"%s\" > \"%s.Z\"\n", filename, filename);
+      sprintf(line_buffer, "compress \"%s\"", filename);
+      system(line_buffer);
+    }
+
+    fclose(in_stream);
+    return(NULL);
   }
-  fclose(in_stream);
-  return(NULL);
- }
 }

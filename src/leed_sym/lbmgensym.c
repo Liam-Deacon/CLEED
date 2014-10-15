@@ -47,7 +47,7 @@ WB/07.09.98 - bezug auf einheitlichen Winkel(zur 1.Ebene)
 int leed_beam_gen_sym(leed_beam_t ** p_beams, 
                leed_cryst_t *b_par, 
                leed_cryst_t *o_par,
-               leed_var_t *v_par, real eng_max)
+               leed_var *v_par, real eng_max)
 
 /************************************************************************
 
@@ -62,7 +62,7 @@ int leed_beam_gen_sym(leed_beam_t ** p_beams,
                 for details see "leed_def.h").
   leed_cryst_t *o_par - all necessary structural parameters (overlayers,
                 for details see "leed_def.h").
-  leed_var_t *v_par - all necessary parameters that change during the 
+  leed_var *v_par - all necessary parameters that change during the 
                 energy loop (for details see "leed_def.h").
                 used: 
                 real theta, phi - incident k-vector.

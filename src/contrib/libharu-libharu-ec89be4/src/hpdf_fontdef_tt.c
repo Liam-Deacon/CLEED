@@ -230,8 +230,8 @@ InitAttr (HPDF_FontDef  fontdef)
         if (attr->cmap.glyph_id_array)
             HPDF_FreeMem (fontdef->mmgr, attr->cmap.glyph_id_array);
 
-        if (attr->offset_tbl.table)
-            HPDF_FreeMem (fontdef->mmgr, attr->offset_tbl.table);
+        if (attr->offsetbl.table)
+            HPDF_FreeMem (fontdef->mmgr, attr->offsetbl.table);
 
         if (attr->glyph_tbl.flgs)
             HPDF_FreeMem (fontdef->mmgr, attr->glyph_tbl.flgs);
@@ -699,26 +699,26 @@ LoadTTFTable (HPDF_FontDef  fontdef)
 
     HPDF_PTRACE ((" HPDF_TTFontDef_LoadTTFTable\n"));
 
-    ret += GetUINT32 (attr->stream, &attr->offset_tbl.sfnt_version);
-    ret += GetUINT16 (attr->stream, &attr->offset_tbl.num_tables);
-    ret += GetUINT16 (attr->stream, &attr->offset_tbl.search_range);
-    ret += GetUINT16 (attr->stream, &attr->offset_tbl.entry_selector);
-    ret += GetUINT16 (attr->stream, &attr->offset_tbl.range_shift);
+    ret += GetUINT32 (attr->stream, &attr->offsetbl.sfnt_version);
+    ret += GetUINT16 (attr->stream, &attr->offsetbl.num_tables);
+    ret += GetUINT16 (attr->stream, &attr->offsetbl.search_range);
+    ret += GetUINT16 (attr->stream, &attr->offsetbl.entry_selector);
+    ret += GetUINT16 (attr->stream, &attr->offsetbl.range_shift);
 
     if (ret != HPDF_OK)
         return HPDF_Error_GetCode (fontdef->error);
 
-    if (attr->offset_tbl.num_tables * sizeof(HPDF_TTFTable) >
+    if (attr->offsetbl.num_tables * sizeof(HPDF_TTFTable) >
             HPDF_TTF_MAX_MEM_SIZ)
         return HPDF_SetError (fontdef->error, HPDF_TTF_INVALID_FOMAT, 0);
 
-    attr->offset_tbl.table = HPDF_GetMem (fontdef->mmgr,
-                        sizeof(HPDF_TTFTable) * attr->offset_tbl.num_tables);
-    if (!attr->offset_tbl.table)
+    attr->offsetbl.table = HPDF_GetMem (fontdef->mmgr,
+                        sizeof(HPDF_TTFTable) * attr->offsetbl.num_tables);
+    if (!attr->offsetbl.table)
         return HPDF_Error_GetCode (fontdef->error);
 
-    tbl = attr->offset_tbl.table;
-    for (i = 0; i < attr->offset_tbl.num_tables; i++) {
+    tbl = attr->offsetbl.table;
+    for (i = 0; i < attr->offsetbl.num_tables; i++) {
         HPDF_UINT siz = 4;
 
         ret += HPDF_Stream_Read (attr->stream, (HPDF_BYTE *)tbl->tag, &siz);
@@ -2001,11 +2001,11 @@ HPDF_TTFontDef_SaveFontData  (HPDF_FontDef   fontdef,
 
     HPDF_PTRACE ((" SaveFontData\n"));
 
-    ret = WriteUINT32 (stream, attr->offset_tbl.sfnt_version);
+    ret = WriteUINT32 (stream, attr->offsetbl.sfnt_version);
     ret += WriteUINT16 (stream, HPDF_REQUIRED_TAGS_COUNT);
-    ret += WriteUINT16 (stream, attr->offset_tbl.search_range);
-    ret += WriteUINT16 (stream, attr->offset_tbl.entry_selector);
-    ret += WriteUINT16 (stream, attr->offset_tbl.range_shift);
+    ret += WriteUINT16 (stream, attr->offsetbl.search_range);
+    ret += WriteUINT16 (stream, attr->offsetbl.entry_selector);
+    ret += WriteUINT16 (stream, attr->offsetbl.range_shift);
 
     if (ret != HPDF_OK)
         return HPDF_Error_GetCode (fontdef->error);
@@ -2230,10 +2230,10 @@ FindTable (HPDF_FontDef      fontdef,
            const char  *tag)
 {
     HPDF_TTFontDefAttr attr = (HPDF_TTFontDefAttr)fontdef->attr;
-    HPDF_TTFTable* tbl = attr->offset_tbl.table;
+    HPDF_TTFTable* tbl = attr->offsetbl.table;
     HPDF_UINT i;
 
-    for (i = 0; i < attr->offset_tbl.num_tables; i++, tbl++) {
+    for (i = 0; i < attr->offsetbl.num_tables; i++, tbl++) {
         if (HPDF_MemCmp ((HPDF_BYTE *)tbl->tag, (HPDF_BYTE *)tag, 4) == 0) {
             HPDF_PTRACE((" FindTable find table[%c%c%c%c]\n",
                         tbl->tag[0], tbl->tag[1], tbl->tag[2], tbl->tag[3]));
