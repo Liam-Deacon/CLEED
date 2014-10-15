@@ -53,13 +53,13 @@ directory of the CLEED installation.
 There are three files for each search (in addition to phase shifts and experimental data)
 which have to be created by the user:
 
-<bul_file> *.bul
+* <bul_file> *.bul:
 Bulk geometry and non-geometric parameters
 
-<inp_file> *.inp
+* <inp_file> *.inp:
 Specifies start geometry for the search and search parameters (symmetry etc.)
 
-<ctr_file> *.ctr
+* <ctr_file> *.ctr:
 Specifies correspondence between theoretical and experimental IV curves.
 
 A detailed description of the file format can be found in 'doc/CLEED_Manual.pdf', but it is 
@@ -122,7 +122,7 @@ final R factor after convergence should be around 0.1322 and it takes around 183
 iteration to get there from the start geometry specified in Ni111_2x2O.inp 
 (see attached *.log file).
 
-The example in NICU leads to an R factor of 0.0633 after 63 iterations (ca 15s cpu 
+The example in NICU leads to an R factor of 0.0633 after 63 iterations (*c.a.* 15s cpu 
 time per iteration).
 
 All information necessary to restart the search at the current position is stored in
@@ -134,5 +134,3 @@ of iterations (currently 2000), it can be restarted by:
 GOOD LUCK
 
 *-- Georg Held --*
-
-
