@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00087" kind="file">
+    <compoundname>qm_func.h</compoundname>
+    <includedby refid="a00086" local="yes">qm.h</includedby>
+    <invincdepgraph>
+      <node id="421">
+        <label>leed.h</label>
+        <link refid="a00066_source"/>
+        <childnode refid="422" relation="include">
+        </childnode>
+      </node>
+      <node id="420">
+        <label>qm.h</label>
+        <link refid="a00086_source"/>
+        <childnode refid="421" relation="include">
+        </childnode>
+      </node>
+      <node id="419">
+        <label>qm_func.h</label>
+        <link refid="qm_func.h"/>
+        <childnode refid="420" relation="include">
+        </childnode>
+      </node>
+      <node id="422">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="a00087_1a10355a22f21e849f3865e6bd4ec988d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int mk_cg_coef</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>mk_cg_coef</name>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a8c49615973f8996d2942af5f180a4537" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double cg</definition>
+        <argsstring>(int, int, int, int, int, int)</argsstring>
+        <name>cg</name>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="33" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a2df05acaac2b74be99ef837e0674ef0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double *</type>
+        <definition>double* cg_info</definition>
+        <argsstring>(int, int, int, int, int *, int *, int *)</argsstring>
+        <name>cg_info</name>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1ab28e1a7fd24c83361cfebcb5a07f127f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void show_cg_coef</definition>
+        <argsstring>()</argsstring>
+        <name>show_cg_coef</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="37" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1ab828a070a9e12ddf1537318e8ceb6482" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat r_ylm</definition>
+        <argsstring>(mat, real, real, size_t)</argsstring>
+        <name>r_ylm</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a0cf74d543aa74d19bd7fd409cf2e2235" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat c_ylm</definition>
+        <argsstring>(mat, real, real, real, size_t)</argsstring>
+        <name>c_ylm</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a62b16b6d3a9e2c0fbe78a02ac4905e00" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int mk_ylm_coef</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>mk_ylm_coef</name>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a9a22bbcccc4d602123e8da460b441034" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat r_hank1</definition>
+        <argsstring>(mat, real, size_t)</argsstring>
+        <name>r_hank1</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a9ca0dd015e3a078fbdc97037dd20db8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat c_hank1</definition>
+        <argsstring>(mat, real, real, size_t)</argsstring>
+        <name>c_hank1</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a642d97ff20a27fd9aede603ed2ebb388" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat c_bess</definition>
+        <argsstring>(mat, real, real, size_t)</argsstring>
+        <name>c_bess</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00087_1a56135a106db414c04e68df942054d898" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat c_bessm</definition>
+        <argsstring>(mat, real, real, size_t)</argsstring>
+        <name>c_bessm</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h" line="56" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>QM_FUNC.H</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>1994-2014<sp/>Georg<sp/>Held<sp/>&lt;g.held@reading.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>@license<sp/>GPL-3.0+<sp/>&lt;http://spdx.org/licenses/GPL-3.0+&gt;</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>Description:<sp/>basic<sp/>quantum<sp/>mechanical<sp/>functions<sp/>for<sp/>the<sp/>leed<sp/>programs</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*<sp/>Changes:</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/><sp/><sp/>GH/1994.07.28<sp/>-<sp/>creation</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/><sp/><sp/>LD/2014.10.09<sp/>-<sp/>change<sp/>prototypes<sp/>to<sp/>have<sp/>l_max<sp/>as<sp/>size_t</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>QM_FUNC_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>QM_FUNC_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="27"><highlight class="comment"><sp/>*<sp/>Clebsch<sp/>Gordon<sp/>(C.G.)<sp/>coefficients:</highlight></codeline>
+<codeline lineno="28"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Calculate<sp/>C.G.<sp/>coefficients<sp/>(qmcgc.c)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>mk_cg_coef(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Return<sp/>C.G.<sp/>coefficient<sp/>(qmcgc.c)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cg(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Return<sp/>relevant<sp/>storage<sp/>information<sp/>(qmcgc.c)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*cg_info(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>list<sp/>C.G.<sp/>coefficients<sp/>(qmcgc.c)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>show_cg_coef();</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="40"><highlight class="comment"><sp/>*<sp/>Spherical<sp/>harmonics</highlight></codeline>
+<codeline lineno="41"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Calculate<sp/>spherical<sp/>harmonics<sp/>(qmylm.c)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>r_ylm(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>real,<sp/>real,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>c_ylm(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>real,<sp/>real,<sp/>real,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>mk_ylm_coef(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="49"><highlight class="comment"><sp/>*<sp/>Hankel/Bessel<sp/>functions</highlight></codeline>
+<codeline lineno="50"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>Calculate<sp/>Hankel<sp/>and<sp/>Bessel<sp/>functions<sp/>(qmhank.c,<sp/>qmbess.c)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>r_hank1(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>real,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>c_hank1(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>real,<sp/>real,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>c_bess(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>real,<sp/>real,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>c_bessm(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>real,<sp/>real,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="59"><highlight class="comment">lower<sp/>level<sp/>functions</highlight></codeline>
+<codeline lineno="60"><highlight class="comment">*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/qm_func.h"/>
+  </compounddef>
+</doxygen>

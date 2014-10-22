@@ -18,7 +18,7 @@
  *                   & initial Doxygen markup.
  *********************************************************************/
 
-/*! \file rfac_def.h
+/*! \file
  *  \brief Header file for rfac data structures, definitions and constants.
  */
 
@@ -37,12 +37,14 @@ extern "C" {
  *********************************************************************/
 
  /*! \define M2_H
- *  \brief convenience constant of 2*m_e/h = 0.2631894506957162 [eV^-1   A^-2]
+ *  \brief convenience constant of \f$ \frac{2 m_e}{h} = 0.2631894506957162
+ *  [eV^{-1} A^{-2}] \f$
  */
 #define M2_H      0.2631894506957162   /* 2*m/h       [eV^-1   A^-2] */
 
 /*! \define SQRT_M2_H
- *  \brief convenience constant of sqrt(2*m_e/h) = 0.5130199320647456 [eV^-0.5 A^-1]
+ *  \brief convenience constant of \f$ \sqrt{\frac{2 m_e}{h}} =
+ *  0.5130199320647456 [eV^{-0.5} A^{-1}] \f$
  */
 #define SQRT_M2_H 0.5130199320647456   /* sqrt(2*m/h) [eV^-0.5 A^-1] */
 
@@ -51,7 +53,7 @@ extern "C" {
  *********************************************************************/
 
 /*! \define N_RFACTORS 6
- *  \brief The maximum number of possible R-factors
+ *  \brief The maximum number of possible R factors
  */
 #define N_RFACTORS     6       /* Number of possible R-factors */
 
@@ -85,22 +87,22 @@ extern "C" {
 */
 
 /*!
- * \brief Indicates the return/exit status of a function.
+ * Indicates the return/exit status of a function.
  */
 typedef enum {
-  RFAC_FAILURE=-1,
-  RFAC_SUCCESS,
-  RFAC_INVALID_ARGUMENT,
-  RFAC_IV_NOT_EQUIDISTANT,
-  RFAC_ALLOCATION_ERROR,
-  RFAC_ESTEP_TOO_SMALL,
-  RFAC_VI_TOO_SMALL,
-  RFAC_INVALID_NUMBER_OF_ENERGIES,
-  RFAC_INVALID_NUMBER_OF_BEAMS,
-  RFAC_BAD_IV_DATA
+  RFAC_FAILURE=-1,              /*!< indicates general failure */
+  RFAC_SUCCESS,                 /*!< indicates general success */
+  RFAC_INVALID_ARGUMENT,        /*!< indicates invalid command line argument */
+  RFAC_IV_NOT_EQUIDISTANT,      /*!< indicates IV is not equally spaced in energy */
+  RFAC_ALLOCATION_ERROR,        /*!< indicates failure to allocate memory */
+  RFAC_ESTEP_TOO_SMALL,         /*!< indicates energy step size is too small */
+  RFAC_VI_TOO_SMALL,            /*!< indicates the \f$ V_i \f$ value is too small */
+  RFAC_INVALID_NUMBER_OF_ENERGIES,  /*!< indicates an invalid number of energies */
+  RFAC_INVALID_NUMBER_OF_BEAMS,     /*!< indicates an invalid number of spots */
+  RFAC_BAD_IV_DATA                  /*!< indicates bad input of IV data */
 } rfac_error;
 
-/*! \typedef \enum refactor
+/*! \typedef rfactor_type
  *  \brief indicates the R-factor type.
  */
 typedef enum {
@@ -110,6 +112,9 @@ typedef enum {
   RB_FACTOR       /*!< Rb factor */
 } rfactor_type;
 
+/*! \typedef rfac_axis
+ *  \brief Enumeration representing IV axis 
+ */
 typedef enum {
   E_AXIS=0,     /*!< use an I(E) curve for R factor calculations */
   K_AXIS        /*!< use an I(k) curve for R factor calculations */

@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00007" kind="struct" prot="public">
+    <compoundname>cryst_str</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00007_1a586c24834530eb38b3173a700ee94583" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::vr</definition>
+        <argsstring></argsstring>
+        <name>vr</name>
+        <briefdescription>
+<para>real part of the optical potential </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="212" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a747a9725746045ca276e384b5a2c1a13" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::vi</definition>
+        <argsstring></argsstring>
+        <name>vi</name>
+        <briefdescription>
+<para>imaginary part optical potential </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="213" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a00917e73e0456c657fff708a709aa0e0" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::temp</definition>
+        <argsstring></argsstring>
+        <name>temp</name>
+        <briefdescription>
+<para>crystal temperature </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="214" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1ac6d507abb577b519196bc2f758d17fe7" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cryst_str::n_rot</definition>
+        <argsstring></argsstring>
+        <name>n_rot</name>
+        <briefdescription>
+<para>degree of rotational symmetry </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="217" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a0127dd32ed6ec372481bde065603f83e" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::rot_axis[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>rot_axis</name>
+        <briefdescription>
+<para>axis of rotational symmetry </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="218" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a8963fe7323744a1116e9a0991d01e1b4" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cryst_str::n_mir</definition>
+        <argsstring></argsstring>
+        <name>n_mir</name>
+        <briefdescription>
+<para>number of mirror plane </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="219" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a17e04eaa61977a74230d639600bf60fd" prot="public" static="no" mutable="no">
+        <type>real *</type>
+        <definition>real* cryst_str::m_plane</definition>
+        <argsstring></argsstring>
+        <name>m_plane</name>
+        <briefdescription>
+<para>points define mirror plane </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="220" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1ab8e5b83fd59e788533d3caa06f783386" prot="public" static="no" mutable="no">
+        <type>real *</type>
+        <definition>real* cryst_str::alpha</definition>
+        <argsstring></argsstring>
+        <name>alpha</name>
+        <briefdescription>
+<para>angle in degree </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="221" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a637f9d68bdc013f88c2a2f97539cc598" prot="public" static="no" mutable="no">
+        <type>leed_mirror_sym</type>
+        <definition>leed_mirror_sym cryst_str::symmetry</definition>
+        <argsstring></argsstring>
+        <name>symmetry</name>
+        <briefdescription>
+<para>NOSYM(0) ROTSYM(1) MIRRORSYM(2) RMSYM(3) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="222" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1abb32b8d9fd0591ea034f9bb26e205dae" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::a[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>a</name>
+        <briefdescription>
+<para>basis vectors of the real 2-dim unit cell stored as standard matrix (a1,a2): a1x = a[1], a2x = a[2] a1y = a[3], a2y = a[4] </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="225" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a9a1938fd8f3218bbe199ce640e49fcbc" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::a_1[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>a_1</name>
+        <briefdescription>
+<para>inverse of a (= 2PI * (a^-1)) =&gt; the rows are the basis vectors of the reciprocal 2-dim unit cell: a*1x = a_1[1], a*1y = a_1[2] a*2x = a_1[3], a*2y = a_1[4] </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="230" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="230" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a0f85e0faecc3215ef137b269ee14b041" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::area</definition>
+        <argsstring></argsstring>
+        <name>area</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="236" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1aaf66ec072b22251b3f9912cd6efcbbef" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::m_trans[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>m_trans</name>
+        <briefdescription>
+<para>Area of the real 2-dim (1x1) unit cell. </para>        </briefdescription>
+        <detaileddescription>
+<para>2x2 transformation matrix: unit cell used in the programs with respect to the input: a_inp = m_trans * a_prg </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="238" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a8a17855d6dc619daa71f176f91337d7f" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::m_super[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>m_super</name>
+        <briefdescription>
+<para>2x2 superstructure matrix: b = m_super * a </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="243" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="243" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a09231c41eb11b2da71ec766b7cd8d8df" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::m_recip[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>m_recip</name>
+        <briefdescription>
+<para>reciprocal 2x2 superstructure matrix: Mt^-1 </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="244" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="244" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1aec60b49b90107d080fc174879d8d923c" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::b[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>b</name>
+        <briefdescription>
+<para>basis vectors of the real 2-dim superstructure unit cell stored as standard matrix (b1,b2): b1x = b[1], a2x = b[2] b1y = b[3], a2y = b[4] </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="246" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a0b4246b3a985e40e3ba9cdd15edfefb7" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::b_1[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>b_1</name>
+        <briefdescription>
+<para>inverse of b (= 2PI * (b^-1)) =&gt; the rows are the basis vectors of the reciprocal 2-dim super structure unit cell: b*1x = b_1[1], b*1y = b_1[2] b*2x = b_1[3], b*2y = b_1[4] </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="251" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a7a0d63d7caccccd1893c549408c16738" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::rel_area_sup</definition>
+        <argsstring></argsstring>
+        <name>rel_area_sup</name>
+        <briefdescription>
+<para>Area of the real 2-dim superstructure unit cell relative to (1x1) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="257" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="257" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a7ce1268cb5732d8c1454aad848c64682" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cryst_str::n_layers</definition>
+        <argsstring></argsstring>
+        <name>n_layers</name>
+        <briefdescription>
+<para>number of layers in array layers </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="262" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="262" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1ad03a85be11eb9535c9dec1eca7b8f33c" prot="public" static="no" mutable="no">
+        <type><ref refid="a00015" kindref="compound">leed_layer</ref> *</type>
+        <definition>leed_layer* cryst_str::layers</definition>
+        <argsstring></argsstring>
+        <name>layers</name>
+        <briefdescription>
+<para>information concerning the atomic layers </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="263" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="263" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a2f449e883b3184e6ed265bb9b782de68" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real cryst_str::dmin</definition>
+        <argsstring></argsstring>
+        <name>dmin</name>
+        <briefdescription>
+<para>minimum interlayer distance </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="265" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="265" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1ada4bc0b175a2d1bbbae1fa364ffa8c9e" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cryst_str::n_atoms</definition>
+        <argsstring></argsstring>
+        <name>n_atoms</name>
+        <briefdescription>
+<para>total number of atoms </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="267" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="267" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1a2c96e6b55b663d5a625a91dff52a9690" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cryst_str::n_types</definition>
+        <argsstring></argsstring>
+        <name>n_types</name>
+        <briefdescription>
+<para>total number atom types </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="268" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00007_1accc5de4204d6bee4ce785a7e11a402bd" prot="public" static="no" mutable="no">
+        <type>char **</type>
+        <definition>char** cryst_str::comments</definition>
+        <argsstring></argsstring>
+        <name>comments</name>
+        <briefdescription>
+<para>comments </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="270" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="15">
+        <label>leed_layer</label>
+        <link refid="a00015"/>
+      </node>
+      <node id="14">
+        <label>cryst_str</label>
+        <link refid="a00007"/>
+        <childnode refid="15" relation="usage">
+          <edgelabel>layers</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="209" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="208" bodyend="271"/>
+    <listofallmembers>
+      <member refid="a00007_1abb32b8d9fd0591ea034f9bb26e205dae" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>a</name></member>
+      <member refid="a00007_1a9a1938fd8f3218bbe199ce640e49fcbc" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>a_1</name></member>
+      <member refid="a00007_1ab8e5b83fd59e788533d3caa06f783386" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>alpha</name></member>
+      <member refid="a00007_1a0f85e0faecc3215ef137b269ee14b041" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>area</name></member>
+      <member refid="a00007_1aec60b49b90107d080fc174879d8d923c" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>b</name></member>
+      <member refid="a00007_1a0b4246b3a985e40e3ba9cdd15edfefb7" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>b_1</name></member>
+      <member refid="a00007_1accc5de4204d6bee4ce785a7e11a402bd" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>comments</name></member>
+      <member refid="a00007_1a2f449e883b3184e6ed265bb9b782de68" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>dmin</name></member>
+      <member refid="a00007_1ad03a85be11eb9535c9dec1eca7b8f33c" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>layers</name></member>
+      <member refid="a00007_1a17e04eaa61977a74230d639600bf60fd" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>m_plane</name></member>
+      <member refid="a00007_1a09231c41eb11b2da71ec766b7cd8d8df" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>m_recip</name></member>
+      <member refid="a00007_1a8a17855d6dc619daa71f176f91337d7f" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>m_super</name></member>
+      <member refid="a00007_1aaf66ec072b22251b3f9912cd6efcbbef" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>m_trans</name></member>
+      <member refid="a00007_1ada4bc0b175a2d1bbbae1fa364ffa8c9e" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>n_atoms</name></member>
+      <member refid="a00007_1a7ce1268cb5732d8c1454aad848c64682" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>n_layers</name></member>
+      <member refid="a00007_1a8963fe7323744a1116e9a0991d01e1b4" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>n_mir</name></member>
+      <member refid="a00007_1ac6d507abb577b519196bc2f758d17fe7" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>n_rot</name></member>
+      <member refid="a00007_1a2c96e6b55b663d5a625a91dff52a9690" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>n_types</name></member>
+      <member refid="a00007_1a7a0d63d7caccccd1893c549408c16738" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>rel_area_sup</name></member>
+      <member refid="a00007_1a0127dd32ed6ec372481bde065603f83e" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>rot_axis</name></member>
+      <member refid="a00007_1a637f9d68bdc013f88c2a2f97539cc598" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>symmetry</name></member>
+      <member refid="a00007_1a00917e73e0456c657fff708a709aa0e0" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>temp</name></member>
+      <member refid="a00007_1a747a9725746045ca276e384b5a2c1a13" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>vi</name></member>
+      <member refid="a00007_1a586c24834530eb38b3173a700ee94583" prot="public" virt="non-virtual"><scope>cryst_str</scope><name>vr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

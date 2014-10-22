@@ -1,3 +1,9 @@
+
+/*! \file
+ *
+ * Parses command line arguments to \c latt program.
+ */
+
 #include "latt.h"
 #include "atom.h"
 #include "lattice.h"
@@ -5,6 +11,13 @@
 #include <strings.h>
 #include <limits.h>
 
+/*!
+ * Processes the command line arguments to \c latt into #lattice \p latt .
+ *
+ * \param argc The number of arguments passed to the function.
+ * \param argv Array of strings containing command line arguments to process.
+ * \param latt Pointer to #lattice \c struct for processed arguments.
+ */
 void latt_parse_args(int argc, char *argv[], lattice *latt)
 {
   int i_arg; 

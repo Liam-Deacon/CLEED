@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00047" kind="struct" prot="public">
+    <compoundname>var_str</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00047_1ac0781c7be685e298c04e7cd862bbeb25" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::eng_r</definition>
+        <argsstring></argsstring>
+        <name>eng_r</name>
+        <briefdescription>
+<para>current energy in crystal (real part) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="353" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="353" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a208dc4415d8c7e930170e0065d9ae1cb" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::eng_i</definition>
+        <argsstring></argsstring>
+        <name>eng_i</name>
+        <briefdescription>
+<para>current energy in crystal (imag. </para>        </briefdescription>
+        <detaileddescription>
+<para>part) </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="354" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="354" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a8aaa3e8bc2ce24af18adfa47e35c650d" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::eng_v</definition>
+        <argsstring></argsstring>
+        <name>eng_v</name>
+        <briefdescription>
+<para>current vacuum energy </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="355" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="355" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1abe2c4c3ba3c01f9ed824389567ea6302" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::vr</definition>
+        <argsstring></argsstring>
+        <name>vr</name>
+        <briefdescription>
+<para>real part of the optical potential </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="356" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a83210e7b48666028e74284f3036ede67" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::vi_pre</definition>
+        <argsstring></argsstring>
+        <name>vi_pre</name>
+        <briefdescription>
+<para>prefactor: imag. </para>        </briefdescription>
+        <detaileddescription>
+<para>part of the optical potential </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="357" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="357" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a93e1fa65bd18164555df0664572b309c" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::vi_exp</definition>
+        <argsstring></argsstring>
+        <name>vi_exp</name>
+        <briefdescription>
+<para>exponent: imag. </para>        </briefdescription>
+        <detaileddescription>
+<para>part of the optical potential </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="358" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="358" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1aada0c12d33165e7b8608d8909dd27efb" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::theta</definition>
+        <argsstring></argsstring>
+        <name>theta</name>
+        <briefdescription>
+<para>polar angle of incidence </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="360" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="360" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a219edb0e9df978d29136c2dfa4064af2" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::phi</definition>
+        <argsstring></argsstring>
+        <name>phi</name>
+        <briefdescription>
+<para>azimuth angle of incidence </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="361" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="361" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a290850a4587605b8da086b3e51de171a" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::k_in[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>k_in</name>
+        <briefdescription>
+<para>incident beam: k[0] = |k_par| k[1/2] = k_par_x/y k[3] = k_z </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="362" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="362" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a774c6e3d0642eb0b4fe01d53386b4e8b" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real var_str::epsilon</definition>
+        <argsstring></argsstring>
+        <name>epsilon</name>
+        <briefdescription>
+<para>decimal tolerance when comparing floating point </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="366" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="366" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1a0a835714a27d81a4bd74e8a5501ffe06" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t var_str::l_max</definition>
+        <argsstring></argsstring>
+        <name>l_max</name>
+        <briefdescription>
+<para>max. </para>        </briefdescription>
+        <detaileddescription>
+<para>l quantum number used in the calculation </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="367" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="367" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00047_1ab188706e1487fd56543087bca27dec5c" prot="public" static="no" mutable="no">
+        <type><ref refid="a00018" kindref="compound">mat</ref> *</type>
+        <definition>mat* var_str::p_tl</definition>
+        <argsstring></argsstring>
+        <name>p_tl</name>
+        <briefdescription>
+<para>array of diagonal atomic scattering matrices (1st dim = lmax, 2nd dim = 1) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="368" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="368" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="125">
+        <label>mat_str</label>
+        <link refid="a00018"/>
+      </node>
+      <node id="124">
+        <label>var_str</label>
+        <link refid="a00047"/>
+        <childnode refid="125" relation="usage">
+          <edgelabel>p_tl</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="352" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="351" bodyend="370"/>
+    <listofallmembers>
+      <member refid="a00047_1a208dc4415d8c7e930170e0065d9ae1cb" prot="public" virt="non-virtual"><scope>var_str</scope><name>eng_i</name></member>
+      <member refid="a00047_1ac0781c7be685e298c04e7cd862bbeb25" prot="public" virt="non-virtual"><scope>var_str</scope><name>eng_r</name></member>
+      <member refid="a00047_1a8aaa3e8bc2ce24af18adfa47e35c650d" prot="public" virt="non-virtual"><scope>var_str</scope><name>eng_v</name></member>
+      <member refid="a00047_1a774c6e3d0642eb0b4fe01d53386b4e8b" prot="public" virt="non-virtual"><scope>var_str</scope><name>epsilon</name></member>
+      <member refid="a00047_1a290850a4587605b8da086b3e51de171a" prot="public" virt="non-virtual"><scope>var_str</scope><name>k_in</name></member>
+      <member refid="a00047_1a0a835714a27d81a4bd74e8a5501ffe06" prot="public" virt="non-virtual"><scope>var_str</scope><name>l_max</name></member>
+      <member refid="a00047_1ab188706e1487fd56543087bca27dec5c" prot="public" virt="non-virtual"><scope>var_str</scope><name>p_tl</name></member>
+      <member refid="a00047_1a219edb0e9df978d29136c2dfa4064af2" prot="public" virt="non-virtual"><scope>var_str</scope><name>phi</name></member>
+      <member refid="a00047_1aada0c12d33165e7b8608d8909dd27efb" prot="public" virt="non-virtual"><scope>var_str</scope><name>theta</name></member>
+      <member refid="a00047_1a93e1fa65bd18164555df0664572b309c" prot="public" virt="non-virtual"><scope>var_str</scope><name>vi_exp</name></member>
+      <member refid="a00047_1a83210e7b48666028e74284f3036ede67" prot="public" virt="non-virtual"><scope>var_str</scope><name>vi_pre</name></member>
+      <member refid="a00047_1abe2c4c3ba3c01f9ed824389567ea6302" prot="public" virt="non-virtual"><scope>var_str</scope><name>vr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

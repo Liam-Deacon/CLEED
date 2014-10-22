@@ -1,0 +1,966 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00073" kind="file">
+    <compoundname>mat_func.h</compoundname>
+    <includes local="no">stdio.h</includes>
+    <includes refid="a00088" local="yes">real.h</includes>
+    <includedby refid="a00071" local="yes">mat.h</includedby>
+    <incdepgraph>
+      <node id="255">
+        <label>float.h</label>
+      </node>
+      <node id="254">
+        <label>real.h</label>
+        <link refid="a00088_source"/>
+        <childnode refid="255" relation="include">
+        </childnode>
+      </node>
+      <node id="252">
+        <label>mat_func.h</label>
+        <link refid="mat_func.h"/>
+        <childnode refid="253" relation="include">
+        </childnode>
+        <childnode refid="254" relation="include">
+        </childnode>
+      </node>
+      <node id="253">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="258">
+        <label>leed.h</label>
+        <link refid="a00066_source"/>
+        <childnode refid="259" relation="include">
+        </childnode>
+      </node>
+      <node id="260">
+        <label>qm.h</label>
+        <link refid="a00086_source"/>
+        <childnode refid="258" relation="include">
+        </childnode>
+      </node>
+      <node id="257">
+        <label>mat.h</label>
+        <link refid="a00071_source"/>
+        <childnode refid="258" relation="include">
+        </childnode>
+        <childnode refid="260" relation="include">
+        </childnode>
+      </node>
+      <node id="259">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+      <node id="256">
+        <label>mat_func.h</label>
+        <link refid="mat_func.h"/>
+        <childnode refid="257" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="a00073_1a2bb892f5ab1a52123931f6a0bcc17168" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real</type>
+        <definition>real matabs</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matabs</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a4dc8395358de2560157915cc6860ca4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matalloc</definition>
+        <argsstring>(mat, int, int, int)</argsstring>
+        <name>matalloc</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a64231ac4578fc16935ca24e77b6da45f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matarralloc</definition>
+        <argsstring>(mat, int)</argsstring>
+        <name>matarralloc</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="33" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1abf3567692f17db43e1463e397cc3925e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matarrfree</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matarrfree</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a3de553ae2703a21a0683d4cf75dca5e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matcheck</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matcheck</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="37" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a027defa799e659b15916eed123d86ab2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matcol</definition>
+        <argsstring>(mat, mat, int)</argsstring>
+        <name>matcol</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a214e853bd665f8a362fc3d1c33367df7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matconj</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>matconj</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="41" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ad0bb829719c6d3b4454da90491380569" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matcop</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>matcop</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a118b1bebac669c4bc4743fbcdef23428" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real</type>
+        <definition>real matdiff</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>matdiff</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1aa7aaac24fddf44cc6072ed894cb258fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matext</definition>
+        <argsstring>(mat, mat, int, int, int, int)</argsstring>
+        <name>matext</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="47" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a918a6509ff8b3fb555e7e678027e7b54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matfree</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matfree</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ad2b1a0b7a6ee3f4b1ef3ecd61cb4958c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matgausinv</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matgausinv</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1aa6617722db5539cd178a5875b54925bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matins</definition>
+        <argsstring>(mat, mat, int, int)</argsstring>
+        <name>matins</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a9aaf81e1379a6fb19d9db9a0499c9f58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matinv</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>matinv</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ac6c4defd3e9b3b073842b94743cef94a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matinv_old</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>matinv_old</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ad05118769dbd9effa33fea9a659c93a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matmul</definition>
+        <argsstring>(mat, mat, mat)</argsstring>
+        <name>matmul</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1acce97d36ac20a781dc7a8c315b8f8c0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matnattovht</definition>
+        <argsstring>(mat, int, int)</argsstring>
+        <name>matnattovht</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="60" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ad8e9dc64335597f50fc350b6bb38078d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matline</definition>
+        <argsstring>(mat, int, int, int, int)</argsstring>
+        <name>matline</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="61" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a6c4dd34a93e07a773fb8e7bda093aed7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matrow</definition>
+        <argsstring>(mat, mat, int)</argsstring>
+        <name>matrow</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ab99f6ca8846b540a0285233d1d0a6199" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matscal</definition>
+        <argsstring>(mat, mat, real, real)</argsstring>
+        <name>matscal</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a2e9dbf20adf7147062175f546550a27b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matshow</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matshow</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a17f7f8cbcf325337064c388f6da05283" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matshowabs</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matshowabs</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="69" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ad9c77751184630cbb452a35c6fec6bcd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matshowpar</definition>
+        <argsstring>(mat)</argsstring>
+        <name>matshowpar</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="71" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a06c2780d664b207bc1177e1a7e471a0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matsqmod</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>matsqmod</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1abe507772074538433ea412822b94065c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int mattrace</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>mattrace</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ad902cc075da3f44ab58606ecbc112131" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat mattrans</definition>
+        <argsstring>(mat, mat)</argsstring>
+        <name>mattrans</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="77" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1aa63753db9356a42d26500f2fe8808574" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int matwrite</definition>
+        <argsstring>(mat, FILE *)</argsstring>
+        <name>matwrite</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>FILE *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="82" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a91af15a619ad87d3cdc9ee490a5ef9d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matread</definition>
+        <argsstring>(mat, FILE *)</argsstring>
+        <name>matread</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>FILE *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="83" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1aa728e5bb82bf050f9831a8eee10f42ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        <definition>mat matrdlm</definition>
+        <argsstring>(mat, int, const char *)</argsstring>
+        <name>matrdlm</name>
+        <param>
+          <type><ref refid="a00018" kindref="compound">mat</ref></type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>const char *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="84" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ae609a084a294c273387312597f3478ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int ludcmp</definition>
+        <argsstring>(real *, int *, int)</argsstring>
+        <name>ludcmp</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="91" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a718bf0243fae3a74aeec5832c56b63e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int r_ludcmp</definition>
+        <argsstring>(real *, int *, int)</argsstring>
+        <name>r_ludcmp</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="93" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1aee48bc56bddfbad7c38f557e5a7ab7f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int r_luinv</definition>
+        <argsstring>(real *, real *, int *, int)</argsstring>
+        <name>r_luinv</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a1d95e691de872c3370fa819ace3d87bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real *</type>
+        <definition>real* r_lubksb</definition>
+        <argsstring>(real *, int *, real *, int)</argsstring>
+        <name>r_lubksb</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="95" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a159c7ff6f632c6f955263e48d6e8ec0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int c_ludcmp</definition>
+        <argsstring>(real *, real *, int *, int)</argsstring>
+        <name>c_ludcmp</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="97" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a9968e9afd6ad7b3eda2923c5bc7db122" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int c_luinv</definition>
+        <argsstring>(real *, real *, real *, real *, int *, int)</argsstring>
+        <name>c_luinv</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="98" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1ac9e8115b2bcd792e59486b231d7ca52e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int c_lubksb</definition>
+        <argsstring>(real *, real *, int *, real *, real *, int)</argsstring>
+        <name>c_lubksb</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="99" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00073_1a70fe2981737880e3c16d802686135caa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real *</type>
+        <definition>real* r_sqmul</definition>
+        <argsstring>(real *, real *, real *, int)</argsstring>
+        <name>r_sqmul</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h" line="101" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MAT_FUNC.H</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>1994-2014<sp/>Georg<sp/>Held<sp/>&lt;g.held@reading.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>@license<sp/>GPL-3.0+<sp/>&lt;http://spdx.org/licenses/GPL-3.0+&gt;</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>Description:<sp/>header<sp/>with<sp/>function<sp/>prototypes<sp/>for<sp/>matrix<sp/>operations</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*<sp/>Changes:</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/><sp/><sp/>GH/1994.02.10<sp/>-<sp/>creation</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>MAT_FUNC_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAT_FUNC_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;real.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>modulus<sp/>of<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal">real<sp/>matabs(<ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>allocate<sp/>matrix<sp/>memory<sp/><sp/>in<sp/>file<sp/>matalloc.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matalloc(<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>allocate<sp/>array<sp/>of<sp/>matrices<sp/>in<sp/>file<sp/>matarralloc.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matarralloc(<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>free<sp/>array<sp/>of<sp/>matrices<sp/>in<sp/>file<sp/>matarrfree.<sp/>c*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matarrfree(<ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>check<sp/>validity<sp/>of<sp/>pointer<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matcheck(<ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/><sp/>extract<sp/>a<sp/>column<sp/>from<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matcol(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);<sp/></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>transpose<sp/>and<sp/>conjugate<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matconj(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Copy<sp/>matrices<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matcop(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>difference<sp/>between<sp/>matrices<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal">real<sp/>matdiff(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Extract<sp/>a<sp/>submatrix<sp/>from<sp/>a<sp/>larger<sp/>one<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matext(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Free<sp/>memory<sp/>allocated<sp/>for<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matfree(<ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>matrix<sp/>inversion<sp/>in<sp/>file<sp/>matcgau.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matgausinv(<ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>copy<sp/>one<sp/>matrix<sp/>into<sp/>another<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matins(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>matrix<sp/>inversion<sp/>in<sp/>file<sp/>matinv.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matinv(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matinv_old(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>matrix<sp/>multiplication<sp/>in<sp/>file<sp/>matmul.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matmul(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>convert<sp/>order<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matnattovht<sp/>(<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matline(<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/><sp/>extract<sp/>a<sp/>row<sp/>from<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matrow(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);<sp/></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>matrix<sp/>multiplication<sp/>with<sp/>complex<sp/>number<sp/>in<sp/>file<sp/>matscal.c<sp/>*/</highlight><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matscal(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>,<sp/>real,<sp/>real);<sp/></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>print<sp/>a<sp/>matrix<sp/>in<sp/>file<sp/>matshow.c<sp/>*/</highlight><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matshow(<ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>print<sp/>the<sp/>modulus<sp/>of<sp/>a<sp/>matrix<sp/>in<sp/>file<sp/>matshow.c<sp/>*/</highlight><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matshowabs(<ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>print<sp/>the<sp/>parameters<sp/>of<sp/>a<sp/>matrix<sp/>in<sp/>file<sp/>matshowpar.c<sp/>*/</highlight><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matshowpar(<ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>square<sp/>modulus<sp/>of<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matsqmod(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>trace<sp/>of<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>mattrace(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>transpose<sp/>a<sp/>matrix<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>mattrans(<ref refid="a00018" kindref="compound">mat</ref>,<sp/><ref refid="a00018" kindref="compound">mat</ref>);<sp/></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="80"><highlight class="comment"><sp/>*<sp/>read<sp/>and<sp/>write<sp/>(&lt;stdio.h&gt;<sp/>used<sp/>for<sp/>type<sp/>definition<sp/>of<sp/>FILE)</highlight></codeline>
+<codeline lineno="81"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>matwrite(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>FILE<sp/>*);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matread(<ref refid="a00018" kindref="compound">mat</ref>,<sp/>FILE<sp/>*);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><ref refid="a00018" kindref="compound">mat</ref><sp/>matrdlm(<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="88"><highlight class="comment"><sp/>*<sp/>lower<sp/>level<sp/>functions</highlight></codeline>
+<codeline lineno="89"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>LU<sp/>decomposition<sp/>in<sp/>file<sp/>ludcmp.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ludcmp(real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>LU<sp/>decomposition<sp/>(real)<sp/>in<sp/>file<sp/>matrlu.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>r_ludcmp(real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>r_luinv(real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal">real<sp/>*r_lubksb(<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>LU<sp/>decomposition<sp/>(complex)<sp/>in<sp/>file<sp/>matclu.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>c_ludcmp(real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>c_luinv(real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>c_lubksb(real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>matrix<sp/>multiplication<sp/>for<sp/>square<sp/>mat.<sp/>in<sp/>file<sp/>matrm.c<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal">real<sp/>*r_sqmul(real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>MAT_FUNC_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/mat_func.h"/>
+  </compounddef>
+</doxygen>

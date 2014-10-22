@@ -1,5 +1,15 @@
-/***********************************************************************
-GH/19.09.95
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *19.09.95
  File contains:
 
   sr_po_gsl(int ndim, char *bak_file, char *log_file)
@@ -18,7 +28,7 @@ GH/19.09.95
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "gh_stddef.h"
 
 /**********************************************************************/

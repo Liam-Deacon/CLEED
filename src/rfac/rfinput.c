@@ -16,8 +16,8 @@
  *   WB/1998.10.05 - cur_list[i_cur -1].group_id = I_END_OF_LIST;
  *********************************************************************/
 
-/*! \file rfinput.c
- *  \brief Implementation file for \ref rf_input function.
+/*! \file
+ *  \brief Implementation file for rf_input() function.
  */
 
 #include <math.h>
@@ -28,9 +28,6 @@
 #include "rfac.h"
 
 /*!
- * \fn rf_input
- *
- *
  * General input routine:
  *
  * Read all inputs from theoretical and experimental data files according

@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00010" kind="struct" prot="public">
+    <compoundname>layer_str</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00010_1ac4faf1307a124a0048ea63eda809d960" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t layer_str::no_of_layer</definition>
+        <argsstring></argsstring>
+        <name>no_of_layer</name>
+        <briefdescription>
+<para>number of layer in array </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="180" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1a0a7214105d368ec4f33e5be745ed1915" prot="public" static="no" mutable="no">
+        <type>leed_structure</type>
+        <definition>leed_structure layer_str::bulk_over</definition>
+        <argsstring></argsstring>
+        <name>bulk_over</name>
+        <briefdescription>
+<para>BULK (0) or OVER. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="181" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1aa008cf8894b7e69c5ae10d41330e2dab" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int layer_str::periodic</definition>
+        <argsstring></argsstring>
+        <name>periodic</name>
+        <briefdescription>
+<para>1: layer is part of the periodically repeated bulk unit cell 0: layer is only used once </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="182" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1a7dfcffe8bf3f100ca1ad3a18266fed9a" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t layer_str::n_atoms</definition>
+        <argsstring></argsstring>
+        <name>n_atoms</name>
+        <briefdescription>
+<para>number of atoms in the layer </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="186" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1ab5f26fe77426078312ba17f6834c9c9f" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real layer_str::a_lat[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>a_lat</name>
+        <briefdescription>
+<para>basis vectors of the real 2-dim unit cell stored as standard matrix (a1,a2): a1x = a_lat[1], a2x = a_lat[2] a1y = a_lat[3], a2y = a_lat[4] </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="187" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1aec6889a4e07044c135c3fe5b783e0cb4" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real layer_str::rel_area</definition>
+        <argsstring></argsstring>
+        <name>rel_area</name>
+        <briefdescription>
+<para>area of the unit cell relative to 1x1 </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="192" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1a36ab92606df1e4495ddce2d96b4137b0" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real layer_str::reg_shift[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>reg_shift</name>
+        <briefdescription>
+<para>2-dim vector pointing to the axis of rot. </para>        </briefdescription>
+        <detaileddescription>
+<para>symmetry/mirror plane </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="193" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="193" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1a30fff757d2a379f3840d9da9544cc6b6" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real layer_str::vec_from_last[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>vec_from_last</name>
+        <briefdescription>
+<para>vector from the origin of layer (n-1) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="196" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1aa083aa63ba602138ce37ed0c6b90e677" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real layer_str::vec_to_next[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>vec_to_next</name>
+        <briefdescription>
+<para>vector to the origin of layer (n+1) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="197" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00010_1abc2e5ab3e597b9ffd676b53a610f4a82" prot="public" static="no" mutable="no">
+        <type><ref refid="a00011" kindref="compound">leed_atom</ref> *</type>
+        <definition>leed_atom* layer_str::atoms</definition>
+        <argsstring></argsstring>
+        <name>atoms</name>
+        <briefdescription>
+<para>properties of the atoms within the composite (or Bravais) layers </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="198" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="23">
+        <label>leed_atom</label>
+        <link refid="a00011"/>
+      </node>
+      <node id="22">
+        <label>layer_str</label>
+        <link refid="a00010"/>
+        <childnode refid="23" relation="usage">
+          <edgelabel>atoms</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="179" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="178" bodyend="200"/>
+    <listofallmembers>
+      <member refid="a00010_1ab5f26fe77426078312ba17f6834c9c9f" prot="public" virt="non-virtual"><scope>layer_str</scope><name>a_lat</name></member>
+      <member refid="a00010_1abc2e5ab3e597b9ffd676b53a610f4a82" prot="public" virt="non-virtual"><scope>layer_str</scope><name>atoms</name></member>
+      <member refid="a00010_1a0a7214105d368ec4f33e5be745ed1915" prot="public" virt="non-virtual"><scope>layer_str</scope><name>bulk_over</name></member>
+      <member refid="a00010_1a7dfcffe8bf3f100ca1ad3a18266fed9a" prot="public" virt="non-virtual"><scope>layer_str</scope><name>n_atoms</name></member>
+      <member refid="a00010_1ac4faf1307a124a0048ea63eda809d960" prot="public" virt="non-virtual"><scope>layer_str</scope><name>no_of_layer</name></member>
+      <member refid="a00010_1aa008cf8894b7e69c5ae10d41330e2dab" prot="public" virt="non-virtual"><scope>layer_str</scope><name>periodic</name></member>
+      <member refid="a00010_1a36ab92606df1e4495ddce2d96b4137b0" prot="public" virt="non-virtual"><scope>layer_str</scope><name>reg_shift</name></member>
+      <member refid="a00010_1aec6889a4e07044c135c3fe5b783e0cb4" prot="public" virt="non-virtual"><scope>layer_str</scope><name>rel_area</name></member>
+      <member refid="a00010_1a30fff757d2a379f3840d9da9544cc6b6" prot="public" virt="non-virtual"><scope>layer_str</scope><name>vec_from_last</name></member>
+      <member refid="a00010_1aa083aa63ba602138ce37ed0c6b90e677" prot="public" virt="non-virtual"><scope>layer_str</scope><name>vec_to_next</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00046" kind="struct" prot="public">
+    <compoundname>timeval</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00046_1a3599199839a89e99a2ce29d45312b5cf" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long timeval::tv_sec</definition>
+        <argsstring></argsstring>
+        <name>tv_sec</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="16" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00046_1aa8396731f2914f9ed2a457d3da602b80" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long timeval::tv_usec</definition>
+        <argsstring></argsstring>
+        <name>tv_usec</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="17" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="15" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="14" bodyend="18"/>
+    <listofallmembers>
+      <member refid="a00046_1a3599199839a89e99a2ce29d45312b5cf" prot="public" virt="non-virtual"><scope>timeval</scope><name>tv_sec</name></member>
+      <member refid="a00046_1aa8396731f2914f9ed2a457d3da602b80" prot="public" virt="non-virtual"><scope>timeval</scope><name>tv_usec</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

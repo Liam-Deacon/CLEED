@@ -13,8 +13,8 @@
  *   GH/1995.08.30 - Adaption to CRFAC
  *********************************************************************/
 
-/*! \file rfsort.c
- *  \brief C implementation of \ref rf_sort function.
+/*! \file
+ *  \brief C implementation of rf_sort() function.
  *
  * Sort IV curves according to the energy and check if the
  * energy values are equidistant.
@@ -26,8 +26,6 @@
 #include "rfac.h"          /* specific definitions etc. */
 
 /*!
- * \fn rf_sort
- *
  * \brief sort IV curves in increasing energy order.
  *
  * Sort experimental and theoretical IV curves according to their

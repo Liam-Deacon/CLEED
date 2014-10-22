@@ -1,0 +1,830 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00081" kind="file">
+    <compoundname>patt_def.h</compoundname>
+    <includes local="no">limits.h</includes>
+    <includes local="no">stdbool.h</includes>
+    <includes refid="a00074" local="yes">matrix_2x2.h</includes>
+    <includes refid="a00096" local="yes">spots.h</includes>
+    <includes refid="a00054" local="yes">coord.h</includes>
+    <includes refid="a00080" local="yes">patt_colors.h</includes>
+    <includes refid="a00084" local="yes">pattern.h</includes>
+    <includes refid="a00049" local="yes">basis.h</includes>
+    <includedby refid="a00083" local="yes">patt_ver.h</includedby>
+    <includedby refid="a00079" local="yes">patt.h</includedby>
+    <includedby refid="a00082" local="yes">patt_func.h</includedby>
+    <incdepgraph>
+      <node id="329">
+        <label>stdbool.h</label>
+      </node>
+      <node id="327">
+        <label>patt_def.h</label>
+        <link refid="patt_def.h"/>
+        <childnode refid="328" relation="include">
+        </childnode>
+        <childnode refid="329" relation="include">
+        </childnode>
+        <childnode refid="330" relation="include">
+        </childnode>
+        <childnode refid="334" relation="include">
+        </childnode>
+        <childnode refid="337" relation="include">
+        </childnode>
+        <childnode refid="336" relation="include">
+        </childnode>
+        <childnode refid="338" relation="include">
+        </childnode>
+        <childnode refid="340" relation="include">
+        </childnode>
+      </node>
+      <node id="333">
+        <label>stdlib.h</label>
+      </node>
+      <node id="340">
+        <label>basis.h</label>
+        <link refid="a00049_source"/>
+        <childnode refid="337" relation="include">
+        </childnode>
+        <childnode refid="335" relation="include">
+        </childnode>
+      </node>
+      <node id="330">
+        <label>matrix_2x2.h</label>
+        <link refid="a00074_source"/>
+        <childnode refid="331" relation="include">
+        </childnode>
+        <childnode refid="332" relation="include">
+        </childnode>
+        <childnode refid="333" relation="include">
+        </childnode>
+      </node>
+      <node id="334">
+        <label>spots.h</label>
+        <link refid="a00096_source"/>
+        <childnode refid="335" relation="include">
+        </childnode>
+        <childnode refid="329" relation="include">
+        </childnode>
+        <childnode refid="336" relation="include">
+        </childnode>
+      </node>
+      <node id="331">
+        <label>stddef.h</label>
+      </node>
+      <node id="328">
+        <label>limits.h</label>
+      </node>
+      <node id="335">
+        <label>miller_index.h</label>
+        <link refid="a00075_source"/>
+      </node>
+      <node id="338">
+        <label>pattern.h</label>
+        <link refid="a00084_source"/>
+        <childnode refid="339" relation="include">
+        </childnode>
+        <childnode refid="330" relation="include">
+        </childnode>
+        <childnode refid="334" relation="include">
+        </childnode>
+        <childnode refid="329" relation="include">
+        </childnode>
+      </node>
+      <node id="339">
+        <label>basis_vector.h</label>
+        <link refid="a00050_source"/>
+      </node>
+      <node id="336">
+        <label>patt_colors.h</label>
+        <link refid="a00080_source"/>
+      </node>
+      <node id="337">
+        <label>coord.h</label>
+        <link refid="a00054_source"/>
+        <childnode refid="332" relation="include">
+        </childnode>
+      </node>
+      <node id="332">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="341">
+        <label>patt_def.h</label>
+        <link refid="patt_def.h"/>
+        <childnode refid="342" relation="include">
+        </childnode>
+        <childnode refid="343" relation="include">
+        </childnode>
+        <childnode refid="345" relation="include">
+        </childnode>
+      </node>
+      <node id="342">
+        <label>patt_ver.h</label>
+        <link refid="a00083_source"/>
+        <childnode refid="343" relation="include">
+        </childnode>
+      </node>
+      <node id="345">
+        <label>patt_func.h</label>
+        <link refid="a00082_source"/>
+        <childnode refid="343" relation="include">
+        </childnode>
+      </node>
+      <node id="343">
+        <label>patt.h</label>
+        <link refid="a00079_source"/>
+        <childnode refid="344" relation="include">
+        </childnode>
+      </node>
+      <node id="344">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="a00025" prot="public">patt_text</innerclass>
+    <innerclass refid="a00024" prot="public">patt_screen</innerclass>
+    <innerclass refid="a00023" prot="public">patt_gun</innerclass>
+    <innerclass refid="a00026" prot="public">patt_vector</innerclass>
+    <innerclass refid="a00022" prot="public">patt_drawing</innerclass>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="a00081_1a486d47d8c71234ccdd26bdb47ac1658e" prot="public" static="no">
+        <name>STRSZ</name>
+        <initializer>128   /*! maximum length of string */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="38" column="11" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1a734c9248dba99c2e219a6943863e0359" prot="public" static="no">
+        <name>PATT_PAGE_HEIGHT</name>
+        <initializer>800.</initializer>
+        <briefdescription>
+<para>Height of bounding box for drawing. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="84" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1aa53b66929d30ddb57ef08e5be9830fbf" prot="public" static="no">
+        <name>PATT_PAGE_WIDTH</name>
+        <initializer>600.</initializer>
+        <briefdescription>
+<para>Width of bounding box for drawing. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="89" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1a9eb1a69ce9c00755742c70089405d21c" prot="public" static="no">
+        <name>ARROW_ANGLE</name>
+        <initializer>0.5</initializer>
+        <briefdescription>
+<para>Default angle for drawing arrow heads. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="94" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1add5015615bcb9a08c68fdedf23d12006" prot="public" static="no">
+        <name>OFF_H</name>
+        <initializer>400.</initializer>
+        <briefdescription>
+<para>Height offset for drawing. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="100" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1ab60532239ebdaf80cf3df8f246e45bbe" prot="public" static="no">
+        <name>OFF_W</name>
+        <initializer>300.</initializer>
+        <briefdescription>
+<para>Width offset for drawing. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="104" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1a666201b429d62c0cc1bd9f464c0fafb3" prot="public" static="no">
+        <name>LINE_WIDTH</name>
+        <initializer>2.</initializer>
+        <briefdescription>
+<para>Default line width for drawing. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="109" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1a7b18b821e397ef6bf1502bc41462d630" prot="public" static="no">
+        <name>MAX_RADIUS</name>
+        <initializer>200.</initializer>
+        <briefdescription>
+<para>Maximum radius for pattern (analogous to the Ewald sphere). </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="114" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1a7ffa49171ebf2b6ffe0a77924efa955b" prot="public" static="no">
+        <name>MAX_INPUT_FILES</name>
+        <initializer>6</initializer>
+        <briefdescription>
+<para>Number of possible input files to be simultaneously rendered in the drawing. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="120" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1aae3be43aaa478794b06dbb6c5b6f7892" prot="public" static="no">
+        <name>MAX_DOMAINS</name>
+        <initializer>128</initializer>
+        <briefdescription>
+<para>The maximum number of allowed super-structure domains per substrate pattern. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="126" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1aca19692f33d7ab826b8c97d7872df89a" prot="public" static="no">
+        <name>GREY_GS</name>
+        <initializer>0.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="128" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00081_1a33882b64fa2a8c47b6fa3f436b78476a" prot="public" static="no">
+        <name>NUM_SUBS</name>
+        <initializer>54</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="131" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81a" prot="public" static="no">
+        <name>patt_format</name>
+        <enumvalue id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81aaf5b1dff32bcb0cb94a6121eba93e3a50" prot="public">
+          <name>PATT_PS_OLD</name>
+          <briefdescription>
+<para>Use old postscript backend. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81aae949ed2f41f59996246a52436d778b8e" prot="public">
+          <name>PATT_EPS</name>
+          <briefdescription>
+<para>Encapsulated postscript output. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81aa4cc56e88b4d567cabf66c13f8c2a432f" prot="public">
+          <name>PATT_PS</name>
+          <briefdescription>
+<para>Postscript output. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81aa112713c67cbf2c61dbb49aa43d3560f1" prot="public">
+          <name>PATT_PNG</name>
+          <briefdescription>
+<para>Portable network graphics output. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81aa447a4007fcf0cadb111fca27cd8de179" prot="public">
+          <name>PATT_PDF</name>
+          <briefdescription>
+<para>Portable document format output. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81aad632f8deebfa30762e98d3f0f76bcbf6" prot="public">
+          <name>PATT_SVG</name>
+          <briefdescription>
+<para>Scalable vector graphics output. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a86f46fe7c1ff298ad24e5b8a4e31a81aae3d64f29ead0e9406f675ecdf52d5aa1" prot="public">
+          <name>PATT_UNKNOWN_FORMAT</name>
+          <briefdescription>
+<para>Unknown output format. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Indicates output format of generated LEED pattern. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="45" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="45" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="enum" id="a00081_1ac84c5775aefa7b951be37c0c08450a1e" prot="public" static="no">
+        <name>patt_color_scheme</name>
+        <enumvalue id="a00081_1ac84c5775aefa7b951be37c0c08450a1ea663601610fdb4bd64a5d996f49b5ab93" prot="public">
+          <name>PATT_MONOCHROME_SCHEME</name>
+          <briefdescription>
+<para>Black and white output only. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1ac84c5775aefa7b951be37c0c08450a1ea3899250191a026e0b10f5d8d0562f574" prot="public">
+          <name>PATT_GRAYSCALE_SCHEME</name>
+          <briefdescription>
+<para>Grayscale output only. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1ac84c5775aefa7b951be37c0c08450a1eab39a609bf484d19263b7e22e065accd2" prot="public">
+          <name>PATT_COLOR_SCHEME</name>
+          <briefdescription>
+<para>Color output enabled. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1ac84c5775aefa7b951be37c0c08450a1eab3cc922771fb7b91749e7c1bf3d5fb52" prot="public">
+          <name>PATT_UNKNOWN_SCHEME</name>
+          <briefdescription>
+<para>Invalid color scheme. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Indicates color scheme for LEED pattern. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="58" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="58" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="enum" id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91" prot="public" static="no">
+        <name>patt_error</name>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91a0c32c6abd2f30342152656bed746ac95" prot="public">
+          <name>PATT_SUCCESS</name>
+          <initializer>=0</initializer>
+          <briefdescription>
+<para>function success </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91ab40f81ad3c7d854308b9fbfe00e46007" prot="public">
+          <name>PATT_ARGUMENT_ERROR</name>
+          <briefdescription>
+<para>invalid argument error </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91a4bcf8f6e9735f09f4a51c80e97af202d" prot="public">
+          <name>PATT_READ_ERROR</name>
+          <briefdescription>
+<para>error reading from file </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91aeec940d939f49a4300ad7f4b143dc49a" prot="public">
+          <name>PATT_WRITE_ERROR</name>
+          <briefdescription>
+<para>error writing to file </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91afc47398cbcdd9d8676efb41f88c816e8" prot="public">
+          <name>PATT_COLOR_ERROR</name>
+          <briefdescription>
+<para>invalid color error </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91a39bb842e355b95dcb0e1bb74f3ed2aab" prot="public">
+          <name>PATT_FORMAT_ERROR</name>
+          <briefdescription>
+<para>invalid format error </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91a837d8fa657d061b45d75c79016593114" prot="public">
+          <name>PATT_ALLOC_ERROR</name>
+          <briefdescription>
+<para>unable to allocate memory error </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91a9bd324f910f5d5994159c6e2334f2903" prot="public">
+          <name>PATT_DEALLOC_ERROR</name>
+          <briefdescription>
+<para>unable to free memory error </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91a5c8a40fdf870e8a644970902f5fd99dc" prot="public">
+          <name>PATT_SHAPE_ERROR</name>
+          <briefdescription>
+<para>invalid shape error </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00081_1a3e8fd391e04c70aa4b40e800afe7ac91ae3cc7d79fb838d8aa6f19f09f871f08c" prot="public">
+          <name>PATT_UNKNOWN_ERROR</name>
+          <briefdescription>
+<para>unknown error </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>patt return codes. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="68" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="68" bodyend="79"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="a00081_1a92fd88c66f26f2fdf5257ade200bae79" prot="public" static="no">
+        <type>struct <ref refid="a00025" kindref="compound">patt_text</ref></type>
+        <definition>typedef struct patt_text  patt_text</definition>
+        <argsstring></argsstring>
+        <name>patt_text</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="154" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="a00081_1a4d8a7fb6f4316765010fb37809764d87" prot="public" static="no">
+        <type>struct <ref refid="a00024" kindref="compound">patt_screen</ref></type>
+        <definition>typedef struct patt_screen  patt_screen</definition>
+        <argsstring></argsstring>
+        <name>patt_screen</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="171" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="a00081_1a0f8117036af43f032f9bdf5b0454a8df" prot="public" static="no">
+        <type>struct <ref refid="a00023" kindref="compound">patt_gun</ref></type>
+        <definition>typedef struct patt_gun  patt_gun</definition>
+        <argsstring></argsstring>
+        <name>patt_gun</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="189" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="a00081_1af5d8dac2e25718503cd8f1053be3c4e7" prot="public" static="no">
+        <type>struct <ref refid="a00026" kindref="compound">patt_vector</ref></type>
+        <definition>typedef struct patt_vector  patt_vector</definition>
+        <argsstring></argsstring>
+        <name>patt_vector</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="207" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="a00081_1a96c2f33806fc1afb85f7020dadbd7435" prot="public" static="no">
+        <type>struct <ref refid="a00022" kindref="compound">patt_drawing</ref></type>
+        <definition>typedef struct patt_drawing  patt_drawing</definition>
+        <argsstring></argsstring>
+        <name>patt_drawing</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="246" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="a00081_1ab7983d0cb85c20a94ddf7d38017bd275" prot="public" static="no" mutable="no">
+        <type>const char</type>
+        <definition>const char substitutes[NUM_SUBS][2][STRSZ]</definition>
+        <argsstring>[NUM_SUBS][2][STRSZ]</argsstring>
+        <name>substitutes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00081_1a6ef91b6a4850116d8b7ed8c36cf4863f" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char line_buffer[STRSZ]</definition>
+        <argsstring>[STRSZ]</argsstring>
+        <name>line_buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="136" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00081_1a14c6473826eaaab21910fe317b748fdc" prot="public" static="no" mutable="no">
+        <type><ref refid="a00025" kindref="compound">patt_text</ref></type>
+        <definition>patt_text text_default</definition>
+        <argsstring></argsstring>
+        <name>text_default</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="155" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00081_1a78b6678846262960fb4a0dbf944ea4e1" prot="public" static="no" mutable="no">
+        <type><ref refid="a00024" kindref="compound">patt_screen</ref></type>
+        <definition>patt_screen screen_default</definition>
+        <argsstring></argsstring>
+        <name>screen_default</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="172" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00081_1a2a991a7ff0a0782a6d5935b58e89e3af" prot="public" static="no" mutable="no">
+        <type><ref refid="a00023" kindref="compound">patt_gun</ref></type>
+        <definition>patt_gun gun_default</definition>
+        <argsstring></argsstring>
+        <name>gun_default</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="190" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00081_1a7563b97c099a45640cf939aaf927e675" prot="public" static="no" mutable="no">
+        <type><ref refid="a00026" kindref="compound">patt_vector</ref></type>
+        <definition>patt_vector vector_default</definition>
+        <argsstring></argsstring>
+        <name>vector_default</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="208" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00081_1adc9b28b2b4e1d509a01b597c787f1c40" prot="public" static="no" mutable="no">
+        <type><ref refid="a00022" kindref="compound">patt_drawing</ref></type>
+        <definition>patt_drawing drawing_default</definition>
+        <argsstring></argsstring>
+        <name>drawing_default</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h" line="247" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PATT_DEF.H</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>@license<sp/>GPL-3.0+<sp/>&lt;http://spdx.org/licenses/GPL-3.0+&gt;</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>Description:<sp/>include<sp/>file<sp/>for<sp/>patt.<sp/>It<sp/>contains:</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/><sp/>-<sp/>enums</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*<sp/><sp/>-<sp/>structs</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/><sp/>-<sp/>defines</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*<sp/>Changes:</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/>*<sp/><sp/><sp/>LD/2014.08.23<sp/>-<sp/>header<sp/>created<sp/>by<sp/>split<sp/>from<sp/>patt.c</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>PATT_DEF_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PATT_DEF_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;limits.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdbool.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;matrix_2x2.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;spots.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;coord.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;patt_colors.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;pattern.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;basis.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>STRSZ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>STRSZ<sp/>128<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>formats<sp/>*/</highlight></codeline>
+<codeline lineno="45"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/>PATT_PS_OLD,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/>PATT_EPS,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/>PATT_PS,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/>PATT_PNG,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/>PATT_PDF,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/>PATT_SVG,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/>PATT_UNKNOWN_FORMAT<sp/></highlight></codeline>
+<codeline lineno="53"><highlight class="normal">}<sp/>patt_format;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/>PATT_MONOCHROME_SCHEME,<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/>PATT_GRAYSCALE_SCHEME,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/>PATT_COLOR_SCHEME,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/>PATT_UNKNOWN_SCHEME<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="63"><highlight class="normal">}<sp/>patt_color_scheme;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/>PATT_SUCCESS=0,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/>PATT_ARGUMENT_ERROR,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/>PATT_READ_ERROR,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/>PATT_WRITE_ERROR,<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/>PATT_COLOR_ERROR,<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/>PATT_FORMAT_ERROR,<sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/>PATT_ALLOC_ERROR,<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/>PATT_DEALLOC_ERROR,<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/>PATT_SHAPE_ERROR,<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/>PATT_UNKNOWN_ERROR<sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="79"><highlight class="normal">}<sp/>patt_error;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="preprocessor">#define<sp/>PATT_PAGE_HEIGHT<sp/>800.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="preprocessor">#define<sp/>PATT_PAGE_WIDTH<sp/>600.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="preprocessor">#define<sp/>ARROW_ANGLE<sp/>0.5</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="preprocessor">#define<sp/>OFF_H<sp/><sp/><sp/><sp/><sp/><sp/>400.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="preprocessor">#define<sp/>OFF_W<sp/><sp/><sp/><sp/><sp/><sp/>300.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="preprocessor">#define<sp/>LINE_WIDTH<sp/>2.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="preprocessor">#define<sp/>MAX_RADIUS<sp/>200.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="preprocessor">#define<sp/>MAX_INPUT_FILES<sp/>6</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="preprocessor">#define<sp/>MAX_DOMAINS<sp/>128</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>GREY_GS<sp/><sp/><sp/><sp/>0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>alter<sp/>the<sp/>following<sp/>list<sp/>for<sp/>order<sp/>of<sp/>preference<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NUM_SUBS<sp/>54</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>map<sp/>to<sp/>postscript<sp/>symbol<sp/>font<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>substitutes[NUM_SUBS][2][STRSZ];</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>line_buffer[STRSZ];</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight><highlight class="comment">/*******************************************************</highlight></codeline>
+<codeline lineno="139"><highlight class="comment">Pattern<sp/>Structures</highlight></codeline>
+<codeline lineno="140"><highlight class="comment">*******************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145" refid="a00025" refkind="compound"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="a00025" kindref="compound">patt_text</ref><sp/></highlight></codeline>
+<codeline lineno="146"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="147" refid="a00025_1a9f66c04d7c6b19d1b056ff332f657e60" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00021" kindref="compound">patt_color_rgb</ref><sp/><ref refid="a00025_1a9f66c04d7c6b19d1b056ff332f657e60" kindref="member">color</ref>;<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="148" refid="a00025_1ac9522433d205a24c0254bfffa6bf19a4" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00025_1ac9522433d205a24c0254bfffa6bf19a4" kindref="member">alpha</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="149" refid="a00025_1a53542c9af59be59197266af6558543ba" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/><ref refid="a00025_1a53542c9af59be59197266af6558543ba" kindref="member">label</ref>[BUFSIZ];<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="150" refid="a00025_1a2c2070b730ec0374909c24ed828cdb86" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00025_1a2c2070b730ec0374909c24ed828cdb86" kindref="member">x</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="151" refid="a00025_1a5b550948ba2e4df66f790cd1794b2efe" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00025_1a5b550948ba2e4df66f790cd1794b2efe" kindref="member">y</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="152" refid="a00025_1abb4f2ae0b8debf23406afbb1d0cac9be" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00025_1abb4f2ae0b8debf23406afbb1d0cac9be" kindref="member">size</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="153" refid="a00025_1a92a023129e383a7dead7468a76842777" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00025_1a92a023129e383a7dead7468a76842777" kindref="member">visible</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="154"><highlight class="normal">}<sp/><ref refid="a00025" kindref="compound">patt_text</ref>;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/><ref refid="a00025" kindref="compound">patt_text</ref><sp/>text_default;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161" refid="a00024" refkind="compound"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="a00024" kindref="compound">patt_screen</ref></highlight></codeline>
+<codeline lineno="162"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="163" refid="a00024_1a49a4bed8c0bb01b25ea61b547291934a" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00024_1a49a4bed8c0bb01b25ea61b547291934a" kindref="member">alpha</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="164" refid="a00024_1aca4257f223140cd74d75d6d9e7452261" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00021" kindref="compound">patt_color_rgb</ref><sp/><ref refid="a00024_1aca4257f223140cd74d75d6d9e7452261" kindref="member">stroke_color</ref>;<sp/><sp/></highlight></codeline>
+<codeline lineno="165" refid="a00024_1ac936c2750de05a5136c787371d2a0406" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00021" kindref="compound">patt_color_rgb</ref><sp/><ref refid="a00024_1ac936c2750de05a5136c787371d2a0406" kindref="member">fill_color</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="166" refid="a00024_1a72f6481fe2489712a1f01d60d66f2942" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00024_1a72f6481fe2489712a1f01d60d66f2942" kindref="member">radius</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="167" refid="a00024_1a7d106287c3f349e59ba687ba9ea9b997" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00024_1a7d106287c3f349e59ba687ba9ea9b997" kindref="member">stroke_width</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="168" refid="a00024_1af1f077040ed484b1ed6b02a2b2ca3322" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00024_1af1f077040ed484b1ed6b02a2b2ca3322" kindref="member">clip</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="169" refid="a00024_1ab3e03ada942ce70bc279e7bb95588efa" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00024_1ab3e03ada942ce70bc279e7bb95588efa" kindref="member">fill</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="170" refid="a00024_1a2b94e5c09a6cf3a0028df37b5f965b5b" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00024_1a2b94e5c09a6cf3a0028df37b5f965b5b" kindref="member">visible</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="171"><highlight class="normal">}<sp/><ref refid="a00024" kindref="compound">patt_screen</ref>;</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/><ref refid="a00024" kindref="compound">patt_screen</ref><sp/>screen_default;</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178" refid="a00023" refkind="compound"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="a00023" kindref="compound">patt_gun</ref><sp/></highlight></codeline>
+<codeline lineno="179"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="180" refid="a00023_1adced51498a53c4228cca31288e2d7e3c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00023_1adced51498a53c4228cca31288e2d7e3c" kindref="member">x</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="181" refid="a00023_1acb6f55726931d88b8785013ba1a7e4e6" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00023_1acb6f55726931d88b8785013ba1a7e4e6" kindref="member">y</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="182" refid="a00023_1afcc7eeb16bd96f63a23f6ae9aea9c129" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00023_1afcc7eeb16bd96f63a23f6ae9aea9c129" kindref="member">stroke_width</ref>;<sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="183" refid="a00023_1af4c98e3b3c61522f96ff3c615c03f478" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00021" kindref="compound">patt_color_rgb</ref><sp/><ref refid="a00023_1af4c98e3b3c61522f96ff3c615c03f478" kindref="member">color</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="184" refid="a00023_1a7237421b934a68ce8dbb9de11a1b8e61" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00023_1a7237421b934a68ce8dbb9de11a1b8e61" kindref="member">radius</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="185" refid="a00023_1a4776d78e40c2ba11fd0a7104b8679679" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00023_1a4776d78e40c2ba11fd0a7104b8679679" kindref="member">angle</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="186" refid="a00023_1a775ed39b83c9b5bd5eabeffd8af81bb5" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00023_1a775ed39b83c9b5bd5eabeffd8af81bb5" kindref="member">fill</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="187" refid="a00023_1aaf6450911195f90036d358b30f90d539" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00023_1aaf6450911195f90036d358b30f90d539" kindref="member">visible</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="188" refid="a00023_1a6a337393be3ccd3e4440505a719e5c7a" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00023_1a6a337393be3ccd3e4440505a719e5c7a" kindref="member">alpha</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="189"><highlight class="normal">}<sp/><ref refid="a00023" kindref="compound">patt_gun</ref>;</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/><ref refid="a00023" kindref="compound">patt_gun</ref><sp/>gun_default;<sp/></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight></codeline>
+<codeline lineno="196" refid="a00026" refkind="compound"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="a00026" kindref="compound">patt_vector</ref></highlight></codeline>
+<codeline lineno="197"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="198" refid="a00026_1a320699ce97310565d4472eff11b9b732" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00026_1a320699ce97310565d4472eff11b9b732" kindref="member">x1</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="199" refid="a00026_1af8a8f50b118f3a5b460d0fbf805789cf" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00026_1af8a8f50b118f3a5b460d0fbf805789cf" kindref="member">y1</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="200" refid="a00026_1a9682b1553507443954bb8b7b18883fb9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00026_1a9682b1553507443954bb8b7b18883fb9" kindref="member">x2</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="201" refid="a00026_1a8fc957621c9d02bb4bb83c154e408c4d" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00026_1a8fc957621c9d02bb4bb83c154e408c4d" kindref="member">y2</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="202" refid="a00026_1a40a5087537d513c08f47d5123c236651" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00026_1a40a5087537d513c08f47d5123c236651" kindref="member">alpha</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="203" refid="a00026_1ac2230e889c26701e4929721b9dadc956" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00021" kindref="compound">patt_color_rgb</ref><sp/><ref refid="a00026_1ac2230e889c26701e4929721b9dadc956" kindref="member">color</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="204" refid="a00026_1ad95c311eeafc1fdf67c9ba689b2729fb" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00026_1ad95c311eeafc1fdf67c9ba689b2729fb" kindref="member">linewidth</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>head_size;</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal">}<sp/><ref refid="a00026" kindref="compound">patt_vector</ref>;</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/><ref refid="a00026" kindref="compound">patt_vector</ref><sp/>vector_default;<sp/></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"></highlight></codeline>
+<codeline lineno="214" refid="a00022" refkind="compound"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="a00022" kindref="compound">patt_drawing</ref><sp/></highlight></codeline>
+<codeline lineno="215"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><ref refid="a00003" kindref="compound">basis</ref><sp/>basis_gs[MAX_INPUT_FILES];</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><ref refid="a00003" kindref="compound">basis</ref><sp/>basis_ss[MAX_INPUT_FILES][MAX_DOMAINS];</highlight></codeline>
+<codeline lineno="218" refid="a00022_1a98e48a7d63676b18a914695a81f20efa" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00025" kindref="compound">patt_text</ref><sp/><ref refid="a00022_1a98e48a7d63676b18a914695a81f20efa" kindref="member">eV</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="219" refid="a00022_1a6cea47ecd5d5635554625d420c6b8b4e" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00025" kindref="compound">patt_text</ref><sp/><ref refid="a00022_1a6cea47ecd5d5635554625d420c6b8b4e" kindref="member">title</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="220" refid="a00022_1a9f6d801ff47bb4485ea99fc58d220d72" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00025" kindref="compound">patt_text</ref><sp/><ref refid="a00022_1a9f6d801ff47bb4485ea99fc58d220d72" kindref="member">footnote</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="221" refid="a00022_1a589bbc4bc6296f546e98a036f58a3c52" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00025" kindref="compound">patt_text</ref><sp/><ref refid="a00022_1a589bbc4bc6296f546e98a036f58a3c52" kindref="member">legend</ref>[MAX_INPUT_FILES];<sp/></highlight></codeline>
+<codeline lineno="222" refid="a00022_1a4355792655c56bec6b5a7867c89c9a0e" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00023" kindref="compound">patt_gun</ref><sp/><ref refid="a00022_1a4355792655c56bec6b5a7867c89c9a0e" kindref="member">gun</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="223" refid="a00022_1a12874e562fbda2a732cfad6d24fb57a8" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00024" kindref="compound">patt_screen</ref><sp/><ref refid="a00022_1a12874e562fbda2a732cfad6d24fb57a8" kindref="member">screen</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="224" refid="a00022_1a2e64aa3ed26c5911b005a48651455096" refkind="member"><highlight class="normal"><sp/><sp/>patt_color_scheme<sp/><ref refid="a00022_1a2e64aa3ed26c5911b005a48651455096" kindref="member">color_scheme</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="225" refid="a00022_1accf3f5d4ffd3b9384a66a314cdc17ca7" refkind="member"><highlight class="normal"><sp/><sp/>patt_format<sp/><ref refid="a00022_1accf3f5d4ffd3b9384a66a314cdc17ca7" kindref="member">format</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="226" refid="a00022_1a4cf369d80e1dfc2f4970a4951d8efdd9" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00043" kindref="compound">spots</ref><sp/><ref refid="a00043" kindref="compound">spots</ref>[2];<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="229" refid="a00022_1a073ff981b633826a1673b703da942112" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="a00022_1a073ff981b633826a1673b703da942112" kindref="member">energy</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="230" refid="a00022_1a50294c9993a60ec9041472f89c0ae554" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a50294c9993a60ec9041472f89c0ae554" kindref="member">show_overlap</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="231" refid="a00022_1a94b275835ab29cb4268a85b78878c22b" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a94b275835ab29cb4268a85b78878c22b" kindref="member">show_vectors</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="232" refid="a00022_1a4e1f78ed72eccf8f78acaa4f4cf2af29" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a4e1f78ed72eccf8f78acaa4f4cf2af29" kindref="member">show_indices</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="233" refid="a00022_1a8193a93549ab1f2cd082325f15e77a44" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a8193a93549ab1f2cd082325f15e77a44" kindref="member">symbols</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="234" refid="a00022_1a7877d4fdd2b0b15b2b9994dec170cbbf" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a7877d4fdd2b0b15b2b9994dec170cbbf" kindref="member">fill_gs</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="235" refid="a00022_1aac8f5dd571fb23f0eab8ec7abf760fc9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1aac8f5dd571fb23f0eab8ec7abf760fc9" kindref="member">fill_ss</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>show_gs_vectors[MAX_INPUT_FILES];</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>show_ss_vectors[MAX_INPUT_FILES][MAX_DOMAINS];</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>show_gs_indices[MAX_INPUT_FILES];</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>show_ss_indices[MAX_INPUT_FILES][MAX_DOMAINS];</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_files;</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>input_files[MAX_INPUT_FILES][FILENAME_MAX];</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>output_filename[FILENAME_MAX];</highlight></codeline>
+<codeline lineno="243" refid="a00022_1a1261be6e66a434e9ce1dd8e1457673c4" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a1261be6e66a434e9ce1dd8e1457673c4" kindref="member">std_in</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="244" refid="a00022_1a6732bf726fd84b98d40cb5bebb32d668" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a6732bf726fd84b98d40cb5bebb32d668" kindref="member">std_out</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="245" refid="a00022_1a812db8afdc991d0c9b480348c5c7c039" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="a00022_1a812db8afdc991d0c9b480348c5c7c039" kindref="member">interactive</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="246"><highlight class="normal">}<sp/><ref refid="a00022" kindref="compound">patt_drawing</ref>;</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/><ref refid="a00022" kindref="compound">patt_drawing</ref><sp/>drawing_default;</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"></highlight></codeline>
+<codeline lineno="249"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="250"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"></highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>PATT_DEF_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt_def.h"/>
+  </compounddef>
+</doxygen>

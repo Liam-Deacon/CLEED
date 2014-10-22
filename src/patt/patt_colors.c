@@ -1,14 +1,33 @@
+/*********************************************************************
+ *                       PATT_COLORS.C
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *********************************************************************/
+
 #include "patt.h"
 #include "patt_colors.h"
 #include "strings.h"
 #include <stdbool.h>
 
+/*!
+ * Array of named colors to cycle between
+ */
 const char colors[NUM_COLORS][2][30] = {
       {"black", "dark gray"}, {"dark red", "red"},
       {"blue", "light blue"}, {"dark green", "green"},
       {"dark orange", "orange"}, {"gold", "yellow"}
 };
-  
+
+/*!
+ * Array of #patt_color_rgb grayscale colors to cycle through.
+ */
 const patt_color_rgb grays[NUM_GRAYS] = {
     {0.1, 0.1, 0.1}, {0.2, 0.2, 0.2}, {0.3, 0.3, 0.3},
     {0.4, 0.4, 0.4}, {0.5, 0.5, 0.5}, {0.6, 0.6, 0.6},
@@ -39,12 +58,11 @@ const patt_color_rgb PATT_EDGE_COLOR = {0.55, 1., 0.55};
 const patt_color_rgb PATT_SCREEN_COLOR = {0.85, 1., 0.85};
 const patt_color_rgb PATT_GUN_COLOR = {0., 0., 0.};
 
-void patt_color_copy(patt_color_rgb *new_color,
-                    const patt_color_rgb *old_color)
+void patt_color_copy(patt_color_rgb *dst, const patt_color_rgb *src)
 {
-  new_color->red = old_color->red;
-  new_color->blue = old_color->blue;
-  new_color->green = old_color->green;
+  dst->red = src->red;
+  dst->blue = src->blue;
+  dst->green = src->green;
 }
 
 bool patt_color_is_equal(const patt_color_rgb *dst,

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00037" kind="struct" prot="public">
+    <compoundname>rfrswitch</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00037_1ae572a8d620a3df3ac2627c678100bf1b" prot="public" static="no" mutable="no">
+        <type><ref refid="a00090_1a6be18850483091eeaa2928f40f0b2ddd" kindref="member">rfac_axis</ref></type>
+        <definition>rfac_axis rfrswitch::ek</definition>
+        <argsstring></argsstring>
+        <name>ek</name>
+        <briefdescription>
+<para>Energy axis: I(E): 0; I(k): 1 (1.1) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="137" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00037_1a7bafb180df95a57704310d0cdcf4d56f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool rfrswitch::r_1</definition>
+        <argsstring></argsstring>
+        <name>r_1</name>
+        <briefdescription>
+<para>R1-factor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="138" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00037_1a1019dce9461b3f080f614076d235a44f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool rfrswitch::r_2</definition>
+        <argsstring></argsstring>
+        <name>r_2</name>
+        <briefdescription>
+<para>R2-factor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="139" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00037_1a1970782a343abff19e0df93ea555d51f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool rfrswitch::r_b</definition>
+        <argsstring></argsstring>
+        <name>r_b</name>
+        <briefdescription>
+<para>Rb-factor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="140" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00037_1a91b5929a55cce1fbd5c191f5aaa29f31" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool rfrswitch::r_g</definition>
+        <argsstring></argsstring>
+        <name>r_g</name>
+        <briefdescription>
+<para>Rg-factor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="141" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00037_1a6958924790cd0e4e32962deb2192da4d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool rfrswitch::r_p</definition>
+        <argsstring></argsstring>
+        <name>r_p</name>
+        <briefdescription>
+<para>Pendry&apos;s R-factor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="142" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="136" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="135" bodyend="143"/>
+    <listofallmembers>
+      <member refid="a00037_1ae572a8d620a3df3ac2627c678100bf1b" prot="public" virt="non-virtual"><scope>rfrswitch</scope><name>ek</name></member>
+      <member refid="a00037_1a7bafb180df95a57704310d0cdcf4d56f" prot="public" virt="non-virtual"><scope>rfrswitch</scope><name>r_1</name></member>
+      <member refid="a00037_1a1019dce9461b3f080f614076d235a44f" prot="public" virt="non-virtual"><scope>rfrswitch</scope><name>r_2</name></member>
+      <member refid="a00037_1a1970782a343abff19e0df93ea555d51f" prot="public" virt="non-virtual"><scope>rfrswitch</scope><name>r_b</name></member>
+      <member refid="a00037_1a91b5929a55cce1fbd5c191f5aaa29f31" prot="public" virt="non-virtual"><scope>rfrswitch</scope><name>r_g</name></member>
+      <member refid="a00037_1a6958924790cd0e4e32962deb2192da4d" prot="public" virt="non-virtual"><scope>rfrswitch</scope><name>r_p</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

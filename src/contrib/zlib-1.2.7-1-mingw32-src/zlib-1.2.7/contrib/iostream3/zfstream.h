@@ -17,7 +17,7 @@
 /*****************************************************************************/
 
 /**
- *  @brief  Gzipped file stream buffer class.
+ *  \brief  Gzipped file stream buffer class.
  *
  *  This class implements basic_filebuf for gzipped files. It doesn't yet support
  *  seeking (allowed by zlib but slow/limited), putback and read/write access
@@ -35,10 +35,10 @@ public:
   ~gzfilebuf();
 
   /**
-   *  @brief  Set compression level and strategy on the fly.
-   *  @param  comp_level  Compression level (see zlib.h for allowed values)
-   *  @param  comp_strategy  Compression strategy (see zlib.h for allowed values)
-   *  @return  Z_OK on success, Z_STREAM_ERROR otherwise.
+   *  \brief  Set compression level and strategy on the fly.
+   *  \param  comp_level  Compression level (see zlib.h for allowed values)
+   *  \param  comp_strategy  Compression strategy (see zlib.h for allowed values)
+   *  \return  Z_OK on success, Z_STREAM_ERROR otherwise.
    *
    *  Unfortunately, these parameters cannot be modified separately, as the
    *  previous zfstream version assumed. Since the strategy is seldom changed,
@@ -50,51 +50,51 @@ public:
                  int comp_strategy = Z_DEFAULT_STRATEGY);
 
   /**
-   *  @brief  Check if file is open.
-   *  @return  True if file is open.
+   *  \brief  Check if file is open.
+   *  \return  True if file is open.
   */
   bool
   is_open() const { return (file != NULL); }
 
   /**
-   *  @brief  Open gzipped file.
-   *  @param  name  File name.
-   *  @param  mode  Open mode flags.
-   *  @return  @c this on success, NULL on failure.
+   *  \brief  Open gzipped file.
+   *  \param  name  File name.
+   *  \param  mode  Open mode flags.
+   *  \return  \c this on success, NULL on failure.
   */
   gzfilebuf*
   open(const char* name,
        std::ios_base::openmode mode);
 
   /**
-   *  @brief  Attach to already open gzipped file.
-   *  @param  fd  File descriptor.
-   *  @param  mode  Open mode flags.
-   *  @return  @c this on success, NULL on failure.
+   *  \brief  Attach to already open gzipped file.
+   *  \param  fd  File descriptor.
+   *  \param  mode  Open mode flags.
+   *  \return  \c this on success, NULL on failure.
   */
   gzfilebuf*
   attach(int fd,
          std::ios_base::openmode mode);
 
   /**
-   *  @brief  Close gzipped file.
-   *  @return  @c this on success, NULL on failure.
+   *  \brief  Close gzipped file.
+   *  \return  \c this on success, NULL on failure.
   */
   gzfilebuf*
   close();
 
 protected:
   /**
-   *  @brief  Convert ios open mode int to mode string used by zlib.
-   *  @return  True if valid mode flag combination.
+   *  \brief  Convert ios open mode int to mode string used by zlib.
+   *  \return  True if valid mode flag combination.
   */
   bool
   open_mode(std::ios_base::openmode mode,
             char* c_mode) const;
 
   /**
-   *  @brief  Number of characters available in stream buffer.
-   *  @return  Number of characters.
+   *  \brief  Number of characters available in stream buffer.
+   *  \return  Number of characters.
    *
    *  This indicates number of characters in get area of stream buffer.
    *  These characters can be read without accessing the gzipped file.
@@ -103,8 +103,8 @@ protected:
   showmanyc();
 
   /**
-   *  @brief  Fill get area from gzipped file.
-   *  @return  First character in get area on success, EOF on error.
+   *  \brief  Fill get area from gzipped file.
+   *  \return  First character in get area on success, EOF on error.
    *
    *  This actually reads characters from gzipped file to stream
    *  buffer. Always buffered.
@@ -113,9 +113,9 @@ protected:
   underflow();
 
   /**
-   *  @brief  Write put area to gzipped file.
-   *  @param  c  Extra character to add to buffer contents.
-   *  @return  Non-EOF on success, EOF on error.
+   *  \brief  Write put area to gzipped file.
+   *  \param  c  Extra character to add to buffer contents.
+   *  \return  Non-EOF on success, EOF on error.
    *
    *  This actually writes characters in stream buffer to
    *  gzipped file. With unbuffered output this is done one
@@ -125,10 +125,10 @@ protected:
   overflow(int_type c = traits_type::eof());
 
   /**
-   *  @brief  Installs external stream buffer.
-   *  @param  p  Pointer to char buffer.
-   *  @param  n  Size of external buffer.
-   *  @return  @c this on success, NULL on failure.
+   *  \brief  Installs external stream buffer.
+   *  \param  p  Pointer to char buffer.
+   *  \param  n  Size of external buffer.
+   *  \return  \c this on success, NULL on failure.
    *
    *  Call setbuf(0,0) to enable unbuffered output.
   */
@@ -137,8 +137,8 @@ protected:
          std::streamsize n);
 
   /**
-   *  @brief  Flush stream buffer to file.
-   *  @return  0 on success, -1 on error.
+   *  \brief  Flush stream buffer to file.
+   *  \return  0 on success, -1 on error.
    *
    *  This calls underflow(EOF) to do the job.
   */
@@ -160,7 +160,7 @@ protected:
 
 private:
   /**
-   *  @brief  Allocate internal buffer.
+   *  \brief  Allocate internal buffer.
    *
    *  This function is safe to call multiple times. It will ensure
    *  that a proper internal buffer exists if it is required. If the
@@ -171,7 +171,7 @@ private:
   enable_buffer();
 
   /**
-   *  @brief  Destroy internal buffer.
+   *  \brief  Destroy internal buffer.
    *
    *  This function is safe to call multiple times. It will ensure
    *  that the internal buffer is deallocated if it exists. In any
@@ -191,7 +191,7 @@ private:
   std::ios_base::openmode io_mode;
 
   /**
-   *  @brief  True if this object owns file descriptor.
+   *  \brief  True if this object owns file descriptor.
    *
    *  This makes the class responsible for closing the file
    *  upon destruction.
@@ -199,7 +199,7 @@ private:
   bool own_fd;
 
   /**
-   *  @brief  Stream buffer.
+   *  \brief  Stream buffer.
    *
    *  For simplicity this remains allocated on the free store for the
    *  entire life span of the gzfilebuf object, unless replaced by setbuf.
@@ -207,7 +207,7 @@ private:
   char_type* buffer;
 
   /**
-   *  @brief  Stream buffer size.
+   *  \brief  Stream buffer size.
    *
    *  Defaults to system default buffer size (typically 8192 bytes).
    *  Modified by setbuf.
@@ -215,7 +215,7 @@ private:
   std::streamsize buffer_size;
 
   /**
-   *  @brief  True if this object owns stream buffer.
+   *  \brief  True if this object owns stream buffer.
    *
    *  This makes the class responsible for deleting the buffer
    *  upon destruction.
@@ -226,7 +226,7 @@ private:
 /*****************************************************************************/
 
 /**
- *  @brief  Gzipped file input stream class.
+ *  \brief  Gzipped file input stream class.
  *
  *  This class implements ifstream for gzipped files. Seeking and putback
  *  is not supported yet.
@@ -238,18 +238,18 @@ public:
   gzifstream();
 
   /**
-   *  @brief  Construct stream on gzipped file to be opened.
-   *  @param  name  File name.
-   *  @param  mode  Open mode flags (forced to contain ios::in).
+   *  \brief  Construct stream on gzipped file to be opened.
+   *  \param  name  File name.
+   *  \param  mode  Open mode flags (forced to contain ios::in).
   */
   explicit
   gzifstream(const char* name,
              std::ios_base::openmode mode = std::ios_base::in);
 
   /**
-   *  @brief  Construct stream on already open gzipped file.
-   *  @param  fd    File descriptor.
-   *  @param  mode  Open mode flags (forced to contain ios::in).
+   *  \brief  Construct stream on already open gzipped file.
+   *  \param  fd    File descriptor.
+   *  \param  mode  Open mode flags (forced to contain ios::in).
   */
   explicit
   gzifstream(int fd,
@@ -263,16 +263,16 @@ public:
   { return const_cast<gzfilebuf*>(&sb); }
 
   /**
-   *  @brief  Check if file is open.
-   *  @return  True if file is open.
+   *  \brief  Check if file is open.
+   *  \return  True if file is open.
   */
   bool
   is_open() { return sb.is_open(); }
 
   /**
-   *  @brief  Open gzipped file.
-   *  @param  name  File name.
-   *  @param  mode  Open mode flags (forced to contain ios::in).
+   *  \brief  Open gzipped file.
+   *  \param  name  File name.
+   *  \param  mode  Open mode flags (forced to contain ios::in).
    *
    *  Stream will be in state good() if file opens successfully;
    *  otherwise in state fail(). This differs from the behavior of
@@ -286,9 +286,9 @@ public:
        std::ios_base::openmode mode = std::ios_base::in);
 
   /**
-   *  @brief  Attach to already open gzipped file.
-   *  @param  fd  File descriptor.
-   *  @param  mode  Open mode flags (forced to contain ios::in).
+   *  \brief  Attach to already open gzipped file.
+   *  \param  fd  File descriptor.
+   *  \param  mode  Open mode flags (forced to contain ios::in).
    *
    *  Stream will be in state good() if attach succeeded; otherwise
    *  in state fail().
@@ -298,7 +298,7 @@ public:
          std::ios_base::openmode mode = std::ios_base::in);
 
   /**
-   *  @brief  Close gzipped file.
+   *  \brief  Close gzipped file.
    *
    *  Stream will be in state fail() if close failed.
   */
@@ -315,7 +315,7 @@ private:
 /*****************************************************************************/
 
 /**
- *  @brief  Gzipped file output stream class.
+ *  \brief  Gzipped file output stream class.
  *
  *  This class implements ofstream for gzipped files. Seeking and putback
  *  is not supported yet.
@@ -327,18 +327,18 @@ public:
   gzofstream();
 
   /**
-   *  @brief  Construct stream on gzipped file to be opened.
-   *  @param  name  File name.
-   *  @param  mode  Open mode flags (forced to contain ios::out).
+   *  \brief  Construct stream on gzipped file to be opened.
+   *  \param  name  File name.
+   *  \param  mode  Open mode flags (forced to contain ios::out).
   */
   explicit
   gzofstream(const char* name,
              std::ios_base::openmode mode = std::ios_base::out);
 
   /**
-   *  @brief  Construct stream on already open gzipped file.
-   *  @param  fd    File descriptor.
-   *  @param  mode  Open mode flags (forced to contain ios::out).
+   *  \brief  Construct stream on already open gzipped file.
+   *  \param  fd    File descriptor.
+   *  \param  mode  Open mode flags (forced to contain ios::out).
   */
   explicit
   gzofstream(int fd,
@@ -352,16 +352,16 @@ public:
   { return const_cast<gzfilebuf*>(&sb); }
 
   /**
-   *  @brief  Check if file is open.
-   *  @return  True if file is open.
+   *  \brief  Check if file is open.
+   *  \return  True if file is open.
   */
   bool
   is_open() { return sb.is_open(); }
 
   /**
-   *  @brief  Open gzipped file.
-   *  @param  name  File name.
-   *  @param  mode  Open mode flags (forced to contain ios::out).
+   *  \brief  Open gzipped file.
+   *  \param  name  File name.
+   *  \param  mode  Open mode flags (forced to contain ios::out).
    *
    *  Stream will be in state good() if file opens successfully;
    *  otherwise in state fail(). This differs from the behavior of
@@ -375,9 +375,9 @@ public:
        std::ios_base::openmode mode = std::ios_base::out);
 
   /**
-   *  @brief  Attach to already open gzipped file.
-   *  @param  fd  File descriptor.
-   *  @param  mode  Open mode flags (forced to contain ios::out).
+   *  \brief  Attach to already open gzipped file.
+   *  \param  fd  File descriptor.
+   *  \param  mode  Open mode flags (forced to contain ios::out).
    *
    *  Stream will be in state good() if attach succeeded; otherwise
    *  in state fail().
@@ -387,7 +387,7 @@ public:
          std::ios_base::openmode mode = std::ios_base::out);
 
   /**
-   *  @brief  Close gzipped file.
+   *  \brief  Close gzipped file.
    *
    *  Stream will be in state fail() if close failed.
   */
@@ -404,7 +404,7 @@ private:
 /*****************************************************************************/
 
 /**
- *  @brief  Gzipped file output stream manipulator class.
+ *  \brief  Gzipped file output stream manipulator class.
  *
  *  This class defines a two-argument manipulator for gzofstream. It is used
  *  as base for the setcompression(int,int) manipulator.

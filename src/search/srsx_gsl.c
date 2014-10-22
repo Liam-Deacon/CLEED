@@ -1,5 +1,15 @@
-/***********************************************************************
-GH/29.12.95
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *29.12.95
  File contains:
 
   sr_sx(int ndim, real dpos, char *bak_file, char *log_file)
@@ -20,7 +30,7 @@ LD/01.07.2014 - modified for compatibility with GSL.
 #include <stdlib.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
-#include "search.h"
+#include "csearch.h"
 
 /**********************************************************************/
 

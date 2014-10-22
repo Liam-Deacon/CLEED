@@ -8,15 +8,16 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: Header file for basic complex functions
- *  - type definitions
- *  - constant values
- *
  * Changes:
  *   GH/1994.06.06 - creation
  *
  ********************************************************************/
+
+/*!
+ * \file
+ * \author Georg Held <g.held@reading.ac.uk>
+ * \brief  Master header file for basic complex functions.
+ */
 
 #ifndef CPL_H
 #define CPL_H
@@ -28,8 +29,8 @@ extern "C" {
 #include <math.h>
 
 /*********************************************************************
-Other includes
-*********************************************************************/
+ * Other includes
+ *********************************************************************/
 #include "real.h"
 #include "cpl_macr.h"
 #include "cpl_func.h"

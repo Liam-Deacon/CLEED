@@ -12,17 +12,15 @@
  *   GH/1995.08.11 - Creation (copy from Numerical Recipes spline.c )
  ********************************************************************/
 
-/*! \file rfspline.c
+/*! \file
  *
- * Implementation file for \ref rf_spline C function.
+ * Implementation file for rf_spline() function.
  */
 
 #include <malloc.h>
 #include "rfac.h"
 
 /*!
- * \fn rf_spline
- *
  * Performs the first stage of a cubic spline.
  *
  * \param[in,out] *list list of energy/intensity values to be

@@ -1,25 +1,29 @@
-/********************************************************************
-GH/29.08.95
-file contains function:
+/*********************************************************************
+ *                           RFMKLIDE.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/1995.08.29 - Creation
+ *********************************************************************/
 
-  int cr_mklide(real *eng, real *e_int, real *t_int, 
-                read de, real shift,
-                struct crelist *exp_list, int exp_leng,
-                struct crelist *the_list, int the_leng)
+/*!
+ * \file
+ * \brief Prepare R factor calculations.
+ *
+ * Implementation file for the cr_mklinde() function.
+ */
 
- Prepare R factor calculations
-
- Changes:
-
- GH/29.08.95 - Creation.
-
-********************************************************************/
 #include <math.h>
 #include "rfac.h"
 
 /*!
- * \fn rf_mklinde
- *
  * \brief First stage of cubic spline.
  *
  * \param[out] *eng energy values within the overlapping energy range.

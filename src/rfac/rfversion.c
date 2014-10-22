@@ -13,9 +13,9 @@
  *********************************************************************/
 
 /*!
- * \file rfversion.c
+ * \file
  *
- * Implementation file for \ref rf_version C function.
+ * Implementation file for rf_version() function.
  *
  * Current Program version and log.
  * - Version 1.0:
@@ -64,8 +64,6 @@
 #include <string.h>
 
 /*!
- * \fn rf_version
- *
  * Copy the current version ID into the string \p version.
  * The function returns its argument.
  *

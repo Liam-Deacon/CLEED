@@ -1,0 +1,389 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00074" kind="file">
+    <compoundname>matrix_2x2.h</compoundname>
+    <includes local="no">stddef.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includedby refid="a00081" local="yes">patt_def.h</includedby>
+    <includedby refid="a00084" local="yes">pattern.h</includedby>
+    <incdepgraph>
+      <node id="264">
+        <label>stdlib.h</label>
+      </node>
+      <node id="261">
+        <label>matrix_2x2.h</label>
+        <link refid="matrix_2x2.h"/>
+        <childnode refid="262" relation="include">
+        </childnode>
+        <childnode refid="263" relation="include">
+        </childnode>
+        <childnode refid="264" relation="include">
+        </childnode>
+      </node>
+      <node id="262">
+        <label>stddef.h</label>
+      </node>
+      <node id="263">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="266">
+        <label>patt_def.h</label>
+        <link refid="a00081_source"/>
+        <childnode refid="267" relation="include">
+        </childnode>
+        <childnode refid="268" relation="include">
+        </childnode>
+        <childnode refid="270" relation="include">
+        </childnode>
+      </node>
+      <node id="265">
+        <label>matrix_2x2.h</label>
+        <link refid="matrix_2x2.h"/>
+        <childnode refid="266" relation="include">
+        </childnode>
+        <childnode refid="271" relation="include">
+        </childnode>
+      </node>
+      <node id="267">
+        <label>patt_ver.h</label>
+        <link refid="a00083_source"/>
+        <childnode refid="268" relation="include">
+        </childnode>
+      </node>
+      <node id="270">
+        <label>patt_func.h</label>
+        <link refid="a00082_source"/>
+        <childnode refid="268" relation="include">
+        </childnode>
+      </node>
+      <node id="268">
+        <label>patt.h</label>
+        <link refid="a00079_source"/>
+        <childnode refid="269" relation="include">
+        </childnode>
+      </node>
+      <node id="271">
+        <label>pattern.h</label>
+        <link refid="a00084_source"/>
+        <childnode refid="266" relation="include">
+        </childnode>
+      </node>
+      <node id="269">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="a00019" prot="public">matrix_2x2</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="a00074_1a9838a74f2bf812347ca99fa20e81eba3" prot="public" static="no">
+        <type>struct <ref refid="a00019" kindref="compound">matrix_2x2</ref></type>
+        <definition>struct matrix_2x2</definition>
+        <argsstring></argsstring>
+        <name>matrix_2x2</name>
+        <briefdescription>
+<para>a 2x2 element matrix type. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="43" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="a00074_1a2af40e0fba85675db7e50990228a7b4c" prot="public" static="no" mutable="no">
+        <type><ref refid="a00019" kindref="compound">matrix_2x2</ref></type>
+        <definition>matrix_2x2 matrix_2x2_default</definition>
+        <argsstring></argsstring>
+        <name>matrix_2x2_default</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="45" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="a00074_1ac9f043343b43341e539746aaff0ffaa5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+        <definition>matrix_2x2* matrix_2x2_init</definition>
+        <argsstring>()</argsstring>
+        <name>matrix_2x2_init</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00074_1ab7086275d52eb3d25185a9d753205e55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+        <definition>matrix_2x2* matrix_2x2_init_all</definition>
+        <argsstring>(double m11, double m12, double m21, double m22)</argsstring>
+        <name>matrix_2x2_init_all</name>
+        <param>
+          <type>double</type>
+          <declname>m11</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m12</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m21</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m22</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00074_1a20e33c51aba89bd9099d6136b992f0d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void matrix_2x2_set_element</definition>
+        <argsstring>(matrix_2x2 *mat, size_t col, size_t row, double value)</argsstring>
+        <name>matrix_2x2_set_element</name>
+        <param>
+          <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00074_1a386d9777e848643510f8911b28f31e4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void matrix_2x2_set_all</definition>
+        <argsstring>(matrix_2x2 *mat, double m11, double m12, double m21, double m22)</argsstring>
+        <name>matrix_2x2_set_all</name>
+        <param>
+          <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m11</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m12</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m21</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>m22</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00074_1a688e50859e293cdb2ba50d87c1ac6afc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void matrix_2x2_printf</definition>
+        <argsstring>(FILE *stream, matrix_2x2 *mat)</argsstring>
+        <name>matrix_2x2_printf</name>
+        <param>
+          <type>FILE *</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00074_1a31129a2d02da045ed05b1bb146664951" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double matrix_2x2_get_element</definition>
+        <argsstring>(matrix_2x2 *mat, size_t col, size_t row)</argsstring>
+        <name>matrix_2x2_get_element</name>
+        <param>
+          <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00074_1acb65161aeaa0545068e06ac5188e77c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void matrix_2x2_free</definition>
+        <argsstring>(matrix_2x2 *mat)</argsstring>
+        <name>matrix_2x2_free</name>
+        <param>
+          <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="57" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00074_1a174b2d3792d6414445bf881d250bd74a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+        <definition>matrix_2x2* matrix_2x2_copy</definition>
+        <argsstring>(matrix_2x2 *mat)</argsstring>
+        <name>matrix_2x2_copy</name>
+        <param>
+          <type><ref refid="a00019" kindref="compound">matrix_2x2</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="58" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MATRIX_2X2.H</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>@license<sp/>GPL-3.0+<sp/>&lt;http://spdx.org/licenses/GPL-3.0+&gt;</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>Description:<sp/>header<sp/>for<sp/>matrix_2x2<sp/>and<sp/>associated<sp/>function</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>prototypes.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>Changes:</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/><sp/><sp/>LD/2014.08.23<sp/>-<sp/>creation</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>MATRIX_2X2_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MATRIX_2X2_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stddef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstddef&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36" refid="a00019" refkind="compound"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>M11;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>M12;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>M21;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>M22;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal">}<sp/><ref refid="a00019" kindref="compound">matrix_2x2</ref>;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/><ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>matrix_2x2_default;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>matrix_2x2<sp/>functions<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*matrix_2x2_init();</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*matrix_2x2_init_all(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m11,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m12,<sp/></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m21,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m22);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>matrix_2x2_set_element(<ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>col,<sp/></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>value);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>matrix_2x2_set_all(<ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m11,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m12,<sp/></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m21,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m22);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>matrix_2x2_printf(FILE<sp/>*stream,<sp/><ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*<ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>matrix_2x2_get_element(<ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*<ref refid="a00018" kindref="compound">mat</ref>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>col,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>matrix_2x2_free(<ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*<ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*matrix_2x2_copy(<ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*<ref refid="a00018" kindref="compound">mat</ref>);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal">}<sp/></highlight><highlight class="comment">/*<sp/>extern<sp/>&quot;C&quot;<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">cleed<sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">Matrix2x2<sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/>Matrix2x2()<sp/>:<sp/><ref refid="a00018" kindref="compound">mat</ref>(::matrix_2x2_init())<sp/>{}</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/>Matrix2x2(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m11,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m12,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m21,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m22</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>):<sp/><ref refid="a00018" kindref="compound">mat</ref>(::matrix_2x2_init_all(m11,<sp/>m12,<sp/>m21,<sp/>m22))<sp/>{}</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix2x2(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix2x2<sp/>&amp;Mat)<sp/>:<sp/><ref refid="a00018" kindref="compound">mat</ref><sp/>(::matrix_2x2_copy(Mat.<ref refid="a00018" kindref="compound">mat</ref>))<sp/>{}</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>~Matrix2x2();</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>setMatrix(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m11,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m12,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m21,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>m22);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>setMatrixElement(std::size_t<sp/>row,<sp/>std::size_t<sp/>col,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>value<sp/>=<sp/>0.);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>print(FILE<sp/>*stream<sp/>=<sp/>stdout);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;<sp/>getAllMatrixElements();</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>getSingleMatrixElement(std::size_t<sp/>row,<sp/>std::size_t<sp/>col);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="a00019" kindref="compound">matrix_2x2</ref><sp/>*<ref refid="a00018" kindref="compound">mat</ref>;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal">}<sp/></highlight><highlight class="comment">/*<sp/>namespace<sp/>cleed<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>__cplusplus<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>MATRIX_2X2_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h"/>
+  </compounddef>
+</doxygen>

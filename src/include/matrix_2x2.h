@@ -27,13 +27,13 @@
 #include <cstddef>
 #include <vector>
 
-  extern "C" {
+extern "C" {
 #endif
 
-/*! \typedef \struct matrix_2x2
+/*! \typedef matrix_2x2
  *  \brief a 2x2 element matrix type.
  */
-typedef struct matrix_2x2 
+typedef struct _matrix_2x2
 {
   double M11;
   double M12;

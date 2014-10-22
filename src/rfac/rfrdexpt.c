@@ -12,8 +12,8 @@
  *   GH/1992.11.11 - creation.
  ********************************************************************/
 
-/*! \file rfrdexpt.c
- *  \brief C implementation of \ref rf_rdexpt function.
+/*! \file
+ *  \brief Implementation of rf_rdexpt() function.
  */
 
 #include <math.h>
@@ -24,8 +24,6 @@
 #include "rfac.h"       /* rf specific definitions */
 
 /*!
- * \fn rf_rdexpt
- *
  * Read experimental IV curve from file specified by filename and check if
  * energy values are equidistant and sorted.
  *
@@ -33,17 +31,17 @@
  * <energy> <intensity>
  * Comments are indicated by a '#'.
  *
- * \param[in,out] *iv_cur pointer to structure rfiv_cur. All available
+ * \param[in,out] iv_cur pointer to structure #rfac_iv. All available
  * information about the theoretical IV curve will be stored in this
  * structure.
  *
- * \param[in] *filename string containing the name of the file where the
+ * \param[in] filename string containing the name of the file where the
  * input should be read from.
  *
- * \return pointer to the IV curve (\ref rfac_iv). The IV list is terminated
+ * \return pointer to the IV curve (#rfac_iv). The IV list is terminated
  * by a pair (energy, intensity) of negative values.
  *
- * \retval NULL if failed.
+ * \retval \c NULL if failed.
  */
 rfac_iv_data *rf_rdexpt(rfac_ivcur *iv_cur, const char *filename )
 {

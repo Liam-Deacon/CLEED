@@ -1,3 +1,22 @@
+/*********************************************************************
+ *                       SPOTS.C
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *********************************************************************/
+
+/*! \file
+ *  \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ * Implementation file for #spots functions
+ */
+
 #include "patt.h"
 #include "spots.h"
 #include <stdlib.h>
@@ -6,10 +25,21 @@
 #include <strings.h>
 #include <math.h>
 
+/*!
+ * Allocates memory for a #spot array of size \p n_spots and returns a
+ * #spots object.
+ *
+ * \param n_spots The number of #spot objects in array.
+ * \return Pointer to #spots object.
+ * \retval \c NULL if memory cannot be allocated for @spots::spots .
+ * \note \p n_spots may be \c 0 however this will result in
+ * @spots::spots = \c NULL
+ */
 spots *spots_alloc(size_t n_spots)
 {
   spots *_spots = (spots*) malloc(sizeof(spots));
-  if (_spots == NULL) {
+  if (_spots == NULL)
+  {
     return(NULL);
   }
   if (n_spots > 0)
@@ -29,9 +59,17 @@ spots *spots_alloc(size_t n_spots)
   return(_spots);
 }
 
+/*!
+ * Allocates memory and initializes a #spots object with default settings.
+ *
+ * \param n_spots Number of #spot objects in @spots::spots array.
+ * \return Pointer to the #spots object.
+ * \retval \c NULL if memory cannot be allocated.
+ */
 spots *spots_init(size_t n_spots)
 {
   spots *_spots = spots_alloc(n_spots);
+  if (_spots == NULL) return NULL;
   
   _spots->fill = true;
   _spots->visible = false;
@@ -47,54 +85,78 @@ spots *spots_init(size_t n_spots)
   
 }
 
-int spots_list_realloc(spots *spots, size_t size)
+/*!
+ * Reallocates memory for a new \p size of #spot
+ *
+ * \param _spots Pointer to #spots object to modify.
+ * \param size New number of #spot objects allocated in memory for \p _spots
+ * @spots::spots array.
+ * \return Integer representing success of function.
+ * \retval 0 Indicates successful completion of the memory reallocation.
+ * \retval 1 Indicates that the memory reallocation was unsuccessful.
+ */
+int spots_list_realloc(spots *_spots, size_t size)
 {
-  spot *temp = spots->spots;
-  
-  if ((spot*) realloc(spots->spots, sizeof(spot)*size) == NULL)
+  if (_spots != NULL)
   {
-    spots->spots = temp;
-    return(-3);
-  }
-  
-  if (size < spots->n_spots)
-  {
-    spots->n_spots = size;
-  }
+    spot *temp = _spots->spots;
 
-  spots->allocated_size = size;
+    if ((spot*) realloc(_spots->spots, sizeof(spot)*size) == NULL)
+    {
+      _spots->spots = temp;
+      return(1);
+    }
+
+    if (size < _spots->n_spots)
+    {
+      _spots->n_spots = size;
+    }
+
+    _spots->allocated_size = size;
+
+  }
     
   return(0);
 }
 
-void spots_free(spots *spots)
+/*!
+ * Frees \p spots object and its member @spots::spots array of #spot from memory.
+ *
+ * \param spots The object to free from memory.
+ */
+void spots_free(spots *_spots)
 {
-  free(spots->spots);
-  free(spots);
+  free(_spots->spots);
+  free(_spots);
 }
 
-void spots_append(spots *spots, spot spot)
+/*!
+ * Append #spot object \p _spot to the @spots::spots array of \p _spots
+ *
+ * @param _spots object to append \p _spot to.
+ * @param[in] _spot #spot object to append to @spots::spots array of \p _spots
+ */
+void spots_append(spots *_spots, const spot _spot)
 {
-  if (spots->n_spots >= spots->allocated_size)
+  if (_spots->n_spots >= _spots->allocated_size)
   {
-    spots_list_realloc(spots, spots->allocated_size * 2);
+    spots_list_realloc(_spots, _spots->allocated_size * 2);
   }
-  spots->spots[spots->n_spots] = spot;
-  spots->n_spots += 1;
+  _spots->spots[_spots->n_spots] = _spot;
+  _spots->n_spots += 1;
 }
 
-void spots_set_list(spots *spots, spot *spot, size_t n_spots)
+void spots_set_list(spots *_spots, spot *_spot, size_t n_spots)
 {
-  while (spots->n_spots > spots->allocated_size)
+  while (_spots->n_spots > _spots->allocated_size)
   {
-    spots_list_realloc(spots, spots->allocated_size * 2);
+    spots_list_realloc(_spots, _spots->allocated_size * 2);
   }
   
-  if (spot == NULL)
-    n_spots = 0;
+  if (_spot == NULL) n_spots = 0;
     
-   spots->spots = spot;
-   spots->n_spots = n_spots;
+  _spots->spots = _spot;
+  _spots->n_spots = n_spots;
 
 }
 

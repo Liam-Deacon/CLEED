@@ -6,7 +6,7 @@ int patt_draw_ps_init(FILE *file_ptr, const patt_drawing *drawing)
 {
 
   fprintf(file_ptr, "%%!PS-Adobe-3.0 \n");
-  fprintf(file_ptr, "%%Creator: %s\n", VERSION);
+  fprintf(file_ptr, "%%Creator: %s\n", PATT_PROG_VERSION);
   fprintf(file_ptr,
     "%%BoundingBox: 50 150 550 650 \n"
     "%%EndComments \n"
@@ -69,5 +69,3 @@ int patt_draw_ps_init(FILE *file_ptr, const patt_drawing *drawing)
 
   return(PATT_SUCCESS);
 }
-
-/*========================================================================*/

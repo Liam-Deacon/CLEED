@@ -8,15 +8,15 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: include file for basic quantum mechanical functions
- *  - type definitions
- *  - constant values
- *
  * Changes:
  *   GH/1995.10.07 - creation
  *
  *********************************************************************/
+
+/*!
+ * \file
+ * \brief Master include file for LEED functions, definitions and types.
+ */
 
 #ifndef LEED_H
 #define LEED_H

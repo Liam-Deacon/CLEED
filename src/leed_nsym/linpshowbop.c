@@ -1,5 +1,15 @@
-/*********************************************************************
-GH/10.05.00 
+/************************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *10.05.00 
   file contains function:
 
   leed_inp_show_beam_op

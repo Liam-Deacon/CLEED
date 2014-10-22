@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00006" kind="struct" prot="public">
+    <compoundname>coord</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00006_1a872bb32132667e8eab8b945fa8f94675" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double coord::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <briefdescription>
+<para>x-axis position </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" line="35" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00006_1ab3d904dc2861711f5e2c420fbf0ddf89" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double coord::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <briefdescription>
+<para>y-axis position </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" line="36" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00006_1a1ccd97ec1a85e6590d0c9f8af016ef04" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double coord::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <briefdescription>
+<para>z-axis position </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" line="37" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" line="34" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/coord.h" bodystart="34" bodyend="38"/>
+    <listofallmembers>
+      <member refid="a00006_1a872bb32132667e8eab8b945fa8f94675" prot="public" virt="non-virtual"><scope>coord</scope><name>x</name></member>
+      <member refid="a00006_1ab3d904dc2861711f5e2c420fbf0ddf89" prot="public" virt="non-virtual"><scope>coord</scope><name>y</name></member>
+      <member refid="a00006_1a1ccd97ec1a85e6590d0c9f8af016ef04" prot="public" virt="non-virtual"><scope>coord</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

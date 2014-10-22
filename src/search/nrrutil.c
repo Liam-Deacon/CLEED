@@ -1,18 +1,28 @@
-/*********************************************************************
-GH/12.09.95
+/************************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *12.09.95
 File contains:
 
 Utility functions for Num. Rec. programs
 
 Changes
 NR          - Copy from "nrutil.c" in Num. Rec. package.
-GH/12.09.95 - Change all "double" to "real" and include "search.h"
+GH/12.09.95 - Change all "double" to "real" and include "csearch.h"
 *********************************************************************/
 
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "search.h"
+#include "csearch.h"
 
 void nrerror(const char *error_text)
 {

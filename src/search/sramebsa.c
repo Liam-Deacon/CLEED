@@ -1,29 +1,25 @@
-/***********************************************************************
-GH/20.09.95
-file contains function:
+/*********************************************************************
+ *                        SRAMEBSA.C
+ *
+ * Changes:
+ *   NR/20.09.95 - Copy from Num. Rec. (type in from book !!!)
+ *   GH/20.09.95 - Copy vertex to *.ver after each iteration.
+ *               - Criterion of termination is absolute deviation in
+ *                 vertex rather than relative deviation.
+ *   LD/30.04.14 - Removed dependence on 'cp' and 'date' system calls
+ *********************************************************************/
 
-  void sr_amebsa(real **p, real *y, int ndim, 
-                 real *pb, real *yb, 
-                 real ftol, real (*funk)(), int *iter, real temptr)
+/*!
+ * Find minimum by simplex algorithm. (From Num. Rec.)
+ */
 
- Find minimum by simplex algorithm. (From Num. Rec.)
-
- Changes:
-
-NR/20.09.95 - Copy from Num. Rec. (type in from book !!!)
-GH/20.09.95 - Copy vertex to *.ver after each iteration.
-            - Criterion of termination is absolute deviation in vertex
-              rather than relative deviation.
-LD/30.04.14 - Removed dependence on 'cp' and 'date' system calls
-
-***********************************************************************/
 #include <math.h>
 #include <stdio.h>
 #include <strings.h>
 #include <stdlib.h>
 #include <time.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "copy_file.h"
 
 #ifndef MAX_ITER_AMOEBA        /* should be defined in "search_def.h" */
@@ -47,14 +43,8 @@ real amotsa(real **, real *, real *, int , real *, real *,
 
 real fluct(long*);
 
-
 void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
                real ftol, real (*funk)(), int *iter, real temptr)
-
-/**************************************************************************
-
-
-**************************************************************************/
 {
 
 FILE *ver_stream;
@@ -221,8 +211,8 @@ time_t result;
    if (copy_file(old_file, new_file)) 
    {
      fprintf(STDERR, "*** error (sramebsa): "
-        "failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
-     exit(1);
+             "failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
+     exit(SR_FILE_IO_ERROR);
    }
 
    strcpy(ver_file, new_file);

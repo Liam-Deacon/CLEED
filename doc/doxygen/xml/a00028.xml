@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00028" kind="struct" prot="public">
+    <compoundname>phs_str</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00028_1afa6c341ae25939e77f274b2bc42a295f" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t phs_str::lmax</definition>
+        <argsstring></argsstring>
+        <name>lmax</name>
+        <briefdescription>
+<para>maximum angular momentum quantum number </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="281" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="281" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1a327b2da2c4aeef8b7a2e67e5ea743323" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t phs_str::n_eng</definition>
+        <argsstring></argsstring>
+        <name>n_eng</name>
+        <briefdescription>
+<para>number of energies in phase shift file </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="282" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1a38280415cc9f39f6300ca87b4b337911" prot="public" static="no" mutable="no">
+        <type>leed_matrix_diag</type>
+        <definition>leed_matrix_diag phs_str::t_type</definition>
+        <argsstring></argsstring>
+        <name>t_type</name>
+        <briefdescription>
+<para>type of scattering matrix: T_DIAG or T_NOND </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="283" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="283" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1a5351532f35a6f88d56312e742df1c2ab" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real phs_str::eng_max</definition>
+        <argsstring></argsstring>
+        <name>eng_max</name>
+        <briefdescription>
+<para>maximum energy </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="284" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="284" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1afa9b09170a31ec2ecea6d2b8a264b26a" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real phs_str::eng_min</definition>
+        <argsstring></argsstring>
+        <name>eng_min</name>
+        <briefdescription>
+<para>minimum energy </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="285" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="285" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1aed6d08a3befa58d1004b99e75e317749" prot="public" static="no" mutable="no">
+        <type>real *</type>
+        <definition>real* phs_str::energy</definition>
+        <argsstring></argsstring>
+        <name>energy</name>
+        <briefdescription>
+<para>array of energy values </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="286" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="286" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1a9b297eb426f845aa4c7c90147857d845" prot="public" static="no" mutable="no">
+        <type>real *</type>
+        <definition>real* phs_str::pshift</definition>
+        <argsstring></argsstring>
+        <name>pshift</name>
+        <briefdescription>
+<para>array of phase shift values </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="287" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="287" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1a703fbb9b34ccce78e8967d9c31c9cc96" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real phs_str::dr[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>dr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="289" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="289" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00028_1a97ed80215472283cf7f61e8fc7765a72" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* phs_str::input_file</definition>
+        <argsstring></argsstring>
+        <name>input_file</name>
+        <briefdescription>
+<para>name of input file </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="290" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="290" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" line="280" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/leed_def.h" bodystart="279" bodyend="291"/>
+    <listofallmembers>
+      <member refid="a00028_1a703fbb9b34ccce78e8967d9c31c9cc96" prot="public" virt="non-virtual"><scope>phs_str</scope><name>dr</name></member>
+      <member refid="a00028_1aed6d08a3befa58d1004b99e75e317749" prot="public" virt="non-virtual"><scope>phs_str</scope><name>energy</name></member>
+      <member refid="a00028_1a5351532f35a6f88d56312e742df1c2ab" prot="public" virt="non-virtual"><scope>phs_str</scope><name>eng_max</name></member>
+      <member refid="a00028_1afa9b09170a31ec2ecea6d2b8a264b26a" prot="public" virt="non-virtual"><scope>phs_str</scope><name>eng_min</name></member>
+      <member refid="a00028_1a97ed80215472283cf7f61e8fc7765a72" prot="public" virt="non-virtual"><scope>phs_str</scope><name>input_file</name></member>
+      <member refid="a00028_1afa6c341ae25939e77f274b2bc42a295f" prot="public" virt="non-virtual"><scope>phs_str</scope><name>lmax</name></member>
+      <member refid="a00028_1a327b2da2c4aeef8b7a2e67e5ea743323" prot="public" virt="non-virtual"><scope>phs_str</scope><name>n_eng</name></member>
+      <member refid="a00028_1a9b297eb426f845aa4c7c90147857d845" prot="public" virt="non-virtual"><scope>phs_str</scope><name>pshift</name></member>
+      <member refid="a00028_1a38280415cc9f39f6300ca87b4b337911" prot="public" virt="non-virtual"><scope>phs_str</scope><name>t_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

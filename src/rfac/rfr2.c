@@ -15,7 +15,7 @@
  *   GH/1995.09.07 -  Adaption for CRFAC
  ********************************************************************/
 
-/*! \file rfr2.c
+/*! \file
  *
  * Implementation of R2 factor calculation.
  */
@@ -26,8 +26,6 @@
 #include "rfac.h"          /* specific definitions etc. */
 
 /*!
- * \fn rf_r1
- *
  * \brief Calculate R2-factor.
  *
  * Calculate R2-factor:
@@ -36,13 +34,14 @@
  * \f$ norm_te = \sqrt( S|It|^2 / S|Ie|^2) \f$
  *
  * \note Normalisation is changed with respect to common use. Instead of
- * S (It)^2 it is now S (It - <It>)^2, where <It> = (S It)/ dE.
+ * \f$ S {(I_t)}^2 \f$ it is now \f$ S {(I_t - <I_t>)}^2 \f$,
+ * where \f$ <I_t> = \frac{(S I_t)}{dE} \f$ .
  *
- * \param[in] *eng pointer to list of energy values.
- * \param[in] *e_int pointer to list of experimental intensity values.
- * \param[in] *t_int pointer to list of theoretical intensity values.
+ * \param[in] eng pointer to list of energy values.
+ * \param[in] e_int pointer to list of experimental intensity values.
+ * \param[in] t_int pointer to list of theoretical intensity values.
  *
- * \note: At least eng must be terminated by F_END_OF_LIST.
+ * \note: \p eng must be terminated by #F_END_OF_LIST.
  *
  * \retval R2-factor if successful.
  * \retval \ref RFAC_FAILURE if failed.

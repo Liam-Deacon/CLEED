@@ -8,12 +8,16 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- * Description: Header provides basis vectors data type and associated 
- *              functions.
  * Change Log:
  *   LD/2014.07.30 - Creation
  ************************************************************************/
  
+/*!
+ * \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief Provides basis vectors data type and associated functions.
+ */
+
 #ifndef BASIS_H
 #define BASIS_H
 
@@ -22,66 +26,71 @@
 
 #define BASIS_VECTOR_PTR(basis, i)  (basis->a+(i*sizeof(coord)))
 
-#define CALC_ROTATION_MATRIX(normal, R)                                         \
-{                                                                               \
-  if (fabs(sqrt(normal->x*normal->x + normal->y*normal->y)) > TOLERANCE)        \
-  {                                                                             \
-    R[0][0] = (normal->z / coord_get_magnitude(normal)) *                       \
-              (normal->x / sqrt(normal->x*normal->x + normal->y*normal->y));    \
-    R[0][1] = (normal->z / coord_get_magnitude(normal)) *                       \
-              (normal->y / sqrt(normal->x*normal->x + normal->y*normal->y));    \
-    R[0][2] = -sqrt ( 1 - (normal->z /                                          \
-                coord_get_magnitude(normal) * normal->z /                       \
-                coord_get_magnitude(normal)));                                  \
-                                                                                \
-    R[1][0] = -sqrt ( 1 - (normal->z /                                          \
-                        coord_get_magnitude(normal) * normal->z /               \
-                        coord_get_magnitude(normal)));                          \
-    R[1][1] =  normal->x / sqrt(normal->x*normal->x + normal->y*normal->y);     \
-    R[1][2] =  0.0;                                                             \
-                                                                                \
-    R[2][0] = sqrt ( 1 - (normal->z /                                           \
-                coord_get_magnitude(normal) * normal->z /                       \
-                coord_get_magnitude(normal))) *                                 \
-                (normal->x / sqrt(normal->x*normal->x + normal->y*normal->y));  \
-    R[2][1] = sqrt ( 1 - (normal->z /                                           \
-                coord_get_magnitude(normal) * normal->z /                       \
-                coord_get_magnitude(normal))) *                                 \
-                (normal->y / sqrt(normal->x*normal->x + normal->y*normal->y));  \
-    R[2][2] = normal->z / coord_get_magnitude(normal);                          \
-  }                                                                             \
-  else                                                                          \
-  {                                                                             \
-    R[0][0] = normal->z / coord_get_magnitude(normal);                          \
-    R[0][1] = 0.;                                                               \
-    R[0][2] = -sqrt ( 1 - (normal->z /                                          \
-                coord_get_magnitude(normal) * normal->z /                       \
-                coord_get_magnitude(normal)));                                  \
-                                                                                \
-    R[1][0] =  0.;                                                              \
-    R[1][1] =  1.;                                                              \
-    R[1][2] =  0.;                                                              \
-                                                                                \
-    R[2][0] = sqrt ( 1 - (normal->z / coord_get_magnitude(normal) * normal->z / \
-                    coord_get_magnitude(normal)));                              \
-    R[2][1] = 0.;                                                               \
-    R[2][2] = normal->z / coord_get_magnitude(normal);                          \
-  }                                                                             \
+#define CALC_ROTATION_MATRIX(normal, R)                                       \
+{                                                                             \
+  if (fabs(sqrt(normal->x*normal->x + normal->y*normal->y)) > TOLERANCE)      \
+  {                                                                           \
+    R[0][0] = (normal->z / coord_get_magnitude(normal)) *                     \
+              (normal->x / sqrt(normal->x*normal->x + normal->y*normal->y));  \
+    R[0][1] = (normal->z / coord_get_magnitude(normal)) *                     \
+              (normal->y / sqrt(normal->x*normal->x + normal->y*normal->y));  \
+    R[0][2] = -sqrt ( 1 - (normal->z /                                        \
+                coord_get_magnitude(normal) * normal->z /                     \
+                coord_get_magnitude(normal)));                                \
+                                                                              \
+    R[1][0] = -sqrt ( 1 - (normal->z /                                        \
+                        coord_get_magnitude(normal) * normal->z /             \
+                        coord_get_magnitude(normal)));                        \
+    R[1][1] =  normal->x / sqrt(normal->x*normal->x + normal->y*normal->y);   \
+    R[1][2] =  0.0;                                                           \
+                                                                              \
+    R[2][0] = sqrt ( 1 - (normal->z /                                         \
+                coord_get_magnitude(normal) * normal->z /                     \
+                coord_get_magnitude(normal))) *                               \
+                (normal->x / sqrt(normal->x*normal->x + normal->y*normal->y));\
+    R[2][1] = sqrt ( 1 - (normal->z /                                         \
+                coord_get_magnitude(normal) * normal->z /                     \
+                coord_get_magnitude(normal))) *                               \
+                (normal->y / sqrt(normal->x*normal->x + normal->y*normal->y));\
+    R[2][2] = normal->z / coord_get_magnitude(normal);                        \
+  }                                                                           \
+  else                                                                        \
+  {                                                                           \
+    R[0][0] = normal->z / coord_get_magnitude(normal);                        \
+    R[0][1] = 0.;                                                             \
+    R[0][2] = -sqrt ( 1 - (normal->z /                                        \
+                coord_get_magnitude(normal) * normal->z /                     \
+                coord_get_magnitude(normal)));                                \
+                                                                              \
+    R[1][0] =  0.;                                                            \
+    R[1][1] =  1.;                                                            \
+    R[1][2] =  0.;                                                            \
+                                                                              \
+    R[2][0] = sqrt(1 - (normal->z / coord_get_magnitude(normal) * normal->z / \
+                    coord_get_magnitude(normal)));                            \
+    R[2][1] = 0.;                                                             \
+    R[2][2] = normal->z / coord_get_magnitude(normal);                        \
+  }                                                                           \
 }
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
-/*! \struct basis
- *  \brief structure for the three basis vectors a1, a2, & a3. */
+/*!
+ *  \brief structure for the three basis vectors \f$ \vec{a_1} \f$,
+ *  \f$ \vec{a_2} \f$, & \f$ \vec{a_3} \f$.
+ */
 typedef struct {
-  coord a[3];
+  coord a[3];       /*!< basis vectors \f$ \vec{a_1} \f$, \f$ \vec{a_2} \f$,
+                     * & \f$ \vec{a_3} \f$.
+                     * \note uses C indexing (first element is \c a[0] ) */
 } basis; 
 
 basis *basis_matrix_rotate(basis *a, double **R);
 basis *basis_ptr_rotate(basis *a, double *R[]);
-basis *basis_angle_rotate(const basis *a, double alpha, double beta, double gamma);
+basis *basis_angle_rotate(const basis *a, double alpha, double beta,
+                          double gamma);
 
 basis *basis_rotate_basis(const basis *basis, double **R);
 coord *basis_rotate_normal(const coord *nor, double **R);
@@ -112,6 +121,9 @@ double **normal_get_rotation_matrix(const coord *normal);
 
 namespace cleed {
 
+/*!
+ * \brief C++ class for #basis and its associated functions.
+ */
 class Basis {
   public:
     Basis();

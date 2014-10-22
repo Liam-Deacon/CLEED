@@ -15,6 +15,13 @@
  *   LD/2014.08.26 - Creation
  ************************************************************************/
 
+/*!
+ * \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief Header for \c struct #atom - an atom structure containing the
+ * element name and x,y,z site coordinates.
+ *
+ */
 
 #ifndef ATOM_H
 #define ATOM_H
@@ -23,14 +30,15 @@
 extern "C" {
 #endif
 
-/*! \struct atom
+/*! \typedef atom
  *  \brief basic atom struct.
  */
-typedef struct atom {
+typedef struct _atom {
   char *element;        /*!< Elemental symbol. */
   double x;             /*!< x Cartesian coordinate of atom. */
   double y;             /*!< y Cartesian coordinate of atom. */
   double z;             /*!< z Cartesian coordinate of atom. */
+  double rmin;          /*!< minimum radius of atom (muffin-tin radius) */
 } atom;
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */

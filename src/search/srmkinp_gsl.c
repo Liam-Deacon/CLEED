@@ -1,5 +1,15 @@
-/***********************************************************************
- GH/02.04.03
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *02.04.03
 
  file contains function:
 
@@ -19,7 +29,7 @@ LD/01.07.2014 - Modified to use GNU Scientific Library Structures
 #include <stdio.h>
 #include <string.h>
 #include <gsl/gsl_vector.h>
-#include "search.h"
+#include "csearch.h"
 
 #ifndef FAC_THETA
 #define FAC_THETA 5.

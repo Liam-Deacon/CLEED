@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="dir_b0856f6b0d80ccb263b2f415c91f9e17" kind="dir">
+    <compoundname>include</compoundname>
+    <innerfile refid="a00048">atom.h</innerfile>
+    <innerfile refid="a00049">basis.h</innerfile>
+    <innerfile refid="a00050">basis_vector.h</innerfile>
+    <innerfile refid="a00051">caoi_leed.h</innerfile>
+    <innerfile refid="a00052">caoi_rfac.h</innerfile>
+    <innerfile refid="a00053">CLEED.H</innerfile>
+    <innerfile refid="a00054">coord.h</innerfile>
+    <innerfile refid="a00055">copy_file.h</innerfile>
+    <innerfile refid="a00056">cpl.h</innerfile>
+    <innerfile refid="a00057">cpl_func.h</innerfile>
+    <innerfile refid="a00058">cpl_macr.h</innerfile>
+    <innerfile refid="a00059">csearch.h</innerfile>
+    <innerfile refid="a00060">err_code.h</innerfile>
+    <innerfile refid="a00061">ftsmooth.h</innerfile>
+    <innerfile refid="a00062">getrusage_win32.h</innerfile>
+    <innerfile refid="a00063">gh_stddef.h</innerfile>
+    <innerfile refid="a00064">latt.h</innerfile>
+    <innerfile refid="a00065">lattice.h</innerfile>
+    <innerfile refid="a00066">leed.h</innerfile>
+    <innerfile refid="a00067">leed_def.h</innerfile>
+    <innerfile refid="a00068">leed_func.h</innerfile>
+    <innerfile refid="a00069">leed_ver.h</innerfile>
+    <innerfile refid="a00070">leed_ver_sym.h</innerfile>
+    <innerfile refid="a00071">mat.h</innerfile>
+    <innerfile refid="a00072">mat_def.h</innerfile>
+    <innerfile refid="a00073">mat_func.h</innerfile>
+    <innerfile refid="a00074">matrix_2x2.h</innerfile>
+    <innerfile refid="a00075">miller_index.h</innerfile>
+    <innerfile refid="a00076">nrr.h</innerfile>
+    <innerfile refid="a00077">nrr_func.h</innerfile>
+    <innerfile refid="a00078">nrr_util.h</innerfile>
+    <innerfile refid="a00079">patt.h</innerfile>
+    <innerfile refid="a00080">patt_colors.h</innerfile>
+    <innerfile refid="a00081">patt_def.h</innerfile>
+    <innerfile refid="a00082">patt_func.h</innerfile>
+    <innerfile refid="a00083">patt_ver.h</innerfile>
+    <innerfile refid="a00084">pattern.h</innerfile>
+    <innerfile refid="a00085">proghelp.h</innerfile>
+    <innerfile refid="a00086">qm.h</innerfile>
+    <innerfile refid="a00087">qm_func.h</innerfile>
+    <innerfile refid="a00088">real.h</innerfile>
+    <innerfile refid="a00089">rfac.h</innerfile>
+    <innerfile refid="a00090">rfac_def.h</innerfile>
+    <innerfile refid="a00091">rfac_func.h</innerfile>
+    <innerfile refid="a00092">rfac_ver.h</innerfile>
+    <innerfile refid="a00093">search_def.h</innerfile>
+    <innerfile refid="a00094">search_func.h</innerfile>
+    <innerfile refid="a00095">search_ver.h</innerfile>
+    <innerfile refid="a00096">spots.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/"/>
+  </compounddef>
+</doxygen>

@@ -1,8 +1,18 @@
-/***********************************************************************
-GH/21.09.02
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *21.09.02
  File contains:
 
-  sr_er_gsl(int ndim, real dpos, char *bak_file, char *log_file)
+  sr_er_gsl(int n_dim, real dpos, char *bak_file, char *log_file)
  Determine error bars for all parameters.
 
  Modified:
@@ -15,32 +25,33 @@ GH/21.09.02 - copy from srsx
 #include <stdlib.h>
 #include <math.h>
 #include <gsl/gsl_vector.h>
-#include "search.h"
+#include "csearch.h"
 
 extern char *sr_project;
 
-/**********************************************************************/
-
-void sr_er_gsl(size_t ndim, real dpos, char *log_file)
-
-/***********************************************************************
-  ERROR BARS
-***********************************************************************/
+/*!
+ * Calculates error bars.
+ *
+ * \param n_dim
+ * \param dpos displacement
+ * \param log_file filename of search log.
+ */
+void sr_er_gsl(size_t n_dim, real dpos, char *log_file)
 {
 
   char *line_buffer;
 
   int iaux = 0;
   size_t i_par, j_par;
-  size_t mpar = ndim+1;
+  size_t mpar = n_dim+1;
 
   real y_0;
 
-  gsl_vector *x = gsl_vector_alloc(ndim);
-  gsl_vector *x_0 = gsl_vector_calloc(ndim);
-  gsl_vector *y = gsl_vector_alloc(ndim);
-  gsl_vector *err = gsl_vector_alloc(ndim);
-  gsl_vector *del = gsl_vector_alloc(ndim);
+  gsl_vector *x = gsl_vector_alloc(n_dim);
+  gsl_vector *x_0 = gsl_vector_calloc(n_dim);
+  gsl_vector *y = gsl_vector_alloc(n_dim);
+  gsl_vector *err = gsl_vector_alloc(n_dim);
+  gsl_vector *del = gsl_vector_alloc(n_dim);
 
   real faux, pref, rtol, rr, dr, rfac, rdel=0.;
 
@@ -51,7 +62,7 @@ void sr_er_gsl(size_t ndim, real dpos, char *log_file)
 ***********************************************************************/
 
   if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
-  fprintf(log_stream,"=> DETERMINE ERROR BARS:\n\n");
+  fprintf(log_stream, "=> DETERMINE ERROR BARS:\n\n");
 
 /***********************************************************************
   allocate memory and preset variables
@@ -113,7 +124,7 @@ void sr_er_gsl(size_t ndim, real dpos, char *log_file)
   Calculate R factors for displacements
 ***********************************************************************/
 
-  for (i_par = 1; i_par <= ndim; i_par ++) 
+  for (i_par = 1; i_par <= n_dim; i_par ++)
   {
     
     gsl_vector_set(del, i_par-1, dpos);
@@ -145,7 +156,7 @@ void sr_er_gsl(size_t ndim, real dpos, char *log_file)
       {
         gsl_vector_set(del, i_par-1, gsl_vector_get(del, i_par-1) / R_sqrt(rdel));
 
-        for (j_par = 1; j_par <= ndim; j_par ++) 
+        for (j_par = 1; j_par <= n_dim; j_par ++)
         {
           if(i_par == j_par)
           {
@@ -177,15 +188,15 @@ void sr_er_gsl(size_t ndim, real dpos, char *log_file)
 ***********************************************************************/
 
   pref = gsl_vector_get(y, 0) * rr;
-  for (i_par = 1; i_par <= ndim; i_par ++) 
+  for (i_par = 1; i_par <= n_dim; i_par ++)
   {
     gsl_vector_set(del, i_par-1, R_fabs(gsl_vector_get(del, i_par-1)) );
   }
 
   if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
 
-  fprintf(log_stream,"\n=> ERROR BARS:\n\n");
-  for (i_par = 1; i_par <= ndim; i_par ++) 
+  fprintf(log_stream, "\n=> ERROR BARS:\n\n");
+  for (i_par = 1; i_par <= n_dim; i_par ++)
   {
     dr = gsl_vector_get(y, i_par-1) - y_0;
     if (dr < 0.)
@@ -201,13 +212,13 @@ void sr_er_gsl(size_t ndim, real dpos, char *log_file)
     {
       faux = R_sqrt(pref/dr) * gsl_vector_get(del, i_par-1);
       gsl_vector_set(err, i_par-1, faux);
-      fprintf(log_stream,"%2d: del R = %.4f; del par = %.4f\n", 
+      fprintf(log_stream, "%2d: del R = %.4f; del par = %.4f\n",
               i_par, dr, faux);
     }
     else
     {
       gsl_vector_set(err, i_par-1, -1.);
-      fprintf(log_stream,"%2d: del R = %.4f; del par ** undefined **\n",
+      fprintf(log_stream, "%2d: del R = %.4f; del par ** undefined **\n",
               i_par, dr );
     }
 

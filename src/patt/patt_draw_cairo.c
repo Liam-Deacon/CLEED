@@ -1,8 +1,24 @@
-/*
- * patt_draw_cairo.c
+/*********************************************************************
+ *                       PATT_COLORS.C
  *
- *  Created on: 24 Sep 2014
- *      Author: Liam Deacon
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/2014.09.14 - creation
+ *********************************************************************/
+
+/*! \file
+ *  \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ * Provides an interface with the Cairo vector graphics library to produce LEED
+ * patterns in a number of different output formats.
+ *
+ * \note To enable this interface, compile \c patt with \c _USE_CAIRO defined.
  */
 
 #include "patt.h"
@@ -14,6 +30,16 @@
 #include <string.h>
 #include <math.h>
 
+/*!
+ * Draws #patt_drawing \p drawing using Cairo graphics. It creates the
+ * Cairo surface, reads LEED pattern information from an input file and
+ * generates a drawing from this information.
+ *
+ * \param drawing Pointer to #patt_drawing instance containing all the
+ * parameters needed for drawing the LEED pattern.
+ * \return #patt_error
+ * \retval #PATT_SUCCESS on successful completion.
+ */
 int patt_draw_cairo(const patt_drawing *drawing)
 {
   cairo_surface_t *surface;
@@ -27,7 +53,7 @@ int patt_draw_cairo(const patt_drawing *drawing)
   char *tok = NULL;
   char str_buf[BUFSIZ];
 
-  strcpy(copyright, PROG_COPYRIGHT);
+  strcpy(copyright, PATT_PROG_COPYRIGHT);
   tok = strtok(copyright, "\n");
 
   /* create surface */
@@ -68,7 +94,8 @@ int patt_draw_cairo(const patt_drawing *drawing)
       }
 
       /* program info */
-      sprintf(str_buf, "%%Creator: %s - Version %s", PROG, PROG_VERSION);
+      sprintf(str_buf, "%%Creator: %s - Version %s",
+              PATT_PROG, PATT_PROG_VERSION);
       cairo_ps_surface_dsc_comment(surface, str_buf);
 
       break;
@@ -235,6 +262,15 @@ int patt_draw_cairo(const patt_drawing *drawing)
   return(PATT_SUCCESS);
 }
 
+/*!
+ * Draws a LEED diffraction spot \p spot on to the Cairo canvas \p cr with
+ * size \p spot_size and shape \p shape
+ *
+ * \param cr Pointer to Cairo canvas to modify.
+ * \param spot Pointer to #spot to draw.
+ * \param spot_size Size of spot.
+ * \param shape Shape of spot; may be one of the shapes given in #patt_shape
+ */
 void patt_draw_cairo_spot(cairo_t *cr, spot *spot,
                           double spot_size, patt_shape shape)
 /*
@@ -315,6 +351,13 @@ void patt_draw_cairo_spot(cairo_t *cr, spot *spot,
   }  /* switch */
 }
 
+/*!
+ * Draws a (h,k) Miller index label for a given LEED diffraction spot on to the
+ * Cairo canvas.
+ *
+ * \param cr Pointer to the Cairo canvas to modify.
+ * \param spot Pointer to spot to draw label for.
+ */
 void patt_draw_cairo_label(cairo_t *cr, const spot *spot)
 {
   cairo_text_extents_t extents;
@@ -324,6 +367,17 @@ void patt_draw_cairo_label(cairo_t *cr, const spot *spot)
 }
 
 
+/*!
+ * Draws an arrow onto the Cairo canvas.
+ *
+ * \param cr Pointer to Cairo canvas to modify.
+ * \param x1 Starting x coordinate of arrow.
+ * \param y1 Starting y coordinate of arrow.
+ * \param x2 Ending x coordinate of arrow.
+ * \param y2 Ending y coordinate of arrow.
+ * \param stroke_width Edge thickness of strokes.
+ * \param head_size Size of the arrow head.
+ */
 void patt_draw_cairo_arrow(cairo_t *cr, double x1, double y1, double x2,
                            double y2, double stroke_width, double head_size)
 {
@@ -354,6 +408,12 @@ void patt_draw_cairo_arrow(cairo_t *cr, double x1, double y1, double x2,
 
 }
 
+/*!
+ * Draws a synthetic LEED gun onto the Cairo canvas.
+ *
+ * \param cr Pointer to Cairo canvas to modify.
+ * \param gun Pointer to #patt_gun instance to draw.
+ */
 void patt_draw_cairo_gun(cairo_t *cr, const patt_gun *gun)
 {
   patt_color_rgb color = gun->color;
@@ -375,6 +435,12 @@ void patt_draw_cairo_gun(cairo_t *cr, const patt_gun *gun)
   cairo_fill(cr);
 }
 
+/*!
+ * Draws a synthetic LEED screen onto the Cairo canvas.
+ *
+ * \param cr Pointer to Cairo canvas to modify.
+ * \param screen Pointer to #patt_screen instance to draw.
+ */
 void patt_draw_cairo_screen(cairo_t *cr, const patt_screen *screen)
 {
   cairo_move_to(cr, 0., 0.);
@@ -394,6 +460,14 @@ void patt_draw_cairo_screen(cairo_t *cr, const patt_screen *screen)
   }
 }
 
+/*!
+ * Draws \p text onto \p cr Cairo canvas.
+ *
+ * \param cr Pointer to cairo canvas
+ * \param text Text to draw.
+ * \param slant The font face style e.g. italics or normal.
+ * \param weight How heavy the text looks.
+ */
 void patt_draw_cairo_text(cairo_t *cr, const patt_text *text,
                         cairo_font_slant_t slant, cairo_font_weight_t weight)
 {

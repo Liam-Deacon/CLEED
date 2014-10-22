@@ -8,12 +8,15 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: Header file for pattern struct and associated functions.
- *
  * Changes:
  *   LD/2014.07.20 - creation
  *********************************************************************/
+
+/*!
+ * \file
+ * \puthor Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief Header file for #pattern \c struct and associated functions.
+ */
 
 #ifndef PATTERN_H
 #define PATTERN_H
@@ -29,10 +32,10 @@
   extern "C" {
 #endif
 
-/*! \struct pattern
+/*! \typedef pattern
  *  \brief Structure containing information needed for LEED pattern generation.
  */
-typedef struct pattern 
+typedef struct _pattern
 {
   char *title;              /*!< pointer to title string */
   basis_vector a1;          /*!< a1 basis vector */
@@ -46,205 +49,45 @@ typedef struct pattern
 extern pattern pattern_default; 
 
 /* pattern functions */
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 pattern *pattern_alloc(size_t n_domains);
 
-/*! \fn pattern *pattern_init(size_t n_domains)
- *  \brief Allocate memory and initialise pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * and initialise members to default values.
- */
 pattern *pattern_init(size_t n_domains);
 
-/*! \fn pattern *pattern_read(FILE *file)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 pattern *pattern_read(FILE *file);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 void pattern_free(pattern *pat);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-double pattern_get_radius(pattern *pat);
+double pattern_get_radius(const pattern *pat);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 bool pattern_is_square(const pattern *pat);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 bool pattern_domain_is_commensurate(const pattern *pat, size_t domain);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-size_t pattern_get_n_domains(pattern *pat);
+size_t pattern_get_n_domains(const pattern *pat);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-const char *pattern_get_title(pattern *pat);
+const char *pattern_get_title(const pattern *pat);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-void pattern_printf(FILE *stream, pattern *pat);
+void pattern_printf(FILE *stream, const pattern *pat);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-void pattern_set_a1(pattern *pat, basis_vector *a1);
+void pattern_set_a1(pattern *pat, const basis_vector *a1);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-void pattern_set_a2(pattern *pat, basis_vector *a2);
+void pattern_set_a2(pattern *pat, const basis_vector *a2);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 void pattern_set_radius(pattern *pat, double radius);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-void pattern_set_title(pattern *pat, char *title);
+void pattern_set_title(pattern *pat, const  char *title);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 void pattern_set_square(pattern *pat, bool is_square);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 int pattern_set_max_domains(pattern *pat, size_t n_domains);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
-void pattern_set_superstructure_matrix(pattern *pat, 
-        matrix_2x2 *mat, size_t domain);
+void pattern_set_superstructure_matrix(pattern *pat, const matrix_2x2 *mat,
+                                       size_t domain);
         
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 const matrix_2x2 *get_superstructure_matrix(const pattern *pat, size_t domain);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 spots *pattern_calculate_substrate_spots(const pattern *pat);
 
-/*! \fn pattern *pattern_alloc(size_t n_domains)
- *  \brief Allocates memory for pattern struct.
- *  \param n_domains The maximum number of superstructure domains to allocate.
- *  \return pattern* Pointer to pattern struct.
- *
- * Allocate memory for pattern structure with \a n_domains, 
- * but do not initialise any members of pattern other than \a n_domains.
- */
 spots *pattern_calculate_superstructure_spots(const pattern *pat,
                                                 size_t domain);
 

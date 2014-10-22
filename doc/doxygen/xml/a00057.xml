@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00057" kind="file">
+    <compoundname>cpl_func.h</compoundname>
+    <includedby refid="a00056" local="yes">cpl.h</includedby>
+    <invincdepgraph>
+      <node id="106">
+        <label>cpl.h</label>
+        <link refid="a00056_source"/>
+        <childnode refid="107" relation="include">
+        </childnode>
+        <childnode refid="108" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+      </node>
+      <node id="105">
+        <label>cpl_func.h</label>
+        <link refid="cpl_func.h"/>
+        <childnode refid="106" relation="include">
+        </childnode>
+      </node>
+      <node id="108">
+        <label>leed.h</label>
+        <link refid="a00066_source"/>
+        <childnode refid="109" relation="include">
+        </childnode>
+      </node>
+      <node id="110">
+        <label>qm.h</label>
+        <link refid="a00086_source"/>
+        <childnode refid="108" relation="include">
+        </childnode>
+      </node>
+      <node id="107">
+        <label>mat.h</label>
+        <link refid="a00071_source"/>
+        <childnode refid="108" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+      </node>
+      <node id="109">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="a00057_1a4efb1c49714fd018a3f470d3ed5ae263" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cri_mul</definition>
+        <argsstring>(real *, real *, real, real, real, real)</argsstring>
+        <name>cri_mul</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <briefdescription>
+<para>multiplication (cribasfun.c) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/cpl_func.h" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00057_1a8d05b89d63e363e6ec9f336f2f1942db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cri_div</definition>
+        <argsstring>(real *, real *, real, real, real, real)</argsstring>
+        <name>cri_div</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <briefdescription>
+<para>division (cribasfun.c) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/cpl_func.h" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00057_1a664fcc1ba748d46ad20c3f31b95338f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cri_sqrt</definition>
+        <argsstring>(real *, real *, real, real)</argsstring>
+        <name>cri_sqrt</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <briefdescription>
+<para>square root (cribasfun.c) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/cpl_func.h" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00057_1a91f751a4bf1839575a5a114f027dce1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cri_exp</definition>
+        <argsstring>(real *, real *, real, real)</argsstring>
+        <name>cri_exp</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <briefdescription>
+<para>square exponent (cribasfun.c) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/cpl_func.h" line="37" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00057_1a694d4010394641205b68d84be1e96e58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cri_expi</definition>
+        <argsstring>(real *, real *, real, real)</argsstring>
+        <name>cri_expi</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/cpl_func.h" line="38" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00057_1a5425f1ea6ec32c840d841953253ffd28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cri_powi</definition>
+        <argsstring>(real *, real *, int)</argsstring>
+        <name>cri_powi</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+<para>integer powers of i </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/cpl_func.h" line="41" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CPL_FUNC.H</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>1994-2014<sp/>Georg<sp/>Held<sp/>&lt;g.held@reading.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>@license<sp/>GPL-3.0+<sp/>&lt;http://spdx.org/licenses/GPL-3.0+&gt;</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>Description:<sp/>Header<sp/>file<sp/>declaring<sp/>prototype<sp/>functions<sp/>for</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>complex<sp/>operations.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>Changes:</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/><sp/><sp/>GH/1994.08.23<sp/>-<sp/>creation</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/>********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>CPL_FUNC_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CPL_FUNC_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>cri_mul(real<sp/>*,<sp/>real<sp/>*,<sp/>real,<sp/>real,<sp/>real,<sp/>real);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>cri_div(real<sp/>*,<sp/>real<sp/>*,<sp/>real,<sp/>real,<sp/>real,<sp/>real);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>cri_sqrt(real<sp/>*,<sp/>real<sp/>*,<sp/>real,<sp/>real);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>cri_exp(real<sp/>*,<sp/>real<sp/>*,<sp/>real,<sp/>real);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>cri_expi(real<sp/>*,<sp/>real<sp/>*,<sp/>real,<sp/>real);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>cri_powi(real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="44"><highlight class="comment">lower<sp/>level<sp/>functions</highlight></codeline>
+<codeline lineno="45"><highlight class="comment">*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>CPL_FUNC_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/cpl_func.h"/>
+  </compounddef>
+</doxygen>

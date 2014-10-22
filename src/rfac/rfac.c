@@ -1,8 +1,20 @@
-/*
- * rfac.c
+/*********************************************************************
+ *                           RFAC.C
  *
- *  Created on: 10 Oct 2014
- *      Author: Liam Deacon
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/2014.10.10 - Creation
+ *********************************************************************/
+
+/*!
+ * \file
+ * \brief Low level routines associated with #rfac_iv and #rfac_iv_data
  */
 
 #include "rfac.h"
@@ -10,12 +22,9 @@
 #include <stdlib.h>
 
 /*!
- * \fn rfac_iv_init
+ * \brief intialize #rfac_iv object.
  *
- * \brief intialize \ref rfac_iv object.
- *
- * \return pointer to \ref rfac_iv object.
- *
+ * \return pointer to #rfac_iv object.
  * \retval NULL if memory cannot be allocated.
  */
 rfac_iv *rfac_iv_init()
@@ -35,13 +44,10 @@ rfac_iv *rfac_iv_init()
 }
 
 /*!
- * \fn rfac_iv_alloc
+ * \brief allocate memory for #rfac_iv with \p n_eng data points for
+ * #rfac_iv_data member.
  *
- * \brief allocate memory for \ref rfac_iv with \p n_eng data points for
- * \ref rfac_iv_data member.
- *
- * \return pointer to \ref rfac_iv object.
- *
+ * \return pointer to #rfac_iv object.
  * \retval NULL if memory cannot be allocated.
  */
 rfac_iv *rfac_iv_alloc(size_t n_eng)
@@ -69,9 +75,7 @@ rfac_iv *rfac_iv_alloc(size_t n_eng)
 }
 
 /*!
- * \fn rfac_iv_free
- *
- * \brief free \ref rfac_iv object from memory.
+ * Free #rfac_iv object instance from memory.
  */
 void rfac_iv_free(rfac_iv *_iv)
 {
@@ -80,4 +84,54 @@ void rfac_iv_free(rfac_iv *_iv)
     if (_iv->data != NULL) free(_iv->data);
     free(_iv);
   }
+}
+
+/*!
+ * Converts @rfac_iv::data of \p iv into arrays of \p x and \p fx
+ *
+ * \param[in] iv \c struct containing IV data to convert.
+ * \param[out] x pointer to array of energy values.
+ * \param[out] fx pointer to array of intensity values.
+ * \param[out] n pointer to \code unsigned int \endcode . This is the number of
+ * elements in \p x and \p fx .
+ *
+ * \return integer representing success of function.
+ * \retval #RFAC_SUCCESS on successful completion.
+ * \retval #RFAC_ALLOC_ERROR if memory cannot be allocated for \p x or \p fx
+ *
+ * \warning memory will be reallocated if \p x or \p fx are not \c NULL when
+ * passed to the function.
+ *
+ * \note arrays \p x and \p fx will not necessarily be terminated by
+ * #F_END_OF_LIST
+ */
+int rfac_iv_to_arrays(const rfac_iv *iv, double *x, double *fx, size_t *n)
+{
+  size_t i;
+
+  /* allocate memory */
+  if (x != NULL) x = (double *) realloc(x, iv->n_eng);
+  else x = (double *) malloc(iv->n_eng * sizeof(double));
+
+  if (x == NULL) return (RFAC_ALLOCATION_ERROR);
+
+  if (fx != NULL) fx = (double *) realloc(fx, iv->n_eng);
+  else fx = (double *) malloc(iv->n_eng * sizeof(double));
+
+  if (fx == NULL)
+  {
+    free(x);
+    return (RFAC_ALLOCATION_ERROR);
+  }
+
+  /* convert energies */
+  for (i=0; i<iv->n_eng; i++)
+  {
+    x[i] = iv->data[i].energy;
+    fx[i] = iv->data[i].intens;
+  }
+
+  *n = iv->n_eng;
+
+  return (RFAC_SUCCESS);
 }

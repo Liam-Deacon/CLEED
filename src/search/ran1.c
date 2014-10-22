@@ -13,7 +13,7 @@ LD/29.06.2014 - Creation of open source version of ran1 function
 #include "real.h"
 #include <stdlib.h>
 
-real ran1(long *idum)
+real ran1_gsl(long *idum)
 
 /************************************************************************
 

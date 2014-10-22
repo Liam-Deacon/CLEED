@@ -8,13 +8,17 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- * Description: Header provides an xyz coordinate data type and associated
- *              functions.
- *
  * Change Log:
  *   LD/2014.07.30 - Creation
  ************************************************************************/
- 
+
+/*!
+ * \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief Header provides an \f$ (x,y,z) \f$ coordinate data type #coord and
+ * its associated functions.
+ */
+
 #ifndef COORD_H
 #define COORD_H
 
@@ -28,7 +32,7 @@ extern "C" {
 
 #include <stdio.h>
 
-/*! \typedef \struct coord
+/*! \typedef coord
  *  \brief structure for x, y, z coordinate.
  */
 typedef struct {
@@ -56,6 +60,9 @@ void coord_printf(FILE *f, const coord *pos);
 
 namespace cleed {
 
+/*!
+ * A C++ wrapper class for the #coord \c struct to give a more OO interface.
+ */
 class Coordinate {
 
   public:

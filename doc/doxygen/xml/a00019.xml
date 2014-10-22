@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00019" kind="struct" prot="public">
+    <compoundname>matrix_2x2</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00019_1ad4b3bcf5c28b825501fe71820a20785e" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double matrix_2x2::M11</definition>
+        <argsstring></argsstring>
+        <name>M11</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="38" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00019_1a0fb10667c9a157d6f9c5f3557965233a" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double matrix_2x2::M12</definition>
+        <argsstring></argsstring>
+        <name>M12</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="39" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00019_1a2c8b2174b9cc501440ddd603372b3fcb" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double matrix_2x2::M21</definition>
+        <argsstring></argsstring>
+        <name>M21</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="40" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00019_1a7decc54436289495e123cbcf80cd8421" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double matrix_2x2::M22</definition>
+        <argsstring></argsstring>
+        <name>M22</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="41" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" line="37" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/matrix_2x2.h" bodystart="36" bodyend="43"/>
+    <listofallmembers>
+      <member refid="a00019_1ad4b3bcf5c28b825501fe71820a20785e" prot="public" virt="non-virtual"><scope>matrix_2x2</scope><name>M11</name></member>
+      <member refid="a00019_1a0fb10667c9a157d6f9c5f3557965233a" prot="public" virt="non-virtual"><scope>matrix_2x2</scope><name>M12</name></member>
+      <member refid="a00019_1a2c8b2174b9cc501440ddd603372b3fcb" prot="public" virt="non-virtual"><scope>matrix_2x2</scope><name>M21</name></member>
+      <member refid="a00019_1a7decc54436289495e123cbcf80cd8421" prot="public" virt="non-virtual"><scope>matrix_2x2</scope><name>M22</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

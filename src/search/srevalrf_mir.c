@@ -1,5 +1,15 @@
-/***********************************************************************
-GH/31.03.03
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *31.03.03
   file contains function:
 
   real sr_evalrf(real *par)
@@ -27,16 +37,8 @@ GH/30.12.04 - calculate original and mirrored geometry at the same time and aver
 #include <math.h>
 #include <stdlib.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "copy_file.h"
-
-/*
-#define WARNING
-#define SHORTCUT
-*/
-
-#define CONTROL
-#define ERROR
 
 /*
   Define the following parameters if not yet defined in "search_def.h"
@@ -68,7 +70,7 @@ extern struct sratom_str *sr_atoms;
 extern struct search_str *sr_search;
 extern char *sr_project;
 
-real sr_evalrf(real *par)
+real sr_evalrf_mir(real *par)
 
 /***********************************************************************
 
@@ -79,84 +81,74 @@ real sr_evalrf(real *par)
 
 ***********************************************************************/
 {
-static real rfac_min = 100.;
-static real rfac_max = 0.;
-static real shift = 0.;
-static int n_eval  = 0;
-static int n_calc  = 0;
+  static real rfac_min = 100.;
+  static real rfac_max = 0.;
+  static real shift = 0.;
+  static int n_eval  = 0;
+  static int n_calc  = 0;
 
-int iaux;
-int i_par;
-real faux;
-real rgeo, rfac;
+  int iaux;
+  size_t i_par;
+  real faux;
+  real rgeo, rfac;
 
-struct tm *l_time;
-time_t t_time;
+  struct tm *l_time;
+  time_t t_time;
 
-char line_buffer[STRSZ];
-char log_file[STRSZ];
-char par_file[STRSZ];
+  char line_buffer[STRSZ];
+  char log_file[STRSZ];
+  char par_file[STRSZ];
 
-FILE *io_stream, *log_stream;
+  FILE *io_stream, *log_stream;
 
-char *old_path;
-char *new_path;
-
-/***********************************************************************
-  Set initial values
-***********************************************************************/
-
- n_eval ++;
- sprintf(log_file, "%s.log", sr_project);
- sprintf(par_file, "%s.par", sr_project);
+  char *old_path;
+  char *new_path;
 
 /***********************************************************************
-  Check whether environment variables CSEARCH_LEED and CSEARCH_RFAC exist
-***********************************************************************/
+ * Set initial values
+ ***********************************************************************/
 
- if( (getenv("CSEARCH_LEED") == NULL) || (getenv("CSEARCH_RFAC") == NULL) )
- {
-#ifdef ERROR
-   fprintf(STDERR, " *** error (sr_evalrf):"
+  n_eval ++;
+  sprintf(log_file, "%s.log", sr_project);
+  sprintf(par_file, "%s.par", sr_project);
+
+/***********************************************************************
+ * Check whether environment variables CSEARCH_LEED and CSEARCH_RFAC exist
+ ***********************************************************************/
+
+  if( (getenv("CSEARCH_LEED") == NULL) || (getenv("CSEARCH_RFAC") == NULL) )
+  {
+    #ifdef ERROR
+    fprintf(STDERR, " *** error (sr_evalrf):"
            " CSEARCH_LEED or CSEARCH_RFAC not defined\n");
-#endif
-   exit(1);
- }
+    #endif
+    exit(SR_ENVIRONMENT_VARIABLE_ERROR);
+  }
 
 /***********************************************************************
-  Geometry assessment
-***********************************************************************/
+ * Geometry assessment
+ ***********************************************************************/
 
- #ifdef SHORTCUT
-   fprintf(STDCTR, "(sr_evalrf %d) SHORTCUT:", n_eval);
- #endif
+  #ifdef SHORTCUT
+  fprintf(STDCTR, "(sr_evalrf %d) SHORTCUT:", n_eval);
+  #endif
 
- rgeo = sr_ckgeo( par );
+  rgeo = sr_ckgeo( par );
 
- #ifdef CONTROL
-   #ifdef SHORTCUT
-     fprintf(STDCTR," rgeo = %.4f", rgeo);
-   #else
-     fprintf(STDCTR," rgeo = %.4f\n", rgeo);
-   #endif
- #endif
-
-
-/* A flag option for testing purposes:
- log_stream = fopen(log_file, "a"); \
-     fprintf(log_stream,"This is a flag"); \
-     fclose(log_stream);
-*/
-
+  #ifdef CONTROL
+    #ifdef SHORTCUT
+    fprintf(STDCTR," rgeo = %.4f", rgeo);
+    #else
+    fprintf(STDCTR," rgeo = %.4f\n", rgeo);
+    #endif
+  #endif
 
 /***********************************************************************
-  Return (rfac_max + rgeo), if the test geometry is seriously 
-  outside the limits.
-  Calculate IV curves otherwise.
-***********************************************************************/
+ * Return (rfac_max + rgeo), if the test geometry is seriously
+ * outside the limits.
+ * Calculate IV curves otherwise.
+ ***********************************************************************/
 
-/*
-*/
  if( (rgeo > 1.) && (n_calc > 1) )
  {
    #ifdef CONTROL
@@ -184,7 +176,7 @@ char *new_path;
 ***********************************************************************/
 
  n_calc ++;
- sr_mkinp_mir(par, n_calc, par_file);
+ sr_mkinp_mir(par_file, par, n_calc);
 
 #ifdef SHORTCUT
 

@@ -15,10 +15,10 @@
  *
  ********************************************************************/
 
-/*! \file rfrdcleed.c
+/*! \file
  *
  *  Implementation file for reading theoretical IV curves from CLEED program
- *  using \ref rf_rdcleed function.
+ *  using rf_rdcleed() function.
  */
 
 #include <math.h>
@@ -34,8 +34,6 @@
                                  input file */
 
 /*!
- * \fn rf_rdcleed
- *
  * Read theoretical IV curves (one per geometry) for the beams
  * listed in index_list from buffer.
  *
@@ -53,19 +51,19 @@
  * Simultaneously it will be checked if the input list is ordered and
  * equidistant according to energy.
  *
- * \param *iv_cur pointer to structure crivcur. All available
+ * \param *iv_cur pointer to structure #rfac_ivcur. All available
  * information about the theoretical IV curve will be stored in this
- * structure. sort and equidist falgs will be set.
+ * structure. sort and equidistant flags will be set.
  *
  * \param buffer file buffer containing theoretical input.
  *
- * \param index_list command line for interpreter rfintindl. Syntax:
+ * \param index_list command line for interpreter rf_intindl() . Syntax:
  * (<index1>,<index2>) {*<scale> +/- (<index1>,<index2>)*<scale>}
  *
- * \return pointer to the IV curve (\ref rfac_iv_data). The list is
+ * \return pointer to the IV curve (#rfac_iv_data). The list is
  * terminated by a pair of negative values.
  *
- * \retval NULL if failed;
+ * \retval \c NULL if failed.
  */
 rfac_iv_data *rf_rdcleed(rfac_ivcur *iv_cur, char *buffer, char *index_list)
 {

@@ -1,10 +1,33 @@
-/*========================================================================*/
+/*********************************************************************
+ *                    PATT_PS_PRINT_SUBSTITUTES.C
+ *
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *********************************************************************/
 
+/*! \file
+ *
+ * Replaces strings containing symbols unrecognized to postscript with
+ * ones that are.
+ */
 #include <stdio.h>
 #include <strings.h>
 #include "patt.h"
 
-/* Search string & convert to postscript where needed */ 
+/*!
+ * Search string and convert to postscript where needed
+ *
+ * \param output File pointer for output e.g. \c stdout
+ * \param[in] str String to modify.
+ * \return
+ * \todo implement substitution.
+ */
 int ps_print_substitute(FILE *output, char *str)
 {
   int i, j, k, last;
@@ -13,7 +36,7 @@ int ps_print_substitute(FILE *output, char *str)
   char poststr[STRSZ];
   strcpy(poststr, str);
 
-    i = j = k = 0;
+  i = j = k = 0;
     
   if (str[0] == '\0') return(0);
 
@@ -26,7 +49,7 @@ int ps_print_substitute(FILE *output, char *str)
       i++; j=0;
       strcpy(substr, "\0");
       strcpy(prestr, "\0");
-      fprintf(output,"/Times-Roman findfont 20 scalefont setfont (");
+      fprintf(output, "/Times-Roman findfont 20 scalefont setfont (");
       while (str[i] != '}' && i<=STRSZ-2)
       {
         i++;
@@ -38,10 +61,9 @@ int ps_print_substitute(FILE *output, char *str)
       for (k=last;k<=i-j-2;k++)
       {
        if (str[k] == '(' || str[k] == ')' ||
-         str[k] == '{'  || str[k] == '}' )
-          fprintf(output, "%c", '\\' );
+           str[k] == '{'  || str[k] == '}' ) fprintf(output, "%c", '\\' );
        if (str[k] == '\0') break;
-       fprintf(output,"%c", str[k]);
+       fprintf(output, "%c", str[k]);
        prestr[k] = str[k];
       }
 
@@ -66,7 +88,7 @@ int ps_print_substitute(FILE *output, char *str)
 	  fprintf(output, "%c", str[k]);
   }
 
-  fprintf(output,") show\n");
+  fprintf(output, ") show\n");
 
   return(last);
 }

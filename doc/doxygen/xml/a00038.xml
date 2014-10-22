@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00038" kind="struct" prot="public">
+    <compoundname>rfspot</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00038_1ad6d2de9f2412740790018596dc79d594" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real rfspot::index1</definition>
+        <argsstring></argsstring>
+        <name>index1</name>
+        <briefdescription>
+<para>1st index </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="181" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00038_1ac3e24035bbb60974e152fcdd0edf8bba" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real rfspot::index2</definition>
+        <argsstring></argsstring>
+        <name>index2</name>
+        <briefdescription>
+<para>2nd index </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="182" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00038_1ae0b3c27925ac7b354896cc09012ff7f0" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real rfspot::f_val1</definition>
+        <argsstring></argsstring>
+        <name>f_val1</name>
+        <briefdescription>
+<para>can be used for length in k space e.g. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="183" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00038_1a27614ed676f28e56ef97e1ed9f68c984" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real rfspot::f_val2</definition>
+        <argsstring></argsstring>
+        <name>f_val2</name>
+        <briefdescription>
+<para>can be used for intensity e.g. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="184" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00038_1a20353393197b3a0ab1584c902a7bd038" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int rfspot::i_val1</definition>
+        <argsstring></argsstring>
+        <name>i_val1</name>
+        <briefdescription>
+<para>arbitrary use </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="185" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00038_1a5c3572083c4e6a128994fa98cd5e345d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int rfspot::i_val2</definition>
+        <argsstring></argsstring>
+        <name>i_val2</name>
+        <briefdescription>
+<para>arbitrary use </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="186" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="180" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="179" bodyend="187"/>
+    <listofallmembers>
+      <member refid="a00038_1ae0b3c27925ac7b354896cc09012ff7f0" prot="public" virt="non-virtual"><scope>rfspot</scope><name>f_val1</name></member>
+      <member refid="a00038_1a27614ed676f28e56ef97e1ed9f68c984" prot="public" virt="non-virtual"><scope>rfspot</scope><name>f_val2</name></member>
+      <member refid="a00038_1a20353393197b3a0ab1584c902a7bd038" prot="public" virt="non-virtual"><scope>rfspot</scope><name>i_val1</name></member>
+      <member refid="a00038_1a5c3572083c4e6a128994fa98cd5e345d" prot="public" virt="non-virtual"><scope>rfspot</scope><name>i_val2</name></member>
+      <member refid="a00038_1ad6d2de9f2412740790018596dc79d594" prot="public" virt="non-virtual"><scope>rfspot</scope><name>index1</name></member>
+      <member refid="a00038_1ac3e24035bbb60974e152fcdd0edf8bba" prot="public" virt="non-virtual"><scope>rfspot</scope><name>index2</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

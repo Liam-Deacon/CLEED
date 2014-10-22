@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00039" kind="struct" prot="public">
+    <compoundname>rusage</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00039_1a2005ce802ef81d6cb382c39c8b72dbf6" prot="public" static="no" mutable="no">
+        <type><ref refid="a00046" kindref="compound">timeval</ref></type>
+        <definition>timeval rusage::ru_utime</definition>
+        <argsstring></argsstring>
+        <name>ru_utime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="22" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1a8e0e3e7e30a7038d0596d75a3dba2124" prot="public" static="no" mutable="no">
+        <type><ref refid="a00046" kindref="compound">timeval</ref></type>
+        <definition>timeval rusage::ru_stime</definition>
+        <argsstring></argsstring>
+        <name>ru_stime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="23" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1ae7e8289a6d9666491a00ce3788a94740" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_maxrss</definition>
+        <argsstring></argsstring>
+        <name>ru_maxrss</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="24" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1adf2c66ca67945d237b1f7a523fb7087d" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_ixrss</definition>
+        <argsstring></argsstring>
+        <name>ru_ixrss</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="25" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1aba44a9e7cf6d29a0fb9fb774fc1054df" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_idrss</definition>
+        <argsstring></argsstring>
+        <name>ru_idrss</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="26" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1a98bbea3ea84e31221545b4a25a5e58eb" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_isrss</definition>
+        <argsstring></argsstring>
+        <name>ru_isrss</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="27" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1a4643b00037b8e80bae9fcd26522a428b" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_minflt</definition>
+        <argsstring></argsstring>
+        <name>ru_minflt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="28" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1aa864ea2c906ab13a9a537a99522ae1f2" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_majflt</definition>
+        <argsstring></argsstring>
+        <name>ru_majflt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="29" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1a27f1c056632ca282cccbbfb18a7fd65e" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_nswap</definition>
+        <argsstring></argsstring>
+        <name>ru_nswap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="30" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1ae0054babff647c0b7d15056d2a065078" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_inblock</definition>
+        <argsstring></argsstring>
+        <name>ru_inblock</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="31" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1af90459468f1d307bef8651ca7f859216" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_oublock</definition>
+        <argsstring></argsstring>
+        <name>ru_oublock</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="32" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1adc1e0b2e4ede24b5d1f21c2ea0d82d13" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_msgsnd</definition>
+        <argsstring></argsstring>
+        <name>ru_msgsnd</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="33" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1ae5d3fdcf63bab40551f38d4cdd6bf8ed" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_msgrcv</definition>
+        <argsstring></argsstring>
+        <name>ru_msgrcv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="34" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1ac577efad747b76666e163b843286380a" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_nsignals</definition>
+        <argsstring></argsstring>
+        <name>ru_nsignals</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="35" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1a1ff82b153eb3945d4aa62bfc428d9b28" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_nvcsw</definition>
+        <argsstring></argsstring>
+        <name>ru_nvcsw</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="36" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00039_1a4ce68fcaf7242cc09be270c56cc2f55e" prot="public" static="no" mutable="no">
+        <type>long</type>
+        <definition>long rusage::ru_nivcsw</definition>
+        <argsstring></argsstring>
+        <name>ru_nivcsw</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="37" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="104">
+        <label>timeval</label>
+        <link refid="a00046"/>
+      </node>
+      <node id="103">
+        <label>rusage</label>
+        <link refid="a00039"/>
+        <childnode refid="104" relation="usage">
+          <edgelabel>ru_stime</edgelabel>
+          <edgelabel>ru_utime</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" line="21" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/getrusage_win32.h" bodystart="20" bodyend="38"/>
+    <listofallmembers>
+      <member refid="a00039_1aba44a9e7cf6d29a0fb9fb774fc1054df" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_idrss</name></member>
+      <member refid="a00039_1ae0054babff647c0b7d15056d2a065078" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_inblock</name></member>
+      <member refid="a00039_1a98bbea3ea84e31221545b4a25a5e58eb" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_isrss</name></member>
+      <member refid="a00039_1adf2c66ca67945d237b1f7a523fb7087d" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_ixrss</name></member>
+      <member refid="a00039_1aa864ea2c906ab13a9a537a99522ae1f2" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_majflt</name></member>
+      <member refid="a00039_1ae7e8289a6d9666491a00ce3788a94740" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_maxrss</name></member>
+      <member refid="a00039_1a4643b00037b8e80bae9fcd26522a428b" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_minflt</name></member>
+      <member refid="a00039_1ae5d3fdcf63bab40551f38d4cdd6bf8ed" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_msgrcv</name></member>
+      <member refid="a00039_1adc1e0b2e4ede24b5d1f21c2ea0d82d13" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_msgsnd</name></member>
+      <member refid="a00039_1a4ce68fcaf7242cc09be270c56cc2f55e" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_nivcsw</name></member>
+      <member refid="a00039_1ac577efad747b76666e163b843286380a" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_nsignals</name></member>
+      <member refid="a00039_1a27f1c056632ca282cccbbfb18a7fd65e" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_nswap</name></member>
+      <member refid="a00039_1a1ff82b153eb3945d4aa62bfc428d9b28" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_nvcsw</name></member>
+      <member refid="a00039_1af90459468f1d307bef8651ca7f859216" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_oublock</name></member>
+      <member refid="a00039_1a8e0e3e7e30a7038d0596d75a3dba2124" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_stime</name></member>
+      <member refid="a00039_1a2005ce802ef81d6cb382c39c8b72dbf6" prot="public" virt="non-virtual"><scope>rusage</scope><name>ru_utime</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

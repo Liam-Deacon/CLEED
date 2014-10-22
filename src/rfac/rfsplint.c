@@ -12,9 +12,9 @@
  *   GH/1995.08.29 - Creation (copy from splint.c in Numerical Recipes)
  ********************************************************************/
 
-/*! \file rfsplint.c
+/*! \file
  *
- * Implementation file for \ref rf_splint C function.
+ * Implementation file for rf_splint() function.
  */
 
 #include <stdlib.h>

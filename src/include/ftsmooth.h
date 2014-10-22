@@ -21,9 +21,9 @@
  *   LD/2014.09.30 - OpenMP support and initial Doxygen markup
  ************************************************************************/
 
-/*! \file ftsmooth.h
+/*! \file
  *
- * Header file for ftsmooth (Fourier Transformation Smooth)
+ * Header file for \c ftsmooth (Fourier Transformation Smooth)
  */
 
 #ifndef FTSMOOTH_H
@@ -34,35 +34,35 @@ extern "C" {
 #endif
 
 /* define version information */
-#define VERSION 1.2
-#define VERSION_INFO "FTSMOOTH - version 1.2 LD/18.06.13"
-#define NOTES "ftsmooth is part of the CLEED package by Georg Held" \
+#define FTSMOOTH_VERSION 1.2
+#define FTSMOOTH_VERSION_INFO "FTSMOOTH - version 1.2 LD/18.06.13"
+#define FTSMOOTH_NOTES "ftsmooth is part of the CLEED package by Georg Held" \
 "\n\t(contact g.held@reading.ac.uk)"
 #ifndef BUG_CONTACT 
 #define BUG_CONTACT "Liam Deacon (liam.deacon@diamond.ac.uk)"
 #endif
 
-#define PROG "ftsmooth"
-#define PROG_COPYRIGHT "Copyright (C) 2008-2014 Georg Held\n" \
+#define FTSMOOTH_PROG "ftsmooth"
+#define FTSMOOTH_PROG_COPYRIGHT "Copyright (C) 2008-2014 Georg Held\n" \
 "Copyright (C) 2014 Liam Deacon"
-#define PROG_LICENSE "GNU General Public License v3"
-#define PROG_VERSION "2014.07.04 Development"
-#define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
-#define PROG_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 
-#define PROG_SHORTDESC "Manipulate IV curves"
+#define FTSMOOTH_PROG_LICENSE "GNU General Public License v3"
+#define FTSMOOTH_PROG_VERSION "2014.07.04 Development"
+#define FTSMOOTH_PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
+#define FTSMOOTH_PROG_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>"
+#define FTSMOOTH_PROG_SHORTDESC "Manipulate IV curves"
 
 /* platform information */
 #if defined(WIN32) || defined(_WIN32) \
                    || defined(__WIN32) || defined(__WIN32__)
-#define PROG_PLAT "Win32"
+#define FTSMOOTH_PROG_PLAT "Win32"
 #elif defined(__CYGWIN__) || defined(__CYGWIN32__)
-#define PROG_PLAT "Win32_Cygwin"
+#define FTSMOOTH_PROG_PLAT "Win32_Cygwin"
 #elif defined(__ANDROID__)
-#define PROG_PLAT "Android"
+#define FTSMOOTH_PROG_PLAT "Android"
 #elif defined(__linux__) || defined(__linux)
-#define PROG_PLAT "Linux"
+#define FTSMOOTH_PROG_PLAT "Linux"
 #else
-#define PROG_PLAT "Unix"
+#define FTSMOOTH_PROG_PLAT "Unix"
 #endif
 
 #include <stdlib.h>
@@ -89,7 +89,7 @@ extern "C" {
 #define SQRT_PI 0.79788456080286541644     /*!< sqrt(2/PI) */
 #endif
 
-/*! \typedef \enum offset
+/*! \typedef offset
  *  \brief indicates the offset operation type
  */
 typedef enum {
@@ -104,22 +104,21 @@ typedef enum {
 /* function prototypes */
 int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
         double cutoff, double tailoff, int stdout_flag);
-        
+
 void ftsmooth_usage(FILE *output);
 
 void ftsmooth_info();
 
-size_t read_data(FILE *in_stream, FILE *out_stream, double *x, double *fx);
+/* ftsmooth data manipulation functions */
+size_t fts_read_data(FILE *, FILE *, double *, double *);
 
-int offset_data(double *x, double *fx, size_t n_x, double offset,
-            int offset_flag);
-        
-size_t trim_data(double *x, double *fx, size_t n_x, double *lbound,
-             double *ubound, size_t n_r);
+int fts_offset_data(double *, double *, size_t, double, int);
 
-size_t rm_neg_data(double *x, double *fx, size_t n_x);
+size_t fts_trim_data(double *, double *, size_t, double *, double *, size_t);
 
-int print_data(FILE *out_stream, double *x, double *fx, size_t n_x);
+size_t fts_rm_neg_data(double *, double *, size_t);
+
+int fts_print_data(FILE *, double *, double *, size_t);
 
 int decode_ranges(double *lbound, double *ubound, size_t *i_r, char *argv);
 

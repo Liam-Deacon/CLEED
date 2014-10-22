@@ -1,5 +1,15 @@
-/*********************************************************************
-GH/16.07.02 
+/************************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *16.07.02 
   file contains functions:
 
   leed_ms_tmat_nd_ii

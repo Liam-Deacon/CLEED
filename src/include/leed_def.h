@@ -1,17 +1,13 @@
 /*********************************************************************
  *                           LEED_DEF.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
- *
- *
- * Description: Header file for data structures, type definitions and
- *              constant values used in the LEED programs.
  *
  * Changes:
  *   GH/1995.09.20 - creation
@@ -34,6 +30,12 @@
  *
  *********************************************************************/
 
+/*!
+ * \file
+ * \brief Header file for data structures, type definitions and
+ * constant values used in the LEED programs \c leed_sym and \c leed_nsym .
+ */
+
 #ifndef LEED_DEF_H
 #define LEED_DEF_H
 
@@ -46,27 +48,27 @@ extern "C" {
 #include "mat_def.h"
 
 /*********************************************************************
- Fundamental constants/conversion factors  
- (Source: CRC Handbook, 73rd Edition)
-*********************************************************************/
+ * Fundamental constants/conversion factors
+ * (Source: CRC Handbook, 73rd Edition)
+ *********************************************************************/
 
-#define HART  27.2113962       /*! Hartree in eV */
-#define BOHR  0.529177249      /*! Bohr radius in Angstroms */
-#define MEL_U 5.48579903e-4    /*! electron mass in amu (atomic mass units) */
-#define U_MEL 1822.88850636    /*! 1 amu in multiples of the electron mass */
-#define KB    3.16682941e-6    /*! Boltzmann constant in Hartree/K */
+#define HART  27.2113962       /*!< Hartree in eV */
+#define BOHR  0.529177249      /*!< Bohr radius in Angstroms */
+#define MEL_U 5.48579903e-4    /*!< electron mass in amu (atomic mass units) */
+#define U_MEL 1822.88850636    /*!< 1 amu in multiples of the electron mass */
+#define KB    3.16682941e-6    /*!< Boltzmann constant in Hartree/K */
 
 /*********************************************************************
- Program parameters
-  - tolerance
-  - threshold values etc.
-*********************************************************************/
+ * Program parameters
+ * - tolerance
+ * - threshold values etc.
+ *********************************************************************/
 
 /* Defaults */
 
-/*! \def PHASE_PATH 
- *
- * default path name for phase shift input relative to HOME directory */
+/*!
+ * Default path name for phase shift input relative to HOME directory
+ */
 #define PHASE_PATH "phase"
                                
 /*! \def DEF_TEMP 
@@ -93,7 +95,7 @@ extern "C" {
 /* Tolerances */
 /*! \def E_TOLERANCE
  *  \brief tolerance for energies in HARTREE (0.027eV) */
-#define E_TOLERANCE    1.e-3   
+#define E_TOLERANCE    1.e-3   /*!< tolerance for comparing two energies */
 #define GEO_TOLERANCE  1.e-3   /*!< tolerance for geometrical parameters in BOHR */
 #define INT_TOLERANCE  1.e-10  /*!< min. intensity > 0. */
 #define K_TOLERANCE    1.e-4   /*!< tolerance for k_par in (BOHR)^-1 */
@@ -102,15 +104,15 @@ extern "C" {
 
 /* Flags for mirror planes etc. */
 
-/*! \typedef \enum leed_structure
+/*! \typedef leed_structure
  *  \brief indicates whether structure is the bulk or an overlayer.
  */
 typedef enum {
   BULK=0,       /*!< bulk structure */
   OVER          /*!< overlayer structure */
-} leed_structure
+} leed_structure;
 
-/*! \typedef \enum leed_matrix_t
+/*! \typedef leed_matrix_diag
  *  \brief indicates whether a diagonal T-matrix or not.
  */
 typedef enum {
@@ -118,7 +120,7 @@ typedef enum {
   T_NOND
 } leed_matrix_diag;
 
-/*! \typedef \enum leed_mirror_sym
+/*! \typedef leed_mirror_sym
  *  \brief indicates mirror symmetry type.
  */
 typedef enum {
@@ -149,12 +151,8 @@ typedef enum {
 /* current version No. now in file leed_ver.h */
 
 /*********************************************************************
- structures and types 
-*********************************************************************/
-
-/*********************************************************************
-  struct atom_str contains all properties of a single atom
-*********************************************************************/
+ *structures and types
+ *********************************************************************/
 
 /*! \struct leed_atom
  *  \brief contains all properties of a single atom */
@@ -169,9 +167,6 @@ typedef struct atom_str
  real dwf;        /*!< Debye-Waller factor */ 
 } leed_atom;
 
-/*********************************************************************
- * struct layer_str contains all properties of a single layer
- *********************************************************************/
 
 /*! \struct leed_layer
  *  \brief contains all properties of a single layer. */
@@ -199,9 +194,6 @@ typedef struct layer_str
                           * (or Bravais) layers */
 } leed_layer;
 
-/*********************************************************************
- * struct cryst_str contains all crystal specific program parameters
- *********************************************************************/
 
 /*! \struct leed_cryst_t
  *  \brief contains all crystal specific program parameters. */
@@ -270,9 +262,6 @@ typedef struct cryst_str
  char **comments; /*!< comments */
 } leed_cryst_t;
 
-/*********************************************************************
- * struct phs_str contains all parameters concerning the phase shifts
- *********************************************************************/
 
 /*! \struct leed_phs_t
  *  \brief contains all crystal specific program parameters. */
@@ -290,10 +279,7 @@ typedef struct phs_str
  char *input_file;    /*!< name of input file */
 } leed_phs_t;
 
-/*********************************************************************
- * struct beam_str contains all parameters of a specific beam in
- * k-space.
- *********************************************************************/
+
 /*! \struct leed_beam_t
  *  \brief contains all parameters of a specific beam in k-space. */
 typedef struct beam_str 
@@ -340,10 +326,7 @@ typedef struct beam_str
  size_t set;       /*!< beam set, where the beam belongs to */
 } leed_beam_t;
 
-/*********************************************************************
- * struct var_str contains all parameters that change during the energy
- * loop and the parameters controlling them.
- *********************************************************************/
+
 /*! \struct leed_var
  *  
  * contains all parameters that change during the energy 
@@ -369,9 +352,6 @@ typedef struct var_str
                  *   (1st dim = lmax, 2nd dim = 1) */
 } leed_var;
 
-/*********************************************************************
- * struct eng_str contains the parameters that control the energy loop
- *********************************************************************/
 
 /*! \struct leed_energy
  *  \brief contains the parameters that control the energy loop. */

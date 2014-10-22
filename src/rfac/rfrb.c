@@ -14,7 +14,7 @@
  *   GH/1995.09.07 -  Adaption for CRFAC
  ********************************************************************/
 
-/*! \file rfrb.c
+/*! \file
  *
  * Implemenation file for Rb1 factor calculation.
  */
@@ -23,28 +23,26 @@
 #include <math.h>           /* needed for sqrt */
 #include "rfac.h"           /* specific definitions etc. */
 
-#define CNORM 0.666667     /* 0.67 normalisation to uncorrelated curves */
+#define CNORM 0.666667     /*!< 2/3 normalisation to uncorrelated curves */
 
 /*!
- * \fn rf_rb
- *
  * \brief Calculate Rb1-factor.
  *
  * Calculate Rb1-factor:
  *
- * \f$ R_{b1} = (1 - C) / (1 - C_NORM) \f$
+ * \f$ R_{b1} = \frac{(1 - C)}{(1 - C_NORM)} \f$
  *
- * \f$ C =  S(I_theory*I_exp) / \sqrt{ (S * I_theory^2) * (S * I_exp^2) } \f$
- * \f$ C_NORM = 2/3 \f$ (cf. G. Held, Dissertation)
+ * \f$ C = \frac{S(I_t \times I_e)}{\sqrt{ (S I_t^2) \cdot (S I_e^2)}} \f$
+ * \f$ C_{NORM} = \frac{2}{3} \f$ (cf. G. Held, Dissertation)
  *
- * \param[in] *eng pointer to list of energies.
- * \param[in] *e_int pointer to list of experimental intensities.
- * \param[in] *t_int lists pointer to list of theoretical intensities.
+ * \param[in] eng pointer to list of energies.
+ * \param[in] e_int pointer to list of experimental intensities.
+ * \param[in] t_int lists pointer to list of theoretical intensities.
  *
- * \note \p eng must be terminated by \ref F_END_OF_LIST.
+ * \note \p eng must be terminated by #F_END_OF_LIST.
  *
  * \return R2-factor if successful.
- * \retval \ref RFAC_FAILURE, if failed.
+ * \retval #RFAC_FAILURE, if failed.
  *
  */
 real rf_rb(const real *eng, const real *e_int, const real *t_int)

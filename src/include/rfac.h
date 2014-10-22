@@ -15,7 +15,7 @@
  *   GH/1997.08.30 - creation
  *********************************************************************/
 
-/*! \file rfac.h
+/*! \file
  *  \brief master include file for R factor program.
  */
 

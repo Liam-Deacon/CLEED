@@ -8,13 +8,16 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: Header for struct lattice and contains prototypes for
- *              associated functions.
- *
  * Changes:
  *   LD/2014.08.28 - Creation
  ************************************************************************/
+
+/*!
+ * \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief Header for \c struct #lattice and contains prototypes for its
+ * associated functions.
+ */
 
 #ifndef LATTICE_H
 #define LATTICE_H
@@ -51,25 +54,31 @@ extern "C" {
 
 #define LAT_INP 100
 
-/*! \typedef \enum lattice_error_code_t
+/*! \typedef lattice_error_code
  *  \brief return codes from functions operating on lattice struct
  */
 typedef enum {
-  LATTICE_OPERATION_SUCCESS=0,
-  LATTICE_ATOM_INDEX_OUT_OF_RANGE,
-  LATTICE_ALLOC_FAILURE,
-  LATTICE_STRING_ALLOC_FAILURE
+  LATTICE_FAILURE=-1,               /*!< indicates general failure */
+  LATTICE_SUCCESS=0,                /*!< indicates general success */
+  LATTICE_ATOM_INDEX_OUT_OF_RANGE,  /*!< indicates the atom index is out of
+                                     * range */
+
+  LATTICE_ALLOC_FAILURE,            /*!< indicates memory allocation failure */
+  LATTICE_STRING_ALLOC_FAILURE      /*!< indicates string memory allocation
+                                     * failure */
 } lattice_error_code;
 
-/*! \enum latt_type
+/*! \typedef latt_type
  *  \brief indicates lattice type
+ *
+ * \c enum for different types of lattice structures.
  */
 typedef enum {
-  LAT_FCC=1,
-  LAT_HCP,
-  LAT_BCC,
-  LAT_DIA,
-  LAT_UNKNOWN
+  LAT_FCC=1,          /*!< indicates Face Centred Cubic (FCC) packing */
+  LAT_HCP,            /*!< indicates Hexagonal Close Packed (HCP) packing */
+  LAT_BCC,            /*!< indicates Body Centred Cubic (BCC) packing */
+  LAT_DIA,            /*!< indicates Diamond structure */
+  LAT_UNKNOWN         /*!< indicates unknown structure */
 } latt_type;
 
 /*! \typedef lattice
@@ -93,12 +102,12 @@ typedef struct {
   double vec_h;         /*!< h Miller index. */
   double vec_k;         /*!< k Miller index. */
   double vec_l;         /*!< l Miller index. */
-  char *input_filename; 
-  char *output_filename;
+  char *input_filename; /*!< the filename to read in input */
+  char *output_filename;/*!< the filename to output the generated lattice to */
   char *script;         /*!< do jmol script to write to xyz output */
   atom *atoms;          /*!< Array of atoms. */
-  size_t n_atoms;
-  size_t allocated_atoms;
+  size_t n_atoms;       /*!< The total number of atoms in the lattice model */
+  size_t allocated_atoms; /*!< The total number of atoms allocated in memory */
 } lattice;
 
 extern FILE *inf_stream;
@@ -156,14 +165,18 @@ miller_hkl *lattice_get_miller_hkl(const lattice *lat);
 
 namespace cleed {
 
+/*!
+ * A C++ wrapper class for \c struct #lattice and its associated functions,
+ * providing a more OO interface.
+ */
 class Lattice {
 
   public:
-    Lattice();
-    ~Lattice();
+    Lattice();      /*!< Constructor */
+    ~Lattice();     /*!< Destructor */
 
   protected:
-    lattice *lat;
+    lattice *lat;   /*!< Access to lower C level \c struct */
 }
 
 

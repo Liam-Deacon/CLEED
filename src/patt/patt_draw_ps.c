@@ -16,12 +16,12 @@ int patt_draw_ps(const patt_drawing *drawing)
   FILE *f = NULL;
   FILE *out_stream = NULL;
   char title[strlen(drawing->title.label)+10];
-  char copyright[strlen(PROG_COPYRIGHT)+20];
-  char program[strlen(PROG_VERSION)+strlen(PROG)+20];
+  char copyright[strlen(PATT_PROG_COPYRIGHT)+20];
+  char program[strlen(PATT_PROG_VERSION)+strlen(PATT_PROG)+20];
 
   sprintf(title, "%%Title: %s", drawing->title.label);
-  sprintf(copyright, "%%Copyright: %s", PROG_COPYRIGHT);
-  sprintf(program, "%%Creator: %s - Version %s", PROG, PROG_VERSION);
+  sprintf(copyright, "%%Copyright: %s", PATT_PROG_COPYRIGHT);
+  sprintf(program, "%%Creator: %s - Version %s", PATT_PROG, PATT_PROG_VERSION);
 
   /* open output stream */
   if ((out_stream = fopen(drawing->output_filename, "w")) == NULL)

@@ -1,18 +1,22 @@
-/********************************************************************
-GH/07.09.95
-file contains function:
+/*********************************************************************
+ *                       RFR1.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/1992.10.01 - Creation
+ *   GH/1992.10.26 - Change normalisation.
+ ********************************************************************/
 
-   real cr_r1( real *eng, real *e_int, real *t_int)
-
-Calculate R2-factor
-
-Changes:
-  GH/01.10.92
-  GH/26.10.92 - Change normalisation.
-********************************************************************/
-
-/*! \file rfr1.c
- *  \brief Implementation of R1 calculation using \ref rf_r1 function.
+/*! \file
+ *  \brief Implementation of R1 calculation using rf_r1() function.
+ *
+ *  Calculate R1 factor.
  */
 
 #include <stdio.h>
@@ -21,26 +25,24 @@ Changes:
 #include "rfac.h"          /* specific definitions etc. */
 
 /*!
- * \fn rf_r1
- *
  * \brief compute R1-factor.
  *
  * This function calculates the R1-factor between experimental and
  * theoretical IV curves.
  *
- * R1 = S|It - norm_te*I_experiment| / S |I_theory|
+ * \f[ R1 = \frac{S |I_t - (norm_te \times I_e)|}{S |I_t|} \f]
  *
- * norm_te = S|I_theory| / S|I_experiment|;
+ * \f[ norm_te = \frac{S|I_t|}{S|I_e|} \f]
  *
  * \note Normalisation factor (denominator) is changed with respect to
- * common use. Instead S |I_theory|, now S |I_theory - S*I_theory / \delta E|
- * is used.
+ * common use. Instead of \f$ S |I_t| \f$, \f$ S|\frac{I_t - S*I_t}{\delta E}|
+ * \f$ is used.
  *
- * \param[in] *eng pointer to list of energy values.
- * \param[in] *e_int pointer to list of experimental intensity values.
- * \param[in] *t_int pointer to list of theoretical intensities.
+ * \param[in] eng pointer to list of energy values.
+ * \param[in] e_int pointer to list of experimental intensity values.
+ * \param[in] t_int pointer to list of theoretical intensities.
  *
- * \note At least eng must be terminated by \ref F_END_OF_LIST.
+ * \note \p eng must be terminated by #F_END_OF_LIST.
  *
  * \retval R1-factor, if successful.
  * \retval F_FAIL, if failed.

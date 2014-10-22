@@ -1,15 +1,28 @@
-/****************************************************************************
-                        PATTERN (Georg Held 22.03.93)
-NAME
-	pattern -- LEED pattern visualisation program  
+/*********************************************************************
+ *                           PATT.H
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/2014.08.23 - header created by split from patt.c
+ *********************************************************************/
 
-DESCRIPTION
-	Pattern simulates Low Energy Electron Diffraction (LEED) patterns
-to help in analysis of complex surface structures. Diffraction peaks 
-(spots), indices, reciprocal lattice vectors & different domains can 
-all be visualised using vector graphics (PostScript). 
-
-******************************************************************************/
+/*!
+ * \file
+ * \brief Master include for \c patt - LEED pattern visualisation program.
+ *
+ * \c patt simulates Low Energy Electron Diffraction (LEED) patterns
+ * to help in analysis of complex surface structures. Diffraction peaks
+ * (spots), indices, reciprocal lattice vectors & different domains can
+ * all be visualised using vector graphics (e.g. PostScript).
+ *
+ */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
@@ -19,10 +32,6 @@ extern "C" {
 #define _PATT_H
 
 #include <stdio.h>
-
-#define VERSION "PATTERN - version 1.4 (2014.07.04 - )"
-#define NOTES "Pattern is part of the CLEED package by Georg Held"\
-"\n\t(contact g.held@reading.ac.uk)"
 
 #include "patt_ver.h"
 #include "patt_def.h"

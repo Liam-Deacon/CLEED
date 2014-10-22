@@ -1,0 +1,898 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00061" kind="file">
+    <compoundname>ftsmooth.h</compoundname>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includes local="no">math.h</includes>
+    <includes local="no">strings.h</includes>
+    <includes local="no">float.h</includes>
+    <includes local="no">ctype.h</includes>
+    <includedby refid="a00053" local="yes">CLEED.H</includedby>
+    <incdepgraph>
+      <node id="145">
+        <label>float.h</label>
+      </node>
+      <node id="141">
+        <label>stdlib.h</label>
+      </node>
+      <node id="140">
+        <label>ftsmooth.h</label>
+        <link refid="ftsmooth.h"/>
+        <childnode refid="141" relation="include">
+        </childnode>
+        <childnode refid="142" relation="include">
+        </childnode>
+        <childnode refid="143" relation="include">
+        </childnode>
+        <childnode refid="144" relation="include">
+        </childnode>
+        <childnode refid="145" relation="include">
+        </childnode>
+        <childnode refid="146" relation="include">
+        </childnode>
+      </node>
+      <node id="143">
+        <label>math.h</label>
+      </node>
+      <node id="144">
+        <label>strings.h</label>
+      </node>
+      <node id="146">
+        <label>ctype.h</label>
+      </node>
+      <node id="142">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="147">
+        <label>ftsmooth.h</label>
+        <link refid="ftsmooth.h"/>
+        <childnode refid="148" relation="include">
+        </childnode>
+      </node>
+      <node id="148">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="a00061_1a1c6d5de492ac61ad29aec7aa9a436bbf" prot="public" static="no">
+        <name>VERSION</name>
+        <initializer>1.2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="37" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a2d2b6ceee9d9602972e2de6426a3b9cf" prot="public" static="no">
+        <name>VERSION_INFO</name>
+        <initializer>&quot;FTSMOOTH - version 1.2 LD/18.06.13&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="38" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a0dcfd20e97e4c9ddc19888308ad18caf" prot="public" static="no">
+        <name>NOTES</name>
+        <initializer>&quot;ftsmooth is part of the CLEED package by Georg Held&quot; \
+&quot;\n\t(contact g.held@reading.ac.uk)&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="39" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a471808f2fb5c298063386bddada3ce1a" prot="public" static="no">
+        <name>BUG_CONTACT</name>
+        <initializer>&quot;Liam Deacon (liam.deacon@diamond.ac.uk)&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="42" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a60a12235056da679c8976cec1faa66e2" prot="public" static="no">
+        <name>PROG</name>
+        <initializer>&quot;ftsmooth&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="45" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a71e8a9200a57fcdbb1641eddcd643dba" prot="public" static="no">
+        <name>PROG_COPYRIGHT</name>
+        <initializer>&quot;Copyright (C) 2008-2014 Georg Held\n&quot; \
+&quot;Copyright (C) 2014 Liam Deacon&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="46" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1aacc7ba144d400b8503741b34fef744af" prot="public" static="no">
+        <name>PROG_LICENSE</name>
+        <initializer>&quot;GNU General Public License v3&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="48" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a50ef2e611dcbc13c41a2bb2556009c61" prot="public" static="no">
+        <name>PROG_VERSION</name>
+        <initializer>&quot;2014.07.04 Development&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="49" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1ab1ef3c8a38b85205fa6a6e0a2241d270" prot="public" static="no">
+        <name>PROG_AUTHOR</name>
+        <initializer>&quot;Georg Held (g.held@reading.ac.uk)&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="50" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a49f95d28775171e45b93f0383ac50763" prot="public" static="no">
+        <name>PROG_MAINTAINER</name>
+        <initializer>&quot;Liam Deacon &lt;liam.deacon@diamond.ac.uk&gt;&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="51" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1ad43812b4200a1ba9dc3aa32a7d0bbf42" prot="public" static="no">
+        <name>PROG_SHORTDESC</name>
+        <initializer>&quot;Manipulate IV curves&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="52" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a49dff70c9a1ba22d1cec48fb5784f0c0" prot="public" static="no">
+        <name>PROG_PLAT</name>
+        <initializer>&quot;Unix&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="65" column="10" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a486d47d8c71234ccdd26bdb47ac1658e" prot="public" static="no">
+        <name>STRSZ</name>
+        <initializer>128</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="81" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a598a3330b3c21701223ee0ca14316eca" prot="public" static="no">
+        <name>PI</name>
+        <initializer>3.141592653589793</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="85" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a204175c725ee19858dedec2865d490b8" prot="public" static="no">
+        <name>SQRT_PI</name>
+        <initializer>0.79788456080286541644</initializer>
+        <briefdescription>
+<para>sqrt(2/PI) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="89" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1abf1073676f609d81565cbff7bc1a39a6" prot="public" static="no">
+        <name>INVALID_ARGUMENT_ERROR</name>
+        <initializer>-1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="102" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00061_1a04df2d265df554063773095295513797" prot="public" static="no">
+        <name>ARG_PARSE_DBL</name>
+        <param><defname>x</defname></param>
+        <initializer>if (i_arg &lt; argc)                                               \
+{                                                               \
+  x = (double)atof(argv[i_arg]);                                \
+}                                                               \
+else                                                            \
+{                                                               \
+  fprintf(stderr, &quot;***error (ftsmooth): &quot;                       \
+      &quot;no argument value for option &apos;%s&apos;\n&quot;,                    \
+      argv[i_arg-1]);                                           \
+  exit(INVALID_ARGUMENT_ERROR);                                 \
+}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="144" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="a00061_1a1bc9f7918db5c0671932160d19ef6eec" prot="public" static="no">
+        <name>offset</name>
+        <enumvalue id="a00061_1a1bc9f7918db5c0671932160d19ef6eeca4b9548c3412b975cceb638b46532a439" prot="public">
+          <name>OFFSET_X_TO_VALUE</name>
+          <initializer>=1</initializer>
+          <briefdescription>
+<para>make x += offset </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00061_1a1bc9f7918db5c0671932160d19ef6eeca9f6f2aa5ec3cf90ad15558a8c8782b5b" prot="public">
+          <name>OFFSET_X_TO_ZERO</name>
+          <briefdescription>
+<para>make x_min = 0 </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00061_1a1bc9f7918db5c0671932160d19ef6eeca757ad684ce4854a45d67c2c18dc547ff" prot="public">
+          <name>OFFSET_Y_TO_VALUE</name>
+          <briefdescription>
+<para>make f(x) += offset </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00061_1a1bc9f7918db5c0671932160d19ef6eeca107380472f8b7cff0f7deb6ac404ab97" prot="public">
+          <name>OFFSET_Y_TO_ZERO</name>
+          <briefdescription>
+<para>make y_min = 0 </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>indicates the offset operation type </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="95" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="95" bodyend="100"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="a00061_1a6ef91b6a4850116d8b7ed8c36cf4863f" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char line_buffer[STRSZ]</definition>
+        <argsstring>[STRSZ]</argsstring>
+        <name>line_buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="141" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="a00061_1ae1cfa59bce762a37efd5640b3b6c4683" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int ftsmooth</definition>
+        <argsstring>(FILE *out_stream, double *x, double *fx, size_t n_x, double cutoff, double tailoff, int stdout_flag)</argsstring>
+        <name>ftsmooth</name>
+        <param>
+          <type>FILE *</type>
+          <declname>out_stream</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cutoff</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tailoff</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>stdout_flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="105" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1a96921bd350bd5c1ced70eb63ce0ad3bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ftsmooth_usage</definition>
+        <argsstring>(FILE *output)</argsstring>
+        <name>ftsmooth_usage</name>
+        <param>
+          <type>FILE *</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="108" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1ace541679c3790bd7f25f084066d235af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ftsmooth_info</definition>
+        <argsstring>()</argsstring>
+        <name>ftsmooth_info</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="110" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1a845bbe5f6d84136db16b17c652e0d189" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t read_data</definition>
+        <argsstring>(FILE *in_stream, FILE *out_stream, double *x, double *fx)</argsstring>
+        <name>read_data</name>
+        <param>
+          <type>FILE *</type>
+          <declname>in_stream</declname>
+        </param>
+        <param>
+          <type>FILE *</type>
+          <declname>out_stream</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>fx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="112" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1acd5de5e9cf274cc4e6a867ac6e0531ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int offset_data</definition>
+        <argsstring>(double *x, double *fx, size_t n_x, double offset, int offset_flag)</argsstring>
+        <name>offset_data</name>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>offset_flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="114" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1af6d11884bcc378c3292996fe57d7f101" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t trim_data</definition>
+        <argsstring>(double *x, double *fx, size_t n_x, double *lbound, double *ubound, size_t n_r)</argsstring>
+        <name>trim_data</name>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_x</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>lbound</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>ubound</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_r</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="117" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1ad1d069718c74c7f9633db15689114cc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t rm_neg_data</definition>
+        <argsstring>(double *x, double *fx, size_t n_x)</argsstring>
+        <name>rm_neg_data</name>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="120" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1a1aef8d7c208380cc467db9c634585e6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int print_data</definition>
+        <argsstring>(FILE *out_stream, double *x, double *fx, size_t n_x)</argsstring>
+        <name>print_data</name>
+        <param>
+          <type>FILE *</type>
+          <declname>out_stream</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="122" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1a8768602b9027c1c945233f2aec60e6b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int decode_ranges</definition>
+        <argsstring>(double *lbound, double *ubound, size_t *i_r, char *argv)</argsstring>
+        <name>decode_ranges</name>
+        <param>
+          <type>double *</type>
+          <declname>lbound</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>ubound</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>i_r</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="124" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1a602053528db9a89a474830bb6b644db2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void ftsmooth_debug</definition>
+        <argsstring>(char *debug_str, char *tag, int argc, char *argv[], FILE *in_stream, FILE *out_stream, int *stdin_flag, int *stdout_flag, double *cutoff, double *tailoff, char *mode, int *offset_flag, double *offset, int *range_flag, int *i_r, double *lbound, double *ubound, int *del_flag)</argsstring>
+        <name>ftsmooth_debug</name>
+        <param>
+          <type>char *</type>
+          <declname>debug_str</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>tag</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>FILE *</type>
+          <declname>in_stream</declname>
+        </param>
+        <param>
+          <type>FILE *</type>
+          <declname>out_stream</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>stdin_flag</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>stdout_flag</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>cutoff</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>tailoff</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>mode</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>offset_flag</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>range_flag</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>i_r</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>lbound</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>ubound</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>del_flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="126" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00061_1a2746e821ac599225aa6f37149f850685" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int parse_args</definition>
+        <argsstring>(int argc, char *argv[], FILE *in_stream, FILE *out_stream, int *stdin_flag, int *stdout_flag, double *cutoff, double *tailoff, char *mode, int *offset_flag, double *offset, int *range_flag, size_t *i_r, double *lbound, double *ubound, int *del_flag)</argsstring>
+        <name>parse_args</name>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type>FILE *</type>
+          <declname>in_stream</declname>
+        </param>
+        <param>
+          <type>FILE *</type>
+          <declname>out_stream</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>stdin_flag</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>stdout_flag</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>cutoff</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>tailoff</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>mode</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>offset_flag</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>range_flag</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>i_r</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>lbound</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>ubound</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>del_flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h" line="133" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Header file for ftsmooth (Fourier Transformation Smooth) </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/************************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>FTSMOOTH.H</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>1995-2014<sp/>Georg<sp/>Held<sp/>&lt;g.held@reading.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2013-2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>@license<sp/>GPL-3.0+<sp/>&lt;http://spdx.org/licenses/GPL-3.0+&gt;</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>Changes:</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/><sp/><sp/>GH/1995.05.30<sp/>-<sp/>Creation</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*<sp/><sp/><sp/>GH/1995.06.01<sp/>-<sp/>Start<sp/>transformation<sp/>from<sp/>f(x=0)<sp/>=<sp/>0<sp/>and</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>interpolate<sp/>values<sp/>from<sp/>-x_0<sp/>to<sp/>x_0.</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/><sp/><sp/>GH/1995.06.07<sp/>-<sp/>x_0<sp/>=<sp/>n_x/4<sp/>*<sp/>x_step</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*<sp/><sp/><sp/>LD/2013.06.18<sp/>-<sp/>Allow<sp/>trimming<sp/>of<sp/>datasets<sp/>with</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&apos;--range<sp/>&lt;arg1&gt;<sp/>&lt;arg2&gt;&apos;</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/>*<sp/><sp/><sp/>LD/2014.07.04<sp/>-<sp/>Added<sp/>VERSION*,<sp/>BUG*<sp/>and<sp/>PROG*<sp/>defines</highlight></codeline>
+<codeline lineno="20"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-<sp/>Added<sp/>C<sp/>linkage<sp/>with<sp/>C++<sp/>compiler</highlight></codeline>
+<codeline lineno="21"><highlight class="comment"><sp/>*<sp/><sp/><sp/>LD/2014.09.30<sp/>-<sp/>OpenMP<sp/>support<sp/>and<sp/>initial<sp/>Doxygen<sp/>markup</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/>************************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="preprocessor">#ifndef<sp/>FTSMOOTH_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FTSMOOTH_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>define<sp/>version<sp/>information<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>VERSION<sp/>1.2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>VERSION_INFO<sp/>&quot;FTSMOOTH<sp/>-<sp/>version<sp/>1.2<sp/>LD/18.06.13&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NOTES<sp/>&quot;ftsmooth<sp/>is<sp/>part<sp/>of<sp/>the<sp/>CLEED<sp/>package<sp/>by<sp/>Georg<sp/>Held&quot;<sp/>\</highlight></codeline>
+<codeline lineno="40"><highlight class="preprocessor">&quot;\n\t(contact<sp/>g.held@reading.ac.uk)&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>BUG_CONTACT<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BUG_CONTACT<sp/>&quot;Liam<sp/>Deacon<sp/>(liam.deacon@diamond.ac.uk)&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG<sp/>&quot;ftsmooth&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_COPYRIGHT<sp/>&quot;Copyright<sp/>(C)<sp/>2008-2014<sp/>Georg<sp/>Held\n&quot;<sp/>\</highlight></codeline>
+<codeline lineno="47"><highlight class="preprocessor">&quot;Copyright<sp/>(C)<sp/>2014<sp/>Liam<sp/>Deacon&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_LICENSE<sp/>&quot;GNU<sp/>General<sp/>Public<sp/>License<sp/>v3&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_VERSION<sp/>&quot;2014.07.04<sp/>Development&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_AUTHOR<sp/>&quot;Georg<sp/>Held<sp/>(g.held@reading.ac.uk)&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_MAINTAINER<sp/>&quot;Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;&quot;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_SHORTDESC<sp/>&quot;Manipulate<sp/>IV<sp/>curves&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>platform<sp/>information<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(WIN32)<sp/>||<sp/>defined(_WIN32)<sp/>\</highlight></codeline>
+<codeline lineno="56"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>||<sp/>defined(__WIN32)<sp/>||<sp/>defined(__WIN32__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_PLAT<sp/>&quot;Win32&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(__CYGWIN__)<sp/>||<sp/>defined(__CYGWIN32__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_PLAT<sp/>&quot;Win32_Cygwin&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(__ANDROID__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_PLAT<sp/>&quot;Android&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(__linux__)<sp/>||<sp/>defined(__linux)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_PLAT<sp/>&quot;Linux&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_PLAT<sp/>&quot;Unix&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;math.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;strings.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;float.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;ctype.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(_USE_OPENMP)<sp/>&amp;&amp;<sp/>!defined(DEBUG)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;omp.h&gt;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>add<sp/>openMP<sp/>support<sp/>if<sp/>desired<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>STRSZ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>STRSZ<sp/>128</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>PI</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PI<sp/>3.141592653589793</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>SQRT_PI</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89" refid="a00061_1a204175c725ee19858dedec2865d490b8" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SQRT_PI<sp/>0.79788456080286541644<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="90"><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95" refid="a00061_1a1bc9f7918db5c0671932160d19ef6eec" refkind="member"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="96" refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca4b9548c3412b975cceb638b46532a439" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca4b9548c3412b975cceb638b46532a439" kindref="member">OFFSET_X_TO_VALUE</ref>=1,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="97" refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca9f6f2aa5ec3cf90ad15558a8c8782b5b" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca9f6f2aa5ec3cf90ad15558a8c8782b5b" kindref="member">OFFSET_X_TO_ZERO</ref>,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="98" refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca757ad684ce4854a45d67c2c18dc547ff" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca757ad684ce4854a45d67c2c18dc547ff" kindref="member">OFFSET_Y_TO_VALUE</ref>,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="99" refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca107380472f8b7cff0f7deb6ac404ab97" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eeca107380472f8b7cff0f7deb6ac404ab97" kindref="member">OFFSET_Y_TO_ZERO</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="100"><highlight class="normal">}<sp/><ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eec" kindref="member">offset</ref>;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>INVALID_ARGUMENT_ERROR<sp/>-1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>function<sp/>prototypes<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ftsmooth(FILE<sp/>*out_stream,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*fx,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_x,</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cutoff,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>tailoff,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>stdout_flag);</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ftsmooth_usage(FILE<sp/>*output);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ftsmooth_info();</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>read_data(FILE<sp/>*in_stream,<sp/>FILE<sp/>*out_stream,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*fx);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>offset_data(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*fx,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eec" kindref="member">offset</ref>,</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>offset_flag);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>trim_data(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*fx,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*lbound,</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*ubound,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_r);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>rm_neg_data(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*fx,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_x);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>print_data(FILE<sp/>*out_stream,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*x,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*fx,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_x);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>decode_ranges(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*lbound,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*ubound,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>*i_r,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*argv);</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ftsmooth_debug(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*debug_str,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*tag,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*argv[],</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>FILE<sp/>*in_stream,<sp/>FILE<sp/>*out_stream,</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*stdin_flag,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*stdout_flag,</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*cutoff,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*tailoff,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*mode,</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*offset_flag,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*<ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eec" kindref="member">offset</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*range_flag,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*i_r,</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*lbound,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*ubound,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*del_flag);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>parse_args(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*argv[],<sp/></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/>FILE<sp/>*in_stream,<sp/>FILE<sp/>*out_stream,</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*stdin_flag,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*stdout_flag,</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*cutoff,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*tailoff,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*mode,</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*offset_flag,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*<ref refid="a00061_1a1bc9f7918db5c0671932160d19ef6eec" kindref="member">offset</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*range_flag,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>*i_r,</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*lbound,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*ubound,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*del_flag);</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>globals<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>line_buffer[STRSZ];</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>macros<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ARG_PARSE_DBL(x)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="145"><highlight class="preprocessor">if<sp/>(i_arg<sp/>&lt;<sp/>argc)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="146"><highlight class="preprocessor">{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="147"><highlight class="preprocessor"><sp/><sp/>x<sp/>=<sp/>(double)atof(argv[i_arg]);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="148"><highlight class="preprocessor">}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="149"><highlight class="preprocessor">else<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="150"><highlight class="preprocessor">{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="151"><highlight class="preprocessor"><sp/><sp/>fprintf(stderr,<sp/>&quot;***error<sp/>(ftsmooth):<sp/>&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="152"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/>&quot;no<sp/>argument<sp/>value<sp/>for<sp/>option<sp/>&apos;%s&apos;\n&quot;,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="153"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/>argv[i_arg-1]);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="154"><highlight class="preprocessor"><sp/><sp/>exit(INVALID_ARGUMENT_ERROR);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="155"><highlight class="preprocessor">}</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>FTSMOOTH_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/ftsmooth.h"/>
+  </compounddef>
+</doxygen>

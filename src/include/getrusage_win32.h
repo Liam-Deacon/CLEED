@@ -1,4 +1,9 @@
 
+/*! \file
+ *
+ * Provides \code struct rusage \endcode for MinGW on Windows.
+ */
+
 #ifndef _GETRUSAGE_H
 #define _GETRUSAGE_H
 

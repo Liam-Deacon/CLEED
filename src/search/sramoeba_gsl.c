@@ -1,5 +1,15 @@
-/***********************************************************************
-GH/28.09.00
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *28.09.00
 
 file contains function:
 
@@ -27,7 +37,7 @@ LD/01.07.2014 - Modified to use the GNU Scientific Library
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_multimin.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "search_func.h"
 #include "copy_file.h"
 
@@ -62,7 +72,7 @@ int sr_amoeba_gsl(
     size_t np = y->size;       /* number of parameters */
     
     /* The parameter vector for the function defn: UNUSED */
-    gsl_multimin_fminimizer *s ;
+    gsl_multimin_fminimizer *s;
     gsl_vector *ss, *x;
     gsl_multimin_function func;
     size_t i, j;
@@ -123,12 +133,12 @@ Write y/p to backup file
     {
         fprintf(STDERR, "*** error (sr_amoeba_): "
             "failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
-        exit(1);
+        exit(SR_FILE_IO_ERROR);
     }
 
     strcpy(vertex_file, new_file);
     vertex_stream = fopen(vertex_file, "w");
-    fprintf(vertex_stream,"%d %d %s\n", np, np+1, sr_project);
+    fprintf(vertex_stream, "%d %d %s\n", np, np+1, sr_project);
     for (i = 0; i < np+1; i++) 
     {
         fprintf(vertex_stream,"%e ", gsl_vector_get(y, i));
@@ -143,7 +153,6 @@ Write y/p to backup file
     
     fclose(vertex_stream);
 	
-    
     /* free GSL memory */
     gsl_vector_free(x);
     gsl_vector_free(ss);

@@ -9,16 +9,17 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: include file for matrix operations:
- *  - type definitions
- *  - constant values
- *
  * Changes:
  *   GH/1994.06.06 - creation
  *   LD/2014.08.10 - added Doygen markup
  *                 - changed rows & cols of mat from int to size_t type
  *********************************************************************/
+
+/*!
+ * \file
+ * \brief Include file for matrix operations. It defines \c struct #mat
+ * and associated definitions.
+ */
 
 #ifndef MAT_DEF_H
 #define MAT_DEF_H
@@ -30,11 +31,7 @@ extern "C" {
 /*********************************************************************
  * structures and types for matrices
  *********************************************************************/
-
-/*
- * type definition for real
- */
-#include "real.h"
+#include "real.h" /* type definition for real */
 
 /*********************************************************************
  * values for:
@@ -42,13 +39,9 @@ extern "C" {
  *  - num_type
  *********************************************************************/
 
-/*! \def MATRIX
- *  \brief magic number for matrix
- */
-#define MATRIX         0xaffe
+#define MATRIX         0xaffe   /*!< magic number for matrix */
 
-/*! \def MAT_MASK
- *
+/*
  * matrix types:
  * Use only lower half of high bytes for mat_type, 
  * i.e. 0x0FFF >= MAT_* > 0x00FF (NUM_MASK)
@@ -87,17 +80,26 @@ extern "C" {
  * Macros for matrix operations
  *********************************************************************/
 
-/*
- * R(I)MATEL(m,n,Mat) - access matrix element (m,n) of matrix Mat (mat)
+/*!
+ * Access real matrix element \$f (m,n) \$f of matrix Mat.
  *
- * m and n must be integers,
- * Mat must be of type mat.
+ * \c m and \c n must be integers,
+ * Mat must be of type #mat.
  */
 #define RMATEL(m,n,Mat) *((Mat)->rel + ((m)-1) * (Mat)->cols + (n))
+/*!
+ * Access imaginary matrix element \f$ (m,n) \f$ of matrix Mat.
+ *
+ * \c m and \c n must be integers,
+ * Mat must be of type #mat.
+ */
 #define IMATEL(m,n,Mat) *((Mat)->iel + ((m)-1) * (Mat)->cols + (n))
 
 /*! \struct mat_str
  *  \brief type definition for mat
+ *
+ * \note The matrix element (m,n) is in the ((m-1)*rows + n)th position of
+ * the arrays rel or iel, respectively.
  */
 struct mat_str      /*!< real or complex matrix */
 {
@@ -109,16 +111,12 @@ struct mat_str      /*!< real or complex matrix */
   size_t cols;       /*!< 2nd dimension of matrix (number of columns) */
   real *rel;         /*!< pointer to real matrix elements */ 
   real *iel;         /*!< pointer to complex matrix elements */
-/* 
- * The matrix element (m,n) is in the ((m-1)*dim1 + n)th position of the arrays
- * del or dcel, respectively.
- */
 };
 
 /*! \typedef mat
  *  \brief pointer to the upper matrix structure (used to refer to a matrix)
  */
-typedef struct mat_str*  mat;
+typedef struct mat_str* mat;
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

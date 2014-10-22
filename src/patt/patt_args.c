@@ -438,7 +438,7 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
   if ((drawing->footnote.label == NULL) ||
       (strlen(drawing->footnote.label) == 0))
   {
-    strcpy(drawing->footnote.label, VERSION);
+    strcpy(drawing->footnote.label, PATT_PROG_VERSION);
   }
   
   return(PATT_SUCCESS);

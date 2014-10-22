@@ -8,14 +8,19 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: Header file for constants and macros generally used
- *              throughout the CLEED code.
- *
  * Changes:
  *   GH/1997.09.03 - creation
- *
  ********************************************************************/
+
+/*!
+ * \file
+ * \author Georg Held <g.held@reading.ac.uk>
+ * \brief Header file for constants and macros generally used
+ * throughout the CLEED code.
+ *
+ * \note When compiling with \c DEBUG defined, the maximum amount of
+ * program control information will be printed to the log during execution.
+ */
 
 #ifndef STD_DEF_H
 #define STD_DEF_H
@@ -25,8 +30,8 @@ extern "C" {
 #endif
 
 /*********************************************************************
- define machine
-*********************************************************************/
+ * define machine
+ *********************************************************************/
 
 /* Alternatives:
 #define DEC
@@ -38,26 +43,23 @@ extern "C" {
 #define free(x) free((void *)(x))
 */
 
-/*********************************************************************
-*********************************************************************/
-
 #include <math.h>
 #include <float.h>
 #include <stdio.h>
 
 /*********************************************************************
- output channels
-*********************************************************************/
+ * output channels
+ *********************************************************************/
 
-#define STDOUT stdout
-#define STDERR stderr
-#define STDWAR stderr
-#define STDCTR stdout
-#define STDCPU stdout
+#define STDOUT stdout     /*!< alias for stdout file stream */
+#define STDERR stderr     /*!< alias for stderr file stream */
+#define STDWAR stderr     /*!< output redirection for warnings */
+#define STDCTR stdout     /*!< output redirection for normal messages */
+#define STDCPU stdout     /*!< output redirection for CPU messages */
 
 /*********************************************************************
- printing verbosity
-*********************************************************************/
+ * printing verbosity
+ *********************************************************************/
 
 #ifndef WARNING
 #define WARNING
@@ -83,55 +85,53 @@ extern "C" {
 #define CONTROL_MBG
 #define CONTROL_LSUM
 #define CONTROL_MATB
-#define CONTROL_ALL
+#define CONTROL_ALL       /*!< The most verbose mode - includes all others */
 #endif
 
 /*********************************************************************
- general mathematical definitions / constants
-*********************************************************************/
+ * general mathematical definitions / constants
+ *********************************************************************/
 
 #ifdef _XOPEN_SOURCE
 #define PI  M_PI
 #else
 #define PI  3.1415926535897932385
 #endif
-/*
-*/
 
-#define DEG_TO_RAD 0.017453293         /* conversion degree to radian */
-#define RAD_TO_DEG 57.29578            /* conversion radian to degree */
+#define DEG_TO_RAD 0.017453293         /*!< conversion degree to radian */
+#define RAD_TO_DEG 57.29578            /*!< conversion radian to degree */
 
-#define M2_H      0.2631894506957162   /* 2*m/h       [eV^-1   A^-2] */
-#define SQRT_M2_H 0.5130199320647456   /* sqrt(2*m/h) [eV^-0.5 A^-1] */
+#define M2_H      0.2631894506957162   /*!< 2*m/h       [eV^-1   A^-2] */
+#define SQRT_M2_H 0.5130199320647456   /*!< sqrt(2*m/h) [eV^-0.5 A^-1] */
 
 /*********************************************************************
- general other definitions / constants
-*********************************************************************/
+ * general other definitions / constants
+ *********************************************************************/
 
 #define KBYTE 1024
 #define MBYTE 1048576
 
 /*********************************************************************
- special definitions
-*********************************************************************/
+ * special definitions
+ *********************************************************************/
 
-#define STRSZ 256                /* maximum length of strings */
+#define STRSZ 256                /*!< maximum length of strings */
 
-#define I_END_OF_LIST   -9999    /* list terminator (integer)*/
-#define F_END_OF_LIST   -9999.   /* list terminator (float)  */
+#define I_END_OF_LIST   -9999    /*!< list terminator (integer)*/
+#define F_END_OF_LIST   -9999.   /*!< list terminator (float)  */
 
-#define IEND_OF_LIST   I_END_OF_LIST    /* alias for list terminator (integer)*/
-#define FEND_OF_LIST   F_END_OF_LIST    /* alias for list terminator (float)  */
+#define IEND_OF_LIST   I_END_OF_LIST  /*!< alias for list terminator (integer)*/
+#define FEND_OF_LIST   F_END_OF_LIST  /*!< alias for list terminator (float)  */
 
 /*********************************************************************
- macros:
-*********************************************************************/
+ * macros:
+ *********************************************************************/
 
-#define MAX(x,y)  ((x)>(y))?(x):(y) 
-#define MIN(x,y)  ((x)<(y))?(x):(y) 
-#define SQUARE(x) (x)*(x)
+#define MAX(x,y)  ((x)>(y))?(x):(y) /*!< returns maximum value */
+#define MIN(x,y)  ((x)<(y))?(x):(y) /*!< returns minimum value */
+#define SQUARE(x) (x)*(x)           /*!< returns the value squared*/
 
-#define ODD(n)    ((n)%2)
+#define ODD(n)    ((n)%2)           /*!< evaluates whether integer is odd */
 #define M1P(n)    (((n)%2)?(-1.):(1.))
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */

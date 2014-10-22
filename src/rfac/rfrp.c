@@ -13,7 +13,7 @@
  *   GH/1995.08.29 - adjust to crfac format.
  ********************************************************************/
 
-/*! \file rfrp.c
+/*! \file
  *
  * Implementation file for calculating Pendry R-factor.
  */
@@ -25,17 +25,15 @@
 
 
 /*!
- * \fn rf_rp
- *
  * \brief Compute Pendry's R-factor.
  *
  * Compute Pendry's R-factor:
  *
  * \f$ R_p = S(Y_e - Y_t)^2 / S(Y_e^2 + Y_t^2) \f$
  *
- * \param[in] *eng pointer to list of energies.
- * \param[in] *e_int pointer to list of experimental intensities.
- * \param[in] *t_int pointer to list of theoretical intensities.
+ * \param[in] eng pointer to list of energies.
+ * \param[in] e_int pointer to list of experimental intensities.
+ * \param[in] t_int pointer to list of theoretical intensities.
  *
  * \warning \p eng must be terminated by F_END_OF_LIST.
  *

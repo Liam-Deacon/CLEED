@@ -16,7 +16,7 @@
  *                 - added some Doxygen markup
  *********************************************************************/
 
-/*! \file rfac_func.h
+/*! \file
  *  \brief Header file for function prototypes used in the R factor program.
  */
 
@@ -45,21 +45,16 @@ char *rf_version(char *);                    /*!< current program version */
 void rf_help(FILE *);                        /*!< help function */
 void rf_info();                              /*!< version information, etc. */
 
-/*!
- * line interpreter
- */
+/* line interpreter */
 void rf_intindl(char *, rfac_spot *, size_t);
 
 /*********************************************************************
  * data output
  *********************************************************************/
-
-/*!
- * copy control file to output
- */
+/* copy control file to output */
 int rf_ctr2out(char *, FILE * );
 
-/*! general output function */
+/* general output function */
 int rf_output(rfac_args *,  rfac *, size_t, size_t);
 
 /*********************************************************************
@@ -119,8 +114,9 @@ real rf_rmin(rfac_ivcur *, rfac_args *, real *, real *, real *);
  *********************************************************************/
 
 rfac_iv *rfac_iv_init();
-rfac_iv *rfac_iv_alloc(size_t n_eng);
+rfac_iv *rfac_iv_alloc(size_t);
 void rfac_iv_free(rfac_iv*);
+int rfac_iv_to_arrays(const rfac_iv *, double *, double *, size_t *);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

@@ -1,9 +1,19 @@
-/***********************************************************************
- GH/02.04.03
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *02.04.03
 
  file contains function:
 
-  int sr_mkinp(real *pos, int i_call, char *filename)
+  int sr_mkinp(real *pos, int iter, char *filename)
 
  Prepare (par)input file for CLEED program
 
@@ -18,7 +28,7 @@ GH/09.08.04 - Copy bulk parameters (except angles from *.bul and write to *.bsr
 #include <stdio.h>
 #include <string.h>
 
-#include "search.h"
+#include "csearch.h"
 
 #ifndef FAC_THETA
 #define FAC_THETA 5.
@@ -33,7 +43,7 @@ extern struct search_str *sr_search;
 
 char line_buffer[STRSZ];
 
-int sr_mkinp(real *par, int i_call, char *filename)
+int sr_mkinp(const char *filename, const real *par, size_t iter)
 
 /***********************************************************************
  - Set up inputfile for IV program
@@ -43,19 +53,19 @@ INPUT:
 ***********************************************************************/
 
 {
-int i_atoms, i_par;
-int i_str;
+  size_t i_atoms, i_par;
+  size_t i_str;
 
-real x, y, z;
-real theta, phi; /* Added for the angle search (SRP 31.03.03) */
+  real x, y, z;
+  real theta, phi; /* Added for the angle search (SRP 31.03.03) */
 
-FILE *iv_par;
-FILE *iv_bul_in;
-FILE *iv_bul_out;
+  FILE *iv_par;
+  FILE *iv_bul_in;
+  FILE *iv_bul_out;
 
 
-/* Open IV parameter file */
- iv_par = fopen(filename, "w"); 
+  /* Open IV parameter file */
+  iv_par = fopen(filename, "w");
 
 /**********************************************************************/
 /* Open IV bulk file for read and write */
@@ -72,7 +82,7 @@ FILE *iv_bul_out;
 /* 
  Write comment lines to IV parameter file
 */
- fprintf(iv_par,"# overlayer (SEARCH No: %d)\n", i_call);
+ fprintf(iv_par,"# overlayer (SEARCH No: %d)\n", iter);
 
 /* 
  Write all other lines to iv_input

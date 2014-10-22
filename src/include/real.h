@@ -8,16 +8,20 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: include file for type definition "real".
- *
  * Changes:
  *   GH/1995.10.02 - creation
  *   LD/2014.10.09 - added inclusion guards and C linkage for C++
  *********************************************************************/
 
-/*
-  Definitions in connection with the type of "real"
+/*!
+ * \file
+ * \brief Definitions in connection with the type #real
+ *
+ * This file defines aliases for floating point operations depending on
+ * whether #real is a \c typedef for \c double or \c float type.
+ *
+ * \note The behavior of changes depending on the CPU of the machine e.g.
+ * casting from \c double to \c float may occur.
 */
 
 #ifndef REAL_H
@@ -30,21 +34,28 @@
 #endif
 #endif
 
+/*!
+ * \typedef real
+ * \brief alias for floating point data type.
+ *
+ * If #REAL_IS_DOUBLE is defined then #real is of type \c double
+ * otherwise if #REAL_IS_FLOAT is defined then #real is of type \c
+ * float .
+ */
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
 /************************************************
-*************************************************
-    REAL IS DOUBLE
-*************************************************
-************************************************/
+ * REAL IS DOUBLE
+ ************************************************/
 #ifdef REAL_IS_DOUBLE
 #include <float.h>
 
 #ifndef TYPE_REAL
 #define TYPE_REAL
- typedef double  real;
+typedef double real;
 #endif
 
 /*
@@ -78,17 +89,15 @@ extern "C" {
 #endif  /* REAL_IS_DOUBLE */
 
 /************************************************
-*************************************************
-    REAL IS FLOAT
-*************************************************
-************************************************/
+ * REAL IS FLOAT
+ ************************************************/
 
 #ifdef REAL_IS_FLOAT
 #include <float.h>
 
 #ifndef TYPE_REAL
 #define TYPE_REAL
- typedef float  real;
+typedef float  real;
 #endif
 
 /*

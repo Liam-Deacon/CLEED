@@ -8,15 +8,16 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: include file for patt. It contains:
- *  - enums
- *  - structs
- *  - defines
- *
  * Changes:
  *   LD/2014.08.23 - header created by split from patt.c
  *********************************************************************/
+
+/*!
+ * \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief File contains \c enum, \c struct and \code #define \endcode declarations
+ * for \c patt.
+ */
 
 #ifndef PATT_DEF_H
 #define PATT_DEF_H

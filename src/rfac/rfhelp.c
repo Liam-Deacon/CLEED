@@ -14,9 +14,9 @@
  *                 - Added hard-coded help if no RF_HELP_FILE in env
  *********************************************************************/
 
-/*! \file rfhelp.c
+/*! \file
  *
- * Implementation file for \ref file_content, \ref rf_help and \ref rf_info
+ * Implementation file for file_content(), rf_help() and rf_info() functions.
  * functions.
  */
 
@@ -28,12 +28,8 @@
 #include "rfac_ver.h"
 
 /*!
- * \fn file_content
- *
  * \brief Get the content of the file (like 'cat' command).
- *
  * \param *filename string constant containing the name of the file to read.
- *
  * \return pointer to string containing contents of file.
  */
 char *file_content(const char* filename)
@@ -61,10 +57,7 @@ char *file_content(const char* filename)
 
 /* print crfac help */
 /*!
- * \fn rf_help
- *
  * \brief Print a short program description explaining all arguments.
- *
  * \param *output file pointer to direct output e.g. stderr
  *
  */
@@ -138,18 +131,16 @@ void rf_help(FILE *output)
 
 
 /*!
- * \fn rf_info
- *
  * \brief Print information about the rfac program.
  *
  */
 void rf_info()
 {
-    printf("%s - version %s (%s)\n", PROG, PROG_VERSION, PROG_PLAT);
-    printf("%s\n", PROG_SHORTDESC);
-    printf("%s\n", PROG_COPYRIGHT);
-    printf("%s\n", PROG_LICENSE);
-    printf("Contact: %s\n", PROG_MAINTAINER);
+    printf("%s - version %s (%s)\n", RFAC, RFAC_VERSION, RFAC_PLAT);
+    printf("%s\n", RFAC_SHORTDESC);
+    printf("%s\n", RFAC_COPYRIGHT);
+    printf("%s\n", RFAC_LICENSE);
+    printf("Contact: %s\n", RFAC_MAINTAINER);
 }
 
 /********************************************************************/

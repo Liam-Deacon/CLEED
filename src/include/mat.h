@@ -8,12 +8,14 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: master include file for matrix operations
- *
  * Changes:
  *   GH/1995.08.17 - creation
  *********************************************************************/
+
+/*!
+ * \file
+ * \brief Master include file for matrix operations.
+ */
 
 #ifndef MAT_H
 #define MAT_H

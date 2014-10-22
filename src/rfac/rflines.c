@@ -17,10 +17,9 @@
  *                   help portability.
  *********************************************************************/
 
-/*! \file rflines.c
+/*! \file
  *
- * Implementation file for \ref rf_lines, \ref rf_nclines and \ref rf_clines
- * C functions.
+ * Implementation file for rf_lines(), rf_nclines() and rf_clines() functions.
  */
 
 #include <stdio.h>

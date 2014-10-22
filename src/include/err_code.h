@@ -1,4 +1,7 @@
-/* header for OpenCL error codes */
+
+/*! \file
+ *  \brief header for OpenCL error codes.
+ */
 
 #ifndef CL_ERR_CODE_H
 #define CL_ERR_CODE_H

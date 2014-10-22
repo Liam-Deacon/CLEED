@@ -14,7 +14,7 @@
  * LD/2014.03.07 - Added POSIX style arguments
  *********************************************************************/
 
-/*! \file rfrdargs.c
+/*! \file
  *  \brief File contains C implementation for \ref rf_rdargs function.
  */
 
@@ -30,8 +30,6 @@
 #define ARG_IS(text) (strcmp(argv[i], text) == 0)
 
 /*!
- * \fn rf_rdargs
- *
  * Read argument list from command line and set the adequate parameters
  * for the program (structure crargs)
  *
@@ -89,7 +87,7 @@
  *            program parameter: iv_file.
  *
  *
- * \return \ref rfac_args struct containing argument list.
+ * \return #rfac_args struct containing argument list.
  *
  * \warning Function exits if any error occurred.
  */

@@ -1,5 +1,15 @@
-/***********************************************************************
-GH/20.09.95
+/*********************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *20.09.95
 file contains function:
 
   void sr_amebsa(real **p, real *y, int ndim, 
@@ -25,7 +35,7 @@ LD/30.04.14 - Removed dependence on 'cp' and 'date' system calls
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_multimin.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "copy_file.h"
 
 #ifndef MAX_ITER_AMOEBA        /* should be defined in "search_def.h" */

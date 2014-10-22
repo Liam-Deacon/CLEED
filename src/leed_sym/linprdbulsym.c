@@ -1,5 +1,15 @@
-/*********************************************************************
-GH/29.09.00 
+/************************************************************************
+ * <FILENAME>
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *29.09.00 
   file contains function:
 
   leed_inp_read_bul_sym
@@ -31,21 +41,6 @@ GH/29.09.00 - calculate dr2 for dmt input in function leed_inp_debye_temp
 
 #include "leed.h"
 #include "leed_def.h"
-
-/*
-#define CONTROL_X
-#define CONTROL
-*/
-
-#ifndef WARNING
-#define WARNING
-#endif
-
-#ifndef ERROR
-#define ERROR
-#endif
-
-#define EXIT_ON_ERROR
 
 #ifndef GEO_TOLERANCE          /* should be defined in "leed_def.h" */
 #define GEO_TOLERANCE 0.0001

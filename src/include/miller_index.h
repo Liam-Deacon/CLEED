@@ -8,12 +8,15 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: header file for miller_index_t (C) & MillerIndex (C++)
- *
  * Changes:
  *   LD/2014.08.23 - creation
  *********************************************************************/
+
+/*!
+ * \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief Header file for miller_index_t (C) & MillerIndex (C++)
+ */
 
 #ifndef MILLER_INDEX_H
 #define MILLER_INDEX_H
@@ -22,7 +25,7 @@
   extern "C" {
 #endif
 
-/*! \typedef \struct miller_hkl
+/*! \typedef miller_hkl
  *  \brief data structure for (hkl) Miller index values.
  */
 typedef struct

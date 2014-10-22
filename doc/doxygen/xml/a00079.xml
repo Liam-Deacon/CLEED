@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00079" kind="file">
+    <compoundname>patt.h</compoundname>
+    <includes local="no">stdio.h</includes>
+    <includes refid="a00083" local="yes">patt_ver.h</includes>
+    <includes refid="a00081" local="yes">patt_def.h</includes>
+    <includes refid="a00082" local="yes">patt_func.h</includes>
+    <includedby refid="a00053" local="yes">CLEED.H</includedby>
+    <incdepgraph>
+      <node id="304">
+        <label>stdbool.h</label>
+      </node>
+      <node id="302">
+        <label>patt_def.h</label>
+        <link refid="a00081_source"/>
+        <childnode refid="303" relation="include">
+        </childnode>
+        <childnode refid="304" relation="include">
+        </childnode>
+        <childnode refid="305" relation="include">
+        </childnode>
+        <childnode refid="308" relation="include">
+        </childnode>
+        <childnode refid="311" relation="include">
+        </childnode>
+        <childnode refid="310" relation="include">
+        </childnode>
+        <childnode refid="312" relation="include">
+        </childnode>
+        <childnode refid="314" relation="include">
+        </childnode>
+      </node>
+      <node id="307">
+        <label>stdlib.h</label>
+      </node>
+      <node id="314">
+        <label>basis.h</label>
+        <link refid="a00049_source"/>
+        <childnode refid="311" relation="include">
+        </childnode>
+        <childnode refid="309" relation="include">
+        </childnode>
+      </node>
+      <node id="305">
+        <label>matrix_2x2.h</label>
+        <link refid="a00074_source"/>
+        <childnode refid="306" relation="include">
+        </childnode>
+        <childnode refid="300" relation="include">
+        </childnode>
+        <childnode refid="307" relation="include">
+        </childnode>
+      </node>
+      <node id="301">
+        <label>patt_ver.h</label>
+        <link refid="a00083_source"/>
+        <childnode refid="302" relation="include">
+        </childnode>
+      </node>
+      <node id="308">
+        <label>spots.h</label>
+        <link refid="a00096_source"/>
+        <childnode refid="309" relation="include">
+        </childnode>
+        <childnode refid="304" relation="include">
+        </childnode>
+        <childnode refid="310" relation="include">
+        </childnode>
+      </node>
+      <node id="315">
+        <label>patt_func.h</label>
+        <link refid="a00082_source"/>
+        <childnode refid="302" relation="include">
+        </childnode>
+        <childnode refid="304" relation="include">
+        </childnode>
+      </node>
+      <node id="306">
+        <label>stddef.h</label>
+      </node>
+      <node id="303">
+        <label>limits.h</label>
+      </node>
+      <node id="299">
+        <label>patt.h</label>
+        <link refid="patt.h"/>
+        <childnode refid="300" relation="include">
+        </childnode>
+        <childnode refid="301" relation="include">
+        </childnode>
+        <childnode refid="302" relation="include">
+        </childnode>
+        <childnode refid="315" relation="include">
+        </childnode>
+      </node>
+      <node id="309">
+        <label>miller_index.h</label>
+        <link refid="a00075_source"/>
+      </node>
+      <node id="312">
+        <label>pattern.h</label>
+        <link refid="a00084_source"/>
+        <childnode refid="313" relation="include">
+        </childnode>
+        <childnode refid="305" relation="include">
+        </childnode>
+        <childnode refid="308" relation="include">
+        </childnode>
+        <childnode refid="304" relation="include">
+        </childnode>
+      </node>
+      <node id="313">
+        <label>basis_vector.h</label>
+        <link refid="a00050_source"/>
+      </node>
+      <node id="310">
+        <label>patt_colors.h</label>
+        <link refid="a00080_source"/>
+      </node>
+      <node id="311">
+        <label>coord.h</label>
+        <link refid="a00054_source"/>
+        <childnode refid="300" relation="include">
+        </childnode>
+      </node>
+      <node id="300">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="316">
+        <label>patt.h</label>
+        <link refid="patt.h"/>
+        <childnode refid="317" relation="include">
+        </childnode>
+      </node>
+      <node id="317">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="a00079_1a239ac5168c14150c8acae16560ba746f" prot="public" static="no">
+        <name>_PATT_H</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt.h" line="19" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00079_1a1c6d5de492ac61ad29aec7aa9a436bbf" prot="public" static="no">
+        <name>VERSION</name>
+        <initializer>&quot;PATTERN - version 1.4 (2014.07.04 - )&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt.h" line="23" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00079_1a0dcfd20e97e4c9ddc19888308ad18caf" prot="public" static="no">
+        <name>NOTES</name>
+        <initializer>&quot;Pattern is part of the CLEED package by Georg Held&quot;\
+&quot;\n\t(contact g.held@reading.ac.uk)&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt.h" line="24" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/****************************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PATTERN<sp/>(Georg<sp/>Held<sp/>22.03.93)</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">NAME</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/><sp/><sp/><sp/>pattern<sp/>--<sp/>LEED<sp/>pattern<sp/>visualisation<sp/>program<sp/><sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="comment"></highlight></codeline>
+<codeline lineno="6"><highlight class="comment">DESCRIPTION</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/><sp/><sp/>Pattern<sp/>simulates<sp/>Low<sp/>Energy<sp/>Electron<sp/>Diffraction<sp/>(LEED)<sp/>patterns</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">to<sp/>help<sp/>in<sp/>analysis<sp/>of<sp/>complex<sp/>surface<sp/>structures.<sp/>Diffraction<sp/>peaks<sp/></highlight></codeline>
+<codeline lineno="9"><highlight class="comment">(spots),<sp/>indices,<sp/>reciprocal<sp/>lattice<sp/>vectors<sp/>&amp;<sp/>different<sp/>domains<sp/>can<sp/></highlight></codeline>
+<codeline lineno="10"><highlight class="comment">all<sp/>be<sp/>visualised<sp/>using<sp/>vector<sp/>graphics<sp/>(PostScript).<sp/></highlight></codeline>
+<codeline lineno="11"><highlight class="comment"></highlight></codeline>
+<codeline lineno="12"><highlight class="comment">******************************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>_PATT_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>_PATT_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>VERSION<sp/>&quot;PATTERN<sp/>-<sp/>version<sp/>1.4<sp/>(2014.07.04<sp/>-<sp/>)&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NOTES<sp/>&quot;Pattern<sp/>is<sp/>part<sp/>of<sp/>the<sp/>CLEED<sp/>package<sp/>by<sp/>Georg<sp/>Held&quot;\</highlight></codeline>
+<codeline lineno="25"><highlight class="preprocessor">&quot;\n\t(contact<sp/>g.held@reading.ac.uk)&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;patt_ver.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;patt_def.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;patt_func.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>_PATT_H<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>add<sp/>C++<sp/>features<sp/>here<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/patt.h"/>
+  </compounddef>
+</doxygen>

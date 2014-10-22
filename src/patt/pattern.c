@@ -1,36 +1,14 @@
 /****************************************************************************
-                        pattern.c
-FUNCTIONS
-	patt_read(FILE *, pattern *) - read LEED pattern from input file.   
+                        PATTERN.C
 
-RETURNS
-    0: success
-   -1: read failure
-
-INPUT FILE
-	The input file specifies the coordinate system, substrate (GS) and
-superstructure (SS), as well as any SS domains. The file has the following
-format:
-	* lines beginning with '#' are ignored by the program.
-	* lines beginning with 'c' are treated as comments, note that
-	  the first 'c' comment block will be printed as a legend.
-	* real space lattice vectors a1 & a2 have the form: <x> <y> a[1-2]
-	* radius is the maximum radius of Ewald construction in units of: a[1-2]
-    * number of domains
-    * superstructure matrix M1 & M2 of the form: <x> <y> M[1-2]
-    * domain mirroring or rotation: Sx, Sy or R<#>
-
-BUGS
-	Please report any bugs (with a description on how to reproduce
-the problem) to liam.deacon@diamond.ac.uk
-
-AUTHOR(S)
-	Liam Deacon <liam.deacon@diamond.ac.uk>
-
-CHANGE-LOG
 2014-07-13/LD - initial implementation
-
 ***************************************************************************/
+
+/*! \file
+ *  \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ * File contains functions for handling #pattern objects.
+ */
 
 #include "pattern.h"
 #include "patt.h"
@@ -40,7 +18,14 @@ CHANGE-LOG
 #include <strings.h>
 #include <math.h>
 
-
+/*!
+ * Allocates memory for #pattern instance with \p n_domains number of domains.
+ *
+ * \param n_domains The number of superstructure domains to allocate to
+ * @pattern::M_SS member of #pattern instance.
+ * \return Pointer to the #pattern instance.
+ * \retval \c NULL if memory cannot be allocated.
+ */
 pattern *pattern_alloc(size_t n_domains)
 {
   pattern *pat = (pattern*) malloc(sizeof(pattern));
@@ -61,6 +46,15 @@ pattern *pattern_alloc(size_t n_domains)
   return(pat);
 }
 
+/*!
+ * Allocates memory for #pattern instance with \p n_domains number of domains
+ * and initializes its members to suitable default values.
+ *
+ * \param n_domains The number of superstructure domains to allocate to
+ * @pattern::M_SS member of #pattern instance.
+ * \return Pointer to the #pattern instance.
+ * \retval \c NULL if memory cannot be allocated.
+ */
 pattern *pattern_init(size_t n_domains)
 { 
   pattern *pat = (pattern*) malloc(sizeof(pattern));
@@ -85,6 +79,12 @@ pattern *pattern_init(size_t n_domains)
   return(pat);
 }
 
+/*!
+ * Frees the #pattern instance \p pat from memory. It also removes its members
+ * @pattern::title and @pattern::M_SS from the memory stack.
+ *
+ * \param pat Pointer to #pattern instance to free from memory.
+ */
 void pattern_free(pattern *pat)
 {
   if (pat->title != NULL)
@@ -96,18 +96,52 @@ void pattern_free(pattern *pat)
   pat = NULL;
 }
 
-double pattern_get_radius(pattern *pat)
+/*!
+ * Returns the @pattern::radius value of \p pat
+ *
+ * \param[in] pat #pattern instance
+ * \return radius of \p pat
+ */
+double pattern_get_radius(const pattern *pat)
 { return(pat->radius);}
 
-void pattern_set_a1(pattern *pat, basis_vector *a1)
+/*!
+ * Assigns (x,y,z) of \p a1 to @pattern::a1 of \p pat .
+ *
+ * \param[in,out] pat #pattern instance to modify.
+ * \param[in] a1 The basis vector \f$ \vec{a_1} \f$
+ */
+void pattern_set_a1(pattern *pat, const basis_vector *a1)
 { pat->a1.x = a1->x; pat->a1.y = a1->y;}
 
-void pattern_set_a2(pattern *pat, basis_vector *a2)
+/*!
+ * Assigns (x,y,z) of \p a2 to @pattern::a2 of \p pat .
+ *
+ * \param[in,out] pat #pattern instance to modify.
+ * \param[in] a2 The basis vector \f$ \vec{a_2} \f$
+ */
+void pattern_set_a2(pattern *pat, const basis_vector *a2)
 { pat->a2.x = a2->x; pat->a2.y = a2->y;}
 
+/*!
+ * Assigns the @pattern::radius member of \p pat to the value of \p radius
+ *
+ * \param[in,out] pat #pattern instance to modify.
+ * \param radius Default (global) radius of spots in pattern.
+ */
 void pattern_set_radius(pattern *pat, double radius)
 { pat->radius = radius;}
 
+/*!
+ * Assigns the maximum number of domains for the #pattern instance \p pat
+ *
+ * \param[in,out] pat #pattern instance to modify.
+ * \param n_domains Maximum number of domains for \p pat
+ * \return Integer representing function success.
+ * \retval 0 Given on successful completion of function.
+ * \retval 1 If memory cannot be allocated for @pattern::M_SS of \p pat
+ * \retval 2 If memory of \p pat cannot be reallocated.
+ */
 int pattern_set_max_domains(pattern *pat, size_t n_domains)
 { 
   char *str = pat->title;
@@ -125,38 +159,81 @@ int pattern_set_max_domains(pattern *pat, size_t n_domains)
     else
     {
       pat->M_SS = temp;
-      return(-3);
+      return(1);
     }
     
     tmp = realloc(pat, sizeof(pattern) + (n_domains*sizeof(matrix_2x2)));
     if (tmp == NULL)
     {
       pat = t;
-      return(-2);
+      return(2);
     }
     
     pat->title = str;
     
-    return(0);
-  } else {
-    return(0);
   }
-  return(-1);
+
+  return(0);
 }
 
-size_t pattern_get_n_domains(pattern *pat)
+/*!
+ * Returns the number of superstructure domains.
+ *
+ * \param[in] pat #pattern instance containing domain information.
+ * \return number of superstructure domains of \p pat
+ */
+size_t pattern_get_n_domains(const pattern *pat)
 { return(pat->n_domains);}
 
-void pattern_set_title(pattern *pat, char *title)
+/*!
+ * Assigns the title string of \p pat
+ *
+ * \param[in,out] pat
+ * \param[in] title string to assign to @pattern::title of \p pat
+ * \note If @pattern::title pointer of \p pat is \c NULL then nothing will
+ * be done.
+ * \warning If the pointer to @pattern::title of \p pat is already initialized
+ * then the memory will be freed before the pointer is reassigned.
+ */
+void pattern_set_title(pattern *pat, const char *title)
 {
   if (pat->title != NULL) free(pat->title);
   pat->title = (char *)malloc(sizeof(char) * strlen(title));
-  strcpy(pat->title, title);
+
+  if (pat->title) strcpy(pat->title, title);
 }
 
-const char *pattern_get_title(pattern *pat)
+/*!
+ * Returns the title string of \p pat
+ *
+ * \param pat #pattern instance to query.
+ * \return pointer to @pattern::title of \p pat
+ */
+const char *pattern_get_title(const pattern *pat)
 { return(pat->title);}
 
+/*!
+ * Reads \p file to determine the LEED pattern parameters and returns a
+ * #pattern instance corresponding to the data that is read.
+ *
+ * The input file specifies the coordinate system, substrate (GS) and
+ * superstructure (SS), as well as any SS domains. The file has the following
+ * format:
+ * - lines beginning with '#' are ignored by the program.
+ * - lines beginning with 'c' are treated as comments, note that
+ *   the first 'c' comment block will be printed as a legend.
+ * - real space lattice vectors \f$ \vec{a_1} \f$ & \f$ \vec{a_2} \f$
+ *   have the form: \code <x> <y> a[1-2] \endcode
+ * - radius of the maximum radius of Ewald construction in units of
+ *   \c a1 or \c a2
+ * - number of domains
+ * - superstructure matrix M1 & M2 of the form: \code <x> <y> M[1-2] \endcode
+ * - domain mirroring or rotation: \c Sx, \c Sy or \c R<#>
+ *
+ * \param file File pointer to read from e.g. \c stdin or an file opened with
+ * fopen()
+ * \return #pattern instance with members set to the values specified in \p file
+ */
 pattern *pattern_read(FILE *file)
 {
   pattern *pat;
@@ -212,9 +289,7 @@ pattern *pattern_read(FILE *file)
     }
   }
   
-/*
- GS SPOTS 
-*/
+  /* GS SPOTS */
 
   /* read real space lattice vectors */
   if (is_stdin) printf("Enter vector a1 (x y): ");
@@ -237,9 +312,7 @@ pattern *pattern_read(FILE *file)
   fget_nocomm(line_buffer, file, stdout);
   sscanf(line_buffer, "%lf", &radius);
   
-/*
- SS SPOT
-*/
+  /* SS SPOTS */
 
   /* Domains */  
   if (is_stdin) printf("Enter no. domains: ");
@@ -359,7 +432,13 @@ pattern *pattern_read(FILE *file)
   return(pat);
 }
 
-void pattern_printf(FILE *stream, pattern *pat)
+/*!
+ * Prints member information of #pattern instance \p pat to the file \p stream
+ *
+ * \param stream File pointer to write to e.g. \c stdout
+ * \param[in] pat #pattern instance to display.
+ */
+void pattern_printf(FILE *stream, const pattern *pat)
 {
   size_t i;
 
@@ -377,8 +456,15 @@ void pattern_printf(FILE *stream, pattern *pat)
   }
 }
 
+/*!
+ * Assigns the superstructure matrix \p mat to \p pat for a given \p domain
+ *
+ * \param pat Pointer to LEED #pattern to be modified.
+ * \param mat Pointer to the superstructure matrix.
+ * \param domain Index for a given superstructure of \p pat
+ */
 void pattern_set_superstructure_matrix(pattern *pat, 
-        matrix_2x2 *mat, size_t domain)
+        const matrix_2x2 *mat, size_t domain)
 {
   if (domain >= pat->n_domains) return;
   pat->M_SS[domain].M11 = mat->M11; 
@@ -393,6 +479,15 @@ const matrix_2x2 *get_superstructure_matrix(const pattern *pat, size_t domain)
   else return(NULL);
 }
 
+/*!
+ * Determines whether the superstructure LEED pattern given by \p domain is
+ * commensurate.
+ *
+ * \param pat Pointer to the #pattern instance containing all the superstructure
+ * matrix for the given \p domain
+ * \param domain The superstructure domain to query.
+ * \return boolean representing whether the domain is commensurate or not.
+ */
 bool pattern_domain_is_commensurate(const pattern *pat, size_t domain)
 {
   if (domain > pat->n_domains) return(false);
@@ -410,11 +505,16 @@ bool pattern_domain_is_commensurate(const pattern *pat, size_t domain)
   }
 }
 
-/*! \fn spots *pattern_calculate_substrate_spots(const pattern *pat)
- *  \brief Calculate LEED spots substrate 
- *  \param *pat Pointer to pattern structure.
+/*!
+ * Calculates the substrate spots in LEED #pattern \p pat . It calculates
+ * the diffraction spot positions for a given (h,k) Miller index and adds them
+ * to the list of spots if a given spot is within the Ewald sphere (the
+ * @pattern::radius ).
  *
- */ 
+ * \param pat pattern instance containing all the parameters needed for the
+ * calculations.
+ * \return #spots instance of substrate spots for \p pat
+ */
 spots *pattern_calculate_substrate_spots(const pattern *pat)
 {
   spots *spots;
@@ -493,11 +593,21 @@ spots *pattern_calculate_substrate_spots(const pattern *pat)
   }
   
   return(spots);
-  
 }
 
-spots *pattern_calculate_superstructure_spots(const pattern *pat,
-                                                size_t domain)
+/*!
+ * Calculates the superstructure spots in LEED #pattern \p pat . It calculates
+ * the diffraction spot positions for a given (h,k) Miller index and adds then
+ * to the list of spots if a given spot is within the Ewald sphere (the
+ * @pattern::radius ).
+ *
+ * \param pat pattern instance containing all the parameters needed for the
+ * calculations.
+ * \param domain The superstructure domain index to calculate spots for.
+ * \return #spots instance of superstructure spots for the given
+ * \p domain of \p pat
+ */
+spots *pattern_calculate_superstructure_spots(const pattern *pat, size_t domain)
 {
   spots *spots;
   double a1[2], a2[2];                /* substrate basis vectors */
@@ -683,9 +793,14 @@ spots *pattern_calculate_superstructure_spots(const pattern *pat,
   #endif
   
   return(spots);
-  
 }
 
+/*!
+ * Returns whether \p pat is a square pattern or a circular one.
+ *
+ * \param[in] pat #pattern instance to query.
+ * \return boolean whether \p pat pattern is square.
+ */
 bool pattern_is_square(const pattern *pat)
 {
   return(pat->square);

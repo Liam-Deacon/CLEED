@@ -8,12 +8,15 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- * Description: file contains struct basis_vector
- *
  * Changes:
  *   LD/2014.07.17 - Creation
- *
  ************************************************************************/
+
+/*!
+ * \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \brief file contains \c struct #basis_vector
+ */
 
 #ifndef BASIS_VECTOR_H
 #define BASIS_VECTOR_H

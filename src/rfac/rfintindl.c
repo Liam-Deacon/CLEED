@@ -16,8 +16,8 @@
  *   GH/1997.08.30 - type = void
  ********************************************************************/
 
-/*! \file rfintindl.c
- *  \brief Implementation of \ref rf_intindl function.
+/*! \file
+ *  \brief Implementation of rf_intindl() function.
  */
 
 #include <stdio.h>

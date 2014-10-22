@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00031" kind="struct" prot="public">
+    <compoundname>rfivcur</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="a00031_1ae818abb9ef9e2b700eff390ce197dfac" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int rfivcur::group_id</definition>
+        <argsstring></argsstring>
+        <name>group_id</name>
+        <briefdescription>
+<para>assignment to a certain group of curves e.g. </para>        </briefdescription>
+        <detaileddescription>
+<para>integral/superstructure </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="192" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a213042deb25a1aacd7b98e886c4f2cd0" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real rfivcur::eng_0</definition>
+        <argsstring></argsstring>
+        <name>eng_0</name>
+        <briefdescription>
+<para>energy of beam appearance (1.1) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="194" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a173368fa27e4053c3db4230699699597" prot="public" static="no" mutable="no">
+        <type><ref refid="a00038" kindref="compound">rfac_spot</ref></type>
+        <definition>rfac_spot rfivcur::spot_id</definition>
+        <argsstring></argsstring>
+        <name>spot_id</name>
+        <briefdescription>
+<para>one labeling set of spot indices </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="195" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a0f82e26e344d3a7e8cf1d389f0d0ca97" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t rfivcur::n_geo</definition>
+        <argsstring></argsstring>
+        <name>n_geo</name>
+        <briefdescription>
+<para>number of different theoretical IV curves </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="196" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a1f36f0e0f0f62d2e1a3b6aebd447f759" prot="public" static="no" mutable="no">
+        <type><ref refid="a00032" kindref="compound">rfac_iv</ref> *</type>
+        <definition>rfac_iv* rfivcur::theory</definition>
+        <argsstring></argsstring>
+        <name>theory</name>
+        <briefdescription>
+<para>theoretical IV curve </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="199" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a3d89adaccbd465e3a5df63961d719733" prot="public" static="no" mutable="no">
+        <type><ref refid="a00032" kindref="compound">rfac_iv</ref> *</type>
+        <definition>rfac_iv* rfivcur::experimental</definition>
+        <argsstring></argsstring>
+        <name>experimental</name>
+        <briefdescription>
+<para>experimental. </para>        </briefdescription>
+        <detaileddescription>
+<para>IV curve </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="202" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="202" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a2f03301d73b38759e94a9d2673f9b297" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real rfivcur::overlap</definition>
+        <argsstring></argsstring>
+        <name>overlap</name>
+        <briefdescription>
+<para>Energy range. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="205" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="205" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a915c13c7e80c706577987dbbdeaedecc" prot="public" static="no" mutable="no">
+        <type><ref refid="a00036" kindref="compound">rfac</ref></type>
+        <definition>rfac rfivcur::rfac</definition>
+        <argsstring></argsstring>
+        <name>rfac</name>
+        <briefdescription>
+<para>R-factors. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="206" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="206" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00031_1a7d95f293b3cd2f5a1002c663080079ea" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real rfivcur::weight</definition>
+        <argsstring></argsstring>
+        <name>weight</name>
+        <briefdescription>
+<para>relative weight in average </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="207" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="207" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="85">
+        <label>rfiv</label>
+        <link refid="a00030"/>
+      </node>
+      <node id="82">
+        <label>rfspot</label>
+        <link refid="a00038"/>
+      </node>
+      <node id="84">
+        <label>rfivlist</label>
+        <link refid="a00032"/>
+        <childnode refid="85" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="83">
+        <label>rfrfac</label>
+        <link refid="a00036"/>
+      </node>
+      <node id="81">
+        <label>rfivcur</label>
+        <link refid="a00031"/>
+        <childnode refid="82" relation="usage">
+          <edgelabel>spot_id</edgelabel>
+        </childnode>
+        <childnode refid="83" relation="usage">
+          <edgelabel>rfac</edgelabel>
+        </childnode>
+        <childnode refid="84" relation="usage">
+          <edgelabel>experimental</edgelabel>
+          <edgelabel>theory</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" line="190" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/rfac_def.h" bodystart="189" bodyend="208"/>
+    <listofallmembers>
+      <member refid="a00031_1a213042deb25a1aacd7b98e886c4f2cd0" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>eng_0</name></member>
+      <member refid="a00031_1a3d89adaccbd465e3a5df63961d719733" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>experimental</name></member>
+      <member refid="a00031_1ae818abb9ef9e2b700eff390ce197dfac" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>group_id</name></member>
+      <member refid="a00031_1a0f82e26e344d3a7e8cf1d389f0d0ca97" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>n_geo</name></member>
+      <member refid="a00031_1a2f03301d73b38759e94a9d2673f9b297" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>overlap</name></member>
+      <member refid="a00031_1a915c13c7e80c706577987dbbdeaedecc" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>rfac</name></member>
+      <member refid="a00031_1a173368fa27e4053c3db4230699699597" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>spot_id</name></member>
+      <member refid="a00031_1a1f36f0e0f0f62d2e1a3b6aebd447f759" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>theory</name></member>
+      <member refid="a00031_1a7d95f293b3cd2f5a1002c663080079ea" prot="public" virt="non-virtual"><scope>rfivcur</scope><name>weight</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

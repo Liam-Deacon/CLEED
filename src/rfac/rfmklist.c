@@ -1,7 +1,7 @@
 /*********************************************************************
  *                       RFMKLIST.C
  *
- *  Copyright 1992-2014 Georg Held
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -14,8 +14,8 @@
  *   GH/1995.08.29 - creation
  *********************************************************************/
 
-/*! \file rfmklist.c
- *  \brief Implementation file for \ref rf_mklist function.
+/*! \file
+ *  \brief Implementation file for rf_mklist() function.
  *
  * Prepare R factor calculations.
  */

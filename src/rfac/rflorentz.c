@@ -12,8 +12,8 @@
  *   GH/1992.10.05 - creation.
  ********************************************************************/
 
-/*! \file rlorentz.c
- *  \brief Contains C implementation of rf_lorentz function.
+/*! \file
+ *  \brief Implementation for rf_lorentz() function.
  *
  */
 

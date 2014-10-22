@@ -1,0 +1,24 @@
+<map id="rfac.h" name="rfac.h">
+<area shape="rect" id="node2" href="$a00042.html" title="Master include file for the CLEED project. " alt="" coords="5,80,76,107"/>
+<area shape="rect" id="node3" href="$a00054_source.html" title="crfac.c" alt="" coords="100,80,160,107"/>
+<area shape="rect" id="node4" href="$a00277_source.html" title="rfac.c" alt="" coords="184,80,239,107"/>
+<area shape="rect" id="node5" href="$a00282_source.html" title="rfctr2out.c" alt="" coords="263,80,344,107"/>
+<area shape="rect" id="node6" href="$a00283.html" title="Implementation file for file_content, rf_help and rf_info functions. " alt="" coords="368,80,433,107"/>
+<area shape="rect" id="node7" href="$a00284.html" title="Implementation file for rf_input function. " alt="" coords="458,80,527,107"/>
+<area shape="rect" id="node8" href="$a00285.html" title="Implementation of rf_intindl function. " alt="" coords="551,80,626,107"/>
+<area shape="rect" id="node9" href="$a00287_source.html" title="rflorentz.c" alt="" coords="650,80,730,107"/>
+<area shape="rect" id="node10" href="$a00288_source.html" title="rfmklide.c" alt="" coords="755,80,833,107"/>
+<area shape="rect" id="node11" href="$a00289.html" title="Implementation file for rf_mklist function. " alt="" coords="858,80,933,107"/>
+<area shape="rect" id="node12" href="$a00290.html" title="Produces output of rfactors to files or stdout. " alt="" coords="957,80,1034,107"/>
+<area shape="rect" id="node13" href="$a00291.html" title="Implementation of R1 calculation using rf_r1 function. " alt="" coords="1058,80,1111,107"/>
+<area shape="rect" id="node14" href="$a00292.html" title="Implementation of R2 factor calculation. " alt="" coords="1135,80,1189,107"/>
+<area shape="rect" id="node15" href="$a00293.html" title="Implemenation file for Rb1 factor calculation. " alt="" coords="1213,80,1266,107"/>
+<area shape="rect" id="node16" href="$a00294.html" title="File contains C implementation for rf_rdargs function. " alt="" coords="1291,80,1369,107"/>
+<area shape="rect" id="node17" href="$a00295.html" title="Implementation file for reading theoretical IV curves from CLEED program using rf_rdcleed function..." alt="" coords="1394,80,1477,107"/>
+<area shape="rect" id="node18" href="$a00296.html" title="C implementation of rf_rdexpt function. " alt="" coords="1501,80,1578,107"/>
+<area shape="rect" id="node19" href="$a00297.html" title="Implementation file for rf_rmin function. " alt="" coords="1602,80,1669,107"/>
+<area shape="rect" id="node20" href="$a00298.html" title="Implementation file for calculating Pendry R&#45;factor. " alt="" coords="1693,80,1746,107"/>
+<area shape="rect" id="node21" href="$a00299.html" title="C implementation of rf_sort function. " alt="" coords="1771,80,1833,107"/>
+<area shape="rect" id="node22" href="$a00300.html" title="Implementation file for rf_spline C function. " alt="" coords="1858,80,1933,107"/>
+<area shape="rect" id="node23" href="$a00301.html" title="Implementation file for rf_splint C function. " alt="" coords="1957,80,2028,107"/>
+</map>

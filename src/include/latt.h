@@ -9,14 +9,16 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: Header file for latt (Lattice generator)
- *
  * Changes:
  *   LD/29.04.14 - Creation; header info taken from for latt.c
- *               - Added PROG* defines for program information and
+ *               - Added LATT* defines for program information and
  *                 ARG* macros for CLI argument evaluation.
  ************************************************************************/
+
+/*!
+ * \file
+ * \brief Header file for \c latt (Lattice generator)
+ */
 
 #ifndef LATT_H
 #define LATT_H
@@ -35,29 +37,29 @@
 #include "lattice.h"
 
 /* additional program information */
-#define PROG "latt"
-#define PROG_COPYRIGHT "Copyright (C) 1994-2014 Georg Held\n" \
+#define LATT "latt"
+#define LATT_COPYRIGHT "Copyright (C) 1994-2014 Georg Held\n" \
 "Copyright (C) 2013-2014 Liam Deacon"
-#define PROG_LICENSE "GNU General Public License v3"
-#define PROG_VERSION "Debug"
-#define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
-#define PROG_MAINTAINER "Liam Deacon (liam.deacon@diamond.ac.uk)"
-#define PROG_SHORTDESC "Lattice generator"
+#define LATT_LICENSE "GNU General Public License v3"
+#define LATT_VERSION "Debug"
+#define LATT_AUTHOR "Georg Held (g.held@reading.ac.uk)"
+#define LATT_MAINTAINER "Liam Deacon (liam.deacon@diamond.ac.uk)"
+#define LATT_SHORTDESC "Lattice generator"
 
 /* platform information */
 #if defined(WIN32) || defined(_WIN32) \
                    || defined(__WIN32) || defined(__WIN32__)
-#define PROG_PLAT "Win32"
+#define LATT_PLAT "Win32"
 #elif defined(__CYGWIN__) || defined(__CYGWIN32__)
-#define PROG_PLAT "Win32_Cygwin"
+#define LATT_PLAT "Win32_Cygwin"
 #elif defined(__ANDROID__)
-#define PROG_PLAT "Android"
+#define LATT_PLAT "Android"
 #elif defined(__linux__) || defined(__linux)
-#define PROG_PLAT "Linux"
+#define LATT_PLAT "Linux"
 #elif defined(__unix__) || defined(__unix)
-#define PROG_PLAT "Unix"
+#define LATT_PLAT "Unix"
 #else
-#define PROG_PLAT "Unknown"
+#define LATT_PLAT "Unknown"
 #endif
 
 /* define constants */

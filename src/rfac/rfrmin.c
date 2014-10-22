@@ -13,8 +13,8 @@
  *   GH/1995.09.12 - Output of IV curves for the best overlap
  ********************************************************************/
 
-/*! \file rfrmin.c
- *  \brief Implementation file for rf_rmin function.
+/*! \file
+ *  \brief Implementation file for rf_rmin() function.
  *
  *  Calculate R factor and find minimum with respect to shift
  *
@@ -31,27 +31,25 @@
 #define SHIFT_DE
 
 /*!
- * \fn rf_rmin
- *
  * Calculate R factor and find minimum with respect to shift.
  *
  *
- * \param *iv_cur Data structure containing all essential data such
+ * \param iv_cur pointer to data structure containing all essential data such
  * as experimental and theoretical IV curves weight etc.
  *
- * \param *args argument list including:
- *         - imaginary part of the optical potential.
- *         - s_ini, s_fin, s_step,
- *         - r_type.
+ * \param args pointer to argument list including:
+ *  - imaginary part of the optical potential.
+ *  - s_ini, s_fin, s_step,
+ *  - r_type.
  *
- * \param *p_r_min pointer to
- * \param *p_s_min pointer to
- * \param *p_e_range pointer to
+ * \param p_r_min pointer to
+ * \param p_s_min pointer to
+ * \param p_e_range pointer to
  *
  * \return minimum R factor, if successful.
  */
-real rf_rmin( rfac_ivcur *iv_cur, rfac_args *args,
-              real *p_r_min, real *p_s_min, real *p_e_range)
+real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
+             real *p_r_min, real *p_s_min, real *p_e_range)
 {
 
   size_t i_list, n_list;

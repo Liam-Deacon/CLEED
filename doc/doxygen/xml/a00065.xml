@@ -1,0 +1,1222 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00065" kind="file">
+    <compoundname>lattice.h</compoundname>
+    <includes refid="a00048" local="yes">atom.h</includes>
+    <includes refid="a00054" local="yes">coord.h</includes>
+    <includes refid="a00075" local="yes">miller_index.h</includes>
+    <includes refid="a00049" local="yes">basis.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">math.h</includes>
+    <includes local="no">string.h</includes>
+    <includedby refid="a00064" local="yes">latt.h</includedby>
+    <incdepgraph>
+      <node id="181">
+        <label>stdlib.h</label>
+      </node>
+      <node id="180">
+        <label>basis.h</label>
+        <link refid="a00049_source"/>
+        <childnode refid="177" relation="include">
+        </childnode>
+        <childnode refid="179" relation="include">
+        </childnode>
+      </node>
+      <node id="176">
+        <label>atom.h</label>
+        <link refid="a00048_source"/>
+      </node>
+      <node id="179">
+        <label>miller_index.h</label>
+        <link refid="a00075_source"/>
+      </node>
+      <node id="183">
+        <label>string.h</label>
+      </node>
+      <node id="182">
+        <label>math.h</label>
+      </node>
+      <node id="175">
+        <label>lattice.h</label>
+        <link refid="lattice.h"/>
+        <childnode refid="176" relation="include">
+        </childnode>
+        <childnode refid="177" relation="include">
+        </childnode>
+        <childnode refid="179" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="178" relation="include">
+        </childnode>
+        <childnode refid="181" relation="include">
+        </childnode>
+        <childnode refid="182" relation="include">
+        </childnode>
+        <childnode refid="183" relation="include">
+        </childnode>
+      </node>
+      <node id="177">
+        <label>coord.h</label>
+        <link refid="a00054_source"/>
+        <childnode refid="178" relation="include">
+        </childnode>
+      </node>
+      <node id="178">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="185">
+        <label>latt.h</label>
+        <link refid="a00064_source"/>
+        <childnode refid="186" relation="include">
+        </childnode>
+      </node>
+      <node id="184">
+        <label>lattice.h</label>
+        <link refid="lattice.h"/>
+        <childnode refid="185" relation="include">
+        </childnode>
+      </node>
+      <node id="186">
+        <label>CLEED.H</label>
+        <link refid="a00053"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="a00009" prot="public">lattice</innerclass>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="a00065_1a486d47d8c71234ccdd26bdb47ac1658e" prot="public" static="no">
+        <name>STRSZ</name>
+        <initializer>256</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="38" column="10" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00065_1a8a9f53e88ab074d064538861f55d1f78" prot="public" static="no">
+        <name>NAMSZ</name>
+        <initializer>128</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="39" column="10" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00065_1a30c17564229ec2e37dfea9c6c9ad643e" prot="public" static="no">
+        <name>TOLERANCE</name>
+        <initializer>(1E-2)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="41" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00065_1a27e59746ad483b398d2862cafaecde2f" prot="public" static="no">
+        <name>IMAGE_LEN</name>
+        <initializer>30.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="42" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00065_1ab0d47d3f74b00968671f22718da341a4" prot="public" static="no">
+        <name>MAX_INP_ATOMS</name>
+        <initializer>256</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="45" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00065_1a85b62cdc749c5d49dc6364fe422fd2f0" prot="public" static="no">
+        <name>MAX_OUT_ATOMS</name>
+        <initializer>4096</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="49" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="a00065_1a75c0a8306809717c974a640afcd8de3f" prot="public" static="no">
+        <name>LAT_INP</name>
+        <initializer>100</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="52" column="9" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="a00065_1a5891714cc3e291803ed7a2aa5c1148ff" prot="public" static="no">
+        <name>lattice_error_code</name>
+        <enumvalue id="a00065_1a5891714cc3e291803ed7a2aa5c1148ffa6cfbcf95998b5407493040bb4bcbd723" prot="public">
+          <name>LATTICE_OPERATION_SUCCESS</name>
+          <initializer>=0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00065_1a5891714cc3e291803ed7a2aa5c1148ffa9764ae3a489ffd38b653f7773f21ee98" prot="public">
+          <name>LATTICE_ATOM_INDEX_OUT_OF_RANGE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00065_1a5891714cc3e291803ed7a2aa5c1148ffab6a1fba3ebc36f357a3ee3d28370f208" prot="public">
+          <name>LATTICE_ALLOC_FAILURE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00065_1a5891714cc3e291803ed7a2aa5c1148ffaece05c85bbc964801d3364105414f3f6" prot="public">
+          <name>LATTICE_STRING_ALLOC_FAILURE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="57" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="57" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="enum" id="a00065_1a2da0dfece8c980029e93e6ce6fd34c50" prot="public" static="no">
+        <name>latt_type</name>
+        <enumvalue id="a00065_1a2da0dfece8c980029e93e6ce6fd34c50a02e38686d90f4fd4f6e09c7fcf3697aa" prot="public">
+          <name>LAT_FCC</name>
+          <initializer>=1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00065_1a2da0dfece8c980029e93e6ce6fd34c50a822eab1fb40d2ff34a66a88b939fa6df" prot="public">
+          <name>LAT_HCP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00065_1a2da0dfece8c980029e93e6ce6fd34c50aa50457573cd2f67392df65b9038e4a0e" prot="public">
+          <name>LAT_BCC</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00065_1a2da0dfece8c980029e93e6ce6fd34c50ae188c554b631f8045a64157d50071283" prot="public">
+          <name>LAT_DIA</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="a00065_1a2da0dfece8c980029e93e6ce6fd34c50a963bf6925a6c4dd8a1ec155de54ea1d9" prot="public">
+          <name>LAT_UNKNOWN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>indicates lattice type </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="67" column="1" bodyfile="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" bodystart="67" bodyend="73"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="a00065_1a8a46968484f5b85e68247fabc1e9a4c1" prot="public" static="no" mutable="no">
+        <type>FILE *</type>
+        <definition>FILE* inf_stream</definition>
+        <argsstring></argsstring>
+        <name>inf_stream</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="104" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="a00065_1ac662c2dd73a9224530dbc4a83bf250fc" prot="public" static="no" mutable="no">
+        <type>FILE *</type>
+        <definition>FILE* ctr_stream</definition>
+        <argsstring></argsstring>
+        <name>ctr_stream</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="105" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="a00065_1a4b7ce43e43c0975afab8e06483242561" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void latt_usage</definition>
+        <argsstring>(FILE *output)</argsstring>
+        <name>latt_usage</name>
+        <param>
+          <type>FILE *</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="108" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1af65d9a494a893e930e25b422ddc552e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void latt_parse_args</definition>
+        <argsstring>(int argc, char *argv[], lattice *latt)</argsstring>
+        <name>latt_parse_args</name>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+          <array>[]</array>
+        </param>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>latt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="109" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1abcba4122c2fd8ac3ab7925f086f6c5af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void latt_info</definition>
+        <argsstring>()</argsstring>
+        <name>latt_info</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="110" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a3c75da67612c4d9dffb7754d299e356b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_generate_atoms</definition>
+        <argsstring>(lattice *latt)</argsstring>
+        <name>lattice_generate_atoms</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>latt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="112" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a8397de4e6850fda8edfa29bf5ed44d22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+        <definition>lattice* lattice_read_input</definition>
+        <argsstring>(const char *filename)</argsstring>
+        <name>lattice_read_input</name>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="113" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1ae23a8f35fd970dd37a2b4c7384b01670" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+        <definition>lattice* lattice_alloc</definition>
+        <argsstring>(size_t n_atoms)</argsstring>
+        <name>lattice_alloc</name>
+        <param>
+          <type>size_t</type>
+          <declname>n_atoms</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="114" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a9cd4247b3359c51d6ee6a8501b5a67d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+        <definition>lattice* lattice_init</definition>
+        <argsstring>(size_t n_atoms)</argsstring>
+        <name>lattice_init</name>
+        <param>
+          <type>size_t</type>
+          <declname>n_atoms</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="115" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1aecebb34f3a97d6983a7cd4e6c5ee55e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lattice_realloc</definition>
+        <argsstring>(lattice *lat, size_t size)</argsstring>
+        <name>lattice_realloc</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="116" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a3077784445c952f8ba9d4932719b5c78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lattice_set_input_filename</definition>
+        <argsstring>(lattice *lat, const char *filename)</argsstring>
+        <name>lattice_set_input_filename</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="117" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1aa9c08b04b92cefa77094feb496fc6efe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lattice_set_output_filename</definition>
+        <argsstring>(lattice *lat, const char *filename)</argsstring>
+        <name>lattice_set_output_filename</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="118" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1ac7e044f2e94f4a38d9036961382511d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lattice_set_script</definition>
+        <argsstring>(lattice *lat, const char *script)</argsstring>
+        <name>lattice_set_script</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>script</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="119" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1acafe17fdabddf526aa16e0f199e8d614" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_free</definition>
+        <argsstring>(lattice *lat)</argsstring>
+        <name>lattice_free</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="120" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a4e9db821f699f9b9cdd5531e1122f78d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_free_atom_list</definition>
+        <argsstring>(lattice *lat)</argsstring>
+        <name>lattice_free_atom_list</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="121" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1afcc96d53ef2a73f1eb7a4227ce675f68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_read</definition>
+        <argsstring>(lattice *lat, coord *a1, coord *a2, coord *a3, coord *nor, coord *bas, char *bas_name, size_t *n_bas)</argsstring>
+        <name>lattice_read</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a1</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a2</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a3</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>nor</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>bas</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>bas_name</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>n_bas</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="122" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1aa7d0a0fffc99f17c9fbc205dd283c67c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lattice_set_atom</definition>
+        <argsstring>(lattice *lat, const atom *atom, size_t index)</argsstring>
+        <name>lattice_set_atom</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>const <ref refid="a00001" kindref="compound">atom</ref> *</type>
+          <declname>atom</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="124" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a8e786c86a4841a97b632ca3dc1dbaca4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lattice_set_atom_list</definition>
+        <argsstring>(lattice *lat, const atom *atoms, size_t n_atoms)</argsstring>
+        <name>lattice_set_atom_list</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>const <ref refid="a00001" kindref="compound">atom</ref> *</type>
+          <declname>atoms</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_atoms</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="125" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a916c1191938d8efe959832e361f906ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_printf</definition>
+        <argsstring>(FILE *output, const lattice *lat)</argsstring>
+        <name>lattice_printf</name>
+        <param>
+          <type>FILE *</type>
+          <declname>output</declname>
+        </param>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="126" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a9b8717401984159f0fd35608c2d00ffc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_debug</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_debug</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="127" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a296b4283e274d78a0bcdc5d490935436" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_a</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_a</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="129" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1af7f92cbad2fac90f45c59f6f88e565c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_b</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_b</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="130" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1aa56f0e2ac3d52d72b2b1921848f9e310" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_c</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_c</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="131" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1ab2d0ad2dd2849877a33977a6d6b1c785" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_max_disp</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_max_disp</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="132" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a2092c28d98018fa0efecee322f2cca98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_max_disp_z</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_max_disp_z</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="133" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a5fe841140afbe3185a9be38117ed86ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t lattice_get_max_layers</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_max_layers</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a9802b8c7b5f6341edcdff8a637b75e23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t lattice_get_max_cells</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_max_cells</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="135" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1abe0de7c9606b7c32610dcac1f1c63bfd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_h</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_h</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="136" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1aed01cfca5c4675464a4be5dfba7f9de7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_k</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_k</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="137" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1aeb01820df9cf2c7dc4eb3c6a0deb9188" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double lattice_get_l</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_l</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="138" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1aa69f06e79e049533b3366df4e5687ae8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char* lattice_get_input_filename</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_input_filename</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="139" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a4aee3a79ff119a700fbd2aeeb9b1f2e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char* lattice_get_output_filename</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_output_filename</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="140" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a2cb99a1ada442d7b3965f40faf5d3fe0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t lattice_get_n_atoms</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_n_atoms</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="141" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a0231b7e8eb2e8794ae538c225698ffc9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="a00001" kindref="compound">atom</ref> *</type>
+        <definition>const atom* lattice_get_atom_list</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_atom_list</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="142" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a76a81c65b2847c431b927887451f3480" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00001" kindref="compound">atom</ref> *</type>
+        <definition>atom* lattice_get_atom</definition>
+        <argsstring>(const lattice *lat, size_t index)</argsstring>
+        <name>lattice_get_atom</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="143" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1af97179a6f15f72b225eff57b5f608f4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_atom_index_swap</definition>
+        <argsstring>(const lattice *lat, size_t i, size_t j)</argsstring>
+        <name>lattice_atom_index_swap</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="144" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1ac1cf89d20cc8b55368af0cba5e885240" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+        <definition>coord* lattice_get_surface_normal</definition>
+        <argsstring>(const lattice *lat, const coord *a1, const coord *a2, const coord *a3)</argsstring>
+        <name>lattice_get_surface_normal</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type>const <ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a2</declname>
+        </param>
+        <param>
+          <type>const <ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a3</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="146" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a22140560afc674cb6accae3ebb49f102" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double **</type>
+        <definition>double** lattice_normal_get_rotation_matrix</definition>
+        <argsstring>(const coord *normal)</argsstring>
+        <name>lattice_normal_get_rotation_matrix</name>
+        <param>
+          <type>const <ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="148" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1ae7bd2e0876ecd5dcb1c2b14b275d84e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lattice_setup</definition>
+        <argsstring>(lattice *lat, coord *a1, coord *a2, coord *a3, coord *nor, coord *bas, char *bas_name, size_t *n_bas)</argsstring>
+        <name>lattice_setup</name>
+        <param>
+          <type><ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a1</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a2</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>a3</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>nor</declname>
+        </param>
+        <param>
+          <type><ref refid="a00006" kindref="compound">coord</ref> *</type>
+          <declname>bas</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>bas_name</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>n_bas</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="149" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00065_1a2f3243288920bc8b01cc19a5c9e6f394" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="a00020" kindref="compound">miller_hkl</ref> *</type>
+        <definition>miller_hkl* lattice_get_miller_hkl</definition>
+        <argsstring>(const lattice *lat)</argsstring>
+        <name>lattice_get_miller_hkl</name>
+        <param>
+          <type>const <ref refid="a00009" kindref="compound">lattice</ref> *</type>
+          <declname>lat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h" line="152" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/************************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LATTICE.H</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2013-2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>@license<sp/>GPL-3.0+<sp/>&lt;http://spdx.org/licenses/GPL-3.0+&gt;</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>Description:<sp/>Header<sp/>for<sp/>struct<sp/>lattice<sp/>and<sp/>contains<sp/>prototypes<sp/>for</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>associated<sp/>functions.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>Changes:</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/><sp/><sp/>LD/2014.08.28<sp/>-<sp/>Creation</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>************************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LATTICE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LATTICE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;atom.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;coord.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;miller_index.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;basis.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>includes<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;math.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>define<sp/>constants<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/><sp/>STRSZ<sp/>256</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/><sp/>NAMSZ<sp/>128</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>TOLERANCE<sp/>(1E-2)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>IMAGE_LEN<sp/>30.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>MAX_INP_ATOMS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAX_INP_ATOMS<sp/>256</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>MAX_OUT_ATOMS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAX_OUT_ATOMS<sp/>4096</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LAT_INP<sp/>100</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/>LATTICE_OPERATION_SUCCESS=0,</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/>LATTICE_ATOM_INDEX_OUT_OF_RANGE,</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/>LATTICE_ALLOC_FAILURE,</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/>LATTICE_STRING_ALLOC_FAILURE</highlight></codeline>
+<codeline lineno="62"><highlight class="normal">}<sp/>lattice_error_code;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/>LAT_FCC=1,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/>LAT_HCP,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/>LAT_BCC,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/>LAT_DIA,</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/>LAT_UNKNOWN</highlight></codeline>
+<codeline lineno="73"><highlight class="normal">}<sp/>latt_type;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81" refid="a00009" refkind="compound"><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="82" refid="a00009_1a749ae7b2f81c87d7fb807bc6e13d7ce1" refkind="member"><highlight class="normal"><sp/><sp/>latt_type<sp/><ref refid="a00009_1a749ae7b2f81c87d7fb807bc6e13d7ce1" kindref="member">latt_type</ref>;<sp/><sp/></highlight></codeline>
+<codeline lineno="83" refid="a00009_1a111ca8a88998cac2c287e690d63ddf90" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1a111ca8a88998cac2c287e690d63ddf90" kindref="member">a_nn</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="84" refid="a00009_1ae3f74b6438c1057fb69c3d619d80e204" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1ae3f74b6438c1057fb69c3d619d80e204" kindref="member">a_latt</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="85" refid="a00009_1aa51d80767225a7f7557f397fd8bc5614" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1aa51d80767225a7f7557f397fd8bc5614" kindref="member">b_latt</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="86" refid="a00009_1a4ca1cef86ae14c046bc6139a56bd69e1" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1a4ca1cef86ae14c046bc6139a56bd69e1" kindref="member">c_latt</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="87" refid="a00009_1a4ff82be3e70b1d0c9cb7e041421c8f14" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1a4ff82be3e70b1d0c9cb7e041421c8f14" kindref="member">max_disp</ref>;<sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="88" refid="a00009_1a296bfd1b837d894dfd1e259300bbc095" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1a296bfd1b837d894dfd1e259300bbc095" kindref="member">max_disp_z</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="89" refid="a00009_1a03cf245fa1fac560e4a864a267a43722" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="a00009_1a03cf245fa1fac560e4a864a267a43722" kindref="member">max_layers</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="90" refid="a00009_1a3a873c724e10fb873451f0b9ee77a5d5" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="a00009_1a3a873c724e10fb873451f0b9ee77a5d5" kindref="member">max_cells</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="91" refid="a00009_1a25bfd9d4432fce002b1fc67d9fb60a46" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="a00009_1a25bfd9d4432fce002b1fc67d9fb60a46" kindref="member">max_atoms</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>image_len;</highlight></codeline>
+<codeline lineno="93" refid="a00009_1aac1b643aeb64126bf94e343e1d2d9a0b" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1aac1b643aeb64126bf94e343e1d2d9a0b" kindref="member">vec_h</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="94" refid="a00009_1ad6ab3a8f1aa698cb2c3e92bddb244117" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1ad6ab3a8f1aa698cb2c3e92bddb244117" kindref="member">vec_k</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="95" refid="a00009_1a79179deb481e06c225e3ed23bed4938c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="a00009_1a79179deb481e06c225e3ed23bed4938c" kindref="member">vec_l</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*input_filename;<sp/></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*output_filename;</highlight></codeline>
+<codeline lineno="98" refid="a00009_1aa15a8c6f67125ecff1d7948250714ca9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<ref refid="a00009_1aa15a8c6f67125ecff1d7948250714ca9" kindref="member">script</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="99" refid="a00009_1ab2b9f6fb130c0ec3ac1589303d0085aa" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="a00001" kindref="compound">atom</ref><sp/>*<ref refid="a00009_1ab2b9f6fb130c0ec3ac1589303d0085aa" kindref="member">atoms</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_atoms;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>allocated_atoms;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal">}<sp/><ref refid="a00009" kindref="compound">lattice</ref>;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/>FILE<sp/>*inf_stream;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/>FILE<sp/>*ctr_stream;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>function<sp/>prototypes<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>latt_usage(FILE<sp/>*output);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>latt_parse_args(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*argv[],<sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*latt);</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>latt_info();</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_generate_atoms(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*latt);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lattice_read_input(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*filename);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lattice_alloc(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_atoms);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lattice_init(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_atoms);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lattice_realloc(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>size);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lattice_set_input_filename(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*filename);</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lattice_set_output_filename(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*filename);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lattice_set_script(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*script);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_free(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_free_atom_list(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_read(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a1,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a2,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a3,<sp/></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*nor,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*bas,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*bas_name,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>*n_bas);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lattice_set_atom(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00001" kindref="compound">atom</ref><sp/>*<ref refid="a00001" kindref="compound">atom</ref>,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>index);</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lattice_set_atom_list(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00001" kindref="compound">atom</ref><sp/>*atoms,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n_atoms);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_printf(FILE<sp/>*output,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_debug(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_a(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_b(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_c(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_max_disp(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_max_disp_z(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>lattice_get_max_layers(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>lattice_get_max_cells(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_h(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_k(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>lattice_get_l(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*lattice_get_input_filename(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*lattice_get_output_filename(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>lattice_get_n_atoms(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00001" kindref="compound">atom</ref><sp/>*lattice_get_atom_list(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><ref refid="a00001" kindref="compound">atom</ref><sp/>*lattice_get_atom(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>index);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_atom_index_swap(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>j);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><ref refid="a00006" kindref="compound">coord</ref><sp/>*lattice_get_surface_normal(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a1,</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a2,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a3);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>**lattice_normal_get_rotation_matrix(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*normal);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lattice_setup(<ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a1,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a2,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*a3,<sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*nor,</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="a00006" kindref="compound">coord</ref><sp/>*bas,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*bas_name,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>*n_bas);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><ref refid="a00020" kindref="compound">miller_hkl</ref><sp/>*lattice_get_miller_hkl(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat);</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus<sp/></highlight><highlight class="comment">/*<sp/>If<sp/>this<sp/>is<sp/>a<sp/>C++<sp/>compiler,<sp/>use<sp/>C<sp/>linkage<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal">}<sp/></highlight><highlight class="comment">/*<sp/>extern<sp/>&quot;C&quot;<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">cleed<sp/>{</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">Lattice<sp/>{</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/>Lattice();</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/>~Lattice();</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="a00009" kindref="compound">lattice</ref><sp/>*lat;</highlight></codeline>
+<codeline lineno="167"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal">}<sp/></highlight><highlight class="comment">/*<sp/>namespace<sp/>cleed<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>ifdef<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>LATTICE_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/lattice.h"/>
+  </compounddef>
+</doxygen>

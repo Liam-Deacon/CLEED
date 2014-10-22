@@ -1,3 +1,21 @@
+/*********************************************************************
+ *                       SPOTS.H
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *********************************************************************/
+
+/*!
+ * \file
+ * \brief header for #spot \c struct and #spots \c struct.
+ */
+
 #ifndef SPOTS_H
 #define SPOTS_H
 
@@ -6,12 +24,12 @@
 #include "patt_colors.h"
 
 enum {
-  SPOT_GS=0   /*!< Indexing of substrate spots. */,
-  SPOT_SS     /*!< Indexing of superstructure spots. */
+  SPOT_GS=0,   /*!< Indexing of substrate spots. */
+  SPOT_SS      /*!< Indexing of superstructure spots. */
 };
 
-#define RADIUS_GS 10.
-#define RADIUS_SS  5.
+#define RADIUS_GS 10.   /*!< Default radius of substrate spots */
+#define RADIUS_SS  5.   /*!< Default radius of superstructure spots */
 
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
@@ -53,13 +71,13 @@ typedef struct spot
   double y;             /*!< y position of spot */
 } spot;
 
-/*! \struct spots
+/*! \typedef spots
  *  \brief LEED spot list structure.
  *
  * List structure for LEED spots. Contains members to control drawing 
  * of spots group.
  */
-typedef struct spots
+typedef struct _spots
 {
   bool fill;                    /*!< flag to determine if spots are filled */
   bool visible;                 /*!< flag to determine if spots are shown */
@@ -80,16 +98,16 @@ typedef struct spots
 extern spot spot_default; 
 
 /* spots functions */
-/*! \fn spots *spots_alloc(size_t n_spots)
+/*!
  *  \brief Allocate memory for spots. 
  *  \param n_spots Size of array to allocate to memory.
- *  \return \sa spots* Pointer to spots structure.
+ *  \return \sa spots Pointer to #spots structure.
  *
  * Allocate memory for array of spots of size \a n_spots.
  */
 spots *spots_alloc(size_t n_spots);
 
-/*! \fn spots *spots_init(size_t n_spots)
+/*!
  *  \brief Initialise a \a spots structure. 
  *  \param n_spots Size of array to allocate to memory.
  *  \return \sa spots* Pointer to spots structure.
@@ -99,7 +117,7 @@ spots *spots_alloc(size_t n_spots);
  */
 spots *spots_init(size_t n_spots);
 
-/*! \fn void spots_free(spots *spots)
+/*!
  *  \brief Free memory of a \a spots structure. 
  *  \param *spots Pointer to spots object to free from memory.
  *
@@ -116,36 +134,33 @@ void spots_free(spots *spots);
  */
 int spots_list_realloc(spots *spots, size_t size);
 
-/*! \fn void spots_append(spots *spots, spot spot)
+/*!
  *  \brief Add a \a spot to the \a spots list.
  *  \param *spots Pointer to spots structure. 
  *  \param spot spot struct.
  *
  */
-void spots_append(spots *spots, spot spot);
+void spots_append(spots *_spots, const spot _spot);
 
-/*! \fn void spots_set_list(spots *spots, spot *spot, size_t n_spots)
+/*!
  *  \brief Assign a \a spot array to the \a spots struct.
- *  \param *spots Pointer to spots structure. 
- *  \param *spot Array of spot.
- *
  */
 void spots_set_list(spots *spots, spot *spot, size_t n_spots);
 
-/*! \fn void spots_set_color(spots *spots, patt_color_rgb color)
- *  \brief Set \a color of the \a spots struct.
- *  \param *spots Pointer to spots structure. 
- *  \param *color A patt_color_rgb struct.
+/*!
+ * \brief Set \p color of the \p spots struct.
+ * \param *spots Pointer to spots structure.
+ * \param *color A patt_color_rgb struct.
  *
  */
 void spots_set_color(spots *spots, patt_color_rgb color);
 
-/*! \fn void spots_set_color(spots *spots, double red, double green, double blue)
- *  \brief Set color of the \a spots struct using individual RGB channels.
- *  \param *spots Pointer to spots structure. 
- *  \param red Fraction of red color.
- *  \param green Fraction of green color.
- *  \param blue Fraction of blue color.
+/*!
+ * \brief Set color of the \a spots struct using individual RGB channels.
+ * \param *spots Pointer to spots structure.
+ * \param red Fraction of red color.
+ * \param green Fraction of green color.
+ * \param blue Fraction of blue color.
  *
  */
 void spots_set_color_rgb(spots *spots, 
@@ -156,7 +171,7 @@ void spots_set_shape(spots *spots, patt_shape shape);
 void spots_set_stroke_width(spots *spots, double stroke_width);
 void spots_set_stroke_style(spots *spots, int stroke_style);
 void spots_set_font_size(spots *spots, double font_size);
-void spots_set_font_name(spots *spots, char *font_name);  
+void spots_set_font_name(spots *spots, char *font_name);
 void spots_set_radius(spots *spots, double radius);
 void spots_set_visible(spots *spots, bool visible);
 void spots_set_indexing(spots *spots, bool indexing);

@@ -1,25 +1,24 @@
-/****************************************************************************
-                        FTSMOOTH_MAIN (Georg Held 29.05.1995)
-
-Fourier Transformation Smooth
-
-Format of input file must be:
-     <x>  <y>
-Lines beginning with '#' are interpreted as comments.
-
-Changes:
-
-GH/30.05.1995 - Creation
-GH/01.06.1995 - Start transformation from f(x=0) = 0 and interpolate values
-                from -x_0 to x_0.
-GH/07.06.1995 - x_0 = n_x/4 * x_step
-LD/18.06.2013 - allow trimming of datasets with '--range <arg1> <arg2>'
-
-****************************************************************************/
+/*********************************************************************
+ *                    FTSMOOTH_MAIN.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/30.05.1995 - Creation
+ *   GH/01.06.1995 - Start transformation from f(x=0) = 0 and interpolate values
+ *                   from -x_0 to x_0.
+ *   GH/07.06.1995 - x_0 = n_x/4 * x_step
+ *   LD/18.06.2013 - allow trimming of datasets with '--range <arg1> <arg2>'
+ *********************************************************************/
 
 #include "ftsmooth.h"
 
-/*====================================================================*/
 int main(int argc, char *argv[])
 {
   char mode;
@@ -78,10 +77,10 @@ int main(int argc, char *argv[])
     	  lbound, ubound, &del_flag);
   #endif
 	  
-  fprintf(out_stream,"# Sin Fourier Smooth: version %3.1f\n",VERSION);
+  fprintf(out_stream, "# Sin Fourier Smooth: version %3.1f\n", FTSMOOTH_VERSION);
   if (!stdout_flag) /* print if out_stream not equal to stdout */
   {
-    printf("#> Sin Fourier Smooth: version %3.1f\n",VERSION);
+    printf("#> Sin Fourier Smooth: version %3.1f\n", FTSMOOTH_VERSION);
   }
 
   /*
@@ -92,7 +91,7 @@ int main(int argc, char *argv[])
   fx = (double *) malloc (1 * sizeof(double) );
 
   /* READ INPUT DATA */
-  n_x = read_data(in_stream, out_stream, x, fx);
+  n_x = fts_read_data(in_stream, out_stream, x, fx);
   fclose(in_stream);
 
   if(!stdout_flag)
@@ -105,7 +104,7 @@ int main(int argc, char *argv[])
   /* PROCESS DATA */
   if(offset_flag) /* apply y-offset */
   {
-    offset = offset_data(x, fx, n_x, offset, offset_flag);
+    offset = fts_offset_data(x, fx, n_x, offset, offset_flag);
     if(!stdout_flag)
     {
       printf("#> Offset f(x) by %f\n",offset);
@@ -124,32 +123,32 @@ int main(int argc, char *argv[])
   if(del_flag) /* remove negative y-values */
   {
     i_x = n_x;
-    n_x = rm_neg_data(x, fx, n_x);
+    n_x = fts_rm_neg_data(x, fx, n_x);
     if(!stdout_flag)
     {
-	  printf("#> Removed %i negative entries from data\n",i_x-n_x);
+      printf("#> Removed %i negative entries from data\n",i_x-n_x);
     } /* !stdout_flag */
   }
    
   if(range_flag) /* trim data range for x-values */
   {
     i_x = n_x;
-    n_x = trim_data(x, fx, n_x, lbound, ubound, i_r);
+    n_x = fts_trim_data(x, fx, n_x, lbound, ubound, i_r);
     if(!stdout_flag)
     {
       printf("#> Trimmed %i entries from data\n",i_x-n_x);
   	  printf("#> %i trimming ranges:\n",i_r);
       for(i_arg=0; i_arg<i_r; i_arg++)
-	  {
-	    printf("#> \t%i: %e to %e\n", i_arg, lbound[i_arg], ubound[i_arg]);
-	  }
+      {
+        printf("#> \t%i: %e to %e\n", i_arg, lbound[i_arg], ubound[i_arg]);
+      }
     }
   }
  
   /* OUTPUT DATA */
  
   /* finalise output */
-  print_data(out_stream, x, fx, n_x);
+  fts_print_data(out_stream, x, fx, n_x);
   fclose(out_stream);
  
   if(!stdout_flag)
@@ -166,5 +165,5 @@ int main(int argc, char *argv[])
     free(lbound);
   }
  
-  return 0;
+  return(0);
 }

@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.7">
+  <compounddef id="a00077" kind="file">
+    <compoundname>nrr_func.h</compoundname>
+    <includedby refid="a00076" local="yes">nrr.h</includedby>
+    <invincdepgraph>
+      <node id="294">
+        <label>csearch.h</label>
+        <link refid="a00059"/>
+      </node>
+      <node id="292">
+        <label>nrr_func.h</label>
+        <link refid="nrr_func.h"/>
+        <childnode refid="293" relation="include">
+        </childnode>
+      </node>
+      <node id="293">
+        <label>nrr.h</label>
+        <link refid="a00076_source"/>
+        <childnode refid="294" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="a00077_1a113d531e3f1d4d7974629f9091e5344c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real</type>
+        <definition>real brent</definition>
+        <argsstring>(real, real, real, real(*)(real), real, real *)</argsstring>
+        <name>brent</name>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real(*)(real)</type>
+        </param>
+        <param>
+          <type>real</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/nrr_func.h" line="5" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00077_1aa791990b9eb64202ac237875d3b40158" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real</type>
+        <definition>real f1dim</definition>
+        <argsstring>(real)</argsstring>
+        <name>f1dim</name>
+        <param>
+          <type>real</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/nrr_func.h" line="6" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00077_1a7d187aaea0968db9d2d64ef734717d72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void linmin</definition>
+        <argsstring>(real *, real *, int, real *, real(*)())</argsstring>
+        <name>linmin</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>int</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real(*)()</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/nrr_func.h" line="7" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00077_1ab89b55cc0f2387d6312bfd27c96f1282" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mnbrak</definition>
+        <argsstring>(real *, real *, real *, real *, real *, real *, real(*)(real))</argsstring>
+        <name>mnbrak</name>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real *</type>
+        </param>
+        <param>
+          <type>real(*)(real)</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/nrr_func.h" line="8" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="a00077_1a66643b2e96a8aef9cffd9255a427a374" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real</type>
+        <definition>real ran1</definition>
+        <argsstring>(long *)</argsstring>
+        <name>ran1</name>
+        <param>
+          <type>long *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/nrr_func.h" line="9" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*********************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">Num.<sp/>Rec.<sp/>functions</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">*********************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal">real<sp/>brent(real<sp/>,<sp/>real<sp/>,<sp/>real<sp/>,<sp/>real(*)(real),<sp/>real<sp/>,<sp/>real<sp/>*);</highlight></codeline>
+<codeline lineno="6"><highlight class="normal">real<sp/>f1dim(real<sp/>);</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>linmin(real<sp/>*,<sp/>real<sp/>*,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>,<sp/>real<sp/>*,<sp/>real<sp/>(*)()<sp/>);</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>mnbrak(real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>*,<sp/>real<sp/>(*)(real)<sp/>);</highlight></codeline>
+<codeline lineno="9"><highlight class="normal">real<sp/>ran1(</highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>*);</highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/src/include/nrr_func.h"/>
+  </compounddef>
+</doxygen>

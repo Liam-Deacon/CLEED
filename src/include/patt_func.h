@@ -1,4 +1,21 @@
-/* patt_func.h */
+/*********************************************************************
+ *                           PATT_FUNC.H
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/2014.08.23 - header created by split from patt.c
+ *********************************************************************/
+
+/*!
+ * \file
+ * \brief File contains function prototypes for the \c patt program.
+ */
 
 #ifndef PATT_FUNC_H
 #define PATT_FUNC_H

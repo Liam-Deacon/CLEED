@@ -100,9 +100,10 @@ int patt_session(const patt_drawing *drawing)
   char buf[BUFSIZ];
   char u;
 
-  printf("%s [%s] - %s\n", PROG, PROG_VERSION, PROG_SHORTDESC);
-  printf("%s\n", PROG_COPYRIGHT);
-  printf("This program is released under the terms of the %s\n", PROG_LICENSE);
+  printf("%s [%s] - %s\n", PATT_PROG, PATT_PROG_VERSION, PATT_PROG_SHORTDESC);
+  printf("%s\n", PATT_PROG_COPYRIGHT);
+  printf("This program is released under the terms of the %s\n",
+         PATT_PROG_LICENSE);
   printf("\nType 'help' to get started...\n\n");
 
   while(gets(buf))
