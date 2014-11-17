@@ -58,13 +58,13 @@ int main(int argc, char *argv[])
  
 *********************************************************************/
 {
-leed_cryst_t *bulk;
-leed_cryst_t *over;
-leed_phs_t *phs_shifts;
-leed_beam_t *beams_all;
-leed_beam_t *beams_out;
-leed_beam_t *beams_now;
-leed_beam_t *beams_set;
+leed_crystal *bulk;
+leed_crystal *over;
+leed_phase *phs_shifts;
+leed_beam *beams_all;
+leed_beam *beams_out;
+leed_beam *beams_now;
+leed_beam *beams_set;
 leed_var *v_par;
 leed_energy *eng;
 
@@ -411,8 +411,8 @@ FILE *res_stream;
         {
           leed_ms_sym( &Tpp, &Rpm, 
                     v_par, (bulk->layers + 0), beams_set);
-          Tmm = matcop(Tmm, Tpp);
-          Rmp = matcop(Rmp, Rpm);
+          Tmm = matcopy(Tmm, Tpp);
+          Rmp = matcopy(Rmp, Rpm);
         }
         else
         {
@@ -439,8 +439,8 @@ FILE *res_stream;
           {
             leed_ms_sym( &Tpp_s, &Rpm_s, 
                       v_par, (bulk->layers + i_layer), beams_set);
-            Tmm_s = matcop(Tmm_s, Tpp_s);
-            Rmp_s = matcop(Rmp_s, Rpm_s);
+            Tmm_s = matcopy(Tmm_s, Tpp_s);
+            Rmp_s = matcopy(Rmp_s, Rpm_s);
           }
           else
           {
@@ -487,8 +487,8 @@ FILE *res_stream;
           {
             leed_ms_sym( &Tpp_s, &Rpm_s,
                       v_par, (bulk->layers + i_layer), beams_set);
-            Tmm_s = matcop(Tmm_s, Tpp_s);
-            Rmp_s = matcop(Rmp_s, Rpm_s);
+            Tmm_s = matcopy(Tmm_s, Tpp_s);
+            Rmp_s = matcopy(Rmp_s, Rpm_s);
           }
           else
           {
@@ -558,8 +558,8 @@ FILE *res_stream;
       {
         leed_ms_sym( &Tpp_s, &Rpm_s,
                   v_par, (over->layers + i_layer), beams_now);
-        Tmm_s = matcop(Tmm_s, Tpp_s);
-        Rmp_s = matcop(Rmp_s, Rpm_s);
+        Tmm_s = matcopy(Tmm_s, Tpp_s);
+        Rmp_s = matcopy(Rmp_s, Rpm_s);
       }
       else
       {

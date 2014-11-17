@@ -80,21 +80,20 @@ int patt_session(const patt_drawing *drawing);
 int patt_args(int argc, char *argv[], patt_drawing *drawing);
 const char *patt_color_get_name(const patt_color_rgb *color);
 const char *patt_color_get_ps_string(const patt_color_rgb *color);
-bool patt_color_is_equal(const patt_color_rgb *dst,
-                         const patt_color_rgb *src);
+bool patt_color_is_equal(const patt_color_rgb *, const patt_color_rgb *);
 int patt_draw(const patt_drawing *drawing);
 
 int patt_draw_ps(const patt_drawing *drawing);
-int patt_draw_ps_finish(FILE *file_ptr, const patt_drawing *drawing);
-int patt_draw_ps_gun(FILE *file_ptr, const patt_gun *gun);
-int patt_draw_ps_init(FILE *file_ptr, const patt_drawing *drawing);
-int patt_draw_ps_label(FILE *file_ptr, const spots *group, const spot *spot);
-int patt_draw_ps_screen(FILE *file_ptr, const patt_screen *screen);
-int patt_draw_ps_spot(FILE *file_ptr, spot *spot, double spot_size,
+void patt_draw_ps_finish(FILE *file_ptr, const patt_drawing *drawing);
+void patt_draw_ps_gun(FILE *file_ptr, const patt_gun *gun);
+void patt_draw_ps_init(FILE *file_ptr, const patt_drawing *drawing);
+void patt_draw_ps_label(FILE *file_ptr, const spots *group, const spot *spot);
+void patt_draw_ps_screen(FILE *file_ptr, const patt_screen *screen);
+void patt_draw_ps_spot(FILE *file_ptr, spot *spot, double spot_size,
                       patt_shape shape, const patt_color_rgb *color,
                       bool fill);
-int patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing);
-int patt_draw_ps_vector_funcs(FILE *file_ptr);
+void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing);
+void patt_draw_ps_vector_funcs(FILE *file_ptr);
 
 patt_color_rgb *patt_get_named_color(const char *color);
 void patt_info();

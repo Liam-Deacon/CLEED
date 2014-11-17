@@ -14,7 +14,7 @@
 
 /*!
  * \file
- * \puthor Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
  * \brief Header file for #pattern \c struct and associated functions.
  */
 

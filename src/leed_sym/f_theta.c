@@ -9,7 +9,7 @@
 char line_buffer[STRSZ];
 /*========================================================================*/
 
-main(int argc, char *argv[])
+ftheta(int argc, char *argv[])
 {
 
 mat Ylm;

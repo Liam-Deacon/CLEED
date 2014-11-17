@@ -58,8 +58,8 @@
  * ef=/usr/leed/RU001/Ru001cl.iv3:ti=(-2.,2.)+(2.,-2.):id=11:wt=1.
  * --- End of File ---
  *
- * \return pointer to a list of IV curves \ref rfac_ivcur \p *cur_list .
- * This list is terminated by the value I_END_OF_LIST in
+ * \return pointer to a list of IV curves #rfac_ivcur \p *cur_list .
+ * This list is terminated by the value #I_END_OF_LIST in
  * cur_list[i+1].group_id.
 */
 rfac_ivcur *rf_input(const char *control_file, const char *theory_file)

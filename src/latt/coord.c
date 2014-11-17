@@ -24,7 +24,7 @@
 /*!
  * Initializes #coord instance with a position (0, 0, 0).
  *
- * \return pointer to #coord object
+ * \return Pointer to initialized #coord object
  * \retval \c NULL if memory could not be allocated.
  */
 coord *coord_init()
@@ -43,7 +43,7 @@ coord *coord_init()
 /*!
  * Frees #coord object \p pos from memory.
  *
- * \param pos object to free.
+ * \param pos #coord object to free from memory.
  */
 void coord_free(coord *pos)
 {
@@ -53,8 +53,9 @@ void coord_free(coord *pos)
 }
 
 /*!
+ * Returns the amount of size allocated to the #coord object \p pos in memory.
  *
- * \param pos
+ * \param[in] pos Pointer to #coord structure.
  * \return The maximum number of #coord objects with allocated memory to \p pos.
  */
 size_t coord_get_allocated_size(const coord *pos)
@@ -76,7 +77,7 @@ void coord_copy(coord *dst, const coord *src)
 /*!
  * Getter function for @coord::x
  *
- * \param pos
+ * \param[in] pos Pointer to #coord structure.
  * \return @coord::x of \p pos
  */
 double coord_get_x(const coord *pos)
@@ -87,7 +88,7 @@ double coord_get_x(const coord *pos)
 /*!
  * Getter function for @coord::y
  *
- * \param pos
+ * \param[in] pos Pointer to #coord structure.
  * \return @coord::y of \p pos
  */
 double coord_get_y(const coord *pos)
@@ -98,7 +99,7 @@ double coord_get_y(const coord *pos)
 /*!
  * Getter function for @coord::z
  *
- * \param pos
+ * \param[in] pos Pointer to #coord structure.
  * \return @coord::z of \p pos
  */
 
@@ -110,7 +111,7 @@ double coord_get_z(const coord *pos)
 /*!
  * Calculates the magnitude of the vector given by \p pos
  *
- * \param pos
+ * \param[in] pos Pointer to #coord structure.
  * \return the magnitude of \p pos
  */
 double coord_get_magnitude(const coord *pos)
@@ -121,40 +122,40 @@ double coord_get_magnitude(const coord *pos)
 /*!
  * Setter function for @coord::x
  *
- * \param pos #coord object to change.
- * \param x value of x position.
+ * \param[in,out] pos Pointer to #coord object to change.
+ * \param new_x value of x position.
  */
-void coord_set_x(coord *pos, double x)
+void coord_set_x(coord *pos, double new_x)
 {
-  pos->x = x;
+  pos->x = new_x;
 }
 
 /*!
  * Setter function for @coord::y
  *
- * \param pos #coord object to change.
- * \param y value of y position.
+ * \param[in,out] pos Pointer to #coord object to change.
+ * \param new_y value of y position.
  */
-void coord_set_y(coord *pos, double y)
+void coord_set_y(coord *pos, double new_y)
 {
-  pos->y = y;
+  pos->y = new_y;
 }
 
 /*!
  * Setter function for @coord::z
  *
- * \param pos #coord object to change.
- * \param z value of z position.
+ * \param[in,out] pos Pointer to #coord object to change.
+ * \param new_z value of z position.
  */
-void coord_set_z(coord *pos, double z)
+void coord_set_z(coord *pos, double new_z)
 {
-  pos->z = z;
+  pos->z = new_z;
 }
 
 /*!
  * Setter function for assigning (@p x, \p y, \p z) coordinate \p pos
  *
- * \param pos #coord object to change.
+ * \param[in,out] pos Pointer to #coord object to change.
  * \param x value of x-axis position.
  * \param y value of y-axis position.
  * \param z value of z-axis position.

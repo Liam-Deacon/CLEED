@@ -1,22 +1,30 @@
 /*********************************************************************
-LD/24.04.14
-  file contains functions:
+ *                           PATT_HELP.H
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/2014.04.14 - creation
+ *********************************************************************/
 
-  usage (24.04.14)
-     Provides syntax help and other information before exiting
-
-  info (24.04.14)
-     Provides version information then exits
-  
-Changes:
-
-*********************************************************************/
+/*! \file
+ *
+ * Contains patt_usage() and patt_info() functions.
+ */
 
 #include "patt_ver.h"
 #include "patt_def.h"
 #include <stdio.h>
 
-/* Print Patt usage */
+/*!
+ * Prints syntax usage of command line arguments for the \c patt program.
+ * \param output File pointer for output e.g. \c stdout
+ */
 void patt_usage(FILE *output)
 {
    fprintf(output,"syntax:\npatt ");
@@ -95,6 +103,9 @@ void patt_usage(FILE *output)
    
 }
 
+/*!
+ * Prints program version information for \c patt
+ */
 void patt_info()
 {
     printf("%s - version %s (%s)\n", PATT_PROG, PATT_PROG_VERSION, PATT_PROG_PLAT);

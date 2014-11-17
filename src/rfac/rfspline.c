@@ -26,7 +26,7 @@
  * \param[in,out] *list list of energy/intensity values to be
  * interpolated by cubic spline.
  * The function will generate the structure elements deriv2, which will
- * be used for interpolation in function \ref rf_splint .
+ * be used for interpolation in function rf_splint() .
  *
  * For a description see Numerical Recipes in C Chapter 3.3.
  * The boundary conditions are set for a natural spline

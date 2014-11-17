@@ -32,14 +32,11 @@ extern "C" {
 
 #include <stdio.h>
 
-/*! \typedef coord
- *  \brief structure for x, y, z coordinate.
- */
 typedef struct {
   double x;       /*!< x-axis position */
   double y;       /*!< y-axis position */
   double z;       /*!< z-axis position */
-} coord;
+} coord;          /*!< Structure for x,y,z coordinates */
 
 coord *coord_init();
 void coord_free(coord *pos);
@@ -61,7 +58,7 @@ void coord_printf(FILE *f, const coord *pos);
 namespace cleed {
 
 /*!
- * A C++ wrapper class for the #coord \c struct to give a more OO interface.
+ * A C++ wrapper class for the #coord \c struct to give a more object-orientated interface.
  */
 class Coordinate {
 

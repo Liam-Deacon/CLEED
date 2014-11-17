@@ -1,19 +1,16 @@
 /*********************************************************************
-LD/24.04.14
-                        FTSMOOTH_DEBUG
-
-  file contains functions:
-
-  debug (24.04.14)
-     provides debug output for troubleshooting
-  
-Changes:
-
-*********************************************************************/
-
-/*!
- * \fn
- */
+ *                      FTSMOOTH_DEBUG.C
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/24.04.14 - creation.
+ *********************************************************************/
 
 #include "ftsmooth.h"
 

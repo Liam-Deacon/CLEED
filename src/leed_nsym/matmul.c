@@ -11,6 +11,15 @@ Changes:
   LD/02.04.14 - First attempt at OpenCL version of matmul code
   
 *********************************************************************/
+
+/*! \file
+ *
+ * Implements matmul() function for matrix multiplication.
+ *
+ * \note An initial attempt to use OpenCL for GPGPU calculations has been added
+ * but is not tested. It can be enabled by defining #_USE_OPENCL when compiling.
+ */
+
 #include <math.h>   
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,80 +29,74 @@ Changes:
 #ifdef _USE_OPENCL
 #include "err_code.h"
 #ifndef CL_DEVICE
-#define CL_DEVICE CL_DEVICE_TYPE_GPU   // change as desired
+#define CL_DEVICE CL_DEVICE_TYPE_GPU   /* change as desired */
 #endif
 #endif
 
-mat matmul( mat Mr, mat M1, mat M2 )
-
-/*********************************************************************
-  Multiply two matrices: Mr = M1*M2
-
-  parameters:
-  Mr - pointer to the matrix containing the result of the multiplication.
-       If NULL, the pointer will be created and returned.
-
-  M1, M2 - pointers to the matrices to multiply.
-
-  return value: Mr
-
-*********************************************************************/
-
+/*!
+ * Multiplies two matrices \p Mr = \p M1 * \p M2
+ *
+ * \param[out] Mr Pointer to the matrix containing the result of the
+ * multiplication. If \p Mr is passed in as \c NULL , the matrix will be
+ * created and allocated memory.
+ * \param[in] M1 Pointer to the first matrix to multiply.
+ * \param[in] M2 Pointer to the second matrix to multiply.
+ * \return Pointer to the resultant matrix.
+ * \retval \c NULL if unsuccessful and #EXIT_ON_ERROR is not defined.
+ */
+mat matmul(mat Mr, const mat M1, const mat M2 )
 {
 
-long int i_c2, i_r1;
-long int i_cr1, i_cr2;
+  long int i_c2, i_r1;
+  long int i_cr1, i_cr2;
 
-mat Maux;
+  mat Maux;
 
-Maux = NULL;
+  Maux = NULL;
 
-/********************************************************************* 
-  check input matrices 
-*********************************************************************/
+  /* check input matrices */
 
-/* check validity of the input matrices */
- if ((matcheck(M1) < 1) || (matcheck(M2) < 1))
- {
-#ifdef ERROR
-  fprintf(STDERR,"*** error (matmul): ivalid input matrices\n");
-#endif
-#ifdef EXIT_ON_ERROR
-  exit(1);
-#else
-  return(NULL);
-#endif
- }
+  /* check validity of the input matrices */
+  if ((matcheck(M1) < 1) || (matcheck(M2) < 1))
+  {
 
-/* check dimensions of input matrices */
- if (M1->cols != M2->rows)
- {
-#ifdef ERROR
-  fprintf(STDERR,
-  "*** error (matmul): dimensions of input matrices do not match\n");
-#endif
-#ifdef EXIT_ON_ERROR
-  exit(1);
-#else
-  return(NULL);
-#endif
- }
+    #ifdef ERROR
+    fprintf(STDERR, "*** error (matmul): ivalid input matrices\n");
+    #endif
 
-/*********************************************************************
-  Create matrix Maux
-*********************************************************************/
+    #ifdef EXIT_ON_ERROR
+    exit(1);
+    #else
+    return(NULL);
+    #endif
+  }
 
- if((M1->num_type ==  NUM_REAL) && (M2->num_type ==  NUM_REAL) )
- {
-   Maux = matalloc(Maux, M1->rows, M2->cols, NUM_REAL);
- }
- else
-   Maux = matalloc(Maux, M1->rows, M2->cols, NUM_COMPLEX);
+  /* check dimensions of input matrices */
+  if (M1->cols != M2->rows)
+  {
+    #ifdef ERROR
+    fprintf(STDERR, "*** error (matmul): "
+            "dimensions of input matrices do not match\n");
+    #endif
+
+    #ifdef EXIT_ON_ERROR
+    exit(1);
+    #else
+    return(NULL);
+    #endif
+  }
+
+  /* Create matrix Maux */
+  if((M1->num_type ==  NUM_REAL) && (M2->num_type ==  NUM_REAL) )
+  {
+    Maux = matalloc(Maux, M1->rows, M2->cols, NUM_REAL);
+  }
+  else Maux = matalloc(Maux, M1->rows, M2->cols, NUM_COMPLEX);
    
-#ifdef _USE_OPENCL
-/*********************************************************************
-  Perform OpenCL matrix multiplication (GPU)
-*********************************************************************/
+  #ifdef _USE_OPENCL
+/*====================================================================
+ * Perform OpenCL matrix multiplication (GPU)
+ *====================================================================*/
   
   cl_uint iplatform;
   cl_mem Ma, Mb, Mc;          /* Matrices in device memory */
@@ -129,9 +132,11 @@ Maux = NULL;
                         "\n"
         );
 
-  //------------------------------------------------------------------
-  // Create a context, queue and device.
-  //------------------------------------------------------------------
+  /*
+   * ------------------------------------------------------------------
+   * Create a context, queue and device.
+   *------------------------------------------------------------------
+   */
 
   /* Set up OpenCL context. queue, kernel, etc. */
   cl_uint numPlatforms;
@@ -141,8 +146,7 @@ Maux = NULL;
   if (numPlatforms == 0)
   {
     #ifdef ERROR
-    fprintf(STDERR,
-    "*** warning (matmul): Failed to find an OpenCL platform\n");
+    fprintf(STDERR, "* warning (matmul): Failed to find an OpenCL platform\n");
     #endif
   }
   
@@ -154,8 +158,8 @@ Maux = NULL;
     if (err != CL_SUCCESS || numPlatforms == 0)
     {
       #ifdef ERROR
-      fprintf(STDERR,
-        "*** warning (matmul): Failed to find an OpenCL platform\n");
+      fprintf(STDERR, "* warning (matmul): "
+              "Failed to find an OpenCL platform\n");
       #endif
     }
   } /* numPlatforms */
@@ -165,10 +169,9 @@ Maux = NULL;
   {
     for (iplatform = 0; iplatform < numPlatforms; iplatform++)
     {
-        err = clGetDeviceIDs(platform[iplatform], CL_DEVICE, 
-                             1, &device_id, NULL);
-        if (err == CL_SUCCESS)
-            break;
+      err = clGetDeviceIDs(platform[iplatform], CL_DEVICE,
+                           1, &device_id, NULL);
+      if (err == CL_SUCCESS) break;
     }
     if (device_id == NULL)
     {
@@ -179,33 +182,36 @@ Maux = NULL;
     }
 
     /* Create a compute context */
-    if (err == CL_SUCCESS) {
+    if (err == CL_SUCCESS)
+    {
       context = clCreateContext(0, 1, &device_id, NULL, NULL, &err);
       if (!context)
       {
         #ifdef ERROR
-        fprintf(STDERR,
-          "*** warning (matmul): Failed to create an OpenCL compute" 
-          " context (%s)\n", err_code(err));
+        fprintf(STDERR, "* warning (matmul): "
+            "Failed to create an OpenCL compute context (%s)\n", err_code(err));
         #endif
       }
     }
+
     /* Create a command queue */
     commands = clCreateCommandQueue(context, device_id, 0, &err);
     if (!commands)
     {
       #ifdef ERROR
-      fprintf(STDERR, " *** warning (matmul): " 
+      fprintf(STDERR, "* warning (matmul): "
         "Failed to create an OpenCL command queue (%s)\n", err_code(err));
       #endif
     }
 
-    //-------------------------------------------------------------------------
-    // Setup the buffers, initialize matrices, & write them into global memory
-    //-------------------------------------------------------------------------
+    /*
+     *-------------------------------------------------------------------------
+     * Setup the buffers, initialize matrices, & write them into global memory
+     *-------------------------------------------------------------------------
+     */
 
     Ma = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(real) * M1->rows * M1->cols, M1->iel, &err);
+                        sizeof(real) * M1->rows * M1->cols, M1->iel, &err);
     if (err != CL_SUCCESS)
     {
       #ifdef ERROR
@@ -214,7 +220,7 @@ Maux = NULL;
       #endif
     }
     Mb = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(real) * M2->rows * M2->cols, M2->iel, &err);
+                        sizeof(real) * M2->rows * M2->cols, M2->iel, &err);
     if (err != CL_SUCCESS)
     {
       #ifdef ERROR
@@ -223,7 +229,7 @@ Maux = NULL;
       #endif
     }
     Mc = clCreateBuffer(context, CL_MEM_WRITE_ONLY,
-                         sizeof(real) * Maux->rows * Maux->cols, NULL, &err);
+                        sizeof(real) * Maux->rows * Maux->cols, NULL, &err);
     if (err != CL_SUCCESS)
     {
       #ifdef ERROR
@@ -233,9 +239,11 @@ Maux = NULL;
     }
 
 
-    //------------------------------------------------------------------------
-    // OpenCL matrix multiplication ... Naive
-    //------------------------------------------------------------------------
+    /*
+     *------------------------------------------------------------------------
+     * OpenCL matrix multiplication ... Naive
+     *------------------------------------------------------------------------
+     */
 
     /* Create the compute program from the source buffer */
     program = clCreateProgramWithSource(context, 1, 
@@ -243,8 +251,8 @@ Maux = NULL;
     if (err != CL_SUCCESS)
     {
       #ifdef ERROR
-      fprintf(STDERR, " *** warning (matmul): " 
-        "could not create program (%s)\n", err_code(err));
+      fprintf(STDERR, "* warning (matmul): "
+        "could not create OpenCL program (%s)\n", err_code(err));
       #endif
     }
     /* Build the program */
@@ -255,10 +263,11 @@ Maux = NULL;
         char buffer[2048];
 
         #ifdef ERROR
-        fprintf(STDERR, " *** warning (matmul): " 
-                "failed to build program executable (%s)\n", err_code(err));
+        fprintf(STDERR, " * warning (matmul): "
+                "failed to build OpenCL program executable (%s)\n",
+                err_code(err));
         clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, 
-                                sizeof(buffer), buffer, &len);
+                              sizeof(buffer), buffer, &len);
         fprintf(STDERR, "%s\n", buffer);
         #endif
     }
@@ -266,9 +275,7 @@ Maux = NULL;
     /* check type of matrix multiplication to apply */
     switch(Maux->num_type)
     {
-      /*
-        real matrix
-      */
+      /* real matrix */
       case (NUM_REAL):
       { 
     
@@ -277,8 +284,8 @@ Maux = NULL;
         if (!kernel || err != CL_SUCCESS)
         {
           #ifdef ERROR
-          fprintf(STDERR, " *** warning (matmul): " 
-              "failed to create compute kernel (%s)\n", err_code(err));
+          fprintf(STDERR, "* warning (matmul): "
+              "failed to create OpenCL compute kernel (%s)\n", err_code(err));
           #endif
         }
     
@@ -289,28 +296,23 @@ Maux = NULL;
         err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &M1->);
         err |= clSetKernelArg(kernel, 4, sizeof(cl_mem), &M2->);
         err |= clSetKernelArg(kernel, 5, sizeof(cl_mem), &Maux->);
-*/
+         */
         break;
       }
       
-      /*
-        complex matrix
-      */
+      /* complex matrix */
       case (NUM_COMPLEX):
       {    
  
         #ifdef CONTROL
-        fprintf(STDCTR,"(matmul): entering OpenCL complex multiplication\n");
+        fprintf(STDCTR, "(matmul): entering OpenCL complex multiplication\n");
         #endif
 
-        /*  
-          M1 and M2 are complex 
-        */
-
+        /* M1 and M2 are complex */
         if((M1->num_type ==  NUM_COMPLEX) && (M2->num_type ==  NUM_COMPLEX) )
         {
         
-        
+         ;
         }
         
         /*  
@@ -410,178 +412,169 @@ Maux = NULL;
    } /* */
 #endif
 
-/********************************************************************* 
-  Perform the multiplication (CPU only)
-*********************************************************************/
-#ifdef CONTROL
+  /* Perform the multiplication (CPU only) */
+  #ifdef CONTROL
   fprintf(STDCTR," (matmul) start multiplication \n");
-#endif
+  #endif
+
   switch(Maux->num_type)
   {
-/*
- real matrix
-*/
-   case (NUM_REAL):
-   { 
-    register real rsum;
-    register real *ptr1, *ptr2, *ptr_end;
-    register real *ptrr;
+    /* real matrix */
+    case (NUM_REAL):
+    {
+      register real rsum;
+      register real *ptr1, *ptr2, *ptr_end;
+      register real *ptrr;
 
-    i_cr1 = M1->rows * M1->cols;
-    i_cr2 = M2->rows * M2->cols;
+      i_cr1 = M1->rows * M1->cols;
+      i_cr2 = M2->rows * M2->cols;
   
-#ifdef CONTROL
-    fprintf(STDCTR," (matmul) entering real loop\n");
-#endif
-    /* 
-       i_r1 is the offset in M1 (current row), 
-       i_c2 is the offset in M2 (current column)
-    */
-    for( ptrr = Maux->rel + 1, i_r1 = 1; i_r1 <= i_cr1; i_r1 += M1->cols)
-    for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++)
+      #ifdef CONTROL
+      fprintf(STDCTR, " (matmul) entering real loop\n");
+      #endif
+
+      /*
+       * i_r1 is the offset in M1 (current row),
+       * i_c2 is the offset in M2 (current column)
+       */
+      for( ptrr = Maux->rel + 1, i_r1 = 1; i_r1 <= i_cr1; i_r1 += M1->cols)
+      {
+        for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++)
+        {
+          rsum = 0;
+
+          for (ptr1 = M1->rel + i_r1, ptr2 = M2->rel + i_c2,
+               ptr_end = M1->rel + i_r1 + M1->cols;
+               ptr1 < ptr_end; ptr1 ++, ptr2 += M2->cols)
+          {
+            rsum += *ptr1 * *ptr2;
+          }
+
+          *ptrr = rsum;
+        }
+      } /* for ptrr */
+
+      break;
+    } /* case REAL */
+
+    /* complex matrix */
+    case (NUM_COMPLEX):
     {
-
-      rsum = 0;
-
-      for (ptr1 = M1->rel + i_r1, ptr2 = M2->rel + i_c2, 
-           ptr_end = M1->rel + i_r1 + M1->cols;
-           ptr1 < ptr_end; ptr1 ++, ptr2 += M2->cols)
-        rsum += *ptr1 * *ptr2;
-
-      *ptrr = rsum;
-    } /* for ptrr */
-    break;
-   }  /* case REAL */
-
-/*
- complex matrix
-*/
-   case (NUM_COMPLEX):
-   {
-     i_cr1 = M1->rows * M1->cols;
-     i_cr2 = M2->rows * M2->cols;
+      i_cr1 = M1->rows * M1->cols;
+      i_cr2 = M2->rows * M2->cols;
  
-#ifdef CONTROL
-     fprintf(STDCTR,"(matmul): entering complex loop\n");
-#endif
+      #ifdef CONTROL
+      fprintf(STDCTR, "(matmul): entering complex loop\n");
+      #endif
 
-     /*  
-      M1 and M2 are complex 
-     */
+      /* M1 and M2 are complex */
+      if((M1->num_type ==  NUM_COMPLEX) && (M2->num_type ==  NUM_COMPLEX) )
+      {
+        register real rsum, isum;
+        register real *ptri1, *ptri2, *ptr_end;
+        register real *ptrr1, *ptrr2;
+        register real *ptrr, *ptri;
 
-     if((M1->num_type ==  NUM_COMPLEX) && (M2->num_type ==  NUM_COMPLEX) )
-     {
-     register real rsum, isum;
-     register real *ptri1, *ptri2, *ptr_end;
-     register real *ptrr1, *ptrr2;
-     register real *ptrr, *ptri;
+        #ifdef CONTROL
+        fprintf(STDCTR, "(matmul): M1 and M2 are complex \n");
+        #endif
 
-#ifdef CONTROL
-     fprintf(STDCTR,"(matmul): M1 and M2 are complex \n");
-#endif
+        for( ptrr = Maux->rel + 1, ptri = Maux->iel + 1, i_r1 = 1;
+             i_r1 <= i_cr1; i_r1 += M1->cols)
+        {
+          for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++, ptri ++)
+          {
+            rsum = 0;
+            isum = 0;
 
-     for( ptrr = Maux->rel + 1, ptri = Maux->iel + 1, i_r1 = 1; 
-                    i_r1 <= i_cr1; i_r1 += M1->cols)
-     for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++, ptri ++)
-     {
-       rsum = 0;
-       isum = 0;
-
-       for (ptrr1 = M1->rel + i_r1, ptrr2 = M2->rel + i_c2, 
-            ptri1 = M1->iel + i_r1, ptri2 = M2->iel + i_c2, 
-            ptr_end = M1->rel + i_r1 + M1->cols;
-            ptrr1 < ptr_end; 
-            ptrr1 ++, ptrr2 += M2->cols, ptri1 ++, ptri2 += M2->cols)
-       {
-         rsum += (*ptrr1 * *ptrr2) - (*ptri1 * *ptri2);
-         isum += (*ptrr1 * *ptri2) + (*ptri1 * *ptrr2);
-       }
+            for (ptrr1 = M1->rel + i_r1, ptrr2 = M2->rel + i_c2,
+                 ptri1 = M1->iel + i_r1, ptri2 = M2->iel + i_c2,
+                 ptr_end = M1->rel + i_r1 + M1->cols;
+                 ptrr1 < ptr_end;
+                 ptrr1 ++, ptrr2 += M2->cols, ptri1 ++, ptri2 += M2->cols)
+            {
+              rsum += (*ptrr1 * *ptrr2) - (*ptri1 * *ptri2);
+              isum += (*ptrr1 * *ptri2) + (*ptri1 * *ptrr2);
+            }
  
-       *ptrr = rsum;
-       *ptri = isum;
-     } /* for ptrr */
-    }  /* both are complex */
+            *ptrr = rsum;
+            *ptri = isum;
+          }
+        } /* for ptrr */
+      } /* both are complex */
 
-    /*  
-     Only M1 is complex 
-    */
+      /* Only M1 is complex */
+      else if (M1->num_type ==  NUM_COMPLEX)
+      {
+        register real rsum, isum;
+        register real *ptri1, *ptr_end;
+        register real *ptrr1, *ptrr2;
+        register real *ptrr, *ptri;
 
-    else if (M1->num_type ==  NUM_COMPLEX)
-    {
-     register real rsum, isum;
-     register real *ptri1, *ptr_end;
-     register real *ptrr1, *ptrr2;
-     register real *ptrr, *ptri;
+        #ifdef CONTROL
+        fprintf(STDCTR, "(matmul): only M1 is complex \n");
+        #endif
 
-#ifdef CONTROL
-    fprintf(STDCTR,"(matmul): only M1 is complex \n");
-#endif
+        for( ptrr = Maux->rel + 1, ptri = Maux->iel + 1, i_r1 = 1;
+             i_r1 <= i_cr1; i_r1 += M1->cols)
+          for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++, ptri ++)
+          {
+            rsum = 0;
+            isum = 0;
 
-     for( ptrr = Maux->rel + 1, ptri = Maux->iel + 1, i_r1 = 1; 
-                    i_r1 <= i_cr1; i_r1 += M1->cols)
-     for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++, ptri ++)
-     {
-       rsum = 0;
-       isum = 0;
-
-       for (ptrr1 = M1->rel + i_r1, ptri1 = M1->iel + i_r1,
-            ptrr2 = M2->rel + i_c2, ptr_end = M1->rel + i_r1 + M1->cols;
-            ptrr1 < ptr_end; 
-            ptrr1 ++, ptrr2 += M2->cols, ptri1 ++)
-       {
-         rsum += *ptrr1 * *ptrr2; 
-         isum += *ptri1 * *ptrr2;
-       }
+            for (ptrr1 = M1->rel + i_r1, ptri1 = M1->iel + i_r1,
+                 ptrr2 = M2->rel + i_c2, ptr_end = M1->rel + i_r1 + M1->cols;
+                 ptrr1 < ptr_end;
+                 ptrr1 ++, ptrr2 += M2->cols, ptri1 ++)
+            {
+              rsum += *ptrr1 * *ptrr2;
+              isum += *ptri1 * *ptrr2;
+            }
  
-       *ptrr = rsum;
-       *ptri = isum;
-     } /* for ptrr */
-    }  /* M1 is complex */
+            *ptrr = rsum;
+            *ptri = isum;
+          } /* for ptrr */
+      } /* M1 is complex */
 
-    /*  
-     Only M2 is complex
-    */
+      /* Only M2 is complex */
+      else
+      {
+        register real rsum, isum;
+        register real *ptrr1, *ptr_end;
+        register real *ptri2, *ptrr2;
+        register real *ptrr, *ptri;
 
-    else
-    {
-     register real rsum, isum;
-     register real *ptrr1, *ptr_end;
-     register real *ptri2, *ptrr2;
-     register real *ptrr, *ptri;
+        #ifdef CONTROL
+        fprintf(STDCTR, "(matmul) only M2 is complex \n");
+        #endif
 
-#ifdef CONTROL
-     fprintf(STDCTR,"(matmul) only M2 is complex \n");
-#endif
+        for( ptrr = Maux->rel + 1, ptri = Maux->iel + 1, i_r1 = 1;
+             i_r1 <= i_cr1; i_r1 += M1->cols)
+          for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++, ptri ++)
+          {
+            rsum = 0;
+            isum = 0;
 
-     for( ptrr = Maux->rel + 1, ptri = Maux->iel + 1, i_r1 = 1; 
-                    i_r1 <= i_cr1; i_r1 += M1->cols)
-     for( i_c2 = 1; i_c2 <= M2->cols; i_c2 ++, ptrr ++, ptri ++)
-     {
-       rsum = 0;
-       isum = 0;
-
-       for (ptrr1 = M1->rel + i_r1, ptrr2 = M2->rel + i_c2, 
-            ptri2 = M2->iel + i_c2, ptr_end = M1->rel + i_r1 + M1->cols;
-            ptrr1 < ptr_end; 
-            ptrr1 ++, ptrr2 += M2->cols, ptri2 += M2->cols)
-       {
-         rsum += *ptrr1 * *ptrr2;
-         isum += *ptrr1 * *ptri2;
-       }
+            for (ptrr1 = M1->rel + i_r1, ptrr2 = M2->rel + i_c2,
+                 ptri2 = M2->iel + i_c2, ptr_end = M1->rel + i_r1 + M1->cols;
+                 ptrr1 < ptr_end;
+                 ptrr1 ++, ptrr2 += M2->cols, ptri2 += M2->cols)
+            {
+              rsum += *ptrr1 * *ptrr2;
+              isum += *ptrr1 * *ptri2;
+            }
  
-       *ptrr = rsum;
-       *ptri = isum;
-     } /* for ptrr */
-    }  /* M2 is complex */
+            *ptrr = rsum;
+            *ptri = isum;
+          } /* for ptrr */
+      } /* M2 is complex */
 
-    break;
-   }  /* case COMPLEX */
-  }   /* switch */
+      break;
+    } /* case COMPLEX */
+  } /* switch */
 
-/*
-  Copy Maux into Mr
-*/
-  Mr = matcop(Mr, Maux);
+  /* Copy Maux into Mr */
+  Mr = matcopy(Mr, Maux);
   matfree(Maux);
   return(Mr);
   

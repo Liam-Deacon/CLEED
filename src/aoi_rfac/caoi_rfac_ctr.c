@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*======================================================================*/
 
 int ctrinp(const char *filectr)
 {

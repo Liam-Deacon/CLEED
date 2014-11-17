@@ -47,11 +47,11 @@ GH/08.08.95 - Creation (copy from leed_read_overlayer).
 
 /********************************************************************/
 
-int leed_write_par(leed_cryst_t *bulk_par,
-              leed_phs_t   *phs_shifts,
+int leed_write_par(leed_crystal *bulk_par,
+              leed_phase   *phs_shifts,
               leed_var   *par,
               leed_energy   *eng,
-              leed_beam_t  *beams,
+              leed_beam  *beams,
               FILE* file)
 
 /*********************************************************************
@@ -59,12 +59,12 @@ int leed_write_par(leed_cryst_t *bulk_par,
 
   INPUT:
 
-   leed_cryst_t *bulk_par - (input) bulk parameters.
-   leed_phs_t   *phs_shifts - (input) phase shifts.
+   leed_crystal *bulk_par - (input) bulk parameters.
+   leed_phase   *phs_shifts - (input) phase shifts.
    leed_var   *par - (input) other parameters necessary to control
               the program.
    leed_energy   *eng - (input) energy parameters.
-   leed_beam_t  *beams - (input) all output beams used at the highest 
+   leed_beam  *beams - (input) all output beams used at the highest 
               energy.
    FILE* file - (input) pointer to output file.
 
@@ -97,14 +97,14 @@ size_t tot_size;
 *********************************************************************/
 
 /* parameters */
- if( fwrite(bulk_par, sizeof(leed_cryst_t), 1, file) != 1 )
+ if( fwrite(bulk_par, sizeof(leed_crystal), 1, file) != 1 )
  {
  #ifdef ERROR
    ERR_MESS0("*** error (leed_write_par): "
     "output error while writing bulk parameters\n");
 #endif
  }
- tot_size += sizeof(leed_cryst_t) * 1;
+ tot_size += sizeof(leed_crystal) * 1;
 
 /* layers */
  if( fwrite(bulk_par->layers, sizeof(leed_layer), 
@@ -157,14 +157,14 @@ size_t tot_size;
  tot_size += sizeof(int) * 1;
 
 /* parameters (including terminating set) */
- if( fwrite(phs_shifts, sizeof(leed_phs_t), n_phs+1, file) != n_phs+1 )
+ if( fwrite(phs_shifts, sizeof(leed_phase), n_phs+1, file) != n_phs+1 )
  {
 #ifdef ERROR
    ERR_MESS0("*** error (leed_write_par): "
     "output error while writing phase shift parameters\n");
 #endif
  }
- tot_size += sizeof(leed_phs_t) * (n_phs+1);
+ tot_size += sizeof(leed_phase) * (n_phs+1);
 
  for( i = 0; i < n_phs; i ++)
  {
@@ -266,14 +266,14 @@ size_t tot_size;
  tot_size += sizeof(int) * 1;
 
 /* beam list */
- if( fwrite(beams, sizeof(leed_beam_t), number, file) != number )
+ if( fwrite(beams, sizeof(leed_beam), number, file) != number )
  {
 #ifdef ERROR
    ERR_MESS0("*** error (leed_write_par): "
     "output error while writing beam list\n");
 #endif
  }
- tot_size += sizeof(leed_beam_t) * number;
+ tot_size += sizeof(leed_beam) * number;
 
 #ifdef CONTROL
  fprintf(STDCTR,"(leed_write_par): %d bytes written\n", tot_size);

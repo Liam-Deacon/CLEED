@@ -1,29 +1,47 @@
-/**************************************************************************<
-    
-             File Name: calca.c
-    
-**************************************************************************/
+/*********************************************************************
+ *                        CALCA.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   CS/08.09.93 - creation.
+ *********************************************************************/
 
-/**************************************************************************/
+/*! \file
+ *
+ * Implements calca() function.
+ */
+
 #include "mkiv.h"
-/**************************************************************************/
- 
+
+/*!
+ * Computes the new values of \p a , \p range and \p scale according to the new
+ * energy value and given boundaries (i.e. \p range_min , \p scale_min ).
+ *
+ * \param kappa
+ * \param en_old
+ * \param energy
+ * \param a
+ * \param range
+ * \param range_min
+ * \param rel_range
+ * \param scale
+ * \param scale_min
+ * \param rel_scale
+ *  * \return
+ * \retval 0 on successful completion.
+ */
 int calca(float *kappa, float *en_old, float energy,
-      struct vector a[], float *range, float range_min, float rel_range, 
-      struct vector *scale, float scale_min, struct vector rel_scale)
-
-/***************************************************************************
-  CS/8.9.93    
-
- Purpose:
-  calca() computes the new values of a, range and scale according to the
-  new energy value and given boundaries ( i.e. range_min, scale_min )
-  
-***************************************************************************/
+      mkiv_vector a[], float *range, float range_min, float rel_range,
+      mkiv_vector *scale, float scale_min, mkiv_vector rel_scale)
 {
    float fval;
-
-/**************************************************************************/
 
    *kappa = sqrt(*en_old/energy);
    a[1].xx *= *kappa;
@@ -37,12 +55,12 @@ int calca(float *kappa, float *en_old, float energy,
    scale->xx = rel_scale.xx * a[1].len;
    scale->yy = rel_scale.yy * a[1].len;
 
-   if ( ( fval = PYTH(scale->xx,scale->yy)/scale_min/ROOT2 ) < 1. ) {
+   if ( ( fval = PYTH(scale->xx,scale->yy)/scale_min/ROOT2 ) < 1. )
+   {
      scale->xx /= fval;
      scale->yy /= fval;
    }
    *en_old = energy;
    
-   return 0;
+   return(0);
 }
-/**************************************************************************/

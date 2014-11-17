@@ -39,7 +39,7 @@ int leed_out_head_2 (const char *prg_version, const char *prg_name,
  
  INPUT:
 
-  leed_cryst_t *bulk_par - (input) for future use
+  leed_crystal *bulk_par - (input) for future use
 
   const char * prg_version   - (input) program version
 

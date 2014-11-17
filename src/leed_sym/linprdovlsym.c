@@ -56,9 +56,9 @@ GH/29.09.00 - calculate dr2 for dmt input in function leed_inp_debye_temp
 
 /********************************************************************/
 
-int leed_read_overlayer_sym(leed_cryst_t **p_over_par, 
-                 leed_phs_t **p_phs_shifts,
-                 leed_cryst_t *bulk_par,
+int leed_read_overlayer_sym(leed_crystal **p_over_par, 
+                 leed_phase **p_phs_shifts,
+                 leed_crystal *bulk_par,
                  char *filename)
 /*********************************************************************
   Read all the overlayer parameters that do change during a search
@@ -103,7 +103,7 @@ int i_layer;
 real faux;                    /* dummy variable */
 real vaux[4];                 /* dummy vector */
 
-leed_cryst_t *over_par;   /* use *over_par instead of the pointer 
+leed_crystal *over_par;   /* use *over_par instead of the pointer 
                                  p_over_par */
 
 leed_atom atom_aux;     /* used for sorting atoms */
@@ -120,8 +120,8 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  over_par = NULL;
  if (*p_over_par == NULL) 
    over_par = *p_over_par = 
-   (leed_cryst_t *)malloc( sizeof(leed_cryst_t) );
- memcpy(over_par, bulk_par, sizeof(leed_cryst_t) );
+   (leed_crystal *)malloc( sizeof(leed_crystal) );
+ memcpy(over_par, bulk_par, sizeof(leed_crystal) );
 
 
 /********************************************************************

@@ -133,8 +133,8 @@ void spots_free(spots *_spots)
 /*!
  * Append #spot object \p _spot to the @spots::spots array of \p _spots
  *
- * @param _spots object to append \p _spot to.
- * @param[in] _spot #spot object to append to @spots::spots array of \p _spots
+ * \param _spots object to append \p _spot to.
+ * \param[in] _spot #spot object to append to @spots::spots array of \p _spots
  */
 void spots_append(spots *_spots, const spot _spot)
 {

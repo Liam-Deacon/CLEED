@@ -15,7 +15,7 @@
  ********************************************************************/
 
 /*! \file file2buffer.c
- *  \brief Implementation file for \ref file2buffer function.
+ *  \brief Implementation file for file2buffer() function.
  */
 
 #include <stdio.h>

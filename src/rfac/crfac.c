@@ -1,5 +1,5 @@
 /*********************************************************************
- *                       CRFAC_MAIN.C
+ *                          CRFAC.C
  *
  *  Copyright 1992-2014 Georg Held
  *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
@@ -15,7 +15,7 @@
  *   GH/1995.08.29 - creation
  *********************************************************************/
 
-/*! \file crfac_main.c
+/*! \file
  *  \brief Main function for CRFAC program.
  */
 
@@ -27,9 +27,11 @@
 #include "rfac_def.h"
 #include "rfac.h"
 
-
-int main(int argc, char *argv[])
-
+#if LIBRARY_BUILD == 1
+int rfac_main(int argc, char *argv[])   /* compile as library function */
+#else
+int main(int argc, char *argv[])        /* compile as standalone program */
+#endif
 /**********************************************************************
  * Program calculates different R factors.
  **********************************************************************/

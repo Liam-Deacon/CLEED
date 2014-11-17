@@ -35,8 +35,8 @@
  * such as theoretical IV curves. The theoretical IV curves
  * will be modified after return.
  *
- * \retval \ref RFAC_SUCCESS if successful.
- * \retval \ref RFAC_FAILURE if failed.
+ * \retval #RFAC_SUCCESS if successful.
+ * \retval #RFAC_FAILURE if failed.
  *
  * \todo implement \ref RFAC_FAILURE.
  */

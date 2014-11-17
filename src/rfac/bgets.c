@@ -17,7 +17,7 @@
  *********************************************************************/
 
 /*! \file bgets.c
- *  \brief Implementation file for C function \ref bgets.
+ *  \brief Implementation file for C function bgets() .
  */
 
 /*!

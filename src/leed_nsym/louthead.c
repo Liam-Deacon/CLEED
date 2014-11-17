@@ -1,5 +1,5 @@
-/************************************************************************
- * <FILENAME>
+/*********************************************************************
+ *                      LOUTHEAD.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
@@ -9,18 +9,10 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
  * Changes:
- *11.08.95 
-  file contains function:
+ *   GH/11.08.95 - Creation
+ *********************************************************************/
 
-  int leed_out_head( FILE * outfile)
-
- Write header information to output file.
-
- Changes:
- 
- GH/11.08.95 - Creation
-
-*********************************************************************/
+/*! \file */
 
 #include <stdio.h>
 #include <time.h>
@@ -31,55 +23,32 @@
 #define LEED_VERSION "0.0 (test version GH/11.08.95)"
 #endif
 
-int leed_out_head(FILE * outfile)
-
-/************************************************************************
-
- write header information to output file.
- 
- INPUT:
-
-  leed_cryst_t *bulk_par - (input)
-  FILE * outfile - (input) pointer to the output file were the output 
-            is written to.
-
- DESIGN:
-
-  "#vn" No of version.
-  "#ts" start time and date.
-
- RETURN VALUES:
-
-   1   if o.k.
-  -1   if failed
-
-*************************************************************************/
+/*!
+ * Writes header information to output file.
+ *
+ * \param[in] outfile File pointer to output file.
+ */
+void leed_output_header(FILE *outfile)
 {
 
-struct tm *l_time;
-time_t t_time;
+  struct tm *l_time;
+  time_t t_time;
 
- fprintf(outfile, "# ####################################### #\n");
- fprintf(outfile, "#            output from CLEED            #\n");
- fprintf(outfile, "# ####################################### #\n");
+  fprintf(outfile, "# ####################################### #\n");
+  fprintf(outfile, "#            output from CLEED            #\n");
+  fprintf(outfile, "# ####################################### #\n");
 
-/************************************************************************
-  Write version number and start time to output file
-************************************************************************/
+  /* Write version number and start time to output file */
+  fprintf(outfile, "#vn %s\n", LEED_VERSION);
 
- fprintf(outfile, "#vn %s\n", LEED_VERSION);
-
- t_time = time(NULL);
- l_time = localtime(&t_time);
+  t_time = time(NULL);
+  l_time = localtime(&t_time);
  
- fprintf(outfile, "#ts %s", asctime(l_time) );
- fprintf(outfile, "#\n");
+  fprintf(outfile, "#ts %s", asctime(l_time) );
+  fprintf(outfile, "#\n");
 
-#ifdef CONTROL
- fprintf(STDCTR,"(leed_out_head): Start date: %s", asctime(l_time) );
-#endif
+  #ifdef CONTROL
+  fprintf(STDCTR, "(leed_out_head): Start date: %s", asctime(l_time) );
+  #endif
  
-
- return(1);
 }  /* end of function leed_out_head */
-/************************************************************************/

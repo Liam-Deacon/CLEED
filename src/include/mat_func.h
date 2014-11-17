@@ -27,83 +27,80 @@ extern "C" {
 #include "real.h"
 
 /* modulus of a matrix */
-real matabs(mat);
+real matabs(const mat);
 
 /* allocate matrix memory  in file matalloc.c */
-mat matalloc(mat, int, int, int);
+mat matalloc(mat, size_t, size_t, int);
 
 /* allocate array of matrices in file matarralloc.c */
-mat matarralloc(mat, int);
+mat matarralloc(mat, size_t);
 
 /* free array of matrices in file matarrfree. c*/
 int matarrfree(mat);
 
 /* check validity of pointer */
-int matcheck(mat); 
+int matcheck(const mat);
 
 /*  extract a column from a matrix */
-mat matcol(mat, mat, int); 
+mat matcol(const mat, size_t);
 
 /* transpose and conjugate a matrix */
-mat matconj(mat, mat); 
+mat matconj(mat, const mat);
 
 /* Copy matrices */
-mat matcop(mat, mat);
+mat matcopy(mat, const mat);
 
 /* difference between matrices */
-real matdiff(mat, mat);
+real matdiff(const mat, const mat);
 
 /* Extract a submatrix from a larger one */
-mat matext(mat, mat, int, int, int, int);
+mat matextract(mat, const mat, size_t, size_t, size_t, size_t);
 
 /* Free memory allocated for a matrix */
 int matfree(mat);
 
-/* matrix inversion in file matcgau.c */
-mat matgausinv(mat);
-
 /* copy one matrix into another */
-mat matins(mat, mat, int, int);
+mat matins(mat, const mat, size_t, size_t);
 
 /* matrix inversion in file matinv.c */
-mat matinv(mat, mat);
+mat matinv(mat, const mat);
 mat matinv_old(mat, mat);
 
 /* matrix multiplication in file matmul.c */
 mat matmul(mat, mat, mat);
 
 /* convert order */
-int matnattovht (mat, int, int);
-int matline(mat, int, int, int, int);
+void matnattovht(const mat, size_t, size_t);
+void matline(const mat, int, size_t, size_t, size_t);
 
 /*  extract a row from a matrix */
 mat matrow(mat, mat, int); 
 
 /* matrix multiplication with complex number in file matscal.c */
-mat matscal(mat, mat, real, real); 
+mat matscal(mat, const mat, real, real);
 
 /* print a matrix in file matshow.c */
-int matshow(mat); 
+void matshow(const mat);
 
 /* print the modulus of a matrix in file matshow.c */
-int matshowabs(mat); 
+void matshowabs(const mat);
 
 /* print the parameters of a matrix in file matshowpar.c */
-int matshowpar(mat); 
+void matshowpar(const mat);
 
 /* square modulus of a matrix */
-mat matsqmod(mat, mat); 
+mat matsqmod(mat, const mat);
 
 /* trace of a matrix */
-int mattrace(mat, mat); 
+int mattrace(mat, const mat);
 
 /* transpose a matrix */
-mat mattrans(mat, mat); 
+mat mattrans(mat, const mat);
 
 /*********************************************************************
  * read and write (<stdio.h> used for type definition of FILE)
  *********************************************************************/
-int matwrite(mat, FILE *);
+int matwrite(const mat, FILE *);
 mat matread(mat, FILE *);
 mat matrdlm(mat, int, const char *);
 
@@ -111,12 +108,12 @@ mat matrdlm(mat, int, const char *);
  * lower level functions
  *********************************************************************/
 /* LU decomposition in file ludcmp.c */
-int ludcmp(real *, int *, int);
+int ludcmp(real *, int *, size_t);
 
 /* LU decomposition (real) in file matrlu.c */
-int r_ludcmp(real *, int *, int);
-int r_luinv(real *, real *, int *, int);
-real *r_lubksb( real *, int *, real *, int);
+int r_ludcmp(real *, size_t *, size_t);
+int r_luinv(real *, const real *, size_t *, size_t);
+real *r_lubksb(const real *, const size_t *, real *, size_t);
 
 /* LU decomposition (complex) in file matclu.c */
 int c_ludcmp(real *, real *, int *, int);
@@ -124,7 +121,7 @@ int c_luinv(real *, real *, real *, real *, int *, int);
 int c_lubksb(real *, real *, int *, real *, real *, int);
 
 /* matrix multiplication for square mat. in file matrm.c */
-real *r_sqmul(real *, real *, real *, int);
+real *r_sqmul(real *, real *, real *, size_t);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

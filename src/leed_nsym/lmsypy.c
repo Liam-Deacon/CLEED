@@ -322,7 +322,7 @@ real *ptr, *ptr_end;
   - find l_max;
 */
 
- Ymmat = matcop( Ymmat, Ypmat);
+ Ymmat = matcopy( Ymmat, Ypmat);
 
  l_max = (int)(R_sqrt((real) Ymmat->cols ) + 0.1) - 1;
 #ifdef CONTROL

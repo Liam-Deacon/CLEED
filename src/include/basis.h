@@ -78,12 +78,12 @@ extern "C" {
 #endif
 
 /*!
- *  \brief structure for the three basis vectors \f$ \vec{a_1} \f$,
- *  \f$ \vec{a_2} \f$, & \f$ \vec{a_3} \f$.
+ *  \brief Structure for the three basis vectors \f$ \vec{a}_1 \f$ ,
+ *  \f$ \vec{a}_2 \f$ , & \f$ \vec{a}_3 \f$ .
  */
 typedef struct {
-  coord a[3];       /*!< basis vectors \f$ \vec{a_1} \f$, \f$ \vec{a_2} \f$,
-                     * & \f$ \vec{a_3} \f$.
+  coord a[3];       /*!< Basis vectors \f$ \vec{a}_1 \f$, \f$ \vec{a}_2 \f$,
+                     * & \f$ \vec{a}_3 \f$.
                      * \note uses C indexing (first element is \c a[0] ) */
 } basis; 
 

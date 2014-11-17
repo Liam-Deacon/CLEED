@@ -90,16 +90,16 @@ extern "C" {
  * Indicates the return/exit status of a function.
  */
 typedef enum {
-  RFAC_FAILURE=-1,              /*!< indicates general failure */
-  RFAC_SUCCESS,                 /*!< indicates general success */
-  RFAC_INVALID_ARGUMENT,        /*!< indicates invalid command line argument */
-  RFAC_IV_NOT_EQUIDISTANT,      /*!< indicates IV is not equally spaced in energy */
-  RFAC_ALLOCATION_ERROR,        /*!< indicates failure to allocate memory */
-  RFAC_ESTEP_TOO_SMALL,         /*!< indicates energy step size is too small */
-  RFAC_VI_TOO_SMALL,            /*!< indicates the \f$ V_i \f$ value is too small */
-  RFAC_INVALID_NUMBER_OF_ENERGIES,  /*!< indicates an invalid number of energies */
-  RFAC_INVALID_NUMBER_OF_BEAMS,     /*!< indicates an invalid number of spots */
-  RFAC_BAD_IV_DATA                  /*!< indicates bad input of IV data */
+  RFAC_FAILURE=-1,              /*!< Indicates general failure */
+  RFAC_SUCCESS,                 /*!< Indicates general success */
+  RFAC_INVALID_ARGUMENT,        /*!< Indicates invalid command line argument */
+  RFAC_IV_NOT_EQUIDISTANT,      /*!< Indicates IV is not equally spaced in energy */
+  RFAC_ALLOCATION_ERROR,        /*!< Indicates failure to allocate memory */
+  RFAC_ESTEP_TOO_SMALL,         /*!< Indicates energy step size is too small */
+  RFAC_VI_TOO_SMALL,            /*!< Indicates the \f$ V_i \f$ value is too small */
+  RFAC_INVALID_NUMBER_OF_ENERGIES,  /*!< Indicates an invalid number of energies */
+  RFAC_INVALID_NUMBER_OF_BEAMS,     /*!< Indicates an invalid number of spots */
+  RFAC_BAD_IV_DATA                  /*!< Indicates bad input of IV data */
 } rfac_error;
 
 /*! \typedef rfactor_type
@@ -116,8 +116,8 @@ typedef enum {
  *  \brief Enumeration representing IV axis 
  */
 typedef enum {
-  E_AXIS=0,     /*!< use an I(E) curve for R factor calculations */
-  K_AXIS        /*!< use an I(k) curve for R factor calculations */
+  E_AXIS=0,     /*!< Use an I(E) curve for R factor calculations */
+  K_AXIS        /*!< Use an I(k) curve for R factor calculations */
 } rfac_axis;
 
 #define RG_IGNORE_MAX  400.    /*!< Ignore Features larger than 100eV (defines
@@ -129,11 +129,9 @@ typedef enum {
  *********************************************************************/
 
 /*!
- *
  * Indicates which R-factors shall be calculated.
- * If this structure is changed, the functions \fn rfrsw, \fn rfcmpr,
- * \fn rfoutput have to be changed as well */
-typedef struct rfrswitch
+ */
+typedef struct
 {
   rfac_axis ek;       /*!< Energy axis: I(E): 0; I(k): 1 (1.1) */
   bool r_1;           /*!< R1-factor */
@@ -143,85 +141,111 @@ typedef struct rfrswitch
   bool r_p;           /*!< Pendry's R-factor */
 } rfac_rf_switch;
 
-typedef struct rfiv
+
+/*!
+ * \brief Contains I(V) data pair at a single energy.
+ */
+typedef struct      /* Structure for a single I(V) data point entry */
 {
-  real energy;      /*!< energy value in expt. IV curve */
-  real intens;      /*!< intensity value in expt. IV curve */
-  real deriv2;      /*!< second derivative used in cubic spline */
+  real energy;      /*!< Energy value for IV data point */
+  real intens;      /*!< Intensity value for IV data point */
+  real deriv2;      /*!< Second derivative used in cubic spline */
 } rfac_iv_data;
 
-typedef struct rfivlist
+/*!
+ * Holds all the properties and data for an entire I(V) dataset. This
+ * includes the energy range, flags for data operations and the actual I(V)
+ * data as an array with @rfac_iv::n_eng number of elements.
+ */
+typedef struct            /* Holds all properties for an entire IV dataset */
 {
-  rfac_iv_data *data;     /*!< pointer to the list of IV values */
-  size_t n_eng;           /*!< number of data pairs in IV list */
-  bool equidist;          /*!< indicates equidistant energies */
-  bool sort;              /*!< indicates sorted energies */
-  bool smooth;            /*!< indicates that smoothing has been done */
-  bool spline;            /*!< indicates that cubic spline has been prepared */
-  real first_eng;         /*!< first energy in theo. list */
-  real last_eng;          /*!< last energy in theo. list */
-  real max_int;           /*!< max. intensity value in list */
+  rfac_iv_data *data;     /*!< Pointer to the list of IV values */
+  size_t n_eng;           /*!< Number of data pairs in IV list */
+  bool equidist;          /*!< Indicates equidistant energies */
+  bool sort;              /*!< Indicates sorted energies */
+  bool smooth;            /*!< Indicates that smoothing has been done */
+  bool spline;            /*!< Indicates that cubic spline has been prepared */
+  real first_eng;         /*!< First energy in theo. list */
+  real last_eng;          /*!< Last energy in theo. list */
+  real max_int;           /*!< Max. intensity value in list */
 } rfac_iv;
 
-typedef struct rfrfac
+/*!
+ * Contains R-factor values for evaluating the experimental/theoretical fit.
+ */
+typedef struct        /* Holds R-factor values for evaluating fits */
 {
-  int group_id;      /*!< either AVERAGE_ID or group flag */
-  float r_1;         /*!< R1-factor */
-  float r_2;         /*!< R2-factor */
-  float r_b1;        /*!< Rb1-factor */
-  float r_b2;        /*!< Rb2-factor */
-  float r_g;         /*!< Rg-factor */
-  float r_p;         /*!< Pendry's R-factor */
-  float rr;          /*!< RR factor (confidence level) */
-  float i_ratio;     /*!< ratio of theoretical/experimental curve integral */
-  float e_range;     /*!< total energy range */
+  int group_id;       /*!< either AVERAGE_ID or group flag */
+  float r_1;          /*!< R1-factor */
+  float r_2;          /*!< R2-factor */
+  float r_b1;         /*!< Rb1-factor */
+  float r_b2;         /*!< Rb2-factor */
+  float r_g;          /*!< Rg-factor */
+  float r_p;          /*!< Pendry's R-factor */
+  float rr;           /*!< RR factor (confidence level) */
+  float i_ratio;      /*!< Ratio of theoretical/experimental curve integral */
+  float e_range;      /*!< Total energy range */
 } rfac;
 
-typedef struct rfspot
+/*!
+ * Contains contains diffraction spot data.
+ */
+typedef struct          /* Holds diffraction spot data. */
 {
-  real index1;       /*!< 1st index */
-  real index2;       /*!< 2nd index */
-  real f_val1;       /*!< can be used for length in k space e.g. */
-  real f_val2;       /*!< can be used for intensity e.g. */
-  int i_val1;        /*!< arbitrary use */
-  int i_val2;        /*!< arbitrary use */
+  real index1;          /*!< First index ( \f$ h \f$ Miller index) */
+  real index2;          /*!< Second index ( \f$ h \f$ Miller index) */
+  real f_val1;          /*!< Floating point variable which can be used for
+                         * length in \f$ k \f$ -space */
+  real f_val2;          /*!< Floating point variable which can be used for
+                         * spot intensity */
+  int i_val1;           /*!< Arbitrary use */
+  int i_val2;           /*!< Arbitrary use */
 } rfac_spot;
 
-typedef struct rfivcur
+/*!
+ * Structure to contain the theoretical and experimental I(V) curves and
+ * any supporting properties needed for the R-factor calculations.
+ */
+typedef struct            /* Struct for comparing two I(V) curves */
 {
   /* general */
-  int group_id;               /*!< assignment to a certain group of
-                               * curves e.g. integral/superstructure */
-  real eng_0;                 /*!< energy of beam appearance (1.1) */
-  rfac_spot spot_id;          /*!< one labeling set of spot indices */
-  size_t n_geo;               /*!< number of different theoretical IV curves */
+  int group_id;           /*!< Assignment to a certain group of
+                           * curves e.g. integral/superstructure */
+  real eng_0;             /*!< Energy of beam appearance (1.1) */
+  rfac_spot spot_id;      /*!< One labeling set of spot indices */
+  size_t n_geo;           /*!< Number of different theoretical IV curves */
   
   /* theoretical data */
-  rfac_iv *theory;             /*!< theoretical IV curve */
+  rfac_iv *theory;        /*!< Pointer to theoretical IV curve data */
 
   /* experimental data */
-  rfac_iv *experimental;       /*!< experimental. IV curve */
+  rfac_iv *experimental;  /*!< Pointer experimental IV curve data*/
 
   /* R factor */
-  real overlap;               /*!< Energy range */
-  rfac rfac;                  /*!< R-factors */
-  real weight;                /*!< relative weight in average */
+  real overlap;           /*!< Energy range */
+  rfac rfac;              /*!< R-factors */
+  real weight;            /*!< Relative weight in average R-factor between
+                           * different IV curves */
 } rfac_ivcur;
 
-typedef struct rfargs
+/*!
+ * Stores all the command line arguments as properties ready for use in
+ * the \c rfac program.
+ */
+typedef struct                /* Holds CLI arguments as program properties */
 {
-  rfac_rf_switch r_switch;    /*!< calculate an r-factor or not */
-  char *ctr_file;             /*!< input control file */
-  char *the_file;             /*!< input theory file */
-  char *out_file;             /*!< output file */
-  char *iv_file;              /*!< file name for IV curves */
-  bool iv_out;                /*!< flag for output of IV curves */
+  rfac_rf_switch r_switch;    /*!< Calculate an r-factor or not */
+  char *ctr_file;             /*!< Input control file string or path */
+  char *the_file;             /*!< Input theory file string or path */
+  char *out_file;             /*!< Output file string or path */
+  char *iv_file;              /*!< File name or path for IV curves */
+  bool iv_out;                /*!< Flag for output of IV curves */
   rfactor_type r_type;        /*!< R-factor type */
-  real s_ini;                 /*!< shift of energy axes */
-  real s_fin;                 /*!< shift of energy axes */
-  real s_step;                /*!< shift of energy axes */
-  real vi;                    /*!< imaginary part of optical potential */
-  bool all_groups;            /*!< flag: print R-factors of all group ID's */
+  real s_ini;                 /*!< Shift of initial energy */
+  real s_fin;                 /*!< Shift of final energy */
+  real s_step;                /*!< Shift of energy step */
+  real vi;                    /*!< Imaginary part of optical potential */
+  bool all_groups;            /*!< Flag: print R-factors of all group ID's */
 
   /* added for compatability with older routines */
   int *p_geo;
@@ -229,14 +253,17 @@ typedef struct rfargs
 
 } rfac_args;
 
-typedef struct rfpar
+typedef struct
 {
  float rf;
  int geo;
  int shift;
 } rfac_par;
 
-typedef struct rfmin
+/*!
+ * Contains the minimum R-factor using different evaluation methods.
+ */
+typedef struct
 {
  int group_id;
  rfac_par r_1;
@@ -247,7 +274,7 @@ typedef struct rfmin
  rfac_par r_p;
 } rfac_rmin;
 
-typedef struct rfref  /*!< relation between expt. and theo. lists */
+typedef struct rfref  /*! Relation between experimental and theory lists */
 {
  int i_min;           /*!< index of smallest energy in theor. list */
  int i_max;           /*!< index of largest energy in theor. list */

@@ -51,8 +51,8 @@ char line_buffer[STRSZ];
  * \param[in] par parameter vector for current call.
  * \param iter iteration number in search.
  *
- * \return \ref search_error
- * \retval \ref SR_SUCCESS if successful.
+ * \return #search_error
+ * \retval #SR_SUCCESS if successful.
  */
 #ifdef _USE_GSL
 int sr_mkinp_mir(const char *filename, const gsl_vector *par, size_t iter)

@@ -67,16 +67,16 @@ typedef enum {
  *  \brief patt return codes.
  */
 typedef enum {
-  PATT_SUCCESS=0,         /*!< function success */
-  PATT_ARGUMENT_ERROR,    /*!< invalid argument error */
-  PATT_READ_ERROR,        /*!< error reading from file */
-  PATT_WRITE_ERROR,       /*!< error writing to file */
-  PATT_COLOR_ERROR,       /*!< invalid color error */
-  PATT_FORMAT_ERROR,      /*!< invalid format error */
-  PATT_ALLOC_ERROR,       /*!< unable to allocate memory error */
-  PATT_DEALLOC_ERROR,     /*!< unable to free memory error */
-  PATT_SHAPE_ERROR,       /*!< invalid shape error */
-  PATT_UNKNOWN_ERROR      /*!< unknown error */
+  PATT_SUCCESS=0,         /*!< Indicates function success */
+  PATT_ARGUMENT_ERROR,    /*!< Indicates invalid argument error */
+  PATT_READ_ERROR,        /*!< Indicates error reading from file */
+  PATT_WRITE_ERROR,       /*!< Indicates error writing to file */
+  PATT_COLOR_ERROR,       /*!< Indicates invalid color error */
+  PATT_FORMAT_ERROR,      /*!< Indicates invalid format error */
+  PATT_ALLOC_ERROR,       /*!< Indicates unable to allocate memory error */
+  PATT_DEALLOC_ERROR,     /*!< Indicates unable to free memory error */
+  PATT_SHAPE_ERROR,       /*!< Indicates invalid shape error */
+  PATT_UNKNOWN_ERROR      /*!< Indicates an unknown error */
 } patt_error;
 
 /*! \def PATT_PAGE_HEIGHT
@@ -145,36 +145,36 @@ Pattern Structures
  */
 typedef struct patt_text 
 {
-  patt_color_rgb color;   /*!< color of text label */
-  double alpha;           /*!< alpha transparency (0. to 1. is 0 to 100%) */
-  char label[BUFSIZ];     /*!< text string to be displayed */
+  patt_color_rgb color;   /*!< Color of text label */
+  double alpha;           /*!< Alpha transparency (0. to 1. is 0 to 100%) */
+  char label[BUFSIZ];     /*!< Text string to be displayed */
   double x;               /*!< x-position for text */
   double y;               /*!< y-position for text */
-  double size;            /*!< text size */
-  bool visible;           /*!< show text */
+  double size;            /*!< Text size */
+  bool visible;           /*!< Indicates whether to show text */
 } patt_text;
 extern patt_text text_default;
 
 
-/*! \struct screen
- *  \brief Struct for containing LEED screen drawing parameters.
+/*! \struct patt_screen
+ *  \brief Structure for containing LEED screen drawing parameters.
  */
 typedef struct patt_screen
 {
-  double alpha;           /*!< % alpha transparency of screen (if supported) */
-  patt_color_rgb stroke_color;  /*!< line color of screen */
-  patt_color_rgb fill_color;    /*!< fill color of screen */
-  double radius;          /*!< screen radius (default is MAX_RADIUS)*/
-  double stroke_width;    /*!< screen edge thickness */
-  bool clip;              /*!< clip pattern to radius for screen */
-  bool fill;              /*!< background fill of screen */
-  bool visible;           /*!< show screen */
+  double alpha;         /*!< % alpha transparency of screen (if supported) */
+  patt_color_rgb stroke_color;  /*!< Line color of screen */
+  patt_color_rgb fill_color;    /*!< Fill color of screen */
+  double radius;        /*!< Screen radius (default is #MAX_RADIUS ) */
+  double stroke_width;  /*!< Screen edge thickness */
+  bool clip;            /*!< Clip pattern to radius for screen */
+  bool fill;            /*!< Indicates whether to apply background fill to screen */
+  bool visible;         /*!< Indicates whether to show screen */
 } patt_screen;
 extern patt_screen screen_default;
 
 
 /*! \struct patt_gun
- *  \brief Struct for containing electron gun drawing parameters.
+ *  \brief Structure for containing electron gun drawing parameters.
  */
 typedef struct patt_gun 
 {
@@ -192,17 +192,17 @@ extern patt_gun gun_default;
 
 
 /*! \struct patt_vector
- *  \brief Struct for containing basis vector drawing details.
+ *  \brief Structure for containing basis vector drawing details.
  */
 typedef struct patt_vector
 {
-  double x1;                /*!< initial x-coordinate for vector */
-  double y1;                /*!< initial y-coordinate for vector */
-  double x2;                /*!< final x-coordinate for vector */
-  double y2;                /*!< final y-coordinate for vector */
-  double alpha;             /*!< fractional alpha transparency from 0. to 1. */
-  patt_color_rgb color;     /*!< color of basis vector */
-  double linewidth;         /*!< line width of basis vector */
+  double x1;                /*!< Initial x-coordinate for vector */
+  double y1;                /*!< Initial y-coordinate for vector */
+  double x2;                /*!< Final x-coordinate for vector */
+  double y2;                /*!< Final y-coordinate for vector */
+  double alpha;             /*!< Fractional alpha transparency from 0. to 1. */
+  patt_color_rgb color;     /*!< Color of basis vector */
+  double linewidth;         /*!< Line width of basis vector */
   double head_size;
 
 } patt_vector;
@@ -216,24 +216,24 @@ typedef struct patt_drawing
 {
   basis basis_gs[MAX_INPUT_FILES];
   basis basis_ss[MAX_INPUT_FILES][MAX_DOMAINS];
-  patt_text eV;                      /*!< label for energy if used */
-  patt_text title;                   /*!< label for drawing title */
-  patt_text footnote;                /*!< label for drawing footnote */
-  patt_text legend[MAX_INPUT_FILES]; /*!< legend for drawing */
-  patt_gun gun;                      /*!< electron gun drawing details */
+  patt_text eV;                      /*!< Label for energy if used */
+  patt_text title;                   /*!< Label for drawing title */
+  patt_text footnote;                /*!< Label for drawing footnote */
+  patt_text legend[MAX_INPUT_FILES]; /*!< Legend for drawing */
+  patt_gun gun;                      /*!< Electron gun drawing details */
   patt_screen screen;                /*!< LEED screen drawing details */
-  patt_color_scheme color_scheme;    /*!< color scheme for drawing */
-  patt_format format;         /*!< format for output file e.g. svg or pdf */
-  spots spots[2];             /*!< container for drawing style for both
+  patt_color_scheme color_scheme;    /*!< Color scheme for drawing */
+  patt_format format;         /*!< Format for output file e.g. svg or pdf */
+  spots spots[2];             /*!< Container for drawing style for both
                                *   GS_SPOTS (subtrate) and
                                *   SS_SPOTS (superstructure) */
-  size_t energy;              /*!< energy for simulating Ewald sphere */
-  bool show_overlap;          /*!< show spots on top of gun and edge of screen */
-  bool show_vectors;          /*!< show basis vectors in output drawing */
-  bool show_indices;          /*!< show Miller indices in output drawing */
-  bool symbols;               /*!< use different symbols for each domain */
-  bool fill_gs;               /*!< fill in substrate spots with spot color */
-  bool fill_ss;               /*!< fill in superstructure spots */
+  size_t energy;              /*!< Energy for simulating Ewald sphere */
+  bool show_overlap;          /*!< Show spots on top of gun and edge of screen */
+  bool show_vectors;          /*!< Show basis vectors in output drawing */
+  bool show_indices;          /*!< Show Miller indices in output drawing */
+  bool symbols;               /*!< Use different symbols for each domain */
+  bool fill_gs;               /*!< Fill in substrate spots with spot color */
+  bool fill_ss;               /*!< Fill in superstructure spots */
   bool show_gs_vectors[MAX_INPUT_FILES];
   bool show_ss_vectors[MAX_INPUT_FILES][MAX_DOMAINS];
   bool show_gs_indices[MAX_INPUT_FILES];
@@ -241,9 +241,9 @@ typedef struct patt_drawing
   size_t n_files;
   char input_files[MAX_INPUT_FILES][FILENAME_MAX];
   char output_filename[FILENAME_MAX];
-  bool std_in;              /*!< indicates whether to use stdin as input */
-  bool std_out;             /*!< indicates whether to use stdout as output */
-  bool interactive;         /*!< indicates whether to run patt interactively */
+  bool std_in;              /*!< Indicates whether to use \c stdin as input */
+  bool std_out;             /*!< Indicates whether to use \c stdout as output */
+  bool interactive;         /*!< Indicates whether to run patt interactively */
 } patt_drawing;
 extern patt_drawing drawing_default;
 

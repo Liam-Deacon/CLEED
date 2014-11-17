@@ -8,14 +8,15 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- *
- * Description: header for matrix_2x2 and associated function
- *              prototypes.
- *
  * Changes:
  *   LD/2014.08.23 - creation
  *********************************************************************/
 
+/*! \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ * Header for #matrix_2x2 and associated function prototypes.
+ */
 #ifndef MATRIX_2X2_H
 #define MATRIX_2X2_H
 
@@ -55,7 +56,7 @@ void matrix_2x2_set_all(matrix_2x2 *mat, double m11, double m12,
 void matrix_2x2_printf(FILE *stream, matrix_2x2 *mat);
 double matrix_2x2_get_element(matrix_2x2 *mat, size_t col, size_t row);
 void matrix_2x2_free(matrix_2x2 *mat);
-matrix_2x2 *matrix_2x2_copy(matrix_2x2 *mat);
+matrix_2x2 *matrix_2x2_copy(const matrix_2x2 *mat);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */

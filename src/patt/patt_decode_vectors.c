@@ -1,14 +1,39 @@
+/*********************************************************************
+ *                     PATT_DECODE_VECTORS.C
+ *
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *********************************************************************/
+
+/*! \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * Implements decode_vectors() function.
+ */
+
 #include "patt.h"
 #include <strings.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
-/* decode input string to determine which vectors to draw
- 
-   Note: more than 10 input files is not currently supported as the conversion
-   is done using single characters (i.e. "0"-"9")
-*/
+/*!
+ * Decodes input string to determine which vectors to draw
+ *
+ * \param spotype Either #SPOT_GS for substrate spots or #SPOT_SS for
+ * superstructure spots.
+ * \param do_vectors Pointer to an array of boolean values indicating whether or
+ * not to draw a given vector.
+ * \param argv The string to decode.
+ * \param str_length Length of string.
+ * \return
+ *
+ * \note more than 10 input files is not currently supported as the conversion
+ * is done using single characters (i.e. "0"-"9")
+ */
 int decode_vectors(int spotype, bool *do_vectors,
                    char *argv, size_t str_length)
 {

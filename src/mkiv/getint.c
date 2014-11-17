@@ -1,186 +1,202 @@
-/**************************************************************************
-    File Name: getint.c
+/*********************************************************************
+ *                        GETINT.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *  GH /25.08.92
+ *  CS /09.08.93
+ *********************************************************************/
 
-**************************************************************************/
+/*! \file */
 
-/***************************************************************************/
 #include "mkiv.h"
 #include <stdlib.h>
-/***************************************************************************/
 
-int get_int(int nspot,              /* number of spots */
-            Spot spot[],            /* list of measurable reflexes */
-            ImageMatrix *image,     /* matrix of image data */
-            ImageMatrix *imask,     /* matrix of mask image data */
-            Vector *scale,          /* half axes of elliptical int. area */
-            float angle,            /* angle of int.area versus horizontal */
-            float use_cur,          /* normalization factor= beam current */
-            int bg,                 /* background subtraction flag */
-            float mins2n,           /* minimum signal-to-noise value */
-            int verb,               /* verbose output flag */
-            float verh,             /* integration area ratios */
-            float acci,             /* integration area ratios */
-            float accb)             /* integration area ratios */
-
-/****************************************************************************
-  GH /25.08.92
-  CS /9.8.93
-
- Purpose:
-  getint serves to :
-  - integrate over an elliptical spot area ( axes defined as scale->xx/yy )
-  - integrate over an elliptical background area (axes = VERH*scale->xx/yy )
-  - if ( bg == 1 ) -> subtract background from spot intensity 
-  - calculate S/N ratio :
-  - set spot[i].control bit SPOT_GOOD_S2N if spot has good s/n ratio
-  - set spot[i].control bit SPOT_OUT if spot touches boundaries :
-    acci = percentage of spot area that must be within visible LEED-screen
-    accb = percentage of background area - " -
-
-****************************************************************************/
+/*!
+ * Calculates intensities of each mkiv_reflex in the \p image by performing the
+ * following:
+ * - integrates over an elliptical spot area ( axes defined as scale->xx/yy )
+ * - integrates over an elliptical background area (axes = VERH*scale->xx/yy )
+ * - if ( bg == 1 ) -> subtract background from spot intensity
+ * - calculates S/N ratio :
+ *    - set spot[i].control bit #SPOT_GOOD_S2N if spot has good s/n ratio
+ *    - set spot[i].control bit #SPOT_OUT if spot touches boundaries :
+ *        acci = percentage of spot area that must be within visible LEED-screen
+ *        accb = percentage of background area - " -
+ *
+ * \param nspot number of spots.
+ * \param spot Pointer to list of measurable reflexes.
+ * \param image Pointer to matrix of image data.
+ * \param imask Pointer mask matrix data.
+ * \param scale Pointer to half axies of elliptical integration area.
+ * \param angle Angle of integration area versus horizontal.
+ * \param use_cur Normalization factor for beam current.
+ * \param bg Flag for background subtraction.
+ * \param mins2n Minimum signal-to-noise value.
+ * \param verb Flag for verbose output.
+ * \param verh Integration area ratios.
+ * \param acci Integration area ratios.
+ * \param accb Integration area ratios.
+ *  * \return
+ */
+int get_int(size_t nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_image *imask,
+            mkiv_vector *scale, float angle, float use_cur, int bg, float mins2n,
+            int verb, float verh, float acci, float accb)
 {
-    register int i, j, k, val, pos;
-    int a_back;
-    int e_counter=0, *e_count;        /* no.of pixels within spot area      */
-    int b_counter=0, *b_count;        /* no.of pixels within background area*/
-    float x_fac, y_fac, xy_fac, ellipse, b_norm;
-    float sgma, sgmb;
-    register int cols = image->rows,        /* define image size */
-                 rows = image->cols;
-    float h = scale->xx,
-          v = scale->yy;
-    unsigned short *im = (unsigned short *)image->imagedata;
-    unsigned short *mask = (unsigned short *)imask->imagedata;
+  register int i, j, k, val, pos;
+  int a_back;
+  int e_counter=0, *e_count;        /* no.of pixels within spot area      */
+  int b_counter=0, *b_count;        /* no.of pixels within background area*/
+  float x_fac, y_fac, xy_fac, ellipse, b_norm;
+  float sgma, sgmb;
 
-/***************************************************************************/
+  register size_t cols = image->rows;        /* define image size */
+  register size_t rows = image->cols;
 
-    /* Allocate memory for e_count, b_count */
-    e_count = (int *)calloc( nspot, sizeof(int) );
-    b_count = (int *)calloc( nspot, sizeof(int) );
-    if ( e_count == NULL || b_count == NULL ) 
-        ERR_EXIT(getint : Memory allocation failed)
+  float h = scale->xx;
+  float v = scale->yy;
 
-    /* Initialize */
-    angle *= PI/180.;
-    x_fac = PYTH2(cos(angle)/h,sin(angle)/v);
-    y_fac = PYTH2(sin(angle)/h,cos(angle)/v);
-    xy_fac = sin(angle) * cos(angle) * ( 2./(h*h) - 2./(v*v) );
+  unsigned short *im = (unsigned short *)image->imagedata;
+  unsigned short *mask = (unsigned short *)imask->imagedata;
 
-    for (k = 0; k < nspot; k++) { 
-        if ( spot[k].control & SPOT_GOOD_S2N ) continue;
-        spot[k].intensity = 0.;
-        spot[k].s2n = 0.;
-        spot[k].s2u = 0.;
-    }
+  /* Allocate memory for e_count, b_count */
+  e_count = (int *)calloc( nspot, sizeof(int) );
+  b_count = (int *)calloc( nspot, sizeof(int) );
+  if ( e_count == NULL || b_count == NULL )
+  {
+    ERR_EXIT(getint : Memory allocation failed)
+  }
 
-/****************************************************************************
+  /* Initialize */
+  angle *= (float)PI / 180.;
+  x_fac = PYTH2(cos(angle)/h, sin(angle)/v);
+  y_fac = PYTH2(sin(angle)/h, cos(angle)/v);
+  xy_fac = sin(angle) * cos(angle) * (2./(h*h) - 2./(v*v) );
 
-  Search for the points which lie inside the (rotated) ellipses around the 
-  spot maxima and sum up the intensities for each spot ( list spot ).
+  for (k = 0; k < nspot; k++)
+  {
+    if ( spot[k].control & SPOT_GOOD_S2N ) continue;
+    spot[k].intensity = 0.;
+    spot[k].s2n = 0.;
+    spot[k].s2u = 0.;
+  }
 
-  A point (x,y) being inside an ellipsis with half axes h and v is defined by 
-  the following equation:
-                  x*x/(h*h) + y*y/(v*v) <= 1.                 (1)
-  If the coordinate system is rotated about (-angle),  x and y are transformed:
-                  x(new) =  x*cos(angle) + y*sin(angle)       (2)
-                  y(new) = -x*sin(angle) + y*cos(angle) 
-  The ellipsis equation (1) then transforms as:
-                x*x* x_fac + y*y* y_fac + x*y * xy_fac <= 1.  (3)
-  
-  spot.s2u is temporarily used as background.  
-  spot.s2n is temporarily used as SQUARE(background)
-
-****************************************************************************/
+  /*!
+   * Search for the points which lay inside the (rotated) ellipses around the
+   * spot maxima and sum up the intensities for each spot ( list spot ).
+   *
+   * A point (x,y) being inside an ellipsis with half axes h and v is defined by
+   * the following equation:
+   *  \f[ \frac{x^2}{h^2} + \frac{y^2}{v^2} <= 1. \f]            (1)
+   *
+   * If the coordinate system is rotated about (-angle),  x and y are transformed:
+   *      x(new) =  x*cos(angle) + y*sin(angle)                  (2)
+   *      y(new) = -x*sin(angle) + y*cos(angle)
+   *
+   * The ellipsis equation (1) then transforms as:
+   *      x*x* x_fac + y*y* y_fac + x*y * xy_fac <= 1.           (3)
+   *
+   * spot.s2u is temporarily used as background.
+   * spot.s2n is temporarily used as SQUARE(background)
+   *
+   */
 
     /* loop over relative coordinates */
     a_back = RND( verh * MAX(h,v) );
-    for (j = -a_back; j <= a_back; j++) {
-        for (i = -a_back; i <= a_back; i++) {
-            /* equation (3) - see above */
-            ellipse = (i*i* x_fac) + (j*j* y_fac) + (i*j* xy_fac);
-            if (ellipse > SQUARE(verh)) continue;    /* outside */
-            if (ellipse <= 1.) e_counter++;
-            else               b_counter++;
+    for (j = -a_back; j <= a_back; j++)
+    {
+      for (i = -a_back; i <= a_back; i++)
+      {
+        /* equation (3) - see above */
+        ellipse = (i*i* x_fac) + (j*j* y_fac) + (i*j* xy_fac);
+        if (ellipse > SQUARE(verh)) continue;    /* outside */
+        if (ellipse <= 1.) e_counter++;
+        else               b_counter++;
             
-            /* loop over spots */
-            for (k = 0; k < nspot; k++) {
-            
-                if( spot[k].control & SPOT_GOOD_S2N )
-                    continue; /*already done*/
-                    
-                pos =((int)spot[k].yy+j)*cols +(int)spot[k].xx+i;
+        /* loop over spots */
+        for (k = 0; k < nspot; k++)
+        {
+          if( spot[k].control & SPOT_GOOD_S2N ) continue; /*already done*/
+          pos = ( (int)spot[k].yy + j)*cols + (int)spot[k].xx + i;
                 
-                if ( pos < 0 || pos >= cols*rows )
-                    continue; /* out of frame */
-                    
-                if ( imask && !mask[pos] ) 
-                    continue; /* outside masked area */
-                val = im[ pos ];
+          if ( pos < 0 || pos >= cols*rows ) continue; /* out of frame */
+          if ( imask && !mask[pos] ) continue; /* outside masked area */
+          val = im[ pos ];
 
-                if (ellipse>1.) {
-                    b_count[k]++;
-                    spot[k].s2u += val;
-                    spot[k].s2n += SQUARE(val); 
-                }
-                else {
-                    e_count[k]++;
-                    spot[k].intensity += val; 
-                }
-            }
-        }  
-     }   
+          if (ellipse > 1.)
+          {
+            b_count[k]++;
+            spot[k].s2u += val;
+            spot[k].s2n += SQUARE(val);
+          }
+          else
+          {
+            e_count[k]++;
+            spot[k].intensity += val;
+          }
+        }
+      }
+    }
 
     /* Normalize background.  Subtract background.  calculate s/n ratio */
-
-    for (k = 0; k < nspot; k++) {
-        if( spot[k].control & SPOT_GOOD_S2N ) continue;
-        if ( (float)e_count[k]/(float)e_counter < acci ||
-             (float)b_count[k]/(float)b_counter < accb   ) {
+    for (k = 0; k < nspot; k++)
+    {
+      if( spot[k].control & SPOT_GOOD_S2N ) continue;
+      if ( (float)e_count[k]/(float)e_counter < acci ||
+           (float)b_count[k]/(float)b_counter < accb )
+      {
             
-            spot[k].control |= SPOT_OUT;
-            spot[k].intensity = INT_OUT;
-            VPRINT(" (%5.2f,%5.2f)  %3.0f|%3.0f  ***out***\n",
-            spot[k].lind1,spot[k].lind2,spot[k].xx,spot[k].yy );
-            continue;
-        }
-	
-        b_norm = (float)e_count[k] / (float)b_count[k];
-        if ( b_norm < TOLERANCE || b_norm > 1./TOLERANCE ) continue;
-
-        sgma =sqrt( spot[k].s2n -SQUARE(spot[k].s2u)/b_count[k] )/b_count[k];
-        sgmb =spot[k].intensity/e_count[k] -spot[k].s2u/b_count[k];
-        spot[k].s2n = sqrt( spot[k].s2n*b_count[k] - SQUARE(spot[k].s2u) );
-        spot[k].s2n /= spot[k].s2u;
-
-        if ( bg == BG_YES ) {
-           spot[k].s2u *= b_norm;
-           spot[k].intensity -= spot[k].s2u;
-           spot[k].s2u = spot[k].intensity / spot[k].s2u;
-           spot[k].intensity /= use_cur;
-        }
-        else {
-           spot[k].s2u *= b_norm;
-           spot[k].s2u = spot[k].intensity / spot[k].s2u - 1.;
-           spot[k].intensity /= use_cur;
-        }
-        spot[k].s2n = spot[k].s2u / spot[k].s2n;
-        QQ {  
-            printf(" (%5.2f,%5.2f)", spot[k].lind1, spot[k].lind2);
-            printf("  %3.0f|%3.0f", spot[k].xx, spot[k].yy);
-            printf("  i:%7.3f", spot[k].intensity);
-            printf("  su:%6.3f  sn:%5.2f", spot[k].s2u, spot[k].s2n );
-            printf("  n:%4d", b_count[k]);
-            printf("  snn:%5.1f", sgmb/sgma);
-        }
-        if ( spot[k].s2n > mins2n )
-            spot[k].control |= SPOT_GOOD_S2N;
-        else 
-            QQ printf(" bad");
-        QQ printf("\n");
+        spot[k].control |= SPOT_OUT;
+        spot[k].intensity = INT_OUT;
+        VPRINT(" (%5.2f,%5.2f)  %3.0f|%3.0f  ***out***\n",
+        spot[k].lind1,spot[k].lind2,spot[k].xx,spot[k].yy );
+        continue;
     }
-    free( e_count );
-    free( b_count );
+	
+    b_norm = (float)e_count[k] / (float)b_count[k];
+    if ( b_norm < TOLERANCE || b_norm > 1./TOLERANCE ) continue;
+
+    sgma =sqrt( spot[k].s2n -SQUARE(spot[k].s2u)/b_count[k] )/b_count[k];
+    sgmb =spot[k].intensity/e_count[k] -spot[k].s2u/b_count[k];
+    spot[k].s2n = sqrt( spot[k].s2n*b_count[k] - SQUARE(spot[k].s2u) );
+    spot[k].s2n /= spot[k].s2u;
+
+    if ( bg == BG_YES )
+    {
+      spot[k].s2u *= b_norm;
+      spot[k].intensity -= spot[k].s2u;
+      spot[k].s2u = spot[k].intensity / spot[k].s2u;
+      spot[k].intensity /= use_cur;
+    }
+    else
+    {
+      spot[k].s2u *= b_norm;
+      spot[k].s2u = spot[k].intensity / spot[k].s2u - 1.;
+      spot[k].intensity /= use_cur;
+    }
+    spot[k].s2n = spot[k].s2u / spot[k].s2n;
+
+    QQ {
+      printf(" (%5.2f,%5.2f)", spot[k].lind1, spot[k].lind2);
+      printf("  %3.0f|%3.0f", spot[k].xx, spot[k].yy);
+      printf("  i:%7.3f", spot[k].intensity);
+      printf("  su:%6.3f  sn:%5.2f", spot[k].s2u, spot[k].s2n );
+      printf("  n:%4d", b_count[k]);
+      printf("  snn:%5.1f", sgmb/sgma);
+    }
+    if ( spot[k].s2n > mins2n )spot[k].control |= SPOT_GOOD_S2N;
+    else QQ printf(" bad");
+    QQ printf("\n");
+  }
+  free(e_count);
+  free(b_count);
     
-    return 0;
+  return(0);
 }
-/***************************************************************************/

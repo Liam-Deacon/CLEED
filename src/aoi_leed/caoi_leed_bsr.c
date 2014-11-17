@@ -15,7 +15,7 @@
 
 /*! \file caoi_leed_bsr.c
  *
- * Implementation file for function \ref bsrinp which makes \ref sa
+ * Implementation file for function bsrinp() which makes \c sa
  * ia_i.bsr files for each angle of incidence.
  *
  */

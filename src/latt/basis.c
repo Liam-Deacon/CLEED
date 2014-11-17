@@ -169,13 +169,13 @@ void basis_get_vectors(const basis *basis, coord *a1,
  *
  * It performs the following operation:
  *
- * \f$ [ \vec{N^'} = (R_{0,0} N_x + R_{0,1} N_y + R_{0,2} N_z,
- *                    R_{1,0} N_x + R_{1,1} N_y + R_{1,2} N_z,
- *                    R_{2,0} N_x + R_{2,1} N_y + R_{2,2} N_z) \f]
+ * \f$ \vec{N^\prime} = (R_{0,0} N_x + R_{0,1} N_y + R_{0,2} N_z,
+ *                       R_{1,0} N_x + R_{1,1} N_y + R_{1,2} N_z,
+ *                       R_{2,0} N_x + R_{2,1} N_y + R_{2,2} N_z) \f]
  *
  * \param nor The original vector normal to the surface.
  * \param R The rotation matrix \f$ \textbf{R} \f$ .
- * \return New rotated vector normal \f$ \vec{N^'] \f$ .
+ * \return New rotated vector normal \f$ \vec{N^\prime \f$ .
  */
 coord *basis_rotate_normal(const coord *nor, double **R)
 {
@@ -234,10 +234,10 @@ coord *basis_rotate_vector_list(const coord *list, size_t n, double **R)
 /*!
  * Rotates \p _basis vectors by rotation matrix \p R
  *
- * @param[in] _basis Original basis vectors, \f$ \vec{a_1}, \vec{a_2},
+ * \param[in] _basis Original basis vectors, \f$ \vec{a_1}, \vec{a_2},
  * \vec{a_3} \f$ .
- * @param[in] R Rotation matrix \f$ \textbf{R} \f$
- * @return Rotated basis vectors \f$ \vec{a^'_1}, \vec{a^'_2}, \vec{a^'_3} \f$ .
+ * \param[in] R Rotation matrix \f$ \textbf{R} \f$
+ * \return Rotated basis vectors \f$ \vec{a^'_1}, \vec{a^'_2}, \vec{a^'_3} \f$ .
  */
 basis *basis_rotate_basis(const basis *_basis, double **R)
 {
@@ -432,7 +432,7 @@ coord *basis_get_a3(const basis *_basis)
 }
 
 /*!
- * Copies \f$ \vec{a_1} \f$ from \p a1 to @basis::a[0] of \p _basis
+ * Copies \f$ \vec{a_1} \f$ from \p a1 to \c a[0] member of \p _basis
  *
  * \param[out] _basis
  * \param[in] a1

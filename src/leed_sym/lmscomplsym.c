@@ -59,7 +59,7 @@
 int leed_ms_compl_sym( mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                  leed_var *v_par, 
                  leed_layer * layer,
-                 leed_beam_t * beams )
+                 leed_beam * beams )
 
 /************************************************************************
  
@@ -92,7 +92,7 @@ int leed_ms_compl_sym( mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                      a_lat[3] = a1_y, a_lat[4] = a2_y;
               real rel_area: area of the unit cell relative to 1x1.
 
-   leed_beam_t * beams - (input) additional information about the k 
+   leed_beam * beams - (input) additional information about the k 
               vectors involved (in this case: (A kz)^-1).
               The order of beams must be equal to the first dimension of
               Ykl (not checked).
@@ -667,7 +667,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 /*
   L_m(g',jlm) = Ylm(g'-) * exp(- ikg'(-) * rj)
 */
-   Maux = matcop(Maux, Ylm);
+   Maux = matcopy(Maux, Ylm);
 
  /* Multiply the rows of Maux with exp(- ikg'(-) * ri) */
    for(k = 0; k < Maux->rows; k ++)

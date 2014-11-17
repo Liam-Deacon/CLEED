@@ -2,7 +2,7 @@
   GH/11.08.95 
   file contains function:
 
-  leed_output_iint_sym(mat Amp, leed_beam_t *beams, leed_var *par, FILE * outfile)
+  leed_output_iint_sym(mat Amp, leed_beam *beams, leed_var *par, FILE * outfile)
 
  Intensity output function
 
@@ -21,7 +21,7 @@
 #define INT_TOLERANCE 1.e-10               /* min intensity != 0. */
 #endif
 
-int leed_output_iint_sym(mat Amp, leed_beam_t *beams_now, leed_beam_t *beams_all,
+int leed_output_iint_sym(mat Amp, leed_beam *beams_now, leed_beam *beams_all,
             leed_var *par, FILE * outfile)
 
 /************************************************************************
@@ -32,8 +32,8 @@ int leed_output_iint_sym(mat Amp, leed_beam_t *beams_now, leed_beam_t *beams_all
 
   mat Amp - (input) vector containing the beam amplitudes of all beams
            included at the current energy.
-  leed_beam_t *beams_now  -  all beams included at the current energy.
-  leed_beam_t *beams_all  -  all beams included at the highest energy.
+  leed_beam *beams_now  -  all beams included at the current energy.
+  leed_beam *beams_all  -  all beams included at the highest energy.
   FILE * outfile - pointer to the output file were the intensities are 
            written to.
 

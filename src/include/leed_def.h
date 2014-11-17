@@ -105,19 +105,19 @@ extern "C" {
 /* Flags for mirror planes etc. */
 
 /*! \typedef leed_structure
- *  \brief indicates whether structure is the bulk or an overlayer.
+ *  \brief Indicates whether structure is the bulk or an overlayer.
  */
 typedef enum {
-  BULK=0,       /*!< bulk structure */
-  OVER          /*!< overlayer structure */
+  BULK=0,       /*!< Bulk structure */
+  OVER          /*!< Overlayer structure */
 } leed_structure;
 
 /*! \typedef leed_matrix_diag
  *  \brief indicates whether a diagonal T-matrix or not.
  */
 typedef enum {
-  T_DIAG=0,
-  T_NOND
+  T_DIAG=0,     /*!< Diagonal matrix */
+  T_NOND        /*!< Non-diagonal matrix */
 } leed_matrix_diag;
 
 /*! \typedef leed_mirror_sym
@@ -130,23 +130,35 @@ typedef enum {
   SXY         /*!< mirror symmetry along xy direction */
 } leed_mirror_sym;
 
-#define NOSYM      101
-#define MONO_2ROT  102
-#define MONO_1MIR  111
+/*!
+ * Return codes for LEED program.
+ */
+typedef enum {
+  LEED_ERROR = -1,        /*!< general failure */
+  LEED_SUCCESS,           /*!< success */
+  LEED_ALLOCATION_ERROR,  /*!< memory allocation failure */
+  LEED_FILE_IO_ERROR,     /*!< file read/write failure */
+  LEED_INVALID_ENERGY     /*!< error when initial, final or energy step
+                           *   is incorrect */
+} leed_error;
 
-#define REC_2ROT   202
-#define REC_1MIR   211
-#define REC_2MIR   221
+#define NOSYM      101  /*!< Indicates no symmetry for structure */
+#define MONO_2ROT  102  /*!< Monoclinic structure with 2-fold rot. symmetry */
+#define MONO_1MIR  111  /*!< Monoclinic structure with 1 mirror plane */
 
-#define HEX_1MIR   311
-#define HEX_3ROT   303  
-#define HEX_3MIR   331
+#define REC_2ROT   202  /*!< Rectangular structure with 2-fold rot. symmetry */
+#define REC_1MIR   211  /*!< Rectangular structure with 1 mirror plane */
+#define REC_2MIR   221  /*!< Rectangular structure with 2 mirror planes */
 
-#define SQ_2ROT    402
-#define SQ_4ROT    404
-#define SQ_1MIR    411
-#define SQ_2MIR    421
-#define SQ_4MIR    441
+#define HEX_1MIR   311  /*!< Hexagonal structure with 1 mirror plane */
+#define HEX_3ROT   303  /*!< Hexagonal structure with 3-fold rot. symmetry */
+#define HEX_3MIR   331  /*!< Hexagonal structure with 3 mirror planes */
+
+#define SQ_2ROT    402  /*!< Square structure with 2-fold rotational symmetry */
+#define SQ_4ROT    404  /*!< Square structure with 4-fold rotational symmetry */
+#define SQ_1MIR    411  /*!< Square structure with 1 mirror planes */
+#define SQ_2MIR    421  /*!< Square structure with 2 mirror planes */
+#define SQ_4MIR    441  /*!< Square structure with 4 mirror planes */
 
 /* current version No. now in file leed_ver.h */
 
@@ -154,213 +166,221 @@ typedef enum {
  *structures and types
  *********************************************************************/
 
-/*! \struct leed_atom
- *  \brief contains all properties of a single atom */
-typedef struct atom_str
+/*! \typedef leed_atom
+ *  \brief Contains all properties of a single atom in the model */
+typedef struct leed_atom /*! Holds properties of a single atom */
 {
- size_t layer;    /*!< number of layer where the atom belongs to */
- leed_structure type;
-                  /*!< type of atom (i. e. set of phase shifts to be used) */
- leed_matrix_diag t_type;
-                  /*!< type of t matrix (T_DIAG or T_NOND) */
- real pos[4];     /*!< relative position inside the unit cell */
- real dwf;        /*!< Debye-Waller factor */ 
+  size_t layer;    /*!< number of layer where the atom belongs to */
+  leed_structure type;
+                   /*!< type of atom (i. e. set of phase shifts to be used) */
+  leed_matrix_diag t_type;
+                   /*!< type of t matrix (T_DIAG or T_NOND) */
+  real pos[4];     /*!< relative position inside the unit cell */
+  real dwf;        /*!< Debye-Waller factor */
 } leed_atom;
 
 
-/*! \struct leed_layer
- *  \brief contains all properties of a single layer. */
-typedef struct layer_str
+/*! \typedef leed_layer
+ *  \brief contains all properties of a single Bravais layer. */
+typedef struct leed_layer /*! Holds properties of a single Bravais layer */
 {
- size_t no_of_layer;       /*!< number of layer in array */
- leed_structure bulk_over; /*!< BULK (0) or OVER */
- int  periodic;          /*!< 1: layer is part of the periodically repeated bulk
-                          *      unit cell
-                          * 0: layer is only used once 
-                          */
- size_t n_atoms;         /*!< number of atoms in the layer */
- real a_lat[5];          /*!< basis vectors of the real 2-dim unit cell stored as
-                          *  standard matrix (a1,a2): 
-                          *    a1x = a_lat[1], a2x = a_lat[2]
-                          *    a1y = a_lat[3], a2y = a_lat[4] 
-                          */
- real rel_area;          /*!< area of the unit cell relative to 1x1 */
- real reg_shift[4];      /*!< 2-dim vector pointing to the axis 
-                          *   of rot. symmetry/mirror plane 
-                          */
- real vec_from_last[4];  /*!< vector from the origin of layer (n-1) */
- real vec_to_next[4];    /*!< vector to the origin of layer (n+1) */
- leed_atom *atoms;       /*!< properties of the atoms within the composite
-                          * (or Bravais) layers */
+  size_t no_of_layer;       /*!< number of layer in array */
+  leed_structure bulk_over; /*!< BULK (0) or OVER */
+  int  periodic;            /*!< 1: layer is part of the periodically
+                             *      repeated bulk unit cell.
+                             *   0: layer is only used once.
+                             */
+  size_t n_atoms;         /*!< number of atoms in the layer */
+  real a_lat[5];          /*!< basis vectors of the real 2-dim unit cell stored
+                           * as standard matrix (a1,a2):
+                           *    a1x = a_lat[1], a2x = a_lat[2]
+                           *    a1y = a_lat[3], a2y = a_lat[4]
+                           */
+  real rel_area;          /*!< area of the unit cell relative to 1x1 */
+  real reg_shift[4];      /*!< 2-dim vector pointing to the axis
+                           *   of rot. symmetry/mirror plane
+                           */
+  real vec_from_last[4];  /*!< vector from the origin of layer (n-1) */
+  real vec_to_next[4];    /*!< vector to the origin of layer (n+1) */
+  leed_atom *atoms;       /*!< properties of the atoms within the composite
+                           * (or Bravais) layers */
 } leed_layer;
 
 
-/*! \struct leed_cryst_t
- *  \brief contains all crystal specific program parameters. */
-typedef struct cryst_str
+/*! \typedef leed_crystal
+ *
+ * Contains all the crystallographic parameters e.g. for the bulk model or
+ * the overlayer structure.
+ */
+typedef struct leed_crystal /*! Holds all crystallographic parameters */
 {
 
-/* general parameters */
- real vr;         /*!< real part of the optical potential */
- real vi;         /*!< imaginary part optical potential */
- real temp;       /*!< crystal temperature */
+  /* general parameters */
+  real vr;         /*!< real part of the optical potential */
+  real vi;         /*!< imaginary part optical potential */
+  real temp;       /*!< crystal temperature */
 
-/* symmetries */
- size_t n_rot;    /*!< degree of rotational symmetry */
- real rot_axis[4];/*!< axis of rotational symmetry */
- size_t n_mir;    /*!< number of mirror plane */
- real *m_plane;   /*!< points define mirror plane */
- real *alpha;     /*!< angle in degree */
- leed_mirror_sym symmetry;  /*!< NOSYM(0) ROTSYM(1) MIRRORSYM(2) RMSYM(3)*/
+  /* symmetries */
+  size_t n_rot;    /*!< degree of rotational symmetry */
+  real rot_axis[4];/*!< axis of rotational symmetry */
+  size_t n_mir;    /*!< number of mirror plane */
+  real *m_plane;   /*!< points define mirror plane */
+  real *alpha;     /*!< angle in degree */
+  leed_mirror_sym symmetry;  /*!< NOSYM(0) ROTSYM(1) MIRRORSYM(2) RMSYM(3)*/
 
-/* 1x1 unit cell */
- real a[5];       /*!< basis vectors of the real 2-dim unit cell stored as
-                   *   standard matrix (a1,a2): 
-                   *     a1x = a[1], a2x = a[2]
-                   *     a1y = a[3], a2y = a[4] 
-                   */
- real a_1[5];     /*!< inverse of a (= 2PI * (a^-1)) 
-                   *   => the rows are the basis vectors of the reciprocal 
-                   *   2-dim unit cell: 
-                   *     a*1x = a_1[1], a*1y = a_1[2]
-                   *     a*2x = a_1[3], a*2y = a_1[4] 
-                   */
- real area;       /*! Area of the real 2-dim (1x1) unit cell */
-                              
- real m_trans[5]; /*!< 2x2 transformation matrix: unit cell used in the programs
-                   *   with respect to the input: a_inp = m_trans * a_prg 
-                   */
+  /* 1x1 unit cell */
+  real a[5];       /*!< basis vectors of the real 2-dim unit cell stored as
+                    *   standard matrix (a1,a2):
+                    *     a1x = a[1], a2x = a[2]
+                    *     a1y = a[3], a2y = a[4]
+                    */
+  real a_1[5];     /*!< inverse of a (= 2PI * (a^-1))
+                    *   => the rows are the basis vectors of the reciprocal
+                    *   2-dim unit cell:
+                    *     a*1x = a_1[1], a*1y = a_1[2]
+                    *     a*2x = a_1[3], a*2y = a_1[4]
+                    */
+  real area;       /*! Area of the real 2-dim (1x1) unit cell */
 
-/* superstructure */
- real m_super[5]; /*!< 2x2 superstructure matrix: b = m_super * a */
- real m_recip[5]; /*!< reciprocal 2x2 superstructure matrix: Mt^-1 */
+  real m_trans[5]; /*!< 2x2 transformation matrix: unit cell used in the
+                    * programs with respect to the input:
+                    * a_inp = m_trans * a_prg
+                    */
 
- real b[5];       /*!< basis vectors of the real 2-dim superstructure unit cell
-                   *   stored as standard matrix (b1,b2):
-                   *     b1x = b[1], a2x = b[2]
-                   *     b1y = b[3], a2y = b[4]
-                   */
- real b_1[5];     /*!< inverse of b (= 2PI * (b^-1))
-                   *   => the rows are the basis vectors of the reciprocal
-                   *   2-dim super structure unit cell:
-                   *     b*1x = b_1[1], b*1y = b_1[2]
-                   *     b*2x = b_1[3], b*2y = b_1[4] 
-                   */
- real rel_area_sup; /*!< Area of the real 2-dim superstructure unit cell 
-                     *   relative to (1x1) 
-                     */
+  /* superstructure */
+  real m_super[5]; /*!< 2x2 superstructure matrix: b = m_super * a */
+  real m_recip[5]; /*!< reciprocal 2x2 superstructure matrix: Mt^-1 */
+
+  real b[5];       /*!< basis vectors of the real 2-dim superstructure unit cell
+                    *   stored as standard matrix (b1,b2):
+                    *     b1x = b[1], a2x = b[2]
+                    *     b1y = b[3], a2y = b[4]
+                    */
+  real b_1[5];     /*!< inverse of b (= 2PI * (b^-1))
+                    *   => the rows are the basis vectors of the reciprocal
+                    *   2-dim super structure unit cell:
+                    *     b*1x = b_1[1], b*1y = b_1[2]
+                    *     b*2x = b_1[3], b*2y = b_1[4]
+                    */
+  real rel_area_sup; /*!< Area of the real 2-dim superstructure unit cell
+                      *   relative to (1x1)
+                      */
                      
-/* stacking of layers */
- size_t n_layers; /*!< number of layers in array layers */
- leed_layer *layers;
-                  /*!< information concerning the atomic layers */
- real dmin;       /*!< minimum interlayer distance */
+  /* stacking of layers */
+  size_t n_layers; /*!< number of layers in array layers */
+  leed_layer *layers; /*!< information concerning the atomic layers */
+  real dmin;       /*!< minimum interlayer distance */
 
- size_t n_atoms;  /*!< total number of atoms */
- size_t n_types;  /*!< total number atom types */
+  size_t n_atoms;  /*!< total number of atoms */
+  size_t n_types;  /*!< total number atom types */
 
- char **comments; /*!< comments */
-} leed_cryst_t;
+  char **comments; /*!< comments */
+} leed_crystal;
 
 
-/*! \struct leed_phs_t
- *  \brief contains all crystal specific program parameters. */
-typedef struct phs_str
+/*! \typedef leed_phase
+ *  \brief Contains all phase shift parameters. */
+typedef struct leed_phase  /*! Holds parameters for a single phase shift */
 {
- size_t lmax;         /*!< maximum angular momentum quantum number */
- size_t n_eng;       /*!< number of energies in phase shift file */
- leed_matrix_diag t_type; /*!< type of scattering matrix: T_DIAG or T_NOND */
- real eng_max;        /*!< maximum energy */
- real eng_min;        /*!< minimum energy */
- real *energy;        /*!< array of energy values */
- real *pshift;        /*!< array of phase shift values */
+  int lmax;           /*!< maximum angular momentum quantum number */
+  size_t n_eng;       /*!< number of energies in phase shift file */
+  leed_matrix_diag t_type; /*!< type of scattering matrix: T_DIAG or T_NOND */
+  real eng_max;        /*!< maximum energy */
+  real eng_min;        /*!< minimum energy */
+  real *energy;        /*!< array of energy values */
+  real *pshift;        /*!< array of phase shift values */
  
- real dr[4];
- char *input_file;    /*!< name of input file */
-} leed_phs_t;
+  real dr[4];
+  char *input_file;    /*!< name of input file */
+} leed_phase;
 
 
-/*! \struct leed_beam_t
- *  \brief contains all parameters of a specific beam in k-space. */
-typedef struct beam_str 
+/*! \typedef leed_beam
+ *  \brief Contains all parameters of a specific beam in k-space. */
+typedef struct leed_beam /*! Holds parameters of a beam in k-space */
 {
- real ind_1;     /*!< h beam index in (1x1) basis A (real) */
- real ind_2;     /*!< k beam index in (1x1) basis A (real) */
- int  b_ind_1;   /*!< h beam index in super-structure basis B (integer) */
- int  b_ind_2;   /*!< k beam index in super-structure basis B (integer) */
- real k_par;     /*!< k_vector length of the parallel components */
- real k_r[4];    /*!< k_r[0] = |k_r|, k_r[i] = kx,ky,kz */
- real k_i[4];    /*!< imagary part of k vector */
- real cth_r;     /*!< real part of cos (theta(k)) */
- real cth_i;     /*!< imaginary part of cos (theta(k)) */
- real phi;       /*!< phi(k) */
- real Akz_r;     /*!< factor 1/(Akz), needed to calculate the scattering matrix */
- real Akz_i;     /*!< factor 1/(Akz), needed to calculate the scattering matrix */
+  real ind_1;     /*!< h beam index in (1x1) basis A (real) */
+  real ind_2;     /*!< k beam index in (1x1) basis A (real) */
+  int  b_ind_1;   /*!< h beam index in super-structure basis B (integer) */
+  int  b_ind_2;   /*!< k beam index in super-structure basis B (integer) */
+  real k_par;     /*!< k_vector length of the parallel components */
+  real k_r[4];    /*!< k_r[0] = |k_r|, k_r[i] = kx,ky,kz */
+  real k_i[4];    /*!< imagary part of k vector */
+  real cth_r;     /*!< real part of cos (theta(k)) */
+  real cth_i;     /*!< imaginary part of cos (theta(k)) */
+  real phi;       /*!< phi(k) */
+  real Akz_r;     /*!< factor 1/(Akz), needed to calculate the scattering matrix */
+  real Akz_i;     /*!< factor 1/(Akz), needed to calculate the scattering matrix */
 
-/* symmetry related phase factors */
- real k_p_sym[12]; /*!< angular difference (phi) between all symmetry-related
-                    *    beams and the representant beam (12 is max.
-                    *    number of beams)
-                    */
- real k_x_sym[12]; /*!< x component of all symmetry-related beams represented
-                    *   by this beam (0) (12 is max. number of beams)
-                    */
- real k_y_sym[12]; /*!< y component of all symmetry-related beams represented
-                    *   by this beam (0) (12 is max. number of beams)
-                    */
- size_t n_eqb_b;   /*!< number of equivalent beams represented by this beam
-                    * (bulk layers)
-                    */
- size_t n_eqb_s;   /*!< number of equivalent beams represented by this beam
-                    * (superstructure)
-                    */
- real *eout_b_r;   /*!< phase factor for the outgoing beam sqrt(n_rot) S exp(+is*g')), */
- real *eout_b_i;   /*!< needed to calculate the scattering matrix, length = n_layer*/
- real *eout_s_r;   /*!< b: bulk layers, s: superstructure */
- real *eout_s_i;
- real *ein_b_r;    /*!< phase factor for the incoming beam 1/sqrt(n_rot) S exp(-i(m*phi + s*g)), */
- real *ein_b_i;    /*!< needed to calculate the scattering matrix, length = (2*l_max + 1) * n_layer*/
- real *ein_s_r;    /*!< b: bulk layers, s: superstructure */
- real *ein_s_i;
+  /* symmetry related phase factors */
+  real k_p_sym[12]; /*!< angular difference (phi) between all symmetry-related
+                     *    beams and the representant beam (12 is max.
+                     *    number of beams)
+                     */
+  real k_x_sym[12]; /*!< x component of all symmetry-related beams represented
+                     *   by this beam (0) (12 is max. number of beams)
+                     */
+  real k_y_sym[12]; /*!< y component of all symmetry-related beams represented
+                     *   by this beam (0) (12 is max. number of beams)
+                     */
+  size_t n_eqb_b;   /*!< number of equivalent beams represented by this beam
+                     * (bulk layers)
+                     */
+  size_t n_eqb_s;   /*!< number of equivalent beams represented by this beam
+                     * (superstructure)
+                     */
+  real *eout_b_r;   /*!< phase factor for the outgoing beam:
+                     *   sqrt(n_rot) S exp(+is*g')), */
+  real *eout_b_i;   /*!< needed to calculate the scattering matrix,
+                     *   length = n_layer*/
+  real *eout_s_r;   /*!< b: bulk layers, s: superstructure */
+  real *eout_s_i;
+  real *ein_b_r;    /*!< phase factor for the incoming beam:
+                     *   1/sqrt(n_rot) S exp(-i(m*phi + s*g)), */
+  real *ein_b_i;    /*!< needed to calculate the scattering matrix,
+                     *   length = (2*l_max + 1) * n_layer*/
+  real *ein_s_r;    /*!< b: bulk layers, s: superstructure */
+  real *ein_s_i;
 
- size_t set;       /*!< beam set, where the beam belongs to */
-} leed_beam_t;
+  size_t set;       /*!< beam set, where the beam belongs to */
+} leed_beam;
 
 
-/*! \struct leed_var
+/*! \typedef leed_var
  *  
- * contains all parameters that change during the energy 
+ * Contains all parameters that change during the energy
  * loop and the parameters controlling them. */
-typedef struct var_str 
+typedef struct leed_var /*! Holds parameters that change during energy loop */
 {
- real eng_r;    /*!< current energy in crystal (real  part) */
- real eng_i;    /*!< current energy in crystal (imag. part) */
- real eng_v;    /*!< current vacuum energy */
- real vr;       /*!< real part of the optical potential */
- real vi_pre;   /*!< prefactor: imag. part of the optical potential */
- real vi_exp;   /*!< exponent: imag. part of the optical potential */
+  real eng_r;    /*!< current energy in crystal (real  part) */
+  real eng_i;    /*!< current energy in crystal (imag. part) */
+  real eng_v;    /*!< current vacuum energy */
+  real vr;       /*!< real part of the optical potential */
+  real vi_pre;   /*!< prefactor: imag. part of the optical potential */
+  real vi_exp;   /*!< exponent: imag. part of the optical potential */
 
- real theta;    /*!< polar angle of incidence */
- real phi;      /*!< azimuth angle of incidence */
- real k_in[4];  /*!< incident beam:
-                 *   k[0] = |k_par| k[1/2] = k_par_x/y k[3] = k_z
-                 */
+  real theta;    /*!< polar angle of incidence */
+  real phi;      /*!< azimuth angle of incidence */
+  real k_in[4];  /*!< incident beam:
+                  *   k[0] = |k_par| k[1/2] = k_par_x/y k[3] = k_z
+                  */
 
- real epsilon;  /*!< decimal tolerance when comparing floating point */
- size_t l_max;  /*!< max. l quantum number used in the calculation */
- mat *p_tl;     /*!< array of diagonal atomic scattering matrices
-                 *   (1st dim = lmax, 2nd dim = 1) */
+  real epsilon;  /*!< decimal tolerance when comparing floating point */
+  size_t l_max;  /*!< max. l quantum number used in the calculation */
+  mat *p_tl;     /*!< array of diagonal atomic scattering matrices
+                  *   (1st dim = lmax, 2nd dim = 1) */
 } leed_var;
 
 
-/*! \struct leed_energy
- *  \brief contains the parameters that control the energy loop. */
-typedef struct eng_str  /*!< contains all parameters that change during the 
-                         *   energy loop and the parameters controlling them */
+/*! \typedef leed_energy
+ *  \brief Contains the parameters that control the energy loop. */
+typedef struct leed_energy /*! Contains all parameters that change during
+                            *  the energy loop and the parameters
+                            *  controlling them */
 {
- real initial;      /*!< initial energy */
- real final;        /*!< final energy */
- real step;         /*!< energy step */
+  real initial;      /*!< initial energy */
+  real final;        /*!< final energy */
+  real step;         /*!< energy step */
 } leed_energy;
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */

@@ -4,4 +4,4 @@
 #else
 #include <CL/cl.h>
 #endif
-char *err_code (cl_int err_in);
+char *cl_err_code(cl_int err_in);

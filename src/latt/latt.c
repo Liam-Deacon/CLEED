@@ -1,31 +1,48 @@
-/****************************************************************************
-                        LATT.C (Georg Held 01.05.06)
-
-CHANGES
-
- 15.04.2006 - Creation
- 27.04.2006 - include hcp, bcc, dia.
- 29.04.2006 - correct format of *.xyz file 
-            - allow input from file (CLEED format).
- 01.05.2006 - calculate indices for lattice vectors.
- 20.05.2013 - [LD] added script on line 2 of output
-            - [LD] max displacement options
- 02.06.2013 - [LD] --version option added
- 29.04.2014 - [LD] Moved preprocessor information into header "latt.h"
- 
-Format of output file will be:
-     <atom_name>  <x> <y> <z>
-Lines beginning with '#' are interpreted as comments.
-
-****************************************************************************/
+/*********************************************************************
+ *                           LATT.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *  GH/15.04.2006 - Creation
+ *  GH/27.04.2006 - include hcp, bcc, dia.
+ *  GH/29.04.2006 - correct format of *.xyz file
+ *                - allow input from file (CLEED format).
+ * GH/01.05.2006 - calculate indices for lattice vectors.
+ * LD/20.05.2013 - added script on line 2 of output
+ *               - max displacement options
+ * LD/02.06.2013 - '--version' option added
+ * LD/29.04.2014 - Moved preprocessor information into header "latt.h"
+ *********************************************************************/
 
 #include "latt.h"
 #include "miller_index.h"
 
-FILE *ctr_stream;
-FILE *inf_stream;
+FILE *ctr_stream;    /* control output stream */
+FILE *inf_stream;    /* additional output information stream */
 
-int main(int argc, char *argv[])
+/*!
+ * Main entry point for \c latt program.
+ *
+ * @param argc Number of command line arguments.
+ * @param argv Array of command line string arguments.
+ * @return C style return code.
+ *
+ * \note To compile as a standalone program add the following:
+ *  + '-Wl,-elatt_main' and '-Dlatt_main=main' for \c gcc
+ *  + '/ENTRY latt_main' for \c msvc (Visual studio users)
+ */
+#if BUILD_LIBRARY != 1
+int main(int argc, char *argv[])        /* compile as main function */
+#else
+int latt_main(int argc, char *argv[])   /* compile as library function */
+#endif
 {
 
   char line_buffer[STRSZ];
@@ -33,7 +50,8 @@ int main(int argc, char *argv[])
   int n1, n2, n3;
   
   size_t n_bas=0, i_bas;
-  size_t i_atom, j_atom;
+  size_t i_atom, j_atom;      /* counters for atoms */
+  size_t n_atoms = 0;         /* number of atoms in lattice */
   
   double faux_x, faux_y, faux_z, faux_len;
   
@@ -43,34 +61,22 @@ int main(int argc, char *argv[])
   double nor_len = 0.0;
   
   double ind[3][3] = { {0., 0.}, {0., 0.}, {0., 0.} };
-  miller_hkl miller;
+  miller_hkl miller = {.h=0., .k=0., .l=1.};
+  lattice *lat = lattice_init(1);
   
   /* variables for print out */
   double dist_min, dist_max;
   
   int n_max;
   int i_pass;
-  
-  size_t n_atoms;
 
-  FILE *out_stream;
-  
-  lattice *lat = lattice_init(1);
-  
-  /********************************************************
-   * Preset input / output streams
-   ********************************************************/
-  
-  out_stream = stdout;
-  ctr_stream = stdout;
-  inf_stream = stderr;
-   
-  nor_len = 0.0;
+  FILE *out_stream = stdout;    /* output stream */
 
-  /********************************************************
-   * Check command line and decode arguments
-   ********************************************************/
+  /* set defaults */
+  ctr_stream = stdout;    /* control output stream */
+  inf_stream = stderr;    /* additional output information stream */
 
+  /* Check command line and decode arguments */
   #if DEBUG > 0
   fprintf(stderr, "#LATT debug info\n");
   fprintf(stderr, "#TOLERANCE = %7.4f\n", TOLERANCE);
@@ -106,8 +112,8 @@ int main(int argc, char *argv[])
     }
   }
    
-  fprintf(inf_stream, "# LATT: version %s\n", PROG_VERSION);
-  fprintf(ctr_stream, "# LATT: version %s\n", PROG_VERSION);
+  fprintf(inf_stream, "# LATT: version %s\n", LATT_VERSION);
+  fprintf(ctr_stream, "# LATT: version %s\n", LATT_VERSION);
    
   if (strcmp(lat->input_filename, "stdin") != 0)
   {
@@ -144,9 +150,7 @@ int main(int argc, char *argv[])
     /*! TODO */
   }
  
-/***********************************************************
-    BEGIN CALCULATIONS
-************************************************************/
+  /* BEGIN CALCULATIONS */
   coord *a1 = coord_init();
   coord *a2 = coord_init();
   coord *a3 = coord_init();  
@@ -161,9 +165,7 @@ int main(int argc, char *argv[])
   basis_set_a2(a, a2);
   basis_set_a3(a, a3);
   
-/********************************************************
- Control output
-********************************************************/
+  /* Control output */
   fprintf(inf_stream, "\n Before rotation:\n" );
   basis_printf(inf_stream, a);
   fprintf(inf_stream, "normal: ");
@@ -189,10 +191,8 @@ int main(int argc, char *argv[])
   }
   
   
-/********************************************************
- Calculate Rotation matrix
-********************************************************/
- double **R = normal_get_rotation_matrix(nor);
+  /* Calculate Rotation matrix */
+  double **R = normal_get_rotation_matrix(nor);
 
 
   #if DEBUG == 1
@@ -205,10 +205,7 @@ int main(int argc, char *argv[])
           R[2][0], R[2][1], R[2][2]);
   #endif
 
-/********************************************************
- Rotate lattice vectors and basis vectors
-********************************************************/
-
+  /* Rotate lattice vectors and basis vectors */
   basis *rot_a = basis_rotate_basis(a, R);
   coord *rot_nor = basis_rotate_normal(nor, R);
 
@@ -230,16 +227,13 @@ int main(int argc, char *argv[])
     coord_copy(&bas[i_bas], &rot_bas[i_bas]); 
   }
 
-/********************************************************
- Find lattice vectors b1, b2, b3
-********************************************************/
-
+  /* Find lattice vectors b1, b2, b3 */
   b2_len = b1_len = lat->max_disp * lat->a_nn; /* = 10. * a_nn; */
 
   coord_set(b3, 0., 0., -(lat->max_disp_z) * lat->a_nn); /* -10. * a_nn; */
   b3_len = COORD_MAGNITUDE(b3);
 
-  n_max = lat->max_disp_z * 2; /* n_max = 20; */
+  n_max = abs((int)(lat->max_disp_z * 2.)); /* n_max = 20; */
 
   #if (DEBUG == 1)
   lattice_debug(lat);
@@ -328,11 +322,10 @@ int main(int argc, char *argv[])
   
   basis_printf(ctr_stream, b);
 
-/********************************************************
- rotate lattice vectors b1, b2, b3 such that b1 || x-axis
- make sure, b1 / b2 is a right-handed system 
- make sure, < b1,b2 is  greater than 90deg 
-********************************************************/
+  /* Rotate lattice vectors b1, b2, b3 such that b1 || x-axis
+   * - make sure, b1 / b2 is a right-handed system
+   * - make sure, <b1,b2 is  greater than 90 degrees
+   */
   b = basis_rotate_parallel_to_x_axis_rhs(b, R);
 
   for(i_bas = 0; i_bas < n_bas; i_bas ++)
@@ -347,11 +340,9 @@ int main(int argc, char *argv[])
   fprintf(ctr_stream, "\n interm vectors (2):\n");
   basis_printf(ctr_stream, b);
 
-/********************************************************
- Make sure, b1 / b2 is a right-handed system:
- b2->y must be positive, if not, replace b2 by -b2.
-********************************************************/
-
+  /* Check that b1 / b2 is a right-handed system:
+   * b2->y must be positive, if not, replace b2 by -b2.
+   */
   if( b2->y < 0. )
   {
     b2->x *= -1;
@@ -362,11 +353,9 @@ int main(int argc, char *argv[])
     ind[1][2] *= -1;
   }
 
-/********************************************************
- Make sure, < b1,b2 is  greater than 90deg
- cos must be <= 0, if not, replace b2 by b2-b1.
-********************************************************/
-
+  /* Check angle between b1 and b2 is greater than 90 degrees
+   * cos must be <= 0, if not, replace b2 by b2-b1.
+   */
   if( (b1->x*b2->x + b1->y*b2->y) > TOLERANCE )
   {
     b2->x -= b1->x;
@@ -377,10 +366,7 @@ int main(int argc, char *argv[])
     ind[1][2] -= ind[0][2];
   }
 
-/********************************************************
- Indices for fcc and bcc:
-********************************************************/
-
+  /* Indices for fcc and bcc: */
   if (lat->latt_type == LAT_FCC)
   {
     miller.h = (ind[0][0] + ind[0][1]);
@@ -464,24 +450,21 @@ int main(int argc, char *argv[])
             bas[i_bas].x, bas[i_bas].y, bas[i_bas].z);
   }
 
-/* area of unit cell */
+  /* area of unit cell */
   faux->x = fabs(b1->x*b2->y - b2->x*b1->y);
 
-/* volume of unit cell */
+  /* volume of unit cell */
   faux->y = fabs(-faux->x * b3->z);
   fprintf(inf_stream, "\n area = %7.3f; volume = %7.3f\n", faux->x, faux->y);
   fprintf(ctr_stream, "\n area = %7.3f; volume = %7.3f\n", faux->x, faux->y);
 
-/********************************************************
- Create list of atoms
- i_pass = 0: find number of atoms in list (n_atoms).
- i_pass = 1: write atoms to list.
-********************************************************/
-
-/* n_atom will be changed later */
-  n_atoms = lat->n_atoms;
+  /* Create list of atoms:
+   * - i_pass = 0: find number of atoms in list (n_atoms).
+   * - i_pass = 1: write atoms to list.
+   */
+  n_atoms = lat->n_atoms;   /* n_atoms will be changed later */
   
-/* cycle through layers */
+  /* cycle through layers */
   if (lat->max_layers == 0) 
   {
     lat->max_layers = ( rint (-3. * lat->a_nn / (b3->z) ) );
@@ -504,11 +487,8 @@ int main(int argc, char *argv[])
               lat->n_atoms, lat->max_layers); 
     }
 
-
-/* complete unit cells if n_unit_cell > 0 */
-
+    /* complete unit cells if n_unit_cell > 0 */
     n_max = lat->max_cells;
-
     if(lat->max_cells > 0)
     {
       for(n3 = -1; n3 < lat->max_layers; n3 ++)
@@ -546,15 +526,15 @@ int main(int argc, char *argv[])
   
               }  /* for i_bas */
             }  /* if */
-          } 
-        }/* for n1, n2 */
+          } /* for n2 */
+        } /* for n1*/
       } /* for n3 */
     } /* keep unit cell */
 
-/* only atoms within limits if n_unit_cell <= 0 */
+    /* only atoms within limits if n_unit_cell <= 0 */
     else 
     {
-      for(n3 = -1; n3 < lat->max_layers; n3 ++)
+      for(n3 = -1; n3 < (int)lat->max_layers; n3 ++)
       {
         for(n1 = -n_max; n1 < n_max; n1 ++)
         {
@@ -584,8 +564,8 @@ int main(int argc, char *argv[])
               }
   
             }  /* for i_bas */
-          }
-        }        /* for n1, n2 */
+          } /* for n2 */
+        } /* for n1 */
       } /* for n3 */
     } /* n_unit_cell <= 0 */
 
@@ -593,11 +573,7 @@ int main(int argc, char *argv[])
 
   } /* i_pass */
 
-/********************************************************
- Sort list of atoms
- Find shortest / longest inter-layer distance
-********************************************************/
-
+  /* Sort list of atoms & find shortest / longest inter-layer distance */
   for(i_atom = 0; i_atom < lat->n_atoms; i_atom ++)
   {
     for(j_atom = i_atom+1; j_atom < lat->n_atoms; j_atom ++)
@@ -623,7 +599,8 @@ int main(int argc, char *argv[])
           dist_min, dist_max);
 
   lattice_printf(stdout, lat);
-  fprintf(inf_stream, "\n Atoms in list = %d; layers = %d\n", n_atoms, lat->max_layers);
+  fprintf(inf_stream, "\n Atoms in list = %d; layers = %d\n",
+          n_atoms, lat->max_layers);
   
   fclose(inf_stream);
   fclose(ctr_stream);
@@ -646,8 +623,7 @@ int main(int argc, char *argv[])
   free(R[1]);
   free(R[2]);
   free(R);
-  R = NULL;
   
-  return (0);
+  return(0);
 } /* end of main */
 

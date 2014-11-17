@@ -4,7 +4,7 @@
   (copy from inpbullayer.c additional test symmetry and create the 
                            registry shifts)
 
-  leed_leed_inp_bul_layer_sym
+  leed_inp_bul_layer_sym
 
 Changes:
                               
@@ -24,49 +24,32 @@ Changes:
 #define MIN_DIST 2.0
 #endif
 
-int leed_leed_inp_bul_layer_sym(leed_cryst_t *par, 
-                  leed_atom * atom_list, real *a3)
-
-/************************************************************************
-
- Decide which atoms belong to which layer:
- - group atoms to composite layers if necessary;
- - determine inter layer vectors;
-
- 
- INPUT PARAMETERS:
-
- leed_cryst_t *par (input, output)
-     structure that contains all geometrical and non-geometrical 
-     parameters of the bulk except atom positions and types.
-     Output will be written to structure element layers.
-
- leed_atom *atom_list (input)
-     structure that contains all geometrical and non-geometrical
-     parameters of the atoms to be grouped (see "leed_def.h").
-     (The list of atoms must be ordered according to their z coordinate,
-     LARGEST z first.) It will be modified during the execution
-     of this function.
-
- real *a3
-     3rd basis vector of the bulk unit cell.
-       
- return value:
-     number of layers (i_layer)   if o.k.
-
- DESIGN:
-
-
- NOTE:
- The function cannot handle the case when all layer distances are smaller
- than MIN_DIST. In this case the bulk must be modelled as one composite 
- layer.
- 
-*************************************************************************/
+/*!
+ * Decides which atoms belong to which layer (based on symmetry):
+ * - group atoms to composite layers if necessary
+ * - determine inter-layer vectors
+ *
+ * \param[in,out] par Pointer to structure that contains all geometrical
+ * and non-geometrical parameters of the bulk except atom positions and types.
+ * Output will be written to structure element layers.
+ * \param[in,out] atom_list Pointer to structure that contains all
+ * geometrical and non-geometrical parameters of the atoms to be
+ * grouped (see "leed_def.h"). The list of atoms must be ordered according to
+ * their z coordinate, with LARGEST z first. It will be modified during
+ * the execution of this function.
+ * \param[in] a3 Pointer to third basis vector of the bulk unit cell.
+ * \return Number of layers.
+ * \retval -1 if unsuccessful and #EXIT_ON_ERROR is not defined.
+ * \warning The function cannot handle the case when all layer distances
+ * are smaller than #MIN_DIST. In this case the bulk must be modelled
+ * as one composite layer.
+ */
+int leed_inp_bul_layer_sym(leed_crystal *par, leed_atom * atom_list,
+                           const real *a3)
 {
-int i,j; 
-int i_c,i_d;
-int n_rot,n_mir;
+int i, j;
+int i_c, i_d;
+int n_rot, n_mir;
 int n_atoms, i_atoms;
 int i_layer;
 int end_per;             /* indicates end of vertical periodicity */
@@ -83,7 +66,7 @@ real vaux[4];
 
 
 #ifdef CONTROL
- fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): entering leed_leed_inp_bul_layer_sym MIN_DIST= %.3f\n", 
+ fprintf(STDCTR,"(leed_inp_bul_layer_sym): entering leed_inp_bul_layer_sym MIN_DIST= %.3f\n",
          MIN_DIST*BOHR);
 #endif
 /************************************************************************
@@ -101,7 +84,7 @@ real vaux[4];
 
 #ifdef CONTROL
  fprintf(STDCTR,
- "(leed_leed_inp_bul_layer_sym): n_atoms = %d, a1 = (%.3f,%.3f), a2 = (%.3f,%.3f)\n",
+ "(leed_inp_bul_layer_sym): n_atoms = %d, a1 = (%.3f,%.3f), a2 = (%.3f,%.3f)\n",
          n_atoms, a1x*BOHR, a1y*BOHR, a2x*BOHR, a2y*BOHR);
 #endif
 
@@ -124,25 +107,28 @@ real vaux[4];
  no_of_atoms[i_layer] = 1;
  atom_list[0].layer = i_layer;
 
+
+
  orig = atom_list[0].pos[3];
 
  vaux[3] = atom_list[0].pos[3];
  atom_list[0].pos[3] = 0.;
  
 #ifdef CONTROL
-  fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): old atomlist, atom%d (%f %f %f (now %f))\n",0,
+  fprintf(STDCTR,"(leed_inp_bul_layer_sym): old atomlist, atom%d (%f %f %f (now %f))\n",0,
           atom_list[0].pos[1]*BOHR,atom_list[0].pos[2]*BOHR,vaux[3]*BOHR,atom_list[0].pos[3]*BOHR);
  for(i_atoms = 1;i_atoms < n_atoms; i_atoms++)
-  fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): old atomlist, atom%d (%f %f %f)\n",
+  fprintf(STDCTR,"(leed_inp_bul_layer_sym): old atomlist, atom%d (%f %f %f)\n",
          i_atoms, atom_list[i_atoms].pos[1]*BOHR,atom_list[i_atoms].pos[2]*BOHR,atom_list[i_atoms].pos[3]*BOHR);
 #endif
+
 
  for(i_atoms=1; i_atoms<n_atoms; i_atoms++)
  {
 
 #ifdef CONTROL
-   fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym):for i_atom = %d \n",i_atoms);
-   fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): pos: %.4f %.4f %.4f dist: %.4f\n", 
+   fprintf(STDCTR,"(leed_inp_bul_layer_sym):for i_atom = %d \n",i_atoms);
+   fprintf(STDCTR,"(leed_inp_bul_layer_sym): pos: %.4f %.4f %.4f dist: %.4f\n",
    atom_list[i_atoms].pos[1]*BOHR, atom_list[i_atoms].pos[2]*BOHR, 
    atom_list[i_atoms].pos[3]*BOHR,
    R_fabs(atom_list[(i_atoms - 1)].pos[3]+vaux[3]-atom_list[i_atoms].pos[3])*BOHR);
@@ -160,7 +146,7 @@ real vaux[4];
    - set up new origin of the layer;
 **********************************************************************/
 #ifdef CONTROL
-     fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): new layer, no_of_atoms[%d] = %d\n", 
+     fprintf(STDCTR,"(leed_inp_bul_layer_sym): new layer, no_of_atoms[%d] = %d\n",
                      i_layer, no_of_atoms[i_layer]);
 #endif
  
@@ -180,12 +166,12 @@ real vaux[4];
    {
     *(shift + 2*i_layer + 0) = -(atom_list[i_atoms -1].pos[1]);
     *(shift + 2*i_layer + 1) = -(atom_list[i_atoms -1].pos[2]);
-
 /* set up new inter layer vector  */
     *(vec + 4*i_layer + 1) = 0.;
     *(vec + 4*i_layer + 2) = 0.;
     *(vec + 4*i_layer + 3) =
         atom_list[i_atoms].pos[3] - atom_list[i_atoms-1].pos[3] - vaux[3];
+
 
    }
 
@@ -194,6 +180,27 @@ real vaux[4];
      vaux[3] = atom_list[i_atoms].pos[3];
      atom_list[i_atoms].pos[3] = 0.;
 
+
+
+
+
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
   }  /* if R_fabs ... */
 
   /***********************************************************************
@@ -214,6 +221,9 @@ real vaux[4];
   Set up the last inter layer vector to point from the last layer to the
   first one of the next unit cell.
 *************************************************************************/
+
+
+
 
 
  if(no_of_atoms[i_layer] > 1)
@@ -245,6 +255,7 @@ real vaux[4];
    *(shift + 2*i_layer + 0) = -atom_list[n_atoms -1].pos[1];
    *(shift + 2*i_layer + 1) = -atom_list[n_atoms -1].pos[2];
 
+
    *(vec+4*i_layer + 1) = 0.;
    *(vec+4*i_layer + 2) = 0.;
    *(vec+4*i_layer + 3) = a3[3] - vaux[3] - atom_list[n_atoms-1].pos[3] + orig;
@@ -259,7 +270,7 @@ real vaux[4];
    if(i_layer == 0)
    {
 #ifdef ERROR
-     fprintf(STDERR," *** error (leed_leed_inp_bul_layer_sym): bulk atoms are too close ");
+     fprintf(STDERR," *** error (leed_inp_bul_layer_sym): bulk atoms are too close ");
      fprintf(STDERR," (cannot be split into layers).\n");
 #endif
 #ifdef EXIT_ON_ERROR
@@ -271,7 +282,7 @@ real vaux[4];
    else /* i_layer != 0 ,but R_abs too small */
    {
 #ifdef CONTROL
-     fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): inter layer distance is too short\n");
+     fprintf(STDCTR,"(leed_inp_bul_layer_sym): inter layer distance is too short\n");
 #endif
 /************************************************************************
  If the inter layer distance is too short and the bulk layers can be split
@@ -281,11 +292,9 @@ real vaux[4];
   - copy the atoms of the first layer into the last layer;
   - set up the new inter layer vector.
 *************************************************************************/
-
      for (j=0; atom_list[j].layer == 0; j++);
        atom_list = ( leed_atom *) realloc( 
                  atom_list, (n_atoms+j+2) * sizeof(leed_atom) );
-
    /*******************************************************
     Reset atom_list:
      - add the atoms of the first layer to the last one
@@ -311,9 +320,7 @@ real vaux[4];
       in the first layer translated by a3.
       So you have to add the inter layer vector of the first layer.
     **********************************************************************/
-
      *(vec + 4*i_layer + 3) += *(vec + 3); /** atom_list[n_atoms -1].pos[3] **/
-
     /*********************************************
       Reset registry-shift:
       In this case the layer is a composite layer,
@@ -345,10 +352,10 @@ real vaux[4];
 
 #ifdef CONTROL_X
  for(i=0; i< i_layer; i++)
-   fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): shift_orig: %.4f %.4f \n",
+   fprintf(STDCTR,"(leed_inp_bul_layer_sym): shift_orig: %.4f %.4f \n",
                  *(shift+2*i+0) *BOHR,
                  *(shift+2*i+1) *BOHR);
- fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym):i_layer = %d\n", i_layer);
+ fprintf(STDCTR,"(leed_inp_bul_layer_sym):i_layer = %d\n", i_layer);
 #endif
 
 /************************************************************************
@@ -374,10 +381,10 @@ real vaux[4];
  
 #ifdef CONTROL_X
  for(i=0; i< i_layer; i++)
-   fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): shift_mod: %.4f %.4f \n",
+   fprintf(STDCTR,"(leed_inp_bul_layer_sym): shift_mod: %.4f %.4f \n",
                  *(shift+2*i+0) *BOHR,
                  *(shift+2*i+1) *BOHR);
- fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym):i_layer = %d\n", i_layer);
+ fprintf(STDCTR,"(leed_inp_bul_layer_sym):i_layer = %d\n", i_layer);
 #endif
 
 /************************************************************************
@@ -392,6 +399,9 @@ real vaux[4];
        (leed_layer *) malloc( (i_layer+1) * sizeof(leed_layer) );
 
 
+
+
+
  for(i = 0 ; i < i_layer ; i++)
  {
    j = i_layer - i - 1; 
@@ -401,6 +411,48 @@ real vaux[4];
    par->layers[j].reg_shift[2] = *(shift+2*i+1);
  }
 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  for(i=0; i< i_layer; i++)
  {
 /********************************************************************* 
@@ -408,7 +460,6 @@ real vaux[4];
    j refers to index of layers
 *********************************************************************/
    j = i_layer - i - 1;
-
 /********************************************************************* 
    Write to par->layers[j]:
    - number of atoms (from no_of_atoms), 
@@ -417,7 +468,6 @@ real vaux[4];
    - interlayer vectors 
 *********************************************************************/
    par->layers[j].natoms = no_of_atoms[i];
-
    if( (i == 0) && (end_per == 1) )
        par->layers[j].periodic = 0;
    else
@@ -469,9 +519,7 @@ real vaux[4];
        par->layers[j].atoms[i_c].pos[1] = atom_list[i_atoms].pos[1];
        par->layers[j].atoms[i_c].pos[2] = atom_list[i_atoms].pos[2];
        par->layers[j].atoms[i_c].pos[3] = atom_list[i_atoms].pos[3];
-
        par->layers[j].atoms[i_c].dwf = atom_list[i_atoms].dwf;
-
        i_c ++;
      }
    } /* for i_atoms */
@@ -479,7 +527,7 @@ real vaux[4];
    {
 #ifdef ERROR
      fprintf(STDERR,
-"*** error (leed_leed_inp_bul_layer_sym): the numbers of atoms in layer %d do not match\n", j);
+"*** error (leed_inp_bul_layer_sym): the numbers of atoms in layer %d do not match\n", j);
 #endif
 #ifdef EXIT_ON_ERROR
        exit(1);
@@ -489,6 +537,11 @@ real vaux[4];
    }
  } /* for i (loop over layers) */
 
+/***************************************************************************/
+
+ free(shift);
+ free(vec);
+ free(no_of_atoms);
 /***********************************************************************
   test rot.symmetry for composite layer.
   therefor rotate all atoms in the layer
@@ -498,6 +551,10 @@ real vaux[4];
     n_rot = leed_check_rotation_sym(par);
  if(n_mir > 0)
     n_mir = leed_check_mirror_sym(par);
+
+
+
+
 
 /**************************************************************************
   and now,
@@ -527,6 +584,10 @@ for(i_c = 0 ; i_c < i_layer ; i_c++)
                     par->layers[i_c].a_lat[3]*BOHR,par->layers[i_c].a_lat[4]*BOHR);
   fprintf(STDCTR,"atom_position: \n");
 
+
+
+
+
   for(i = 0 ; i < par->layers[i_c].natoms ; i++)
         fprintf(STDCTR,"\t atom%d :(%.3f %.3f %.3f) type%d \n\n",i+1,
                                  par->layers[i_c].atoms[i].pos[1]*BOHR,
@@ -537,21 +598,13 @@ for(i_c = 0 ; i_c < i_layer ; i_c++)
 }
 #endif
 
-/***************************************************************************/
-
- free(shift);
- free(vec);
- free(no_of_atoms);
-
-
 #ifdef EXIT
  fprintf(STDCTR,
-  "(leed_leed_inp_bul_layer_sym): leaving inp_layer, return value = %d\n", i_layer);
+  "(leed_inp_bul_layer_sym): leaving inp_layer, return value = %d\n", i_layer);
  fprintf(STDERR, "********* (LEED): exit now\n");
- fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): at the end of program");
+ fprintf(STDCTR,"(leed_inp_bul_layer_sym): at the end of program");
  exit(0);
 #endif
 
  return(i_layer);
-} /* end of function leed_leed_inp_bul_layer_sym */
-/*======================================================================*/
+} /* end of function leed_inp_bul_layer_sym */

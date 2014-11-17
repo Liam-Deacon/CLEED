@@ -88,7 +88,7 @@ char whatnext[STRSZ];
  * Read input for search from input file (and *.bul)
  *
  * \param[in] inp_file input file containing start geometry and control
- * parameters for SEARCH.
+ * parameters for the \c search program.
  *
  * Unlike in the CLEED program this input routine does not convert the
  * parameters into atomic units (BOHR and HARTREE).
@@ -130,11 +130,11 @@ char whatnext[STRSZ];
  *  - x,y,z: atom positions
  *  - dr: vibrational amplitude ( \f$ <dr^2> \f$ )
  *
- * \note \ref sr_atoms and \ref sr_search will be allocated in this function.
+ * \note #sr_atoms and #sr_search will be allocated in this function.
  * \return number of parameters.
- * \retval \ref SR_FAILURE if failed and \c EXIT_ON_ERROR is not defined.
+ * \retval #SR_FAILURE if failed and \c EXIT_ON_ERROR is not defined.
  *
- * \note the exit code \ref search_error will be be given if the function
+ * \note the exit code #search_error will be be given if the function
  * fails and \c EXIT_ON_ERROR is defined.
  *
  */

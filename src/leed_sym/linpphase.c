@@ -46,7 +46,7 @@ static int i_phase = 0;      /* number of atom types */
 
 /********************************************************************/
 
-int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phs_t **p_phs_shifts )
+int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
 
 /*********************************************************************
 
@@ -60,7 +60,7 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phs_t **p_phs_shifts )
   
   real * dr (input) displacement vector for thermic vibrations
   
-  leed_phs_t **p_phs_shifts (output) phase shifts.
+  leed_phase **p_phs_shifts (output) phase shifts.
 
  DESIGN:
 
@@ -77,7 +77,7 @@ char filename[STRSZ];
 char linebuffer[STRSZ];
 char eng_type[STRSZ];
 
-leed_phs_t *phs_shifts;
+leed_phase *phs_shifts;
 
 int i;
 int i_str, i_eng;
@@ -130,13 +130,13 @@ real eng_scale;
        break;
      }
    i_phase ++;
-   *p_phs_shifts = (leed_phs_t *)realloc( 
-                    *p_phs_shifts, (i_phase + 1) * sizeof(leed_phs_t) );
+   *p_phs_shifts = (leed_phase *)realloc( 
+                    *p_phs_shifts, (i_phase + 1) * sizeof(leed_phase) );
  }
  else
  {
    i_phase ++;
-   *p_phs_shifts = (leed_phs_t *) malloc( 2 * sizeof(leed_phs_t) );
+   *p_phs_shifts = (leed_phase *) malloc( 2 * sizeof(leed_phase) );
  }
 
 /* Terminate list of phase shifts */

@@ -38,58 +38,62 @@ extern "C" {
 #include <string.h>
 
 /* define constants */
-#define  STRSZ 256
-#define  NAMSZ 128
+#define  STRSZ 256        /*!< Maximum length of buffer line */
+#define  NAMSZ 128        /*!< Maximum length of atom name string */
 
 #define TOLERANCE (1E-2)
 #define IMAGE_LEN 30.
 
 #ifndef MAX_INP_ATOMS
-#define MAX_INP_ATOMS 256
+#define MAX_INP_ATOMS 256 /*!< Maximum number of input atoms */
 #endif
 
 #ifndef MAX_OUT_ATOMS
-#define MAX_OUT_ATOMS 4096
+#define MAX_OUT_ATOMS 4096 /*!< Maximum number of output atoms */
 #endif
 
 #define LAT_INP 100
 
-/*! \typedef lattice_error_code
+/*! \enum lattice_error_code
  *  \brief return codes from functions operating on lattice struct
  */
-typedef enum {
+typedef enum lattice_error_code {
   LATTICE_FAILURE=-1,               /*!< indicates general failure */
   LATTICE_SUCCESS=0,                /*!< indicates general success */
   LATTICE_ATOM_INDEX_OUT_OF_RANGE,  /*!< indicates the atom index is out of
                                      * range */
 
   LATTICE_ALLOC_FAILURE,            /*!< indicates memory allocation failure */
-  LATTICE_STRING_ALLOC_FAILURE      /*!< indicates string memory allocation
+  LATTICE_STRING_ALLOC_FAILURE,     /*!< indicates string memory allocation
                                      * failure */
+  LATTICE_FILE_IO_FAILURE,          /*!< Indicates problems reading/writing
+                                     * to file */
+  LATTICE_INPUT_ERROR               /*!< Indicates problems with the input
+                                     * format when reading a file or \c stdin */
 } lattice_error_code;
 
-/*! \typedef latt_type
+/*! \enum latt_type
  *  \brief indicates lattice type
  *
  * \c enum for different types of lattice structures.
  */
-typedef enum {
-  LAT_FCC=1,          /*!< indicates Face Centred Cubic (FCC) packing */
-  LAT_HCP,            /*!< indicates Hexagonal Close Packed (HCP) packing */
-  LAT_BCC,            /*!< indicates Body Centred Cubic (BCC) packing */
-  LAT_DIA,            /*!< indicates Diamond structure */
-  LAT_UNKNOWN         /*!< indicates unknown structure */
+typedef enum latt_type {
+  LAT_FCC=1,          /*!< Indicates Face Centred Cubic (FCC) packing */
+  LAT_HCP,            /*!< Indicates Hexagonal Close Packed (HCP) packing */
+  LAT_BCC,            /*!< Indicates Body Centred Cubic (BCC) packing */
+  LAT_DIA,            /*!< Indicates Diamond structure */
+  LAT_UNKNOWN         /*!< Indicates unknown structure */
 } latt_type;
 
-/*! \typedef lattice
+/*! \struct lattice
  *  \brief lattice struct.
  *
  * Contains all the information for generating a lattice of different 
  * atoms.
  */
-typedef struct {
+typedef struct lattice {
   latt_type latt_type;  /*!< Type of lattice e.g. HCP or FCC. */
-  double a_nn;          /*!< nearest neighbour distance. */
+  double a_nn;          /*!< Nearest neighbour distance. */
   double a_latt;        /*!< a lattice constant. */
   double b_latt;        /*!< b lattice constant. */
   double c_latt;        /*!< c lattice constant. */
@@ -102,9 +106,9 @@ typedef struct {
   double vec_h;         /*!< h Miller index. */
   double vec_k;         /*!< k Miller index. */
   double vec_l;         /*!< l Miller index. */
-  char *input_filename; /*!< the filename to read in input */
-  char *output_filename;/*!< the filename to output the generated lattice to */
-  char *script;         /*!< do jmol script to write to xyz output */
+  char *input_filename; /*!< The filename or path to read in input */
+  char *output_filename;/*!< The filename or path to output the generated lattice to */
+  char *script;         /*!< Do jmol script to write to xyz output */
   atom *atoms;          /*!< Array of atoms. */
   size_t n_atoms;       /*!< The total number of atoms in the lattice model */
   size_t allocated_atoms; /*!< The total number of atoms allocated in memory */
@@ -128,8 +132,8 @@ int lattice_set_output_filename(lattice *lat, const char *filename);
 int lattice_set_script(lattice *lat, const char *script);
 void lattice_free(lattice *lat);
 void lattice_free_atom_list(lattice *lat);
-void lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3, 
-                  coord *nor, coord *bas, char *bas_name, size_t *n_bas);
+int lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
+                 coord *nor, coord *bas, char *bas_name, size_t *n_bas);
 int lattice_set_atom(lattice *lat, const atom *atom, size_t index);
 int lattice_set_atom_list(lattice *lat, const atom *atoms, size_t n_atoms);
 void lattice_printf(FILE *output, const lattice *lat);
@@ -150,7 +154,7 @@ const char *lattice_get_output_filename(const lattice *lat);
 size_t lattice_get_n_atoms(const lattice *lat);
 const atom *lattice_get_atom_list(const lattice *lat);
 atom *lattice_get_atom(const lattice *lat, size_t index);
-void lattice_atom_index_swap(const lattice *lat, size_t i, size_t j);
+void lattice_atom_index_swap(lattice *lat, size_t i, size_t j);
 
 coord *lattice_get_surface_normal(const lattice *lat, const coord *a1,
                                     const coord *a2, const coord *a3);

@@ -26,7 +26,7 @@
 int leed_ms ( mat *p_Tpp, mat *p_Rpm,
                leed_var *v_par,
                leed_layer * layer,
-               leed_beam_t * beams)
+               leed_beam * beams)
 
 /************************************************************************
 
@@ -55,7 +55,7 @@ int leed_ms ( mat *p_Tpp, mat *p_Rpm,
                      a_lat[3] = a1_y, a_lat[4] = a2_y;
               real rel_area: area of the unit cell relative to 1x1.
 
-   leed_beam_t * beams - (input) additional information about the k
+   leed_beam * beams - (input) additional information about the k
               vectors involved.
               Used: k_r, k_i: wave vectors,
                     set:      current beam set,

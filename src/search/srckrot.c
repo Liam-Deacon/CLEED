@@ -64,7 +64,7 @@
  * This condition is tested in this function for all pairs of atoms that
  * could qualify to be symmetry equivalent.
  *
- * \param[in,out] atoms pointer to \ref search_atom \c struct which contains
+ * \param[in,out] atoms pointer to #search_atom \c struct which contains
  * information about initial atom positions, types, etc. The function will
  * modify the following structure elements:
  *  - \c x
@@ -78,7 +78,7 @@
  *  - \c x, \c y, \c z (initial atom positions)
  *  - \c type (atom type)
  *
- * \param[in,out] search pointer \ref search \c struct containing information
+ * \param[in,out] search pointer #search \c struct containing information
  * about symmetries, etc. The function will update the structure element
  * \c n_par (number of parameters).
  *
@@ -90,7 +90,7 @@
  *  - \c mir_point (x,y of point in mirror plane)
  *  - \c mir_dir   (x,y of direction of mirror plane)
  *
- * \note The program exits with code \ref SR_SYMMETRY_ERROR if the number of
+ * \note The program exits with code #SR_SYMMETRY_ERROR if the number of
  * atoms do not match the specified degree of rotational symmetry
  *
  * \return number of parameters in search.

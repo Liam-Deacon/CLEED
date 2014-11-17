@@ -1,80 +1,99 @@
+/*********************************************************************
+ *                        REFINP.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   SU/17.04.91
+ *   GH/05.08.92
+ *   CS/11.08.93
+ *********************************************************************/
 
-/**************************************************************************<
-    >
-    >         File Name: refinp.c
-    >
->**************************************************************************/
+/*! \file
+ *
+ * Contains ref_inp() function for reading reference spot indices and positions.
+ */
 
 #include "mkiv.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
-char line_buffer[STRSZ];
  
-int ref_inp(int *naux, struct spot *aux, int verb)
-
-/***************************************************************************
-  SU/ 17.04.91
-  GH/ 05.08.92
-  CS/11.8.93    
-
- Purpose:
-  ref_inp reads the indices and positions of (at least 3) reflexes from
-  the standard input
-
- Input:
-  int verb - defines amount of output.
-
- Output:
-  int *naux - number of spots
-  struct spot *aux - indices and positions of spots
-
-***************************************************************************/
-
+/*!
+ * Reads the indices and positions of (at least 3) reflexes from standard input.
+ *
+ * \param[out] naux Pointer to number of reflexes in \p aux
+ * \param[out] aux Pointer to #mkiv_reflex array which stores the indices and
+ * positions of spots.
+ * \param verb Flag for verbosity level of output.
+ * \param[in] pos_file File path to *.pos file.
+ * 
+ * \return C style return code indication function success.
+ * \retval 0 if successful.
+ */
+int ref_inp(size_t *naux, mkiv_reflex *aux, int verb, const char *pos_file)
 {
-    int i;
-    FILE *in_out;
+  size_t i;
+  FILE *in_out;
+  char file_path[FILENAME_MAX] = "mkiv.pos";
+  char line_buffer[STRSZ];
 
-/**************************************************************************/
+  if (pos_file == NULL) strcpy(file_path, pos_file);
+  fprintf(stdout, "Enter number of spots for determination of basis "
+          "(max. 5):\n");
+  fprintf(stdout, "\t<num>:\tinput through terminal\n");
+  fprintf(stdout, "\tr:\tformer input will be read \n\t\tfrom file '%s'\n",
+         file_path);
+  fgets(line_buffer, STRSZ, stdin);
 
-    fprintf(stdout,"Enter number of spots for determination of basis (max. 5):\n");
-    fprintf(stdout,"\t<num>:\tinput through terminal\n");
-    fprintf(stdout,"\tr:\tformer input will be read \n\t\tfrom file 'mkiv.pos'\n");
-    fgets(line_buffer, STRSZ, stdin);
-
-    if ( verb&QUICK || ( !(verb&QUICK) && *line_buffer=='r' ) ) {
-        if ((in_out = fopen("mkiv.pos","r")) == NULL) {
-            ERR_EXIT(mkiv.pos: fopen for reading failed!)
-        }
-        else
-            fprintf(stdout, "Reading reference spot positions from 'mkiv.pos' \n");
-
-        fscanf(in_out, "%d\n", naux);
-        QQ printf("\t%3d reflexes:\n",*naux);
-        for (i=0; i<*naux; i++) {
-            fscanf(in_out, "%f %f\n",&(aux[i].lind1),&(aux[i].lind2) );
-            fscanf(in_out, "%f %f\n",&(aux[i].xx),&(aux[i].yy) );
-            QQ printf("\t(%4.2f,%4.2f) at\t(%3.0f,%3.0f)\n",
-                     aux[i].lind1,aux[i].lind2, aux[i].xx,aux[i].yy );
-        }
+  if ( verb&QUICK || ( !(verb&QUICK) && *line_buffer == 'r' ) )
+  {
+    if ((in_out = fopen(file_path, "r")) == NULL)
+    {
+      ERR_EXIT_X("(ref_inp): unable to read from file '%s'", file_path);
     }
-    else {
-        sscanf(line_buffer,"%d", naux);
-        if ((in_out = fopen("mkiv.pos","w")) == NULL)
-            ERR_EXIT("mkiv.pos: fopen for writing failed!");
-        fprintf(in_out, "%d\n", *naux);
-        for (i=0; i<*naux; i++) {
-            fprintf(stdout," Enter indices for one reflex:\n");
-            fscanf(stdin,"%f%f",&(aux[i].lind1),&(aux[i].lind2) );
-            fprintf(in_out, "%f %f\n",aux[i].lind1,aux[i].lind2 );
-            fprintf(stdout," Enter horizontal and vertical comp. of reflex position;\n");
-            scanf("%f%f",&(aux[i].xx),&(aux[i].yy) );
-            fprintf(in_out, "%f %f\n",aux[i].xx,aux[i].yy );
-        }
+    else
+    {
+      fprintf(stdout, "Reading reference spot positions from '%s'\n",
+              file_path);
     }
-    fclose(in_out);
-    
-    return 0;
+
+    fscanf(in_out, "%d\n", naux);
+    QQ printf("\t%3d reflexes:\n", *naux);
+    for (i=0; i < *naux; i++)
+    {
+      fscanf(in_out, "%f %f\n", &(aux[i].lind1), &(aux[i].lind2) );
+      fscanf(in_out, "%f %f\n", &(aux[i].xx), &(aux[i].yy) );
+      QQ printf("\t(%4.2f,%4.2f) at\t(%3.0f,%3.0f)\n",
+                aux[i].lind1, aux[i].lind2, aux[i].xx, aux[i].yy );
+    }
+  }
+  else
+  {
+    sscanf(line_buffer, "%d", naux);
+    if ((in_out = fopen(file_path, "w")) == NULL)
+    {
+      ERR_EXIT_X("(ref_inp): unable to '%s' for writing\n", file_path);
+    }
+    fprintf(in_out, "%d\n", *naux);
+    for (i=0; i < *naux; i++)
+    {
+      fprintf(stdout, " Enter indices for one reflex:\n");
+      fscanf(stdin, "%f%f", &(aux[i].lind1), &(aux[i].lind2) );
+      fprintf(in_out, "%f %f\n", aux[i].lind1, aux[i].lind2 );
+      fprintf(stdout, " Enter horizontal and vertical components "
+              "of reflex position;\n");
+      scanf("%f%f", &(aux[i].xx), &(aux[i].yy) );
+      fprintf(in_out, "%f %f\n", aux[i].xx, aux[i].yy );
+    }
+  }
+  fclose(in_out);
+
+  return(0);
 }
-/***************************************************************************/

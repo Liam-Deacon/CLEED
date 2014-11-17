@@ -30,10 +30,10 @@ extern "C" {
 #include <stdlib.h>
 
 /* function prototypes */
-void usage(FILE *output);
-void usage_sym(FILE *output);
-void info();
-void info_sym();
+void leed_usage(FILE *output);
+void leed_usage_sym(FILE *output);
+void leed_info();
+void leed_info_sym();
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

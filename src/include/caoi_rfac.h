@@ -66,11 +66,11 @@ include global values for multiple datasets
 size_t sa;	  /*!< global memory variable for number of aoi datasets */
 char proj_name[FILENAME_MAX]; /*!< global memory variable for storing
 													     * project name */
-/*! \fn
+/*!
  *  \brief
  *  \return integer value representing success (zero) or error (non-zero)
  *  code.
- *  \param char filectr
+ *  \param filectr File path or name for the control input.
  */
 int ctrinp(const char filectr[FILENAME_MAX]);
 

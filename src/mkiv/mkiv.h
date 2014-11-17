@@ -1,5 +1,23 @@
-#ifndef _mkiv_h_
-#define _mkiv_h_
+/*********************************************************************
+ *                             MKIV.H
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *********************************************************************/
+
+/*! \file
+ *
+ * Master include for the \c mkiv program.
+ */
+
+#ifndef _MKIV_H_
+#define _MKIV_H_
 
 #include <stdio.h>
 #include <math.h>
@@ -29,9 +47,5 @@
 
 /* image matrix using libtiff */
 #include <tiffio.h>
-
-void mkiv_usage(FILE *output);
-
-void mkiv_info();
 
 #endif

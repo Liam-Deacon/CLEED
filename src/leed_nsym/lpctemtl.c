@@ -103,7 +103,7 @@ mat Jl;                        /* Bessel function */
   backup original scattering factors
   and allocate output array 
 */
- tl_aux = matcop(tl_aux, tl_0);
+ tl_aux = matcopy(tl_aux, tl_0);
  tl_t =  matalloc(tl_t, l_max_t+1, 1, NUM_COMPLEX);
 
 /*

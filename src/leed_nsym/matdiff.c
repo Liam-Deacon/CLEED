@@ -1,125 +1,122 @@
 /*********************************************************************
-  GH/18.01.95
-  
-  real matdiff(mat M1, mat M2)
-  
-  Calculate the difference between two matrices
+ *                        MATDIFF.C
+ *
+ *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/18.01.95 - diagonal matrices are not implemented!
+ *********************************************************************/
 
-  Changes:
-  GH/18.01.95 - diagonal matrices are not implemented!
+/*! \file
+ *
+ * Implements matdiff() function to compute the difference between two matrices.
+ */
 
-*********************************************************************/
 #include <math.h>  
 #include <stdio.h>
 #include <stdlib.h>
 #include "mat.h"
 
-real matdiff(mat M1, mat M2)
-
-/* 
-  Calculate the difference between two matrices i.e. the sum of the
-  moduli of the difference between the matrix elements.
-
-  parameters:
-  M1,M2 - input matrices (must have the same dimensions)
-
-  RETURN VALUE:  
-  
-    difference
-    -1.         if failed (and EXIT_ON_ERROR is not defined)
-*/
-
+/*!
+ * Calculates the difference between two matrices, i.e. the sum of the moduli
+ * of the difference between the matrix elements of \p M1 and \p M2 .
+ *
+ * \param[in] M1 Pointer to first matrix for comparison.
+ * \param[in] M2 Pointer to second matrix for comparison.
+ * \return The sum of the moduli of the difference between the matrix elements.
+ * \retval -1. if function was unsuccessful.
+ */
+real matdiff(const mat M1, const mat M2)
 {
-real diff;
-real *ptr_1, *ptr_2, *ptr_end;
-long int nn;
+  real diff;
+  real *ptr_1, *ptr_2, *ptr_end;
+  long int nn;
   
-/********************************************************************* 
-  Check input matrix
-*********************************************************************/
+  /* Check input matrix */
+  
+  /* check validity of the input matrices M1 and M2 */
+  if ( (matcheck(M1) < 1) || (matcheck(M2) < 1) )
+  {
+    #ifdef ERROR
+    fprintf(STDERR, "*** error (matdiff): invalid input matrix\n");
+    #endif
 
-/* check validity of the input matrices M1 and M2 */
- if ( (matcheck(M1) < 1) || (matcheck(M2) < 1) )
- {
-#ifdef ERROR
-   fprintf(STDERR," *** error (matdiff): invalid input matrix\n");
-#endif
-#ifdef EXIT_ON_ERROR
-   exit(1);
-#else
-   return(-1.);
-#endif
- }
+    #ifdef EXIT_ON_ERROR
+    exit(1);
+    #else
+    return(-1.);
+    #endif
+  }
 
- if ((M1->cols != M2->cols) || (M1->rows != M2->rows) )
- {
-#ifdef ERROR
-   fprintf(STDERR," *** error (matdiff): matrix dimensions do not match\n");
-#endif
-#ifdef EXIT_ON_ERROR
-   exit(1);
-#else
-   return(-1.);
-#endif
- }
+  if ((M1->cols != M2->cols) || (M1->rows != M2->rows) )
+  {
+    #ifdef ERROR
+    fprintf(STDERR, "*** error (matdiff): matrix dimensions do not match\n");
+    #endif
 
-/********************************************************************* 
-  Calculate difference for valid matrix types
-*********************************************************************/
+    #ifdef EXIT_ON_ERROR
+    exit(1);
+    #else
+    return(-1.);
+    #endif
+  }
 
- diff = 0.;
+  /* Calculate difference for valid matrix types */
+  diff = 0.;
 
- if ( ( (M1->mat_type == MAT_NORMAL) || (M1->mat_type == MAT_SQUARE) ) &&
-      ( (M1->mat_type == MAT_NORMAL) || (M1->mat_type == MAT_SQUARE) ) )
- {
-   nn = M1->cols * M1->cols;
-   switch(M1->num_type)
-   {
-     case(NUM_REAL):
-     {
-       for (ptr_1 = M1->rel + 1, ptr_2 = M2->rel + 1, ptr_end = M1->rel + nn;
-            ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
-       {
-         diff += R_fabs(*ptr_1 - *ptr_2);
-       } 
-       break;
-     } /* case REAL */
+  if ( ( (M1->mat_type == MAT_NORMAL) || (M1->mat_type == MAT_SQUARE) ) &&
+       ( (M1->mat_type == MAT_NORMAL) || (M1->mat_type == MAT_SQUARE) ) )
+  {
+    nn = M1->cols * M1->cols;
+    switch(M1->num_type)
+    {
+      case(NUM_REAL):
+      {
+        for (ptr_1 = M1->rel + 1, ptr_2 = M2->rel + 1, ptr_end = M1->rel + nn;
+             ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
+        {
+          diff += R_fabs(*ptr_1 - *ptr_2);
+        }
+        break;
+      } /* case REAL */
 
-     case(NUM_COMPLEX):
-     {
-     /* first calculate diffrerence of real part */
-       for (ptr_1 = M1->rel + 1, ptr_2 = M2->rel + 1, ptr_end = M1->rel + nn;
-            ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
-       {
-         diff += R_fabs(*ptr_1 - *ptr_2);
-       }
+      case(NUM_COMPLEX):
+      {
+        /* first calculate difference of real part */
+        for (ptr_1 = M1->rel + 1, ptr_2 = M2->rel + 1, ptr_end = M1->rel + nn;
+             ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
+        {
+          diff += R_fabs(*ptr_1 - *ptr_2);
+        }
 
-    /* add diffrerence of imaginary part */
-       for (ptr_1 = M1->iel + 1, ptr_2 = M2->iel + 1, ptr_end = M1->iel + nn;
-            ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
-       {
-         diff += R_fabs(*ptr_1 - *ptr_2);
-       }
-       break;
-     } /* case COMPLEX */
-   }  /* switch */
- }     /* matrix type is not diagonal */
- 
- else  /* one matrix is diagonal */
- {
+        /* add difference of imaginary part */
+        for (ptr_1 = M1->iel + 1, ptr_2 = M2->iel + 1, ptr_end = M1->iel + nn;
+             ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
+        {
+          diff += R_fabs(*ptr_1 - *ptr_2);
+        }
+        break;
+      } /* case COMPLEX */
+    } /* switch */
+  } /* matrix type is not diagonal */
+  else /* one matrix is diagonal */
+  {
+    /* diagonal matrices are not implemented! */
+    #ifdef ERROR
+    fprintf(STDERR, "*** error (matdiff): diagonal matrices not implemented\n");
+    #endif
 
-/********************************************************************* 
-  diagonal matrices are not implemented!
-*********************************************************************/
+    #ifdef EXIT_ON_ERROR
+    exit(1);
+    #else
+    return(-1.);
+    #endif
+  }
 
-#ifdef ERROR
-   fprintf(STDERR," *** error (matdiff): diagonal matrices not implemented\n");
-#endif
-#ifdef EXIT_ON_ERROR
-   exit(1);
-#else
-   return(-1.);
-#endif
- }
- return(diff);
-}  /* end of function matdiff */
+  return(diff);
+} /* end of function matdiff */

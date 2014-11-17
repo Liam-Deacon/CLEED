@@ -29,7 +29,7 @@
  * \brief Calculate R2-factor.
  *
  * Calculate R2-factor:
- * \f$ R_2 = \sqrt{ S(I_t - norm_te*I_e)^2 / {S * I_t^2} }
+ * \f$ R_2 = \sqrt{ S(I_t - norm_te*I_e)^2 / {S * I_t^2} } \f$
  *
  * \f$ norm_te = \sqrt( S|It|^2 / S|Ie|^2) \f$
  *
@@ -44,7 +44,7 @@
  * \note: \p eng must be terminated by #F_END_OF_LIST.
  *
  * \retval R2-factor if successful.
- * \retval \ref RFAC_FAILURE if failed.
+ * \retval #RFAC_FAILURE if failed.
  */
 real rf_r2(const real *eng, const real *e_int, const real *t_int)
 {

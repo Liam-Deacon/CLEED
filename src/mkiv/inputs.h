@@ -1,11 +1,11 @@
 
 /* readvar.h contains the input variable names for readinp.c */
 
-#ifndef _readinp_h_
-#define _readinp_h_
+#ifndef __READ_INP_H__
+#define __READ_INP_H__
 
-#define		INP_LEN		7	/* number of relevant characters */
-#define		INP_MAX		15	/* number of names */
+#define	INP_LEN		7	  /*! number of relevant characters */
+#define	INP_MAX		15	/*! number of names */
 
 const char INP[INP_MAX][20] = {
     "REF_NAME",
@@ -23,6 +23,6 @@ const char INP[INP_MAX][20] = {
     "NDOM",
     "DOMAIN",
     "NDESIRE",
-                   };
+};
 
-#endif
+#endif /* __READINP_H__ */

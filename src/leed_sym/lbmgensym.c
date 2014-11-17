@@ -44,9 +44,9 @@ WB/07.09.98 - bezug auf einheitlichen Winkel(zur 1.Ebene)
 #define GEO_TOLERANCE 0.001
 #endif
 
-int leed_beam_gen_sym(leed_beam_t ** p_beams, 
-               leed_cryst_t *b_par, 
-               leed_cryst_t *o_par,
+int leed_beam_gen_sym(leed_beam ** p_beams, 
+               leed_crystal *b_par, 
+               leed_crystal *o_par,
                leed_var *v_par, real eng_max)
 
 /************************************************************************
@@ -55,12 +55,12 @@ int leed_beam_gen_sym(leed_beam_t ** p_beams,
  
  INPUT:
 
-  leed_beam_t ** p_beams - (output) pointer to the list of beams to be 
+  leed_beam ** p_beams - (output) pointer to the list of beams to be 
                 included at the maximum energy (eng_max).
                 (for details see "leed_def.h").
-  leed_cryst_t *b_par - all necessary structural parameters (bulk, 
+  leed_crystal *b_par - all necessary structural parameters (bulk, 
                 for details see "leed_def.h").
-  leed_cryst_t *o_par - all necessary structural parameters (overlayers,
+  leed_crystal *o_par - all necessary structural parameters (overlayers,
                 for details see "leed_def.h").
   leed_var *v_par - all necessary parameters that change during the 
                 energy loop (for details see "leed_def.h").
@@ -124,8 +124,8 @@ real equalset1, equalset2;
 real R_m[5];                           /* mirror -matrix*/
 real **R_n;                            /* Rot.-matrix */
 
-leed_beam_t *beams, beam_aux;
-leed_beam_t *bm_off;
+leed_beam *beams, beam_aux;
+leed_beam *bm_off;
 
 /**********************************************************************
   Some often used values:
@@ -182,9 +182,9 @@ fprintf(STDCTR,"(leed_beam_gen_sym): n1%d n2%d\n",n1,n2);
                     b_par->area * k_max_2 /n1);
 
  if (*p_beams == NULL)
-  *p_beams = (leed_beam_t *)calloc(iaux, sizeof(leed_beam_t));
+  *p_beams = (leed_beam *)calloc(iaux, sizeof(leed_beam));
  else
-  *p_beams = (leed_beam_t *)realloc(*p_beams, iaux*sizeof(leed_beam_t));
+  *p_beams = (leed_beam *)realloc(*p_beams, iaux*sizeof(leed_beam));
 
  if(*p_beams == NULL)
  {
@@ -215,7 +215,7 @@ fprintf(STDCTR,"(leed_beam_gen_sym): n1%d n2%d\n",n1,n2);
 **********************************************************************/
  
  n_set = (int) R_nint(b_par->rel_area_sup);
- bm_off = (leed_beam_t *)calloc(n_set, sizeof(leed_beam_t));
+ bm_off = (leed_beam *)calloc(n_set, sizeof(leed_beam));
 
  (bm_off+0)->ind_1 = 0.;
  (bm_off+0)->ind_2 = 0.;
@@ -452,7 +452,7 @@ needed in the routines bravelsym and complsym
       }
 #endif
       if( i_set > j_set )
-      { memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam_t) ); }
+      { memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam) ); }
       j_set ++;
      }
     } /* for i_set */
@@ -769,9 +769,9 @@ needed in the routines bravelsym and complsym
       {
        if((beams + n2)->k_par < (beams + n1)->k_par )
        {
-        memcpy( & beam_aux, beams + n2, sizeof(leed_beam_t) );
-        memcpy( beams + n2, beams + n1, sizeof(leed_beam_t) );
-        memcpy( beams + n1, & beam_aux, sizeof(leed_beam_t) );
+        memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+        memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+        memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
        }
       } /* n2 */
      }  /* n1 */
@@ -787,16 +787,16 @@ needed in the routines bravelsym and complsym
       {
        if((beams + n2)->ind_1 < (beams + n1)->ind_1 )
        {
-        memcpy( & beam_aux, beams + n2, sizeof(leed_beam_t) );
-        memcpy( beams + n2, beams + n1, sizeof(leed_beam_t) );
-        memcpy( beams + n1, & beam_aux, sizeof(leed_beam_t) );
+        memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+        memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+        memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
        }
        if( IS_EQUAL_REAL((beams + n2)->ind_1, (beams + n1)->ind_1) &&
            ((beams + n2)->ind_2 < (beams + n1)->ind_2 )  )
        {
-        memcpy( & beam_aux, beams + n2, sizeof(leed_beam_t) );
-        memcpy( beams + n2, beams + n1, sizeof(leed_beam_t) );
-        memcpy( beams + n1, & beam_aux, sizeof(leed_beam_t) );
+        memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+        memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+        memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
        }
       } /* n2 */
      }  /* n1 */
@@ -1025,7 +1025,7 @@ needed in the routines bravelsym and complsym
       }
 #endif
       if( i_set > j_set )
-      { memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam_t) ); }
+      { memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam) ); }
       j_set ++;
      }
     } /* for i_set */
@@ -1422,9 +1422,9 @@ needed in the routines bravelsym and complsym
      {
       if((beams + n2)->k_par < (beams + n1)->k_par )
       {
-       memcpy( & beam_aux, beams + n2, sizeof(leed_beam_t) );
-       memcpy( beams + n2, beams + n1, sizeof(leed_beam_t) );
-       memcpy( beams + n1, & beam_aux, sizeof(leed_beam_t) );
+       memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+       memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+       memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
       }
      } /* n2 */
     }  /* n1 */
@@ -1440,16 +1440,16 @@ needed in the routines bravelsym and complsym
      {
       if((beams + n2)->ind_1 < (beams + n1)->ind_1 )
       {
-       memcpy( & beam_aux, beams + n2, sizeof(leed_beam_t) );
-       memcpy( beams + n2, beams + n1, sizeof(leed_beam_t) );
-       memcpy( beams + n1, & beam_aux, sizeof(leed_beam_t) );
+       memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+       memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+       memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
       }
       if( IS_EQUAL_REAL((beams + n2)->ind_1, (beams + n1)->ind_1 ) &&
           ((beams + n2)->ind_2 < (beams + n1)->ind_2 )  )
       {
-       memcpy( & beam_aux, beams + n2, sizeof(leed_beam_t) );
-       memcpy( beams + n2, beams + n1, sizeof(leed_beam_t) );
-       memcpy( beams + n1, & beam_aux, sizeof(leed_beam_t) );
+       memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+       memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+       memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
       }
      } /* n2 */
     }  /* n1 */

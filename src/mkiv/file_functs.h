@@ -1,23 +1,16 @@
-/**************************************************************************
-    
-             File Name: file_functs.h
-    
-**************************************************************************/
-
-#include <time.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <sys/stat.h>
-
-/************************************************************************ 
-   LD/02.03.14
-
-  Purpose:
-   provide simple cross-platform file functions to replace system calls.
-
-************************************************************************/
+/*********************************************************************
+ *                        FILE_FUNCTS.C
+ *
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/02.03.14 - creation
+ *********************************************************************/
 
 /* return timestamp in format YYYY-mm-dd_HHMM */
 const char *timestamp();

@@ -61,20 +61,28 @@ extern "C" {
  * printing verbosity
  *********************************************************************/
 
-#ifndef WARNING
-#define WARNING
-#endif
-
-#ifndef ERROR
-#define ERROR
-#endif
-
-#ifndef EXIT_ON_ERROR
-#define EXIT_ON_ERROR
-#endif
-
+/*! 
+ * \define EXIT_ON_ERROR
+ * \brief Exits program if error occurs.
+ *
+ * \define ERROR
+ * \brief Adds error messages to #STDERR output.
+ *
+ * \define WARNING
+ * \brief Adds warning messages to #STDWAR output.
+ *
+ * \define CONTROL
+ * \brief Adds control messages for debugging to #STDCTR
+ *
+ * \define CONTROL_ALL
+ * \brief Adds maximum level of control information for debugging.
+ */
+ 
 #ifdef DEBUG
-#define CONTROL_ALL
+#define CONTROL_ALL     /*!< Maximum verbosity for control output */
+#define EXIT_ON_ERROR   /*!< Exits program if error occurs. */
+#define ERROR           /*!< Enable error logging to stderr */
+#define WARNING         /*!< Enable warning logging to #STDWAR */
 #endif
 
 #ifdef CONTROL_ALL
@@ -86,6 +94,15 @@ extern "C" {
 #define CONTROL_LSUM
 #define CONTROL_MATB
 #define CONTROL_ALL       /*!< The most verbose mode - includes all others */
+#endif
+
+#if VERBOSE == 1
+#  ifndef WARNING 1
+#  define WARNING 1
+#  endif /* WARNING */
+#  ifndef ERROR 1
+#  define ERROR 1
+#  endif /* ERROR */
 #endif
 
 /*********************************************************************

@@ -2,7 +2,7 @@
   GH/18.07.95 
   file contains function:
 
-  leed_par_mktl(mat *p_tl, leed_phs_t *phs_shifts, int l_max, real energy)
+  leed_par_mktl(mat *p_tl, leed_phase *phs_shifts, int l_max, real energy)
 
  Calculate atomic scattering factors for a given energy.
 
@@ -21,7 +21,7 @@ GH/18.07.95 - temperature dependent phase shifts.
 #include "leed.h"
 
 
-mat * leed_par_mktl(mat *p_tl, leed_phs_t *phs_shifts, int l_max, real energy)
+mat * leed_par_mktl(mat *p_tl, leed_phase *phs_shifts, int l_max, real energy)
 
 /************************************************************************
 
@@ -33,7 +33,7 @@ mat * leed_par_mktl(mat *p_tl, leed_phs_t *phs_shifts, int l_max, real energy)
   mat *p_tl - (input) Array of scattering factor matrices. The function 
            returns its first argument. If tl is NULL, the structure will 
            be created.
-  leed_phs_t *phs_shifts  -  phase shifts.
+  leed_phase *phs_shifts  -  phase shifts.
   real energy - new energy (real part)
 
  RETURN VALUES:
@@ -52,7 +52,7 @@ int i_eng, iaux;
 
 real delta;
 real faux_r, faux_i;
-leed_phs_t *ptr;
+leed_phase *ptr;
 
 /*********************************************************
    Search through list "phs_shifts". 

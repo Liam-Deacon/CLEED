@@ -1,4 +1,4 @@
-/************************************************************************
+/*********************************************************************
  *                           LATT.H
  *
  *  Copyright 2006-2014 Georg Held <g.held@reading.ac.uk>
@@ -13,7 +13,7 @@
  *   LD/29.04.14 - Creation; header info taken from for latt.c
  *               - Added LATT* defines for program information and
  *                 ARG* macros for CLI argument evaluation.
- ************************************************************************/
+ *********************************************************************/
 
 /*!
  * \file
@@ -22,6 +22,10 @@
 
 #ifndef LATT_H
 #define LATT_H
+
+#ifdef __cplusplus__ /* allow C functions if using a C++ compiler */
+extern C {
+#endif
 
 /* includes */
 #include <stdio.h>
@@ -189,5 +193,12 @@ else                                                                        \
 
 
 #endif /* DEBUG */
-                                        
+
+/* function prototypes */
+int latt_main(int argc, char *argv[]); /* entry point for latt */
+
+#ifdef __cplusplus__ /* allow C functions if using a C++ compiler */
+} /* extern C */
+#endif
+
 #endif /* _LATT_H */

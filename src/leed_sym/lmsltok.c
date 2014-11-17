@@ -23,7 +23,7 @@
 /*======================================================================*/
 
 mat ms_ltok ( mat Mkk, mat Mlm, mat Ylm, mat Yxlm, 
-              leed_beam_t * beams, real rel_area, real unsc)
+              leed_beam * beams, real rel_area, real unsc)
 
 /************************************************************************
  
@@ -51,7 +51,7 @@ mat ms_ltok ( mat Mkk, mat Mlm, mat Ylm, mat Yxlm,
               conjugate transposed matrix from the opposite transformation
               using ms_ytoyx.
 
-   leed_beam_t * beams - additional information about the k vectors 
+   leed_beam * beams - additional information about the k vectors 
               involvedi (in this case: (A kz)^-1).
               The order of beams must be equal to the first dimension of
               Ykl (not checked).

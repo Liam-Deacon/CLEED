@@ -1,3 +1,19 @@
+/*********************************************************************
+ *                       PATT_DEFAULTS.C
+ *
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *********************************************************************/
+
+/*! \file
+ *
+ * Provides defaults for the structs used in the \c patt program.
+ */
+
 #include "patt.h"
 #include <stdbool.h>
 

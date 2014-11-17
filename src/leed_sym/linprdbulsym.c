@@ -57,8 +57,8 @@ GH/29.09.00 - calculate dr2 for dmt input in function leed_inp_debye_temp
 
 /********************************************************************/
 
-int leed_inp_read_bul_sym(leed_cryst_t **p_bulk_par, 
-                leed_phs_t **p_phs_shifts,
+int leed_inp_read_bul_sym(leed_crystal **p_bulk_par, 
+                leed_phase **p_phs_shifts,
                 char *filename)
 /*********************************************************************
   Read all the bulk parameters that do not change during a search
@@ -109,7 +109,7 @@ real faux;                    /* dummy variable */
 real a1[4], a2[4], a3[4];     /* vectors: 1=x, 2=y, 3=z, 0 is not used */
 real vaux[4];                 /* dummy vector */
 
-leed_cryst_t *bulk_par;   /* use *bulk_par instead of the pointer 
+leed_crystal *bulk_par;   /* use *bulk_par instead of the pointer 
                                  p_bulk_par */
 
 leed_atom atom_aux;     /* used for sorting atoms */
@@ -124,7 +124,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  bulk_par = NULL;
  if (*p_bulk_par == NULL) 
    bulk_par = *p_bulk_par = 
-                (leed_cryst_t *)malloc( sizeof(leed_cryst_t) );
+                (leed_crystal *)malloc( sizeof(leed_crystal) );
 
 /********************************************************************
   Preset parameters

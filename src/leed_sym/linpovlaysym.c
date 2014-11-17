@@ -22,7 +22,7 @@ Creation:
 #define MIN_DIST 2.0
 #endif
 
-int leed_inp_overlayer_sym(leed_cryst_t *par,leed_atom * atom_list) 
+int leed_inp_overlayer_sym(leed_crystal *par,leed_atom * atom_list) 
 
 /************************************************************************
 
@@ -33,7 +33,7 @@ int leed_inp_overlayer_sym(leed_cryst_t *par,leed_atom * atom_list)
  
  INPUT PARAMETERS:
 
- leed_cryst_t *par (input, output)
+ leed_crystal *par (input, output)
      structure that contains all geometrical and nongeometrical 
      parameters of the overlayer except atom positions and types.
      Output will be written to structure element layers.

@@ -1,5 +1,5 @@
 /*********************************************************************
- *                       PATT_COLORS.C
+ *                       PATT_DRAW_CAIRO.C
  *
  *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
  *

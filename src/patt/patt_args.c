@@ -1,3 +1,23 @@
+/*********************************************************************
+ *                           PATT_ARGS.C
+ *
+ *  COpyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/2014.08.23 - split from patt.c
+ *********************************************************************/
+
+/*! \file
+ *
+ * Parses command line arguments for the \c patt program.
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <strings.h>
@@ -6,12 +26,27 @@
 #include "patt.h"
 #include "pattern.h"
 
+/*!
+ * Initializes \p drawing for the LEED pattern to the specified command line
+ * arguments.
+ *
+ * \param argc Number of command line arguments in \p argv
+ * \param[in] argv Array of command line argument strings to parse.
+ * \param[in,out] drawing
+ * \return #patt_error
+ * \retval #PATT_SUCCESS on successful completion.
+ * \note Exits with a #patt_error code other than #PATT_SUCCESS if errors occur.
+ */
 int patt_args(int argc, char *argv[], patt_drawing *drawing)
 {
 
   int i_arg, ii, jj;
   FILE *f;
 
+  if (drawing == NULL)
+  {
+    ;//if ((drawing = patt_drawing_init()) == NULL) exit(PATT_ALLOC_ERROR);
+  }
   drawing->std_in = true;
   drawing->std_out = true;
 

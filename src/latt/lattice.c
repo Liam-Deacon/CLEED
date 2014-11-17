@@ -27,7 +27,7 @@
 /*!
  * Prints member values of #lattice instance \p lat
  *
- * \param lat
+ * \param[in] lat Pointer to #lattice object to print debugging information.
  */
 void lattice_debug(const lattice *lat)
 {
@@ -48,7 +48,7 @@ void lattice_debug(const lattice *lat)
  * Write list of atoms to output file.
  *
  * \param output file pointer to print output into.
- * \param lat
+ * \param[in] lat Pointer to #lattice object.
  */
 void lattice_printf(FILE *output, const lattice *lat)
 {
@@ -99,7 +99,7 @@ void lattice_printf(FILE *output, const lattice *lat)
  * Allocates memory for a #lattice instance with \p n_atoms
  *
  * \param n_atoms number of atoms to allocate.
- * \return pointer to #lattice instance.
+ * \return Pointer to #lattice instance.
  * \retval \c NULL if memory cannot be allocated.
  */
 lattice *lattice_alloc(size_t n_atoms)
@@ -128,7 +128,7 @@ lattice *lattice_alloc(size_t n_atoms)
  * sensible default values.
  *
  * \param n_atoms number of atoms to allocate.
- * \return pointer to #lattice instance.
+ * \return Pointer to initialized #lattice instance.
  * \retval \c NULL if memory cannot be allocated.
  */
 lattice *lattice_init(size_t n_atoms)
@@ -171,7 +171,7 @@ lattice *lattice_init(size_t n_atoms)
  * Performs reallocation of memory for #lattice instance \p lat and changes
  * the amount of memory to the value given by \p size
  *
- * \param lat #lattice \c struct to reallocate memory for.
+ * \param[in,out] lat Pointer to #lattice \c struct to reallocate memory for.
  * \param size total number of atoms allowed in model.
  * \return integer representing success.
  * \retval #LATTICE_ALLOC_FAILURE if memory cannot be reallocated.
@@ -220,7 +220,7 @@ void lattice_free(lattice *lat)
 /*!
  * Frees array of #atom list from memory.
  *
- * \param lat pointer to #lattice object containing #atom list.
+ * \param lat Pointer to #lattice object containing #atom list.
  */
 void lattice_free_atom_list(lattice *lat)
 {
@@ -235,10 +235,10 @@ void lattice_free_atom_list(lattice *lat)
 /*!
  * Assigns atom[@p index] of \p lat to the values held within \p atom.
  *
- * \param lat pointer to #lattice object with array of atoms.
- * \param atom atom to use as source to copy information from.
- * \param index index within @lattice::atoms to write into.
- * \return integer signifying function success.
+ * \param lat Pointer to #lattice object with array of atoms.
+ * \param atom Pointer to #atom to use as source to copy information from.
+ * \param index Index within @lattice::atoms to write into.
+ * \return C style return code indicating function success.
  * \retval #LATTICE_ATOM_INDEX_OUT_OF_RANGE if \p index is greater than
  * @lattice::allocated_atoms
  * \retval #LATTICE_SUCCESS on successful completion.
@@ -263,10 +263,10 @@ int lattice_set_atom(lattice *lat, const atom *atom, size_t index)
 /*!
  * Assigns an array of #atom to @lattice::atoms within \p lat
  *
- * \param lat #lattice destination object to copy into.
- * \param atoms #atom source array to copy from.
- * \param n_atoms number of atoms held in \p atoms
- * \return integer value representing function success.
+ * \param[in,out] lat Pointer to #lattice destination object to copy into.
+ * \param[in] atoms Pointer to #atom source array to copy from.
+ * \param n_atoms Number of atoms held in \p atoms
+ * \return C style return code indicating function success.
  * \retval #LATTICE_SUCCESS on successful completion.
  * \retval #LATTICE_ALLOC_FAILURE if memory cannot be (re)allocated to
  * @lattice::atoms .
@@ -310,15 +310,17 @@ int lattice_set_atom_list(lattice *lat, const atom *atoms, size_t n_atoms)
 /*!
  * Assigns \p filename string to @lattice::input_filename of \p lat
  *
- * \param lat destination of \p filename copy.
- * \param filename source filename string to copy from.
- * \return integer value representing function success.
+ * \param[in,out] lat Pointer to destination of \p filename copy.
+ * \param filename Source filename string to copy from.
+ * \return C style return code indicating function success.
  * \retval #LATTICE_SUCCESS on successful completion.
+ * \retval #LATTICE_ALLOC_FAILURE if \p lat is \c NULL .
  * \retval #LATTICE_STRING_ALLOC_FAILURE if @lattice::input_filename of
  * \p lat is \c NULL after operation (signifies memory could not be allocated).
  */
 int lattice_set_input_filename(lattice *lat, const char *filename)
 {
+  if (lat == NULL) return(LATTICE_ALLOC_FAILURE);
   if (lat->input_filename == NULL)
   {
     lat->input_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
@@ -330,17 +332,19 @@ int lattice_set_input_filename(lattice *lat, const char *filename)
 
 
 /*!
- * Assigns script string to \p lat
+ * Assigns script string to @lattice::script member of \p lat .
  *
- * \param lat
+ * \param[in,out] lat Pointer to #lattice instance to modify.
  * \param script source script to copy from.
- * \return integer representing function success.
+ * \return C style return code indicating function success.
  * \retval #LATTICE_SUCCESS on successful completion.
+ * \retval #LATTICE_ALLOC_FAILURE if \p lat is \c NULL .
  * \retval #LATTICE_STRING_ALLOC_FAILURE if @lattice::script points to
  * \c NULL after operation and indicates memory could not be (re)allocated.
  */
 int lattice_set_script(lattice *lat, const char *script)
 {
+  if (lat == NULL) return(LATTICE_ALLOC_FAILURE);
   if (lat->script == NULL)
   {
     lat->script = (char*) malloc(sizeof(char) * STRSZ * STRSZ);
@@ -351,18 +355,20 @@ int lattice_set_script(lattice *lat, const char *script)
 }
 
 /*!
- * Assigns output \p filename to @lattice::output_filename of \p lat
+ * Assigns output \p filename to @lattice::output_filename member of \p lat
  *
- * \param lat destination #lattice object to copy into.
- * \param filename source filename string to copy from.
- * \return integer indicating function success.
+ * \param[in,out] lat Pointer to destination #lattice object to modify.
+ * \param filename Source filename string to copy from.
+ * \return C style return code indicating function success.
  * \retval #LATTICE_SUCCESS on successful completion.
+ * \retval #LATTICE_ALLOC_FAILURE if \p lat is \c NULL .
  * \retval #LATTICE_STRING_ALLOC_FAILURE if @lattice::output_filename of
  * \p lat is \c NULL after operation, indicating that memory could not be
  * (re)allocated.
  */
 int lattice_set_output_filename(lattice *lat, const char *filename)
 {
+  if (lat == NULL) return(LATTICE_ALLOC_FAILURE);
   if (lat->output_filename == NULL)
   {
     lat->output_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
@@ -372,93 +378,194 @@ int lattice_set_output_filename(lattice *lat, const char *filename)
   return (LATTICE_SUCCESS);
 }
 
- double lattice_get_a(const lattice *lat)
+/*!
+ * Returns the @lattice::a_latt of \p lat
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return \f$ a \f$ lattice constant
+ */
+double lattice_get_a(const lattice *lat)
 {
   return (lat->a_latt);
 }
 
- double lattice_get_b(const lattice *lat)
+/*!
+ * Returns the @lattice::b_latt of \p lat
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return \f$ b \f$ lattice constant
+ */
+double lattice_get_b(const lattice *lat)
 {
   return (lat->b_latt);
 }
 
- double lattice_get_c(const lattice *lat)
+/*!
+ * Returns the @lattice::c_latt of \p lat
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return \f$ c \f$ lattice constant
+ */
+double lattice_get_c(const lattice *lat)
 {
   return (lat->c_latt);
 }
 
- double lattice_get_max_disp(const lattice *lat)
+/*!
+ * Returns the maximum lateral displacement allowed for \p lat when
+ * creating a lattice of atoms.
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return Maximum allowed lateral displacement.
+ */
+double lattice_get_max_disp(const lattice *lat)
 {
   return (lat->max_disp);
 }
 
- double lattice_get_max_disp_z(const lattice *lat)
+/*!
+ * Returns the maximum vertical displacement allowed for \p lat when
+ * creating a lattice of atoms.
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return Maximum allowed vertical displacement.
+ */
+double lattice_get_max_disp_z(const lattice *lat)
 {
   return (lat->max_disp_z);
 }
 
- size_t lattice_get_max_layers(const lattice *lat)
+/*!
+ * Returns the maximum allowed number of layers for \p lat when
+ * creating a lattice of atoms.
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return Maximum allowed number of layers.
+ */
+size_t lattice_get_max_layers(const lattice *lat)
 {
   return (lat->max_layers);
 }
 
- size_t lattice_get_max_cells(const lattice *lat)
+/*!
+ * Returns the maximum allowed number of lateral unit cells for \p lat
+ * when creating a lattice of atoms.
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return Maximum allowed number of lateral unit cells.
+ */
+size_t lattice_get_max_cells(const lattice *lat)
 {
   return (lat->max_cells);
 }
 
- double lattice_get_h(const lattice *lat)
+/*!
+ * Returns the Miller index \f$ h \f$ of \p lat .
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return \f$ h \f$ Miller index.
+ */
+double lattice_get_h(const lattice *lat)
 {
   return (lat->vec_h);
 }
 
- double lattice_get_k(const lattice *lat)
+/*!
+ * Returns the Miller index \f$ k \f$ of \p lat .
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return \f$ k \f$ Miller index.
+ */
+double lattice_get_k(const lattice *lat)
 {
   return (lat->vec_k);
 }
 
- double lattice_get_l(const lattice *lat)
+/*!
+ * Returns the Miller index \f$ l \f$ of \p lat .
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return \f$ l \f$ Miller index.
+ */
+double lattice_get_l(const lattice *lat)
 {
   return (lat->vec_l);
 }
 
- const char *lattice_get_input_filename(const lattice *lat)
+/*!
+ * Returns the filename of the input file for \p lat
+ *
+ * @param[in] lat Pointer to #lattice structure holding filename.
+ * @return String of input filename or path.
+ */
+const char *lattice_get_input_filename(const lattice *lat)
 {  
   const char *filename = (const char*) lat->input_filename;
   return (filename);
 }
 
- const char *lattice_get_output_filename(const lattice *lat)
+/*!
+ * Returns the filename of the output file for \p lat
+ *
+ * @param[in] lat Pointer to #lattice structure holding filename.
+ * @return String of output filename or path.
+ */
+const char *lattice_get_output_filename(const lattice *lat)
 {
   const char *filename = (const char*) lat->output_filename;
   return (filename);
 }
 
- size_t lattice_get_n_atoms(const lattice *lat)
+/*!
+ * Returns the number of atoms in the @lattice::atoms array of \p lat
+ *
+ * @param[in] lat Pointer to #lattice structure.
+ * @return Number of atoms in structure.
+ */
+size_t lattice_get_n_atoms(const lattice *lat)
 {
   return (lat->n_atoms);
 }
 
+/*!
+ * Returns the #atom at the given \p index of \p lat
+ *
+ * \param[in] lat Pointer to #lattice instance.
+ * \param index Index of atom in @lattice::atoms array of \p lat .
+ * \return
+ * \retval \c NULL if memory could not be allocated, \p index is too large
+ * or \p lat is \c NULL .
+ */
 atom *lattice_get_atom(const lattice *lat, size_t index)
 {
-  atom *_atom = (atom*) malloc(sizeof(atom));
+  atom *an_atom = NULL;
+
+  if (lat == NULL) return(NULL);
+
+  if ((an_atom = (atom*) malloc(sizeof(atom))) == NULL) return(NULL);
+
+  if (index >= lat->n_atoms) return(NULL);
   
-  if (index >= lat->n_atoms) return NULL;
-  
-  _atom->x = lat->atoms[index].x;
-  _atom->x = lat->atoms[index].y;
-  _atom->x = lat->atoms[index].z;
+  an_atom->x = lat->atoms[index].x;
+  an_atom->x = lat->atoms[index].y;
+  an_atom->x = lat->atoms[index].z;
   if (strlen(lat->atoms[index].element) > 0)
   {
-    _atom->element = (char*) malloc(sizeof(char) *
+    an_atom->element = (char*) malloc(sizeof(char) *
                                 strlen(lat->atoms[index].element));
-    strcpy(_atom->element, lat->atoms[index].element);
+    strcpy(an_atom->element, lat->atoms[index].element);
   }
   
-  return(_atom);
+  return(an_atom);
 }
 
- const atom *lattice_get_atom_list(const lattice *lat)
+/*!
+ * Returns a list of atoms from \p lat .
+ *
+ * \param[in] lat Pointer to #lattice instance.
+ * \return Pointer to a list of #atom objects.
+ */
+const atom *lattice_get_atom_list(const lattice *lat)
 {
   const atom *atoms = (const atom*) lat->atoms;
   return (atoms);
@@ -468,11 +575,11 @@ atom *lattice_get_atom(const lattice *lat, size_t index)
  * Swaps #atom object at index \p i with that at index \p j within
  * @lattice::atoms of \p lat
  *
- * \param lat object containing #atom array.
- * \param i first index to swap.
- * \param j second index to swap.
+ * \param[in,out] lat Pointer to #lattice object containing #atom array.
+ * \param i First index to swap.
+ * \param j Second index to swap.
  */
-void lattice_atom_index_swap(const lattice *lat, size_t i, size_t j)
+void lattice_atom_index_swap(lattice *lat, size_t i, size_t j)
 {
   atom *temp_atom = (atom*) malloc(sizeof(atom));
   temp_atom->element = (char*) malloc(sizeof(char) * NAMSZ);  
@@ -499,14 +606,15 @@ void lattice_atom_index_swap(const lattice *lat, size_t i, size_t j)
  * Calculates the surface normal vector to (hkl) specified in \p lat
  * and \p a1 , \p a2 and \p a3 .
  *
- * \param lat
- * \param a1
- * \param a2
- * \param a3
- * \return
+ * \param[in] lat Pointer to #lattice object.
+ * \param[in] a1 Pointer to first basis vector.
+ * \param[in] a2 Pointer to second basis vector.
+ * \param[in] a3 Pointer to third basis vector.
+ * \return #coord object representing the surface normal vector.
+ * \retval \c NULL if function is unsuccessful.
  */
 coord *lattice_get_surface_normal(const lattice *lat, const coord *a1,
-                                    const coord *a2, const coord *a3)
+                                  const coord *a2, const coord *a3)
 {
   double h = lat->vec_h;
   double k = lat->vec_k;
@@ -557,8 +665,20 @@ coord *lattice_get_surface_normal(const lattice *lat, const coord *a1,
   return (normal);
 }
 
-void lattice_setup(lattice *lat, coord *a1, coord *a2, 
-        coord *a3, coord *nor, coord *bas, char *bas_name, size_t *n_bas)
+/*!
+ * Sets up the lattice according to #latt_type of \p lat
+ *
+ * \param[in,out] lat Pointer to #lattice instance.
+ * \param[out] a1 Pointer to first basis vector.
+ * \param[out] a2 Pointer to second basis vector.
+ * \param[out] a3 Pointer to third basis vector.
+ * \param[out] nor Pointer to surface normal vector.
+ * \param[out] bas Array of #coord representing the lattice site for each atom.
+ * \param[out] bas_name String of atom names occurring every #STRSZ characters.
+ * \param n_bas Number of atoms in \p bas and \p bas_name .
+ */
+void lattice_setup(lattice *lat, coord *a1, coord *a2, coord *a3,
+                   coord *nor, coord *bas, char *bas_name, size_t *n_bas)
 {
   
   *n_bas = 1;
@@ -570,12 +690,9 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2,
   
   if(lat->latt_type == LAT_FCC)
   {
+    /* LAT_FCC: face-center cubic structure*/
 
-    /********************************************************
-                            LAT_FCC 
-    ********************************************************/
-
-	strncpy(bas_name, lat->atoms[0].element, NAMSZ);
+    strncpy(bas_name, lat->atoms[0].element, NAMSZ);
 
     coord_set(a1, 0.5 * a, 0.0, 0.5 * a);
     coord_set(a2, 0.5 * a,0.5 * a, 0.0);
@@ -583,16 +700,14 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2,
     
     lat->a_nn = a / sqrt(2.);
 
-    /*** Find surface normal ***/
+    /* Find surface normal */
     coord_set(nor, h * a, k * a, l * a);
 
   } /* if fcc */
 
   else if(lat->latt_type == LAT_HCP)
   {
-    /********************************************************
-                        LAT_HCP 
-    ********************************************************/
+    /* LAT_HCP: hexagonal close-packed structure */
 
     *n_bas = 2;
     realloc((coord*) bas, sizeof(coord) * (*n_bas));
@@ -619,16 +734,15 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2,
 
     lat->a_nn = a;
 
-    /*** Find surface normal ***/
+    /* Find surface normal */
     coord_set(nor, sqrt(0.75) * c * (k + h), 0.5 * c * (k - h), sqrt(0.75) * a * l);
  
   } /* if hcp */
 
   else if(lat->latt_type == LAT_BCC)
   {
-    /********************************************************
-        LAT_BCC
-    ********************************************************/
+    /* LAT_BCC: body center cubic structure */
+
     strncpy (bas_name, lat->atoms[0].element, NAMSZ);
 
     coord_set(a1, a, 0., 0.);
@@ -644,9 +758,7 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2,
 
   else if(lat->latt_type == LAT_DIA)
   {
-    /********************************************************
-                        LAT_DIA
-    ********************************************************/
+    /* LAT_DIA: diamond structure */
 
     *n_bas = 2;
     realloc((coord*) bas, sizeof(coord) * (*n_bas));
@@ -675,10 +787,7 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2,
 
   else if(lat->latt_type == LAT_INP)
   {
-    /********************************************************
-               LAT_INP: external lattice input
-    ********************************************************/
-
+    /* LAT_INP: external lattice input */
     lattice_read(lat, a1, a2, a3, nor, bas, bas_name, &*n_bas);
     
     #if DEBUG > 0
@@ -687,9 +796,7 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2,
     
   } /* if LAT_INP */
 
-/********************************************************
- ELSE
-********************************************************/
+  /* ELSE : error*/
   else
   {
     fprintf(stderr, "*** error (lattice_setup): "
@@ -711,22 +818,54 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2,
 
 }
 
+/*!
+ * Returns the Miller indices of \p lat .
+ *
+ * \param[in] lat Pointer to #lattice instance.
+ * \return Pointer to #miller_hkl object containg Miller indices.
+ * \retval \c NULL if function was unsuccessful.
+ */
 miller_hkl *lattice_get_miller_hkl(const lattice *lat)
 {
   miller_hkl *hkl;
+
+  if (lat == NULL) return(NULL);
+
   if (! (hkl = (miller_hkl*) malloc(sizeof(miller_hkl))))
   {
-    return NULL;
+    return(NULL);
   }
   
   hkl->h = lat->vec_h;
   hkl->k = lat->vec_k;
   hkl->l = lat->vec_l;
   
-  return (hkl);
+  return(hkl);
 }
 
-void lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3, 
+/*!
+ * Reads all the parameters for #lattice \p lat from an input file.
+ *
+ * \param[in,out] lat Pointer to #lattice object.
+ * \param[in,out] a1 Pointer to first basis vector.
+ * \param[in,out] a2 Pointer to second basis vector.
+ * \param[in,out] a3 Pointer to third basis vector.
+ * \param[in,out] nor Pointer to surface normal vector.
+ * \param[in,out] bas Pointer to an array of atomic coordinates .
+ * \param bas_name String containing an array of atom names. Each name
+ * occurs at multiples #STRSZ
+ * \param n_bas Number of atoms in \p bas and \p bas_name .
+ *
+ * \return C style return code indicating function success.
+ * \retval #LATTICE_SUCCESS if function completes successfully.
+ * \retval #LATTICE_STRING_ALLOC_FAILURE if @lattice::input_filename member
+ * of \p lat is \c NULL (and #EXIT_ON_ERROR is not defined).
+ * \retval #LATTICE_ALLOC_FAILURE if \p bas is passed in as \c NULL .
+ *
+ * \note if \p a1 , \p a2 , \p a3 , \p nor or \p bas_name are \c NULL then
+ * memory will be allocated for them (not implemented).
+ */
+int lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
                   coord *nor, coord *bas, char *bas_name, size_t *n_bas)
 {
 
@@ -739,12 +878,13 @@ void lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
   char faux_name[NAMSZ];
   
   /* Translate basis vectors such that all z are < 0. */
+  if (bas == NULL) return(LATTICE_ALLOC_FAILURE);
   faux.x = bas[0].x;
   faux.y = bas[0].y;
   faux.z = bas[0].z;
   if (bas_name != NULL)
   {
-	strncpy(faux_name, bas_name, NAMSZ);
+    strncpy(faux_name, bas_name, NAMSZ);
   }
 
   fprintf(stderr, "%s -> %s\n", bas_name, faux_name);
@@ -755,7 +895,11 @@ void lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
     {
       fprintf(stderr, "*** error (lattice_read): open failed %s\n", 
               lat->input_filename);
+      #ifdef EXIT_ON_ERROR
       exit(1);
+      #else
+      return(LATTICE_STRING_ALLOC_FAILURE);
+      #endif
     }
     fprintf(inf_stream, "Read lattice input from file \"%s\" \n",
             lat->input_filename);
@@ -937,4 +1081,5 @@ void lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
   fprintf(stderr, "** debug (lattice_read): end of lattice_read\n");
   #endif
 
+  return(LATTICE_SUCCESS);
 }

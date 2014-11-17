@@ -134,7 +134,7 @@ extern "C" {
  *********************************************************************/
 
 /*!
- * \typedef search_method
+ * \enum search_method
  * \brief enumeration for search methodology.
  */
 typedef enum {
@@ -147,7 +147,7 @@ typedef enum {
 } search_method;
 
 /*!
- * \typedef search_error
+ * \enum search_error
  * \brief Indicates error code for function success.
  */
 typedef enum {
@@ -176,72 +176,77 @@ typedef enum {
 
 
 /*!
- * \struct sr_atom_str
+ * \struct search_atom
  *
- * This structure contains all properties of a single atom.
+ * This structure contains all properties of a single atom needed when
+ * performing a geometry search.
  */
 
-typedef struct sratom_str
+typedef struct search_atom
 {
-  int type;         /*!< type reference, terminator */
-  size_t ref;       /*!< reference to symmetry equivalent atom */
-  int n_ref;        /*!< number of equivalent atoms */
-  char name[STRSZ]; /*!< atomic symbol (reference to phase shifts) */
-  real r_min;       /*!< min. radius */
+  int type;         /*!< Type reference, terminator */
+  size_t ref;       /*!< Reference to symmetry equivalent atom */
+  size_t n_ref;     /*!< Number of equivalent atoms */
+  char name[STRSZ]; /*!< Atomic symbol (reference to phase shifts) */
+  real r_min;       /*!< Minimum radius e.g. the muffin tin radius MTR */
 
-  real x;           /*!< offset for x position */
-  real y;           /*!< offset for y position */
-  real z;           /*!< offset for z position */
-  real dr;          /*!< offset for thermal vibrations */
+  real x;           /*!< Offset for x position */
+  real y;           /*!< Offset for y position */
+  real z;           /*!< Offset for z position */
+  real dr;          /*!< Offset for thermal vibrations */
 
-  real *x_par;      /*!< coefficients used to determine shifts in x */
-  real *y_par;      /*!< coefficients used to determine shifts in y */
-  real *z_par;      /*!< coefficients used to determine shifts in z */
-  real *dr_par;     /*!< coefficients used to determine shifts in dr */
+  real *x_par;      /*!< Coefficients used to determine shifts in x */
+  real *y_par;      /*!< Coefficients used to determine shifts in y */
+  real *z_par;      /*!< Coefficients used to determine shifts in z */
+  real *dr_par;     /*!< Coefficients used to determine shifts in dr */
 
 } search_atom;
 
 /*!
+ * \struct search
+ *
  * Structure for containing all the parameters of a given search.
  */
-typedef struct search_str
+typedef struct search
 {
-  size_t n_par;       /*!< number of independent parameters */
+  size_t n_par;       /*!< Number of independent parameters */
 
   /* coordinate search: */
-  size_t n_par_geo;   /*!< number of geometrical parameters in search */
+  size_t n_par_geo;   /*!< Number of geometrical parameters in search */
 
-  real x_min;         /*!< minimum rel. x shift */
-  real y_min;         /*!< minimum rel. y shift */
-  real z_min;         /*!< minimum z value */
+  real x_min;         /*!< Minimum relative x shift */
+  real y_min;         /*!< Minimum relative y shift */
+  real z_min;         /*!< Minimum z value */
 
-  real x_max;         /*!< maximum rel. x shift */
-  real y_max;         /*!< maximum rel. y shift */
-  real z_max;         /*!< maximum z value */
+  real x_max;         /*!< Maximum relative x shift */
+  real y_max;         /*!< Maximum relative y shift */
+  real z_max;         /*!< Maximum z value */
 
-  real b_lat[5];      /*!< basis vectors of the real 2-dim unit cell
+  real b_lat[5];      /*!< Basis vectors of the real 2-dim unit cell
                        * stored as standard matrix \f$(b1,b2)\f$:
                        * \f[ b1_x = b_lat[1], b2_x = b_lat[2] \f]
                        * \f[ b1_y = b_lat[3], b2_y = b_lat[4] \f]
                        */
   /* angle search */
-  bool sr_angle;      /*!< flag for the angle search */
-  size_t i_par_theta; /*!< number of search parameter for theta */
-  size_t i_par_phi;   /*!< number of search parameter for phi */
-  real theta_0;       /*!< theta start value */
-  real phi_0;         /*!< phi start value */
+  bool sr_angle;      /*!< Flag for the angle search */
+  size_t i_par_theta; /*!< Number of search parameters for for \f$ \theta \f$
+                       * when using multiple data sets */
+  size_t i_par_phi;   /*!< Number of search parameters for \f$ \phi \f$ when
+                       * using multiple data sets */
+  real theta_0;       /*!< Start value for \f$ \theta \f$ when optimising */
+  real phi_0;         /*!< Start value for \f$ \phi \f$ when optimising */
 
 
   /* symmetries of search */
-  bool z_only;        /*!< xyz search or z search only */
-  size_t rot_deg;     /*!< degree of rot. symmetry */
-  real rot_axis[3];   /*!< rotational axis */
-  real mir_point[3];  /*!< point in mirror plane */
-  real mir_dir[3];    /*!< direction of mirror plane */
+  bool z_only;        /*!< \f$ (x,y,z) \f$ search or \f$ z \f$ only search */
+  size_t rot_deg;     /*!< Degree of rotational symmetry */
+  real rot_axis[3];   /*!< Rotational axis */
+  real mir_point[3];  /*!< Point in mirror plane */
+  real mir_dir[3];    /*!< Direction of mirror plane */
 
   /* R factor */
   char rf_type[16];   /*!< R factor type */
-  real rf_range;      /*!< shift range for R factor */
+  real rf_range;      /*!< Shift range for R factor */
 
 } search;
 

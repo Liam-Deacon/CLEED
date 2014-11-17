@@ -33,7 +33,7 @@ GH/07.07.03 - removed unused variables, make matrices non-static.
 int leed_ms_sym ( mat *p_Tpp, mat *p_Rpm,
                    leed_var *v_par,
                    leed_layer * layer,
-                   leed_beam_t * beams)
+                   leed_beam * beams)
 
 /************************************************************************
 
@@ -64,7 +64,7 @@ int leed_ms_sym ( mat *p_Tpp, mat *p_Rpm,
               real *eout_b/s: prefactors for outgoing beams:
               real *ein_b/s:  prefactors for incoming beams:
 
-   leed_beam_t * beams - (input) additional information about the k
+   leed_beam * beams - (input) additional information about the k
               vectors involved.
               Used: k_r, k_i: wave vectors,
                     set:      current beam set,

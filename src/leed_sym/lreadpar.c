@@ -38,23 +38,23 @@ GH/08.08.95 - Creation (copy from leed_write_par).
 
 /********************************************************************/
 
-int leed_read_par( leed_cryst_t ** p_bulk_par,
-              leed_phs_t   ** p_phs_shifts,
+int leed_read_par( leed_crystal ** p_bulk_par,
+              leed_phase   ** p_phs_shifts,
               leed_var   ** p_par,
               leed_energy   ** p_eng,
-              leed_beam_t  ** p_beams,
+              leed_beam  ** p_beams,
               FILE* file)
 /*********************************************************************
   Read all necessary program parameters from a file.
 
   INPUT:
 
-   leed_cryst_t ** p_bulk_par - (input) bulk parameters.
-   leed_phs_t   ** p_phs_shifts - (input) phase shifts.
+   leed_crystal ** p_bulk_par - (input) bulk parameters.
+   leed_phase   ** p_phs_shifts - (input) phase shifts.
    leed_var   ** p_par - (input) other parameters necessary to control
               the program.
    leed_energy   ** p_eng - (input) energy parameters.
-   leed_beam_t  ** p_beams - (input) all output beams used at the highest 
+   leed_beam  ** p_beams - (input) all output beams used at the highest 
               energy.
    FILE* file - (input) pointer to input file.
 
@@ -83,11 +83,11 @@ unsigned int number;
 
 unsigned int tot_size;
 
-leed_cryst_t *bulk_par;
-leed_phs_t   *phs_shifts;
+leed_crystal *bulk_par;
+leed_phase   *phs_shifts;
 leed_var   *par;
 leed_energy   *eng;
-leed_beam_t  *beams;
+leed_beam  *beams;
 
 /********************************************************************
   Set bulk_par, phs_shifts, par, eng, and beams to the values the
@@ -114,7 +114,7 @@ leed_beam_t  *beams;
 /* allocate memory for bulk_par */
  if( bulk_par == NULL)
  { 
-   if( ( bulk_par = (leed_cryst_t *) malloc( sizeof(leed_cryst_t) ))
+   if( ( bulk_par = (leed_crystal *) malloc( sizeof(leed_crystal) ))
        == NULL)
    {
      ERR_MESS0("*** error (leed_read_par): allocation error (bulk parameters)\n");
@@ -122,12 +122,12 @@ leed_beam_t  *beams;
  }
 
 /* read parameters */
- if( fread(bulk_par, sizeof(leed_cryst_t), 1, file) != 1 )
+ if( fread(bulk_par, sizeof(leed_crystal), 1, file) != 1 )
  {
    ERR_MESS0(
    "*** error (leed_read_par): input error while reading bulk parameters\n");
  }
- tot_size += sizeof(leed_cryst_t);
+ tot_size += sizeof(leed_crystal);
 
 /* allocate memory for bulk_par->layers */
 
@@ -212,7 +212,7 @@ leed_beam_t  *beams;
  if( phs_shifts == NULL)
  {
    if( ( phs_shifts = 
-         (leed_phs_t *) malloc( (n_phs + 1) * sizeof(leed_phs_t) ))
+         (leed_phase *) malloc( (n_phs + 1) * sizeof(leed_phase) ))
        == NULL)
    {
      ERR_MESS0("*** error (leed_read_par): allocation error (phase shifts)\n");
@@ -220,12 +220,12 @@ leed_beam_t  *beams;
  }
 
 /* Read phase shift parameters  (including terminating set) */
- if( fread(phs_shifts, sizeof(leed_phs_t), n_phs+1, file) != n_phs+1 )
+ if( fread(phs_shifts, sizeof(leed_phase), n_phs+1, file) != n_phs+1 )
  {
    ERR_MESS0(
    "*** error (leed_read_par): output error while reading phase shift parameters\n");
  }
- tot_size += sizeof(leed_phs_t) * (n_phs+1);
+ tot_size += sizeof(leed_phase) * (n_phs+1);
 
  for( i = 0; i < n_phs; i ++)
  {
@@ -377,7 +377,7 @@ leed_beam_t  *beams;
 /* Allocate memory for beam list */
  if( beams == NULL)
  {
-   if( ( beams = (leed_beam_t *) malloc( number * sizeof(leed_beam_t) ))
+   if( ( beams = (leed_beam *) malloc( number * sizeof(leed_beam) ))
        == NULL)
    {
      ERR_MESS0("*** error (leed_read_par): allocation error (energy parameters)\n");
@@ -385,11 +385,11 @@ leed_beam_t  *beams;
  }
 
 /* Read beam list */
- if( fread(beams, sizeof(leed_beam_t), number, file) != number )
+ if( fread(beams, sizeof(leed_beam), number, file) != number )
  {
    ERR_MESS0( "*** error (leed_read_par): input error while reading beam list\n");
  }
- tot_size += sizeof(leed_beam_t) * number;
+ tot_size += sizeof(leed_beam) * number;
 
 #ifdef CONTROL
  fprintf(STDCTR, "\t%3d: (%6.3f,%6.3f)\n", 

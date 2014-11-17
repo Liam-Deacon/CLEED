@@ -136,7 +136,7 @@ Check matrix dimensions of Tlm_in and compatibilities with l_max.
 
      else if (Tlm_in->rows == Tlm->rows)
      {
-       Tlm = matcop(Tlm, Tlm_in);
+       Tlm = matcopy(Tlm, Tlm_in);
      }
 
      else if (Tlm_in->rows > Tlm->rows)
