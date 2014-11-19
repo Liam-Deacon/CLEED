@@ -4,18 +4,24 @@ mat matmul( mat Mr, mat M1, mat M2 )
   Matrix multiplication.
 
 Changes:
-  GH/16.08.94 - Mr can be equal to  M1 or M2
-                (Diagonal matrices are not included)
-  GH/26.08.94 - Error in the multiplication for complex matrices
-                corrected.
-  LD/02.04.14 - First attempt at OpenCL version of matmul code
+   GH/16.08.1994 - Mr can be equal to  M1 or M2
+                  (Diagonal matrices are not included)
+   GH/26.08.1994 - Error in the multiplication for complex matrices
+                   corrected.
+   LD/02.04.2014 - First attempt at OpenCL version of matmul code
+  MGF/18.07.2014 - Workaround: 
+                   replace native matrix multiplication by cblas_Xgemm
   
 *********************************************************************/
 
 /*! \file
  *
- * Implements matmul() function for matrix multiplication.
- *
+ * Implements matmul() function for matrix multiplication. 
+ 
+ * The original Numerical recipes routines have been replaced with a
+ * CBLAS one, which gives massive speed gains over the original textbook 
+ * version (kindly contributed by Michael Fink <Michael.Fink@uibk.ac.at>).
+ * 
  * \note An initial attempt to use OpenCL for GPGPU calculations has been added
  * but is not tested. It can be enabled by defining #_USE_OPENCL when compiling.
  */
@@ -24,6 +30,9 @@ Changes:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cblas.h>
+
+#include "cblas_aux.h"
 #include "mat.h"
 
 #ifdef _USE_OPENCL
@@ -47,8 +56,13 @@ Changes:
 mat matmul(mat Mr, const mat M1, const mat M2 )
 {
 
+  long int i;
   long int i_c2, i_r1;
   long int i_cr1, i_cr2;
+
+  int result_num_type;
+
+  real *cblas_m1, *cblas_m2, *cblas_mr; /* passed to cblas_Xgemm */
 
   mat Maux;
 
@@ -85,7 +99,36 @@ mat matmul(mat Mr, const mat M1, const mat M2 )
     return(NULL);
     #endif
   }
+  
+  /* Create cblas matrices */
+  if((M1->num_type ==  NUM_REAL) && (M2->num_type ==  NUM_REAL) )
+  {
+   /* In this case we need:
+    * - no intermediary storage for operands
+    * - no conversion to complex
+    */
+   cblas_mr = calloc(M1->rows * M2->cols, sizeof(real));
 
+   cblas_m1 = M1->rel + 1;   /* matrices are stored as row major */
+   cblas_m2 = M2->rel + 1;
+
+   result_num_type = NUM_REAL;
+
+ }
+ else
+ {
+   /* at least one operand is complex */
+   cblas_mr = calloc(M1->rows * M2->cols, 2*sizeof(real));
+
+   cblas_m1 = calloc(M1->rows * M1->cols, 2*sizeof(real));
+   cblas_m2 = calloc(M2->rows * M2->cols, 2*sizeof(real));
+
+   mat2cblas ( cblas_m1, NUM_COMPLEX, M1 ) ;
+   mat2cblas ( cblas_m2, NUM_COMPLEX, M2 ) ;
+
+   result_num_type = NUM_COMPLEX;
+ }
+  
   /* Create matrix Maux */
   if((M1->num_type ==  NUM_REAL) && (M2->num_type ==  NUM_REAL) )
   {
@@ -417,7 +460,7 @@ mat matmul(mat Mr, const mat M1, const mat M2 )
   fprintf(STDCTR," (matmul) start multiplication \n");
   #endif
 
-  switch(Maux->num_type)
+  switch(result_num_type)
   {
     /* real matrix */
     case (NUM_REAL):
