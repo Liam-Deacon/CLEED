@@ -42,7 +42,7 @@ extern "C" {
  * Include type definitions and constant values and functions for SEARCH
  *********************************************************************/
 
-#if !defined(USE_GSL) && !defined(_USE_GSL)
+#if !defined(USE_GSL) && !defined(USE_GSL)
   /* numerical receipes */
   #include "nrr.h"              
 #else

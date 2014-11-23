@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
     /* POWELL'S METHOD */
     case(SR_POWELL):
     {
-      #if defined(_USE_GSL) || defined(USE_GSL)
+      #if defined(USE_GSL) || defined(USE_GSL)
          SR_NOT_IMPLEMENTED_ERROR("Powell's method");
       #else
          SR_PO(n_dim, bak_file, log_file);
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
     /* SIMULATED ANNEALING */
     case(SR_SIM_ANNEALING):
     {
-      #if defined(_USE_GSL) || defined(USE_GSL)
+      #if defined(USE_GSL) || defined(USE_GSL)
          SR_NOT_IMPLEMENTED_ERROR("simulated annealing");
       #else
          SR_SA(n_dim, delta, bak_file, log_file);

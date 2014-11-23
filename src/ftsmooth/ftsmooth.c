@@ -94,7 +94,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   fk_c = (double *) malloc (N * sizeof(double) );
 
 /* Fourier Transformation */
-  #ifdef _USE_OPENMP
+  #ifdef USE_OPENMP
   #pragma omp parallel for
   #endif
   for( i_k = 0; i_k < n_k; i_k ++)

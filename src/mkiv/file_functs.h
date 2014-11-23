@@ -28,7 +28,7 @@ int file_backup(const char *filepath);
 int file_move(const char *src_path, const char *dst_path);
 
 /* cat replacement */
-char* file_content(const char* filename);
+char *file_content(const char *filename);
 
 /* remove extension */
-char *remove_ext(char* str, char dot, char sep);
+char *remove_ext(char *str, char dot, char sep);

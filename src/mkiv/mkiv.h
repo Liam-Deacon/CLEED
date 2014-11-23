@@ -45,7 +45,7 @@
 #include <ctype.h>
 #include <math.h>
 
-/* image matrix using libtiff */
+/* handle images internally using libtiff */
 #include <tiffio.h>
 
 #endif

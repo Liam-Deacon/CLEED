@@ -9,19 +9,28 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
  * Changes:
- *   GH/08.06.94 - Creation
- *   GH/20.07.95 - Change call of function c_luinv
+ *   GH/08.06.1994 - Creation
+ *   GH/20.07.1995 - Change call of function c_luinv
+ * MGJF/18.07.2014 - Workaround:
+ *                   replace Numerical Recipes inversion by LAPACK routines.
  *********************************************************************/
 
 /*! \file
  *
  * Implements LU decomposition function matinv()
+ *
+ * The original Numerical Recipes routines have been replaced with a
+ * CBLAS one, which gives massive speed gains over the original textbook
+ * version (kindly contributed by Michael Fink <Michael.Fink@uibk.ac.at>).
  */
 
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "mat.h"
+#include "cblas_aux.h"
+#include "clapack.h"
 
 
 /*!
@@ -34,10 +43,14 @@
  */
 mat matinv(mat A_1, const mat A)
 {
-  int d, i, n;
-  size_t *indx;
+  int i, d, n, nb, lwork;
+  const int p1 = 1, m1 = -1;
+  int *ipiv;
+  int info;
 
-  mat Alu = NULL;
+  real *ptr, *ptr_end;
+
+  real *cblas_a, *work;
 
   /* check input matrix */
 
@@ -61,14 +74,6 @@ mat matinv(mat A_1, const mat A)
     return(NULL);
   }
   n = A->cols;
- 
-  /* Backup of input matrix A */
-
-  /* Copy A into temporary storage Alu */
-  Alu = matcopy(Alu, A);
-
-  /* Allocate A_1 (if it does not exist.) */
-  A_1 = matalloc(A_1, n, n, Alu->num_type);
 
   /* DIAGONAL MATRIX */
 
@@ -87,84 +92,129 @@ mat matinv(mat A_1, const mat A)
   }
 
   /* NON-DIAGONAL MATRIX */
-  indx = (size_t *)calloc( (n+1), sizeof(size_t));
 
-  switch(Alu->num_type)
+  /* Create lapack and result matrices */
+  ipiv = (int *)calloc( (n+1), sizeof(int));
+
+  switch(A->num_type)
   {
     /* Real matrix (NUM_REAL) */
     case (NUM_REAL):
     {
-      if( (d = r_ludcmp(Alu->rel, indx, n)) == 0)
-      {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matinv): LU decomposition (r_ludcmp)\n");
-        #endif
+       cblas_a = calloc(n*n, sizeof(real)) ;
+       mat2cblas( cblas_a, NUM_REAL, A);
 
-        matfree(A_1);
-        matfree(Alu);
+       if ( sizeof(real) == sizeof(float) )
+       {
+         nb = ilaenv_( &p1, "SGETRI", " ", &n, &m1, &m1, &m1);
+         lwork = n*nb;
+         work = calloc(lwork, sizeof(float));
+
+         sgetrf_(&n, &n, cblas_a, &n, ipiv, &info);
+         info_check("sgetrf", info);
+
+         sgetri_(&n, (float*)cblas_a, &n, ipiv, work, &lwork, &info);
+         info_check("sgetri", info);
+         free(work);
+       }
+       else if ( sizeof(real) == sizeof(double) )
+       {
+         nb = ilaenv_( &p1, "DGETRI", " ", &n, &m1, &m1, &m1);
+         lwork = n*nb;
+         work = calloc(lwork, sizeof(double));
+
+         dgetrf_(&n, &n, cblas_a, &n, ipiv, &info);
+         info_check("dgetrf", info);
+
+         dgetri_(&n, (double*)cblas_a, &n, ipiv, work, &lwork, &info);
+         info_check("dgetri", info);
+         free(work);
+      }
+       else
+      {
+        fprintf(STDERR, "***error (matinv): "
+                "unexpected sizeof(real)=%lu\n", sizeof(real));
+        #ifdef EXIT_ON_ERROR
+        exit(1);
+        #else
         return(NULL);
+        #endif
       }
 
       #ifdef CONTROL
-      fprintf(STDCTR, " (matinv) indx: ");
-      for (i=1; i<=n; i++) fprintf(STDCTR, " %u", indx[i]);
+      fprintf(STDCTR, "(matinv) ipiv: ");
+      for (i=0; i<n; i++) fprintf(STDCTR," %d", ipiv[i]);
       fprintf(STDCTR,"\n");
       #endif
 
-      if( r_luinv (A_1->rel, Alu->rel, indx, n) != 0)
-      {
-
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matinv): "
-                "LU backsubstitution r1 (r_luinv)\n");
-        #endif
-
-        matfree(Alu);
-        return(NULL);
-      }
-
-      matfree(Alu);
+      /* Allocate A_1 (if it does not exist.) */
+      A_1 = matalloc( A_1, n, n, A->num_type);
+      cblas2mat(A_1, cblas_a);
+      free(cblas_a);
       break;
     }  /* REAL */
 
     /* Complex matrix (NUM_COMPLEX) */
     case (NUM_COMPLEX):
     {
-      if( (d = c_ludcmp(Alu->rel, Alu->iel, indx, n)) == 0)
-      {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matinv): LU decomposition (r_ludcmp)\n");
-        #endif
+      cblas_a = calloc(n*n, 2*sizeof(real)) ;
+      mat2cblas( cblas_a, NUM_COMPLEX, A);
 
-        matfree(A_1);
-        matfree(Alu);
+      if ( sizeof(real) == sizeof(float) )
+      {
+        nb = ilaenv_( &p1, "CGETRI", " ", &n, &m1, &m1, &m1);
+        lwork = n*nb;
+        work = calloc(lwork, 2*sizeof(float));
+
+        cgetrf_(&n, &n, cblas_a, &n, ipiv, &info);
+        info_check("cgetrf", info);
+
+        cgetri_(&n, (float*)cblas_a, &n, ipiv, work, &lwork, &info);
+        info_check("cgetri", info);
+
+        free(work);
+      }
+      else if ( sizeof(real) == sizeof(double) )
+      {
+        nb = ilaenv_( &p1, "ZGETRI", " ", &n, &m1, &m1, &m1);
+        lwork = n*nb;
+        work = calloc(lwork, 2*sizeof(double));
+
+        zgetrf_(&n, &n, cblas_a, &n, ipiv, &info);
+        info_check("zgetrf", info);
+
+        zgetri_(&n, (double*)cblas_a, &n, ipiv, work, &lwork, &info);
+        info_check("zgetri", info);
+
+        free(work);
+      }
+      else
+      {
+        fprintf(STDERR, "***error (matinv): "
+                "unexpected sizeof(real)=%lu\n", sizeof(real));
+        #ifdef EXIT_ON_ERROR
+        exit(1);
+        #else
         return(NULL);
+        #endif
       }
 
       #ifdef CONTROL
-      fprintf(STDCTR, " (matinv) indx: ");
-      for (d=1; d<=n; d++) fprintf(STDCTR, " %u", indx[d]);
+      fprintf(STDCTR, "(matinv) ipiv: ");
+      for (i=0; i<n; i++) fprintf(STDCTR, " %d", ipiv[i]);
       fprintf(STDCTR, "\n");
       #endif
 
-      if( c_luinv (A_1->rel, A_1->iel, Alu->rel, Alu->iel, indx, n) != 0 )
-      {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matinv): "
-                "LU backsubstitution r1 (r_luinv)\n");
-        #endif
-        matfree(Alu);
-        return(NULL);
-      }
-
-      matfree(Alu);
+      /* Allocate A_1 (if it does not exist) */
+      A_1 = matalloc( A_1, n, n, A->num_type);
+      cblas2mat(A_1, cblas_a);
+      free(cblas_a);
       break;
-    }  /* COMPLEX */
+    } /* COMPLEX */
 
-  }   /* switch num_type */
+  } /* switch(A->num_type) */
 
-  /* clean up and return */
-  free(indx);
+  free(ipiv);
 
   return(A_1);
 }

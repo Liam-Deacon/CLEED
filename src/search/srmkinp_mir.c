@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef _USE_GSL
+#ifdef USE_GSL
 #include <gsl/gsl_vector.h>
 #endif
 
@@ -54,7 +54,7 @@ char line_buffer[STRSZ];
  * \return #search_error
  * \retval #SR_SUCCESS if successful.
  */
-#ifdef _USE_GSL
+#ifdef USE_GSL
 int sr_mkinp_mir(const char *filename, const gsl_vector *par, size_t iter)
 #else
 int sr_mkinp_mir(const char *filename, const real *par, size_t iter)

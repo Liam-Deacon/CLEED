@@ -14,7 +14,7 @@
  *   GH/1995.09.20 - Include parameters for R factor program here
  *   GH/2006.06.20 - Change number of iterations in amoeba to 2000.
  *   LD/2014.04.29 - Removed RFAC_PRG & LEED_PRG from defines as no longer used.
- *   LD/2014.06.15 - Added conditional defines if compiling with '_USE_GSL'
+ *   LD/2014.06.15 - Added conditional defines if compiling with 'USE_GSL'
  *   LD/2014.10.09 - Added typedefs to structs.
  *                 - Added some Doxygen markup.
  *   LD/2014.10.16 - Added enumerations: search_error & search_method
@@ -58,7 +58,7 @@ extern "C" {
  * \def SR_EVALRF
  * \brief Entry into R factor evaluation function.
  */
-#if defined(USE_GSL) || defined(_USE_GSL)
+#if defined(USE_GSL) || defined(USE_GSL)
     /* set search functions to GNU Scientific Library */
     #define SR_SX     sr_sx_gsl
     #define SR_SA     sr_sa_gsl
@@ -155,7 +155,7 @@ typedef enum {
   SR_SUCCESS,                 /*!< indicates general success. */
   SR_SEARCH_NOT_IMPLEMENTED,  /*!< indicates search method is not yet implemented.
                                * This is particularly relevant if compiling
-                               * when defining \c _USE_GSL as not all the
+                               * when defining \c USE_GSL as not all the
                                * search methods have been ported to use the
                                * GNU Scientific Library API.
                                */

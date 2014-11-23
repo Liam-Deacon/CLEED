@@ -12,7 +12,7 @@
 // script written by Tom Deakin, August 2013
 //
 //------------------------------------------------------------------------------
-#ifdef _USE_OPENCL
+#ifdef USE_OPENCL
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -138,4 +138,4 @@ char *cl_err_code (cl_int err_in)
     }
 }
 
-#endif /* _USE_OPENCL */
+#endif /* USE_OPENCL */

@@ -21,8 +21,9 @@
 #define MKIV_VER_H
 
 #define MKIV "mkiv"
-#define MKIV_COPYRIGHT "Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>\n" \
-"Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>"   \
+#define MKIV_COPYRIGHT                                                        \
+"Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>\n"                     \
+"Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>"\
 "Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>"
 #define MKIV_LICENSE "GNU General Public License v3"
 #define MKIV_VERSION "2014.07.04 Development"

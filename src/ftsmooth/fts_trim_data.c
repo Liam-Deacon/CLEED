@@ -42,7 +42,7 @@ size_t fts_trim_data(double *x, double *fx, size_t n_x,
   n_t = n_x;
 
   /* first pass to get number of values after trimming */
-  #ifdef _USE_OPENMP
+  #ifdef USE_OPENMP
   #pragma omp parallel for
   #endif
   for (ix=0; ix<n_x; ix++)

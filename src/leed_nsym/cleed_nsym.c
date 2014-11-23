@@ -22,8 +22,11 @@
  * using non-symmetrised code.
  *
  * \note Experimental multi-core calculations of the energy loop can be
- * enabled by defining #_USE_OPENMP when compiling and linking with the
- * '-fopenmp' flag.
+ * enabled by defining #USE_OPENMP when compiling and linking with the
+ * '-fopenmp' flag. The environment variable \c OMP_NUM_THREADS should be
+ * set prior to executing the program, otherwise the maximum number of threads
+ * will be used as the default setting. This can be disabled by defining
+ * \c OMP_DEFAULT_IS_SERIAL when compiling.
  */
 
 #include <stdio.h>
@@ -35,7 +38,7 @@
 #include "leed_ver.h"   /* version information */
 #include "leed_help.h"
 
-#ifdef _USE_OPENMP
+#ifdef USE_OPENMP
 #include <omp.h>        /* compile with '-fopenmp' */
 #endif
 
@@ -275,11 +278,23 @@ int main(int argc, char *argv[])
   /*===================================================================
    * Energy Loop
    *===================================================================*/
-  #ifdef _USE_OPENMP
+  #ifdef USE_OPENMP
   /*
    * OpenMP control loops can only iterate using integers, so energy
    * variables need to be converted using a multiplication factor
    */
+
+  /*!
+   * Check if \c OMP_NUM_THREADS environment variable is set if compiled with
+   * \c USE_OPENMP defined; the default is to have maximum parallization
+   * (but minimum efficiency as speed up is not linear with added threads).
+   * This behavior can be disabled by defining \c OMP_DEFAULT_IS_SERIAL .
+   */
+  #ifndef OMP_DEFAULT_IS_SERIAL
+  if (getenv(OMP_NUM_THREADS) == NULL)
+    omp_set_num_threads ( omp_get_max_threads() );
+  #endif
+
   #define IFAC 1e6
   unsigned long int ienergy, istep, istop;
   istep = (unsigned long int) eng->step * IFAC;
@@ -290,7 +305,7 @@ int main(int argc, char *argv[])
        ienergy -= istep) /* energy loop inverted to try to sync finish */
   {
     energy = (real) ienergy/IFAC; /* convert back integer representation of energy */
-  #else /* _USE_OPENMP */
+  #else /* USE_OPENMP */
   for( energy = eng->initial;
        energy > eng->final + E_TOLERANCE;
        energy += eng->step)

@@ -30,7 +30,7 @@
  * considered as highly experimental.
  *
  * \warning The open source version of the search program,
- * enabled when compiling with \c _USE_GSL defined, is highly experimental
+ * enabled when compiling with \c USE_GSL defined, is highly experimental
  * and needs significant testing.
  */
 
@@ -45,7 +45,7 @@ extern "C" {
 #include <string.h>
 #include "search_def.h"
 
-#if !defined(USE_GSL) && !defined(_USE_GSL) /* Original CLEED Interface */
+#if !defined(USE_GSL) && !defined(USE_GSL) /* Original CLEED Interface */
 
 /* sramoeba.c */
 void sr_amoeba(real **, real *, int, real, real (*)(), int *);

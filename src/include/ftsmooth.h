@@ -72,7 +72,7 @@ extern "C" {
 #include <float.h>
 #include <ctype.h>
 
-#if defined(_USE_OPENMP) && !defined(DEBUG)
+#if defined(USE_OPENMP) && !defined(DEBUG)
 #include <omp.h>            /* add openMP support if desired */
 #endif
 

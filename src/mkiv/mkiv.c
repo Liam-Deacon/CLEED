@@ -35,7 +35,7 @@
 #include "tiffio.h"
 #include "mkiv.h"
 
-#ifdef _USE_OPENMP
+#ifdef USE_OPENMP
 #include <omp.h>           /* for parallel processing */
 #endif 
 
@@ -498,9 +498,18 @@ int main(int argc, char *argv[])
   /* i_e_step = (int)e_step; */
     
   numb_2 = nstart;
-  #ifdef _USE_OPENMP
-    /* #pragma omp parallel for */
-  #endif
+  #ifdef USE_OPENMP
+
+  /* Default to maximum parallization if OMP_NUM_THREADS environment variable
+   * is not set (this bahavior can be removed if OMP_DEFAULT_IS_SERIAL is
+   * defined when compiling) */
+  #ifndef OMP_DEFAULT_IS_SERIAL
+  if ( getenv(OMP_NUM_THREADS) == NULL )
+    omp_set_num_threads( omp_get_max_threads() );
+  #endif /* OMP_DEFAULT_IS_SERIAL */
+
+  #pragma omp parallel for
+  #endif /* _USE_OPNEMP */
   for ( numb = nstart;
         ((numb<=nstop)&&(e_step>0)) || ((numb>=nstop)&&(e_step<0)); 
         numb += e_step)  /* note the dodgy cast from float to int */

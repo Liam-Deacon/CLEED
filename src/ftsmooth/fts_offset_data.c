@@ -52,7 +52,7 @@ int fts_offset_data(double *x, double *fx, size_t n_x, double offset,
 	 
     case OFFSET_X_TO_ZERO:
       /* check for lowest value of y */
-      #ifdef _USE_OPENMP
+      #ifdef USE_OPENMP
       #pragma omp parallel for
       #endif
       for (i=0; i<n_x; i++)
@@ -61,7 +61,7 @@ int fts_offset_data(double *x, double *fx, size_t n_x, double offset,
 	    }
 	 
       /* offset f(x) by ymin */
-      #ifdef _USE_OPENMP
+      #ifdef USE_OPENMP
 	    #pragma omp parallel for
       #endif
       for (i=0; i<n_x; i++)
@@ -80,7 +80,7 @@ int fts_offset_data(double *x, double *fx, size_t n_x, double offset,
 	 
     case OFFSET_Y_TO_ZERO:
       /* check for lowest value of y */
-      #ifdef _USE_OPENMP
+      #ifdef USE_OPENMP
       #pragma omp parallel for
       #endif
       for (i=0; i<n_x; i++)
@@ -89,7 +89,7 @@ int fts_offset_data(double *x, double *fx, size_t n_x, double offset,
       }
 	 
       /* offset f(x) by ymin */
-      #ifdef _USE_OPENMP
+      #ifdef USE_OPENMP
 	    #pragma omp parallel for
       #endif
       for (i=0; i<n_x; i++)

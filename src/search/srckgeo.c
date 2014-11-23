@@ -12,7 +12,7 @@
  *   GH/1995.08.24 - Creation (copy from srevalrf.c)
  *  SRP/2003.04.01 - Modified the code for the angle search (n_par_geo)
  *   LD/1014.07.01 - Modified to use GNU Scientific library structures if
- *                   compiling with '_USE_GSL'
+ *                   compiling with 'USE_GSL'
  *********************************************************************/
 
 /*!
@@ -20,7 +20,7 @@
  * \author Georg Held <g.held@reading.ac.uk>
  * \brief Checks geometry of search.
  *
- * \note To use the GSL interface, ensure \c _USE_GSL is defined when
+ * \note To use the GSL interface, ensure \c USE_GSL is defined when
  * compiling.
  */
 
@@ -30,7 +30,7 @@
 #include <time.h>
 #include <math.h>
 
-#ifdef _USE_GSL
+#ifdef USE_GSL
 #include <gsl/gsl_vector.h>
 #endif
 
@@ -51,7 +51,7 @@ extern char *sr_project;
  * \param par pointer to parameter vector to evaluate.
  * \return nearest neighbour distance (?)
  */
-#ifdef _USE_GSL
+#ifdef USE_GSL
 real sr_ckgeo_gsl(const gsl_vector *par)
 #else
 real sr_ckgeo(const real *par)
@@ -85,7 +85,7 @@ real sr_ckgeo(const real *par)
     y[i_atoms] = (sr_atoms + i_atoms)->y;
     z[i_atoms] = (sr_atoms + i_atoms)->z;
 
-    #ifdef _USE_GSL
+    #ifdef USE_GSL
     for(i_par = 0; i_par < sr_search->n_par_geo; i_par ++)
     {
       faux = gsl_vector_get(par, i_par);

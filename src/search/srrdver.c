@@ -13,7 +13,7 @@
  *   GH/11.09.95 - Creation
  *   GH/28.09.95 - Do not check dimensions if n_dim is -1.
  *   GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
- *   LD/30.06.14 - modified for GSL input (enable by adding _USE_GSL
+ *   LD/30.06.14 - modified for GSL input (enable by adding USE_GSL
  *                 to defines when compiling).
  *********************************************************************/
 
@@ -23,7 +23,7 @@
  * \brief Read vertex for simplex algorithm from backup file.
  *
  * \note To enable the GNU Scientific Library interface, compile with \c
- * _USE_GSL defined.
+ * USE_GSL defined.
  */
 
 #include <malloc.h>
@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#ifdef _USE_GSL
+#ifdef USE_GSL
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #endif
@@ -77,7 +77,7 @@
  * \note exits with \ref search_error code if failed and \c EXIT_ON_ERROR
  * defined.
  */
-#ifdef _USE_GSL
+#ifdef USE_GSL
 int sr_rdver(const char *ver_file, gsl_vector *y, gsl_matrix *p, int n_dim)
 #else
 int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
@@ -92,7 +92,7 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
   size_t i_par, j_par;                        /* counter, dummy  variables */
   size_t m_par;
 
-  #ifdef _USE_GSL
+  #ifdef USE_GSL
   real faux = 0.;
   #endif
 
@@ -157,7 +157,7 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
       i_str = 0;
       while(linebuffer[i_str] == ' ') i_str ++;
 
-      #ifdef _USE_GSL
+      #ifdef USE_GSL
 
       while(linebuffer[i_str] == ' ') i_str ++;
         #ifdef REAL_IS_DOUBLE
@@ -183,7 +183,7 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
           #endif
         }
 
-      #else /* _USE_GSL */
+      #else /* USE_GSL */
 
       #ifdef REAL_IS_DOUBLE
       sscanf(linebuffer+i_str,"%le", y + i_par);
@@ -206,7 +206,7 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
 
       }
 
-      #endif /* _USE_GSL */
+      #endif /* USE_GSL */
 
       i_par ++;
 
@@ -226,7 +226,7 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
   for (i_par = 1; i_par<= m_par; i_par++)
   {
     fprintf(STDCTR, "(%2d) %7.4f :", i_par,
-      #ifdef _USE_GSL
+      #ifdef USE_GSL
       gsl_vector_get(y, i_par));
       #else
       y[i_par]);
@@ -234,7 +234,7 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
     for(j_par=1; j_par<= (size_t)n_dim; j_par++)
     {
       fprintf(STDCTR, " %6.3f",
-          #ifdef _USE_GSL
+          #ifdef USE_GSL
           gsl_matrix_get(p, i_par, j_par));
           #else
           p[i_par][j_par]);

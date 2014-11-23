@@ -1,8 +1,32 @@
 /*********************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   WB/06.10.00 
   file contains function:
   (copy from inpbullayer.c additional test symmetry and create the 
                            registry shifts)
+
+
+
+
 
   leed_inp_bul_layer_sym
 
@@ -15,7 +39,9 @@ Changes:
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
+
 #include <strings.h>
+
 #include <stdlib.h>
 #include "leed.h"
 #include "leed_def.h"
@@ -40,6 +66,7 @@ Changes:
  * \param[in] a3 Pointer to third basis vector of the bulk unit cell.
  * \return Number of layers.
  * \retval -1 if unsuccessful and #EXIT_ON_ERROR is not defined.
+
  * \warning The function cannot handle the case when all layer distances
  * are smaller than #MIN_DIST. In this case the bulk must be modelled
  * as one composite layer.
@@ -49,20 +76,31 @@ int leed_inp_bul_layer_sym(leed_crystal *par, leed_atom * atom_list,
 {
 int i, j;
 int i_c, i_d;
+
+
+
+
 int n_rot, n_mir;
 int n_atoms, i_atoms;
 int i_layer;
 int end_per;             /* indicates end of vertical periodicity */
 
 real a1x,a1y,a2x,a2y;    /* 2-dim lattice shift to rs: 1=x, 2=y 0 is not used */
+
+
 real orig;              
                           
 real *vec;               /* intermediate storage for inter layer vectors */
 real *shift;             /* intermediate storage for registry-shifts */
 int *no_of_atoms;        /* intermediate storage for number of atoms in layer */
 
+
+
+
 real faux;
 real vaux[4];
+
+
 
 
 #ifdef CONTROL
@@ -73,9 +111,16 @@ real vaux[4];
   predefine some often used variables
 *************************************************************************/
 
+
  n_atoms = par->natoms;
  n_mir = par->n_mir;
  n_rot = par->n_rot;
+
+
+
+
+
+
 
  a1x = par->a[1];
  a1y = par->a[3];
@@ -85,6 +130,7 @@ real vaux[4];
 #ifdef CONTROL
  fprintf(STDCTR,
  "(leed_inp_bul_layer_sym): n_atoms = %d, a1 = (%.3f,%.3f), a2 = (%.3f,%.3f)\n",
+
          n_atoms, a1x*BOHR, a1y*BOHR, a2x*BOHR, a2y*BOHR);
 #endif
 
@@ -100,12 +146,17 @@ real vaux[4];
 /************************************************************************
   i_layer indicates the layer which an atom belongs to; it will eventually 
           be the total number of layers.
+
+
   vaux  is used to store the z-position of the topmost atom in the layer.
 *************************************************************************/
+
 
  i_layer = 0;
  no_of_atoms[i_layer] = 1;
  atom_list[0].layer = i_layer;
+
+
 
 
 
@@ -116,21 +167,48 @@ real vaux[4];
  
 #ifdef CONTROL
   fprintf(STDCTR,"(leed_inp_bul_layer_sym): old atomlist, atom%d (%f %f %f (now %f))\n",0,
+
+
+
+
+
           atom_list[0].pos[1]*BOHR,atom_list[0].pos[2]*BOHR,vaux[3]*BOHR,atom_list[0].pos[3]*BOHR);
  for(i_atoms = 1;i_atoms < n_atoms; i_atoms++)
+
   fprintf(STDCTR,"(leed_inp_bul_layer_sym): old atomlist, atom%d (%f %f %f)\n",
          i_atoms, atom_list[i_atoms].pos[1]*BOHR,atom_list[i_atoms].pos[2]*BOHR,atom_list[i_atoms].pos[3]*BOHR);
+
+
+
+
 #endif
+
+
+
+
+
+
+
+
+
 
 
  for(i_atoms=1; i_atoms<n_atoms; i_atoms++)
  {
+
+
+
+
+
+
+
 
 #ifdef CONTROL
    fprintf(STDCTR,"(leed_inp_bul_layer_sym):for i_atom = %d \n",i_atoms);
    fprintf(STDCTR,"(leed_inp_bul_layer_sym): pos: %.4f %.4f %.4f dist: %.4f\n",
    atom_list[i_atoms].pos[1]*BOHR, atom_list[i_atoms].pos[2]*BOHR, 
    atom_list[i_atoms].pos[3]*BOHR,
+
    R_fabs(atom_list[(i_atoms - 1)].pos[3]+vaux[3]-atom_list[i_atoms].pos[3])*BOHR);
 #endif
 
@@ -141,6 +219,7 @@ real vaux[4];
    New layer:
    - check, weather the previous layer contains only one atom 
      (no_of_atoms[i_layer] == 1). 
+
    - set up new inter layer vector (vec[3*i_layer + i_c]);
    - increase i_layer;
    - set up new origin of the layer;
@@ -166,11 +245,15 @@ real vaux[4];
    {
     *(shift + 2*i_layer + 0) = -(atom_list[i_atoms -1].pos[1]);
     *(shift + 2*i_layer + 1) = -(atom_list[i_atoms -1].pos[2]);
+
 /* set up new inter layer vector  */
     *(vec + 4*i_layer + 1) = 0.;
     *(vec + 4*i_layer + 2) = 0.;
     *(vec + 4*i_layer + 3) =
         atom_list[i_atoms].pos[3] - atom_list[i_atoms-1].pos[3] - vaux[3];
+
+
+
 
 
    }
@@ -203,6 +286,7 @@ real vaux[4];
      
   }  /* if R_fabs ... */
 
+
   /***********************************************************************
    set up new atom position.
    in case of composite layer keep track of the new origin.
@@ -216,11 +300,18 @@ real vaux[4];
    }
  }  /* for i_atoms (loop through atoms) */
 
+
+
 /************************************************************************
   BULK:
   Set up the last inter layer vector to point from the last layer to the
   first one of the next unit cell.
 *************************************************************************/
+
+
+
+
+
 
 
 
@@ -239,9 +330,14 @@ real vaux[4];
    *(shift + 2*i_layer + 1) = 0;
 
 
+
+
+
    *(vec+4*i_layer + 1) = 0.;
    *(vec+4*i_layer + 2) = 0.;
    *(vec+4*i_layer + 3) = a3[3] - atom_list[n_atoms-1].pos[3] - vaux[3] + orig;
+
+
 
  }
  else
@@ -254,6 +350,11 @@ real vaux[4];
 ***********************************************************************************/
    *(shift + 2*i_layer + 0) = -atom_list[n_atoms -1].pos[1];
    *(shift + 2*i_layer + 1) = -atom_list[n_atoms -1].pos[2];
+
+
+
+
+
 
 
    *(vec+4*i_layer + 1) = 0.;
@@ -278,7 +379,10 @@ real vaux[4];
 #else
      return(-1);
 #endif
+
+
    }
+
    else /* i_layer != 0 ,but R_abs too small */
    {
 #ifdef CONTROL
@@ -292,9 +396,12 @@ real vaux[4];
   - copy the atoms of the first layer into the last layer;
   - set up the new inter layer vector.
 *************************************************************************/
+
      for (j=0; atom_list[j].layer == 0; j++);
+
        atom_list = ( leed_atom *) realloc( 
                  atom_list, (n_atoms+j+2) * sizeof(leed_atom) );
+
    /*******************************************************
     Reset atom_list:
      - add the atoms of the first layer to the last one
@@ -306,6 +413,9 @@ real vaux[4];
        atom_list[n_atoms + j].layer = i_layer;
        atom_list[n_atoms + j].type = atom_list[j].type;
 
+
+
+
        for(i_c=1; i_c<=3; i_c++)
        {
          atom_list[n_atoms + j].pos[i_c] = 
@@ -314,13 +424,16 @@ real vaux[4];
        no_of_atoms[i_layer] ++;
      } /* for j */
 
+
     /*********************************************************************
       The inter layer vector now points from the z coordinate of the frist
       atom in the last layer (vaux) to the z coordinate of the first atom
       in the first layer translated by a3.
       So you have to add the inter layer vector of the first layer.
     **********************************************************************/
+
      *(vec + 4*i_layer + 3) += *(vec + 3); /** atom_list[n_atoms -1].pos[3] **/
+
     /*********************************************
       Reset registry-shift:
       In this case the layer is a composite layer,
@@ -329,9 +442,15 @@ real vaux[4];
      *(shift + 2*i_layer + 0) = 0; 
      *(shift + 2*i_layer + 1) = 0; 
 
+
+
+
    /*** update n_atoms and start of periodic stacking ***/
      n_atoms += j;
      end_per = 1;
+
+
+
 
    } /* else (i_layer != 0) */
  } /* if < MIN_DIST */
@@ -350,6 +469,7 @@ real vaux[4];
  i_layer ++;
  par->nlayers = i_layer;
 
+
 #ifdef CONTROL_X
  for(i=0; i< i_layer; i++)
    fprintf(STDCTR,"(leed_inp_bul_layer_sym): shift_orig: %.4f %.4f \n",
@@ -358,16 +478,26 @@ real vaux[4];
  fprintf(STDCTR,"(leed_inp_bul_layer_sym):i_layer = %d\n", i_layer);
 #endif
 
+
 /************************************************************************
   Make shure that all registry shifts are the shortest possible.
 *************************************************************************/
  for(i=0; i< i_layer; i++)
+
+
+
+
+
  {
    vaux[0] = *(shift+2*i + 0);
    vaux[1] = *(shift+2*i + 1);
    faux = SQUARE(vaux[0]) + SQUARE(vaux[1]);
 
    for(i_c = -1; i_c <= 1; i_c ++)
+
+
+
+
    for(i_d = -1; i_d <= 1; i_d ++)
    {
      if( ( SQUARE(vaux[0] + i_c*a1x + i_d*a2x) +
@@ -387,6 +517,17 @@ real vaux[4];
  fprintf(STDCTR,"(leed_inp_bul_layer_sym):i_layer = %d\n", i_layer);
 #endif
 
+
+
+
+
+
+
+
+
+
+
+
 /************************************************************************
   Allocate array "layers" and copy all relevant information from
   atom_list, shift and no_of_atoms.
@@ -394,9 +535,23 @@ real vaux[4];
   (smallest z, i.e. deepest layer, first)
 *************************************************************************/
 
+
  
  par->layers =
        (leed_layer *) malloc( (i_layer+1) * sizeof(leed_layer) );
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -410,6 +565,8 @@ real vaux[4];
    par->layers[j].reg_shift[1] = *(shift+2*i+0); 
    par->layers[j].reg_shift[2] = *(shift+2*i+1);
  }
+
+
 
 
  
@@ -454,10 +611,13 @@ real vaux[4];
  
  
  for(i=0; i< i_layer; i++)
+
+
  {
 /********************************************************************* 
    i refers to index in shift, no_of_atoms, and atom_list
    j refers to index of layers
+
 *********************************************************************/
    j = i_layer - i - 1;
 /********************************************************************* 
@@ -468,25 +628,37 @@ real vaux[4];
    - interlayer vectors 
 *********************************************************************/
    par->layers[j].natoms = no_of_atoms[i];
+
+
    if( (i == 0) && (end_per == 1) )
        par->layers[j].periodic = 0;
    else
        par->layers[j].periodic = 1;
 
+
+
    for(i_c = 1; i_c < 5; i_c ++)
      par->layers[j].a_lat[i_c] = par->a[i_c];
 
+
+
      par->layers[j].a_lat[0] = 0;
+
 
 /* for bulk layers 1x1 periodicity is assumed */
      par->layers[j].rel_area = 1.;
 
    for(i_c = 1; i_c <= 4; i_c ++)
+
      par->layers[j].vec_from_last[i_c] =  - vec[4 * i + i_c];
+
 
 /************************************************************************
    vec_to_next points to the next layer (j+1) except for the topmost
    layer (i_layer) where it points to the origin of the coordinate 
+
+
+
    system (the new origin is the rot.axis ,set to 0/0/0).
 *************************************************************************/
    if(i == 0)
@@ -498,20 +670,33 @@ real vaux[4];
    else
    {
      for(i_c = 1; i_c <= 4; i_c ++)
+
        par->layers[j].vec_to_next[i_c] =  - vec[4*(i-1) + i_c];
+
+
+
    }
+
+
+
+
+
+
   
 /************************************************************************* 
    Allocate structure element atoms in layer 
    and copy the appropriate entries from list atom_list into 
    par->layers[j].atoms
+
 **************************************************************************/
    par->layers[j].atoms =
      (leed_atom *) malloc(no_of_atoms[i] * sizeof(leed_atom) );
 
    for( i_c = 0, i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
+
    {
      if(atom_list[i_atoms].layer == i)
+
      {
        par->layers[j].atoms[i_c].layer = j;
        par->layers[j].atoms[i_c].type = atom_list[i_atoms].type;
@@ -519,7 +704,11 @@ real vaux[4];
        par->layers[j].atoms[i_c].pos[1] = atom_list[i_atoms].pos[1];
        par->layers[j].atoms[i_c].pos[2] = atom_list[i_atoms].pos[2];
        par->layers[j].atoms[i_c].pos[3] = atom_list[i_atoms].pos[3];
+
+
        par->layers[j].atoms[i_c].dwf = atom_list[i_atoms].dwf;
+
+
        i_c ++;
      }
    } /* for i_atoms */
@@ -537,7 +726,16 @@ real vaux[4];
    }
  } /* for i (loop over layers) */
 
+
+
+
+
 /***************************************************************************/
+
+
+
+
+
 
  free(shift);
  free(vec);
@@ -556,6 +754,13 @@ real vaux[4];
 
 
 
+
+
+
+
+
+
+
 /**************************************************************************
   and now,
   the useful control of all variables.
@@ -563,6 +768,7 @@ real vaux[4];
 #ifdef CONTROL
 fprintf(STDCTR,"ROT = %d  MIRRORPLANES %d \n",n_rot,n_mir);
 for(i_c = 0 ; i_c < i_layer ; i_c++)
+
 {
   fprintf(STDCTR,"\n*****************************************\n");
   fprintf(STDCTR,"bulklayer%d:\n",i_c);
@@ -589,14 +795,23 @@ for(i_c = 0 ; i_c < i_layer ; i_c++)
 
 
   for(i = 0 ; i < par->layers[i_c].natoms ; i++)
+
         fprintf(STDCTR,"\t atom%d :(%.3f %.3f %.3f) type%d \n\n",i+1,
                                  par->layers[i_c].atoms[i].pos[1]*BOHR,
                                  par->layers[i_c].atoms[i].pos[2]*BOHR,
                                  par->layers[i_c].atoms[i].pos[3]*BOHR,
                                  par->layers[i_c].atoms[i].type);
+
+
+
   fprintf(STDCTR,"*****************************************\n");    
 }
 #endif
+
+
+
+
+
 
 #ifdef EXIT
  fprintf(STDCTR,

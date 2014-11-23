@@ -11,7 +11,7 @@
  * Changes:
  *   GH/21.09.02 - copy from srsx
  *   LD/17.10.14 - adapted for condition GSL usage (enabled with
- *                 '_USE_GSL' added to defines when compiling)
+ *                 'USE_GSL' added to defines when compiling)
  *********************************************************************/
 
 /*!
@@ -25,11 +25,11 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef _USE_GSL
+#ifdef USE_GSL
 #include <gsl/gsl_vector.h>
 #endif
 
-#ifdef _USE_GSL
+#ifdef USE_GSL
 #define VECTOR_SET(vec, i, val)     gsl_vector_set(vec, i, val)
 #define VECTOR_ALLOC(vec, n)        gsl_vector* vec = gsl_vector_alloc(n)
 #define VECTOR_FREE(vec)            gsl_vector_free(vec)
@@ -63,7 +63,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
 
   real y_0;
 
-  #ifdef _USE_GSL
+  #ifdef USE_GSL
   gsl_vector *x = gsl_vector_alloc(n_dim);
   gsl_vector *x_0 = gsl_vector_calloc(n_dim);
   gsl_vector *y = gsl_vector_alloc(n_dim);
@@ -132,7 +132,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   /* Calculate R factors for displacements */
   for (i_par = 1; i_par <= n_dim; i_par ++)
   {
-    #ifdef _USE_GSL
+    #ifdef USE_GSL
     gsl_vector_set(del, i_par-1, pos);
     #else
     del[i_par] = dpos;
@@ -163,7 +163,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
       }
       else
       {
-        #ifdef _USE_GSL
+        #ifdef USE_GSL
         gsl_vector_set(del, i_par-1,
                         gsl_vector_get(del, i_par-1) / R_sqrt(rdel));
         #else
@@ -174,14 +174,14 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
         {
           if(i_par == j_par)
           {
-            #ifdef _USE_GSL
+            #ifdef USE_GSL
             gsl_vector_set(x, j_par-1, gsl_vector_get(x_0, j_par-1)
                                           + gsl_vector_get(del, j_par-1));
             #else
             x[j_par] = x_0[j_par] + del[j_par];
             #endif
           }
-          #ifdef _USE_GSL
+          #ifdef USE_GSL
           else gsl_vector_set(x, j_par-1, gsl_vector_get(x_0, j_par-1));
           #else
           else x[j_par] = x_0[j_par];
@@ -193,7 +193,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
                 i_par);
         #endif
 
-        #ifdef _USE_GSL
+        #ifdef USE_GSL
         gsl_vector_set(y, i_par-1, SR_EVALRF(x));
         rdel = R_fabs(gsl_vector_get(y, i_par-1) - y_0) / pref;
         #else
@@ -208,7 +208,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   } /* for i_par */
 
   /* Calculate error bars and write to log file */
-  #ifdef _USE_GSL
+  #ifdef USE_GSL
   pref = gsl_vector_get(y, 0) * rr;
   for (i_par = 1; i_par <= ndim; i_par ++)
   {
@@ -224,7 +224,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   fprintf(log_stream, "\n=> ERROR BARS:\n\n");
   for (i_par = 1; i_par <= n_dim; i_par ++)
   {
-    #ifdef _USE_GSL
+    #ifdef USE_GSL
     dr = gsl_vector_get(y, i_par-1) - y_0;
     #else
     dr = y[i_par] - y_0;
@@ -240,7 +240,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
 
     if( ! IS_EQUAL_REAL(dr, 0.))
     {
-      #ifdef _USE_GSL
+      #ifdef USE_GSL
       faux = R_sqrt(pref/dr) * gsl_vector_get(del, i_par-1);
       gsl_vector_set(err, i_par-1, faux);
       fprintf(log_stream, "%2d: del R = %.4f; del par = %.4f\n",
@@ -253,7 +253,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
     }
     else
     {
-      #ifdef _USE_GSL
+      #ifdef USE_GSL
       gsl_vector_set(err, i_par-1, -1.);
       #else
       err[i_par] = -1.;
