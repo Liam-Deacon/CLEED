@@ -76,10 +76,8 @@ int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, int set)
   }
   if(beams_out == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " ***error (leed_beam_set): allocation error.\n");
-    #endif
-    exit(LEED_ALLOCATION_ERROR);
+    ERROR_MSG("allocation error.\n");
+    RETURN_ERROR(LEED_ALLOCATION_ERROR);
   }
 
   /*
@@ -88,10 +86,7 @@ int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, int set)
    * - loop over beam indices.
    */
  
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_beam_set): "
-      "%d beams in beam set %d:\n", n_beams_out-1, set);
-  #endif
+  CONTROL_MSG(CONTROL, "%d beams in beam set %d:\n", n_beams_out-1, set);
 
   i_beams_out = 0;
   for(i_beams_in = 0;
@@ -102,12 +97,10 @@ int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, int set)
     {
       memcpy( beams_out+i_beams_out, beams_in+i_beams_in, sizeof(leed_beam) );
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "beam%3d [set%d]: (%6.2f, %6.2f)\n", i_beams_out,
+      CONTROL_MSG(CONTROL, "beam%3d [set%d]: (%6.2f, %6.2f)\n", i_beams_out,
               (beams_out + i_beams_out)->set,
               (beams_out + i_beams_out)->ind_1,
               (beams_out + i_beams_out)->ind_2);
-      #endif
 
       i_beams_out ++;
     } /* if */

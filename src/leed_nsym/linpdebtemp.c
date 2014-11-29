@@ -68,51 +68,25 @@ real leed_inp_debye_temp(real deb_temp, real mass, real temp)
   /* Check parameters */
   if (deb_temp <= 0.)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "***error (leed_inp_debye_temp): "
-            "wrong value for Debye temperature: %f\n", deb_temp);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_MSG("wrong value for Debye temperature: %f\n", deb_temp);
+    ERROR_RETURN(-1.);
   }
 
   if (mass <= 0.)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_inp_debye_temp): "
-            "wrong value for mass: %f\n", mass);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_MSG("wrong value for mass: %f\n", mass);
+    ERROR_RETURN(-1.);
   }
 
   if (temp < 0.)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_inp_debye_temp): "
-            "wrong value for temperature: %f\n", temp);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_MSG("wrong value for temperature: %f\n", temp);
+    ERROR_RETURN(-1.);
   }
 
   /* calculate dr2 */
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_inp_debye_temp): "
+  CONTROL_MSG(CONTROL,
       "Debye = %.1f, Mass = %.1f, Temp. = %.1f\n", deb_temp, mass, temp);
-  #endif
 
   faux = temp / deb_temp;
 
@@ -129,10 +103,8 @@ real leed_inp_debye_temp(real deb_temp, real mass, real temp)
     dr2 = 0.5 * PREF_DEBWAL / (mass * deb_temp) * R_sqrt(0.0625 + faux*faux);
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_inp_debye_temp): dr2 = %.3f dr1 = %.3f \n",
-         dr2 * BOHR * BOHR, R_sqrt(dr2)*BOHR );
-  #endif
+  CONTROL_MSG(CONTROL, "dr2 = %.3f dr1 = %.3f \n",
+              dr2 * BOHR * BOHR, R_sqrt(dr2)*BOHR );
 
   return(dr2);
 }  /* end of function leed_inp_debye_temp */

@@ -88,10 +88,8 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
  
   if(*p_beams_out == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_beam_get_selection): allocation error.\n");
-    #endif
-    exit(LEED_ALLOCATION_ERROR);
+    ERROR_MSG("allocation error.\n");
+    ERROR_EXIT(LEED_ALLOCATION_ERROR);
   }
  else
  {
@@ -103,21 +101,16 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
   k_max_2 = faux_r*faux_r + 2*v_par->eng_r;
   k_max = R_sqrt(k_max_2);
  
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_beam_get_selection): dmin  = %.2f, epsilon = %.2e\n",
-                 dmin * BOHR, v_par->epsilon);
-  fprintf(STDCTR, "(leed_beam_get_selection): "
-          "k_max = %.2f, max. No of beams = %2d\n", k_max, iaux);
-  #endif
+  CONTROL_MSG(CONTROL_X, "dmin  = %.2f, epsilon = %.2e\n",
+              dmin * BOHR, v_par->epsilon);
+  CONTROL_MSG(CONTROL_X, "k_max = %.2f, max. No of beams = %2d\n", k_max, iaux);
 
   /*
    * Copy those beams from list beams_in whose k_par are within the
    * radius defined by k_max into list beams_out.
    * - loop over beam indices.
    */
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_beam_get_selection): currently used beams:\n\n");
-  #endif
+  CONTROL_MSG(CONTROL, "currently used beams:\n\n");
 
   /* k_r, k_i is now defined by the complex energy */
   cri_sqrt(&k_r, &k_i, 2.*v_par->eng_r, 2.*v_par->eng_i);
@@ -172,7 +165,7 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
                (beams_out + i_beams_out)->k_r[3],
                (beams_out + i_beams_out)->k_i[3]);
 
-      #ifdef CONTROL
+      #if CONTROL
       /* mark new beam sets */
       if((i_beams_out > 0) &&
           ((beams_out+i_beams_out)->set != (beams_out+i_beams_out-1)->set) )
@@ -209,7 +202,7 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
       fprintf(STDCTR, "\t\t\t\t1/Akz\t: (%6.4f, %6.4f)\n\n",
               (beams_out + i_beams_out)->Akz_r,
               (beams_out + i_beams_out)->Akz_i);
-      #endif
+      #endif /* CONTROL */
 
       i_beams_out ++;
     } /* if */

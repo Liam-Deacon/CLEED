@@ -58,21 +58,22 @@
  *
  * \todo add OpenCL version e.g. using CBLAS within conditional \c
  * USE_OPENCL preprocessor block.
+ *
+ * \note A uniform interface to several matrix multiplication backends (CBLAS,
+ * GSL and native) is provided through the use of preprocessor macros, which
+ * are defined in cblas_aux.h .
+ *
  */
 mat matmul(mat Mr, const mat M1, const mat M2)
 {
-
-  long int i;
-  long int i_c2, i_r1;
-  long int i_cr1, i_cr2;
-
   int result_num_type;
 
-  #if defined(USE_GSL)
-  gsl_matrix *gsl_m1, *gsl_m2, *gsl_mr;
-  gsl_matrix_complex *gsl_m1c, *gsl_m2c, *gsl_mr;
+  #if ( USE_CBLAS || USE_GSL || USE_MKL )
+  REAL_MATRIX *m1, *m2, *mr;      /* cblas matrices passed to cblas_[sf]gemm */
+  COMPLEX_MATRIX *m1c, *m2c, *mr; /* cblas matrices passed to cblas_[cz]gemm */
   #else
-  real *cblas_m1, *cblas_m2, *cblas_mr; /* passed to cblas_Xgemm */
+  mat m1 = M1, m2 = M2, mr = Mr;
+  mat m1c = M1, m2c = M2, mrc = Mr;
   #endif
 
   /* check input matrices */
@@ -80,128 +81,94 @@ mat matmul(mat Mr, const mat M1, const mat M2)
   /* check validity of the input matrices */
   if ((matcheck(M1) < 1) || (matcheck(M2) < 1))
   {
-
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matmul): ivalid input matrices\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid input matrices\n");
+    ERROR_RETURN(NULL);
   }
 
   /* check dimensions of input matrices */
   if (M1->cols != M2->rows)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matmul): "
-            "dimensions of input matrices do not match\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("dimensions of input matrices do not match\n");
+    ERROR_RETURN(NULL);
   }
   
+  /* check size of real */
+  if ( sizeof(real) != sizeof(float) && sizeof(real) != sizeof(double) )
+  {
+    ERROR_MSG("unexpected sizeof(real)=%lu\n", sizeof(real));
+    ERROR_RETURN(NULL);
+  }
+
   /* Create cblas matrices */
   if((M1->num_type ==  NUM_REAL) && (M2->num_type ==  NUM_REAL) )
   {
-    #ifdef USE_GSL /* use GNU Scientific Library */
-
-    #else /* use CBLAS method */
     /* In this case we need:
      * - no intermediary storage for operands
      * - no conversion to complex
      */
-    cblas_mr = calloc(M1->rows * M2->cols, sizeof(real));
+    mr = REAL_MATRIX_ALLOC(M1->rows, M2->cols);
 
-    cblas_m1 = M1->rel + 1;   /* matrices are stored as row major */
-    cblas_m2 = M2->rel + 1;
+    /* matrices are stored as row major */
+    REAL_MAT2CBLAS(m1, M1);
+    REAL_MAT2CBLAS(m2, M2);
 
     result_num_type = NUM_REAL;
-    #endif /* end USE_GSL */
   }
   else
   {
     /* at least one operand is complex */
-    cblas_mr = calloc(M1->rows * M2->cols, 2*sizeof(real));
+    mrc = COMPLEX_MATRIX_ALLOC(M1->rows, M2->cols);
 
-    cblas_m1 = calloc(M1->rows * M1->cols, 2*sizeof(real));
-    cblas_m2 = calloc(M2->rows * M2->cols, 2*sizeof(real));
+    m1c = COMPLEX_MATRIX_ALLOC(M1->rows, M1->cols);
+    m2c = COMPLEX_MATRIX_ALLOC(M2->rows, M2->cols);
 
-    mat2cblas ( cblas_m1, NUM_COMPLEX, M1 ) ;
-    mat2cblas ( cblas_m2, NUM_COMPLEX, M2 ) ;
+    COMPLEX_MAT2CBLAS(m1c, M1);
+    COMPLEX_MAT2CBLAS(m2c, M2);
 
     result_num_type = NUM_COMPLEX;
   }
+
+  /* Allocate memory for the resultant native matrix */
+  Mr = matalloc(Mr, M1->rows, M2->cols, result_num_type);
   
   /* Perform the multiplication */
-  #ifdef CONTROL
-  fprintf(STDCTR, " (matmul) start multiplication \n");
-  #endif
+  CONTROL_MSG(CONTROL, "start multiplication\n");
 
   switch(result_num_type)
   {
    case (NUM_REAL):
    {
      real alpha = 1.0 ;
-     real beta = 0.0 ;
+     real beta =  0.0 ;
 
-     if ( sizeof(real) == sizeof(float) || sizeof(real) == sizeof(double) )
-     {
-       CBLAS_REAL_GEMM(alpha, m1, m1_rows, m1_cols, m2, m2_cols, beta, mr);
-     }
-     else
-     {
-       fprintf(stderr, "matmul: unexpected sizeof(real)=%lu\n", sizeof(real));
-
-       #ifdef EXIT_ON_ERROR
-       exit(1);
-       #else
-       return(NULL);
-       #endif
-     }
+     REAL_CBLAS_GEMM(alpha, m1, M1->rows, M1->cols,
+                            m2, M2->cols, beta, mr);
+     REAL_CBLAS2MAT(mrc, Mr);
    }  /* endcase NUM_REAL */
    break;
 
    case (NUM_COMPLEX):
    {
-     real alpha[2] = { 1.0, 0.0 } ;
-     real beta[2] =  { 0.0, 0.0 } ;
+     COMPLEX(alpha, 1.0, 0.0);
+     COMPLEX(beta, 0.0, 0.0);
 
-     if ( sizeof(real) == sizeof(float) || sizeof(real) == sizeof(double) )
-     {
-       CBLAS_COMPLEX_GEMM(alpha, m1, m1_rows, m1_cols, m2, m2_cols, beta)
-     }
-     else
-     {
-       fprintf(stderr, "matmul: unexpected sizeof(real)=%lu\n", sizeof(real));
-
-       #ifdef EXIT_ON_ERROR
-       exit(1);
-       #else
-       return(NULL);
-       #endif
-     }
+     COMPLEX_CBLAS_GEMM(alpha, m1c, M1->rows, M1->cols,
+                               m2c, M2->cols, beta, mrc);
+     COMPLEX_CBLAS2MAT(mrc, Mr);
    }  /* endcase NUM_COMPLEX */
    break ;
   }   /* endswitch */
 
-  /* Copy cblas_mr into Mr */
-  Mr = matalloc(Mr, M1->rows, M2->cols, result_num_type);
-  cblas2mat ( Mr, cblas_mr );
-
   /* free memory */
-  if ( result_num_type == NUM_COMPLEX )
-  {
-    free(cblas_m1);
-    free(cblas_m2);
-  }
-  free(cblas_mr);
+  #ifndef USE_NATIVE
+  REAL_MATRIX_FREE(m1);
+  REAL_MATRIX_FREE(m2);
+  REAL_MATRIX_FREE(mr);
+
+  COMPLEX_MATRIX_FREE(m1c);
+  COMPLEX_MATRIX_FREE(m2c);
+  COMPLEX_MATRIX_FREE(mrc);
+  #endif
 
   return(Mr);
 }  /* end of function matmul */

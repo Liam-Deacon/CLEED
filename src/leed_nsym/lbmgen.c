@@ -113,9 +113,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
 
   if(*p_beams == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (leed_beam_gen): allocation error.\n");
-    #endif
+    ERROR_MSG("allocation error.\n");
     exit(1);
   }
   else
@@ -123,15 +121,11 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
     beams = *p_beams;
   }
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_beam_gen): eng_max  = %.2f, vr = %.2e\n",
-                 eng_max * HART, v_par->vr * HART);
-  fprintf(STDCTR, "(leed_beam_gen): dmin  = %.2f, epsilon = %.2e\n",
+  CONTROL_MSG(CONTROL_X, "eng_max  = %.2f, vr = %.2e\n",
+              eng_max * HART, v_par->vr * HART);
+  CONTROL_MSG(CONTROL_X, "dmin  = %.2f, epsilon = %.2e\n",
                  c_par->dmin * BOHR, v_par->epsilon);
-  fprintf(STDCTR, "(leed_beam_gen): k_max = %.2f, max. No of beams = %2d\n",
-                 k_max, iaux);
-  #endif
-
+  CONTROL_MSG(CONTROL_X, "k_max = %.2f, max. No of beams = %2d\n", k_max, iaux);
 
   /*
    * Some often used values:
@@ -151,10 +145,8 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   k_in[1] = faux_r * R_cos(v_par->phi);
   k_in[2] = faux_r * R_sin(v_par->phi);
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_beam_gen): a1 = (%.2f, %.2f)", g1_x, g1_y);
-  fprintf(STDCTR, "\ta2 = (%.2f, %.2f)\n", g2_x, g2_y);
-  #endif
+  CONTROL_MSG(CONTROL_X, "a1 = (%.2f, %.2f)\ta2 = (%.2f, %.2f)\n",
+                          g1_x, g1_y, g2_x, g2_y);
 
   /*
    * Determine number of beam sets (n_set)
@@ -173,10 +165,8 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   (bm_off+0)->k_r[1] = 0.;
   (bm_off+0)->k_r[2] = 0.;
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_beam_gen): set %d: %5.2f %5.2f (%5.2f %5.2f)\n", 0,
+  CONTROL_MSG(CONTROL_X, "set %d: %5.2f %5.2f (%5.2f %5.2f)\n", 0,
       (bm_off)->ind_1, (bm_off)->ind_2, (bm_off)->k_r[1], (bm_off)->k_r[2]);
-  #endif
 
   for(n1 = -n_set, i_set = 1; n1 <= n_set; n1++)
   {
@@ -201,12 +191,11 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
 
   } /* for n1 */
  
-  #ifdef WARNING
+  #if WARNING
   if( i_set != n_set)
   {
-    fprintf(STDWAR, "* warning (leed_beam_gen): "
-            "wrong number of beam sets found.\n"
-            "                    found: %d, should be: %d\n", i_set, n_set);
+    WARNING_MSG("wrong number of beam sets found.\n"
+                "                    found: %d, should be: %d\n", i_set, n_set);
   }
   #endif
 
@@ -233,10 +222,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   n2_max = 2 + (int)(k_max/faux_i + k_in[0]/a2);
   n1_max = 2 + (int)( k_max/a1 + n2_max * faux_r/ a1 + k_in[0]/a1);
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_beam_gen): "
-          "n1_max = %2d, n2_max = %2d\n", n1_max, n2_max);
-  #endif
+  CONTROL_MSG(CONTROL_X, "n1_max = %2d, n2_max = %2d\n", n1_max, n2_max);
 
   /*
    * k_r, k_i is now defined by the complex energy
@@ -292,10 +278,9 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
      * 1st pass: Sort the beams according to the parallel component
      * (i.e. smallest k_par first)
      */
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_beam_gen): SORTING %2d beams in set %d:\n",
-                i_beams - offset, i_set);
-    #endif
+    CONTROL_MSG(CONTROL, "SORTING %2d beams in set %d:\n",
+                i_beams-offset, i_set);
+
     for(n1 = offset; n1 < i_beams; n1 ++)
     {
       for(n2 = n1+1; n2 < i_beams; n2 ++)
@@ -334,13 +319,11 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
         }
       } /* n2 */
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "%2d: (%6.2f, %6.2f):\t",
+      CONTROL_MSG(CONTROL, "%2d: (%6.2f, %6.2f):\t",
               n1, (beams + n1)->ind_1, (beams + n1)->ind_2);
-      fprintf(STDCTR, "\td_par: %.2f\tk_r: (%5.2f, %5.2f, %5.2f)\n",
+      CONTROL_MSG(CONTROL, "\td_par: %.2f\tk_r: (%5.2f, %5.2f, %5.2f)\n",
               R_sqrt((beams + n1)->k_par),  (beams + n1)->k_r[1],
               (beams + n1)->k_r[2], (beams + n1)->k_r[3]);
-      #endif
     }  /* n1 */
 
   } /* for i_set */

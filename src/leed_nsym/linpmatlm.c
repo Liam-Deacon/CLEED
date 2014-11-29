@@ -74,16 +74,8 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
   /* Open input file */
   if((inp_stream = fopen(filename, "r")) == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "\n*** error (leed_inp_mat_lm): "
-        "could not open file \"%s\"\n", filename);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return NULL;
-    #endif
+    ERROR_MSG("could not open file \"%s\"\n", filename);
+    ERROR_RETURN(NULL);
   }
 
   /* Read the first line of the input file which contains the
@@ -92,10 +84,7 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
 
   if ( linebuffer == NULL)     /* EOF found */
   {
-    #ifdef ERROR
-    fprintf(STDERR, "\n*** error (leed_inp_mat_lm): "
-        "unexpected EOF found while reading file \"%s\"\n", filename);
-    #endif
+    ERROR_MSG("unexpected EOF found while reading file \"%s\"\n", filename);
     exit(1);
   }
    
@@ -105,32 +94,25 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
   else if( sscanf(linebuffer, "%u %f",  &l_max_in, &eng) < 2)
   #endif
   {
-    #ifdef ERROR
-    fprintf(STDERR, "\n*** error (leed_inp_mat_lm): "
-        "improper input line in file \"%s\":\n%s", filename, linebuffer);
+    #if ERROR
+    fprintf(STDERR, "\n");
+    ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
     #endif
 
-    #ifdef EXIT_ON_ERROR
-    exit(LEED_FILE_IO_ERROR);
-    #else
-    return(NULL);
-    #endif
+    ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, NULL);
   }
 
-  #ifdef WARNING
+  #if WARNING
   if (l_max_in > l_max)
   {
-    fprintf(STDWAR, "* warning (leed_inp_mat_lm): "
-      "dataset of input file is greater than specified matrix "
-      "(l_max: input %u, matrix %u)\n", l_max_in, l_max);
+    WARNING_MSG("dataset of input file is greater than specified matrix "
+                "(l_max: input %u, matrix %u)\n", l_max_in, l_max);
   }
   #endif
 
   eng = R_sqrt(2*eng);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, " (leed_inp_mat_lm): l_max_in: %u, eng %f)\n", l_max_in, eng);
-  #endif
+  CONTROL_MSG(CONTROL, "l_max_in: %u, eng %f)\n", l_max_in, eng);
 
   /* allocate memory */
   pos_1 = pos_2 = (l_max + 1)*(l_max + 1);
@@ -158,16 +140,13 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
 
     if (iaux < 8 || iaux == EOF)
     {
-      #ifdef ERROR
-      fprintf(STDERR, "\n*** error (leed_inp_mat_lm): "
-          "unable to read values from file \"%s\":\n%s", filename, linebuffer);
+      #if ERROR
+      fprintf(STDERR, "\n");
+      ERROR_MSG("unable to read values from file \"%s\":\n%s",
+                filename, linebuffer);
       #endif
 
-      #ifdef EXIT_ON_ERROR
-      exit(LEED_FILE_IO_ERROR);
-      #else
-      return(NULL);
-      #endif
+      ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, NULL);
     }
 
     if ((l1 <= l_max) && (l2 <= l_max))
@@ -178,7 +157,6 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
       RMATEL(pos_1, pos_2, Mat) = eng * r_part ;
       IMATEL(pos_1, pos_2, Mat) = eng * i_part ;
     }
-
 
   } /* End while */
 

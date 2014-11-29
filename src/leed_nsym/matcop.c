@@ -41,19 +41,13 @@ mat matcopy(mat M_dst, const mat M_src )
   long int size;
 
   /* Check input matrix */
+  if (M_dst == M_src) return(M_src); /* nothing to be done */
 
   /* check validity of the input matrices M_dst and M_src */
   if ( (matcheck(M_src) < 1) || (matcheck(M_dst) < 0) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matcopy): invalid input matrix\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid input matrix\n");
+    ERROR_RETURN(NULL);
   }
 
   /* Check if M_dst == M_src:
@@ -67,9 +61,7 @@ mat matcopy(mat M_dst, const mat M_src )
    */
   if (matcheck(M_dst) == 0)
   {
-    #ifdef CONTROL
-    fprintf(STDCTR, " (matcopy) M_dst = NULL \n");
-    #endif
+    CONTROL_MSG(CONTROL, "M_dst = NULL \n");
 
     M_dst = ( mat )malloc( sizeof( struct mat_str ));
     M_dst->rel = NULL;
@@ -128,12 +120,10 @@ mat matcopy(mat M_dst, const mat M_src )
   }
   else
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matcopy): improper num_type input\n");
-    #endif
-   
     matfree(M_dst);
-    return(NULL);
+
+    ERROR_MSG("improper num_type input\n");
+    ERROR_RETURN(NULL);
   }
 
   /* Set magic number and return M_dst */

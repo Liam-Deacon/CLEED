@@ -45,36 +45,20 @@ mat matalloc(mat M, size_t rows, size_t cols, int num_type)
   size_t no_of_elts;
   real *ptr, *ptr_end;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(matalloc): enter function rows=%u cols=%u num_type=%d\n",
-          rows, cols, num_type);
-  #endif
+  CONTROL_MSG(CONTROL, "enter function rows=%u cols=%u num_type=%d\n",
+              rows, cols, num_type);
 
   /* Check the validity of the pointer M and cols/rows first */
   if(matcheck(M) < 0)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matalloc): Invalid pointer \n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("Invalid pointer\n");
+    ERROR_RETURN(NULL);
   }
 
   if( (cols < 1) || (rows < 1) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matalloc): Invalid number of cols/rows \n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("Invalid number of cols/rows \n");
+    ERROR_RETURN(NULL);
   }
 
   /* Find the correct matrix type (high byte of num_type) and number
@@ -93,24 +77,14 @@ mat matalloc(mat M, size_t rows, size_t cols, int num_type)
   }
   else if( (mat_type == MAT_DIAG) && (cols != rows) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matalloc): different numbers of cols ");
-    fprintf(STDERR, "and rows are incompatible with diagonal matrix type\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("different numbers of cols and rows are incompatible "
+              "with diagonal matrix type\n");
+    ERROR_RETURN(NULL);
   }
 
   num_type = num_type & NUM_MASK;
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(matalloc): num_type: %x mat_type: %x \n",
-          num_type, mat_type);
-  #endif
+  CONTROL_MSG(CONTROL_X, "num_type: %x mat_type: %x \n", num_type, mat_type);
 
   /* If M already points to the right matrix type, only reset matrix elements */
   if( (matcheck(M) > 0) &&
@@ -166,18 +140,14 @@ mat matalloc(mat M, size_t rows, size_t cols, int num_type)
    */
   if(M == NULL)
   {
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(matalloc): create new matrix structure\n");
-    #endif
+    CONTROL_MSG(CONTROL_X, "create new matrix structure\n");
 
     M = ( mat )malloc(sizeof(struct mat_str));
     M->blk_type = BLK_SINGLE;
   }
   else  /* M != NULL */
   {
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(matalloc): reuse old matrix structure\n");
-    #endif
+    CONTROL_MSG(CONTROL_X, "reuse old matrix structure\n");
 
     if (M->iel != NULL) free(M->iel);
     if (M->rel != NULL) free(M->rel);
@@ -196,10 +166,7 @@ mat matalloc(mat M, size_t rows, size_t cols, int num_type)
   {
     case(NUM_REAL):
     {
-      #ifdef CONTROL_X
-      fprintf(STDCTR, "(matalloc): allocate %d real matrix elements\n",
-              no_of_elts);
-      #endif
+      CONTROL_MSG(CONTROL_X, "allocate %d real matrix elements\n", no_of_elts);
 
       M->iel = NULL;
       M->rel = (real*)calloc( no_of_elts, sizeof(real));
@@ -208,25 +175,16 @@ mat matalloc(mat M, size_t rows, size_t cols, int num_type)
       {
         free(M);
 
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matalloc) allocation error\n");
-        #endif
-
-        #ifdef EXIT_ON_ERROR
-        exit(1);
-        #else
-        return(NULL);
-        #endif
+        ERROR_MSG("allocation error\n");
+        ERROR_RETURN(NULL);
       }
       break;
     } /* NUM_REAL */
 
     case(NUM_COMPLEX):
     {
-      #ifdef CONTROL_X
-      fprintf(STDCTR, "(matalloc): allocate 2 * %d complex matrix elements\n",
-              no_of_elts);
-      #endif
+      CONTROL_MSG(CONTROL_X,
+          "allocate 2 * %d complex matrix elements\n", no_of_elts);
 
       M->rel = (real*)calloc(no_of_elts, sizeof(real));
       M->iel = (real*)calloc(no_of_elts, sizeof(real));
@@ -237,38 +195,21 @@ mat matalloc(mat M, size_t rows, size_t cols, int num_type)
         if (M->iel != NULL) free(M->iel);
         free(M);
 
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matalloc) allocation error\n");
-        #endif
-
-        #ifdef EXIT_ON_ERROR
-        exit(1);
-        #else
-        return(NULL);
-        #endif
+        ERROR_MSG("allocation error\n");
+        ERROR_RETURN(NULL);
       }
       break;
     } /* NUM_COMPLEX */
 
     default: /* unknown number type */
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (matalloc) wrong number type: %d\n",
-              num_type);
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(NULL);
-      #endif
+      ERROR_MSG("wrong number type: %d\n", num_type);
+      ERROR_RETURN(NULL);
     }
   } /* switch */
 
   /* Set magic number and return */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(matalloc): set magic number and return\n\n");
-  #endif
+  CONTROL_MSG(CONTROL_X, "set magic number and return\n\n");
 
   M->mag_no = MATRIX;
   return(M);
