@@ -1191,7 +1191,7 @@ HPDF_LineAnnot_SetCaption (HPDF_Annotation annot, HPDF_BOOL showCaption, HPDF_Li
     HPDF_PTRACE((" HPDF_LineAnnot_SetCaption\n"));
 
     ret += HPDF_Dict_AddBoolean ( annot, "Cap", showCaption);
-    ret += HPDF_Dict_AddName( annot, "CP", HPDF_LINE_ANNOT_CAP_POSITION_NAMES[(HPDF_INT)position]);
+    ret += HPDF_Dict_AddName( annot, "CP", HPDF_LINE_ANNOT_CAP_POSITION_NAMES[(HPDF_INT) position]);
 
     if (ret != HPDF_OK)
        return HPDF_Error_GetCode ( annot->error);

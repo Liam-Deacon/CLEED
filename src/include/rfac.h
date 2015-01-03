@@ -42,7 +42,6 @@ extern "C" {
 
 #include "rfac_def.h"
 #include "rfac_func.h"
-#include "rfac_ver.h"
 
 /*********************************************************************
  * End of include file

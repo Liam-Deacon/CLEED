@@ -1,30 +1,17 @@
 /*********************************************************************
- *                        MKIV_VER.H
- *
- *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
- *
- *  Licensed under GNU General Public License 3.0 or later.
- *  Some rights reserved. See COPYING, AUTHORS.
- *
- * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
- *
- * Changes:
- *   LD/02.03.14 - creation
- *********************************************************************/
+LD/24.04.14
+  
+  file contains mkiv version information
+  
+Changes:
 
-/*! \file
- *
- * Header contains mkiv version information
- */
+*********************************************************************/
 
 #ifndef MKIV_VER_H
 #define MKIV_VER_H
 
 #define MKIV "mkiv"
-#define MKIV_COPYRIGHT                                                        \
-"Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>\n"                     \
-"Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>"\
-"Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>"
+#define MKIV_COPYRIGHT "Copyright unknown"
 #define MKIV_LICENSE "GNU General Public License v3"
 #define MKIV_VERSION "2014.07.04 Development"
 #define MKIV_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 

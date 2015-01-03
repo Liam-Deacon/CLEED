@@ -13,7 +13,7 @@
  ********************************************************************/
 
 /*! \file
- *  \brief Implementation of rf_rdexpt() function.
+ *  \brief Implementation of rfac_iv_read() function.
  */
 
 #include <math.h>
@@ -31,10 +31,6 @@
  * <energy> <intensity>
  * Comments are indicated by a '#'.
  *
- * \param[in,out] iv_cur pointer to structure #rfac_iv. All available
- * information about the theoretical IV curve will be stored in this
- * structure.
- *
  * \param[in] filename string containing the name of the file where the
  * input should be read from.
  *
@@ -43,12 +39,12 @@
  *
  * \retval \c NULL if failed.
  */
-rfac_iv_data *rf_rdexpt(rfac_ivcur *iv_cur, const char *filename )
+rfac_iv_data *rfac_iv_read(const char *filename)
 {
 
   size_t i;
-  size_t lines, len;
-  long offs;
+  size_t lines;
+  long offs, len;
   real max_int;
 
   char line_buffer[STRSZ];
@@ -66,56 +62,40 @@ rfac_iv_data *rf_rdexpt(rfac_ivcur *iv_cur, const char *filename )
 
   if( (buffer = file2buffer(filename)) == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (cr_rdexpt): error in function file2buffer \n");
-    #endif
+    ERROR_MSG("error in function file2buffer \n");
     return(NULL);
   }
-  lines = rf_nclines(buffer);
+  lines = rfac_nclines(buffer);
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(cr_rdexpt): file content:\n%s\n", buffer);
-  fprintf(STDCTR, "(cr_rdexpt): lines = %d\n", lines);
-  #endif
+  CONTROL_MSG(CONTROL_X, "file content:\n%s\n", buffer);
+  CONTROL_MSG(CONTROL_X, "lines = %d\n", lines);
 
   if (iv->data != NULL) free(iv->data);
   iv->data = (rfac_iv_data *) malloc((lines+1)* sizeof(rfac_iv_data));
   if( iv->data == NULL )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (cr_rdexpt): allocation error (list) \n");
-    #endif
+    ERROR_MSG("allocation error (list) \n");
     exit(RFAC_ALLOCATION_ERROR);
   }
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(cr_rdexpt): after malloc\n");
-  #endif
+  CONTROL_MSG(CONTROL_X, "after malloc\n");
 
   /* write energy pairs to list */
   for ( i = 0, offs = 0L, max_int = 0.,
        iv->equidist = true , iv->sort = true ;
       ((len = bgets(buffer, offs, STRSZ, line_buffer))+1 ) /* orig. len > -1 */
-      && (i < lines);  offs += (long)len)
+      && (i < lines);  offs += len)
   {
     
     if(line_buffer[0] != '#')      /* no comment */
     {
 
-      #ifdef CONTROL_XX
       /* print eV[i] I[i] */
-      fprintf(STDCTR, "(cr_rdexpt): (%s): %e %e\n", filename,
-              iv.data[i].energy, iv.data[i].intens);
-      #endif
+      CONTROL_MSG(CONTROL_X, "(%s): %e %e\n", filename,
+                  iv->data[i].energy, iv->data[i].intens);
 
-      #ifdef REAL_IS_DOUBLE
-      if(sscanf(line_buffer, "%lf %lf", &iv.data[i].energy,
-                &iv.data[i].intens) == 2)
-      #endif
-      #ifdef REAL_IS_FLOAT
-      if(sscanf(line_buffer, "%f %f", &iv->data[i].energy,
-                &iv->data[i].intens) == 2)
-      #endif
+      if(sscanf(line_buffer, "%" REAL_FMT "f %" REAL_FMT "f",
+                &iv->data[i].energy, &iv->data[i].intens) == 2)
       {
 
         /* search for max. intensity */
@@ -133,10 +113,7 @@ rfac_iv_data *rf_rdexpt(rfac_ivcur *iv_cur, const char *filename )
                        iv->data[i-2].energy)) >  ENG_TOLERANCE ) )
         {
           iv->equidist = 0;
-          #ifdef WARNING
-          fprintf(STDWAR, "*** warning (cr_rdexpt):"
-                    " \"%s\" is not equidistant (No:%d)\n", filename, i-1);
-          #endif
+          WARNING_MSG("\"%s\" is not equidistant (No:%d)\n", filename, i-1);
         }
 
         /* increment i */
@@ -150,42 +127,36 @@ rfac_iv_data *rf_rdexpt(rfac_ivcur *iv_cur, const char *filename )
 
   if (i==0)
   {
-    printf("(cr_rdexpt): *** No input read from file \"%s\"\n", filename);
+    WARNING_MSG("No input read from file \"%s\"\n", filename);
   }
-  #ifdef CONTROL
   else
   {
-    fprintf(STDCTR, "(cr_rdexpt): last pair(%d): %f %f\n",
+    CONTROL_MSG(CONTROL, "last pair(%d): %f %f\n",
                  i-1, iv->data[i-1].energy, iv->data[i-1].intens);
   }
 
   if(iv->equidist == true)
   {
-    fprintf(STDCTR, "(cr_rdexpt): expt. IV curve is equidistant\n");
+    CONTROL_MSG(CONTROL, "expt. IV curve is equidistant\n");
   }
   else
   {
-    fprintf(STDCTR, "(cr_rdexpt): expt. IV curve is not equidistant\n");
+    CONTROL_MSG(CONTROL, "expt. IV curve is not equidistant\n");
   }
-  #endif /* CONTROL */
 
   /* write available information to structure iv_cur. */
   iv->first_eng = iv->data[0].energy;
   iv->last_eng = iv->data[i-1].energy;
   iv->max_int = max_int;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_rdexpt): iv_cur structure written\n");
-  #endif
+  CONTROL_MSG(CONTROL, "iv_cur structure written\n");
  
   /* set last energy and intensities to termination value */
-  iv->data[i].energy = FEND_OF_LIST;  /* termination */
-  iv->data[i].intens = FEND_OF_LIST;  /* termination */
+  iv->data[i].energy = (real) FEND_OF_LIST;  /* termination */
+  iv->data[i].intens = (real) FEND_OF_LIST;  /* termination */
   iv->n_eng = i;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_rdexpt): list terminations set\n");
-  #endif
+  CONTROL_MSG(CONTROL, "list terminations set\n");
 
   /*
    free previously allocated memory;

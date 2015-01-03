@@ -21,30 +21,28 @@ SET(PATT_VERSION_MAJOR "${CPACK_PACKAGE_VERSION_MAJOR}")
 SET(PATT_VERSION_MINOR "${CPACK_PACKAGE_VERSION_MINOR}")
 SET(PATT_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}")
 SET(PATT_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
-CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/patt.h.in"
-   "${PROJECT_SOURCE_DIR}/src/include/patt.h" IMMEDIATE @ONLY )
+CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h.in"
+   "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h" IMMEDIATE @ONLY )
 
 ###############################################################################
 # Sources
 ###############################################################################
 SET (patt_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 SET (patt_SRCS 
+    matrix_2x2.c
+    nice_frac.c
     patt.c
+    patt_args.c
+    patt_colors.c
     patt_decode_vectors.c
-    patt_ps_add_vectors.c
-    patt_ps_color.c
-    patt_ps_draw_init.c
-    patt_ps_draw_finalize.c
-    patt_ps_draw_gun.c
-    patt_ps_draw_vectors.c
-    patt_ps_draw_screen.c
-    patt_ps_draw_spot.c
-    patt_ps_set_linewidth.c
-    patt_ps_print_substitute.c
-    patt_ps_write_title.c
+    patt_defaults.c
+    patt_draw.c
+    patt_draw_ps.c
+    patt_draw_cairo.c
     patt_fget_nocomm.c
     patt_help.c
-    nice_frac.c
+    pattern.c
+    spots.c
 )
 
 

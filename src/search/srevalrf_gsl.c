@@ -12,7 +12,7 @@
  *31.03.03
   file contains function:
 
-  real sr_evalrf_gsl(gsl_vector *par)
+  real sr_evalrfac_gsl(gsl_vector *par)
 
  Calculate IV curves and evaluate R factor
 
@@ -74,7 +74,7 @@ extern struct sratom_str *sr_atoms;
 extern struct search_str *sr_search;
 extern char *sr_project;
 
-double sr_evalrf_gsl(const gsl_vector *par)
+double sr_evalrfac_gsl(const gsl_vector *par)
 
 /***********************************************************************
 

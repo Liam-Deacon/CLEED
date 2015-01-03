@@ -58,8 +58,7 @@
  * a & b.
  * \note The returned reflection matrix is not necessarily identical to \p Rpm_ab
  */
-mat leed_ld_2lay_rpm ( mat Rpm_ab,
-                mat Rpm_a,
+mat leed_ld_2lay_rpm ( mat Rpm_ab, mat Rpm_a,
                 mat Tpp_b,  mat Tmm_b,  mat Rpm_b,  mat Rmp_b,
                 leed_beam *beams, real *vec_ab )
 {
@@ -75,31 +74,26 @@ mat leed_ld_2lay_rpm ( mat Rpm_ab,
 
   Res = Pp = Pm = Maux_a = Maux_b = NULL;
 
-/*************************************************************************
-  Allocate memory and set up propagators Pp and Pm. 
-
-  Pp = exp[ i *( k_x*v_ab_x + k_y*v_ab_y + k_z*v_ab_z) ]
-  Pm = exp[-i *( k_x*v_ab_x + k_y*v_ab_y - k_z*v_ab_z) ]
-     = exp[ i *(-k_x*v_ab_x - k_y*v_ab_y + k_z*v_ab_z) ]
-*************************************************************************/
+  /* Allocate memory and set up propagators Pp and Pm.
+   *
+   * Pp = exp[ i *( k_x*v_ab_x + k_y*v_ab_y + k_z*v_ab_z) ]
+   * Pm = exp[-i *( k_x*v_ab_x + k_y*v_ab_y - k_z*v_ab_z) ]
+   *    = exp[ i *(-k_x*v_ab_x - k_y*v_ab_y + k_z*v_ab_z) ]
+   */
   n_beams = Rpm_a->cols;
   nn_beams = n_beams * n_beams;
 
   Pp = matalloc(NULL, n_beams, 1, NUM_COMPLEX );
   Pm = matalloc(NULL, n_beams, 1, NUM_COMPLEX );
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_ld_2lay_rpm):vec_ab(%.2f %.2f %.2f)\n",
-          vec_ab[1],vec_ab[2],vec_ab[3]);
-  #endif
+  CONTROL_MSG(CONTROL_X, "vec_ab(%.2f %.2f %.2f)\n",
+              vec_ab[1],vec_ab[2],vec_ab[3]);
 
   for( k = 0; k < n_beams; k++)
   {
-    #ifdef CONTROL
-    fprintf(STDCTR, "ld: %2d: k_r = %5.2f %5.2f %5.2f\tk_i = %5.2f;",
+    CONTROL_MSG(CONTROL, "ld: %2d: k_r = %5.2f %5.2f %5.2f\tk_i = %5.2f;",
         k, (beams+k)->k_r[1], (beams+k)->k_r[2], (beams+k)->k_r[3],
         (beams+k)->k_i[3]);
-    #endif
 
     faux_r = (beams+k)->k_r[1] * vec_ab[1] +
              (beams+k)->k_r[2] * vec_ab[2] +

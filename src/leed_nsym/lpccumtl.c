@@ -37,9 +37,9 @@ GH/11.07.03 - bug fix in output of T_mat for T=0: multiply with (-kappa)
 #include "leed.h"
 
 
-#define NITER 1000
+static const size_t NITER = 1000;
 /* #define CONV_TEST 0.00000390625 */  /* to be multiplied by (l_max+1)^2 */
-#define CONV_TEST 0.000001        /* to be multiplied by (l_max+1)^2 */
+static const double CONV_TEST = 0.000001; /*!< to be multiplied by (l_max+1)^2 */
 
 static int n_call = 0;
 static int last_l = -1;
@@ -103,13 +103,13 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
   mat MyMyTn, MyTnMy, TnMyMy;
   mat MzMzTn, MzTnMz, TnMzMz;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_par_cumulative_tl): Enter function: \n");
-  fprintf(STDCTR, "\t(ux, uy, uz) = (%.3f, %.3f, %.3f) [au]; "
-                  "energy = %.3f H; lmax_t = %u, lmax_0 = %u\n",
-                  ux, uy, uz, energy, l_max_t, l_max_0);
+#if CONTROL
+  CONTROL_MSG(CONTROL, "Enter function: \n"
+              "\t(ux, uy, uz) = (%.3f, %.3f, %.3f) [au]; "
+              "energy = %.3f H; lmax_t = %u, lmax_0 = %u\n",
+              ux, uy, uz, energy, l_max_t, l_max_0);
   matshow(tl_0);
-  #endif
+#endif
 
   /* Backup original scattering factors
    * and allocate output and dummy arrays.
@@ -132,13 +132,9 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
   }
   else if(l_max_0 < l_max_t)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, "* warning (leed_par_cumulative_tl): "
-            "input phase shifts exist only up to l_max_0 = %u, "
-            "for higher l (up to l_max = %u) they are set to zero.\n",
-            l_max_0, l_max_t);
-    #endif
-    ;
+    WARNING_MSG("input phase shifts exist only up to l_max_0 = %u, "
+                "for higher l (up to l_max = %u) they are set to zero.\n",
+                l_max_0, l_max_t);
   }
 
   /* Set up zero order t matrix t^(0), write to T_n:
@@ -156,10 +152,10 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
             IMATEL(lm1, lm2, T_n) = - tl_aux->iel[l1+1] / kappa;
           }
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR,"(leed_par_cumulative_tl): Tmat(T=0): \n");
+#if CONTROL_X
+  CONTROL_MSG(CONTROL_X, "Tmat(T=0): \n");
   matshowabs(T_n);
-  #endif
+#endif
 
   /* If T = 0, i.e. all ux, uy, and uz are zero, we are allready done.
    * return T_n * (-kappa).
@@ -168,10 +164,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
   {
     Tmat = matcopy(Tmat, T_n);
 
-    #ifdef WARNING
-    fprintf(STDWAR, "*warning (leed_par_cumulative_tl): "
-            "All displacements are zero: return Tmat(T=0)\n");
-    #endif
+    WARNING_MSG("All displacements are zero: return Tmat(T=0)\n");
 
     iaux = Tmat->cols * Tmat->rows;
     for(i_el = 1; i_el <= iaux; i_el ++)
@@ -190,23 +183,19 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
    */
   if( (n_call == 0) || (last_l != l_max_t) )
   {
-
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_par_cumulative_tl): "
-            "calculate Mx, etc. for l_max = %d\n", l_max_t);
-    #endif
+    CONTROL_MSG(CONTROL, "calculate Mx, etc. for l_max = %d\n", l_max_t);
 
     pc_mk_ms( &Mx, &My, &Mz, &MxMx, &MyMy, &MzMz, l_max_t);
   }
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_par_cumulative_tl): Mx: \n");
+#if CONTROL_X
+  CONTROL_MSG(CONTROL_X, "Mx: \n");
   matshow(Mx);
-  fprintf(STDCTR, "(leed_par_cumulative_tl): My: \n");
+  CONTROL_MSG(CONTROL_X, "My: \n");
   matshow(My);
-  fprintf(STDCTR, "(leed_par_cumulative_tl): Mz: \n");
+  CONTROL_MSG(CONTROL_X, "Mz: \n");
   matshow(Mz);
-  #endif
+#endif
 
   MxMxTn = MxTnMx = TnMxMx = NULL;
 
@@ -237,6 +226,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
 
   conv_test = CONV_TEST * l_max_2 * l_max_2;
   relerr_r = relerr_i = 2*conv_test;
+
   for(i_iter = 1;
       (i_iter < NITER) && ( (relerr_r > conv_test) || (relerr_i > conv_test) );
       i_iter ++)
@@ -251,17 +241,17 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
     MxMxTn = matmul(MxMxTn, MxMx,T_n);
     TnMxMx = matmul(TnMxMx, T_n,MxMx);
 
-    #ifdef CONTROL_X
+#if CONTROL_X
     if (i_iter < 4)
     {
-      fprintf(STDCTR, "(leed_par_cumulative_tl): MxMxTn(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "MxMxTn(%d):\n", i_iter-1);
       matshow(MxMxTn);
-      fprintf(STDCTR, "(leed_par_cumulative_tl): MxTnMx(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "MxTnMx(%d):\n", i_iter-1);
       matshow(MxTnMx);
-      fprintf(STDCTR, "(leed_par_cumulative_tl): TnMxMx(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "TnMxMx(%d):\n", i_iter-1);
       matshow(TnMxMx);
     }
-    #endif
+#endif
 
     MyTnMy = matmul(MyTnMy, T_n, My);
     MyTnMy = matmul(MyTnMy, My, MyTnMy);
@@ -275,17 +265,17 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
     MzMzTn = matmul(MzMzTn, MzMz,T_n);
     TnMzMz = matmul(TnMzMz, T_n,MzMz);
 
-    #ifdef CONTROL_X
+#if CONTROL_X
     if (i_iter < 4)
     {
-      fprintf(STDCTR, "(leed_par_cumulative_tl): MzMzTn(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "MzMzTn(%d):\n", i_iter-1);
       matshow(MzMzTn);
-      fprintf(STDCTR, "(leed_par_cumulative_tl): MzTnMz(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "MzTnMz(%d):\n", i_iter-1);
       matshow(MzTnMz);
-      fprintf(STDCTR, "(leed_par_cumulative_tl): TnMzMz(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "TnMzMz(%d):\n", i_iter-1);
       matshow(TnMzMz);
     }
-    #endif
+#endif
 
     /* from here on replace T(n) by T(n+1) */
     pref = - kappa * kappa / i_iter;
@@ -327,26 +317,15 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
       }
     } /* for i_el */
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_par_cumulative_tl): "
-            "iteration No %u: rel. errors: (%.3e, %.3e) <> %.3e\n",
+    CONTROL_MSG(CONTROL, "iteration No %u: rel. errors: (%.3e, %.3e) <> %.3e\n",
             i_iter, relerr_r, relerr_i, conv_test);
-    #endif
  
   } /* for i_iter */
 
   if (i_iter == NITER)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_par_cumulative_tl): "
-            "No convergence after %u iterations\n", i_iter);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("No convergence after %u iterations\n", i_iter);
+    ERROR_RETURN(NULL);
   }
 
   Tmat = matcopy(Tmat, T_acc);
@@ -374,9 +353,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
   matfree(MyMyTn); matfree(MyTnMy); matfree(TnMyMy);
   matfree(MzMzTn); matfree(MzTnMz); matfree(TnMzMz);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_par_cumulative_tl): End of function \n");
-  #endif
+  CONTROL_MSG(CONTROL, "End of function \n");
 
   return (Tmat);
 } /* end of function leed_par_cumulative_tl */

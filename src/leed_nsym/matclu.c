@@ -29,8 +29,6 @@
 
 #include "mat.h"
 
-#define TINY 1.0e-20;
-
 #define CAB2RI(a,b)  (a)*(a) + (b)*(b)
 
 /*!
@@ -59,6 +57,7 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
 
   int i_r, i_c;
   int i_max;
+  const real TINY = 1.e-20;
 
   real big, dum, sumr, sumi;
   real *vv;                  /* vv stores the implicit scaling of each row */
@@ -83,10 +82,8 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
     }
     if (IS_EQUAL_REAL(big, 0.0))
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (ludcmp): Singular matrix \n");
-      #endif
-
+      ERROR_MSG("Singular matrix \n");
+      free(vv);
       return(0);
     }
     vv[i_r]=1.0/big;
@@ -190,8 +187,6 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
 
   return(d);
 } /* end of function c_ludcmp */
-
-#undef TINY
 
 
 /*!

@@ -61,10 +61,7 @@ mat leed_ms_ymat_set(mat Ymat, size_t l_max, leed_beam *beams, size_t set)
     if((beams + i_beams)->set == set) n_beams ++;
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_ms_ymat_set): No of beams in set %u = %u\n",
-          set, n_beams);
-  #endif
+  CONTROL_MSG(CONTROL, "No of beams in set %u = %u\n", set, n_beams);
 
   /* Allocate memory for Ymat */
   ll_max = (l_max + 1)*(l_max + 1);
@@ -80,11 +77,9 @@ mat leed_ms_ymat_set(mat Ymat, size_t l_max, leed_beam *beams, size_t set)
   {
     if( (beams + i_beams)->set == set)
     {
-      #ifdef CONTROL
-      fprintf(STDCTR, "(leed_ms_ymat_set): cos(th): (%.3f %.3f), phi: %.3f\n",
-             (beams+i_beams)->cth_r, 
-             (beams+i_beams)->cth_i, (beams+i_beams)->phi);
-      #endif
+      CONTROL_MSG(CONTROL, "cos(th): (%.3f %.3f), phi: %.3f\n",
+                  (beams+i_beams)->cth_r,
+                  (beams+i_beams)->cth_i, (beams+i_beams)->phi);
 
       Ylm = c_ylm(Ylm, (beams+i_beams)->cth_r, (beams+i_beams)->cth_i,
                        (beams+i_beams)->phi, l_max);

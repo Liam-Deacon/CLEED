@@ -98,17 +98,15 @@ int latt_main(int argc, char *argv[])   /* compile as library function */
   
     if ((out_stream = fopen(lat->output_filename, "w")) == NULL)
     {
-    fprintf(stderr, "*** error: "
-            "open failed %s\n", lat->output_filename);
-    exit(1);
+      ERROR_MSG("open failed %s\n", lat->output_filename);
+      exit(1);
     }
 
     sprintf(line_buffer, "%s.inf", lat->output_filename);
     if ((inf_stream = fopen(line_buffer, "w")) == NULL)
     {
-    fprintf(stderr, "*** error: "
-            "open failed %s\n", lat->output_filename);
-    exit(1);
+      ERROR_MSG("open failed %s\n", lat->output_filename);
+      exit(1);
     }
   }
    
@@ -467,7 +465,7 @@ int latt_main(int argc, char *argv[])   /* compile as library function */
   /* cycle through layers */
   if (lat->max_layers == 0) 
   {
-    lat->max_layers = ( rint (-3. * lat->a_nn / (b3->z) ) );
+    lat->max_layers = (size_t)( rint (-3. * lat->a_nn / (b3->z) ) );
   }
 
   faux->x = lat->image_len / b1->x;
@@ -488,10 +486,10 @@ int latt_main(int argc, char *argv[])   /* compile as library function */
     }
 
     /* complete unit cells if n_unit_cell > 0 */
-    n_max = lat->max_cells;
+    n_max = (int)lat->max_cells;
     if(lat->max_cells > 0)
     {
-      for(n3 = -1; n3 < lat->max_layers; n3 ++)
+      for(n3 = -1; n3 < (int)lat->max_layers; n3 ++)
       {
       /* n_max -> n_cells */
         for(n1 = -n_max; n1 < n_max; n1 ++)

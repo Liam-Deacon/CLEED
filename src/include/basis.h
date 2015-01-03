@@ -24,7 +24,7 @@
 #include "coord.h"
 #include "miller_index.h"
 
-#define BASIS_VECTOR_PTR(basis, i)  (basis->a+(i*sizeof(coord)))
+#define BASIS_VECTOR_PTR(_basis, i)  ((coord*)_basis->a+(i*sizeof(_basis)))
 
 #define CALC_ROTATION_MATRIX(normal, R)                                       \
 {                                                                             \
@@ -127,7 +127,7 @@ namespace cleed {
 class Basis {
   public:
     Basis();
-    Basis(basis *a);
+    Basis(const basis *a);
     ~Basis();
     
     /* setters */
@@ -142,17 +142,17 @@ class Basis {
     void setBasis(const Basis *basis);
     
     /* getters */
-    const &Coordinate getA1();
-    const &Coordinate getA2();
-    const &Coordinate getA3();
+    const Coordinate getA1();
+    const Coordinate getA2();
+    const Coordinate getA3();
     
     /* other methods */
     double **calculateRotationMatrix();
     void rotate(double **R);
     void rotate(double alpha, double beta, double gamma);
     
-  protected:
-    basis *basis;
+  private:
+    basis *basis_ptr;
     
     friend class Coordinate;
 };

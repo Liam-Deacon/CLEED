@@ -139,7 +139,7 @@ void sr_sa_gsl(size_t n_dim, real dpos,
       fprintf(STDCTR, "(sr_sa): Calculate function for vertex(%d)\n", i_par);
       #endif
 
-      gsl_vector_set(y, i_par, sr_evalrf_gsl(x));
+      gsl_vector_set(y, i_par, sr_evalrfac_gsl(x));
 
     } /* for i_par */
 
@@ -175,7 +175,7 @@ void sr_sa_gsl(size_t n_dim, real dpos,
     #endif
 
     n_func = MAX_ITER_SA;
-    sr_amebsa_gsl(p, y, x, &rmin, temp, sr_evalrf_gsl, &n_func, temp);
+    sr_amebsa_gsl(p, y, x, &rmin, temp, sr_evalrfac_gsl, &n_func, temp);
   }
 
 /***********************************************************************

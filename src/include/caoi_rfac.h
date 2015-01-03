@@ -1,46 +1,21 @@
-/************************************************************************
- *                           CAOI_RFAC.H
- *
- *  Copyright 2008-2014 Zhasmina Zheleeva
- *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
- *
- *  Licensed under GNU General Public License 3.0 or later.
- *  Some rights reserved. See COPYING, AUTHORS.
- *
- * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
- *
- * Description:  include file for angle of incidence additions
- *   - type definitions
- *   - constant values
- *
- * Changes:
- *   ZZ/2008.03.23 - Creation
- *   LD/2014.10.07 - Added PROG* definitions and C++ wrapper
- *
- ************************************************************************/
+/*********************************************************************
+ZZ/03.03.2008
+
+include file for angle of incidence additions
+ - type definitions
+ - constant values
+*********************************************************************/
+
 #ifndef RFAC_AOI_H
 #define RFAC_AOI_H
 
-#include <stdio.h>
-#include <string.h>
-
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
-#ifndef STRSIZE
-#define STRSIZE 256
-#endif
-
-#ifndef STDERR
-#define STDERR stderr
-#endif
+#include "gh_stddef.h"
 
 #define PROG "crfac_aoi"
 #define PROG_COPYRIGHT "Copyright (C) 2008-2014 Georg Held\n" \
 "Copyright (C) 2007-2009 Zhasmina Zheleeva" \
 "Copyright (C) 2014 Liam Deacon"
-#define PROG_LICENSE ""
+#define PROG_LICENSE "GNU General Public License v3"
 #define PROG_VERSION ".. Development"
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
 #define PROG_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 
@@ -60,23 +35,22 @@ extern "C" {
 #define PROG_PLAT "Unix"
 #endif
 
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
+
 /*********************************************************************
 include global values for multiple datasets
 *********************************************************************/
-size_t sa;	  /*!< global memory variable for number of aoi datasets */
-char proj_name[FILENAME_MAX]; /*!< global memory variable for storing
-													     * project name */
-/*!
- *  \brief
- *  \return integer value representing success (zero) or error (non-zero)
- *  code.
- *  \param filectr File path or name for the control input.
- */
-int ctrinp(const char filectr[FILENAME_MAX]);
+size_t sa;
+int ctrinp (const char filectr[STRSZ]);
+char proj_name[STRSZ];
 
 /*********************************************************************
 END
 *********************************************************************/
+
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif

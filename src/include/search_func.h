@@ -45,7 +45,7 @@ extern "C" {
 #include <string.h>
 #include "search_def.h"
 
-#if !defined(USE_GSL) && !defined(USE_GSL) /* Original CLEED Interface */
+#if !defined(USE_GSL) /* Original CLEED Interface */
 
 /* sramoeba.c */
 void sr_amoeba(real **, real *, int, real, real (*)(), int *);
@@ -103,7 +103,7 @@ void sr_er_gsl(size_t, real, char *);             /* error evaluation     */
 /* file input|output */
 real sr_ckgeo(const gsl_vector *);
 int sr_ckrot(search_atom *, search *);
-double sr_evalrf_gsl(const gsl_vector *);
+double sr_evalrfac_gsl(const gsl_vector *);
 int sr_mkinp_gsl(const gsl_vector *, int, const char *);
 int sr_mkinp_mir(const char *, gsl_vector *, int);
 void sr_mklog(const char *);

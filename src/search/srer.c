@@ -70,11 +70,11 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   gsl_vector *err = gsl_vector_alloc(n_dim);
   gsl_vector *del = gsl_vector_alloc(n_dim);
   #else
-  real *x = vector(1, n_dim);
-  real *x_0 = vector(1, n_dim);
-  real *y = vector(1, n_dim);
-  real *err = vector(1, n_dim);
-  real *del = vector(1, n_dim);
+  real *x = vector(1, (int)n_dim);
+  real *x_0 = vector(1, (int)n_dim);
+  real *y = vector(1, (int)n_dim);
+  real *err = vector(1, (int)n_dim);
+  real *del = vector(1, (int)n_dim);
   #endif /* _USE-GSL */
 
   real pref, rtol, rr, dr, rfac, rdel=0.;
@@ -102,12 +102,8 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
 
   while( fgets(line_buffer, STRSZ, io_stream) != NULL)
   { ;
-    #ifdef REAL_IS_DOUBLE
-    if( (iaux = sscanf(line_buffer, "%lf %lf", &rfac, &rr) ) == 2) break;
-    #endif
-    #ifdef REAL_IS_FLOAT
-    if( (iaux = sscanf(line_buffer, "%f %f", &rfac, &rr) ) == 2) break;
-    #endif
+    if( (iaux = sscanf(line_buffer, "%" REAL_FMT "f %" REAL_FMT "f",
+                       &rfac, &rr) ) == 2) break;
   }
 
   /* Stop with error message if reading error */
@@ -146,18 +142,12 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
       {
         if( rdel < 0. )
         {
-          #ifdef ERROR
-          fprintf(STDERR, "*** error (sr_er): "
-                  "minimum not found (%d)\n", i_par);
-          #endif
+          ERROR_MSG("minimum not found (%d)\n", i_par);
           exit(SR_FAILURE);
         }
         else
         {
-          #ifdef WARNING
-          fprintf(STDWAR, "* warning (sr_er): "
-                  "minimum R factor independent of par. %d\n", i_par);
-          #endif
+          WARNING_MSG("minimum R factor independent of par. %d\n", i_par);
           rdel = 1.;
         }
       }
@@ -188,10 +178,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
           #endif
         }
 
-        #ifdef CONTROL
-        fprintf(STDCTR, "(sr_er): Calculate function for parameter (%d)\n",
-                i_par);
-        #endif
+        CONTROL_MSG(CONTROL, "Calculate function for parameter (%d)\n", i_par);
 
         #ifdef USE_GSL
         gsl_vector_set(y, i_par-1, SR_EVALRF(x));
@@ -232,9 +219,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
 
     if (dr < 0.)
     {
-      #ifdef WARNING
-      fprintf(STDWAR, "* warning (sr_er): not at minimum: dr = %.4f\n", dr);
-      #endif
+      WARNING_MSG("not at minimum: dr = %.4f\n", dr);
       dr = R_fabs(dr);
     }
 

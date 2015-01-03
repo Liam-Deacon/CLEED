@@ -123,6 +123,10 @@ int c_lubksb(real *, real *, int *, real *, real *, int);
 /* matrix multiplication for square mat. in file matrm.c */
 real *r_sqmul(real *, real *, real *, size_t);
 
+/* convert row major ordering FORTRAN <-> C */
+int row2col_order(const real *row_major, real *col_major, size_t rows, size_t cols);
+int col2row_order(const real *col_major, real *row_major, size_t rows, size_t cols);
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif

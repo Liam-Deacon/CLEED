@@ -20,7 +20,7 @@ extern "C" {
 
 #define SEARCH "csearch"
 #define SEARCH_COPYRIGHT "Copyright (c) 1994-2014 Georg Held"
-#define SEARCH_LICENSE ""
+#define SEARCH_LICENSE "GNU General Public License v3"
 #define SEARCH_VERSION ".. Development"
 #define SEARCH_AUTHOR "Georg Held (g.held@reading.ac.uk)"
 #define SEARCH_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 

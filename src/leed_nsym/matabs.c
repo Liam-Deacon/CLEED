@@ -43,15 +43,8 @@ real matabs(const mat M)
   /* check validity of the input matrices M */
   if (matcheck(M) < 0)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matabs): invalid input matrix\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_MSG("invalid input matrix\n");
+    ERROR_RETURN(-1.);
   }
 
   /* Calculate modulus for valid matrix types */
@@ -111,16 +104,9 @@ real matabs(const mat M)
   } /* diag. matrix */
   else /* not a valid matrix type */
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matabs): %d not a valid matrix type\n",
+    ERROR_MSG("%d not a valid matrix type\n",
             M->mat_type);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_RETURN(-1.);
   }
 
   return(mabs);

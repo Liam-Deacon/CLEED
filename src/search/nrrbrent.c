@@ -28,28 +28,30 @@ GH/19.09.95 - Criterion of termination is absolute deviation in vertex
 #include <math.h>
 #include "csearch.h"
 
-#define ITMAX 100
-#define CGOLD 0.3819660
-#define ZEPS 1.0e-10
+static const size_t ITMAX = 100;
+static const real CGOLD = 0.3819660;
+static const real ZEPS = 1.0e-10;
 #define SIGN(a,b) ((b) > 0.0 ? fabs(a) : -fabs(a))
 #define SHFT(a,b,c,d) (a)=(b);(b)=(c);(c)=(d);
 
 real brent(real ax, real bx, real cx, real(*f)(real), real tol, real *xmin)
 {
-	int iter;
+	size_t iter;
 	real a,b,etemp,fu,fv,fw,fx,p,q,r,tol1,tol2,u,v,w,x,xm;
-	real d=0.0;
-    real e=0.0;
+	real d = 0.0;
+  real e = 0.0;
 	void nrerror();
 
-	a=((ax < cx) ? ax : cx);
-	b=((ax > cx) ? ax : cx);
-	x=w=v=bx;
-	fw=fv=fx=(*f)(x);
-	for (iter=1;iter<=ITMAX;iter++) {
-		xm=0.5*(a+b);
-		tol2=2.0*(tol1=tol*fabs(x)+ZEPS);
-		if (fabs(x-xm) <= (tol2-0.5*(b-a))) {
+	a = ((ax < cx) ? ax : cx);
+	b = ((ax > cx) ? ax : cx);
+	x = w = v = bx;
+	fw = fv = fx = (*f)(x);
+	for (iter=1; iter<=ITMAX; iter++)
+	{
+		xm = 0.5*(a+b);
+		tol2 = 2.0*(tol1=tol*fabs(x)+ZEPS);
+		if (fabs(x-xm) <= (tol2-0.5*(b-a)))
+		{
 			*xmin=x;
 			return fx;
 		}
@@ -96,11 +98,8 @@ real brent(real ax, real bx, real cx, real(*f)(real), real tol, real *xmin)
 		}
 	}
 	nrerror("Too many iterations in BRENT");
-	*xmin=x;
-	return fx;
+	*xmin = x;
+	return(fx);
 }
 
-#undef ITMAX
-#undef CGOLD
-#undef ZEPS
 #undef SIGN

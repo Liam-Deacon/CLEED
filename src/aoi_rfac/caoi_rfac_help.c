@@ -22,7 +22,7 @@
 #include "caoi_rfac.h"
 #include <stdio.h>
 
-void usage(FILE *output)
+void caoi_rfac_usage(FILE *output)
 {
     fprintf(output, "\n %s -c <control_file> -t <theory_file> [OPTIONS...]    ",
             PROG);
@@ -88,7 +88,7 @@ void usage(FILE *output)
     fprintf(output, "\n      specify file name for iv curves output.");
 }
 
-void info()
+void caoi_rfac_info()
 {
     printf("%s - version %s (%s)\n", PROG, PROG_VERSION, PROG_PLAT);
     printf("\n%s\n", PROG_SHORTDESC);

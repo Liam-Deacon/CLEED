@@ -32,10 +32,7 @@ void matshowpar(const mat M)
   
   if (matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matshowpar): matrix does not exist \n");
-    #endif
-
+    ERROR_MSG("matrix does not exist \n");
     return;
   }
 

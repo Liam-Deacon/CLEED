@@ -77,7 +77,8 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   real faux;
   real vaux[4];           /* stores the z-position of topmost atom in layer */
 
-  CONTROL_MSG("entering leed_inp_bul_layer MIN_DIST= %.3f\n", MIN_DIST*BOHR);
+  CONTROL_MSG(CONTROL, "entering leed_inp_bul_layer MIN_DIST= %.3f\n",
+              MIN_DIST*BOHR);
 
   /* predefine some often used variables */
   n_atoms = par->n_atoms;
@@ -87,7 +88,7 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   a1[1] = par->a[1]; a1[2] = par->a[3];
   a2[1] = par->a[2]; a2[2] = par->a[4];
 
-  CONTROL_MSG("n_atoms = %d, a1 = (%.3f,%.3f), a2 = (%.3f,%.3f)\n",
+  CONTROL_MSG(CONTROL, "n_atoms = %d, a1 = (%.3f,%.3f), a2 = (%.3f,%.3f)\n",
                n_atoms, a1[1]*BOHR, a1[2]*BOHR, a2[1]*BOHR, a2[2]*BOHR);
 
   /* Allocate memory for intermediate storage vectors vec and no_of_atoms:
@@ -239,17 +240,15 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
     shift[2*i_layer + 0] = 0;
     shift[2*i_layer + 1] = 0;
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_inp_bul_layer): setting up bulk layers\n");
-    #endif
+    CONTROL_MSG(CONTROL, "setting up bulk layers\n");
 
     vec[4*i_layer + 1] = orig[1] + a3[1];
     vec[4*i_layer + 2] = orig[2] + a3[2];
-    #ifdef NSYM
+#ifdef NSYM
     vec[4*i_layer + 3] = orig[3] + a3[3] - vaux[3] - atom_list[n_atoms-1].pos[3];
-    #else
+#else
     vec[4*i_layer + 3] = a3[3] - atom_list[n_atoms-1].pos[3] - vaux[3] + orig[3];
-    #endif
+#endif
  }
  else
  {

@@ -73,10 +73,7 @@ int r_ludcmp(real *a, size_t *indx, size_t n)
 
     if (IS_EQUAL_REAL(big, 0.0))
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (ludcmp): Singular matrix \n");
-      #endif
-
+      ERROR_MSG("Singular matrix \n");
       return(0);
     }
     vv[i_r]=1.0/big;

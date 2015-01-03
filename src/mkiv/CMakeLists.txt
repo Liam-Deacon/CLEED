@@ -44,6 +44,7 @@ SET (mkivLib_SRCS
     file_functs.c
     fimax4.c
     getint.c
+    img2tif.c
     markref.c
     mem4spots.c
     mkmask.c
@@ -71,12 +72,23 @@ SET (mkiv_SRCS mkiv.c)
 # include directories
 INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/src/mkiv)
 
-FIND_LIBRARY(TIFF_LIBRARY NAME tiff)
-IF(WIN32)
+FIND_LIBRARY(TIFF_LIBRARY NAME tiff tiff3 libtiff libtiff3)
+IF(WIN32 AND NOT TIFF_LIBRARY_FOUND)
     SET (TIFF_LIBRARY "${PROJECT_SOURCE_DIR}/lib/win32/libtiff3.dll" CACHE STRING "" FORCE)
     GET_FILENAME_COMPONENT(TIFF_LIBRARY_DIR "${TIFF_LIBRARY}" PATH)
-ENDIF(WIN32)
-                     
+ENDIF()
+
+# try to include ImageMagick 
+FIND_PACKAGE(ImageMagick COMPONENTS MagickWand MagickCore QUIET)
+IF(WIN32 AND NOT ImageMagick_FOUND)
+    FILE (GLOB ImageMagick_LIBRARIES ${PROJECT_SOURCE_DIR}/lib/win32/CORE_RL_*.dll)
+    SET(ImageMagick_INCLUDE_DIRS 
+        "${PROJECT_SOURCE_DIR}/lib/win32/ImageMagick/include" CACHE STRING "" FORCE)
+    SET(ImageMagick_FOUND TRUE)
+ENDIF()               
+IF(ImageMagick_FOUND)
+    ADD_DEFINITIONS(-DUSE_MAGICK)
+ENDIF()      
 ###############################################################################
 # INSTALL TARGETS
 ###############################################################################
@@ -100,12 +112,13 @@ IF (WIN32)
     
     ADD_EXECUTABLE(mkiv ${mkiv_SRCS})
     
-    TARGET_LINK_LIBRARIES (mkiv -L"${TIFF_LIBRARY_DIR}" tiff3 m)
-    TARGET_LINK_LIBRARIES (mkivLib -L"${TIFF_LIBRARY_DIR}" tiff3 m)
-    TARGET_LINK_LIBRARIES (mkivLibStatic -L"${TIFF_LIBRARY_DIR}" tiff3 m)
+    TARGET_LINK_LIBRARIES (mkiv -L"${TIFF_LIBRARY_DIR}" ${ImageMagick_LIBRARIES} tiff3 m)
+    TARGET_LINK_LIBRARIES (mkivLib -L"${TIFF_LIBRARY_DIR}" ${ImageMagick_LIBRARIES} tiff3 m)
+    TARGET_LINK_LIBRARIES (mkivLibStatic -L"${TIFF_LIBRARY_DIR}" ${ImageMagick_LIBRARIES} tiff3 m)
     
     # These are the symbols for the linker
     INSTALL(FILES
+        ${ImageMagick_LIBRARIES}
         ${PROJECT_SOURCE_DIR}/lib/win32/libtiff3.dll
         ${PROJECT_SOURCE_DIR}/lib/win32/jpeg62.dll
         ${PROJECT_SOURCE_DIR}/lib/win32/zlib1.dll
@@ -117,6 +130,7 @@ IF (WIN32)
     # Header files are located in these directories
     INCLUDE_DIRECTORIES (
         "${PROJECT_SOURCE_DIR}/lib/win32/libtiff/include"
+        ${ImageMagick_INCLUDE_DIRS}
     )
     
 ELSE (WIN32)

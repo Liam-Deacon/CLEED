@@ -108,9 +108,9 @@ void patt_usage(FILE *output)
  */
 void patt_info()
 {
-    printf("%s - version %s (%s)\n", PATT_PROG, PATT_PROG_VERSION, PATT_PROG_PLAT);
-    printf("\n%s\n", PATT_PROG_SHORTDESC);
-    printf("\n%s\n%s\n", PATT_PROG_COPYRIGHT, PATT_PROG_LICENSE);
+    printf("%s - version %s (%s)\n", PATT, PATT_VERSION, PATT_PLAT);
+    printf("\n%s\n", PATT_SHORTDESC);
+    printf("\n%s\n%s\n", PATT_COPYRIGHT, PATT_LICENSE);
     printf("\nContact either Georg Held (g.held@reading.ac.uk) " 
-        "or %s for reporting bugs or submitting fixes.\n", PATT_PROG_MAINTAINER);
+        "or %s for reporting bugs or submitting fixes.\n", PATT_MAINTAINER);
 }

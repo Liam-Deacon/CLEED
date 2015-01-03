@@ -41,30 +41,15 @@ int matwrite(const mat M, FILE *file)
   /* Check the input matrix */
   if (matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matwrite): input matrix does not exist \n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("input matrix does not exist \n");
+    ERROR_RETURN(-1);
   }
  
   /* Diagonal Matrix: */
   if (M->mat_type == MAT_DIAG)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matwrite): "
-            "diagonal input matrix not implemented.\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("diagonal input matrix not implemented.\n");
+    ERROR_RETURN(-1);
   } /* if diagonal */
 
   /* Other matrix types: */
@@ -73,16 +58,8 @@ int matwrite(const mat M, FILE *file)
     /* First write matrix header */
     if( fwrite(M, sizeof(struct mat_str), 1, file) != 1 )
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (matwrite): "
-              "output error while writing header\n");
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(-1);
-      #endif
+      ERROR_MSG("output error while writing header\n");
+      ERROR_RETURN(-1);
     }
 
     tot_size = sizeof(struct mat_str);
@@ -91,16 +68,8 @@ int matwrite(const mat M, FILE *file)
     n_el = M->cols * M->rows;
     if( fwrite(M->rel+1, sizeof(real), n_el, file) != n_el )
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (matwrite): "
-          "output error while writing reals\n");
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(-1);
-      #endif
+      ERROR_MSG("output error while writing reals\n");
+      ERROR_RETURN(-1);
     }
     tot_size += n_el * sizeof(real);
 
@@ -109,24 +78,14 @@ int matwrite(const mat M, FILE *file)
     {
       if( fwrite(M->iel+1, sizeof(real), n_el, file) != n_el )
       {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matwrite): "
-                "output error while writing imags\n");
-        #endif
-
-        #ifdef EXIT_ON_ERROR
-        exit(1);
-        #else
-        return(-1);
-        #endif
+        ERROR_MSG("output error while writing imags\n");
+        ERROR_RETURN(-1);
       }
       tot_size += n_el * sizeof(real);
     } /* NUM_COMPLEX */
   } /* else */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(matwrite): %d bytes written\n", tot_size);
-  #endif
+  CONTROL_MSG(CONTROL, "%d bytes written\n", tot_size);
 
   return((int)tot_size);
 } /* end of function matwrite */

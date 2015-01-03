@@ -37,13 +37,6 @@ WB/07.09.98 - bezug auf einheitlichen Winkel(zur 1.Ebene)
 
 #include "leed.h"
 
-#ifndef K_TOLERANCE
-#define K_TOLERANCE 0.0001                        /* tolerance of k_par */
-#endif
-#ifndef GEO_TOLERANCE
-#define GEO_TOLERANCE 0.001
-#endif
-
 int leed_beam_gen_sym(leed_beam ** p_beams, 
                leed_crystal *b_par, 
                leed_crystal *o_par,
@@ -86,522 +79,482 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
 
 *************************************************************************/
 {
-int iaux, m, i_layers,i,j;
-int n1,n2;
-int n1_max,n2_max;
-int offset;
-int i_c,i_d,i_e;
-int i_beams, i_set, j_set, n_set;        /* beam sets */
-int l_max, n_mir;                        /* symmetry */
-int n_rot,i_rot;
-int ctrol;
+  int iaux, m, i_layers, i, j;
+  int n1, n2;
+  int n1_max, n2_max;
+  int offset;
+  int i_c, i_d, i_e;
+  int i_beams, i_set, j_set, n_set;        /* beam sets */
+  int l_max, n_mir;                        /* symmetry */
+  int n_rot, i_rot;
+  int ctrol;
 
-real k_x_mir[13];                        /* for sorting the */
-real k_y_mir[13];                        /* sym equivalent beam */
-real k_p_mir[13];                        /* with respect to bulk- */ 
-real k_x_store[13];                      /* and overlayer scattering */
-real k_y_store[13];                      
-real k_p_store[13];
-real vaux[2];
-real integ[2];
+  real k_x_mir[13];                        /* for sorting the */
+  real k_y_mir[13];                        /* sym equivalent beam */
+  real k_p_mir[13];                        /* with respect to bulk- */
+  real k_x_store[13];                      /* and overlayer scattering */
+  real k_y_store[13];
+  real k_p_store[13];
+  real vaux[2];
+  real integ[2];
 
-real alpha[3];
-real faux_r, faux_i, pref1, pref2;
-real k_max, k_max_2;
-real wedge;
+  real alpha[3];
+  real faux_r, faux_i, pref1, pref2;
+  real k_max, k_max_2;
+  real wedge;
 
-real k_in[3];
-real k_r, k_i;
+  real k_in[3];
+  real k_r, k_i;
 
-real g1_x, g1_y, g2_x, g2_y;             /*reziprocal lattice vector*/
-real a1_x, a1_y, a2_x, a2_y;             /*lattice vector*/
-real k_x, k_y;
-real a1, a2;
-real m11, m12, m21, m22;
-real det;                              /*first det(a1,a2) than det(g1,g2)*/
-real equalset1, equalset2;
+  real g1_x, g1_y, g2_x, g2_y;             /*reziprocal lattice vector*/
+  real a1_x, a1_y, a2_x, a2_y;             /*lattice vector*/
+  real k_x, k_y;
+  real a1, a2;
+  real m11, m12, m21, m22;
+  real det;                              /*first det(a1,a2) than det(g1,g2)*/
+  real equalset1, equalset2;
 
-real R_m[5];                           /* mirror -matrix*/
-real **R_n;                            /* Rot.-matrix */
+  real R_m[5];                           /* mirror -matrix*/
+  real **R_n;                            /* Rot.-matrix */
 
-leed_beam *beams, beam_aux;
-leed_beam *bm_off;
+  leed_beam *beams, beam_aux;
+  leed_beam *bm_off;
 
-/**********************************************************************
-  Some often used values:
-  - indices of the basic superstructure vectors (mij)
-  - reciprocal (1x1) lattice vectors (g1/2_x/y)
-  - k_in at max. energy (k_in)
-**********************************************************************/
+  /**********************************************************************
+   * Some often used values:
+   * - indices of the basic superstructure vectors (mij)
+   * - reciprocal (1x1) lattice vectors (g1/2_x/y)
+   * - k_in at max. energy (k_in)
+   **********************************************************************/
 
- m11 = b_par->m_recip[1], m12 = b_par->m_recip[2];
- m21 = b_par->m_recip[3], m22 = b_par->m_recip[4];
+  m11 = b_par->m_recip[1], m12 = b_par->m_recip[2];
+  m21 = b_par->m_recip[3], m22 = b_par->m_recip[4];
 
- g1_x = b_par->a_1[1]; g1_y = b_par->a_1[2];
- g2_x = b_par->a_1[3]; g2_y = b_par->a_1[4];
+  g1_x = b_par->a_1[1]; g1_y = b_par->a_1[2];
+  g2_x = b_par->a_1[3]; g2_y = b_par->a_1[4];
 
- faux_r = R_sin(v_par->theta) * R_sqrt(2*eng_max);
- k_in[0] = faux_r;
- k_in[1] = faux_r * R_cos(v_par->phi);
- k_in[2] = faux_r * R_sin(v_par->phi);
+  faux_r = R_sin(v_par->theta) * R_sqrt(2*eng_max);
+  k_in[0] = faux_r;
+  k_in[1] = faux_r * R_cos(v_par->phi);
+  k_in[2] = faux_r * R_sin(v_par->phi);
 
- n_mir = b_par->n_mir;
- n_rot = b_par->n_rot;
+  n_mir = b_par->n_mir;
+  n_rot = b_par->n_rot;
 
-#ifdef CONTROL_X
- fprintf(STDCTR,"(leed_beam_gen_sym):  m11 = %.2f m12 = %.2f\nm21 = %.2f m22 = %.2f\n", m11,m12, m21 ,m22);
-#endif
+  CONTROL_MSG(CONTROL_X, "m11 = %.2f m12 = %.2f\nm21 = %.2f m22 = %.2f\n",
+              m11, m12, m21, m22);
 
-/**********************************************************************
-  Allocate storage space
-  - Determine k_max (square of max k_par) from epsilon and dmin.
-  - Determine the max. number of beams within this radius (iaux)
-    and allocate memory for the beam list. (The formula given in
-    VHT p. 24 is not an upper limit. A prefactor 1/(PI*PI)
-    (0.10132118) is saver than 1/(4*PI) ).
-**********************************************************************/
+  /* Allocate storage space:
+   * - Determine k_max (square of max k_par) from epsilon and dmin.
+   * - Determine the max. number of beams within this radius (iaux)
+   *   and allocate memory for the beam list. (The formula given in
+   *   VHT p. 24 is not an upper limit. A prefactor 1/(PI*PI)
+   *   (0.10132118) is saver than 1/(4*PI) ).
+   */
 
- eng_max -= v_par->vr;
- faux_r = R_log(v_par->epsilon) / b_par->dmin;
- k_max_2 = faux_r*faux_r + 2*eng_max;
- k_max = R_sqrt(k_max_2);
- l_max = v_par->l_max;
+  eng_max -= v_par->vr;
+  faux_r = R_log(v_par->epsilon) / b_par->dmin;
+  k_max_2 = faux_r*faux_r + 2*eng_max;
+  k_max = R_sqrt(k_max_2);
+  l_max = v_par->l_max;
 
- /** n1 is for allocation **/
- /** n2 is the n_eqb_b value for set 0 **/
- if(n_rot > n_mir)
+  /* n1 is for allocation */
+  /* n2 is the n_eqb_b value for set 0 */
+  if(n_rot > n_mir)
     n1 = n2 = n_rot;
- else
- {
-   n1 = n_mir;
-   n2 = 2 * n_mir;
- }
-fprintf(STDCTR,"(leed_beam_gen_sym): n1%d n2%d\n",n1,n2);
+  else
+  {
+    n1 = n_mir;
+    n2 = 2 * n_mir;
+  }
+  CONTROL_MSG(CONTROL, "n1%d n2%d\n", n1, n2);
   
- iaux =  2 + (int)( 0.10132118 * b_par->rel_area_sup * 
+  iaux =  2 + (int)( 0.10132118 * b_par->rel_area_sup *
                     b_par->area * k_max_2 /n1);
 
- if (*p_beams == NULL)
-  *p_beams = (leed_beam *)calloc(iaux, sizeof(leed_beam));
- else
-  *p_beams = (leed_beam *)realloc(*p_beams, iaux*sizeof(leed_beam));
+  if (*p_beams == NULL)
+    *p_beams = (leed_beam *)calloc(iaux, sizeof(leed_beam));
+  else
+    *p_beams = (leed_beam *)realloc(*p_beams, iaux*sizeof(leed_beam));
 
- if(*p_beams == NULL)
- {
-#ifdef ERROR
-   fprintf(STDERR," *** error (leed_beam_gen_mir): allocation error.\n");
-#endif
-   exit(1);
- }
- else
- {
-   beams = *p_beams;
- }
+  if(*p_beams == NULL)
+  {
+    ERROR_MSG("failed to allocate p_beams.\n");
+    exit(1);
+  }
+  else
+  {
+    beams = *p_beams;
+  }
+  CONTROL_MSG(CONTROL_X, "dmin  = %.2f, epsilon = %.2e\n",
+              b_par->dmin * BOHR, v_par->epsilon);
+  CONTROL_MSG(CONTROL_X, "k_max = %.2f, max. No of beams = %2d\n", k_max, iaux);
 
-#ifdef CONTROL_X
- fprintf(STDCTR,"(leed_beam_gen_sym): dmin  = %.2f, epsilon = %.2e\n",
-                  b_par->dmin * BOHR, v_par->epsilon);
- fprintf(STDCTR,"(leed_beam_gen_sym): k_max = %.2f, max. No of beams = %2d\n",
-                 k_max, iaux);
-#endif
-
-/**********************************************************************
-  Determine the total number of beam sets (n_set) 
-  and offsets (store in bm_off)
-  Each beam set is represented exactly once within the first BZ 
-  (i.e. within the diamond: (0,0)(1,0)(0,1)(1,1)) 
-  => raster through the first BZ and store all fractional
-     order beams in the array bm_off.
-**********************************************************************/
+  /**********************************************************************
+   * Determine the total number of beam sets (n_set)
+   * and offsets (store in bm_off)
+   * Each beam set is represented exactly once within the first BZ
+   * (i.e. within the diamond: (0,0)(1,0)(0,1)(1,1))
+   * => raster through the first BZ and store all fractional
+   *  order beams in the array bm_off.
+   **********************************************************************/
  
- n_set = (int) R_nint(b_par->rel_area_sup);
- bm_off = (leed_beam *)calloc(n_set, sizeof(leed_beam));
+  n_set = (int) R_nint(b_par->rel_area_sup);
+  bm_off = (leed_beam *)calloc(n_set, sizeof(leed_beam));
 
- (bm_off+0)->ind_1 = 0.;
- (bm_off+0)->ind_2 = 0.;
- (bm_off+0)->b_ind_1 = 0;
- (bm_off+0)->b_ind_2 = 0;
- (bm_off+0)->k_r[1] = 0.;
- (bm_off+0)->k_r[2] = 0.;
- (bm_off+0)->n_eqb_s = 1;
- (bm_off+0)->n_eqb_b = n2;
+  bm_off[0].ind_1 = 0.;
+  bm_off[0].ind_2 = 0.;
+  bm_off[0].b_ind_1 = 0;
+  bm_off[0].b_ind_2 = 0;
+  bm_off[0].k_r[1] = 0.;
+  bm_off[0].k_r[2] = 0.;
+  bm_off[0].n_eqb_s = 1;
+  bm_off[0].n_eqb_b = n2;
 
-#ifdef CONTROL_X
-     fprintf(STDCTR,"(leed_beam_gen_sym): set %d: index_a (%5.2f %5.2f), ",
-             i_set=0, (bm_off+0)->ind_1,   (bm_off+0)->ind_2);
-     fprintf(STDCTR,"index_b (%2d %2d), real (%5.2f %5.2f)\n", 
-                    (bm_off+0)->b_ind_1, (bm_off+0)->b_ind_2,
-                    (bm_off+0)->k_r[1], (bm_off+0)->k_r[2]);
-#endif
+  CONTROL_MSG(CONTROL_X, "set %d: index_a (%5.2f %5.2f), "
+                         "index_b (%2d %2d), real (%5.2f %5.2f)\n",
+             i_set=0, bm_off[0].ind_1,   bm_off[0].ind_2,
+                      bm_off[0].b_ind_1, bm_off[0].b_ind_2,
+                      bm_off[0].k_r[1],  bm_off[0].k_r[2]);
 
- for(n1 = -n_set, i_set = 1; n1 <= n_set;                     n1++)
- for(n2 = -n_set;           (n2 <= n_set) && (i_set < n_set); n2++)
- {
-   k_x = n1*m11 + n2*m21;
-   k_y = n1*m12 + n2*m22;
-   if( (k_x >= 0.) && (k_x + K_TOLERANCE < 1.) && 
-       (k_y >= 0.) && (k_y + K_TOLERANCE < 1.) &&
-       (R_hypot(k_x, k_y) > K_TOLERANCE)          )
-   {
-     (bm_off+i_set)->ind_1 = k_x;
-     (bm_off+i_set)->ind_2 = k_y;
-     (bm_off+i_set)->b_ind_1 = n1;
-     (bm_off+i_set)->b_ind_2 = n2;
-     (bm_off+i_set)->k_r[1] = k_x*g1_x + k_y*g2_x;
-     (bm_off+i_set)->k_r[2] = k_x*g1_y + k_y*g2_y;
-     (bm_off+i_set)->n_eqb_s = 1;
-     (bm_off+i_set)->n_eqb_b = 1;
-
-#ifdef CONTROL_X
-     fprintf(STDCTR,"(leed_beam_gen_sym): set %d: index_a (%5.2f %5.2f), ",
-             i_set, (bm_off+i_set)->ind_1,   (bm_off+i_set)->ind_2);
-     fprintf(STDCTR,"index_b (%2d %2d), real (%5.2f %5.2f)\n", 
-                    (bm_off+i_set)->b_ind_1, (bm_off+i_set)->b_ind_2,
-                    (bm_off+i_set)->k_r[1], (bm_off+i_set)->k_r[2]);
-#endif
-     i_set ++;
-   }
- } /* for n1,n2 */
- 
-#ifdef WARNING
- if( i_set != n_set)
- {
-   fprintf(STDWAR,"* warning (leed_beam_gen_sym): wrong number of beam sets found.\n");
-   fprintf(STDWAR,"                    found: %d, should be: %d\n",
-           i_set, n_set);
- }
-#endif
-
-/**********************************************************************
-  Find the beam sets which are equivalent through symmetry.
-  (Rotation or MIRROR)
-**********************************************************************/
-   a1_x = b_par->a[1];
-   a1_y = b_par->a[3];
-   a2_x = b_par->a[2];
-   a2_y = b_par->a[4];
-
-   det = a1_x*a2_y - a1_y*a2_x;
-   det = 1. / det;
-
-
- switch(b_par->symmetry)
- {
-
-/************************************************************************************
-
-   CASE ROTATIONSYMMETRY !!!!!
-
-here we have to call the function leed_beam_gen_rot also in case of NOSYM,because we must 
-allocate and set the variables eout_b/s and ein_b/s .
-Otherwise the program couldn't work. These variables are 
-needed in the routines bravelsym and complsym 
-
-*************************************************************************************/ 
-   case HEX_3ROT:
-   case REC_2ROT:
-   case MONO_2ROT:
-   case SQ_2ROT:
-   case SQ_4ROT:
-   case NOSYM:
-   { 
-    R_n = leed_beam_get_rotation_matrices(n_rot);
-
-/***************************************************************************
-  Scan through beam sets and mark equivalent sets:
-  - beam set 0 (integral order beams) cannot be equivalent to any fractional
-    order beam set, but is n_rot-fold symmetric.
-  - check whether (ind_1(i),ind_2(i)) R^-1 is an integer vector.
-  - n_eqb_s is used to count the number of equivalent beam sets,
-    n_eqb_b is used to 
-***************************************************************************/
-    for(i_set = 1; i_set < n_set; i_set ++)
+  for(n1 = -n_set, i_set = 1; n1 <= n_set; n1++)
+    for(n2 = -n_set; (n2 <= n_set) && (i_set < n_set); n2++)
     {
-
-     if( (bm_off+i_set)->n_eqb_s != 0 )
-     {
-      for(i_rot = 1; i_rot < n_rot; i_rot ++)
+      k_x = n1*m11 + n2*m21;
+      k_y = n1*m12 + n2*m22;
+      if( (k_x >= 0.) && (k_x + K_TOLERANCE < 1.) &&
+          (k_y >= 0.) && (k_y + K_TOLERANCE < 1.) &&
+          (R_hypot(k_x, k_y) > K_TOLERANCE)          )
       {
-  /* calculate R^-1 = At^-1 R At */
-       m11 =   R_n[i_rot][1]*a1_x*a2_y + R_n[i_rot][2]*a1_y*a2_y 
-             - R_n[i_rot][3]*a1_x*a2_x - R_n[i_rot][4]*a1_y*a2_x;
-       m11 *= det;
-       m21 = - R_n[i_rot][1]*a1_x*a1_y - R_n[i_rot][2]*a1_y*a1_y 
-             + R_n[i_rot][3]*a1_x*a1_x + R_n[i_rot][4]*a1_y*a1_x;
-       m21 *= det;
-       m12 =   R_n[i_rot][1]*a2_x*a2_y + R_n[i_rot][2]*a2_y*a2_y
-             - R_n[i_rot][3]*a2_x*a2_x - R_n[i_rot][4]*a2_y*a2_x;
-       m12 *= det;
-       m22 = - R_n[i_rot][1]*a2_x*a1_y - R_n[i_rot][2]*a2_y*a1_y
-             + R_n[i_rot][3]*a2_x*a1_x + R_n[i_rot][4]*a2_y*a1_x;
-       m22 *= det;
-      
-  /* calculate (ind_1(i),ind_2(i)) R^-1 */
-       k_x = (bm_off+i_set)->ind_1 * m11 + (bm_off+i_set)->ind_2 * m21;
-       k_y = (bm_off+i_set)->ind_1 * m12 + (bm_off+i_set)->ind_2 * m22;
+        bm_off[i_set].ind_1 = k_x;
+        bm_off[i_set].ind_2 = k_y;
+        bm_off[i_set].b_ind_1 = n1;
+        bm_off[i_set].b_ind_2 = n2;
+        bm_off[i_set].k_r[1] = k_x*g1_x + k_y*g2_x;
+        bm_off[i_set].k_r[2] = k_x*g1_y + k_y*g2_y;
+        bm_off[i_set].n_eqb_s = 1;
+        bm_off[i_set].n_eqb_b = 1;
 
-/********************************************************************
-   If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(i),ind_2(i)) is integer, the 
-   beam set is equivalent to itself.
-   Mark this in n_eqb_b.
-********************************************************************/
-       faux_r = k_x - (bm_off+i_set)->ind_1;
-       if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )      /* integer ? */
-       {
-        faux_r = k_y - (bm_off+i_set)->ind_2;
-        if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )    /* integer ? */
+        CONTROL_MSG(CONTROL_X, "set %d: index_a (%5.2f %5.2f), ",
+                            "index_b (%2d %2d), real (%5.2f %5.2f)\n",
+             i_set, bm_off[i_set].ind_1,   bm_off[i_set].ind_2,
+                    bm_off[i_set].b_ind_1, bm_off[i_set].b_ind_2,
+                    bm_off[i_set].k_r[1],  bm_off[i_set].k_r[2]);
+
+        i_set ++;
+      } /* if */
+    } /* for n1,n2 */
+ 
+  if( i_set != n_set)
+  {
+    WARNING_MSG("wrong number of beam sets found.\n"
+               "                    found: %d, should be: %d\n", i_set, n_set);
+  }
+
+  /* Find the beam sets which are equivalent through symmetry. (Rotation or MIRROR) */
+  a1_x = b_par->a[1];
+  a1_y = b_par->a[3];
+  a2_x = b_par->a[2];
+  a2_y = b_par->a[4];
+
+  det = a1_x*a2_y - a1_y*a2_x;
+  det = 1. / det;
+
+  switch(b_par->symmetry)
+  {
+
+    /*! CASE ROTATIONSYMMETRY !!!!!
+     * here we have to call the function leed_beam_gen_rot() also in case of
+     * NOSYM, because we must allocate and set the variables eout_b/s and
+     * ein_b/s . Otherwise the program couldn't work. These variables are
+     * needed in the routines bravelsym() and complsym()
+     */
+    case HEX_3ROT:
+    case REC_2ROT:
+    case MONO_2ROT:
+    case SQ_2ROT:
+    case SQ_4ROT:
+    case NOSYM:
+    {
+      R_n = leed_beam_get_rotation_matrices(n_rot);
+
+      /* Scan through beam sets and mark equivalent sets:
+       * - beam set 0 (integral order beams) cannot be equivalent to any fractional
+       *   order beam set, but is n_rot-fold symmetric.
+       * - check whether (ind_1(i),ind_2(i)) R^-1 is an integer vector.
+       * - n_eqb_s is used to count the number of equivalent beam sets,
+       */
+      for(i_set = 1; i_set < n_set; i_set ++)
+      {
+
+        if( bm_off[i_set].n_eqb_s != 0 )
         {
-         (bm_off+i_set)->n_eqb_b ++;
-#ifdef CONTROL_X
-         fprintf(STDCTR,"(leed_beam_gen_rot) set %d has rotation symmetry (rot = %d*2pi/%d)\n",
-         i_set, i_rot, n_rot);
-#endif
-        }
-       }
-      
-/**********************************************************************
-   If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(j),ind_2(j)) is integer, the 
-   beam sets i and j are equivalent.
-   Mark this in n_eqb_s.
-***********************************************************************/
-       for(j_set = i_set+1; j_set < n_set; j_set ++)
-       {
-        if( (bm_off+i_set)->n_eqb_s != 0 && (bm_off+j_set)->n_eqb_s != 0) 
-        {
-         faux_r = k_x - (bm_off+j_set)->ind_1;
-         if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )    /* integer ? */
-         {
-          faux_r = k_y - (bm_off+j_set)->ind_2;
-          if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )  /* integer ? */
+          for(i_rot = 1; i_rot < n_rot; i_rot ++)
           {
-           (bm_off+i_set)->n_eqb_s ++;
-           (bm_off+j_set)->n_eqb_s = 0;
-#ifdef CONTROL_X
-           fprintf(STDCTR,"(leed_beam_gen_rot) sets %d and %d are equivalent (rot = %d*2pi/%d)\n",
-             i_set, j_set, i_rot, n_rot);
-#endif
-          }
-         }
-        } /* if n_eqb_s */
-       } /* for j_set */
-      } /* for i_rot */
-     } /* if != 0 */
-     if( ((bm_off+i_set)->n_eqb_b != 1)&&((n_rot % (bm_off+i_set)->n_eqb_b) !=0) )
-     {
-/* The number of equivalent beams can only be equal to or an integer fraction of n_rot */
-#ifdef ERROR
-   fprintf(STDERR," *** error (leed_beam_gen_sym): mismatch in symmetries\n");
-#endif
-      exit(1);
-     }
-    } /* for i_set */
+            /* calculate R^-1 = At^-1 R At */
+            m11 =   R_n[i_rot][1]*a1_x*a2_y + R_n[i_rot][2]*a1_y*a2_y
+                  - R_n[i_rot][3]*a1_x*a2_x - R_n[i_rot][4]*a1_y*a2_x;
+            m11 *= det;
+            m21 = - R_n[i_rot][1]*a1_x*a1_y - R_n[i_rot][2]*a1_y*a1_y
+                  + R_n[i_rot][3]*a1_x*a1_x + R_n[i_rot][4]*a1_y*a1_x;
+            m21 *= det;
+            m12 =   R_n[i_rot][1]*a2_x*a2_y + R_n[i_rot][2]*a2_y*a2_y
+                  - R_n[i_rot][3]*a2_x*a2_x - R_n[i_rot][4]*a2_y*a2_x;
+            m12 *= det;
+            m22 = - R_n[i_rot][1]*a2_x*a1_y - R_n[i_rot][2]*a2_y*a1_y
+                  + R_n[i_rot][3]*a2_x*a1_x + R_n[i_rot][4]*a2_y*a1_x;
+            m22 *= det;
+      
+            /* calculate (ind_1(i),ind_2(i)) R^-1 */
+            k_x = bm_off[i_set].ind_1 * m11 + bm_off[i_set].ind_2 * m21;
+            k_y = bm_off[i_set].ind_1 * m12 + bm_off[i_set].ind_2 * m22;
 
-/*************************************************************************
- At this point:
-   ind_1, ind_2 = beam indices of one beam in the beam set.
-   n_eqb_s == 0 <=> this beam set can be omitted because it is represented
-                    by another set
-           != 0 <=> this beam set represents other beam sets. The number of
-                    beams is n_eqb_s * n_eqb_b.
-   n_eqb_b = number of beams within the beam set related by symmetry.
-***************************************************************************/
+            /* If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(i),ind_2(i)) is integer,
+             * the beam set is equivalent to itself. Mark this in n_eqb_b.
+             */
+            faux_r = k_x - bm_off[i_set].ind_1;
+            if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+            {
+              faux_r = k_y - bm_off[i_set].ind_2;
+              if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+              {
+                bm_off[i_set].n_eqb_b ++;
+                CONTROL_MSG(CONTROL_X,
+                    "set %d has rotation symmetry (rot = %d*2pi/%d)\n",
+                    i_set, i_rot, n_rot);
+              }
+            }
 
-#ifdef CONTROL
- fprintf(STDCTR,"\n(leed_beam_gen_rot) %d unsymmetrised beam sets:\n", n_set);
- for(i_set = 0; i_set < n_set; i_set ++)
- {
-   fprintf(STDCTR,"(leed_beam_gen_rot) set %d:(%5.2f %5.2f) ",
-                  i_set, (bm_off+i_set)->ind_1,   (bm_off+i_set)->ind_2);
-   if((bm_off+i_set)->n_eqb_s > 0)
-   {
-     fprintf(STDCTR,"represents %d sets (%d beam(s)).\n", 
-             (bm_off+i_set)->n_eqb_s, (bm_off+i_set)->n_eqb_b);
-   }
-   else 
-   {
-     fprintf(STDCTR,"\t\tis equivalent to %d (%5.2f %5.2f).\n",
-             (bm_off+i_set)->n_eqb_b, 
-             (bm_off+i_set)->ind_1,
-             (bm_off+i_set)->ind_2);
-   }
- } /* for i_set */
+            /* If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(j),ind_2(j)) is integer,
+             * the beam sets i and j are equivalent. Mark this in n_eqb_s.
+             */
+            for(j_set = i_set+1; j_set < n_set; j_set ++)
+            {
+              if( bm_off[i_set].n_eqb_s != 0 && (bm_off+j_set)->n_eqb_s != 0)
+              {
+                faux_r = k_x - (bm_off+j_set)->ind_1;
+                if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )    /* integer ? */
+                {
+                  faux_r = k_y - (bm_off+j_set)->ind_2;
+                  if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )  /* integer ? */
+                  {
+                    bm_off[i_set].n_eqb_s ++;
+                    (bm_off+j_set)->n_eqb_s = 0;
+                    CONTROL_MSG(CONTROL_X,
+                        "sets %d and %d are equivalent (rot = %d*2pi/%d)\n",
+                        i_set, j_set, i_rot, n_rot);
+                  }
+                }
+              } /* if n_eqb_s */
+            } /* for j_set */
+          } /* for i_rot */
+        } /* if != 0 */
+        if( (bm_off[i_set].n_eqb_b != 1)&&((n_rot % bm_off[i_set].n_eqb_b) !=0) )
+        {
+          /* The number of equivalent beams can only be equal to
+           * or an integer fraction of n_rot */
+          ERROR_MSG("mismatch in symmetries\n");
+          exit(1);
+        }
+      } /* for i_set */
+
+      /* At this point:
+       * ind_1, ind_2 = beam indices of one beam in the beam set.
+       * n_eqb_s == 0 <=> this beam set can be omitted because it is represented
+       *                  by another set
+       *         != 0 <=> this beam set represents other beam sets. The number of
+       *                  beams is n_eqb_s * n_eqb_b.
+       * n_eqb_b = number of beams within the beam set related by symmetry.
+       */
+
+#if CONTROL
+      CONTROL_MSG(CONTROL, "%d unsymmetrised beam sets:\n", n_set);
+      for(i_set = 0; i_set < n_set; i_set ++)
+      {
+        fprintf(STDCTR, "(leed_beam_gen_rot) set %d:(%5.2f %5.2f) ",
+                  i_set, bm_off[i_set].ind_1, bm_off[i_set].ind_2);
+        if( bm_off[i_set].n_eqb_s > 0)
+        {
+          fprintf(STDCTR, "represents %d sets (%d beam(s)).\n",
+              bm_off[i_set].n_eqb_s, bm_off[i_set].n_eqb_b);
+        }
+        else
+        {
+          fprintf(STDCTR, "\t\tis equivalent to %d (%5.2f %5.2f).\n",
+                          bm_off[i_set].n_eqb_b,
+                          bm_off[i_set].ind_1,
+                          bm_off[i_set].ind_2);
+        }
+      } /* for i_set */
 #endif 
 
-/***********************************************************************
- Remove the equivalent beam sets from the list beam_off.
- - set No 0 (i.o. beams) will always be included in the list, 
-   therefore start loop at 1.
- - set n_eqb_s to real number of beams (n_eqb_b * n_eqb_s)
-************************************************************************/
-
+    /* Remove the equivalent beam sets from the list beam_off.
+     * - set No 0 (i.o. beams) will always be included in the list,
+     *   therefore start loop at 1.
+     * - set n_eqb_s to real number of beams (n_eqb_b * n_eqb_s)
+     */
     (bm_off+0)->n_eqb_s=(bm_off+0)->n_eqb_s*(bm_off+0)->n_eqb_b;
 
     for(i_set = 1, j_set = 1; i_set < n_set; i_set ++)
     {
-     if( (bm_off+i_set)->n_eqb_s > 0)
-     {
-      (bm_off+i_set)->n_eqb_s = (bm_off+i_set)->n_eqb_s*(bm_off+i_set)->n_eqb_b;
-
-#ifdef WARNING
-      if( (bm_off+i_set)->n_eqb_s != n_rot)
+      if( bm_off[i_set].n_eqb_s > 0)
       {
-       fprintf(STDWAR,"* warning (leed_beam_gen_sym): n_eqb_s * n_eqb_b = %d ",
-               (bm_off+i_set)->n_eqb_s);
-       fprintf(STDWAR,"!= n_rot = %d for beam set (%5.2f %5.2f)\n",
-               n_rot, (bm_off+i_set)->ind_1, (bm_off+i_set)->ind_2);
-      }
+       bm_off[i_set].n_eqb_s =
+           bm_off[i_set].n_eqb_s * bm_off[i_set].n_eqb_b;
+
+#if WARNING
+       if( bm_off[i_set].n_eqb_s != n_rot)
+       {
+         WARNING_MSG("n_eqb_s * n_eqb_b = %d "
+                     "!= n_rot = %d for beam set (%5.2f %5.2f)\n",
+                     bm_off[i_set].n_eqb_s, n_rot, bm_off[i_set].ind_1,
+                     bm_off[i_set].ind_2);
+       }
 #endif
-      if( i_set > j_set )
-      { memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam) ); }
-      j_set ++;
-     }
+       if( i_set > j_set )
+         memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam) );
+       j_set ++;
+      }
     } /* for i_set */
     n_set = j_set;
 
-#ifdef CONTROL
- fprintf(STDCTR,"\n(leed_beam_gen_rot) %d sets in symmetrised list of beamsets:\n",n_set);
- for(i_set = 0; i_set < n_set; i_set ++)
- {
-  fprintf(STDCTR,"(leed_beam_gen_rot) set %d: (%5.2f %5.2f), (%d %d)\n",
-                 i_set, (bm_off+i_set)->ind_1,  (bm_off+i_set)->ind_2,
-                        (bm_off+i_set)->n_eqb_s,(bm_off+i_set)->n_eqb_b);
- } /* for i_set */
+#if CONTROL
+    CONTROL_MSG(CONTROL, "%d sets in symmetrised list of beamsets:\n", n_set);
+    for(i_set = 0; i_set < n_set; i_set ++)
+    {
+      CONTROL_MSG(CONTROL, "set %d: (%5.2f %5.2f), (%d %d)\n",
+                 i_set, bm_off[i_set].ind_1,  bm_off[i_set].ind_2,
+                        bm_off[i_set].n_eqb_s,bm_off[i_set].n_eqb_b);
+    } /* for i_set */
 #endif
 
 
-/**********************************************************************
-  Find the beams within the radius defined by k_max
-  - determine boundaries for beam indices n1 and n2
-  - loop over beam sets and indices.
-**********************************************************************/
-  /* a1 = length of g1 */
-    a1 = R_hypot(g1_x, g1_y);
-  /* a2 = length of g2 */
-    a2 = R_hypot(g2_x, g2_y);
+    /* Find the beams within the radius defined by k_max:
+     * - determine boundaries for beam indices n1 and n2
+     * - loop over beam sets and indices.
+     */
 
-  /* a2 * cos(a1,a2) */
-    faux_r = R_fabs((g1_x*g2_x + g1_y*g2_y)/a1);
-  /* a2 * sin(a1,a2) */
-    faux_i = R_fabs((g1_x*g2_y - g1_y*g2_x)/a1);
+    a1 = R_hypot(g1_x, g1_y); /* a1 = length of g1 */
+    a2 = R_hypot(g2_x, g2_y); /* a2 = length of g2 */
 
-/**********************************************************************
-  n2_max = k_max / (sin(a1,a2) * a2) + k_in/a2
-  n1_max = k_max / a1 + n2_max * (cos(a1,a2) *a2)/a1 + k_in/a1
-***********************************************************************/
+    faux_r = R_fabs((g1_x*g2_x + g1_y*g2_y)/a1); /* a2 * cos(a1,a2) */
+    faux_i = R_fabs((g1_x*g2_y - g1_y*g2_x)/a1); /* a2 * sin(a1,a2) */
+
+    /*
+     * n2_max = k_max / (sin(a1,a2) * a2) + k_in/a2
+     * n1_max = k_max / a1 + n2_max * (cos(a1,a2) *a2)/a1 + k_in/a1
+     */
     n2_max = 2 + (int)(k_max/faux_i + k_in[0]/a2);
     n1_max = 2 + (int)( k_max/a1 + n2_max * faux_r/ a1 + k_in[0]/a1);
 
-#ifdef CONTROL_X
- fprintf(STDCTR,"(leed_beam_gen_rot): n1_max = %2d, n2_max = %2d ,kmax = %f\n", n1_max, n2_max,k_max_2);
-#endif
+    CONTROL_MSG(CONTROL_X, "n1_max = %2d, n2_max = %2d ,kmax = %f\n",
+                n1_max, n2_max,k_max_2);
 
-/**********************************************
-  k_r, k_i is now defined by the complex energy
-***********************************************/
+    /* k_r, k_i is now defined by the complex energy */
     cri_sqrt(&k_r, &k_i, 2.*eng_max, 2.*v_par->eng_i);
 
-/**********************************************************************
-  LOOP OVER BEAM SETS
-  Create a list of all beams with the appropriate settings
-  ordered according to their beam sets and indices.
-**********************************************************************/
+    /* LOOP OVER BEAM SETS:
+     * Create a list of all beams with the appropriate settings
+     * ordered according to their beam sets and indices.
+     */
     for(i_set = 0, i_beams = 0, offset = 0;i_set < n_set; 
         i_set ++, offset = i_beams)
     {
-  /*********************************************************
-    Find the beams within the radius defined by k_max and 
-                   within the wedge defined by symmetry.
-    (loop over beam indices)
-  *********************************************************/ 
+      /* Find the beams within the radius defined by k_max and
+       * within the wedge defined by symmetry.
+       * (loop over beam indices)
+       */
+      wedge = PI / bm_off[i_set].n_eqb_b;      /* half the wedge, use +/- */
 
-     wedge = PI / (bm_off+i_set)->n_eqb_b;      /* half the wedge, use +/- */
-
-     for(n1 = -n1_max; n1 <= n1_max; n1 ++)
-     for(n2 = -n2_max; n2 <= n2_max; n2 ++)
-     {
-      k_x = n1*g1_x + n2*g2_x + k_in[1] + (bm_off+i_set)->k_r[1];
-      k_y = n1*g1_y + n2*g2_y + k_in[2] + (bm_off+i_set)->k_r[2];
-
-      faux_r = SQUARE(k_x) + SQUARE(k_y);      /* length of vector */
-      faux_i = R_atan2(k_y, k_x);              /* angle of vector */
-
-      if(faux_r <= k_max_2)
-      { 
-       if( ((bm_off+i_set)->n_eqb_b == 1)    || 
-           ((IS_EQUAL_REAL(k_x, 0.)) && (IS_EQUAL_REAL(k_y, 0.)))    || 
-           ((( wedge - DEG_TO_RAD) > faux_i ) && 
-            ( faux_i > (-wedge - DEG_TO_RAD)))  
-         )
-/* ~ 1 deg tolerance by adding +/- DEG_TO_RAD */
-       {
-        for(i=0;i<12;i++)
+      for(n1 = -n1_max; n1 <= n1_max; n1 ++)
+        for(n2 = -n2_max; n2 <= n2_max; n2 ++)
         {
-         (beams + i_beams)->k_x_sym[i] = 0.;
-         (beams + i_beams)->k_y_sym[i] = 0.;
-         (beams + i_beams)->k_p_sym[i] = 0.;
-        }
+          k_x = n1*g1_x + n2*g2_x + k_in[1] + bm_off[i_set].k_r[1];
+          k_y = n1*g1_y + n2*g2_y + k_in[2] + bm_off[i_set].k_r[2];
 
-        (beams + i_beams)->ind_1 = (real)n1 + (bm_off+i_set)->ind_1;
-        (beams + i_beams)->ind_2 = (real)n2 + (bm_off+i_set)->ind_2;
+          faux_r = SQUARE(k_x) + SQUARE(k_y);      /* length of vector */
+          faux_i = R_atan2(k_y, k_x);              /* angle of vector */
 
-        k_x = n1*g1_x + n2*g2_x + (bm_off+i_set)->k_r[1];
-        k_y = n1*g1_y + n2*g2_y + (bm_off+i_set)->k_r[2];
+          if(faux_r <= k_max_2)
+          {
+            if( (bm_off[i_set].n_eqb_b == 1)    ||
+                ((IS_EQUAL_REAL(k_x, 0.)) && (IS_EQUAL_REAL(k_y, 0.)))    ||
+                ((( wedge - DEG_TO_RAD) > faux_i ) &&
+                    ( faux_i > (-wedge - DEG_TO_RAD)))  )
+              /* ~ 1 deg tolerance by adding +/- DEG_TO_RAD */
+            {
+              for(i=0; i<12; i++)
+              {
+                beams[i_beams].k_x_sym[i] = 0.;
+                beams[i_beams].k_y_sym[i] = 0.;
+                beams[i_beams].k_p_sym[i] = 0.;
+              }
 
-   /*** rotate beamvec ****/
-        if(n_rot == 4)
-        {   
-         (beams + i_beams)->k_x_sym[1]= k_x * R_n[2][1] + k_y * R_n[2][2];
-         (beams + i_beams)->k_y_sym[1]= k_x * R_n[2][3] + k_y * R_n[2][4]; 
-         (beams + i_beams)->k_p_sym[1]= 2 * 2 * PI/n_rot;
-         (beams + i_beams)->k_x_sym[2]= k_x * R_n[1][1] + k_y * R_n[1][2];
-         (beams + i_beams)->k_y_sym[2]= k_x * R_n[1][3] + k_y * R_n[1][4];
-         (beams + i_beams)->k_p_sym[2]= 1 * 2 * PI/n_rot;
-         (beams + i_beams)->k_x_sym[3]= k_x * R_n[3][1] + k_y * R_n[3][2];
-         (beams + i_beams)->k_y_sym[3]= k_x * R_n[3][3] + k_y * R_n[3][4];
-         (beams + i_beams)->k_p_sym[3]= 3 * 2 * PI/n_rot;
-        }
-        else /**n_rot 1,2,3 **/
-        {
-         for(i_rot = 1; i_rot < n_rot; i_rot ++)
-         {
-          (beams + i_beams)->k_x_sym[i_rot]= k_x * R_n[i_rot][1] + k_y * R_n[i_rot][2];
-          (beams + i_beams)->k_y_sym[i_rot]= k_x * R_n[i_rot][3] + k_y * R_n[i_rot][4];
-          (beams + i_beams)->k_p_sym[i_rot]= i_rot * 2 * PI/n_rot;
-         }
-        }
+              beams[i_beams].ind_1 = (real)n1 + bm_off[i_set].ind_1;
+              beams[i_beams].ind_2 = (real)n2 + bm_off[i_set].ind_2;
 
-/* k_par, k_x/y, without the parallel component of k_in */
-        (beams + i_beams)->k_x_sym[0]= k_x;
-        (beams + i_beams)->k_y_sym[0]= k_y; 
-        (beams + i_beams)->k_p_sym[0]= 0.;
-        (beams + i_beams)->k_r[1] = k_x;
-        (beams + i_beams)->k_r[2] = k_y;
-        (beams + i_beams)->k_par  = SQUARE(k_x) + SQUARE(k_y);
+              k_x = n1*g1_x + n2*g2_x + bm_off[i_set].k_r[1];
+              k_y = n1*g1_y + n2*g2_y + bm_off[i_set].k_r[2];
 
-        (beams + i_beams)->k_i[1] = 0.;
-        (beams + i_beams)->k_i[2] = 0.;
+              /* rotate beamvec */
+              if(n_rot == 4)
+              {
+                beams[i_beams].k_x_sym[1]= k_x * R_n[2][1] + k_y * R_n[2][2];
+                beams[i_beams].k_y_sym[1]= k_x * R_n[2][3] + k_y * R_n[2][4];
+                beams[i_beams].k_p_sym[1]= 2 * 2 * PI/n_rot;
+                beams[i_beams].k_x_sym[2]= k_x * R_n[1][1] + k_y * R_n[1][2];
+                beams[i_beams].k_y_sym[2]= k_x * R_n[1][3] + k_y * R_n[1][4];
+                beams[i_beams].k_p_sym[2]= 1 * 2 * PI/n_rot;
+                beams[i_beams].k_x_sym[3]= k_x * R_n[3][1] + k_y * R_n[3][2];
+                beams[i_beams].k_y_sym[3]= k_x * R_n[3][3] + k_y * R_n[3][4];
+                beams[i_beams].k_p_sym[3]= 3 * 2 * PI/n_rot;
+              }
+              else /* n_rot 1,2,3 */
+              {
+                for(i_rot = 1; i_rot < n_rot; i_rot ++)
+                {
+                  beams[i_beams].k_x_sym[i_rot]= k_x * R_n[i_rot][1]
+                                               + k_y * R_n[i_rot][2];
+                  beams[i_beams].k_y_sym[i_rot]= k_x * R_n[i_rot][3]
+                                               + k_y * R_n[i_rot][4];
+                  beams[i_beams].k_p_sym[i_rot]= i_rot * 2 * PI/n_rot;
+                }
+              }
 
-        (beams + i_beams)->n_eqb_s = (bm_off+i_set)->n_eqb_s;
-        (beams + i_beams)->n_eqb_b = (bm_off+i_set)->n_eqb_b;
+              /* k_par, k_x/y, without the parallel component of k_in */
+              beams[i_beams].k_x_sym[0]= k_x;
+              beams[i_beams].k_y_sym[0]= k_y;
+              beams[i_beams].k_p_sym[0]= 0.;
+              beams[i_beams].k_r[1] = k_x;
+              beams[i_beams].k_r[2] = k_y;
+              beams[i_beams].k_par  = SQUARE(k_x) + SQUARE(k_y);
+
+              beams[i_beams].k_i[1] = 0.;
+              beams[i_beams].k_i[2] = 0.;
+
+              beams[i_beams].n_eqb_s = bm_off[i_set].n_eqb_s;
+              beams[i_beams].n_eqb_b = bm_off[i_set].n_eqb_b;
 
 
-/********OUTPUT from all beams and her symmetry related********/
-#ifdef CONTROL_X
- fprintf(STDCTR,"**********************\n");
- fprintf(STDCTR,"beam%d (%f %f)(%f %f): neqb_s %d  neqb_b %d \n",
-             i_beams,(beams + i_beams)->ind_1,(beams + i_beams)->ind_2
-       ,(beams+i_beams)->k_x_sym[0] * BOHR,(beams+i_beams)->k_y_sym[0] * BOHR
-       ,(beams+i_beams)->n_eqb_s,(beams+i_beams)->n_eqb_b);  
- fprintf(STDCTR,"symmetry related beams:\n");
- for(i = 1 ;i < n_rot; i++)
- {
-   fprintf(STDCTR," k_x_sym %f k_y_sym %f k_p_sym %f\n",
-                    (beams+i_beams)->k_x_sym[i] * BOHR ,
-                    (beams+i_beams)->k_y_sym[i] * BOHR ,
-                    (beams+i_beams)->k_p_sym[i]/DEG_TO_RAD);
- }
- fprintf(STDCTR,"**********************\n\n");
+              /* OUTPUT from all beams and her symmetry related */
+#if CONTROL_X
+              fprintf(STDCTR, "**********************\n");
+              fprintf(STDCTR, "beam%d (%f %f)(%f %f): neqb_s %d  neqb_b %d \n",
+                      i_beams,beams[i_beams].ind_1, beams[i_beams].ind_2,
+                      beams[i_beams].k_x_sym[0] * BOHR,
+                      beams[i_beams].k_y_sym[0] * BOHR,
+                      beams[i_beams].n_eqb_s, beams[i_beams].n_eqb_b);
+              fprintf(STDCTR, "symmetry related beams:\n");
+              for(i = 1 ;i < n_rot; i++)
+              {
+                fprintf(STDCTR, " k_x_sym %f k_y_sym %f k_p_sym %f\n",
+                        beams[i_beams].k_x_sym[i] * BOHR ,
+                        beams[i_beams].k_y_sym[i] * BOHR ,
+                        beams[i_beams].k_p_sym[i]/DEG_TO_RAD);
+              }
+              fprintf(STDCTR, "**********************\n\n");
 #endif
+
 /*************************************************************************
   Symmetry related information (ONLY ROTATION):
   n_eqb_s = number of equivalent beams for overlayers (numer of sets times
@@ -617,868 +570,827 @@ needed in the routines bravelsym and complsym
             The information relevant for i_layers and m will be stroed in 
             ein_b/s[ nlayers*i_layers + l_max + m ]
 **************************************************************************/
-     /* Akz_r = (area of the unit cell)^-1 */
-        (beams + i_beams)->Akz_r = 1./b_par->area;
 
-        (beams + i_beams)->eout_b_r = 
-          (real*)malloc((b_par->nlayers)*sizeof(real));
-        (beams + i_beams)->eout_b_i = 
-          (real*)malloc((b_par->nlayers)*sizeof(real));
-        (beams + i_beams)->eout_s_r = 
-          (real*)malloc((o_par->nlayers)*sizeof(real));
-        (beams + i_beams)->eout_s_i = 
-          (real*)malloc((o_par->nlayers)*sizeof(real));
+              /* Akz_r = (area of the unit cell)^-1 */
+              beams[i_beams].Akz_r = 1./b_par->area;
 
-        (beams + i_beams)->ein_b_r = 
-          (real *)malloc((2*l_max+1)*(b_par->nlayers)*sizeof(real));
-        (beams + i_beams)->ein_b_i = 
-          (real *)malloc((2*l_max+1)*(b_par->nlayers)*sizeof(real));
-        (beams + i_beams)->ein_s_r = 
-          (real *)malloc((2*l_max+1)*(o_par->nlayers)*sizeof(real));
-        (beams + i_beams)->ein_s_i = 
-          (real *)malloc((2*l_max+1)*(o_par->nlayers)*sizeof(real));
+              beams[i_beams].eout_b_r =
+                  (real*)malloc((b_par->n_layers)*sizeof(real));
+              beams[i_beams].eout_b_i =
+                  (real*)malloc((b_par->n_layers)*sizeof(real));
+              beams[i_beams].eout_s_r =
+                  (real*)malloc((o_par->n_layers)*sizeof(real));
+              beams[i_beams].eout_s_i =
+                  (real*)malloc((o_par->n_layers)*sizeof(real));
+
+              beams[i_beams].ein_b_r =
+                  (real *)malloc((2*l_max+1)*(b_par->n_layers)*sizeof(real));
+              beams[i_beams].ein_b_i =
+                  (real *)malloc((2*l_max+1)*(b_par->n_layers)*sizeof(real));
+              beams[i_beams].ein_s_r =
+                  (real *)malloc((2*l_max+1)*(o_par->n_layers)*sizeof(real));
+              beams[i_beams].ein_s_i =
+                  (real *)malloc((2*l_max+1)*(o_par->n_layers)*sizeof(real));
 
 
-/* bulk layers */
+              /* bulk layers */
 
-        for(i_layers = 0, iaux = 0; i_layers < b_par->nlayers; i_layers ++)
-        {
-         a1_x = (b_par->layers + i_layers)->reg_shift[1];
-         a1_y = (b_par->layers + i_layers)->reg_shift[2];
-         pref2 = R_sqrt((real) (bm_off+i_set)->n_eqb_b );
+              for(i_layers = 0, iaux = 0; i_layers < b_par->n_layers; i_layers++)
+              {
+                a1_x = (b_par->layers + i_layers)->reg_shift[1];
+                a1_y = (b_par->layers + i_layers)->reg_shift[2];
+                pref2 = R_sqrt((real) bm_off[i_set].n_eqb_b );
 
-         faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                 + a1_y * (beams + i_beams)->k_y_sym[0];
-         cri_expi( &faux_r, &faux_i, faux_r, 0.);
+                faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                        + a1_y * beams[i_beams].k_y_sym[0];
+                cri_expi( &faux_r, &faux_i, faux_r, 0.);
          
-         *((beams+i_beams)->eout_b_r + i_layers) = pref2 * faux_r;
-         *((beams+i_beams)->eout_b_i + i_layers) = pref2 * faux_i;
+                *(beams[i_beams].eout_b_r + i_layers) = pref2 * faux_r;
+                *(beams[i_beams].eout_b_i + i_layers) = pref2 * faux_i;
 
-         pref2 = 1./R_sqrt((real) (bm_off+i_set)->n_eqb_b );
-         for(m = -l_max; m <= l_max; m ++, iaux ++)
-         {
-          if( (bm_off+i_set)->n_eqb_b == 1) 
-          {
-           faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                   + a1_y * (beams + i_beams)->k_y_sym[0];
-           cri_expi( (beams+i_beams)->ein_b_r + iaux,
-                     (beams+i_beams)->ein_b_i + iaux,
-                     -faux_r, 0.);
+                pref2 = 1./R_sqrt((real) bm_off[i_set].n_eqb_b );
+                for(m = -l_max; m <= l_max; m ++, iaux ++)
+                {
+                  if( bm_off[i_set].n_eqb_b == 1)
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_b_r + iaux,
+                              beams[i_beams].ein_b_i + iaux,
+                              -faux_r, 0.);
 
-          }
-          else
-          {
-           faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                   + a1_y * (beams + i_beams)->k_y_sym[0];
-           cri_expi( (beams+i_beams)->ein_b_r + iaux,
-                     (beams+i_beams)->ein_b_i + iaux,
-                     -faux_r, 0.);
+                  }
+                  else
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_b_r + iaux,
+                              beams[i_beams].ein_b_i + iaux,
+                              -faux_r, 0.);
 
-           for(i_rot = 1; i_rot < (bm_off+i_set)->n_eqb_b; i_rot ++)
-           {
-            a2_x = (beams + i_beams)->k_x_sym[i_rot];
-            a2_y = (beams + i_beams)->k_y_sym[i_rot];
-            pref1 = m * (beams + i_beams)->k_p_sym[i_rot];
+                    for(i_rot = 1; i_rot < bm_off[i_set].n_eqb_b; i_rot ++)
+                    {
+                      a2_x = beams[i_beams].k_x_sym[i_rot];
+                      a2_y = beams[i_beams].k_y_sym[i_rot];
+                      pref1 = m * beams[i_beams].k_p_sym[i_rot];
 
-            faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
-            cri_expi(&faux_r, &faux_i, -faux_r, 0.);
-            *((beams+i_beams)->ein_b_r + iaux) += faux_r;
-            *((beams+i_beams)->ein_b_i + iaux) += faux_i;
-           }
-          }  /* else */
+                      faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
+                      cri_expi(&faux_r, &faux_i, -faux_r, 0.);
+                      *(beams[i_beams].ein_b_r + iaux) += faux_r;
+                      *(beams[i_beams].ein_b_i + iaux) += faux_i;
+                    }
+                  }  /* else */
 
-          *((beams+i_beams)->ein_b_r + iaux) *= pref2;
-          *((beams+i_beams)->ein_b_i + iaux) *= pref2;
+                  *(beams[i_beams].ein_b_r + iaux) *= pref2;
+                  *(beams[i_beams].ein_b_i + iaux) *= pref2;
 
-         }  /* for m */
-        }  /* for i_layers */
+                }  /* for m */
+              }  /* for i_layers */
 
-   /* superlattice (full rotational symmetry), use o_par */
+              /* superlattice (full rotational symmetry), use o_par */
+              for(i_layers = 0, iaux = 0; i_layers < o_par->n_layers; i_layers++)
+              {
+                a1_x = (o_par->layers + i_layers)->reg_shift[1];
+                a1_y = (o_par->layers + i_layers)->reg_shift[2];
+                pref2 = R_sqrt((real) bm_off[i_set].n_eqb_s);
 
-        for(i_layers = 0, iaux = 0; i_layers < o_par->nlayers; i_layers ++)
-        {
-         a1_x = (o_par->layers + i_layers)->reg_shift[1];
-         a1_y = (o_par->layers + i_layers)->reg_shift[2];
-         pref2 = R_sqrt((real) (bm_off+i_set)->n_eqb_s);
-
-         faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                 + a1_y * (beams + i_beams)->k_y_sym[0];
-         cri_expi( &faux_r, &faux_i, faux_r, 0.);
+                faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                        + a1_y * beams[i_beams].k_y_sym[0];
+                cri_expi( &faux_r, &faux_i, faux_r, 0.);
          
-         *((beams+i_beams)->eout_s_r + i_layers) = pref2 * faux_r;
-         *((beams+i_beams)->eout_s_i + i_layers) = pref2 * faux_i;
+                *(beams[i_beams].eout_s_r + i_layers) = pref2 * faux_r;
+                *(beams[i_beams].eout_s_i + i_layers) = pref2 * faux_i;
 
           
-         pref2 = 1./R_sqrt((real) (bm_off+i_set)->n_eqb_s );
-         for(m = -l_max; m <= l_max; m ++, iaux ++)
-         {
+                pref2 = 1./R_sqrt((real) bm_off[i_set].n_eqb_s );
+                for(m = -l_max; m <= l_max; m ++, iaux ++)
+                {
+                  if( bm_off[i_set].n_eqb_s == 1)
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_s_r + iaux,
+                              beams[i_beams].ein_s_i + iaux,
+                              -faux_r, 0.);
+                  }
+                  else
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_s_r + iaux,
+                              beams[i_beams].ein_s_i + iaux,
+                              -faux_r, 0.);
 
-          if( (bm_off+i_set)->n_eqb_s == 1)
+                    for(i_rot = 1; i_rot < n_rot; i_rot ++)
+                    {
+                      a2_x = beams[i_beams].k_x_sym[i_rot];
+                      a2_y = beams[i_beams].k_y_sym[i_rot];
+                      pref1 = m * beams[i_beams].k_p_sym[i_rot];
+
+                      faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
+                      cri_expi(&faux_r, &faux_i, -faux_r, 0.);
+                      *(beams[i_beams].ein_s_r + iaux) += faux_r;
+                      *(beams[i_beams].ein_s_i + iaux) += faux_i;
+                    }
+
+                    *(beams[i_beams].ein_s_r + iaux) *= pref2;
+                    *(beams[i_beams].ein_s_i + iaux) *= pref2;
+                  }  /* else */
+                }  /* for m */
+              }  /* for i_layers */
+
+              /* beam set */
+
+              beams[i_beams].set = i_set;
+              i_beams ++;
+
+            } /*if wedge...**/
+          } /* if inside k_max */
+        } /* for n1/n2 */
+
+      /* 1st pass: Sort the beams according to the parallel component
+       * (i.e. smallest k_par first)
+       */
+      CONTROL_MSG(CONTROL_X, "SORTING %2d beams in set %d:\n", i_beams - offset, i_set);
+
+      for(n1 = offset; n1 < i_beams; n1 ++)
+      {
+        for(n2 = n1+1; n2 < i_beams; n2 ++)
+        {
+          if((beams + n2)->k_par < (beams + n1)->k_par )
           {
-           faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                   + a1_y * (beams + i_beams)->k_y_sym[0];
-           cri_expi( (beams+i_beams)->ein_s_r + iaux,
-                     (beams+i_beams)->ein_s_i + iaux,
-                     -faux_r, 0.);
+            memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+            memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+            memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
           }
-          else
+        } /* n2 */
+     } /* n1 */
+
+      /* 2nd pass: Sort the beams according to the 1st and 2nd index
+       * (i.e. smallest indices first)
+       */
+      for(n1 = offset; n1 < i_beams; n1 ++)
+      {
+        for(n2 = n1+1;
+            fabs( (beams + n2)->k_par - (beams + n1)->k_par ) < K_TOLERANCE;
+            n2++)
+        {
+          if((beams + n2)->ind_1 < (beams + n1)->ind_1 )
           {
-           faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                   + a1_y * (beams + i_beams)->k_y_sym[0];
-           cri_expi( (beams+i_beams)->ein_s_r + iaux,
-                     (beams+i_beams)->ein_s_i + iaux,
-                     -faux_r, 0.);
-
-           for(i_rot = 1; i_rot < n_rot; i_rot ++)
-           {
-            a2_x = (beams + i_beams)->k_x_sym[i_rot];
-            a2_y = (beams + i_beams)->k_y_sym[i_rot];
-            pref1 = m * (beams + i_beams)->k_p_sym[i_rot];
-
-            faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
-            cri_expi(&faux_r, &faux_i, -faux_r, 0.);
-            *((beams+i_beams)->ein_s_r + iaux) += faux_r;
-            *((beams+i_beams)->ein_s_i + iaux) += faux_i;
-           }
-
-           *((beams+i_beams)->ein_s_r + iaux) *= pref2;
-           *((beams+i_beams)->ein_s_i + iaux) *= pref2;
-          }  /* else */
-         }  /* for m */
-        }  /* for i_layers */
-
-  /* beam set */
-
-        (beams + i_beams)->set = i_set;
-        i_beams ++;
-
-       }/*if wedge...**/
-      } /* if inside k_max */
-     } /* for n1/n2 */
-  /*********************************************************
-    1st pass: Sort the beams according to the parallel component
-    (i.e. smallest k_par first)
-  *********************************************************/ 
-#ifdef CONTROL_X
- fprintf(stdout,"(leed_beam_gen_sym): SORTING %2d beams in set %d:\n", 
-                i_beams - offset, i_set);
-#endif
-     for(n1 = offset; n1 < i_beams; n1 ++)
-     {
-      for(n2 = n1+1; n2 < i_beams; n2 ++)
-      {
-       if((beams + n2)->k_par < (beams + n1)->k_par )
-       {
-        memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
-        memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
-        memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
-       }
-      } /* n2 */
-     }  /* n1 */
-
-  /*********************************************************
-    2nd pass: Sort the beams according to the 1st and 2nd index
-    (i.e. smallest indices first)
-  *********************************************************/ 
-     for(n1 = offset; n1 < i_beams; n1 ++)
-     {
-      for(n2 = n1+1;fabs( (beams + n2)->k_par - (beams + n1)->k_par ) < K_TOLERANCE; 
-         n2++)
-      {
-       if((beams + n2)->ind_1 < (beams + n1)->ind_1 )
-       {
-        memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
-        memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
-        memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
-       }
-       if( IS_EQUAL_REAL((beams + n2)->ind_1, (beams + n1)->ind_1) &&
-           ((beams + n2)->ind_2 < (beams + n1)->ind_2 )  )
-       {
-        memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
-        memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
-        memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
-       }
-      } /* n2 */
-     }  /* n1 */
+            memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+            memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+            memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
+          }
+          if( IS_EQUAL_REAL((beams + n2)->ind_1, (beams + n1)->ind_1) &&
+              ((beams + n2)->ind_2 < (beams + n1)->ind_2 )  )
+          {
+            memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+            memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+            memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
+          }
+        } /* n2 */
+      } /* n1 */
     } /* for i_set */
 
-/**********************************************************************
-  Reset the symmetry structure elements for (0,0) beam (always 
-  first in the list) (0,0) is an exception since it can only 
-  represent 1 beam, although the symmetry might be higher.
-**********************************************************************/
-
+    /* Reset the symmetry structure elements for (0,0) beam (always
+     * first in the list) (0,0) is an exception since it can only
+     * represent 1 beam, although the symmetry might be higher.
+     */
     (beams + 0)->n_eqb_b = 1;
     (beams + 0)->n_eqb_s = 1;
 
-  /* bulk layers */
-
-    for(i_layers = 0, iaux = 0; i_layers < b_par->nlayers; i_layers ++)
+    /* bulk layers */
+    for(i_layers = 0, iaux = 0; i_layers < b_par->n_layers; i_layers ++)
     {
-     *((beams+0)->eout_b_r + i_layers) = 1.;
-     *((beams+0)->eout_b_i + i_layers) = 0.;
+      *((beams+0)->eout_b_r + i_layers) = 1.;
+      *((beams+0)->eout_b_i + i_layers) = 0.;
 
-     for(m = -l_max; m <= l_max; m ++, iaux ++)
-     {
-      *((beams+0)->ein_b_r + iaux) = 1.;
-      *((beams+0)->ein_b_i + iaux) = 0.;
-     }  /* for m */
-    }  /* for i_layers */
-
-  /* overlayers */
-
-    for(i_layers = 0, iaux = 0; i_layers < o_par->nlayers; i_layers ++)
-    {
-     *((beams+0)->eout_s_r + i_layers) = 1.;
-     *((beams+0)->eout_s_i + i_layers) = 0.;
-
-     for(m = -l_max; m <= l_max; m ++, iaux ++)
-     {
-      *((beams+0)->ein_s_r + iaux) = 1.;
-      *((beams+0)->ein_s_i + iaux) = 0.;
-     }
-    }  /* for i_layers */
-
-/**********************************************************************
-  Set k_par of the last element of the list to the terminating value.
-  free R_n.
-**********************************************************************/
-    (beams + i_beams)->k_par = F_END_OF_LIST;
-     leed_beam_rotation_matrix_free(R_n);
-
-    break;
-
-   }  /* case rotsymmetry */
-
-
-/***********************************************************************
-
-  CASE MIRRORSYMMETRY !!!!!
-
-***********************************************************************/
-   
-   case HEX_3MIR:
-   case HEX_1MIR: 
-   case SQ_1MIR:
-   case REC_1MIR:
-   case MONO_1MIR:
-   case REC_2MIR:
-   case SQ_2MIR:
-   case SQ_4MIR:
-   {
-
-    for(i_set = 1; i_set < n_set; i_set ++)
-    {
-     if( (bm_off+i_set)->n_eqb_s != 0 )
-     {
-      equalset1 = (bm_off+i_set)->ind_1;
-      equalset2 = (bm_off+i_set)->ind_2;
-      for(j = 0; j < 2; j++)
+      for(m = -l_max; m <= l_max; m ++, iaux ++)
       {
-      for(i = 0; i < n_mir - j; i++)
+        *((beams+0)->ein_b_r + iaux) = 1.;
+        *((beams+0)->ein_b_i + iaux) = 0.;
+      } /* for m */
+    } /* for i_layers */
+
+    /* overlayers */
+    for(i_layers = 0, iaux = 0; i_layers < o_par->n_layers; i_layers ++)
+    {
+      *((beams+0)->eout_s_r + i_layers) = 1.;
+      *((beams+0)->eout_s_i + i_layers) = 0.;
+
+      for(m = -l_max; m <= l_max; m ++, iaux ++)
       {
-       k_x = (bm_off+i_set)->k_r[1];
-       k_y = (bm_off+i_set)->k_r[2];
+        *((beams+0)->ein_s_r + iaux) = 1.;
+        *((beams+0)->ein_s_i + iaux) = 0.;
+      }
+    } /* for i_layers */
 
-       R_m[1] = R_cos(2* b_par->alpha[i]);
-       R_m[2] = R_sin(2* b_par->alpha[i]);
-       R_m[3] = R_m[2];
-       R_m[4] = - R_m[1];
+    /* Set k_par of the last element of the list to the terminating value.
+     * free R_n.
+     */
+      beams[i_beams].k_par = F_END_OF_LIST;
+      leed_beam_rotation_matrix_free(R_n);
+
+      break;
+    }  /* case rotsymmetry */
 
 
-  /* calculate R^-1 = At^-1 R At */
-       m11 = R_m[1]*a1_x*a2_y + R_m[2]*a1_y*a2_y
-           - R_m[3]*a1_x*a2_x - R_m[4]*a1_y*a2_x;
-       m11 *= det;
-       m21 = - R_m[1]*a1_x*a1_y - R_m[2]*a1_y*a1_y
-             + R_m[3]*a1_x*a1_x + R_m[4]*a1_y*a1_x;
-       m21 *= det;
-       m12 = R_m[1]*a2_x*a2_y + R_m[2]*a2_y*a2_y
-           - R_m[3]*a2_x*a2_x - R_m[4]*a2_y*a2_x;
-       m12 *= det;
-       m22 = - R_m[1]*a2_x*a1_y - R_m[2]*a2_y*a1_y
-             + R_m[3]*a2_x*a1_x + R_m[4]*a2_y*a1_x;
-       m22 *= det;
- 
-  /* calculate (ind_1(i),ind_2(i)) R^-1 */
+    /* CASE MIRRORSYMMETRY */
+    case HEX_3MIR:
+    case HEX_1MIR:
+    case SQ_1MIR:
+    case REC_1MIR:
+    case MONO_1MIR:
+    case REC_2MIR:
+    case SQ_2MIR:
+    case SQ_4MIR:
+    {
 
-       k_x = equalset1 * m11 + equalset2 * m21;
-       k_y = equalset1 * m12 + equalset2 * m22;
-#ifdef CONTROL_X
-      fprintf(STDCTR,"(Drehung) k_x = %f , k_y = %f (ind_1 = %f ind_2 = %f)\n",
-      k_x, k_y, equalset1, equalset2);
-#endif
-/***********************************************************************
-   If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(i),ind_2(i)) is integer, the
-   beam set is equivalent to itself.
-   Mark this in n_eqb_b.
-*************************************************************************/
-       faux_r = k_x - (bm_off+i_set)->ind_1;
-#ifdef CONTROL_X
-       fprintf(STDCTR,"(gleiches Set) faux_r = %f k_x = %f ind_1(set %d) = %f\n",
-       faux_r, k_x, i_set, (bm_off+i_set)->ind_1);
-#endif
-
-       if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )      /* integer ? */
-       {
-        faux_r = k_y - (bm_off+i_set)->ind_2;
-#ifdef CONTROL_X
-      fprintf(STDCTR,"(gleiches Set) faux_r = %f k_y = %f ind_2(set %d) = %f\n",
-      faux_r, k_y, i_set, (bm_off+i_set)->ind_2);
-#endif
-        if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )    /* integer ? */
+      for(i_set = 1; i_set < n_set; i_set ++)
+      {
+        if( bm_off[i_set].n_eqb_s != 0 )
         {
-         (bm_off+i_set)->n_eqb_b ++;
-#ifdef CONTROL_X
-        fprintf(STDCTR,"(leed_beam_gen_mir) set %d has mirror symmetry alpha = %f\n",
-        i_set, b_par->alpha[i]/DEG_TO_RAD);
-#endif
-        }
-       }
+          equalset1 = bm_off[i_set].ind_1;
+          equalset2 = bm_off[i_set].ind_2;
 
-/***********************************************************************
-   If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(j),ind_2(j)) is integer, the
-   beam sets i and j are equivalent.
-   Mark this in n_eqb_s.
-*************************************************************************/
-       for(j_set = i_set+1; j_set < n_set; j_set ++)
-       {
-        if( (bm_off+i_set)->n_eqb_s != 0 && (bm_off+j_set)->n_eqb_s != 0)
-        {
-         faux_r = k_x - (bm_off+j_set)->ind_1;
-         if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )    /* integer ? */
-         {
-          faux_r = k_y - (bm_off+j_set)->ind_2;
-          if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )  /* integer ? */
+          for(j = 0; j < 2; j++)
           {
-           (bm_off+i_set)->n_eqb_s ++;
-           (bm_off+j_set)->n_eqb_s = 0;
-#ifdef CONTROL_X
-    fprintf(STDCTR,"(leed_beam_gen_mir) sets %d and %d are equivalent (alpha = %f)\n",
-       i_set, j_set,b_par->alpha[i]/DEG_TO_RAD);
-#endif
-          }
-         }
-        } /* if n_eqb_s */
-       } /* for j_set */
+            for(i = 0; i < n_mir - j; i++)
+            {
+              k_x = bm_off[i_set].k_r[1];
+              k_y = bm_off[i_set].k_r[2];
 
-	 equalset1 = k_x;
-	 equalset2 = k_y;
+              R_m[1] = R_cos(2* b_par->alpha[i]);
+              R_m[2] = R_sin(2* b_par->alpha[i]);
+              R_m[3] = R_m[2];
+              R_m[4] = - R_m[1];
 
-      }/*for n_mir*/
-      }/*for j --- n_mir-j */
-     }/*if n_eqb_s != 0 */ 
-    }/*for i_set */
 
-/***************************************************************************
- At this point:
-   ind_1, ind_2 = beam indices of one beam in the beam set.
-   n_eqb_s == 0 <=> this beam set can be omitted because it is represented
-                    by another set
-           != 0 <=> this beam set represents other beam sets. The number of
-                    beams is n_eqb_s * n_eqb_b.
-   n_eqb_b = number of beams within the beam set related by symmetry.
-****************************************************************************/
+              /* calculate R^-1 = At^-1 R At */
+              m11 = R_m[1]*a1_x*a2_y + R_m[2]*a1_y*a2_y
+                  - R_m[3]*a1_x*a2_x - R_m[4]*a1_y*a2_x;
+              m11 *= det;
+              m21 = - R_m[1]*a1_x*a1_y - R_m[2]*a1_y*a1_y
+                    + R_m[3]*a1_x*a1_x + R_m[4]*a1_y*a1_x;
+              m21 *= det;
+              m12 = R_m[1]*a2_x*a2_y + R_m[2]*a2_y*a2_y
+                  - R_m[3]*a2_x*a2_x - R_m[4]*a2_y*a2_x;
+              m12 *= det;
+              m22 = - R_m[1]*a2_x*a1_y - R_m[2]*a2_y*a1_y
+                    + R_m[3]*a2_x*a1_x + R_m[4]*a2_y*a1_x;
+              m22 *= det;
+ 
+              /* calculate (ind_1(i),ind_2(i)) R^-1 */
+              k_x = equalset1 * m11 + equalset2 * m21;
+              k_y = equalset1 * m12 + equalset2 * m22;
 
-#ifdef CONTROL
- fprintf(STDCTR,"\n(leed_beam_gen_mir) %d unsymmetrised beam sets:\n", n_set);
- for(i_set = 0; i_set < n_set; i_set ++)
- {
-   fprintf(STDCTR,"(leed_beam_gen_mir) set %d:(%5.2f %5.2f) ",
-                  i_set, (bm_off+i_set)->ind_1,   (bm_off+i_set)->ind_2);
-   if((bm_off+i_set)->n_eqb_s > 0)
-   {
-     fprintf(STDCTR,"represents %d sets (%d beam(s)).\n", 
-             (bm_off+i_set)->n_eqb_s, (bm_off+i_set)->n_eqb_b);
-   }
-   else 
-   {
-     fprintf(STDCTR,"\t\tis equivalent to %d (%5.2f %5.2f).\n",
-             (bm_off+i_set)->n_eqb_b, 
-             (bm_off+ (bm_off+i_set)->n_eqb_b)->ind_1,
-             (bm_off+ (bm_off+i_set)->n_eqb_b)->ind_2);
-   }
- } /* for i_set */
+              CONTROL_MSG(CONTROL_X,
+                  "k_x = %f , k_y = %f (ind_1 = %f ind_2 = %f)\n",
+                  k_x, k_y, equalset1, equalset2);
+
+              /* If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(i),ind_2(i)) is integer,
+               * the beam set is equivalent to itself. Mark this in n_eqb_b.
+               */
+              faux_r = k_x - bm_off[i_set].ind_1;
+
+              CONTROL_MSG(CONTROL_X,
+                  "faux_r = %f k_x = %f ind_1(set %d) = %f\n",
+                  faux_r, k_x, i_set, bm_off[i_set].ind_1);
+
+              if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+              {
+                faux_r = k_y - bm_off[i_set].ind_2;
+
+                CONTROL_MSG(CONTROL_X,
+                    "faux_r = %f k_y = %f ind_2(set %d) = %f\n",
+                    faux_r, k_y, i_set, bm_off[i_set].ind_2);
+
+                if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+                {
+                  bm_off[i_set].n_eqb_b ++;
+
+                  CONTROL_MSG(CONTROL_X,
+                      "set %d has mirror symmetry alpha = %f\n",
+                      i_set, b_par->alpha[i]/DEG_TO_RAD);
+                }
+              }
+
+              /* If (ind_1(i),ind_2(i)) R^-1 - ((ind_1(j),ind_2(j)) is integer,
+               * the beam sets i and j are equivalent. Mark this in n_eqb_s.
+               */
+              for(j_set = i_set+1; j_set < n_set; j_set ++)
+              {
+                if( bm_off[i_set].n_eqb_s != 0 && (bm_off+j_set)->n_eqb_s != 0)
+                {
+                  faux_r = k_x - (bm_off+j_set)->ind_1;
+                  if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+                  {
+                    faux_r = k_y - (bm_off+j_set)->ind_2;
+                    if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+                    {
+                      bm_off[i_set].n_eqb_s ++;
+                      (bm_off+j_set)->n_eqb_s = 0;
+
+                      CONTROL_MSG(CONTROL_X,
+                          "sets %d and %d are equivalent (alpha = %f)\n",
+                          i_set, j_set,b_par->alpha[i]/DEG_TO_RAD);
+                    }
+                  }
+                } /* if n_eqb_s */
+              } /* for j_set */
+
+              equalset1 = k_x;
+              equalset2 = k_y;
+
+            } /*for n_mir*/
+          } /*for j --- n_mir-j */
+        } /*if n_eqb_s != 0 */
+      } /*for i_set */
+
+      /* At this point:
+       * ind_1, ind_2 = beam indices of one beam in the beam set.
+       * n_eqb_s == 0 <=> this beam set can be omitted because it is represented
+       *                  by another set
+       *         != 0 <=> this beam set represents other beam sets. The number of
+       *                  beams is n_eqb_s * n_eqb_b.
+       * n_eqb_b = number of beams within the beam set related by symmetry.
+       */
+#if CONTROL
+      CONTROL_MSG(CONTROL, "%d unsymmetrised beam sets:\n", n_set);
+      for(i_set = 0; i_set < n_set; i_set ++)
+      {
+        CONTROL_MSG(CONTROL, "set %d:(%5.2f %5.2f) ",
+                i_set, bm_off[i_set].ind_1,   bm_off[i_set].ind_2);
+
+        if(bm_off[i_set].n_eqb_s > 0)
+        {
+          fprintf(STDCTR,"represents %d sets (%d beam(s)).\n",
+             bm_off[i_set].n_eqb_s, bm_off[i_set].n_eqb_b);
+        }
+        else
+        {
+          fprintf(STDCTR,"\t\tis equivalent to %d (%5.2f %5.2f).\n",
+             bm_off[i_set].n_eqb_b,
+             (bm_off+ bm_off[i_set].n_eqb_b)->ind_1,
+             (bm_off+ bm_off[i_set].n_eqb_b)->ind_2);
+        }
+      } /* for i_set */
 #endif 
 
-/**************************************************************************
- Remove the equivalent beam sets from the list beam_off.
- - set No 0 (i.o. beams) will always be included in the list, 
-   therefore start loop at 1.
- - set n_eqb_s to real number of beams (n_eqb_b * n_eqb_s)
-***************************************************************************/
+    /* Remove the equivalent beam sets from the list beam_off:
+     * - set No 0 (i.o. beams) will always be included in the list,
+     *   therefore start loop at 1.
+     * - set n_eqb_s to real number of beams (n_eqb_b * n_eqb_s)
+     */
 
     (bm_off+0)->n_eqb_s=(bm_off+0)->n_eqb_s*(bm_off+0)->n_eqb_b;
 
     for(i_set = 1, j_set = 1; i_set < n_set; i_set ++)
     {
-     if( (bm_off+i_set)->n_eqb_s > 0)
-     {
-      (bm_off+i_set)->n_eqb_s = (bm_off+i_set)->n_eqb_s*(bm_off+i_set)->n_eqb_b;
-#ifdef WARNING
-      if( (bm_off+i_set)->n_eqb_s != 2*n_mir)
+      if( bm_off[i_set].n_eqb_s > 0)
       {
-       fprintf(STDWAR,"* warning (leed_beam_gen_mir): n_eqb_s * n_eqb_b = %d ",
-               (bm_off+i_set)->n_eqb_s);
-       fprintf(STDWAR,"!= n_mir = %d for beam set (%5.2f %5.2f)\n",
-               2*n_mir, (bm_off+i_set)->ind_1, (bm_off+i_set)->ind_2);
-      }
+        bm_off[i_set].n_eqb_s = bm_off[i_set].n_eqb_s*bm_off[i_set].n_eqb_b;
+#if WARNING
+        if( bm_off[i_set].n_eqb_s != 2*n_mir)
+        {
+          WARNING_MSG("n_eqb_s * n_eqb_b = %d "
+                      "!= n_mir = %d for beam set (%5.2f %5.2f)\n",
+                      bm_off[i_set].n_eqb_s,
+                      2*n_mir, bm_off[i_set].ind_1, bm_off[i_set].ind_2);
+        }
 #endif
-      if( i_set > j_set )
-      { memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam) ); }
-      j_set ++;
-     }
+        if( i_set > j_set )
+          memcpy( bm_off+j_set, bm_off+i_set, sizeof(leed_beam) );
+        j_set ++;
+      }
     } /* for i_set */
     n_set = j_set;
 
-#ifdef CONTROL
- fprintf(STDCTR, "\n(leed_beam_gen_mir) %d sets in symmetrised list of beamsets:\n",n_set);
- for(i_set = 0; i_set < n_set; i_set ++)
- {
-   fprintf(STDCTR,"(leed_beam_gen_mir) set %d: (%5.2f %5.2f), (%d %d)\n",
-                  i_set, (bm_off+i_set)->ind_1,  (bm_off+i_set)->ind_2,
-                         (bm_off+i_set)->n_eqb_s,(bm_off+i_set)->n_eqb_b);
- } /* for i_set */
+#if CONTROL
+    CONTROL_MSG(CONTROL, "%d sets in symmetrised list of beamsets:\n", n_set);
+    for(i_set = 0; i_set < n_set; i_set ++)
+    {
+      CONTROL_MSG(CONTROL, "set %d: (%5.2f %5.2f), (%d %d)\n",
+                  i_set, bm_off[i_set].ind_1,  bm_off[i_set].ind_2,
+                         bm_off[i_set].n_eqb_s,bm_off[i_set].n_eqb_b);
+    } /* for i_set */
 #endif
 
 
-/**********************************************************************
-  Find the beams within the radius defined by k_max
-  - determine boundaries for beam indices n1 and n2
-  - loop over beam sets and indices.
-**********************************************************************/
-  /* a1 = length of g1 */
-    a1 = R_hypot(g1_x, g1_y);
-  /* a2 = length of g2 */
-    a2 = R_hypot(g2_x, g2_y);
+  /* Find the beams within the radius defined by k_max:
+   * - determine boundaries for beam indices n1 and n2
+   * - loop over beam sets and indices.
+   */
+  a1 = R_hypot(g1_x, g1_y); /* a1 = length of g1 */
+  a2 = R_hypot(g2_x, g2_y); /* a2 = length of g2 */
 
-  /* a2 * cos(a1,a2) */
-    faux_r = R_fabs((g1_x*g2_x + g1_y*g2_y)/a1);
-  /* a2 * sin(a1,a2) */
-    faux_i = R_fabs((g1_x*g2_y - g1_y*g2_x)/a1);
+  faux_r = R_fabs((g1_x*g2_x + g1_y*g2_y)/a1); /* a2 * cos(a1,a2) */
+  faux_i = R_fabs((g1_x*g2_y - g1_y*g2_x)/a1); /* a2 * sin(a1,a2) */
 
-/**********************************************************************
-  n2_max = k_max / (sin(a1,a2) * a2) + k_in/a2
-  n1_max = k_max / a1 + n2_max * (cos(a1,a2) *a2)/a1 + k_in/a1
-***********************************************************************/
-    n2_max = 2 + (int)(k_max/faux_i + k_in[0]/a2);
-    n1_max = 2 + (int)( k_max/a1 + n2_max * faux_r/ a1 + k_in[0]/a1);
+  /*
+   * n2_max = k_max / (sin(a1,a2) * a2) + k_in/a2
+   * n1_max = k_max / a1 + n2_max * (cos(a1,a2) *a2)/a1 + k_in/a1
+   */
+  n2_max = 2 + (int)(k_max/faux_i + k_in[0]/a2);
+  n1_max = 2 + (int)( k_max/a1 + n2_max * faux_r/ a1 + k_in[0]/a1);
 
-#ifdef CONTROL_X
- fprintf(STDCTR,"(leed_beam_gen_mir): n1_max = %2d, n2_max = %2d ,kmax = %f\n", n1_max, n2_max,k_max_2);
-#endif
+  CONTROL_MSG(CONTROL_X, "n1_max = %2d, n2_max = %2d ,kmax = %f\n",
+              n1_max, n2_max, k_max_2);
 
-/**********************************************
-  k_r, k_i is now defined by the complex energy
-***********************************************/
-    cri_sqrt(&k_r, &k_i, 2.*eng_max, 2.*v_par->eng_i);
+  /* k_r, k_i is now defined by the complex energy */
+  cri_sqrt(&k_r, &k_i, 2.*eng_max, 2.*v_par->eng_i);
 
 
-/**********************************************************************
-***********************************************************************
-  LOOP OVER BEAM SETS
-  Create a list of all beams with the appropriate settings
-  ordered according to their beam sets and indices.
-**********************************************************************
-**********************************************************************/
-    det = g1_x*g2_y - g1_y*g2_x;
+  /* LOOP OVER BEAM SETS:
+   * Create a list of all beams with the appropriate settings
+   * ordered according to their beam sets and indices.
+   */
+  det = g1_x*g2_y - g1_y*g2_x;
 
-    for(i_set = 0, i_beams = 0, offset = 0;i_set < n_set; 
-        i_set ++, offset = i_beams)
-    {
-  /*********************************************************
-    Find the beams within the radius defined by k_max and 
-                   within the wedge defined by symmetry.
-    (loop over beam indices)
-  *********************************************************/ 
-
-    for(n1 = -n1_max; n1 <= n1_max; n1 ++)
-    for(n2 = -n2_max; n2 <= n2_max; n2 ++)
-    {
-     k_x = n1*g1_x + n2*g2_x + k_in[1] + (bm_off+i_set)->k_r[1];
-     k_y = n1*g1_y + n2*g2_y + k_in[2] + (bm_off+i_set)->k_r[2];
-
-     faux_r = SQUARE(k_x) + SQUARE(k_y);      /* length of vector */
-     faux_i = R_atan2(k_y, k_x);              /* angle of vector */
-     wedge = faux_i - b_par->alpha[0];
-
-     if(wedge < 0)
-       wedge += 2*PI;
-
-     if(faux_r <= k_max_2  &&
-        ((IS_EQUAL_REAL(k_x, 0.) && IS_EQUAL_REAL(k_y, 0.)) || 
-        wedge <= (2*PI)/(bm_off+i_set)->n_eqb_b+GEO_TOLERANCE))
-     {
-      k_x = n1*g1_x + n2*g2_x + (bm_off+i_set)->k_r[1];
-      k_y = n1*g1_y + n2*g2_y + (bm_off+i_set)->k_r[2];
-
-/*****************************************************************
-            TEST IF the new BEAM is needed
-     if not : set ctrol to 1 and leave the ...if k_max without
-*******************************************************************/
-      ctrol = 0;
-      for(i= offset ; i < i_beams ; i++)
-      { 
-       for(j=0;j< (beams + i)->n_eqb_s;j++)
-       {
-        if((R_fabs(k_x - (beams + i)->k_x_sym[j])< K_TOLERANCE) &&
-          (R_fabs(k_y - (beams + i)->k_y_sym[j])< K_TOLERANCE) )
+  for(i_set = 0, i_beams = 0, offset = 0;i_set < n_set;
+      i_set ++, offset = i_beams)
+  {
+    /* Find the beams within the radius defined by k_max and
+     * within the wedge defined by symmetry.
+     * (loop over beam indices)
+     */
+      for(n1 = -n1_max; n1 <= n1_max; n1 ++)
+        for(n2 = -n2_max; n2 <= n2_max; n2 ++)
         {
-         ctrol = 1;
-        }
-       }
-      }  
-/******************************************************************/
-     
-      if(ctrol != 1)
-      {
-#ifdef CONTROL_XX
-   fprintf(STDCTR,"(leed_beam_gen_mir) (%5.2f %5.2f): %5.2f %5.2f\n",
-                     n1 + (bm_off+i_set)->ind_1, n2 + (bm_off+i_set)->ind_2,
-                     faux_r, R_atan2(k_y, k_x) + PI);
-#endif
+          k_x = n1*g1_x + n2*g2_x + k_in[1] + bm_off[i_set].k_r[1];
+          k_y = n1*g1_y + n2*g2_y + k_in[2] + bm_off[i_set].k_r[2];
 
-       for(i=0;i<12;i++)
-       {
-        (beams + i_beams)->k_x_sym[i] = 0.;
-        (beams + i_beams)->k_y_sym[i] = 0.;
-        (beams + i_beams)->k_p_sym[i] = 0.;
-       }
-     
-       (beams + i_beams)->ind_1 = (real)n1 + (bm_off+i_set)->ind_1;
-       (beams + i_beams)->ind_2 = (real)n2 + (bm_off+i_set)->ind_2;
+          faux_r = SQUARE(k_x) + SQUARE(k_y);      /* length of vector */
+          faux_i = R_atan2(k_y, k_x);              /* angle of vector */
+          wedge = faux_i - b_par->alpha[0];
 
-       (beams + i_beams)->k_x_sym[0] = k_x;
-       (beams + i_beams)->k_y_sym[0] = k_y;
-       (beams + i_beams)->k_p_sym[0] = 0.;
-       alpha[1] = R_atan2(k_y,k_x);
+          if(wedge < 0)
+            wedge += 2*PI;
 
-       k_x_mir[0] = k_x;
-       k_y_mir[0] = k_y;
-       k_p_mir[0] = 0.;
-
-/**************************************************************
-  REFLECT AND SORT
-**************************************************************/
-
-       i_c = 0;
-       i_d = 1;
-       ctrol = 0;
-       for(j=0;j<2;j++)
-       {
-        for(i = 0 ; i < n_mir - j; i++)
-        {   
-         R_m[1] = R_cos(2* b_par->alpha[i]);
-         R_m[2] = R_sin(2* b_par->alpha[i]);
-         R_m[3] = R_m[2];
-         R_m[4] = - R_m[1];
-
-         iaux = ctrol + 1;
-         ctrol++;
-         k_x_mir[iaux] = k_x_mir[iaux-1] * R_m[1]
-                       + k_y_mir[iaux-1] * R_m[2];
-         k_y_mir[iaux] = k_x_mir[iaux-1] * R_m[3]
-                       + k_y_mir[iaux-1] * R_m[4]; 
-
-         for(i_e = 0 ; i_e < iaux ; i_e++)
-         {
-          if(R_fabs(k_x_mir[iaux] - k_x_mir[i_e]) < K_TOLERANCE &&
-             R_fabs(k_y_mir[iaux] - k_y_mir[i_e]) < K_TOLERANCE    )
+          if( faux_r <= k_max_2  &&
+              ((IS_EQUAL_REAL(k_x, 0.) && IS_EQUAL_REAL(k_y, 0.)) ||
+                  wedge <= (2*PI)/bm_off[i_set].n_eqb_b+GEO_TOLERANCE))
           {
-           ctrol--; 
-          }
-         }
+            k_x = n1*g1_x + n2*g2_x + bm_off[i_set].k_r[1];
+            k_y = n1*g1_y + n2*g2_y + bm_off[i_set].k_r[2];
+
+            /* TEST IF the new BEAM is needed
+             * if not : set ctrol to 1 and leave the ...if k_max without
+             */
+            ctrol = 0;
+            for(i= offset ; i < i_beams ; i++)
+            {
+              for(j=0; j< (beams + i)->n_eqb_s; j++)
+              {
+                if( (R_fabs(k_x - (beams + i)->k_x_sym[j])< K_TOLERANCE) &&
+                    (R_fabs(k_y - (beams + i)->k_y_sym[j])< K_TOLERANCE) )
+                {
+                  ctrol = 1;
+                }
+              }
+            }
+
+            if(ctrol != 1)
+            {
+              CONTROL_MSG(CONTROL_X, "(%5.2f %5.2f): %5.2f %5.2f\n",
+                          n1 + bm_off[i_set].ind_1, n2 + bm_off[i_set].ind_2,
+                          faux_r, R_atan2(k_y, k_x) + PI);
+
+              for(i=0; i<12; i++)
+              {
+                beams[i_beams].k_x_sym[i] = 0.;
+                beams[i_beams].k_y_sym[i] = 0.;
+                beams[i_beams].k_p_sym[i] = 0.;
+              }
+     
+              beams[i_beams].ind_1 = (real)n1 + bm_off[i_set].ind_1;
+              beams[i_beams].ind_2 = (real)n2 + bm_off[i_set].ind_2;
+
+              beams[i_beams].k_x_sym[0] = k_x;
+              beams[i_beams].k_y_sym[0] = k_y;
+              beams[i_beams].k_p_sym[0] = 0.;
+              alpha[1] = R_atan2(k_y,k_x);
+
+              k_x_mir[0] = k_x;
+              k_y_mir[0] = k_y;
+              k_p_mir[0] = 0.;
+
+              /* REFLECT AND SORT */
+              i_c = 0;
+              i_d = 1;
+              ctrol = 0;
+              for(j=0; j<2; j++)
+              {
+                for(i = 0 ; i < n_mir - j; i++)
+                {
+                  R_m[1] = R_cos(2* b_par->alpha[i]);
+                  R_m[2] = R_sin(2* b_par->alpha[i]);
+                  R_m[3] = R_m[2];
+                  R_m[4] = - R_m[1];
+
+                  iaux = ctrol + 1;
+                  ctrol++;
+                  k_x_mir[iaux] = k_x_mir[iaux-1] * R_m[1]
+                                + k_y_mir[iaux-1] * R_m[2];
+                  k_y_mir[iaux] = k_x_mir[iaux-1] * R_m[3]
+                                + k_y_mir[iaux-1] * R_m[4];
+
+                  for(i_e = 0 ; i_e < iaux ; i_e++)
+                  {
+                    if(R_fabs(k_x_mir[iaux] - k_x_mir[i_e]) < K_TOLERANCE &&
+                       R_fabs(k_y_mir[iaux] - k_y_mir[i_e]) < K_TOLERANCE    )
+                    {
+                      ctrol--;
+                    }
+                  }
          
-         if(iaux == ctrol) 
-         { 
-          alpha[2] = R_atan2(k_y_mir[iaux],k_x_mir[iaux]);
-          k_p_mir[iaux]= alpha[2] - alpha[1];
-          if(k_p_mir[iaux] < 0)
-             k_p_mir[iaux] += 2*PI; 
+                  if(iaux == ctrol)
+                  {
+                    alpha[2] = R_atan2(k_y_mir[iaux],k_x_mir[iaux]);
+                    k_p_mir[iaux]= alpha[2] - alpha[1];
+                    if(k_p_mir[iaux] < 0)
+                      k_p_mir[iaux] += 2*PI;
 
-          vaux[0] = k_x - k_x_mir[iaux];
-          vaux[1] = k_y - k_y_mir[iaux];
-          integ[0] = R_fabs((vaux[1] * g1_x - vaux[0] * g1_y)/det);
-          integ[1] = R_fabs((vaux[1] * g2_x - vaux[0] * g2_y)/(-det));
+                    vaux[0] = k_x - k_x_mir[iaux];
+                    vaux[1] = k_y - k_y_mir[iaux];
+                    integ[0] = R_fabs((vaux[1] * g1_x - vaux[0] * g1_y)/det);
+                    integ[1] = R_fabs((vaux[1] * g2_x - vaux[0] * g2_y)/(-det));
 
-          vaux[0] = integ[0] - R_nint(integ[0]);
-          vaux[1] = integ[1] - R_nint(integ[1]);
+                    vaux[0] = integ[0] - R_nint(integ[0]);
+                    vaux[1] = integ[1] - R_nint(integ[1]);
 
-          if(R_fabs(vaux[0]) > K_TOLERANCE || R_fabs(vaux[1]) > K_TOLERANCE)
-          {
-           k_x_store[i_c] = k_x_mir[iaux];
-           k_y_store[i_c] = k_y_mir[iaux];
-           k_p_store[i_c] = k_p_mir[iaux];
-           i_c++;
-          }
-          else
-          {
-           (beams+i_beams)->k_x_sym[i_d] = k_x_mir[iaux];
-           (beams+i_beams)->k_y_sym[i_d] = k_y_mir[iaux];
-           (beams+i_beams)->k_p_sym[i_d] = k_p_mir[iaux];
-           i_d++;
-          }
-         }/* if ctrol = iaux */ 
-        }/* for i */
-       }/* for j */
+                    if(R_fabs(vaux[0]) > K_TOLERANCE ||
+                       R_fabs(vaux[1]) > K_TOLERANCE  )
+                    {
+                      k_x_store[i_c] = k_x_mir[iaux];
+                      k_y_store[i_c] = k_y_mir[iaux];
+                      k_p_store[i_c] = k_p_mir[iaux];
+                      i_c++;
+                    }
+                    else
+                    {
+                      beams[i_beams].k_x_sym[i_d] = k_x_mir[iaux];
+                      beams[i_beams].k_y_sym[i_d] = k_y_mir[iaux];
+                      beams[i_beams].k_p_sym[i_d] = k_p_mir[iaux];
+                      i_d++;
+                    }
+                  } /* if ctrol = iaux */
+                } /* for i */
+              } /* for j */
 
-       for(i=0;i < i_c; i++)
-       {
-        (beams+i_beams)->k_x_sym[i_d + i] = k_x_store[i];
-        (beams+i_beams)->k_y_sym[i_d + i] = k_y_store[i];
-        (beams+i_beams)->k_p_sym[i_d + i] = k_p_store[i];
-       }
+              for(i=0; i < i_c; i++)
+              {
+                beams[i_beams].k_x_sym[i_d + i] = k_x_store[i];
+                beams[i_beams].k_y_sym[i_d + i] = k_y_store[i];
+                beams[i_beams].k_p_sym[i_d + i] = k_p_store[i];
+              }
 
-       (beams+i_beams)->n_eqb_s = i_d + i_c;
-       (beams+i_beams)->n_eqb_b = i_d;
-       (beams+i_beams)->k_x_sym[i_d + i_c] = F_END_OF_LIST;
-       (beams+i_beams)->k_y_sym[i_d + i_c] = F_END_OF_LIST;
-       (beams+i_beams)->k_p_sym[i_d + i_c] = F_END_OF_LIST;
+              beams[i_beams].n_eqb_s = i_d + i_c;
+              beams[i_beams].n_eqb_b = i_d;
+              beams[i_beams].k_x_sym[i_d + i_c] = F_END_OF_LIST;
+              beams[i_beams].k_y_sym[i_d + i_c] = F_END_OF_LIST;
+              beams[i_beams].k_p_sym[i_d + i_c] = F_END_OF_LIST;
  
-/******OUTPUT of all beams and their equivalents by symmetry**************/
-#ifdef CONTROL_X
- fprintf(STDCTR,"********************\n");
- fprintf(STDCTR,"beam%d (%f %f) (%f %f): neqb_s %d  neqb_b %d \n",
-             i_beams,(beams + i_beams)->ind_1,(beams + i_beams)->ind_2,
-                     (beams+i_beams)->k_x_sym[0],(beams+i_beams)->k_y_sym[0],
-                     (beams+i_beams)->n_eqb_s,(beams+i_beams)->n_eqb_b);  
- fprintf(STDCTR,"symmetry related beams:\n");
- for(i = 1 ;i < i_d + i_c; i++)
- {
-   fprintf(STDCTR," k_x_sym %f k_y_sym %f k_p_sym %f\n",
-                    (beams+i_beams)->k_x_sym[i] * BOHR ,
-                    (beams+i_beams)->k_y_sym[i] * BOHR ,
-                    (beams+i_beams)->k_p_sym[i]/DEG_TO_RAD);
- }
+              /* OUTPUT of all beams and their equivalents by symmetry */
+#if CONTROL_X
+              fprintf(STDCTR,"********************\n");
+              fprintf(STDCTR,"beam%d (%f %f) (%f %f): neqb_s %d  neqb_b %d \n",
+                      i_beams,beams[i_beams].ind_1,beams[i_beams].ind_2,
+                      beams[i_beams].k_x_sym[0],beams[i_beams].k_y_sym[0],
+                      beams[i_beams].n_eqb_s,beams[i_beams].n_eqb_b);
+              fprintf(STDCTR,"symmetry related beams:\n");
+              for(i = 1 ;i < i_d + i_c; i++)
+              {
+                fprintf(STDCTR," k_x_sym %f k_y_sym %f k_p_sym %f\n",
+                        beams[i_beams].k_x_sym[i] * BOHR ,
+                        beams[i_beams].k_y_sym[i] * BOHR ,
+                        beams[i_beams].k_p_sym[i]/DEG_TO_RAD);
+              }
 #endif
-/***************************************************************************
-  Symmetry related information (ONLY ROTATION):
-  n_eqb_s = number of equivalent beams for overlayers (numer of sets times
-            the number of beams per set).
-  n_eqb_b = number of equivalent beams for bulk layers (number of equivalent
-            beams in this set).
 
-  *eout_b/s = phase factor for outgoing beams due to rotation:
-            sqrt(n_rot) exp(+is*g')).
+              /* Symmetry related information (ONLY ROTATION):
+               * n_eqb_s = number of equivalent beams for overlayers
+               * (number of sets times the number of beams per set).
+               *
+               * n_eqb_b = number of equivalent beams for bulk layers
+               * (number of equivalent beams in this set).
+               *
+               * *eout_b/s = phase factor for outgoing beams due to rotation:
+               * sqrt(n_rot) exp(+is*g')).
+               *
+               * *ein_b/s = phase factor for incoming beams due to rotation:
+               * 1/sqrt(n_eqb) S exp(-i(m*phi + s*g))
+               *
+               * The information relevant for i_layers and m will be stroed in
+               * ein_b/s[ nlayers*i_layers + l_max + m ]
+               */
 
-  *ein_b/s = phase factor for incoming beams due to rotation:
-            1/sqrt(n_eqb) S exp(-i(m*phi + s*g))
-            The information relevant for i_layers and m will be stroed in
-            ein_b/s[ nlayers*i_layers + l_max + m ]
-*****************************************************************************/
+              /* k_par, k_x/y, without the parallel component of k_in */
+              beams[i_beams].k_r[1] = k_x;
+              beams[i_beams].k_r[2] = k_y;
+              beams[i_beams].k_par  = SQUARE(k_x) + SQUARE(k_y);
 
-  /* k_par, k_x/y, without the parallel component of k_in */
-       (beams + i_beams)->k_r[1] = k_x;
-       (beams + i_beams)->k_r[2] = k_y;
-       (beams + i_beams)->k_par  = SQUARE(k_x) + SQUARE(k_y);
+              beams[i_beams].k_i[1] = 0.;
+              beams[i_beams].k_i[2] = 0.;
 
-       (beams + i_beams)->k_i[1] = 0.;
-       (beams + i_beams)->k_i[2] = 0.;
+              /* Akz_r = (area of the unit cell)^-1 */
+              beams[i_beams].Akz_r = 1./b_par->area;
 
-  /* Akz_r = (area of the unit cell)^-1 */
-       (beams + i_beams)->Akz_r = 1./b_par->area;
+              beams[i_beams].eout_b_r =
+                  (real*)malloc((b_par->n_layers)*sizeof(real));
+              beams[i_beams].eout_b_i =
+                  (real*)malloc((b_par->n_layers)*sizeof(real));
+              beams[i_beams].eout_s_r =
+                  (real*)malloc((o_par->n_layers)*sizeof(real));
+              beams[i_beams].eout_s_i =
+                  (real*)malloc((o_par->n_layers)*sizeof(real));
 
-       (beams + i_beams)->eout_b_r = 
-          (real*)malloc((b_par->nlayers)*sizeof(real));
-       (beams + i_beams)->eout_b_i = 
-          (real*)malloc((b_par->nlayers)*sizeof(real));
-       (beams + i_beams)->eout_s_r = 
-          (real*)malloc((o_par->nlayers)*sizeof(real));
-       (beams + i_beams)->eout_s_i = 
-          (real*)malloc((o_par->nlayers)*sizeof(real));
+              beams[i_beams].ein_b_r =
+                  (real *)malloc((2*l_max+1)*(b_par->n_layers)*sizeof(real));
+              beams[i_beams].ein_b_i =
+                  (real *)malloc((2*l_max+1)*(b_par->n_layers)*sizeof(real));
+              beams[i_beams].ein_s_r =
+                  (real *)malloc((2*l_max+1)*(o_par->n_layers)*sizeof(real));
+              beams[i_beams].ein_s_i =
+                  (real *)malloc((2*l_max+1)*(o_par->n_layers)*sizeof(real));
 
-       (beams + i_beams)->ein_b_r = 
-          (real *)malloc((2*l_max+1)*(b_par->nlayers)*sizeof(real));
-       (beams + i_beams)->ein_b_i = 
-          (real *)malloc((2*l_max+1)*(b_par->nlayers)*sizeof(real));
-       (beams + i_beams)->ein_s_r = 
-          (real *)malloc((2*l_max+1)*(o_par->nlayers)*sizeof(real));
-       (beams + i_beams)->ein_s_i = 
-          (real *)malloc((2*l_max+1)*(o_par->nlayers)*sizeof(real));
+              /* bulk layers */
+              for(i_layers = 0, iaux = 0;
+                  i_layers < b_par->n_layers;
+                  i_layers++)
+              {
+                a1_x = (b_par->layers + i_layers)->reg_shift[1];
+                a1_y = (b_par->layers + i_layers)->reg_shift[2];
+                pref2 = R_sqrt((real) beams[i_beams].n_eqb_b );
 
+                faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                        + a1_y * beams[i_beams].k_y_sym[0];
+                cri_expi( &faux_r, &faux_i, faux_r, 0.);
 
-/* bulk layers */
+                *(beams[i_beams].eout_b_r + i_layers) = pref2 * faux_r;
+                *(beams[i_beams].eout_b_i + i_layers) = pref2 * faux_i;
 
-       for(i_layers = 0, iaux = 0; i_layers < b_par->nlayers; i_layers ++)
-       {
-        a1_x = (b_par->layers + i_layers)->reg_shift[1];
-        a1_y = (b_par->layers + i_layers)->reg_shift[2];
-        pref2 = R_sqrt((real) (beams + i_beams)->n_eqb_b );
+                pref2 = 1./R_sqrt((real) beams[i_beams].n_eqb_b );
+                for(m = -l_max; m <= l_max; m ++, iaux ++)
+                {
+                  if( beams[i_beams].n_eqb_b == 1)
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_b_r + iaux,
+                              beams[i_beams].ein_b_i + iaux,
+                              -faux_r, 0.);
+                  }
+                  else
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_b_r + iaux,
+                              beams[i_beams].ein_b_i + iaux,
+                              -faux_r, 0.);
 
-        faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                + a1_y * (beams + i_beams)->k_y_sym[0];
-        cri_expi( &faux_r, &faux_i, faux_r, 0.);
-         
-        *((beams+i_beams)->eout_b_r + i_layers) = pref2 * faux_r;
-        *((beams+i_beams)->eout_b_i + i_layers) = pref2 * faux_i;
+                    for(i = 1; i < beams[i_beams].n_eqb_b; i++)
+                    {
+                      a2_x = beams[i_beams].k_x_sym[i];
+                      a2_y = beams[i_beams].k_y_sym[i];
+                      pref1 = m * beams[i_beams].k_p_sym[i];
 
-        pref2 = 1./R_sqrt((real) (beams + i_beams)->n_eqb_b );
-        for(m = -l_max; m <= l_max; m ++, iaux ++)
+                      faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
+                      cri_expi(&faux_r, &faux_i, -faux_r, 0.);
+                      *(beams[i_beams].ein_b_r + iaux) += faux_r;
+                      *(beams[i_beams].ein_b_i + iaux) += faux_i;
+                    }
+                  } /* else */
+
+                  *(beams[i_beams].ein_b_r + iaux) *= pref2;
+                  *(beams[i_beams].ein_b_i + iaux) *= pref2;
+
+                } /* for m */
+              } /* for i_layers */
+
+              /* superlattice (full rotational symmetry), use o_par */
+              for(i_layers = 0, iaux = 0;
+                  i_layers < o_par->n_layers;
+                  i_layers++)
+              {
+                a1_x = (o_par->layers + i_layers)->reg_shift[1];
+                a1_y = (o_par->layers + i_layers)->reg_shift[2];
+                pref2 = R_sqrt((real) beams[i_beams].n_eqb_s);
+
+                faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                        + a1_y * beams[i_beams].k_y_sym[0];
+                cri_expi( &faux_r, &faux_i, faux_r, 0.);
+
+                *(beams[i_beams].eout_s_r + i_layers) = pref2 * faux_r;
+                *(beams[i_beams].eout_s_i + i_layers) = pref2 * faux_i;
+
+                pref2 = 1./R_sqrt((real) beams[i_beams].n_eqb_s );
+                for(m = -l_max; m <= l_max; m ++, iaux ++)
+                {
+                  if( beams[i_beams].n_eqb_s == 1)
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_s_r + iaux,
+                              beams[i_beams].ein_s_i + iaux,
+                              -faux_r, 0.);
+                  }
+                  else
+                  {
+                    faux_r =  a1_x * beams[i_beams].k_x_sym[0]
+                            + a1_y * beams[i_beams].k_y_sym[0];
+                    cri_expi( beams[i_beams].ein_s_r + iaux,
+                              beams[i_beams].ein_s_i + iaux,
+                              -faux_r, 0.);
+
+                    for(i = 1; i < beams[i_beams].n_eqb_s; i++)
+                    {
+                      a2_x = beams[i_beams].k_x_sym[i];
+                      a2_y = beams[i_beams].k_y_sym[i];
+                      pref1 = m * beams[i_beams].k_p_sym[i];
+
+                      faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
+                      cri_expi(&faux_r, &faux_i, -faux_r, 0.);
+                      *(beams[i_beams].ein_s_r + iaux) += faux_r;
+                      *(beams[i_beams].ein_s_i + iaux) += faux_i;
+                    }
+
+                    *(beams[i_beams].ein_s_r + iaux) *= pref2;
+                    *(beams[i_beams].ein_s_i + iaux) *= pref2;
+                  } /* else */
+                } /* for m */
+              } /* for i_layers */
+
+              beams[i_beams].set = i_set;
+              i_beams++;
+
+            } /* if ctrol != 1*/
+          } /* if inside k_max */
+        } /* for n1/n2 */
+
+      /* 1st pass: Sort the beams according to the parallel component
+       * (i.e. smallest k_par first)
+       */
+      CONTROL_MSG(CONTROL, "SORTING %2d beams in set %d:\n",
+                  i_beams - offset, i_set);
+
+      for(n1 = offset; n1 < i_beams; n1 ++)
+      {
+        for(n2 = n1+1; n2 < i_beams; n2 ++)
         {
-         if( (beams + i_beams)->n_eqb_b == 1) 
-         {
-          faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                  + a1_y * (beams + i_beams)->k_y_sym[0];
-          cri_expi( (beams+i_beams)->ein_b_r + iaux,
-                    (beams+i_beams)->ein_b_i + iaux,
-                     -faux_r, 0.);
-         }
-         else
-         {
-          faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                  + a1_y * (beams + i_beams)->k_y_sym[0];
-          cri_expi( (beams+i_beams)->ein_b_r + iaux,
-                    (beams+i_beams)->ein_b_i + iaux,
-                     -faux_r, 0.);
-
-          for(i = 1; i < (beams+i_beams)->n_eqb_b; i++)
+          if((beams + n2)->k_par < (beams + n1)->k_par )
           {
-           a2_x = (beams + i_beams)->k_x_sym[i];
-           a2_y = (beams + i_beams)->k_y_sym[i];
-           pref1 = m * (beams + i_beams)->k_p_sym[i];
-
-           faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
-           cri_expi(&faux_r, &faux_i, -faux_r, 0.);
-           *((beams+i_beams)->ein_b_r + iaux) += faux_r;
-           *((beams+i_beams)->ein_b_i + iaux) += faux_i;
+            memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+            memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+            memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
           }
-         }  /* else */
+        } /* n2 */
+      } /* n1 */
 
-         *((beams+i_beams)->ein_b_r + iaux) *= pref2;
-         *((beams+i_beams)->ein_b_i + iaux) *= pref2;
-
-        }  /* for m */
-       }  /* for i_layers */
-
- /* superlattice (full rotational symmetry), use o_par */
-
-       for(i_layers = 0, iaux = 0; i_layers < o_par->nlayers; i_layers ++)
-       {
-        a1_x = (o_par->layers + i_layers)->reg_shift[1];
-        a1_y = (o_par->layers + i_layers)->reg_shift[2];
-        pref2 = R_sqrt((real) (beams + i_beams)->n_eqb_s);
-
-        faux_r =  a1_x * (beams+i_beams)->k_x_sym[0]
-                + a1_y * (beams+i_beams)->k_y_sym[0];
-        cri_expi( &faux_r, &faux_i, faux_r, 0.);
-         
-        *((beams+i_beams)->eout_s_r + i_layers) = pref2 * faux_r;
-        *((beams+i_beams)->eout_s_i + i_layers) = pref2 * faux_i;
-
-        pref2 = 1./R_sqrt((real) (beams + i_beams)->n_eqb_s );
-        for(m = -l_max; m <= l_max; m ++, iaux ++)
+      /* 2nd pass: Sort the beams according to the 1st and 2nd index
+       * (i.e. smallest indices first)
+       */
+      for(n1 = offset; n1 < i_beams; n1 ++)
+      {
+        for(n2 = n1+1;
+            fabs( (beams + n2)->k_par - (beams + n1)->k_par ) < K_TOLERANCE;
+            n2++)
         {
-         if( (beams + i_beams)->n_eqb_s == 1)
-         {
-          faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                  + a1_y * (beams + i_beams)->k_y_sym[0];
-          cri_expi( (beams+i_beams)->ein_s_r + iaux,
-                    (beams+i_beams)->ein_s_i + iaux,
-                    -faux_r, 0.);
-         }
-         else
-         {
-          faux_r =  a1_x * (beams + i_beams)->k_x_sym[0]
-                  + a1_y * (beams + i_beams)->k_y_sym[0];
-          cri_expi( (beams+i_beams)->ein_s_r + iaux,
-                    (beams+i_beams)->ein_s_i + iaux,
-                    -faux_r, 0.);
-
-          for(i = 1; i < (beams+i_beams)->n_eqb_s; i++)
+          if((beams + n2)->ind_1 < (beams + n1)->ind_1 )
           {
-           a2_x = (beams+i_beams)->k_x_sym[i];
-           a2_y = (beams+i_beams)->k_y_sym[i];
-           pref1 = m * (beams+i_beams)->k_p_sym[i];
-
-           faux_r = a1_x * a2_x + a1_y * a2_y + pref1;
-           cri_expi(&faux_r, &faux_i, -faux_r, 0.);
-           *((beams+i_beams)->ein_s_r + iaux) += faux_r;
-           *((beams+i_beams)->ein_s_i + iaux) += faux_i;
+            memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+            memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+            memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
           }
+          if( IS_EQUAL_REAL((beams + n2)->ind_1, (beams + n1)->ind_1 ) &&
+              ((beams + n2)->ind_2 < (beams + n1)->ind_2 )  )
+          {
+            memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
+            memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
+            memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
+          }
+        } /* n2 */
+      } /* n1 */
+    } /* for i_set */
 
-          *((beams+i_beams)->ein_s_r + iaux) *= pref2;
-          *((beams+i_beams)->ein_s_i + iaux) *= pref2;
-         }  /* else */
-        }  /* for m */
-       }  /* for i_layers */
+    /* Set k_par of the last element of the list to the terminating value.
+     * free R_n.
+     */
+    beams[i_beams].k_par = F_END_OF_LIST;
 
-      (beams + i_beams)->set = i_set;
-      i_beams++;
+    break;
 
-      }/* if ctrol != 1*/
-     } /* if inside k_max */
-    } /* for n1/n2 */
-  /*********************************************************
-    1st pass: Sort the beams according to the parallel component
-    (i.e. smallest k_par first)
-  *********************************************************/ 
-#ifdef CONTROL
- fprintf(stdout,"(leed_beam_gen_mir): SORTING %2d beams in set %d:\n", 
-                i_beams - offset, i_set);
-#endif
-    for(n1 = offset; n1 < i_beams; n1 ++)
+    }  /* case MIRRORSYMMETRY */
+
+
+    default:
     {
-     for(n2 = n1+1; n2 < i_beams; n2 ++)
-     {
-      if((beams + n2)->k_par < (beams + n1)->k_par )
-      {
-       memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
-       memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
-       memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
-      }
-     } /* n2 */
-    }  /* n1 */
+      ERROR_MSG("symmetry flag is false\n");
+      exit(1);
+      break;
+    }
 
-  /*********************************************************
-    2nd pass: Sort the beams according to the 1st and 2nd index
-    (i.e. smallest indices first)
-  *********************************************************/ 
-    for(n1 = offset; n1 < i_beams; n1 ++)
-    {
-     for(n2 = n1+1;fabs( (beams + n2)->k_par - (beams + n1)->k_par ) < K_TOLERANCE; 
-         n2++)
-     {
-      if((beams + n2)->ind_1 < (beams + n1)->ind_1 )
-      {
-       memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
-       memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
-       memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
-      }
-      if( IS_EQUAL_REAL((beams + n2)->ind_1, (beams + n1)->ind_1 ) &&
-          ((beams + n2)->ind_2 < (beams + n1)->ind_2 )  )
-      {
-       memcpy( & beam_aux, beams + n2, sizeof(leed_beam) );
-       memcpy( beams + n2, beams + n1, sizeof(leed_beam) );
-       memcpy( beams + n1, & beam_aux, sizeof(leed_beam) );
-      }
-     } /* n2 */
-    }  /* n1 */
-   } /* for i_set */
+  } /*switch sym*/
 
-/**********************************************************************
-  Set k_par of the last element of the list to the terminating value.
-  free R_n.
-**********************************************************************/
-   (beams + i_beams)->k_par = F_END_OF_LIST;
-
-  break;
-
-  }  /* case MIRRORSYMMETRY */
-
-
-   default:
-   {
-#ifdef ERROR
-    fprintf(STDERR,
-    "*** error (LEED): symmetry flag is false\n");
-    exit(1);
-#endif
-     break;
-   } 
-
- }/*switch sym*/ 
-
- return(n_set);
-
-} /** end of function leed_beam_gen_sym **/
-
+  return(n_set);
+} /* end of function leed_beam_gen_sym */

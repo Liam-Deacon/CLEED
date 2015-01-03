@@ -124,7 +124,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
   {
     for(i_atoms = 0; i_atoms != n_atoms; i_atoms ++)
     {
-      if( (atoms + i_atoms)->ref == I_END_OF_LIST )
+      if( (atoms + i_atoms)->ref == U_END_OF_LIST )
       {
         /* First and only occurence of atom i => reference to itself */
         atoms[i_atoms].ref  = i_atoms;
@@ -249,13 +249,14 @@ size_t sr_ckrot(search_atom *atoms, search *search )
 
     for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
     {
-      if( (atoms + i_atoms)->ref == I_END_OF_LIST )
+      if( (atoms + i_atoms)->ref == U_END_OF_LIST )
       {
         /* First occurence of atom i => reference to itself */
 
-        #ifdef CONTROL_X
-        fprintf(STDCTR, "\n(sr_ckrot): atom: %d ->\trot No n1 n2", i_atoms);
-        #endif
+#       if CONTROL_X
+        fprintf(STDCTR, "\n");
+        CONTROL_MSG(CONTROL_X, "atom: %d ->\trot No n1 n2", i_atoms);
+#       endif
 
         (atoms + i_atoms)->ref  = i_atoms;
         (atoms + i_atoms)->n_ref = 1;
@@ -294,7 +295,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
 
           for(j_atoms = i_atoms+1; j_atoms < n_atoms; j_atoms ++)
           {
-            if( ( (atoms + j_atoms)->ref == I_END_OF_LIST ) &&
+            if( ( (atoms + j_atoms)->ref == U_END_OF_LIST ) &&
                 ( fabs( (atoms + i_atoms)->z - (atoms + j_atoms)->z )
                  < GEO_TOLERANCE) &&
                ( strcmp((atoms + i_atoms)->name, (atoms + j_atoms)->name)
@@ -305,18 +306,18 @@ size_t sr_ckrot(search_atom *atoms, search *search )
 
               faux = B_1[1]*xj + B_1[2]*yj - (BR[1]*xi + BR[2]*yi + axis[1]);
           
-              #ifdef CONTROL_X
+#             if CONTROL_X
               fprintf(STDCTR, "\n\t\t\t %d %d %.3f, ", i_rot, j_atoms, faux);
-              #endif
+#             endif
 
               faux -= R_nint(faux);
               if( fabs(faux) < GEO_TOLERANCE)
               {
                 faux = B_1[3]*xj + B_1[4]*yj - (BR[3]*xi + BR[4]*yi + axis[2]);
 
-                #ifdef CONTROL_X
+#               if CONTROL_X
                 fprintf(STDCTR, " %.3f ",  faux);
-                #endif
+#               endif
 
                 faux -= R_nint(faux);
                 if( fabs(faux) < GEO_TOLERANCE)
@@ -361,10 +362,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
       }
       else
       {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (sr_ckrot): "
-                "number of atoms does not match with symmetry (%d)\n", i_atoms);
-        #endif
+        ERROR_MSG("number of atoms does not match with symmetry (%d)\n", i_atoms);
         exit(SR_SYMMETRY_ERROR);
       }
 
@@ -383,9 +381,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
     (atoms+i_atoms)->z_par = (real *)calloc( (n_par+1), sizeof(real) );
   }
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(sr_ckrot): No of parameters in search: %d\n", n_par);
-  #endif
+  CONTROL_MSG(CONTROL_X, "No of parameters in search: %d\n", n_par);
 
 /************************************************************************
  * Identify search parameters
@@ -429,8 +425,8 @@ size_t sr_ckrot(search_atom *atoms, search *search )
 
   }  /* for i_atoms */
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(sr_ckrot): %d parameters, atoms:\n", n_par);
+# if CONTROL_X
+  CONTROL_MSG(CONTROL_X, "%d parameters, atoms:\n", n_par);
   for(i_atoms = 0; i_atoms != n_atoms; i_atoms ++)
   {
     fprintf(STDCTR, "\n%d \"%s\" (%6.3f, %6.3f, %6.3f) ref: %d n_ref: %d",
@@ -459,7 +455,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
     }
     fprintf(STDCTR, "\n");
   }
-  #endif /* CONTROL_X */
+# endif /* CONTROL_X */
 
 /************************************************************************
  * return number of search parameters

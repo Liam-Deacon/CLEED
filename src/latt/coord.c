@@ -1,14 +1,13 @@
 /*********************************************************************
  *                           COORD.C
  *
- *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- * Changes:
  *********************************************************************/
 
 /*! \file
@@ -27,16 +26,9 @@
  * \return Pointer to initialized #coord object
  * \retval \c NULL if memory could not be allocated.
  */
-coord *coord_init()
+inline coord *coord_init()
 {
-  coord *pos = (coord*) malloc(sizeof(coord));
-  
-  if (pos == NULL) return NULL;   /* memory could not be allocated */
-
-  pos->x = 0.;
-  pos->y = 0.;
-  pos->z = 0.;
-
+  coord *pos = (coord*) calloc(1, sizeof(coord));
   return (pos);
 }
 
@@ -45,10 +37,9 @@ coord *coord_init()
  *
  * \param pos #coord object to free from memory.
  */
-void coord_free(coord *pos)
+inline void coord_free(coord *pos)
 {
-  if (pos != NULL)
-	free(pos);
+  if (pos != NULL) free(pos);
   pos = NULL;
 }
 
@@ -60,7 +51,7 @@ void coord_free(coord *pos)
  */
 size_t coord_get_allocated_size(const coord *pos)
 {
-  return (sizeof(pos)/sizeof(coord));
+  return (sizeof(pos)/sizeof(pos[0]));
 }
 
 /*!
@@ -69,9 +60,10 @@ size_t coord_get_allocated_size(const coord *pos)
  * \param dst destination for coordinate data.
  * \param src source of coordinate data.
  */
-void coord_copy(coord *dst, const coord *src)
+inline void coord_copy(coord *dst, const coord *src)
 {
-  coord_set(dst, src->x, src->y, src->z);
+  if (src != NULL)
+    coord_set(dst, src->x, src->y, src->z);
 }
 
 /*!
@@ -80,7 +72,7 @@ void coord_copy(coord *dst, const coord *src)
  * \param[in] pos Pointer to #coord structure.
  * \return @coord::x of \p pos
  */
-double coord_get_x(const coord *pos)
+inline double coord_get_x(const coord *pos)
 {
   return (pos->x);
 }
@@ -91,7 +83,7 @@ double coord_get_x(const coord *pos)
  * \param[in] pos Pointer to #coord structure.
  * \return @coord::y of \p pos
  */
-double coord_get_y(const coord *pos)
+inline double coord_get_y(const coord *pos)
 {
   return (pos->y);
 }
@@ -103,7 +95,7 @@ double coord_get_y(const coord *pos)
  * \return @coord::z of \p pos
  */
 
-double coord_get_z(const coord *pos)
+inline double coord_get_z(const coord *pos)
 {
   return (pos->z);
 }
@@ -114,7 +106,7 @@ double coord_get_z(const coord *pos)
  * \param[in] pos Pointer to #coord structure.
  * \return the magnitude of \p pos
  */
-double coord_get_magnitude(const coord *pos)
+inline double coord_get_magnitude(const coord *pos)
 {
   return (sqrt(pos->x*pos->x + pos->y*pos->y + pos->z*pos->z));
 }
@@ -125,7 +117,7 @@ double coord_get_magnitude(const coord *pos)
  * \param[in,out] pos Pointer to #coord object to change.
  * \param new_x value of x position.
  */
-void coord_set_x(coord *pos, double new_x)
+inline void coord_set_x(coord *pos, double new_x)
 {
   pos->x = new_x;
 }
@@ -136,7 +128,7 @@ void coord_set_x(coord *pos, double new_x)
  * \param[in,out] pos Pointer to #coord object to change.
  * \param new_y value of y position.
  */
-void coord_set_y(coord *pos, double new_y)
+inline void coord_set_y(coord *pos, double new_y)
 {
   pos->y = new_y;
 }
@@ -147,7 +139,7 @@ void coord_set_y(coord *pos, double new_y)
  * \param[in,out] pos Pointer to #coord object to change.
  * \param new_z value of z position.
  */
-void coord_set_z(coord *pos, double new_z)
+inline void coord_set_z(coord *pos, double new_z)
 {
   pos->z = new_z;
 }
@@ -160,7 +152,7 @@ void coord_set_z(coord *pos, double new_z)
  * \param y value of y-axis position.
  * \param z value of z-axis position.
  */
-void coord_set(coord *pos, double x, double y, double z)
+inline void coord_set(coord *pos, double x, double y, double z)
 {
   pos->x = x; 
   pos->y = y; 
@@ -173,14 +165,10 @@ void coord_set(coord *pos, double x, double y, double z)
  * \param f file pointer to print output to e.g. \c stdout
  * \param pos source of coordinates.
  */
-void coord_printf(FILE *f, const coord *pos)
+inline void coord_printf(FILE *f, const coord *pos)
 {
   if (pos != NULL)
-  {
     fprintf(f, "x = %7.4f, y = %7.4f, z = %7.4f\n", pos->x, pos->y, pos->z);
-  }
   else 
-  {
     fprintf(f, "NULL\n");
-  }
 }

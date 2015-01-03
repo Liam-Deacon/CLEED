@@ -27,13 +27,7 @@
 
 #include "leed.h"
 
-#ifdef WARNING
-#define WARN_LEVEL 1000
-#endif
-
-#ifndef GEO_TOLERANCE           /* should be defined in "leed_def.h" */
-#define GEO_TOLERANCE 0.0001
-#endif
+static const real WARN_LEVEL = 1000.;
 
 /*!
  * Calculates the lattice sum Llm used for the Greens function between two
@@ -178,16 +172,8 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
   /* Check arguments: k_i */
   if( k_i <= 0.)                /* no convergence */
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_ms_lsum_ij): "
-            "damping too small: k_i = %.2e\n", k_i);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("damping too small: k_i = %.2e\n", k_i);
+    ERROR_RETURN(-1);
   }
 
   /* Allocate memory for Llm_p and Llm_m (and preset all Llm_p with zero). */
@@ -215,13 +201,12 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
   if (epsilon < 1.) r_max = -log(epsilon) / k_i;
   else              r_max = epsilon;
 
-  #ifdef WARNING
+#if WARNING
   if( r_max > WARN_LEVEL)    /* poor convergence */
   {
-    fprintf(STDWAR, "* warning (leed_ms_lsum_ij): "
-            "damping very weak: k_i = %.2e, eps = %.2e\n", k_i, epsilon);
+    WARNING_MSG("damping very weak: k_i = %.2e, eps = %.2e\n", k_i, epsilon);
   }
-  #endif
+#endif
 
   r_max *= r_max;
 
@@ -236,9 +221,8 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
   f2d = a2_x*d_ij[1] + a2_y*d_ij[2];
   fd  = d_ij[1]*d_ij[1] + d_ij[2]*d_ij[2] + d_ij[3]*d_ij[3];
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_ms_lsum_ij): "
-          "a1  = (%.3f,%.3f) A, a2  =  (%.3f,%.3f) A\n",
+#if CONTROL
+  CONTROL_MSG(CONTROL, "a1  = (%.3f,%.3f) A, a2  =  (%.3f,%.3f) A\n",
           a1_x*BOHR, a1_y*BOHR, a2_x*BOHR, a2_y*BOHR);
   fprintf(STDCTR, "              d_ij = (%7.3f,%7.3f,%7.3f) A\n",
           d_ij[1]*BOHR, d_ij[2]*BOHR, d_ij[3]*BOHR);
@@ -247,7 +231,7 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
   fprintf(STDCTR,
           "              eps = %7.5f, k_i = %7.4f A^-1, r_max = %7.3f A\n",
           epsilon, k_i/BOHR, R_sqrt(r_max)*BOHR);
-  #endif
+#endif
    
   /* Summation over lattice points r = n1*a1 + n2*a2 +/- dij
    * k_in != 0, d_ij[3] != 0: General case
@@ -271,10 +255,8 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
     n1_min = (int) R_nint(faux_r + faux_i);
     n1_max = (int) R_nint(faux_r - faux_i);
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "faux: %f, %f n1_min = %d, n1_max = %d\n",
+    CONTROL_MSG(CONTROL, "faux: %f, %f n1_min = %d, n1_max = %d\n",
                     faux_r, faux_i, n1_min, n1_max);
-    #endif
 
     for ( p0_x = - (n1_max-0)*a1_x, p0_y = - (n1_max-0)*a1_y,
           n1 = n1_min; n1 <= n1_max; n1 ++,
@@ -293,10 +275,8 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
       n2_min = (int) R_nint(faux_r - faux_i);
       n2_max = (int) R_nint(faux_r + faux_i);
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "n1 = %3d,\tn2_min = %3d,\tn2_max = %3d\n",
+      CONTROL_MSG(CONTROL, "n1 = %3d,\tn2_min = %3d,\tn2_max = %3d\n",
                       n1, n2_min, n2_max);
-      #endif
 
       for ( p_x = p0_x + (n2_min+0)*a2_x, p_y = p0_y + (n2_min+0)*a2_y,
             n2 = n2_min; n2 <= n2_max; n2 ++,
@@ -311,11 +291,9 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
          * radius) and the origin is not included in the summation.
          */
 
-        #ifdef CONTROL_X
-        fprintf(STDCTR, "r_abs = %e, r_max = %e, ", r_abs, r_max);
-        fprintf(STDCTR, "n1_max = %d, n2_min = %d, n2_max = %d\n",
+        CONTROL_MSG(CONTROL_X, "r_abs = %e, r_max = %e, ", r_abs, r_max);
+        CONTROL_MSG(CONTROL_X, "n1_max = %d, n2_min = %d, n2_max = %d\n",
                          n1_max, n2_min, n2_max);
-        #endif
 
         if ( (r_abs < r_max) && (r_abs > GEO_TOLERANCE ) )
         {

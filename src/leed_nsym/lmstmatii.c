@@ -24,10 +24,6 @@
 
 #include "leed.h"
 
-#ifdef WARNING
-#define WARN_LEVEL 1000
-#endif
-
 /*!
  * Creates the multiple scattering Matrix [(1 - Tl*Giilm)^-1]*Tl for a
  * periodic plane of scatterers.
@@ -93,11 +89,7 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
 
   if(mk_cg_coef(2*l_max) != 0)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, "* warning (leed_ms_tmat_ii): "
-            "C.G. coefficients had to be recalculated\n");
-    #endif
-    ;
+    WARNING_MSG("C.G. coefficients had to be recalculated\n");
   }
 
   /* Allocate Gev, God */
@@ -106,10 +98,10 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
   iaux = (l_max +1 ) * l_max/2;
   God = matalloc( God, iaux, iaux, NUM_COMPLEX);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): T: \n");
+#if CONTROL
+  CONTROL_MSG(CONTROL, "\nT: \n");
   matshowabs(Tl);
-  #endif
+#endif
 
   /*
    * Loop over (l1,m1),(l2,m2): Set up  - Tl(l1)*Gii(l1,m1; l2,m2).
@@ -234,11 +226,6 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
     } /* m1 */
   } /* l1 */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): -T*Gev: \n");
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): -T*God: \n");
-  #endif
-
   /* Add the identity matrix: (1 - Gev/od * T) */
   iaux = Gev->cols*Gev->rows;
   for( iev1= 1; iev1 <=iaux; iev1 += Gev->rows + 1) Gev->rel[iev1] += 1.;
@@ -246,21 +233,9 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
   iaux = God->cols*God->rows;
   for( iod1= 1; iod1 <=iaux; iod1 += God->rows + 1) God->rel[iod1] += 1.;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): (1 - T*Gev): \n");
-  /* matshowabs(Gev); */
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): (1 - T*God): \n");
-  /* matshowabs(God); */
-  #endif
-
   /* Matrix inversion: (1 - Gev/od * T)^-1 */
   Gev = matinv(Gev, Gev);
   God = matinv(God, God);
-
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): (1 - T*Gev)^-1: \n");
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): (1 - T*God)^-1: \n");
-  #endif
 
  /*
   * Copy (1 - T*Gev)^-1 and (1 - T*God)^-1 into Gii in the natural order
@@ -319,10 +294,10 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
   matfree(Gev);
   matfree(God);
  
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ii): Tii: \n");
+#if CONTROL
+  CONTROL_MSG(CONTROL, "\nTii: \n");
   matshowabs(Tii);
-  #endif
+#endif
  
   return(Tii);
 } /* end of function leed_ms_tmat_ii */

@@ -17,7 +17,7 @@
  *********************************************************************/
 
 /*! \file
- *  \brief Implementation file for rf_input() function.
+ *  \brief Implementation file for rfac_ivcur_read() function.
  */
 
 #include <math.h>
@@ -62,7 +62,7 @@
  * This list is terminated by the value #I_END_OF_LIST in
  * cur_list[i+1].group_id.
 */
-rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
+rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
 {
 
   int i, j, len;
@@ -82,10 +82,7 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
  * first free previously allocated memory.
  *********************************************************************/
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_input): read theoretical data from \"%s\"\n",
-          theory_file);
-  #endif
+  CONTROL_MSG(CONTROL, "read theoretical data from \"%s\"\n", theory_file);
 
   the_buffer = file2buffer(theory_file);
 
@@ -95,17 +92,13 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
  * allocate memory for IV curves
  *********************************************************************/
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_input): read control data from \"%s\"\n", control_file);
-  #endif
+  CONTROL_MSG(CONTROL, "read control data from \"%s\"\n", control_file);
 
   ctr_buffer = file2buffer(control_file);
 
-  n_cur = rf_nclines(ctr_buffer) ;
+  n_cur = rfac_nclines(ctr_buffer) ;
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(cr_input): n_cur = %d\n", n_cur);
-  #endif
+  CONTROL_MSG(CONTROL_X, "n_cur = %d\n", n_cur);
 
   cur_list = (rfac_ivcur*) calloc(n_cur, sizeof(rfac_ivcur));
 
@@ -143,8 +136,7 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
           exp_file[j] = '\0';
          
           /* Read experimental IV curve from file and store to exp_list. */
-          cur_list[i_cur].experimental->data =
-                    rf_rdexpt(&cur_list[i_cur], exp_file);
+          cur_list[i_cur].experimental->data = rfac_iv_read(exp_file);
          
         } /* if "ef=" */
 
@@ -161,15 +153,12 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
   
          if (the_buffer == NULL)
          {
-           #ifdef ERROR
-           fprintf(STDERR, "(cr_input): *** No theoretical input file present "
-                   "\"%s\"\n", index_list);
-           #endif
+           ERROR_MSG("No theoretical input file present \"%s\"\n", index_list);
            exit(1);
          }
          else
          {
-           cur_list[i_cur].theory->data = rf_rdcleed(
+           cur_list[i_cur].theory->data = rfac_iv_data_read_cleed(
                         cur_list+i_cur, /* IV curve structure */
                         the_buffer,      /* theoretical input */
                         index_list);     /* control list for beam average */
@@ -190,22 +179,14 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
        if ( !strncmp("id=", line_buffer+i, 3) )
        {
          i+=3;
-         sscanf(line_buffer+i,"%d",&(cur_list[i_cur].group_id));
+         sscanf(line_buffer+i, "%d", &(cur_list[i_cur].group_id));
        } /* if "id=" */
 
        /* wt: relative weight in R-factor average */
        if ( !strncmp("wt=", line_buffer+i, 3) )
        {
          i+=3;
-
-         #ifdef REAL_IS_DOUBLE
-         sscanf(line_buffer+i,"%lf",&(cur_list[i_cur].weight));
-         #endif
-
-         #ifdef REAL_IS_FLOAT
-         sscanf(line_buffer+i,"%f",&(cur_list[i_cur].weight));
-         #endif
-
+         sscanf(line_buffer+i, "%" REAL_FMT "f", &(cur_list[i_cur].weight));
        } /* if "id=" */
 
 
@@ -213,15 +194,7 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
        if ( !strncmp("e0=", line_buffer+i, 3) )
        {
          i+=3;
-
-         #ifdef REAL_IS_DOUBLE
-         sscanf(line_buffer+i,"%lf",&(cur_list[i_cur].eng_0));
-         #endif
-
-         #ifdef REAL_IS_FLOAT
-         sscanf(line_buffer+i,"%f",&(cur_list[i_cur].eng_0));
-         #endif
-
+         sscanf(line_buffer+i, "%" REAL_FMT "f", &(cur_list[i_cur].eng_0));
        } /* if "e0=" */
 
 
@@ -233,13 +206,11 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
       *   increment i_cur and reset lists;
       */
 
-     #ifdef CONTROL
-     fprintf(STDCTR, "(cr_input) "
+     CONTROL_MSG(CONTROL,
             "%d: ti: %s, ef: %s, e0: %.1f id: %d, wt: %.1f, \n",
             i_cur, index_list, exp_file,
             cur_list[i_cur].eng_0, cur_list[i_cur].group_id,
             cur_list[i_cur].weight);
-     #endif
      i_cur++;
      free(cur_list[i_cur].experimental);
      free(cur_list[i_cur].theory);
@@ -249,9 +220,9 @@ rfac_ivcur *rf_input(const char *control_file, const char *theory_file)
    /* increment offset in ctr_buffer */
    offs += (long)len;
 
-  }  /* while: scan through control file */
+  } /* while: scan through control file */
 
-  cur_list[i_cur-1].group_id = I_END_OF_LIST;
+  cur_list[i_cur-1].group_id = END_OF_GROUP_ID;
 
   /* free previously allocated memory and return.*/
   free(the_buffer);

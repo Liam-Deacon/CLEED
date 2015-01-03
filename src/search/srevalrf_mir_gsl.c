@@ -75,7 +75,7 @@ extern struct sratom_str *sr_atoms;
 extern struct search_str *sr_search;
 extern char *sr_project;
 
-real sr_evalrf_gsl(gsl_vector *par)
+real sr_evalrfac_gsl(gsl_vector *par)
 
 /***********************************************************************
 
@@ -124,7 +124,7 @@ char *new_path;
  if( (getenv("CSEARCH_LEED") == NULL) || (getenv("CSEARCH_RFAC") == NULL) )
  {
    #ifdef ERROR
-     fprintf(STDERR, " *** error (sr_evalrf_gsl):"
+     fprintf(STDERR, " *** error (sr_evalrfac_gsl):"
              " CSEARCH_LEED or CSEARCH_RFAC not defined\n");
    #endif
    exit(1);
@@ -135,7 +135,7 @@ char *new_path;
 ***********************************************************************/
 
  #ifdef SHORTCUT
-   fprintf(STDCTR,"(sr_evalrf_gsl %d) SHORTCUT:", n_eval);
+   fprintf(STDCTR,"(sr_evalrfac_gsl %d) SHORTCUT:", n_eval);
  #endif
 
  rgeo = sr_ckgeo( par );
@@ -222,7 +222,7 @@ char *new_path;
          sr_project);                 /* project name for output file */
 
  #ifdef CONTROL
-   fprintf(STDCTR, "(sr_evalrf_gsl %d): calculate IV curves (original):\n %s\n", 
+   fprintf(STDCTR, "(sr_evalrfac_gsl %d): calculate IV curves (original):\n %s\n", 
            n_eval, line_buffer); 
  #endif
 
@@ -239,7 +239,7 @@ char *new_path;
 
        
  #ifdef CONTROL
-   fprintf(STDCTR, "(sr_evalrf_gsl %d): calculate IV curves (mirror):\n %s\n", 
+   fprintf(STDCTR, "(sr_evalrfac_gsl %d): calculate IV curves (mirror):\n %s\n", 
            n_eval, line_buffer); 
  #endif
 
@@ -284,7 +284,7 @@ char *new_path;
          sr_project);                 /* project name for output file */
 
  #ifdef CONTROL
-   fprintf(STDCTR, "(sr_evalrf_gsl %d): calculate R factor:\n %s\n", 
+   fprintf(STDCTR, "(sr_evalrfac_gsl %d): calculate R factor:\n %s\n", 
            n_eval, line_buffer); 
  #endif
 

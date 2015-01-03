@@ -1,3 +1,22 @@
+/*********************************************************************
+ *                           COORD++.CC
+ *
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *********************************************************************/
+
+/*! \file
+ * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ * Implements the #Coordinate class, which provides an object-orientated
+ * wrapping to the C #coord struct and its associated methods.
+ */
+
 #include "coord.h"
 
 using namespace cleed;
@@ -12,11 +31,13 @@ Coordinate::Coordinate(double x, double y, double z)
 
 Coordinate::Coordinate(const Coordinate &position)
 {
-  this->pos = position.pos;
+  this->pos = ::coord_init();
+  ::coord_copy(this->pos, position.pos);
 }
 
-Coordinate::Coordinate(const coord_t *position)
+Coordinate::Coordinate(const coord *position)
 {
+  this->pos = ::coord_init();
   ::coord_copy(this->pos, position);
 }
 
@@ -26,64 +47,64 @@ Coordinate::~Coordinate()
 }
     
 /* setters */
-void Coordinate::setX(double x)
+inline void Coordinate::setX(double x)
 {
   ::coord_set_x(this->pos, x);
 }
 
-void Coordinate::setY(double y)
+inline void Coordinate::setY(double y)
 {
   ::coord_set_y(this->pos, y);
 }
 
-void Coordinate::setZ(double z)
+inline void Coordinate::setZ(double z)
 {
   ::coord_set_z(this->pos, z);
 }
 
-void Coordinate::setCoordinate(double x, double y, double z)
+inline void Coordinate::setCoordinate(double x, double y, double z)
 {
   ::coord_set(this->pos, x, y, z);
 }
 
-void Coordinate::setCoordinate(const Coordinate &position)
+inline void Coordinate::setCoordinate(const Coordinate &position)
 {
   this->pos = position.pos;
 }
 
-void Coordinate::setCoordinate(const coord_t *position)
+inline void Coordinate::setCoordinate(const coord *position)
 {
-  pos = (coord_t*) position;
+  pos = (coord*) position;
 }
     
 /* getters */
-double Coordinate::getMagnitude()
+inline double Coordinate::getMagnitude()
 {
   return (coord_get_magnitude(this->pos));
 }
 
-double Coordinate::getX()
+inline double Coordinate::getX()
 {
   return (coord_get_x(this->pos));
 }
 
-double Coordinate::getY()
+inline double Coordinate::getY()
 {
   return (coord_get_y(this->pos));
 }
 
-double Coordinate::getZ()
+inline double Coordinate::getZ()
 {
   return (coord_get_z(this->pos));
 }
 
-const coord_t *Coordinate::get_coord_t()
+inline const coord *Coordinate::get_coord()
 {
-  return ((const coord_t*) this->pos);
+  return ((const coord*) this->pos);
 }
 
 /* other methods */
-void Coordinate::print(FILE *f)
+inline void Coordinate::print(FILE *f)
 {
   ::coord_printf(f, this->pos);
 }

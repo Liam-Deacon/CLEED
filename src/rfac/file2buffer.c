@@ -26,6 +26,8 @@
 #include <strings.h>
 #include <malloc.h>
 
+#include "gh_stddef.h"
+
 /*!
  * \fn file2buffer
  *
@@ -45,8 +47,7 @@ char *file2buffer(const char *filename)
   char uncomp;                     /* flag, if file was uncompressed */
 
   size_t len;
-  long int nbytes;
-  size_t ntest;
+  long int nbytes, ntest;
 
   FILE *in_stream;
 
@@ -61,32 +62,26 @@ char *file2buffer(const char *filename)
   {
     if ((in_stream = fopen(filename, "r") ) == NULL)
     {
-      #ifdef ERROR
-      printf(" *** could not open \"%s\"\n", filename);
+      ERROR_MSG("could not open \"%s\"\n", filename);
       fclose(in_stream);
       /*   exit(1); */
-      #endif
 
       /* try uncompressing */
       printf(" *** trying to uncompress \"%s.Z\"\n", filename);
       sprintf(line_buffer, "uncompress \"%s.Z\"", filename);
       if (system(line_buffer))
       {
-        #ifdef ERROR
-        printf(" *** error: uncompression was also unsuccessful!\n");
+        ERROR_MSG("uncompression was also unsuccessful!\n");
         fclose(in_stream);
-        exit(1);
-        #endif
+        ERROR_RETURN(NULL);
       } /* if system.. */
       else
       {
         if ((in_stream = fopen (filename, "r") ) == NULL)
         {
-          #ifdef ERROR
-          printf(" *** error: could not open \"%s\"\n", filename);
+          ERROR_MSG("could not open \"%s\"\n", filename);
           fclose(in_stream);
-          exit(1);
-          #endif
+          ERROR_RETURN(NULL);
         }
 
         uncomp = 1;
@@ -110,23 +105,17 @@ char *file2buffer(const char *filename)
     if (system(line_buffer))
     {
 
-      #ifdef ERROR
-      printf(" *** error: uncompressing was unsuccessful!\n");
-      exit(1);
-      #endif
+      ERROR_MSG("uncompressing was unsuccessful!\n");
+      ERROR_RETURN(NULL);
 
     } /* if system.. */
     else
     {
       if ((in_stream = fopen (filename, "r") ) == NULL)
       {
-
-        #ifdef ERROR
-        printf(" *** error: could not open \"%s\"\n", line_buffer);
+        ERROR_MSG("could not open \"%s\"\n", line_buffer);
         fclose(in_stream);
-        exit(1);
-        #endif
-
+        ERROR_RETURN(NULL);
       }
 
       uncomp = 1;
@@ -146,18 +135,13 @@ char *file2buffer(const char *filename)
   nbytes = ftell(in_stream);
   fseek (in_stream, 0L, SEEK_SET);
 
-  #ifdef CONTROL
-  fprintf(stdout, "(file2buffer): \"%s\" has %ld bytes \n", filename, nbytes);
-  #endif
+  CONTROL_MSG(CONTROL, "\"%s\" has %ld bytes \n", filename, nbytes);
 
   buffer = (char *)malloc((size_t)nbytes*13 + 2);
   if (buffer == NULL)
   {
-    #ifdef ERROR
-    printf(">file2buffer: *** error occurred allocating memory for \"%s\"\n",
-          filename);
-    printf("                  (filesize: %ld)\n", nbytes+1);
-    #endif
+    ERROR_MSG("unable to allocate memory for \"%s\"\n"
+              "                  (filesize: %ld)\n", filename, nbytes+1);
     fclose(in_stream);
     exit(1);
   }
@@ -166,15 +150,12 @@ char *file2buffer(const char *filename)
  * Read file to buffer
  ************************************************************/
 
-  if ( (signed int)(ntest = fread(buffer, 1, nbytes, in_stream) ) == nbytes)
+  if ( (ntest = (long int)fread(buffer, 1, (size_t)nbytes, in_stream) ) == nbytes)
   {
     buffer[nbytes] = '\0';
     buffer[nbytes+1] = '\0';
 
-    #ifdef CONTROL  /* control output, if required */
-    fprintf(stdout, "(file2buffer): %ld bytes read from \"%s\"\n",
-           nbytes, filename);
-    #endif
+    CONTROL_MSG(CONTROL, "%ld bytes read from \"%s\"\n", nbytes, filename);
 
     if (uncomp)
     {
@@ -189,10 +170,7 @@ char *file2buffer(const char *filename)
   else
   {
 
-    #ifdef ERROR
-    printf(">file2buffer: %d of %ld bytes read from \"%s\"\n",
-           ntest, nbytes, filename);
-    #endif
+    ERROR_MSG("%ld of %ld bytes read from \"%s\"\n", ntest, nbytes, filename);
 
     free(buffer);
     if (uncomp)

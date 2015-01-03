@@ -16,9 +16,9 @@
  *   GH/10.08.95 - WARNING output at the end of mk_ylm_coef.
  *********************************************************************/
 
-/*! @file
+/*! \file
  *
- * Quantum mechanical calculations for spherical harmonics @f$ \gamma_{l,m} @f$ .
+ * Quantum mechanical calculations for spherical harmonics \f$ \gamma_{l,m} \f$ .
  *
  * It contains the function r_ylm() and c_ylm() which calculates the real and
  * complex parts of the spherical harmonics, respectively, as well as
@@ -32,8 +32,8 @@
 #include "mat.h"
 #include "qm.h"
 
-#define MEM_BLOCK 256           /* memory block for coef */
-#define UNUSED    -1
+static const size_t MEM_BLOCK = 256;  /* memory block for coef */
+static const int UNUSED = -1;
 
 static real *coef  = NULL;      /* coefficients in the power series of Ylm */
 
@@ -108,13 +108,13 @@ mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
    */
   if ( l_max > l_max_coef )
   {
-    #ifdef WARNING
+#if WARNING
     if(l_max_coef != UNUSED)
     {
-      fprintf(STDWAR, "*warning (r_ylm): recalculating coefficients: ");
-      fprintf(STDWAR, "old l_max: %d, new: %d\n", l_max_coef, l_max);
+      WARNING_MSG("recalculating coefficients: old l_max = %d, new = %d\n",
+                  l_max_coef, l_max);
     }
-    #endif
+#endif
 
     mk_ylm_coef(l_max);
   }
@@ -166,6 +166,7 @@ mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
     {
       sum = 0.;
       iaux = (l+m+1)/2;
+
       for(lamb = l; lamb >= iaux; lamb--, index++ )
       {
         sum = sum * x_2 + coef[index];
@@ -277,13 +278,13 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
    */
   if ( l_max > l_max_coef )
   {
-    #ifdef WARNING
+#if WARNING
     if(l_max_coef != UNUSED)
     {
-      fprintf(STDWAR, "*warning (c_ylm): recalculating coefficients: ");
-      fprintf(STDWAR, "old l_max: %d, new: %d\n", l_max_coef, l_max);
+      WARNING_MSG("recalculating coefficients: old l_max = %d, new = %d\n",
+                  l_max_coef, l_max);
     }
-    #endif
+#endif
 
     mk_ylm_coef(l_max);
   }
@@ -456,9 +457,7 @@ int mk_ylm_coef(size_t l_max)
         i_mem ++;
         coef = (real *)realloc( coef, i_mem * MEM_BLOCK * sizeof(real) );
 
-        #ifdef CONTROL_MK
-        fprintf(STDCTR, "(mk_ylm_coef): reallocate coef: %d\n", i_mem);
-        #endif
+        CONTROL_MSG(CONTROL_ALL, "reallocate coef: %d\n", i_mem);
       }
 
       for(lamb = l; lamb >= iaux; lamb--, index++ )
@@ -466,10 +465,8 @@ int mk_ylm_coef(size_t l_max)
         coef[index] = sgn * pre_lm *
                      (real) ( fac[2*lamb] / 
                              (fac[lamb] * fac[l - lamb] * fac[2*lamb -l -m]));
-        #ifdef CONTROL_MK
-        fprintf(STDCTR, "l:%2d, m:%2d, lamb:%2d, coef[%2d]:%7.3f\n",
-               l,m,lamb,index, coef[index]);
-        #endif
+        CONTROL_MSG(CONTROL_ALL, "l:%2d, m:%2d, lamb:%2d, coef[%2d]:%7.3f\n",
+               l, m, lamb, index, coef[index]);
         sgn = -sgn;
       } /* lamb */
 
@@ -477,18 +474,14 @@ int mk_ylm_coef(size_t l_max)
 
   }     /* l */
 
-  #ifdef CONTROL_MK
-  fprintf(STDCTR, "end of l,m loop\n");
-  #endif
+  CONTROL_MSG(CONTROL_ALL, "end of l,m loop\n");
 
   free(fac);
   l_max_coef = l_max;
 
-  #ifdef WARNING
   /* Write memory size to warning output */
-  fprintf(STDCTR, "(mk_ylm_coef): coef[%d] (%d bytes) for l_max = %d\n",
-          index, i_mem * MEM_BLOCK * sizeof(real), l_max_coef);
-  #endif
+  WARNING_MSG("coef[%d] (%d bytes) for l_max = %d\n",
+              index, i_mem * MEM_BLOCK * sizeof(real), l_max_coef);
 
   return( l_max_coef );
 } /* end of function mk_ylm_coef */

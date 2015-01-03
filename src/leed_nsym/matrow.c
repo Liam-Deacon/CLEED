@@ -40,28 +40,14 @@ mat matrow(mat row, mat M, int row_num)
   /* check validity of the input matrices M1 and M2 */
   if (matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matrow): invalid input matrix\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid input matrix\n");
+    ERROR_RETURN(NULL);
   }
 
   if ( (row_num > M->rows) || (row_num < 1) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matcol): invalid row number\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid row number\n");
+    ERROR_RETURN(NULL);
   }
 
   /* Extract row */
@@ -150,17 +136,9 @@ mat matrow(mat row, mat M, int row_num)
   else /* neither square nor normal, nor diagonal matrix */
   {
     /* matrix type is not implemented! */
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matrow): matrix type 0x%x not implemented\n",
-            M->mat_type);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
+    ERROR_MSG("matrix type 0x%x not implemented\n", M->mat_type);
     matfree(row);
-    return(NULL);
-    #endif
+    ERROR_RETURN(NULL);
   }
 
   return(row);

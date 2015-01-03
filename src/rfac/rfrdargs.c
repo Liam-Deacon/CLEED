@@ -15,7 +15,7 @@
  *********************************************************************/
 
 /*! \file
- *  \brief File contains C implementation for \ref rf_rdargs function.
+ *  \brief File contains C implementation for \ref rfac_rdargs function.
  */
 
 #include <math.h>
@@ -91,52 +91,31 @@
  *
  * \warning Function exits if any error occurred.
  */
-rfac_args rf_rdargs(int argc, char **argv)
+rfac_args *rfac_rdargs(int argc, char **argv)
 {
   int i, j;
 
-/* 
-structure containing all program parameters:
-  char *ctrfile              - input control file 
-  char *thefile              - input theor file 
-  char *outfile              - output file.
-  int r_type                 - R factor type 
-  real  s_ini                - initial shift
-  real  s_fin                - final shift
-  real  s_step               - step for shift
-  int all_groups             - flag: print R-factors of all group ID's 
-  real vi                    - im. part of optical potential.
-  real ignore_max            - ignore features larger than ignore_max.
-*/
-  rfac_args args;
+  /* structure containing all program parameters:
+    char *ctrfile              - input control file
+    char *thefile              - input theor file
+    char *outfile              - output file.
+    int r_type                 - R factor type
+    real  s_ini                - initial shift
+    real  s_fin                - final shift
+    real  s_step               - step for shift
+    int all_groups             - flag: print R-factors of all group ID's
+    real vi                    - im. part of optical potential.
+    real ignore_max            - ignore features larger than ignore_max.
+  */
 
-/*********************************************************************
- * set default values
- *********************************************************************/
+  rfac_args *args = rfac_args_init();
 
-  args.ctr_file = NULL;
-
-  args.s_ini = -10.;
-  args.s_fin =  10.;
-  args.s_step = 0.5;
-
-  args.r_type = RP_FACTOR;         /* default R factor: rp */
-
-  args.all_groups = 0;             /* display only averge over R-factors */
-  args.vi = 4.0;                   /* im. part of opt. potential */
-
-  args.iv_out = 0;                 /* default: no output of IV curves */
-  args.iv_file = NULL;
-
-  args.out_file = NULL;            /* will be treated as "stdout" */
-
-/*********************************************************************
- * decode arguments
- *********************************************************************/
-  printf("got here\n");
+  /*********************************************************************
+   * decode arguments
+   *********************************************************************/
   if( argc == 1)
   {
-    rf_help(stderr);
+    rfac_help(stderr);
     exit(1);
   }
   for( i=1; i < argc; i++)
@@ -155,12 +134,12 @@ structure containing all program parameters:
         if (++i < argc)
         {        
           if ( !strncasecmp(argv[i], "av", 2) )
-            args.all_groups = 0;
+            args->all_groups = false;
           else if ( !strncasecmp(argv[i], "al", 2) )
-            args.all_groups = 1;
+            args->all_groups = true;
           else
           {
-            fprintf(stderr, " *** error (rf_rdargs): in argument list "
+            ERROR_MSG("in argument list "
                     " \"%s\" requires \"ave\" or \"all\" as argument.\n", 
                     argv[i-1]);
             exit(RFAC_INVALID_ARGUMENT);
@@ -168,8 +147,7 @@ structure containing all program parameters:
         }
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
     
@@ -182,11 +160,10 @@ structure containing all program parameters:
                 data input.
         */
     
-        if (++i < argc) strcpy(args.ctr_file, argv[i]);
+        if (++i < argc) strncpy(args->ctr_file, argv[i], FILENAME_MAX);
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
       } /* case c */
@@ -196,7 +173,7 @@ structure containing all program parameters:
         /*
             call help function
         */
-        rf_help(stdout);
+        rfac_help(stdout);
         exit(RFAC_SUCCESS);
       } /* case h */
 
@@ -208,10 +185,10 @@ structure containing all program parameters:
                  valid arguments: "stdout", "single", <file name>.
                  default: "stdout".
         */
-        if (++i < argc) strcpy(args.out_file, argv[i]);
+        if (++i < argc) strncpy(args->out_file, argv[i], FILENAME_MAX);
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
+          fprintf(stderr, " *** error (rfac_rdargs): "
                   "missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
@@ -228,25 +205,22 @@ structure containing all program parameters:
         if (++i < argc)
         {
           if( !strncasecmp(argv[i],"rp", 2) )
-            args.r_type = RP_FACTOR;
+            args->r_type = RP_FACTOR;
           else if( !strncasecmp(argv[i],"r1", 2) )
-            args.r_type = R1_FACTOR;
+            args->r_type = R1_FACTOR;
           else if( !strncasecmp(argv[i],"r2", 2) )
-            args.r_type = R2_FACTOR;
+            args->r_type = R2_FACTOR;
           else if( !strncasecmp(argv[i],"rb", 2) )
-            args.r_type = RB_FACTOR;
+            args->r_type = RB_FACTOR;
           else
           {
-            #ifdef ERROR
-            fprintf(STDERR, "*** error (rf_rdargs): R-factor \"%s\" not known\n",
-                argv[i]);
-            #endif
+            ERROR_MSG("R-factor \"%s\" not known\n", argv[i]);
             exit(RFAC_INVALID_ARGUMENT);
           }
         }
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
+          fprintf(stderr, " *** error (rfac_rdargs): "
                   "missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
@@ -262,25 +236,20 @@ structure containing all program parameters:
     
         if (++i < argc)
         {
-          #ifdef REAL_IS_DOUBLE
-          j = sscanf(argv[i], "%lf,%lf,%lf",
-          #endif
-          #ifdef REAL_IS_FLOAT
-          j = sscanf(argv[i], "%f,%f,%f",
-          #endif
-                     &(args.s_ini), &(args.s_fin), &(args.s_step));
+          j = sscanf(argv[i], "%" REAL_FMT "f,%" REAL_FMT "f,%" REAL_FMT "f",
+                     &(args->s_ini), &(args->s_fin), &(args->s_step));
 
           switch (j)     /* j is the number of arguments */
           {
             case (1):    /* one number: one single shift */
             {
-              args.s_fin = args.s_ini;
-              args.s_step = 0.5;
+              args->s_fin = args->s_ini;
+              args->s_step = 0.5;
               break;
             }
             case (2):    /* two numbers: range of shifts with step 0.5 */
             {
-              args.s_step = 0.5;
+              args->s_step = 0.5;
               break;
             }
             case (3):    /* three numbers: range of shifts with given step */
@@ -289,16 +258,14 @@ structure containing all program parameters:
             }
             default:
             {
-              fprintf(stderr, " *** error (rf_rdargs):\n\toption "
-                      "\"%s\"needs at least 1, maximum 3 arguments\n", argv[i-1]);
+              ERROR_MSG("\n\"%s\"needs at 1 >= i <=3 arguments\n", argv[i-1]);
               exit(RFAC_INVALID_ARGUMENT);
             }
           } /* switch j */
         }  /* if i++ < argc */
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
       } /* case s */
@@ -309,11 +276,10 @@ structure containing all program parameters:
           -t <filename>: specify theoretical input file
         */
      
-        if (++i < argc) strcpy(args.the_file, argv[i]);
+        if (++i < argc) strncpy(args->the_file, argv[i], FILENAME_MAX);
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
       } /* case t */
@@ -329,12 +295,11 @@ structure containing all program parameters:
         */
         if (++i < argc)
         {
-          args.vi = (real)atof(argv[i]);
+          args->vi = (real)atof(argv[i]);
         }
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
       } /* case v */
@@ -346,42 +311,39 @@ structure containing all program parameters:
         */
         if (++i < argc)
         {
-          args.iv_out = 1;
-          args.iv_file = argv[i];
+          strncpy(args->iv_file, argv[i], FILENAME_MAX);
         }
         else
         {
-          fprintf(stderr, " *** error (rf_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
       } /* case w */
 
       else if (ARG_IS("-V") || ARG_IS("--version"))
       {
-        rf_info();
+        rfac_info();
         exit(0);
       }
       else
       {
-        fprintf(stderr, " *** error (rf_rdargs): \"%s\" not known.\n", argv[i]);
-        rf_help(stderr);
+        ERROR_MSG("\"%s\" not known.\n", argv[i]);
+        rfac_help(stderr);
         exit(RFAC_INVALID_ARGUMENT);
       }
     
     }   /* if argv[...] == '-') */
     else
     {
-      fprintf(stderr, " *** error (rf_rdargs): \"%s\"\n", argv[i]);
-      rf_help(stderr);
+      ERROR_MSG("\"%s\"\n", argv[i]);
+      rfac_help(stderr);
       exit(RFAC_INVALID_ARGUMENT);
     }
   }    /* for i */
 
-  if (args.ctr_file == NULL)
+  if (args->ctr_file == NULL)
   {
-    fprintf(stderr, " *** error (rf_rdargs): No control file specified\n");
-    fprintf(stderr, "     use option -c to specify\n");
+    ERROR_MSG("No control file specified\n     use option -c to specify\n");
     exit(RFAC_INVALID_ARGUMENT);
   }
 

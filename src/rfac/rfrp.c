@@ -41,16 +41,16 @@
  *
  * \return Rp if successful.
  */
-real rf_rp(const real *eng, const real *e_int, const real *t_int, real vi)
+real rfac_rp(const real *eng, const real *e_int, const real *t_int, real vi)
 {
   size_t i_eng;
-  real rf_sum, exp_y_sum, the_y_sum;
+  real rfac_sum, exp_y_sum, the_y_sum;
   real Y_exp, Y_the, L, e_step;
 
   /* compute integrals */
   exp_y_sum = 0.;
   the_y_sum = 0.;
-  rf_sum = 0.;
+  rfac_sum = 0.;
   for(i_eng = 1;
      ! IS_EQUAL_REAL(eng[i_eng], F_END_OF_LIST); i_eng ++)
   {
@@ -71,19 +71,19 @@ real rf_rp(const real *eng, const real *e_int, const real *t_int, real vi)
     exp_y_sum += SQUARE(Y_exp)*e_step;
 
     /* compute R-factor sum */
-    rf_sum += SQUARE(Y_the - Y_exp)*e_step;
+    rfac_sum += SQUARE(Y_the - Y_exp)*e_step;
   }
 
   #ifdef CONTROL
-  fprintf(STDCTR, "(cr_rp): exp_sum: %f the_sum: %f rf_sum: %f\n", 
-          exp_y_sum, the_y_sum, rf_sum);
+  fprintf(STDCTR, "(cr_rp): exp_sum: %f the_sum: %f rfac_sum: %f\n", 
+          exp_y_sum, the_y_sum, rfac_sum);
   #endif
 
   /*
-   * Divide rf_sum by the normalizing factor (exp_y_sum + the_y_sum)
+   * Divide rfac_sum by the normalizing factor (exp_y_sum + the_y_sum)
    * and return result
    */
-  rf_sum /= (exp_y_sum + the_y_sum);
+  rfac_sum /= (exp_y_sum + the_y_sum);
 
-  return (rf_sum);
+  return (rfac_sum);
 }

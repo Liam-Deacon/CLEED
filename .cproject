@@ -19,18 +19,18 @@
 							<builder buildPath="${workspace_loc:/CLEED}/Default" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1449460458" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.307734303" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 								<option id="gnu.both.asm.option.include.paths.814028850" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Liam\Dropbox\Windows Tweaks\CLEED_tools_win32\cleed\src\CLEED\src\include&quot;"/>
 									<listOptionValue builtIn="false" value="../."/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\Liam\Dropbox\Windows Tweaks\CLEED_tools_win32\cleed\src\CLEED\src\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1065955113" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1679853662" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1330523232" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
 								<option id="gnu.cpp.compiler.option.include.paths.1112734006" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Liam\Dropbox\Windows Tweaks\CLEED_tools_win32\cleed\src\CLEED\src\include&quot;"/>
 									<listOptionValue builtIn="false" value="../."/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\Liam\Dropbox\Windows Tweaks\CLEED_tools_win32\cleed\src\CLEED\src\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.2047820666" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -43,9 +43,9 @@
 								<option id="gnu.c.compiler.option.debugging.prof.1612796728" name="Generate prof information (-p)" superClass="gnu.c.compiler.option.debugging.prof" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.debugging.gprof.1186446191" name="Generate gprof information (-pg)" superClass="gnu.c.compiler.option.debugging.gprof" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.include.paths.748814437" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Liam\Dropbox\Windows Tweaks\CLEED_tools_win32\cleed\src\CLEED\src\include&quot;"/>
 									<listOptionValue builtIn="false" value="../."/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\Liam\Dropbox\Windows Tweaks\CLEED_tools_win32\cleed\src\CLEED\src\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.327776026" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -94,6 +94,36 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1782688390" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1811498956"/>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.toolchain.gnu.mingw.base.1685963690.971305498" name="/" resourcePath="src/c++">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.641944227" name="cdt.managedbuild.toolchain.gnu.mingw.base" superClass="cdt.managedbuild.toolchain.gnu.mingw.base" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
+							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.157642767" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base.307734303">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1107202590" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.310341192" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base.1679853662"/>
+							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.329337587" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1330523232">
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.487391460" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.extrawarn.721337409" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.wconversion.1649997322" name="Implicit conversion warnings (-Wconversion)" superClass="gnu.cpp.compiler.option.warnings.wconversion" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.include.paths.1686348305" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="../"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\Liam\Dropbox\Windows Tweaks\CLEED_tools_win32\cleed\src\CLEED\src\include&quot;"/>
+									<listOptionValue builtIn="false" value="../."/>
+								</option>
+								<option id="gnu.cpp.compiler.option.dialect.std.57888526" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1568856266" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1848671742" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.173865916">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1737990679" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.344838030" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base.625599519"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.786093" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1811498956"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src/rfac"/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

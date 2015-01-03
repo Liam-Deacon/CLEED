@@ -20,7 +20,7 @@
  */
 void ftsmooth_usage(FILE *output) 
 {
-  fprintf(output, "\nusage:\n\n%s ", FTSMOOTH_PROG);
+  fprintf(output, "\nusage:\n\n%s ", FTSMOOTH);
   fprintf(output, "-i <input> -o <output> "
                   "(-m <mode> -c <cutoff> -t <tailoff> ...)\n\n");
   fprintf(output, "mandatory arguments:\n");
@@ -67,10 +67,10 @@ void ftsmooth_usage(FILE *output)
 void ftsmooth_info()
 {
   printf("%s - version %s (%s)\n",
-        FTSMOOTH_PROG, FTSMOOTH_PROG_VERSION, FTSMOOTH_PROG_PLAT);
-  printf("\n%s\n", FTSMOOTH_PROG_SHORTDESC);
-  printf("\n%s\n%s\n", FTSMOOTH_PROG_COPYRIGHT, FTSMOOTH_PROG_LICENSE);
+        FTSMOOTH, FTSMOOTH_VERSION, FTSMOOTH_PLAT);
+  printf("\n%s\n", FTSMOOTH_SHORTDESC);
+  printf("\n%s\n%s\n", FTSMOOTH_COPYRIGHT, FTSMOOTH_LICENSE);
   printf("\nContact either Georg Held (g.held@reading.ac.uk) "
          "or %s for reporting bugs or submitting fixes.\n",
-         FTSMOOTH_PROG_MAINTAINER);
+         FTSMOOTH_MAINTAINER);
 }

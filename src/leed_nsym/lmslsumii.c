@@ -150,17 +150,8 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
   /* Check arguments: k_i */
   if( k_i <= 0.)                /* no convergence */
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_ms_lsum_ii): "
-            "damping too small: k_i = %.2e\n", k_i);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
-
+    ERROR_MSG("damping too small: k_i = %.2e\n", k_i);
+    ERROR_RETURN(NULL);
   }
 
   /* Allocate memory for Llm (and preset all Llm with zero). */
@@ -191,7 +182,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
     }
   }
 
-  #ifdef NOT
+#ifdef NOT
   if (l_max > l_max_y)
   {
     Ylm = r_ylm(Ylm, 0., 0., l_max);
@@ -215,17 +206,16 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
     else         expm_i = (real *)realloc(expm_i, l_max+1*sizeof(real) );
   }
 
-  #endif
+#endif
 
   /* Some often used values */
   if (epsilon < 1.) r_max = - log(epsilon) / k_i;
   else              r_max = epsilon;
 
-  #ifdef WARNING
+#if WARNING
   if( r_max > WARN_LEVEL)    /* poor convergence */
-  fprintf(STDWAR, "* warning (leed_ms_lsum_ii): "
-          "damping very weak: k_i = %.2e, eps = %.2e\n", k_i, epsilon);
-  #endif
+  WARNING_MSG("damping very weak: k_i = %.2e, eps = %.2e\n", k_i, epsilon);
+#endif
 
   r_max *= r_max;
 
@@ -242,7 +232,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
   fb = (f12*f12 - f1*f2 ) /(f2*f2);     /* prefactor of n1^2 */
   fc = r_max/ f2;                 /* constant under the root */
 
-  #ifdef CONTROL
+#if CONTROL
   fprintf(STDCTR, "(leed_ms_lsum_ii):  "
           "a1  = (%.3f,%.3f) A, a2  =  (%.3f,%.3f) A\n",
           a1_x*BOHR, a1_y*BOHR, a2_x*BOHR, a2_y*BOHR);
@@ -250,7 +240,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
           k_in[1]/BOHR, k_in[2]/BOHR);
   fprintf(STDCTR, "               eps = %7.5f, k_i = %7.4f A^-1, "
           "r_max = %7.3f A\n", epsilon, k_i/BOHR, R_sqrt(r_max)*BOHR);
-  #endif
+#endif
 
   /* Two cases:
    * - k_in != 0,

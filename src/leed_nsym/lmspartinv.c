@@ -146,18 +146,10 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
       } /* m1 */
     } /* l1 */
   } /* i_atoms_1 */
-
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): UL, Maux_a/od: \n");
-  #endif
  
   /* Matrix inversion: (Maux_a/od)^-1 */
   Maux_a = matinv(Maux_a, Maux_a);
   Maux_b = matinv(Maux_b, Maux_b);
-
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): (Maux_b)^-1: \n");
-  #endif
  
   /* Copy (Maux_a)^-1 and (Maux_b)^-1 back into UL in the natural order. */
   for(i_atoms_1 = 0, iev2 = 1, iod2 = 1, ptr_1 = UL->rel+1, ptr_2 = UL->iel+1;
@@ -216,9 +208,7 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
   iaux = first_atoms * (l_max + 1)*(l_max + 1);
   if(iaux == Mbg->cols)
   {
-    #ifdef CONTROL
-    fprintf(STDCTR, "(ms_partinv): All atoms are in the same plane.\n");
-    #endif
+    CONTROL_MSG(CONTROL, "All atoms are in the same plane.\n");
 
     matfree(Maux_a);
     matfree(Maux_b);
@@ -248,35 +238,20 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
   LL = matextract(LL, Mbg, iaux+1, Mbg->rows, 1, iaux);
   LR = matextract(LR, Mbg, iaux+1, Mbg->rows, iaux+1, Mbg->cols);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(ms_partinv):\tUL(%d x %d) UR(%d x %d)\n",
-                  UL->rows,UL->cols, UR->rows,UR->cols);
-  fprintf(STDCTR, "\t\tLL(%d x %d) LR(%d x %d)\n",
-                  LL->rows,LL->cols, LR->rows,LR->cols);
-  #endif
+  CONTROL_MSG(CONTROL, "\n\tUL(%d x %d) UR(%d x %d)\n"
+              "\t\tLL(%d x %d) LR(%d x %d)\n",
+                  UL->rows, UL->cols, UR->rows, UR->cols,
+                  LL->rows, LL->cols, LR->rows, LR->cols);
 
   /* Maux_a = (LL*UL^-1)
    * Maux_b = (LL*UL^-1)*UR ) = Maux_a * UR
    */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): Maux_a\n");
-  #endif
-
   Maux_a = matmul(Maux_a, LL, UL);
-
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): Maux_b\n");
-  #endif
-
   Maux_b = matmul(Maux_b, Maux_a, UR);
 
   /* Maux_b = -(LR - (LL*UL^-1)*UR) = Maux_b - LR (first real then imag. part)
    * LR = Maux_b^-1 = -S
    */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): LR\n");
-  #endif
-
   iaux = LR->cols * LR->rows;
   for(ptr_1 = LR->rel+1, ptr_2 = Maux_b->rel+1, ptr_end = LR->rel+iaux;
       ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
@@ -296,10 +271,6 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
    *   R -> LL = - S * (LL*UL^-1) = LR * Maux_a
    *   Q -> UR = - (UL^-1)*UR * S = Maux_b * LR
    */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): LL, UR\n");
-  #endif
-
   Maux_b = matmul(Maux_b, UL, UR);
 
   LL = matmul(LL, LR, Maux_a);
@@ -308,10 +279,6 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
   /* P -> UL = (UL^-1) + (UL^-1)*UR * S * (LL*UL^-1)
    *         = UL - Maux_b * LL
    */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): UL\n");
-  #endif
-
   Maux_b = matmul(Maux_b, Maux_b, LL);
  
   iaux = UL->cols * UL->rows;
@@ -328,10 +295,6 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
  }
 
   /* S -> LR = -LR */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(ms_partinv): S\n");
-  #endif
-
   iaux = LR->cols * LR->rows;
   for(ptr_1 = LR->rel+1, ptr_2 = LR->iel+1, ptr_end = LR->rel+iaux;
       ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
@@ -345,10 +308,6 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
 
   /* Insert UL (upper left), UR (upper right), LL (lower left), and
    * LR (lower right) into Minv. */
-  #ifdef CONTROL_X
-  fprintf(STDCTR,"(ms_partinv): insert\n");
-  #endif
-
   Minv = matalloc(Minv, Mbg->rows, Mbg->cols, NUM_COMPLEX);
 
   iaux = first_atoms * (l_max + 1)*(l_max + 1) + 1;

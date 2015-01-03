@@ -19,9 +19,8 @@
  *********************************************************************/
 
 #include "caoi_leed.h"
-#include "proghelp.h"
 
-void usage(FILE *output) {
+void caoi_leed_usage(FILE *output) {
     fprintf(output,"\tusage: \t%s -i <par_file> -o <res_file>", PROG);
     fprintf(output," [-b <bul_file> -e]\n"); 
     fprintf(output, "Options:\n");
@@ -30,7 +29,8 @@ void usage(FILE *output) {
     fprintf(output, "  -b <bul_file>        : filepath to bulk parameter file\n");
     fprintf(output, "  -e                   : early return option\n");
     fprintf(output, "  -h --help            : print help and exit\n");
-    fprintf(output, "  -V --version         : print version and information about this program\n");
+    fprintf(output, "  -V --version         "
+        ": print version and information about this program\n");
     fprintf(output, "\n");
     fprintf(output, "Input files:\n");
     fprintf(output, "  *.inp: input file for LEED simulation\n");
@@ -41,7 +41,7 @@ void usage(FILE *output) {
             " used for the R factor program\n");
 }
 
-void info()
+void caoi_leed_info()
 {
     printf("%s - version %s (%s)\n", PROG, PROG_VERSION, PROG_PLAT);
     printf("\n%s\n", PROG_SHORTDESC);

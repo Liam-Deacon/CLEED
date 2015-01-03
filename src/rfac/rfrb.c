@@ -23,7 +23,7 @@
 #include <math.h>           /* needed for sqrt */
 #include "rfac.h"           /* specific definitions etc. */
 
-#define CNORM 0.666667     /*!< 2/3 normalisation to uncorrelated curves */
+static const double CNORM = 0.666667; /*!< 2/3 normalisation to uncorrelated curves */
 
 /*!
  * \brief Calculate Rb1-factor.
@@ -45,36 +45,32 @@
  * \retval #RFAC_FAILURE, if failed.
  *
  */
-real rf_rb(const real *eng, const real *e_int, const real *t_int)
+real rfac_rb(const real *eng, const real *e_int, const real *t_int)
 {
   size_t i_eng;
   real exp_sq_sum, the_sq_sum;
-  real rf_sum;
+  real rfac_sum;
 
   /* Calculate integrals and R-factor */
   exp_sq_sum = 0.;
   the_sq_sum = 0.;
-  rf_sum = 0.;
+  rfac_sum = 0.;
 
   for(i_eng = 0; ! IS_EQUAL_REAL(eng[i_eng], F_END_OF_LIST); i_eng ++)
   {
-    rf_sum += e_int[i_eng] * t_int[i_eng];
+    rfac_sum += e_int[i_eng] * t_int[i_eng];
 
     exp_sq_sum += SQUARE(e_int[i_eng]);
     the_sq_sum += SQUARE(t_int[i_eng]);
   }
 
-  rf_sum /= R_sqrt(the_sq_sum * exp_sq_sum);
+  rfac_sum /= R_sqrt(the_sq_sum * exp_sq_sum);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_rb): rf_sum: %f,", rf_sum);
-  #endif
+  CONTROL_MSG(CONTROL, "rfac_sum: %f,", rfac_sum);
 
-  rf_sum = (real)( (1. - rf_sum) / (1. - CNORM) );
+  rfac_sum = (real)( (1. - rfac_sum) / (1. - CNORM) );
 
-  #ifdef CONTROL
-  fprintf(STDCTR," rfac: %f \n", rf_sum);
-  #endif
+  CONTROL_MSG(CONTROL, "%f \n", rfac_sum);
 
-  return (rf_sum);
+  return (rfac_sum);
 }

@@ -42,17 +42,11 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 
   FILE *log_stream;
 
-/***********************************************************************
- * SIMPLEX METHOD
- ***********************************************************************/
-
+  /* SIMPLEX METHOD */
   if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
-  fprintf(log_stream,"=> SIMPLEX SEARCH:\n\n");
+  fprintf(log_stream, "=> SIMPLEX SEARCH:\n\n");
 
-/***********************************************************************
- * Set up vertex if no vertex file was specified, read vertex otherwise.
- ***********************************************************************/
-
+  /* Set up vertex if no vertex file was specified, read vertex otherwise. */
   mpar = n_dim + 1;
 
   x = vector(1, n_dim);
@@ -83,9 +77,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
         }
       } /* for j_par */
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "(sr_sx): Calculate function for vertex(%d)\n", i_par);
-      #endif
+      CONTROL_MSG(CONTROL, "Calculate function for vertex(%d)\n", i_par);
 
       y[i_par] = sr_evalrf(x);
 
@@ -99,28 +91,19 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
     fclose(log_stream);
   }
 
-/***********************************************************************
- * Enter amoeba
- ***********************************************************************/
+  /* Enter amoeba */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(sr_sx): Enter amoeba\n");
-  #endif
+  CONTROL_MSG(CONTROL, "Enter amoeba\n");
 
   if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
   fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
   fclose(log_stream);
 
-  sr_amoeba(p,y,n_dim,R_TOLERANCE,sr_evalrf,&nfunc);
+  sr_amoeba(p, y, n_dim, R_TOLERANCE, sr_evalrf, &nfunc);
 
-/***********************************************************************
- * Write final results to log file
- ***********************************************************************/
+  /* Write final results to log file */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(sr_sx): %d function evaluations in sr_amoeba\n",
-           nfunc);
-  #endif
+  CONTROL_MSG(CONTROL, "%d function evaluations in sr_amoeba\n", nfunc);
 
   if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
 
@@ -150,7 +133,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   }
  
   fprintf(log_stream, "\navg:");
-  for (j_par=1; j_par<= n_dim; j_par++ )
+  for (j_par=1; j_par<=n_dim; j_par++ )
   {
     fprintf(log_stream, "%7.4f ",p[1][j_par]/mpar);
   }

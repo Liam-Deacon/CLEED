@@ -17,8 +17,8 @@
  * \brief Master include file for matrix operations.
  */
 
-#ifndef MAT_H
-#define MAT_H
+#ifndef __MAT_H__
+#define __MAT_H__
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
@@ -27,7 +27,6 @@ extern "C" {
 /*********************************************************************
  * Include type definitions and constant values and functions for MAT
  *********************************************************************/
-typedef long long long_int;
 #define LONG_INT_IS_LONG_LONG
 
 #define  REAL_IS_DOUBLE
@@ -45,4 +44,4 @@ typedef long long long_int;
 }
 #endif
 
-#endif /* MAT_H */
+#endif /* __MAT_H__ */

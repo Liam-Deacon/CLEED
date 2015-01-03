@@ -41,11 +41,12 @@ version 1.1
 #include "leed_ver_sym.h" /* defines LEED_VERSION and LEED_NAME */
 #include "proghelp.h"
 
-#define FLAG_NONE  0
-#define FLAG_READ  1
-#define FLAG_WRITE 2
+enum {
+  FLAG_NONE=0,
+  FLAG_READ,
+  FLAG_WRITE
+};
 
-/*======================================================================*/
 
 int main(int argc, char *argv[])
 
@@ -146,10 +147,9 @@ FILE *res_stream;
  {
   if(*argv[i_arg] != '-')
   {
-#ifdef ERROR
-   fprintf(STDERR,"*** error (%s):\tsyntax error:\n", LEED_NAME);
-   fprintf(STDERR,"\tusage: \tleed -i <par_file> -o <res_file>");
-   fprintf(STDERR," [-b <bul_file> -r <pro_name> -w <pro_name> -h -V]\n");
+#if ERROR
+   ERROR_MSG("\tusage: \t%s -i <par_file> -o <res_file>"
+             " [-b <bul_file> -r <pro_name> -w <pro_name> -h -V]\n", LEED_PROG);
 #endif
    exit(1);
   }

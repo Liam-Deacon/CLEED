@@ -44,10 +44,7 @@ int mattrace(mat tra, const mat M)
   
   if ((M == NULL) || (M->mat_type != MAT_SQUARE) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (mattrace): matrix has the wrong format\n");
-    #endif
-
+    ERROR_MSG("matrix has the wrong format\n");
     return(-1);
   }
   else

@@ -70,7 +70,6 @@
      fprintf(log_stream,"*** copying \"%s\" to \"%s\" failed ***", x, y); \
      fclose(log_stream); exit(SR_FILE_IO_ERROR)
 
-extern search_atom *sr_atoms;
 extern search *sr_search;
 extern char *sr_project;
 
@@ -92,8 +91,8 @@ real sr_evalrf(real *par)
   static real rfac_min = 100.;
   static real rfac_max = 0.;
   static real shift = 0.;
-  static int n_eval  = 0;
-  static int n_calc  = 0;
+  static size_t n_eval = 0;
+  static size_t n_calc = 0;
 
   int iaux;
   size_t i_par;
@@ -109,40 +108,26 @@ real sr_evalrf(real *par)
 
   FILE *io_stream, *log_stream;
 
-/***********************************************************************
- * Set initial values
- ***********************************************************************/
+  /* Set initial values */
   iaux = 0;
   n_eval ++;
   sprintf(log_file, "%s.log", sr_project);
   sprintf(par_file, "%s.par", sr_project);
 
-/***********************************************************************
- * Check whether environment variables CSEARCH_LEED and CSEARCH_RFAC exist
- ***********************************************************************/
-
+  /* Check whether environment variables CSEARCH_LEED and CSEARCH_RFAC exist */
   if(getenv("CSEARCH_LEED") == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (sr_evalrf): "
-            "CSEARCH_LEED environment variable not defined\n");
-    #endif
+    ERROR_MSG("CSEARCH_LEED environment variable not defined\n");
     exit(SR_ENVIRONMENT_VARIABLE_ERROR);
   }
  
   if(getenv("CSEARCH_RFAC") == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (sr_evalrf): "
-           "CSEARCH_RFAC environment variable not defined\n");
-    #endif
+    ERROR_MSG("CSEARCH_RFAC environment variable not defined\n");
     exit(SR_ENVIRONMENT_VARIABLE_ERROR);
   }
 
-/***********************************************************************
- * Geometry assessment
- ***********************************************************************/
-
+  /* Geometry assessment */
   #ifdef SHORTCUT
   fprintf(STDCTR, "(sr_evalrf %d) SHORTCUT:", n_eval);
   #endif
@@ -187,10 +172,7 @@ real sr_evalrf(real *par)
     return(rfac_max + rgeo);
   }
 
-/***********************************************************************
- * Calculate IV curves
- ***********************************************************************/
-
+  /* Calculate IV curves */
   n_calc ++;
   sr_mkinp(par_file, par, n_calc);
 
@@ -219,10 +201,7 @@ real sr_evalrf(real *par)
           sr_project,                  /* project name for results file */
           sr_project);                 /* project name for output file */
        
-  #ifdef CONTROL
-  fprintf(STDCTR,"(sr_evalrf %d): calculate IV curves:\n %s\n",
-          n_eval, line_buffer);
-  #endif
+  CONTROL_MSG(CONTROL, "[%d] - calculate IV curves:\n %s\n", n_eval, line_buffer);
 
   if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
 
@@ -243,10 +222,7 @@ real sr_evalrf(real *par)
          RFAC_SHIFT_STEP,         /* step of shift */
          sr_project);             /* project name for output file */
 
-  #ifdef CONTROL
-  fprintf(STDCTR,"(sr_evalrf %d): calculate R factor:\n %s\n",
-          n_eval, line_buffer);
-  #endif
+  CONTROL_MSG(CONTROL, "[%d] - calculate R factor:\n %s\n", n_eval, line_buffer);
 
   if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
 
@@ -256,14 +232,8 @@ real sr_evalrf(real *par)
 
   while( fgets(line_buffer, STRSZ, io_stream) != NULL)
   {
-    if(
-    #ifdef REAL_IS_DOUBLE
-       (iaux = sscanf(line_buffer, "%lf %lf %lf", &rfac, &faux, &shift) )
-    #endif
-    #ifdef REAL_IS_FLOAT
-       (iaux = sscanf(line_buffer, "%f %f %f",    &rfac, &faux, &shift) )
-    #endif
-       == 3) break;
+    if( (iaux = sscanf(line_buffer, "%" REAL_FMT "f %" REAL_FMT "f %"
+                       REAL_FMT "f", &rfac, &faux, &shift) ) == 3) break;
   }
 
   /* Stop with error message if reading error */
@@ -282,10 +252,7 @@ real sr_evalrf(real *par)
   fprintf(STDCTR, " rfac = %.4f\n", rfac);
   #endif
 
-/***********************************************************************
- * If this is the minimum R factor copy *.res file to *.rmin
- ***********************************************************************/
-
+  /* If this is the minimum R factor copy *.res file to *.rmin */
   if(rfac < rfac_min)
   {
     /* removed dependence on cp system call */
@@ -330,10 +297,7 @@ real sr_evalrf(real *par)
 
   #endif /* SHORTCUT */
 
-/***********************************************************************
- * Write parameters, R factor and time to *.log file
- ***********************************************************************/
-
+  /* Write parameters, R factor and time to *.log file */
   log_stream = fopen(log_file, "a");
 
   fprintf(log_stream, "#%3d par:", n_eval);
@@ -351,7 +315,6 @@ real sr_evalrf(real *par)
     fprintf(log_stream, " phi:%.2f",  (par[sr_search->i_par_phi  ]*FAC_PHI)  );
   }
 
-
   fprintf(log_stream, " rf:%.4f sh: %.1f rg:%.4f rt:%.4f ",
           rfac, shift, rgeo, rfac + rgeo);
 
@@ -361,9 +324,7 @@ real sr_evalrf(real *par)
 
   fclose(log_stream);
 
-/***********************************************************************
- * Return R factor
- ***********************************************************************/
+  /* Return R factor */
   return (rfac + rgeo);
 }
 

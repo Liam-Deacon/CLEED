@@ -39,15 +39,8 @@ mat matread(mat M, FILE *file)
   /* Check the input matrix */
   if( (check = matcheck(M)) < 0)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matread): input matrix has improper type\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("input matrix has improper type\n");
+    ERROR_RETURN(NULL);
   }
   else
   {
@@ -62,43 +55,22 @@ mat matread(mat M, FILE *file)
   /* First read matrix header */
   if( fread(M, sizeof(struct mat_str), 1, file) != 1 )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matread): input error while reading header\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("input error while reading header\n");
+    ERROR_RETURN(NULL);
   }
   tot_size = sizeof(struct mat_str);
    
   if( M->mag_no != MATRIX )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matread): input error (magic number)\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("input error (magic number)\n");
+    ERROR_RETURN(NULL);
   }
  
   /* Diagonal Matrix: Not implemented */
   if (M->mat_type == MAT_DIAG)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matread): diagonal matrix not implemented.\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("diagonal matrix not implemented.\n");
+    ERROR_RETURN(NULL);
   } /* if diagonal */
   else /* Other matrix types: */
   {
@@ -108,31 +80,16 @@ mat matread(mat M, FILE *file)
 
     if( (M->rel = (real *) malloc(size)) == NULL)
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (matread): allocation error (reals)\n");
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(NULL);
-      #endif
+      ERROR_MSG("allocation error (reals)\n");
+      ERROR_RETURN(NULL);
     }
 
     M->iel = NULL;          /* (for now, will be changed for complex M) */
 
     if( fread(M->rel+1, sizeof(real), n_el, file) != n_el )
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (matread): "
-              "input error while reading reals\n");
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(NULL);
-      #endif
+      ERROR_MSG("input error while reading reals\n");
+      ERROR_RETURN(NULL);
     }
     tot_size += n_el * sizeof(real);
 
@@ -142,38 +99,21 @@ mat matread(mat M, FILE *file)
 
       if( (M->iel = (real *) malloc(size)) == NULL)
       {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matread): allocation error (imag.)\n");
-        #endif
-
-        #ifdef EXIT_ON_ERROR
-        exit(1);
-        #else
-        return(NULL);
-        #endif
+        ERROR_MSG("allocation error (imag.)\n");
+        ERROR_RETURN(NULL);
       }
 
       if( fread(M->iel+1, sizeof(real), n_el, file) != n_el )
       {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (matread): "
-                "input error while reading imag. part\n");
-        #endif
-
-        #ifdef EXIT_ON_ERROR
-        exit(1);
-        #else
-        return(NULL);
-        #endif
+        ERROR_MSG("input error while reading imag. part\n");
+        ERROR_RETURN(NULL);
       }
       tot_size += n_el * sizeof(real);
     } /* NUM_COMPLEX */
 
   } /* else */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(matread): %d byte read\n", tot_size);
-  #endif
+  CONTROL_MSG(CONTROL, "%d byte read\n", tot_size);
 
   return(M);
 } /* end of function matread */

@@ -29,9 +29,9 @@ void Index::setK(double k)
   index.k = k;
 }
 
-double Index::getH()
+inline double Index::getH()
 {
-  return Index::index.h;
+  ;
 }
 
 double Index::getK()

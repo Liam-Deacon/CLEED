@@ -4813,17 +4813,17 @@ lapack_int LAPACKE_zgbsvxx_work( int matrix_order, char fact, char trans,
                                  double* params, lapack_complex_double* work,
                                  double* rwork );
 
-lapack_int LAPACKE_sgbtrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_sgbtrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku, float* ab,
                                 lapack_int ldab, lapack_int* ipiv );
-lapack_int LAPACKE_dgbtrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_dgbtrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku, double* ab,
                                 lapack_int ldab, lapack_int* ipiv );
-lapack_int LAPACKE_cgbtrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgbtrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku,
                                 lapack_complex_float* ab, lapack_int ldab,
                                 lapack_int* ipiv );
-lapack_int LAPACKE_zgbtrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_zgbtrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku,
                                 lapack_complex_double* ab, lapack_int ldab,
                                 lapack_int* ipiv );
@@ -5287,17 +5287,17 @@ lapack_int LAPACKE_zgeqr2_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_double* tau,
                                 lapack_complex_double* work );
 
-lapack_int LAPACKE_sgeqrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_sgeqrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 float* a, lapack_int lda, float* tau,
                                 float* work, lapack_int lwork );
-lapack_int LAPACKE_dgeqrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_dgeqrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 double* a, lapack_int lda, double* tau,
                                 double* work, lapack_int lwork );
-lapack_int LAPACKE_cgeqrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgeqrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_complex_float* tau,
                                 lapack_complex_float* work, lapack_int lwork );
-lapack_int LAPACKE_zgeqrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_zgeqrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_complex_double* tau,
                                 lapack_complex_double* work, lapack_int lwork );
@@ -5593,14 +5593,14 @@ lapack_int LAPACKE_zgetf2_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_int* ipiv );
 
-lapack_int LAPACKE_sgetrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_sgetrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 float* a, lapack_int lda, lapack_int* ipiv );
-lapack_int LAPACKE_dgetrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_dgetrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 double* a, lapack_int lda, lapack_int* ipiv );
-lapack_int LAPACKE_cgetrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgetrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_int* ipiv );
-lapack_int LAPACKE_zgetrf_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_zgetrfac_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_int* ipiv );
 
@@ -5909,21 +5909,21 @@ lapack_int LAPACKE_zgglse_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_double* x,
                                 lapack_complex_double* work, lapack_int lwork );
 
-lapack_int LAPACKE_sggqrf_work( int matrix_order, lapack_int n, lapack_int m,
+lapack_int LAPACKE_sggqrfac_work( int matrix_order, lapack_int n, lapack_int m,
                                 lapack_int p, float* a, lapack_int lda,
                                 float* taua, float* b, lapack_int ldb,
                                 float* taub, float* work, lapack_int lwork );
-lapack_int LAPACKE_dggqrf_work( int matrix_order, lapack_int n, lapack_int m,
+lapack_int LAPACKE_dggqrfac_work( int matrix_order, lapack_int n, lapack_int m,
                                 lapack_int p, double* a, lapack_int lda,
                                 double* taua, double* b, lapack_int ldb,
                                 double* taub, double* work, lapack_int lwork );
-lapack_int LAPACKE_cggqrf_work( int matrix_order, lapack_int n, lapack_int m,
+lapack_int LAPACKE_cggqrfac_work( int matrix_order, lapack_int n, lapack_int m,
                                 lapack_int p, lapack_complex_float* a,
                                 lapack_int lda, lapack_complex_float* taua,
                                 lapack_complex_float* b, lapack_int ldb,
                                 lapack_complex_float* taub,
                                 lapack_complex_float* work, lapack_int lwork );
-lapack_int LAPACKE_zggqrf_work( int matrix_order, lapack_int n, lapack_int m,
+lapack_int LAPACKE_zggqrfac_work( int matrix_order, lapack_int n, lapack_int m,
                                 lapack_int p, lapack_complex_double* a,
                                 lapack_int lda, lapack_complex_double* taua,
                                 lapack_complex_double* b, lapack_int ldb,
@@ -6162,15 +6162,15 @@ lapack_int LAPACKE_zgtsvx_work( int matrix_order, char fact, char trans,
                                 double* rcond, double* ferr, double* berr,
                                 lapack_complex_double* work, double* rwork );
 
-lapack_int LAPACKE_sgttrf_work( lapack_int n, float* dl, float* d, float* du,
+lapack_int LAPACKE_sgttrfac_work( lapack_int n, float* dl, float* d, float* du,
                                 float* du2, lapack_int* ipiv );
-lapack_int LAPACKE_dgttrf_work( lapack_int n, double* dl, double* d, double* du,
+lapack_int LAPACKE_dgttrfac_work( lapack_int n, double* dl, double* d, double* du,
                                 double* du2, lapack_int* ipiv );
-lapack_int LAPACKE_cgttrf_work( lapack_int n, lapack_complex_float* dl,
+lapack_int LAPACKE_cgttrfac_work( lapack_int n, lapack_complex_float* dl,
                                 lapack_complex_float* d,
                                 lapack_complex_float* du,
                                 lapack_complex_float* du2, lapack_int* ipiv );
-lapack_int LAPACKE_zgttrf_work( lapack_int n, lapack_complex_double* dl,
+lapack_int LAPACKE_zgttrfac_work( lapack_int n, lapack_complex_double* dl,
                                 lapack_complex_double* d,
                                 lapack_complex_double* du,
                                 lapack_complex_double* du2, lapack_int* ipiv );
@@ -6585,11 +6585,11 @@ lapack_int LAPACKE_zhetrd_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* tau,
                                 lapack_complex_double* work, lapack_int lwork );
 
-lapack_int LAPACKE_chetrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_chetrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_int* ipiv, lapack_complex_float* work,
                                 lapack_int lwork );
-lapack_int LAPACKE_zhetrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zhetrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_int* ipiv, lapack_complex_double* work,
                                 lapack_int lwork );
@@ -6816,9 +6816,9 @@ lapack_int LAPACKE_zhptrd_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* ap, double* d, double* e,
                                 lapack_complex_double* tau );
 
-lapack_int LAPACKE_chptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_chptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_float* ap, lapack_int* ipiv );
-lapack_int LAPACKE_zhptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zhptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* ap, lapack_int* ipiv );
 
 lapack_int LAPACKE_chptri_work( int matrix_order, char uplo, lapack_int n,
@@ -7519,14 +7519,14 @@ lapack_int LAPACKE_zpbsvx_work( int matrix_order, char fact, char uplo,
                                 double* rcond, double* ferr, double* berr,
                                 lapack_complex_double* work, double* rwork );
 
-lapack_int LAPACKE_spbtrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_spbtrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int kd, float* ab, lapack_int ldab );
-lapack_int LAPACKE_dpbtrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dpbtrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int kd, double* ab, lapack_int ldab );
-lapack_int LAPACKE_cpbtrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_cpbtrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int kd, lapack_complex_float* ab,
                                 lapack_int ldab );
-lapack_int LAPACKE_zpbtrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zpbtrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int kd, lapack_complex_double* ab,
                                 lapack_int ldab );
 
@@ -7547,13 +7547,13 @@ lapack_int LAPACKE_zpbtrs_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int ldab, lapack_complex_double* b,
                                 lapack_int ldb );
 
-lapack_int LAPACKE_spftrf_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_spftrfac_work( int matrix_order, char transr, char uplo,
                                 lapack_int n, float* a );
-lapack_int LAPACKE_dpftrf_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_dpftrfac_work( int matrix_order, char transr, char uplo,
                                 lapack_int n, double* a );
-lapack_int LAPACKE_cpftrf_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_cpftrfac_work( int matrix_order, char transr, char uplo,
                                 lapack_int n, lapack_complex_float* a );
-lapack_int LAPACKE_zpftrf_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_zpftrfac_work( int matrix_order, char transr, char uplo,
                                 lapack_int n, lapack_complex_double* a );
 
 lapack_int LAPACKE_spftri_work( int matrix_order, char transr, char uplo,
@@ -7799,13 +7799,13 @@ lapack_int LAPACKE_zposvxx_work( int matrix_order, char fact, char uplo,
                                  double* params, lapack_complex_double* work,
                                  double* rwork );
 
-lapack_int LAPACKE_spotrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_spotrfac_work( int matrix_order, char uplo, lapack_int n,
                                 float* a, lapack_int lda );
-lapack_int LAPACKE_dpotrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dpotrfac_work( int matrix_order, char uplo, lapack_int n,
                                 double* a, lapack_int lda );
-lapack_int LAPACKE_cpotrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_cpotrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda );
-lapack_int LAPACKE_zpotrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zpotrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda );
 
 lapack_int LAPACKE_spotri_work( int matrix_order, char uplo, lapack_int n,
@@ -7932,13 +7932,13 @@ lapack_int LAPACKE_zppsvx_work( int matrix_order, char fact, char uplo,
                                 double* berr, lapack_complex_double* work,
                                 double* rwork );
 
-lapack_int LAPACKE_spptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_spptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 float* ap );
-lapack_int LAPACKE_dpptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dpptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 double* ap );
-lapack_int LAPACKE_cpptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_cpptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_float* ap );
-lapack_int LAPACKE_zpptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zpptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* ap );
 
 lapack_int LAPACKE_spptri_work( int matrix_order, char uplo, lapack_int n,
@@ -7964,17 +7964,17 @@ lapack_int LAPACKE_zpptrs_work( int matrix_order, char uplo, lapack_int n,
                                 const lapack_complex_double* ap,
                                 lapack_complex_double* b, lapack_int ldb );
 
-lapack_int LAPACKE_spstrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_spstrfac_work( int matrix_order, char uplo, lapack_int n,
                                 float* a, lapack_int lda, lapack_int* piv,
                                 lapack_int* rank, float tol, float* work );
-lapack_int LAPACKE_dpstrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dpstrfac_work( int matrix_order, char uplo, lapack_int n,
                                 double* a, lapack_int lda, lapack_int* piv,
                                 lapack_int* rank, double tol, double* work );
-lapack_int LAPACKE_cpstrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_cpstrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_int* piv, lapack_int* rank, float tol,
                                 float* work );
-lapack_int LAPACKE_zpstrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zpstrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_int* piv, lapack_int* rank, double tol,
                                 double* work );
@@ -8073,11 +8073,11 @@ lapack_int LAPACKE_zptsvx_work( int matrix_order, char fact, lapack_int n,
                                 double* rcond, double* ferr, double* berr,
                                 lapack_complex_double* work, double* rwork );
 
-lapack_int LAPACKE_spttrf_work( lapack_int n, float* d, float* e );
-lapack_int LAPACKE_dpttrf_work( lapack_int n, double* d, double* e );
-lapack_int LAPACKE_cpttrf_work( lapack_int n, float* d,
+lapack_int LAPACKE_spttrfac_work( lapack_int n, float* d, float* e );
+lapack_int LAPACKE_dpttrfac_work( lapack_int n, double* d, double* e );
+lapack_int LAPACKE_cpttrfac_work( lapack_int n, float* d,
                                 lapack_complex_float* e );
-lapack_int LAPACKE_zpttrf_work( lapack_int n, double* d,
+lapack_int LAPACKE_zpttrfac_work( lapack_int n, double* d,
                                 lapack_complex_double* e );
 
 lapack_int LAPACKE_spttrs_work( int matrix_order, lapack_int n, lapack_int nrhs,
@@ -8368,13 +8368,13 @@ lapack_int LAPACKE_ssptrd_work( int matrix_order, char uplo, lapack_int n,
 lapack_int LAPACKE_dsptrd_work( int matrix_order, char uplo, lapack_int n,
                                 double* ap, double* d, double* e, double* tau );
 
-lapack_int LAPACKE_ssptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_ssptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 float* ap, lapack_int* ipiv );
-lapack_int LAPACKE_dsptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dsptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 double* ap, lapack_int* ipiv );
-lapack_int LAPACKE_csptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_csptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_float* ap, lapack_int* ipiv );
-lapack_int LAPACKE_zsptrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zsptrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* ap, lapack_int* ipiv );
 
 lapack_int LAPACKE_ssptri_work( int matrix_order, char uplo, lapack_int n,
@@ -8550,8 +8550,8 @@ lapack_int LAPACKE_zsteqr_work( int matrix_order, char compz, lapack_int n,
                                 double* d, double* e, lapack_complex_double* z,
                                 lapack_int ldz, double* work );
 
-lapack_int LAPACKE_ssterf_work( lapack_int n, float* d, float* e );
-lapack_int LAPACKE_dsterf_work( lapack_int n, double* d, double* e );
+lapack_int LAPACKE_ssterfac_work( lapack_int n, float* d, float* e );
+lapack_int LAPACKE_dsterfac_work( lapack_int n, double* d, double* e );
 
 lapack_int LAPACKE_sstev_work( int matrix_order, char jobz, lapack_int n,
                                float* d, float* e, float* z, lapack_int ldz,
@@ -8928,17 +8928,17 @@ lapack_int LAPACKE_dsytrd_work( int matrix_order, char uplo, lapack_int n,
                                 double* a, lapack_int lda, double* d, double* e,
                                 double* tau, double* work, lapack_int lwork );
 
-lapack_int LAPACKE_ssytrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_ssytrfac_work( int matrix_order, char uplo, lapack_int n,
                                 float* a, lapack_int lda, lapack_int* ipiv,
                                 float* work, lapack_int lwork );
-lapack_int LAPACKE_dsytrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dsytrfac_work( int matrix_order, char uplo, lapack_int n,
                                 double* a, lapack_int lda, lapack_int* ipiv,
                                 double* work, lapack_int lwork );
-lapack_int LAPACKE_csytrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_csytrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_int* ipiv, lapack_complex_float* work,
                                 lapack_int lwork );
-lapack_int LAPACKE_zsytrf_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zsytrfac_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_int* ipiv, lapack_complex_double* work,
                                 lapack_int lwork );

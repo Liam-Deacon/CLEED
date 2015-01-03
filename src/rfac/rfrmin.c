@@ -14,7 +14,7 @@
  ********************************************************************/
 
 /*! \file
- *  \brief Implementation file for rf_rmin() function.
+ *  \brief Implementation file for rfac_rmin() function.
  *
  *  Calculate R factor and find minimum with respect to shift
  *
@@ -42,13 +42,13 @@
  *  - s_ini, s_fin, s_step,
  *  - r_type.
  *
- * \param p_r_min pointer to
- * \param p_s_min pointer to
- * \param p_e_range pointer to
+ * \param[out] p_r_min pointer to minimum R Factor.
+ * \param[out] p_s_min pointer to minimum energy shift.
+ * \param[out] p_e_range pointer to energy range value.
  *
  * \return minimum R factor, if successful.
  */
-real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
+real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
              real *p_r_min, real *p_s_min, real *p_e_range)
 {
 
@@ -73,7 +73,7 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
   rfac = 0.;
   n_leng = 0;
 
-  for(n_list = 0; iv_cur[n_list].group_id != I_END_OF_LIST; n_list ++)
+  for(n_list = 0; iv_cur[n_list].group_id != END_OF_GROUP_ID; n_list ++)
   {
     #ifdef SHIFT_DE
     faux = ((iv_cur+n_list)->experimental->data +
@@ -90,17 +90,15 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
     #endif
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_rmin): start of function, n_list = %d, n_leng = %d\n",
-          n_list, n_leng);
-  #endif
+  CONTROL_MSG(CONTROL, "start of function, n_list = %d, n_leng = %d\n",
+              n_list, n_leng);
 
   eng   = (real *)malloc( n_leng * sizeof(real)*13);
   e_int = (real *)malloc( n_leng * sizeof(real)*13);
   t_int = (real *)malloc( n_leng * sizeof(real)*13);
 
 /********************************************************************
- * Scan through shift and find min. R factor
+ * Scan through shift and find minimum R factor
  ********************************************************************/
 
   *p_r_min = 100.;
@@ -115,13 +113,13 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
     {
 
      #ifdef SHIFT_DE
-     n_leng = rf_mklide(eng, e_int, t_int, args->s_step, shift,
+     n_leng = rfac_mklide(eng, e_int, t_int, args->s_step, shift,
               (iv_cur+i_list)->experimental->data,
               (iv_cur+i_list)->experimental->n_eng,
               (iv_cur+i_list)->theory->data,
               (iv_cur+i_list)->theory->n_eng);
      #else
-     n_leng = rf_mklist(eng, e_int, t_int, args->s_step, shift,
+     n_leng = rfac_mklist(eng, e_int, t_int, args->s_step, shift,
               (iv_cur+i_list)->experimental->data,
               (iv_cur+i_list)->experimental->n_eng,
               (iv_cur+i_list)->theory->data,
@@ -134,51 +132,37 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
        norm += faux *= (iv_cur+i_list)->weight;
 
        if(args->r_type == RP_FACTOR)
-         faux *= rf_rp(eng, e_int, t_int, args->vi);
+         faux *= rfac_rp(eng, e_int, t_int, args->vi);
        else if (args->r_type == R1_FACTOR)
-         faux *= rf_r1(eng, e_int, t_int);
+         faux *= rfac_r1(eng, e_int, t_int);
        else if (args->r_type == R2_FACTOR)
-         faux *= rf_r2(eng, e_int, t_int);
+         faux *= rfac_r2(eng, e_int, t_int);
        else if (args->r_type == RB_FACTOR)
-         faux *= rf_rb(eng, e_int, t_int);
+         faux *= rfac_rb(eng, e_int, t_int);
        else 
        {
-
-         #ifdef ERROR
-         fprintf(STDERR, "*** error (cr_rmin): "
-                 "invalid R factor selection %d\n", args->r_type);
-         #endif
+         ERROR_MSG("invalid R factor selection %d\n", args->r_type);
          exit(1);
        }
        rfac += faux;
      }
-
-     #ifdef WARNING
      else
-       fprintf(STDWAR, "* warning (cr_rmin): No overlap in IV curve No."
-               "%d for shift %.1f eV\n", i_list, shift);
-     #endif
+       WARNING_MSG("No overlap in IV curve No.%d for shift %.1f eV\n",
+                   i_list, shift);
 
    }  /* for i_list */
 
    if(IS_EQUAL_REAL(norm, 0.))
    {
-
-     #ifdef ERROR
-     fprintf(STDERR, "*** error (cr_rmin): "
-             "no overlap for shift %.1f eV\n", shift);
-     #endif
+     ERROR_MSG("no overlap for shift %.1f eV\n", shift);
      exit(1);
    }
    else
    {
      rfac /= norm;
 
-
-     #ifdef CONTROL
-     fprintf(STDCTR,"(cr_rmin): shift = %4.1f, rfac = %.6f range = %.1f\n",
-             shift, rfac, norm);
-     #endif
+     CONTROL_MSG(CONTROL, "shift = %4.1f, rfac = %.6f range = %.1f\n",
+                 shift, rfac, norm);
 
      if(rfac < *p_r_min)
      { 
@@ -189,28 +173,25 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
    }  /* else (overlap) */
  }  /* for shift ... */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_rmin): r_min = %.6f (shift = %4.1f)\n",
-         *p_r_min, *p_s_min);
-  #endif
+  CONTROL_MSG(CONTROL, "r_min = %.6f (shift = %4.1f)\n", *p_r_min, *p_s_min);
 
 /********************************************************************
  * Write IV curves with best agreement to files
  ********************************************************************/
  
-  if(args->iv_out == 1)
+  if(args->iv_file != NULL)
   {
     for(i_list = 0; i_list < n_list; i_list ++)
     {
 
        #ifdef SHIFT_DE
-       n_leng = rf_mklide(eng, e_int, t_int, args->s_step, *p_s_min,
+       n_leng = rfac_mklide(eng, e_int, t_int, args->s_step, *p_s_min,
               (iv_cur+i_list)->experimental->data,
               (iv_cur+i_list)->experimental->n_eng,
               (iv_cur+i_list)->theory->data,
               (iv_cur+i_list)->theory->n_eng);
        #else
-       n_leng = rf_mklist(eng, e_int, t_int, args->s_step, *p_s_min,
+       n_leng = rfac_mklist(eng, e_int, t_int, args->s_step, *p_s_min,
                  (iv_cur+i_list)->experimental->data,
                  (iv_cur+i_list)->experimental->n_eng,
                  (iv_cur+i_list)->theory->data,
@@ -227,28 +208,28 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
          {
            case R1_FACTOR:
            {
-             rfac = rf_r1(eng, e_int, t_int);
+             rfac = rfac_r1(eng, e_int, t_int);
              strcpy(r_name, "R1");
              break;
            }
 
            case R2_FACTOR:
            {
-             rfac = rf_r2(eng, e_int, t_int);
+             rfac = rfac_r2(eng, e_int, t_int);
              strcpy(r_name, "R2");
              break;
            }
 
            case RB_FACTOR:
            {
-             rfac = rf_rb(eng, e_int, t_int);
+             rfac = rfac_rb(eng, e_int, t_int);
              strcpy(r_name,"Rb");
              break;
            }
 
            case RP_FACTOR:
            {
-             rfac = rf_rp(eng, e_int, t_int, args->vi);
+             rfac = rfac_rp(eng, e_int, t_int, args->vi);
              strcpy(r_name, "Rp");
              break;
            }
@@ -264,13 +245,12 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
            norm += t_int[i_leng];
          }
 
-         if(i_list < 9) sprintf(linebuffer,"%s.0%dt",args->iv_file, i_list+1);
-         else           sprintf(linebuffer,"%s.%dt", args->iv_file, i_list+1);
-         out_stream = fopen(linebuffer,"w");
+         if(i_list < 9) sprintf(linebuffer, "%s.0%dt", args->iv_file, i_list+1);
+         else           sprintf(linebuffer, "%s.%dt" , args->iv_file, i_list+1);
 
-         #ifdef CONTROL
-         fprintf(STDCTR, "(cr_rmin): write to file %s\n", linebuffer);
-         #endif
+         out_stream = fopen(linebuffer, "w");
+
+         CONTROL_MSG(CONTROL, "write to file '%s'\n", linebuffer);
 
          fprintf(out_stream, "# (%.3f, %.3f) - theor. data\n",
            (iv_cur+i_list)->spot_id.index1, (iv_cur+i_list)->spot_id.index2);
@@ -296,13 +276,11 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
 
          norm /= faux;
 
-         if(i_list < 9) sprintf(linebuffer, "%s.0%de",args->iv_file, i_list+1);
-         else           sprintf(linebuffer, "%s.%de", args->iv_file, i_list+1);
+         if(i_list < 9) sprintf(linebuffer, "%s.0%de", args->iv_file, i_list+1);
+         else           sprintf(linebuffer, "%s.%de",  args->iv_file, i_list+1);
          out_stream = fopen(linebuffer, "w");
 
-         #ifdef CONTROL
-         fprintf(STDCTR, "(cr_rmin): write to file %s\n", linebuffer);
-         #endif
+         CONTROL_MSG(CONTROL, "write to file '%s'\n", linebuffer);
 
          fprintf(out_stream, "# (%.3f, %.3f) - expt. data\n",
            (iv_cur+i_list)->spot_id.index1, (iv_cur+i_list)->spot_id.index2);
@@ -314,25 +292,22 @@ real rf_rmin(rfac_ivcur *iv_cur, rfac_args *args,
 
          for(i_leng = 0; i_leng < n_leng; i_leng++)
          {
-           fprintf(out_stream,"%f %e\n", eng[i_leng], e_int[i_leng]*norm);
+           fprintf(out_stream, "%f %e\n", eng[i_leng], e_int[i_leng]*norm);
          }
        
-       fclose(out_stream);
+        fclose(out_stream);
 
-     }  /* if n_leng > 1 */
+      }  /* if n_leng > 1 */
 
-   }  /* for i_list */
+    }  /* for i_list */
 
- }  /* if args->iv_out */
+  }  /* if args->iv_out */
  
 
-/********************************************************************
- * Free arrays
- ********************************************************************/
-
+  /* Free arrays */
   free(eng);
   free(e_int);
   free(t_int);
 
   return (*p_r_min);
-}  /* end of function rf_rmin */
+}  /* end of function rfac_rmin */

@@ -31,16 +31,8 @@
 
 #include "csearch.h"
 
-#ifndef FAC_THETA
-#define FAC_THETA 5.
-#endif
-
-#ifndef FAC_PHI
-#define FAC_PHI   50.
-#endif
-
-extern struct sratom_str *sr_atoms;
-extern struct search_str *sr_search;
+extern search_atom *sr_atoms;
+extern search *sr_search;
 
 char line_buffer[STRSZ];
 

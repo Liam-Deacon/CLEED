@@ -24,6 +24,7 @@
 #include "basis_vector.h"
 #include "matrix_2x2.h"
 #include "spots.h"
+#include "gh_stddef.h"
 #include <stdbool.h>
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */

@@ -175,7 +175,7 @@ mat ms_partinv(mat, const mat, size_t, size_t);
 
 /* Green's function (lmstmatii/ij/ijsym.c, lmsgmatijsym.c) */
 mat leed_ms_tmat_ii(mat, mat, mat, size_t);
-mat leed_ms_tmat_nd_ii(mat, mat, mat, int);
+mat leed_ms_tmat_nd_ii(mat, const mat, mat, size_t);
 mat leed_ms_tmat_ij(mat , mat, mat, size_t);
 mat leed_ms_tmat_ij_sym(mat, mat, mat, int, int);
 

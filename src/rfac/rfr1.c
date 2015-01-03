@@ -14,7 +14,7 @@
  ********************************************************************/
 
 /*! \file
- *  \brief Implementation of R1 calculation using rf_r1() function.
+ *  \brief Implementation of R1 calculation using rfac_r1() function.
  *
  *  Calculate R1 factor.
  */
@@ -47,11 +47,11 @@
  * \retval R1-factor, if successful.
  * \retval F_FAIL, if failed.
  */
-real rf_r1(const real *eng, const real *e_int, const real *t_int)
+real rfac_r1(const real *eng, const real *e_int, const real *t_int)
 {
   int i_eng, n_eng;
   real exp_sum, the_sum;
-  real rf_sum, norm_sum;
+  real rfac_sum, norm_sum;
   real norm_te;
 
   /* calculate integrals */
@@ -70,13 +70,13 @@ real rf_r1(const real *eng, const real *e_int, const real *t_int)
   the_sum = the_sum / (real)n_eng;         /* average theor. intensity */
 
   /* calculate R-factor */
-  rf_sum = 0.;
+  rfac_sum = 0.;
   norm_sum = 0.;
   for(i_eng = 0; i_eng < n_eng; i_eng ++)
   {
-    rf_sum   += R_fabs( t_int[i_eng] - norm_te * e_int[i_eng] );
+    rfac_sum   += R_fabs( t_int[i_eng] - norm_te * e_int[i_eng] );
     norm_sum += R_fabs( t_int[i_eng] - the_sum );
   }
 
-  return (rf_sum/norm_sum);
+  return (rfac_sum/norm_sum);
 }

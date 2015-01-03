@@ -41,8 +41,8 @@
                                       * smaller than the sum of their min.
                                       * radii */
 
-extern struct sratom_str *sr_atoms;
-extern struct search_str *sr_search;
+extern struct search_atom *sr_atoms;
+extern struct search *sr_search;
 extern char *sr_project;
 
 /*!

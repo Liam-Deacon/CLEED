@@ -40,24 +40,6 @@ GH/30.12.04 - calculate original and mirrored geometry at the same time and aver
 #include "csearch.h"
 #include "copy_file.h"
 
-/*
-  Define the following parameters if not yet defined in "search_def.h"
-*/
-#ifndef SR_EVAL_DEF
-#define RFAC_TYP    "rp"
-#define RFAC_SHIFT_STEP   0.5
-#define RFAC_SHIFT_RANGE  5.
-#endif
-
-#ifndef FAC_THETA
-#define FAC_THETA 5.
-#endif
-
-#ifndef FAC_PHI
-#define FAC_PHI   50.
-#endif
-
-
 #define SYS_ERROR_TO_LOG(x)   log_stream = fopen(log_file, "a"); \
      fprintf(log_stream,"*** system call \"%s\" failed ***", x); \
      fclose(log_stream); exit(1)
@@ -66,11 +48,11 @@ GH/30.12.04 - calculate original and mirrored geometry at the same time and aver
      fprintf(log_stream,"*** copying \"%s\" to \"%s\" failed ***", x, y); \
      fclose(log_stream); exit(1)
      
-extern struct sratom_str *sr_atoms;
-extern struct search_str *sr_search;
+extern search_atom *sr_atoms;
+extern search *sr_search;
 extern char *sr_project;
 
-real sr_evalrf_mir(real *par)
+real sr_evalrfac_mir(real *par)
 
 /***********************************************************************
 
@@ -104,99 +86,80 @@ real sr_evalrf_mir(real *par)
   char *old_path;
   char *new_path;
 
-/***********************************************************************
- * Set initial values
- ***********************************************************************/
-
+  /* Set initial values */
   n_eval ++;
   sprintf(log_file, "%s.log", sr_project);
   sprintf(par_file, "%s.par", sr_project);
 
-/***********************************************************************
- * Check whether environment variables CSEARCH_LEED and CSEARCH_RFAC exist
- ***********************************************************************/
-
+  /* Check whether environment variables CSEARCH_LEED and CSEARCH_RFAC exist */
   if( (getenv("CSEARCH_LEED") == NULL) || (getenv("CSEARCH_RFAC") == NULL) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (sr_evalrf):"
-           " CSEARCH_LEED or CSEARCH_RFAC not defined\n");
-    #endif
+    ERROR_MSG("CSEARCH_LEED or CSEARCH_RFAC environment variables not defined\n");
     exit(SR_ENVIRONMENT_VARIABLE_ERROR);
   }
 
-/***********************************************************************
- * Geometry assessment
- ***********************************************************************/
-
-  #ifdef SHORTCUT
+  /* Geometry assessment */
+#ifdef SHORTCUT
   fprintf(STDCTR, "(sr_evalrf %d) SHORTCUT:", n_eval);
-  #endif
+#endif
 
   rgeo = sr_ckgeo( par );
 
-  #ifdef CONTROL
-    #ifdef SHORTCUT
+#ifdef CONTROL
+# ifdef SHORTCUT
     fprintf(STDCTR," rgeo = %.4f", rgeo);
-    #else
+# else
     fprintf(STDCTR," rgeo = %.4f\n", rgeo);
-    #endif
-  #endif
+# endif
+#endif
 
-/***********************************************************************
- * Return (rfac_max + rgeo), if the test geometry is seriously
- * outside the limits.
- * Calculate IV curves otherwise.
- ***********************************************************************/
-
- if( (rgeo > 1.) && (n_calc > 1) )
- {
-   #ifdef CONTROL
-     fprintf(STDCTR, " return rfac_max: %.4f rtot = %.4f\n", 
+  /* Return (rfac_max + rgeo), if the test geometry is seriously
+   * outside the limits.
+   * Calculate IV curves otherwise.
+   */
+  if( (rgeo > 1.) && (n_calc > 1) )
+  {
+#ifdef CONTROL
+    fprintf(STDCTR, " return rfac_max: %.4f rtot = %.4f\n",
              rfac_max, rgeo + rfac_max);
-   #endif
-   log_stream = fopen(log_file, "a");
+#endif
+    log_stream = fopen(log_file, "a");
 
-   fprintf(log_stream, "#%3d par:", n_eval);
-   for(i_par=1; i_par <= sr_search->n_par; i_par++)
-     fprintf(log_stream, " %.3f", par[i_par]);
-   fprintf(log_stream, " **rfmax: %.4f** rg:%.4f rt:%.4f ",
-           rfac_max, rgeo, rfac_max + rgeo);
+    fprintf(log_stream, "#%3d par:", n_eval);
+    for(i_par=1; i_par <= sr_search->n_par; i_par++)
+      fprintf(log_stream, " %.3f", par[i_par]);
+    fprintf(log_stream, " **rfmax: %.4f** rg:%.4f rt:%.4f ",
+            rfac_max, rgeo, rfac_max + rgeo);
 
-   t_time = time(NULL);
-   l_time = localtime(&t_time);
-   fprintf(log_stream, " dt: %s", asctime(l_time) );
+    t_time = time(NULL);
+    l_time = localtime(&t_time);
+    fprintf(log_stream, " dt: %s", asctime(l_time) );
 
-   fclose(log_stream);
-   return(rfac_max + rgeo);
- }
+    fclose(log_stream);
+    return(rfac_max + rgeo);
+  }
 
-/***********************************************************************
-  Calculate IV curves
-***********************************************************************/
-
- n_calc ++;
- sr_mkinp_mir(par_file, par, n_calc);
+  /* Calculate IV curves */
+  n_calc ++;
+  sr_mkinp_mir(par_file, par, n_calc);
 
 #ifdef SHORTCUT
+  rfac = 0.;
+  for (i_par = 1; i_par <= sr_search->n_par; i_par ++)
+    rfac += 1 - cos(PI*(par[i_par] -2.3)) + R_fabs(par[i_par] - 2.3);
+  rfac /= sr_search->n_par;
 
- rfac = 0.;
- for (i_par = 1; i_par <= sr_search->n_par; i_par ++)
-   rfac += 1 - cos(PI*(par[i_par] -2.3)) + 
-           R_fabs(par[i_par] - 2.3);
- rfac /= sr_search->n_par;
+# ifdef CONTROL
+  fprintf(STDCTR, " rfac = %.4f rtot = %.4f\n", rfac, rgeo + rfac);
+# endif
 
- #ifdef CONTROL
-   fprintf(STDCTR, " rfac = %.4f rtot = %.4f\n", rfac, rgeo + rfac);
- #endif
-
- rfac_min = MIN(rfac, rfac_min);
- rfac_max = MAX(rfac, rfac_max);
+  rfac_min = MIN(rfac, rfac_min);
+  rfac_max = MAX(rfac, rfac_max);
 
 #else
 
-/* calculate IV curves for the original geometry */
- sprintf(line_buffer, 
+  /* calculate IV curves for the original geometry */
+  sprintf(line_buffer,
          "\"%s\" -b \"%s.bul_org\" -i \"%s\" -o \"%s.res_org\" > \"%s.out\"",
          getenv("CSEARCH_LEED"),      /* LEED program name */
          sr_project,                  /* project name for bulk file */
@@ -204,15 +167,13 @@ real sr_evalrf_mir(real *par)
          sr_project,                  /* project name for results file */
          sr_project);                 /* project name for output file */
 
- #ifdef CONTROL
-   fprintf(STDCTR,"(sr_evalrf %d): calculate IV curves (original):\n %s\n", 
-           n_eval, line_buffer); 
- #endif
+  CONTROL_MSG(CONTROL, "[%d] - calculate IV curves (original):\n %s\n",
+                      n_eval, line_buffer);
 
- if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
+  if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
 
-/* calculate IV curves for the mirrored geometry */
- sprintf(line_buffer,
+  /* calculate IV curves for the mirrored geometry */
+  sprintf(line_buffer,
          "\"%s\" -b \"%s.bul_mir\" -i \"%s\" -o \"%s.res_mxx\" > \"%s.out\"",
          getenv("CSEARCH_LEED"),      /* LEED program name */
          sr_project,                  /* project name for bulk file */
@@ -221,25 +182,23 @@ real sr_evalrf_mir(real *par)
          sr_project);                 /* project name for output file */
 
        
- #ifdef CONTROL
-   fprintf(STDCTR,"(sr_evalrf %d): calculate IV curves (mirror):\n %s\n", 
-           n_eval, line_buffer); 
- #endif
+  CONTROL_MSG(CONTROL, "[%d] - calculate IV curves (mirror):\n %s\n",
+              n_eval, line_buffer);
 
- if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
+  if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
 
-/* change indices in IV curves for the mirrored geometry */
- sprintf(line_buffer,
+  /* change indices in IV curves for the mirrored geometry */
+  sprintf(line_buffer,
          "\"%s/bin/c_miry\" -i \"%s.res_mxx\" -o \"%s.res_mir\" > \"%s.out\"",
          getenv("CLEED_HOME"),
          sr_project,                  /* project name for res file */
          sr_project,                  /* project name for res file */
          sr_project);                 /* project name for out file */
  
- if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
+  if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
 
-/* average IV curves for mirrored and original geometry */
- sprintf(line_buffer,
+  /* average IV curves for mirrored and original geometry */
+  sprintf(line_buffer,
          "\"%s/bin/c_mixtiv\" -t1 \"%s.res_org\" -t2 \"%s.res_mir\" -o \"%s.res\" > \"%s.out\"",
          getenv("CLEED_HOME"),
          sr_project,                  /* project name for res_org file */
@@ -247,15 +206,12 @@ real sr_evalrf_mir(real *par)
          sr_project,                  /* project name for res file */
          sr_project);                 /* project name for out file */
 
- if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
+  if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
 
-/***********************************************************************
-  Calculate R factor
-***********************************************************************/
-
-/* changed for Sim. Ann.: range is independent of previous shift. */
-
- sprintf(line_buffer, 
+  /* Calculate R factor:
+   * changed for Sim. Ann.: range is independent of previous shift.
+   */
+  sprintf(line_buffer,
          "\"%s\" -t \"%s.res\" -c \"%s.ctr\" -r \"%s\" -s %.2f,%.2f,%.2f> \"%s.dum\"", 
          getenv("CSEARCH_RFAC"),      /* R factor program name */
          sr_project,                  /* project name for the. file */
@@ -266,110 +222,94 @@ real sr_evalrf_mir(real *par)
          RFAC_SHIFT_STEP,             /* step of shift */
          sr_project);                 /* project name for output file */
 
- #ifdef CONTROL
-   fprintf(STDCTR,"(sr_evalrf %d): calculate R factor:\n %s\n", 
-           n_eval, line_buffer); 
+  CONTROL_MSG(CONTROL, "[%d] - calculate R factor:\n %s\n", n_eval, line_buffer);
+
+  if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
+
+  /* Read R factor value from output file */
+  sprintf(line_buffer, "%s.dum", sr_project);
+  io_stream = fopen(line_buffer, "r");
+
+  while( fgets(line_buffer, STRSZ, io_stream) != NULL)
+  {
+    if( (iaux = sscanf(line_buffer,
+                       "%" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
+                       &rfac, &faux, &shift) ) == 3) break;
+  }
+
+  /* Stop with error message if reading error */
+  if( iaux != 3)
+  {
+    log_stream = fopen(log_file, "a");
+    fprintf(log_stream, "***error (%s): failed to read output from '%s'\n",
+            __func__, getenv("CSEARCH_RFAC"));
+    fclose(log_stream);
+    exit(1);
+  }
+
+  fclose (io_stream);
+
+# if CONTROL
+  fprintf(STDCTR," rfac = %.4f\n", rfac);
  #endif
 
- if (system (line_buffer)) {SYS_ERROR_TO_LOG(line_buffer);}
-
-/* Read R factor value from output file */
-
- sprintf(line_buffer,"%s.dum", sr_project);
- io_stream = fopen(line_buffer, "r");
-
- while( fgets(line_buffer, STRSZ, io_stream) != NULL)
- {
-   if(
-       #ifdef REAL_IS_DOUBLE
-       (iaux = sscanf(line_buffer, "%lf %lf %lf", &rfac, &faux, &shift) )
-       #endif
-       #ifdef REAL_IS_FLOAT
-       (iaux = sscanf(line_buffer, "%f %f %f",    &rfac, &faux, &shift) )
-       #endif
-       == 3) break;
- }
-
-/* Stop with error message if reading error */
- if( iaux != 3)
- {
-   log_stream = fopen(log_file, "a");
-   fprintf(log_stream, "***error (sr_eval): failed to read output from '%s'\n", 
-           getenv("CSEARCH_RFAC"));
-   fclose(log_stream);
-   exit(1);
- }
-
- fclose (io_stream);
-
- #ifdef CONTROL
-   fprintf(STDCTR," rfac = %.4f\n", rfac);
- #endif
-
-/***********************************************************************
-  If this is the minimum R factor copy *.res file to *.rmin
-***********************************************************************/
-
- if(rfac < rfac_min)
- {
+  /* If this is the minimum R factor copy *.res file to *.rmin */
+  if(rfac < rfac_min)
+  {
  
-   /* remove dependence on 'cp' system call */
-   old_path = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
-   new_path = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
+    /* remove dependence on 'cp' system call */
+    old_path = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
+    new_path = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
    
-   strcpy(old_path, sr_project);
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".res");
-   strcat(new_path, ".rmin");
-   if (copy_file(old_path, new_path)) {COPY_ERROR_TO_LOG(old_path, new_path);}
+    strcpy(old_path, sr_project);
+    strcpy(new_path, sr_project);
+    strcat(old_path, ".res");
+    strcat(new_path, ".rmin");
+    if (copy_file(old_path, new_path)) {COPY_ERROR_TO_LOG(old_path, new_path);}
    
-   strcpy(old_path, sr_project);
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".par");
-   strcat(new_path, ".pmin");
-   if (copy_file(old_path, new_path)) {COPY_ERROR_TO_LOG(old_path, new_path);}
+    strcpy(old_path, sr_project);
+    strcpy(new_path, sr_project);
+    strcat(old_path, ".par");
+    strcat(new_path, ".pmin");
+    if (copy_file(old_path, new_path)) {COPY_ERROR_TO_LOG(old_path, new_path);}
 
-   rfac_min = rfac;
- }
+    rfac_min = rfac;
+  }
 
- rfac_max = MAX(rfac, rfac_max);
+  rfac_max = MAX(rfac, rfac_max);
 #endif /* SHORTCUT */
 
-/***********************************************************************
-  Write parameters, R factor and time to *.log file
-***********************************************************************/
+  /* Write parameters, R factor and time to *.log file */
+  log_stream = fopen(log_file, "a");
 
- log_stream = fopen(log_file, "a");
-
- fprintf(log_stream, "#%3d par:", n_eval);
- for(i_par=1; i_par <= sr_search->n_par_geo; i_par++) 
-   fprintf(log_stream, " %.3f", par[i_par]);
+  fprintf(log_stream, "#%3d par:", n_eval);
+  for(i_par=1; i_par <= sr_search->n_par_geo; i_par++)
+    fprintf(log_stream, " %.3f", par[i_par]);
  
 
-/*Inserted a routine to print the angles in the 
-  log-file for the angle search: 
-*/
- if(sr_search->sr_angle)
+  /* Inserted a routine to print the angles in the log-file for
+   * the angle search: */
+  if(sr_search->sr_angle)
   { 
-  fprintf(log_stream, " theta:%.2f",(par[sr_search->i_par_theta]*FAC_THETA)); 
-  fprintf(log_stream, " phi:%.2f",  (par[sr_search->i_par_phi  ]*FAC_PHI)  ); 
+    fprintf(log_stream, " theta:%.2f",(par[sr_search->i_par_theta]*FAC_THETA));
+    fprintf(log_stream, " phi:%.2f",  (par[sr_search->i_par_phi  ]*FAC_PHI)  );
   }
 
 
- fprintf(log_stream," rf:%.4f sh: %.1f rg:%.4f rt:%.4f ", 
-         rfac, shift, rgeo, rfac + rgeo);
+  fprintf(log_stream, " rf:%.4f sh: %.1f rg:%.4f rt:%.4f ",
+          rfac, shift, rgeo, rfac + rgeo);
 
- t_time = time(NULL);
- l_time = localtime(&t_time);
- fprintf(log_stream," dt: %s", asctime(l_time) );
+  t_time = time(NULL);
+  l_time = localtime(&t_time);
+  fprintf(log_stream, " dt: %s", asctime(l_time) );
 
- fclose(log_stream);
+  fclose(log_stream);
 
-/***********************************************************************
-  Return R factor
-***********************************************************************/
+  /* Clean up and return R factor */
+  free(old_path);
+  free(new_path);
 
- return (rfac + rgeo);
+  return (rfac + rgeo);
 }
 
 

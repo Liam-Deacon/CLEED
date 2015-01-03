@@ -17,7 +17,7 @@
  ********************************************************************/
 
 /*! \file
- *  \brief Implementation of rf_intindl() function.
+ *  \brief Implementation of rfac_intindl() function.
  */
 
 #include <stdio.h>
@@ -35,8 +35,6 @@
 #endif
 
 /*!
- * \fn rf_intindl
- *
  * Interpreter for averaging different beams from theoretical input
  * file.
  *
@@ -55,7 +53,7 @@
  * \param[in] n_beam number of beams
  *
  */
-void rf_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
+void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
 {
   size_t i, j;
 
@@ -70,8 +68,8 @@ void rf_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
 
   i = 0;
   scale = 1.0;
-  test1 = FEND_OF_LIST;
-  test2 = FEND_OF_LIST;
+  test1 = (real) FEND_OF_LIST;
+  test2 = (real) FEND_OF_LIST;
 
   do
   {
@@ -119,20 +117,20 @@ void rf_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
       {
         (beam+j)->f_val1 = scale;
         #ifdef PRINT  /* control output, if required */
-        printf(">rf_intindl: beam:(%5.2f,%5.2f) scale: %5.2f\n",
+        printf(">rfac_intindl: beam:(%5.2f,%5.2f) scale: %5.2f\n",
                (beam+j)->index1, (beam+j)->index2, (beam+j)->f_val1);
         #endif
       }
       else if(test1 > FEND_OF_LIST)
-        printf(">rf_intindl: Could not find (%5.2f,%5.2f) in input file\n",
+        printf(">rfac_intindl: Could not find (%5.2f,%5.2f) in input file\n",
                test1, test2);
       else
-        printf(">rf_intindl: Error in commandline\n");
+        printf(">rfac_intindl: Error in commandline\n");
     }
 
     /* reset scale and test1/2 for next beam */
-    test1 = FEND_OF_LIST;
-    test2 = FEND_OF_LIST;
+    test1 = (real) FEND_OF_LIST;
+    test2 = (real) FEND_OF_LIST;
     scale = 1.0;
 
     while ( (command_line[i] != '+') && (command_line[i] != '-') &&

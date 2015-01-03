@@ -1,29 +1,21 @@
-/****************************************************************************
-                        FTSMOOTH (Georg Held 29.05.95)
+/************************************************************************
+ *                           FTSMOOTH.H
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ ************************************************************************/
 
-Fourier Transformation Smooth
-
-Format of input file must be:
-     <x>  <y>
-Lines beginning with '#' are interpreted as comments.
-
-Changes:
-
-GH/30.05.95 - Creation
-GH/01.06.95 - Start transformation from f(x=0) = 0 and interpolate values
-              from -x_0 to x_0.
-GH/07.06.95 - x_0 = n_x/4 * x_step
-
-LD/18.06.13 - allow trimming of datasets with '--range <arg1> <arg2>'
-
-****************************************************************************/
+#ifndef FTSMOOTH_H
+#define FTSMOOTH_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
-
-#ifndef FTSMOOTH_H
-#define FTSMOOTH_H
 
 /* define version information */
 #define VERSION 1.2
@@ -76,6 +68,7 @@ extern "C" {
 #define OFFSET_Y_TO_VALUE 3   /* offset flag: make f(x) += offset */
 #define OFFSET_Y_TO_ZERO  4   /* offset flag: make ymin = 0 */
 #define INVALID_ARGUMENT_ERROR -1
+
 /* function prototypes */
 int ftsmooth(FILE *out_stream, double *x, double *fx, int n_x, 
         double cutoff, double tailoff, int stdout_flag);
@@ -129,8 +122,8 @@ else                                                            \
   exit(INVALID_ARGUMENT_ERROR);                                 \
 }
 
-#endif /* FTSMOOTH_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* FTSMOOTH_H */

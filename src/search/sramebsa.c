@@ -47,198 +47,174 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
                real ftol, real (*funk)(), int *iter, real temptr)
 {
 
-FILE *ver_stream;
-char ver_file[STRSZ];
+  FILE *ver_stream;
+  char ver_file[STRSZ];
 
-int i,ilo,ihi;
-int j, m, n; 
-int mpts;
-real rtol, sum, swap;
-real yhi, ylo, ynhi, ysave, yt, ytry, *psum;
+  int i,ilo,ihi;
+  int j, m, n;
+  int mpts;
+  real rtol, sum, swap;
+  real yhi, ylo, ynhi, ysave, yt, ytry, *psum;
 
-char *old_file;
-char *new_file;
-time_t result;
+  char *old_file;
+  char *new_file;
+  time_t result;
 
- mpts = ndim+1;
- psum = vector(1,ndim);
- tt = -temptr;
- GET_PSUM
+  mpts = ndim+1;
+  psum = vector(1,ndim);
+  tt = -temptr;
+  GET_PSUM
 
 
-/**************************************************************************
-  LOOP 
-**************************************************************************/
+  /* LOOP */
+  for (;;)
+  {
+    /* Determine which point is highest (worst), next-highest, & lowest (best).
+     *
+     * Whenever we look at a vertex, it gets a random thermal fluctuation. */
+    ilo = 1;
+    ihi = 2;
+    ynhi = ylo = y[1] + tt*fluct(&sa_idum);
+    yhi =        y[2] + tt*fluct(&sa_idum);
 
- for (;;) 
- {
-/**************************************************************************
-  Determine which point is the highest (worst), next-highest, and
-  lowest (best).
+    if( ylo > yhi )
+    {
+      ihi = 1;
+      ilo = 2;
+      ynhi = yhi;
+      yhi  = ylo;
+      ylo  = ynhi;
+    }
 
-  Whenever we look at a vertex, it gets a random thermal fluctuation.
-**************************************************************************/
-   ilo = 1;
-   ihi = 2;
-   ynhi = ylo = y[1] + tt*fluct(&sa_idum);
-   yhi =        y[2] + tt*fluct(&sa_idum);
-   if( ylo > yhi )
-   {
-     ihi = 1;
-     ilo = 2;
-     ynhi = yhi;
-     yhi  = ylo;
-     ylo  = ynhi;
-   }
+    /* Loop over the points in the simplex.
+     * Add thermal fluctuations to each point */
+    for (i=3; i<=mpts; i++)
+    {
+      yt = y[i] + tt*fluct(&sa_idum);
+      if( yt <= ylo )
+      {
+        ilo = i;
+        ylo = yt;
+      }
+      if( yt > yhi )
+      {
+        ynhi = yhi;
+        ihi = i;
+        yhi = yt;
+      }
+      else if( yt > ynhi )
+      {
+        ynhi = yt;
+      }
+    }
 
-/* 
-  Loop over the points in the simplex. add thermal fluctuations to each
-  point.
-*/
-   for (i=3; i<=mpts; i++) 
-   {
-     yt = y[i] + tt*fluct(&sa_idum);
-     if( yt <= ylo ) 
-     {
-       ilo = i;
-       ylo = yt;
-     }
-     if( yt > yhi )
-     {
-       ynhi = yhi;
-       ihi = i;
-       yhi = yt;
-     }
-     else if( yt > ynhi )
-     {
-       ynhi = yt;
-     }
-   }
+    /* Compute range (absolute deviation) from highest to lowest and return
+     *  if satisfactory. (fractional range in original code) */
 
-/**************************************************************************
-  Compute range (absolute deviation) from highest to lowest and return 
-  if satisfactory.
-  (fractional range in original code)
-**************************************************************************/
+    rtol = 2.0*fabs(yhi - ylo);
 
-   rtol = 2.0*fabs(yhi - ylo);
-
-   if( (rtol < ftol) || (*iter < 0) )
-   {
-/* If returning, put best value in slot 1 */
-     swap = y[1];
-     y[1] = y[ilo];
-     y[ilo] = swap;
+    if( (rtol < ftol) || (*iter < 0) )
+    {
+      /* If returning, put best value in slot 1 */
+      swap = y[1];
+      y[1] = y[ilo];
+      y[ilo] = swap;
      
-     for( n=1; n <= ndim; n++)
-     {
-       swap = p[1][n];
-       p[1][n] = p[ilo][n];
-       p[ilo][n] = swap;
-     }
-     break;
-   }
+      for( n=1; n <= ndim; n++)
+      {
+        swap = p[1][n];
+        p[1][n] = p[ilo][n];
+        p[ilo][n] = swap;
+      }
+      break;
+    }
 
-/**************************************************************************
-  Begin a new iteration. First extrapolate by a factor -1 through the face
-  of the simplex across from the high point, i.e., reflect the simplex from
-  the high point.
-**************************************************************************/
+    /* Begin a new iteration. First extrapolate by a factor -1 through the face
+     * of the simplex across from the high point, i.e., reflect the simplex from
+     * the high point. */
+    *iter -= 2;
 
-   *iter -= 2;
+    ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, -1.0);
 
-   ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, -1.0);
+    if( ytry <= ylo )
+    {
+      /* Result better than the best point, so try an additional
+       * extrapolation by a factor of 2. */
+      ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 2.0);
+    }
+    else if( ytry >= ynhi )
+    {
+      /* The reflected point is worse than the second highest point, so
+       * look for an intermediate lower point, i.e. do a one-dimensional
+       * contraction. */
+      ysave = yhi;
+      ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 0.5);
 
-   if( ytry <= ylo )
-   {
-/* 
-   Result better than the best point, so try an additional 
-   extrapolation by a factor of 2.
-*/
-     ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 2.0);
-   }
-   else if( ytry >= ynhi )
-   {
-/* 
-   The reflected point is worse than the second highest point, so 
-   look for an intermediate lower point, i.e. do a one-dimensional
-   contraction. 
-*/
-     ysave = yhi;
-     ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 0.5);
+      if( ytry >= ysave)
+      {
+        /* Can't seem to get rid of that high point. Better contract around
+         * the lowest (best) point. */
+        for( i=1; i <= mpts; i++ )
+        {
+          if( i != ilo)
+          {
+            for (j=1; j<=ndim; j++)
+            {
+              psum[j]=0.5*(p[i][j] + p[ilo][j]);
+              p[i][j]=psum[j];
+            }
 
-     if( ytry >= ysave)
-     {
-/* 
-   Can't seem to get rid of that high point. Better contract around
-   the lowest (best) point.
-*/
-       for( i=1; i <= mpts; i++ )
-       {
-         if( i != ilo)
-         {
-           for (j=1;j<=ndim;j++)
-           { psum[j]=0.5*(p[i][j] + p[ilo][j]);
-             p[i][j]=psum[j]; }
+            y[i]=(*funk)(psum);
+          }
+        } /* for i */
 
-           y[i]=(*funk)(psum);
-         }
-       } /* for i */
-
-       *iter -= ndim;
-       GET_PSUM;                   /* Recompute psum */
-     }  /* ytry >= ysave */
-   }  /* ytry >= ynhi */
-   else
-   {
-/*
-   Correct the evaluation count
-*/
-     (*iter) ++;
-   }
+        *iter -= ndim;
+        GET_PSUM;                   /* Recompute psum */
+      } /* ytry >= ysave */
+    } /* ytry >= ynhi */
+    else
+    {
+      /* Correct the evaluation count */
+      (*iter) ++;
+    }
    
-/***************************************************************************
-  Write y/p to backup file
-***************************************************************************/
-   old_file = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
-   new_file = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
+    /* Write y/p to backup file */
+    old_file = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
+    new_file = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
    
-   /* remove 'cp' system call dependence */
-   strcpy(old_file, sr_project);
-   strcpy(new_file, sr_project);
-   strcat(old_file, ".ver");
-   strcat(new_file, ".vbk");
-   if (copy_file(old_file, new_file)) 
-   {
-     fprintf(STDERR, "*** error (sramebsa): "
-             "failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
-     exit(SR_FILE_IO_ERROR);
-   }
+    /* remove 'cp' system call dependence */
+    strcpy(old_file, sr_project);
+    strcpy(new_file, sr_project);
+    strcat(old_file, ".ver");
+    strcat(new_file, ".vbk");
+    if (copy_file(old_file, new_file) != 0)
+    {
+      ERROR_MSG("failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
+      exit(SR_FILE_IO_ERROR);
+    }
 
-   strcpy(ver_file, new_file);
-   ver_stream = fopen(ver_file,"w");
-   fprintf(ver_stream,"%d %d %s\n",ndim, mpts, sr_project);
-   for (i = 1; i<= mpts; i++) 
-   {
-     fprintf(ver_stream,"%e ", y[i]);
-     for(j=1; j<= ndim; j++) 
-       fprintf(ver_stream,"%e ", p[i][j]);
-     fprintf(ver_stream,"\n");
-   }
+    strcpy(ver_file, new_file);
+    ver_stream = fopen(ver_file,"w");
+    fprintf(ver_stream,"%d %d %s\n",ndim, mpts, sr_project);
+    for (i = 1; i<= mpts; i++)
+    {
+      fprintf(ver_stream,"%e ", y[i]);
+      for(j=1; j<= ndim; j++) fprintf(ver_stream,"%e ", p[i][j]);
+      fprintf(ver_stream,"\n");
+    }
    
-   /* add date */
-   result = time(NULL);
-   fprintf(ver_stream, "%s\n", asctime(localtime(&result)));
+    /* add date */
+    result = time(NULL);
+    fprintf(ver_stream, "%s\n", asctime(localtime(&result)));
    
-   fclose(ver_stream);
+    fclose(ver_stream);
 
- }  /* end of BIG LOOP */
+  } /* end of BIG LOOP */
 
- free_vector(psum,1);
+  free_vector(psum,1);
 
-}  /* end of function sr_amebsa */
+} /* end of function sr_amebsa */
 
-/**************************************************************************/
 
 real amotsa(real **p, real *y, real *psum, int ndim, 
                    real *pb, real *yb,

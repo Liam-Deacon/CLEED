@@ -56,9 +56,9 @@ int getrusage(int who, rusage *usage)
 
         if(GetProcessMemoryInfo(proc_hand, &ctrs, sizeof(ctrs)))
         {
-            PERFORMANCE_INFORMATION perf_info;
-            GetPerformanceInfo(&perf_info, sizeof(perf_info));
-            usage->ru_maxrss = (DWORD) (ctrs.WorkingSetSize / perf_info.PageSize);
+            PERFORMANCE_INFORMATION perfac_info;
+            GetPerformanceInfo(&perfac_info, sizeof(perfac_info));
+            usage->ru_maxrss = (DWORD) (ctrs.WorkingSetSize / perfac_info.PageSize);
             usage->ru_majflt = ctrs.PageFaultCount;
             err = 0;
         }

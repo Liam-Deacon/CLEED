@@ -1,11 +1,24 @@
-/*
- * patt_draw_ps.c
+/*********************************************************************
+ *                           PATT_DRAW_PS.H
  *
- *  Created on: 24 Sep 2014
- *      Author: Liam Deacon
- */
+ *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   LD/2014.09.24 - creation (copy from older
+ *********************************************************************/
 
+/*! \file
+ *
+ * Contains patt_usage() and patt_info() functions.
+ */
 #include "patt.h"
+#include "patt_ver.h"
+#include <math.h>
 #include <strings.h>
 
 /*!
@@ -24,12 +37,12 @@ int patt_draw_ps(const patt_drawing *drawing)
   FILE *f = NULL;
   FILE *out_stream = NULL;
   char title[strlen(drawing->title.label)+10];
-  char copyright[strlen(PATT_PROG_COPYRIGHT)+20];
-  char program[strlen(PATT_PROG_VERSION)+strlen(PATT_PROG)+20];
+  char copyright[strlen(PATT_COPYRIGHT)+20];
+  char program[strlen(PATT_VERSION)+strlen(PATT)+20];
 
   sprintf(title, "%%Title: %s", drawing->title.label);
-  sprintf(copyright, "%%Copyright: %s", PATT_PROG_COPYRIGHT);
-  sprintf(program, "%%Creator: %s - Version %s", PATT_PROG, PATT_PROG_VERSION);
+  sprintf(copyright, "%%Copyright: %s", PATT_COPYRIGHT);
+  sprintf(program, "%%Creator: %s - Version %s", PATT, PATT_VERSION);
 
   /* open output stream */
   if ((out_stream = fopen(drawing->output_filename, "w")) == NULL)
@@ -223,7 +236,7 @@ void patt_draw_ps_init(FILE *file_ptr, const patt_drawing *drawing)
 {
 
   fprintf(file_ptr, "%%!PS-Adobe-3.0 \n");
-  fprintf(file_ptr, "%%Creator: %s\n", PATT_PROG_VERSION);
+  fprintf(file_ptr, "%%Creator: %s\n", PATT_VERSION);
   fprintf(file_ptr,
     "%%BoundingBox: 50 150 550 650 \n"
     "%%EndComments \n"
@@ -477,14 +490,14 @@ void patt_draw_ps_title(FILE *in_stream, FILE *out_stream, size_t ii,
  */
 void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
 {
-  size_t i_dom;
+  size_t i_dom = drawing->i_dom;
+  size_t spot = drawing->i_spot;
   int ii;
   char *color;
   float *a1;
   float *a2;
   float spot_radius;
   char dummystr[10][STRSZ];
-  size_t spot;
   char *vectors_str;
 
   int compare[2];
@@ -506,8 +519,8 @@ void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
   }
 
   /* do comparisons with previous & write new vectors if neccessary */
-  sprintf(dummystr[compare[1]],
-  "%.1f %.1f %.1f %.1f", a1[0], a1[1], a2[0], a2[1]);
+  sprintf(dummystr[compare[1]], "%.1f %.1f %.1f %.1f",
+          a1[0], a1[1], a2[0], a2[1]);
   if (strcmp(dummystr[compare[0]], dummystr[compare[1]]))
   {
 
@@ -759,7 +772,7 @@ int ps_print_substitute(FILE *output, char *str)
       for (k=0; k<=NUM_SUBS-1;k++)
       {
         /*!TODO: include PS substitutions */
-        if (strncmp(substr, substitutes[k][0], j-1) == 0)
+        if (strncmp(substr, "\0" /* substitutes[k][0] */, j-1) == 0)
         {
           /* fprintf(output, "/Symbol findfont 20 scalefont setfont (%s) show\n",
                   substitutes[k][1]);

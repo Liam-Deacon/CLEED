@@ -40,6 +40,6 @@ int fts_print_data(FILE *out_stream, double *x, double *fx, size_t n_x)
     fprintf(out_stream, "%e %e\n", x[i_x], fx[i_x] );
 	}
  
-  return 0;
+  return(0);
 }
 

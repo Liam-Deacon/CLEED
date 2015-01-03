@@ -44,36 +44,20 @@ mat matins(mat Mbg, const mat Msm, size_t off_row, size_t off_col)
   /* Check the input matrix */
   if (matcheck(Msm) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matins): input matrix Msm does not exist \n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("input matrix Msm does not exist \n");
+    ERROR_RETURN(NULL);
   }
  
   if (matcheck(Mbg) < 0)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matins): improper matrix Mbg\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("improper matrix Mbg\n");
+    ERROR_RETURN(NULL);
   }
 
   if (matcheck(Mbg) == 0)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, "* warning (matins): matrix Mbg does not exist\n"
+    WARNING_MSG("matrix Mbg does not exist\n"
             "   => allocate new matrix matching the dimensions of Msm\n");
-    #endif
     Mbg = matalloc(Mbg, off_row + Msm->rows,
                         off_col + Msm->cols, Msm->num_type);
   }
@@ -81,31 +65,15 @@ mat matins(mat Mbg, const mat Msm, size_t off_row, size_t off_col)
           (off_col + Msm->cols - 1 > Mbg->cols) ||
           (Msm->num_type !=  Mbg->num_type) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matins): "
-            "matrix dimensions/types do not match\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("matrix dimensions/types do not match\n");
+    ERROR_RETURN(NULL);
   }
 
   /* Diagonal Matrix: */
   if (Msm->mat_type == MAT_DIAG)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matins): "
-            "diagonal input matrix not implemented.\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("diagonal input matrix not implemented.\n");
+    ERROR_RETURN(NULL);
   } /* if diagonal */
   else /* Other matrix types: */
   {

@@ -15,7 +15,7 @@
 /*!
  * \file
  *
- * Implementation file for rf_version() function.
+ * Implementation file for rfac_version() function.
  *
  * Current Program version and log.
  * - Version 1.0:
@@ -23,7 +23,7 @@
  *     GH/02.11.92 - Find R factor minima.
  *	               - Read theoretical file in standard format
  *                   (additional to VHT format)
- *     GH/12.11.92 - rf_version as external variable.
+ *     GH/12.11.92 - rfac_version as external variable.
  *
  * - Version 1.1:
  *     GH/17.02.93 - new option -e:
@@ -32,7 +32,7 @@
  *                   can be entered in the control file (e0). Alternatively the
  *                   first energy with nonzero intensities for this set is
  *                   taken from the theoretical input file.
- *     GH/18.02.93 - introduce function rf_version (program version).
+ *     GH/18.02.93 - introduce function rfac_version (program version).
  *     GH/19.02.93 - new normalisation for Rb factors (according to C = 0.75).
  *     GH/01.03.93 - Scaling of theoretical IV curve with respect to
  *                   experimental is changed for R2 (2-Norm instead of 1-Norm).
@@ -43,7 +43,7 @@
  *
  *                 - There is also a new option -m, which can modify the
  *                   integration range of Rg.
- *     GH/05.03.93 - Include help utility (rf_help/rfhelpfile)
+ *     GH/05.03.93 - Include help utility (rfac_help/rfhelpfile)
  *     GH/11.03.93 - Include output of average R-factor when option "-o single"
  *                   option is chosen. (Does not work yet)
  *     GH/30.06.93 - Program made compatible with cc - compiler (instead of
@@ -71,7 +71,7 @@
  *
  * \return pointer to \p version string.
  */
-char *rf_version(char *version)
+char *rfac_version(char *version)
 {
   strcpy(version, RF_VERSION);
   return (version);

@@ -46,11 +46,11 @@
  * \retval R2-factor if successful.
  * \retval #RFAC_FAILURE if failed.
  */
-real rf_r2(const real *eng, const real *e_int, const real *t_int)
+real rfac_r2(const real *eng, const real *e_int, const real *t_int)
 {
   size_t i_eng, n_eng;
   real exp_sq_sum, the_sq_sum;  /* sum of expt. / theor. intensities */
-  real rf_sum, norm_sum;
+  real rfac_sum, norm_sum;
   real norm_te, the_avg, aux;
 
   /* compute integrals */
@@ -67,35 +67,30 @@ real rf_r2(const real *eng, const real *e_int, const real *t_int)
   }
   n_eng = i_eng;
 
-  the_avg = the_avg / n_eng;
+  the_avg =  the_avg / ( (real)n_eng );
   norm_te = R_sqrt(the_sq_sum/exp_sq_sum);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(rf_r2): <It>: %e\n", (float)the_avg);
-  fprintf(STDCTR, "(rf_r2): norm: %f \n", (float)norm_te);
-  #endif
+  CONTROL_MSG(CONTROL, "<It>: %e\n", (float)the_avg);
+  CONTROL_MSG(CONTROL, "norm: %f \n", (float)norm_te);
 
-  /* compute R-factor (rf_sum) and normalisation factor (norm_sum) */
-  rf_sum = 0.;
+  /* compute R-factor (rfac_sum) and normalisation factor (norm_sum) */
+  rfac_sum = 0.;
   norm_sum = 0.;
   for(i_eng = 0; i_eng < n_eng; i_eng ++)
   {
     aux = t_int[i_eng] - norm_te * e_int[i_eng];
-    rf_sum +=  SQUARE(aux);
+    rfac_sum +=  SQUARE(aux);
 
     aux = t_int[i_eng] - the_avg;
     norm_sum += SQUARE(aux);
   }
 
-  #ifdef ERROR /* print error output if required */
   if (norm_sum < 0.)
   {
-    printf("*** error (rf_r2): norm_sum is negative: %e\n", (float)norm_sum);
+    ERROR_MSG("norm_sum is negative: %e\n", (float)norm_sum);
     return((real)RFAC_FAILURE);
   }
-  #endif
+  else aux = R_sqrt(rfac_sum/norm_sum);
 
-  aux = R_sqrt(rf_sum/norm_sum);
-
-  return (aux);
+  return(aux);
 }  /* end of function cr_r2 */

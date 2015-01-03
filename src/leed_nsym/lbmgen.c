@@ -30,10 +30,6 @@
 
 #include "leed.h"
 
-#ifndef K_TOLERANCE
-#define K_TOLERANCE 0.0001                        /* tolerance of k_par */
-#endif
-
 /*!
  * Sets up a list of all beams used within the energy loop.
  *

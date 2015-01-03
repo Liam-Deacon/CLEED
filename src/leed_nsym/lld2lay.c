@@ -74,31 +74,26 @@ void leed_ld_2lay ( mat *p_Tpp_ab, mat *p_Tmm_ab, mat *p_Rpm_ab, mat *p_Rmp_ab,
   static mat Pp = NULL, Pm = NULL, Maux_a = NULL, Maux_b = NULL;
   static mat Tpp_ab = NULL, Tmm_ab = NULL, Rpm_ab = NULL, Rmp_ab = NULL;
 
-/*************************************************************************
-  Allocate memory and set up propagators Pp and Pm. 
-
-  Pp = exp[ i *( k_x*v_ab_x + k_y*v_ab_y + k_z*v_ab_z) ]
-  Pm = exp[-i *( k_x*v_ab_x + k_y*v_ab_y - k_z*v_ab_z) ]
-     = exp[ i *(-k_x*v_ab_x - k_y*v_ab_y + k_z*v_ab_z) ]
-*************************************************************************/
+  /* Allocate memory and set up propagators Pp and Pm.
+   *
+   * Pp = exp[ i *( k_x*v_ab_x + k_y*v_ab_y + k_z*v_ab_z) ]
+   * Pm = exp[-i *( k_x*v_ab_x + k_y*v_ab_y - k_z*v_ab_z) ]
+   *    = exp[ i *(-k_x*v_ab_x - k_y*v_ab_y + k_z*v_ab_z) ]
+   */
   n_beams = Tpp_a->cols;
   nn_beams = n_beams * n_beams;
 
   Pp = matalloc(NULL, n_beams, 1, NUM_COMPLEX );
   Pm = matalloc(NULL, n_beams, 1, NUM_COMPLEX );
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_ld_2lay): vec_ab(%.2f %.2f %.2f) = vec_from_last\n",
+  CONTROL_MSG(CONTROL, "vec_ab(%.2f %.2f %.2f) = vec_from_last\n",
          vec_ab[1] * BOHR, vec_ab[2] * BOHR , vec_ab[3] * BOHR);
-  #endif
 
   for( k = 0; k < n_beams; k++)
   {
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_ld_2lay): %2d: k_r = %6.3f %6.3f %6.3f, k_i = %6.3f;",
+    CONTROL_MSG(CONTROL, "%2d: k_r = %6.3f %6.3f %6.3f, k_i = %6.3f;",
            k, (beams+k)->k_r[1], (beams+k)->k_r[2], (beams+k)->k_r[3],
            (beams+k)->k_i[3]);
-    #endif
 
     faux_r = (beams+k)->k_r[1] * vec_ab[1] +
              (beams+k)->k_r[2] * vec_ab[2] +
@@ -111,14 +106,14 @@ void leed_ld_2lay ( mat *p_Tpp_ab, mat *p_Tmm_ab, mat *p_Rpm_ab, mat *p_Rmp_ab,
 
     cri_expi(Pm->rel+k+1, Pm->iel+k+1, -faux_r, faux_i);
 
-    #ifdef CONTROL
+#if CONTROL
     fprintf(STDCTR, " Pp = (%6.3f,%6.3f), Pm = (%6.3f,%6.3f)",
            Pp->rel[k+1], Pp->iel[k+1], Pm->rel[k+1], Pm->iel[k+1]);
 
     cri_mul(&faux_r, &faux_i,
             Pp->rel[k+1], Pp->iel[k+1], Pm->rel[k+1], Pm->iel[k+1]);
     fprintf(STDCTR, ": (%6.3f,%6.3f)\n", faux_r, faux_i);
-    #endif
+#endif
   }
  
   /*
@@ -187,12 +182,12 @@ void leed_ld_2lay ( mat *p_Tpp_ab, mat *p_Tmm_ab, mat *p_Rpm_ab, mat *p_Rmp_ab,
     Tmm_ab->rel[k] += 1.;
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_ld_2lay): Tpp_ab = matmul(Tpp_ab, Maux_a, Maux_b)\n");
+#if CONTROL
+  CONTROL_MSG(CONTROL, "Tpp_ab = matmul(Tpp_ab, Maux_a, Maux_b)\n");
   matshow(Tpp_ab);
-  fprintf(STDCTR, "(leed_ld_2lay): Tmm_ab = matmul(Tmm_ab, Maux_b, Maux_a)\n");
+  CONTROL_MSG(CONTROL, "Tmm_ab = matmul(Tmm_ab, Maux_b, Maux_a)\n");
   matshow(Tmm_ab);
-  #endif
+#endif
 
   /* (ii) */
   Tpp_ab = matinv(Tpp_ab, Tpp_ab);

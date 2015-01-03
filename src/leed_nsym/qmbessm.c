@@ -33,9 +33,9 @@
 
 
 #ifdef REAL_IS_FLOAT
-#define ACC 30.0                 /* Accuracy for float */
+static const real ACC = 30.0; /*!< Accuracy for float */
 #else
-#define ACC 40.0                 /* Accuracy for double */
+static const real ACC = 40.0; /*!< Accuracy for double */
 #endif
 
 /*!
@@ -165,10 +165,8 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
   cos_r = faux_r*pref_r;
   cos_i = -faux_i*pref_i;
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(c_bess-m): sin(z) = (%.3e,%.3e), cos(z) = (%.3e,%.3e)\n",
+  CONTROL_MSG(CONTROL_X, "sin(z) = (%.3e,%.3e), cos(z) = (%.3e,%.3e)\n",
           sin_r, sin_i, cos_r, cos_i);
-  #endif
  
   /*
    * J0 and J1 are calculated from the exact formula:
@@ -188,12 +186,8 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
   /* 1/z * (J0(z) - cos(z)) */
   cri_mul(Jl->rel+2, Jl->iel+2, z_inv_r, z_inv_i, faux_r, faux_i);
  
-  #ifdef CONTROL
-  fprintf(STDCTR, "(c_bess-m): J(%d) = (%.3e,%.3e)\n",
-                0, Jl->rel[1], Jl->iel[1]);
-  fprintf(STDCTR, "(c_bess-m): J(%d) = (%.3e,%.3e)\n",
-                1, Jl->rel[2], Jl->iel[2]);
-  #endif
+  CONTROL_MSG(CONTROL, "J(%d) = (%.3e,%.3e)\n", 0, Jl->rel[1], Jl->iel[1]);
+  CONTROL_MSG(CONTROL, "J(%d) = (%.3e,%.3e)\n", 1, Jl->rel[2], Jl->iel[2]);
 
   /* loop over l:
    *
@@ -219,10 +213,8 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
     Jl->rel[l+1] -= Jl->rel[l-1];
     Jl->iel[l+1] -= Jl->iel[l-1];
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(c_bess-m): (r)J(%d) = (%.3e,%.3e)\n",
-           l, Jl->rel[l+1], Jl->iel[l+1]);
-    #endif
+    CONTROL_MSG(CONTROL, "(r)J(%d) = (%.3e,%.3e)\n",
+                l, Jl->rel[l+1], Jl->iel[l+1]);
   }   /* for l */
 
   /*
@@ -263,16 +255,12 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
     {
       cri_mul(Jl->rel+l+1, Jl->iel+l+1, pref_r, pref_i, F_r[l+1], F_i[l+1]);
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "(c_bess-m): (m)J(%d) = (%.3e,%.3e)\n",
-             l, Jl->rel[l+1], Jl->iel[l+1]);
-      #endif
+      CONTROL_MSG(CONTROL, "(m)J(%d) = (%.3e,%.3e)\n",
+                  l, Jl->rel[l+1], Jl->iel[l+1]);
     }
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(c_bess-m): l_start = %d, pref = (%.3e,%.3e)\n",
-             l_start, pref_r, pref_i);
-    #endif
+    CONTROL_MSG(CONTROL, "l_start = %d, pref = (%.3e,%.3e)\n",
+                l_start, pref_r, pref_i);
 
     free(F_r);
     free(F_i);

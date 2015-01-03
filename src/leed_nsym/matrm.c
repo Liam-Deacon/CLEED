@@ -38,9 +38,7 @@ real *r_sqmul(real *res, real *a, real *b, size_t n)
   real *ptrr, *ptr_end;
   register real *ptr1, *ptr2;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, " (matmul) entering real loop\n");
-  #endif
+  CONTROL_MSG(CONTROL, "entering real loop\n");
 
   for(ptrr = res + 1, i_r1 = 1; i_r1 < nn; i_r1 += n)
   {

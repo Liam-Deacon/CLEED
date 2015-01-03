@@ -3,11 +3,13 @@ environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.83
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/CPATH/operation=remove
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/CPLUS_INCLUDE_PATH/delimiter=;
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/CPLUS_INCLUDE_PATH/operation=remove
+environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/CPLUS_INCLUDE_PATH/value=.
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/C_INCLUDE_PATH/delimiter=;
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/C_INCLUDE_PATH/operation=remove
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/append=true
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/appendContributed=true
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/LIBRARY_PATH/delimiter=;
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/LIBRARY_PATH/operation=remove
+environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/LIBRARY_PATH/value=%MINGW%\\lib;%QWT%\\lib
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/append=true
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.839802680/appendContributed=true

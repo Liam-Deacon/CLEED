@@ -29,15 +29,6 @@
 #include "leed.h"
 #include "leed_def.h"
 
-
-#ifndef WAVE_TOLERANCE         /* should be defined in "leed_def.h" */
-#define WAVE_TOLERANCE 1.e-4
-#endif
-
-#ifndef R_FOR_LMAX             /* should be defined in "leed_def.h" */
-#define R_FOR_LMAX 2.5
-#endif
-
 /*!
  * Reads most of the parameters necessary to control the program.
  *
@@ -104,9 +95,7 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
   /* If *p_var_par or *p_eng_par are NULL: allocate memory. */
   if (*p_var_par == NULL)
   {
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(leed_inp_leed_read_par): allocate var_par\n");
-    #endif
+    CONTROL_MSG(CONTROL_X, "allocate var_par\n");
 
     var_par = *p_var_par = (leed_var *)malloc( sizeof(leed_var) );
   }
@@ -145,25 +134,15 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
    */
   if( (inp_stream = fopen(in_file, "r")) == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_inp_leed_read_par): "
-            "could not open file \"%s\"\n", in_file);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(LEED_FILE_IO_ERROR);
-    #else
-    return(LEED_FILE_IO_ERROR);
-    #endif
+    ERROR_MSG("could not open file \"%s\"\n", in_file);
+    ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, LEED_FILE_IO_ERROR);
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_inp_leed_read_par): Reading file \"%s\"\n", in_file);
-  #endif
+  CONTROL_MSG(CONTROL, "Reading file \"%s\"\n", in_file);
 
   while ( fgets(linebuffer, STRSZ, inp_stream) != NULL)
   {
-    #ifdef CONTROL_X
+    #if CONTROL_X
     fprintf(STDCTR, "%s", linebuffer);
     #endif
 
@@ -181,47 +160,27 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('f'): /* final energy */
           {
-            #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str+3, "%lf", &faux);
-            #else
-            sscanf(linebuffer+i_str+3, "%f", &faux);
-            #endif
-
+            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
             eng_par->final = faux/HART;
             break;
           }
 
           case('i'): /* initial energy */
           {
-            #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str+3, "%lf", &faux);
-            #else
-            sscanf(linebuffer+i_str+3, "%f", &faux);
-            #endif
-
+            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
             eng_par->initial = faux/HART;
             break;
           }
 
           case('p'): /* epsilon */
           {
-            #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str+3, "%lf", &(var_par->epsilon) );
-            #else
-            sscanf(linebuffer+i_str+3, "%f", &(var_par->epsilon) );
-            #endif
-
+            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &(var_par->epsilon) );
             break;
           }
 
           case('s'): /* energy step */
           {
-            #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str+3, "%lf", &faux);
-            #else
-            sscanf(linebuffer+i_str+3, "%f", &faux);
-            #endif
-
+            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
             eng_par->step = faux/HART;
             break;
           }
@@ -237,24 +196,14 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('t'): /* theta */
           {
-            #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str+3, "%lf", &faux);
-            #else
-            sscanf(linebuffer+i_str+3, "%f", &faux);
-            #endif
-
+            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
             var_par->theta = DEG_TO_RAD * faux;
             break;
           }
 
           case('p'): /* phi */
           {
-            #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str+3, "%lf", &faux);
-            #else
-            sscanf(linebuffer+i_str+3 ,"%f", &faux);
-            #endif
-
+            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
             var_par->phi = DEG_TO_RAD * faux;
             break;
           }
@@ -285,11 +234,7 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('e'):
           {
-            #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str+3, "%lf", &(var_par->vi_exp));
-            #else
-            sscanf(linebuffer+i_str+3, "%f", &(var_par->vi_exp));
-            #endif
+            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &(var_par->vi_exp));
             break;
           }
            
@@ -313,11 +258,8 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
       default:
       /* default: print warning for unrecognized key words */
       {
-        #ifdef WARNING
-        fprintf(STDWAR, "* warning (leed_inp_leed_read_par): "
-            "could not interpret line: \n\t%s\t(in file \"%s\")\n",
-            linebuffer, in_file);
-        #endif
+        WARNING_MSG("could not interpret line: \n\t%s\t(in file \"%s\")\n",
+                    linebuffer, in_file);
         break;
       }
     } /* switch linebuffer */
@@ -336,70 +278,53 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
    */
   if (eng_par->initial <= 0.)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_inp_leed_read_par): "
-        "no initial energy available (Eini = %.1f)\n", eng_par->initial * HART);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(LEED_INVALID_ENERGY);
-    #else
-    return(LEED_INVALID_ENERGY);
-    #endif
+    ERROR_MSG("no initial energy available (Eini = %.1f)\n",
+              eng_par->initial * HART);
+    ERROR_EXIT_RETURN(LEED_INVALID_ENERGY, LEED_INVALID_ENERGY);
   }
 
   if (eng_par->final <= eng_par->initial)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, "* warning (leed_inp_leed_read_par): "
-        "final energy (%.1f) <= initial energy (%.1f)\n",
-        eng_par->final * HART, eng_par->initial * HART);
-    fprintf(STDWAR, "*         only one energy step will be performed.\n");
-    #endif
+    WARNING_MSG("final energy (%.1f) <= initial energy (%.1f)\n"
+                "*         only one energy step will be performed.\n",
+                eng_par->final * HART, eng_par->initial * HART);
     eng_par->final = eng_par->initial;
   }
 
   if (eng_par->step <= 0.)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, "* warning (leed_inp_leed_read_par): "
-        "energy <= 0. (%.1f)\n", eng_par->step * HART);
-    fprintf(STDWAR, "*         only one energy step will be performed.\n");
-    #endif
+    WARNING_MSG("energy <= 0. (%.1f)\n"
+                "*         only one energy step will be performed.\n",
+                eng_par->step * HART);
     eng_par->step = eng_par->final - eng_par->initial;
   }
 
-  #ifdef CONTROL
+#if CONTROL
   fprintf(STDCTR, "******************************"
       "(leed_inp_leed_read_par)*****************************\n");
   fprintf(STDCTR, "energy loop:\n");
   fprintf(STDCTR, "\tstart:\t%.1f eV\n",eng_par->initial * HART);
   fprintf(STDCTR, "\tend:\t%.1f eV\n",eng_par->final * HART);
   fprintf(STDCTR, "\tstep:\t%.1f eV\n",eng_par->step * HART);
-  #endif
+#endif
 
   /* LMAX
    * - warning if var_par->l_max = 0 => calculate l_max = k_max * R
    */
   if (var_par->l_max <= 0)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, "* warning (leed_inp_leed_read_par): "
-        "l_max = %d <= 0\n", var_par->l_max);
-    #endif
+    WARNING_MSG("l_max = %d <= 0\n", var_par->l_max);
 
     faux = R_sqrt(2. * eng_par->final) * R_FOR_LMAX;
     var_par->l_max = (int)R_nint(faux);
 
-    #ifdef WARNING
-    fprintf(STDWAR, "*         calculate value %d from Efin = %.1f eV and "
-        "assumed Rmax = %.1f A.\n", var_par->l_max,
-        eng_par->final * HART, R_FOR_LMAX * BOHR);
-    #endif
+    WARNING_MSG("calculate value %d from Efin = %.1f eV and "
+                "assumed Rmax = %.1f A.\n", var_par->l_max,
+                eng_par->final * HART, R_FOR_LMAX * BOHR);
   }
 
   /* Write eng_par and var_par back to their pointers and return. */
-  #ifdef CONTROL
+#if CONTROL
   fprintf(STDCTR, "\nparameter structure:\n");
   fprintf(STDCTR, "\tvr:\t%.2f eV,\tvi:\t%.2f eV (pref), (expt: %.2f)\n",
           var_par->vr*HART, var_par->vi_pre*HART, var_par->vi_exp);
@@ -409,7 +334,7 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
           var_par->epsilon, var_par->l_max);
   fprintf(STDCTR, "******************************"
       "(leed_inp_leed_read_par)*****************************\n");
-  #endif
+#endif
 
   *p_eng_par = eng_par;
   *p_var_par = var_par;

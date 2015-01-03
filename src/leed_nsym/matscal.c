@@ -40,24 +40,15 @@ mat matscal(mat Mr, const mat Mi, real num_r, real num_i )
   /* check validity of the input matrices */
   if (matcheck(Mi) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matscal): ivalid input matrix\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid input matrix\n");
+    ERROR_RETURN(NULL);
   }
 
   /* copy Mi to Mr */
   Mr = matcopy(Mr, Mi);
 
   /* Perform multiplication */
-  #ifdef CONTROL
-  fprintf(STDCTR, "(matscal): start multiplication \n");
-  #endif
+  CONTROL_MSG(CONTROL, "start multiplication \n");
 
   switch(Mr->num_type)
   {
@@ -69,9 +60,7 @@ mat matscal(mat Mr, const mat Mi, real num_r, real num_i )
         register real *ptr_end;
         register real *ptrr;
 
-        #ifdef CONTROL
-        fprintf(STDCTR, "(matscal): entering real loop\n");
-        #endif
+        CONTROL_MSG(CONTROL, "entering real loop\n");
 
         for(ptrr = Mr->rel + 1, ptr_end = Mr->rel + Mr->cols*Mr->rows;
             ptrr <= ptr_end; ptrr ++)
@@ -102,17 +91,13 @@ mat matscal(mat Mr, const mat Mi, real num_r, real num_i )
     /* complex matrix */
     case (NUM_COMPLEX):
     {
-      #ifdef CONTROL
-      fprintf(STDCTR, "(matscal): entering complex loop\n");
-      #endif
+      CONTROL_MSG(CONTROL, "entering complex loop\n");
 
       register real faux;
       register real *ptr_end;
       register real *ptrr, *ptri;
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "(matscal): entering real loop\n");
-      #endif
+      CONTROL_MSG(CONTROL, "entering real loop\n");
 
       for( ptrr = Mr->rel + 1, ptri = Mr->iel + 1,
            ptr_end = Mr->rel + Mr->cols*Mr->rows;

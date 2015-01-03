@@ -53,7 +53,7 @@ int patt_draw_cairo(const patt_drawing *drawing)
   char *tok = NULL;
   char str_buf[BUFSIZ];
 
-  strcpy(copyright, PATT_PROG_COPYRIGHT);
+  strcpy(copyright, PATT_COPYRIGHT);
   tok = strtok(copyright, "\n");
 
   /* create surface */
@@ -95,7 +95,7 @@ int patt_draw_cairo(const patt_drawing *drawing)
 
       /* program info */
       sprintf(str_buf, "%%Creator: %s - Version %s",
-              PATT_PROG, PATT_PROG_VERSION);
+              PATT, PATT_VERSION);
       cairo_ps_surface_dsc_comment(surface, str_buf);
 
       break;

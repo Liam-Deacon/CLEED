@@ -41,15 +41,8 @@ mat matarralloc(mat M, size_t length)
   {
 
     /* Check the validity of the pointer M and abort if not valid */
-    #ifdef ERROR
-    fprintf(STDERR," *** error (matarralloc): Invalid pointer \n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("Invalid pointer \n");
+    ERROR_RETURN(NULL);
   }
   else if(mat_ch > 0)
   {
@@ -84,10 +77,7 @@ mat matarralloc(mat M, size_t length)
   /* If pointer M is NULL (mat_ch = 0) or valid but the array length did
    * not match, allocate new array.
    */
-  #ifdef CONTROL
-  fprintf(STDCTR, "(matarralloc): create new matrix array of length %d\n",
-          length);
-  #endif
+  CONTROL_MSG(CONTROL, "create new matrix array of length %d\n", length);
 
   M = (mat)malloc( (length+1) * sizeof(struct mat_str));
 

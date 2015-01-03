@@ -46,28 +46,14 @@ mat matextract(mat Msm, const mat Mbg,
   /* Check the input matrix */
   if (matcheck(Mbg) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matext): input matrix Mbg does not exist\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("input matrix Mbg does not exist\n");
+    ERROR_RETURN(NULL);
   }
  
   if (matcheck(Msm) < 0)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (matext): improper matrix Msm\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("improper matrix Msm\n");
+    ERROR_RETURN(NULL);
   }
 
   if( (off_row > end_row)   ||
@@ -78,32 +64,17 @@ mat matextract(mat Msm, const mat Mbg,
       (end_col > Mbg->cols)
    )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matext): matrix indices do not match:\n");
-    fprintf(STDERR, "\trows: %d -> %d (%d)\tcols:%d -> %d (%d)\n",
-            off_row, end_row, Mbg->rows, off_col, end_col, Mbg->cols);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("matrix indices do not match:\n");
+              "\trows: %d -> %d (%d)\tcols:%d -> %d (%d)\n",
+              off_row, end_row, Mbg->rows, off_col, end_col, Mbg->cols);
+    ERROR_RETURN(NULL);
   }
 
   /* Diagonal Matrix: */
   if (Mbg->mat_type == MAT_DIAG)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matext): "
-            "diagonal input matrix not implemented.\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("diagonal input matrix not implemented.\n");
+    ERROR_RETURN(NULL);
   } /* if diagonal */
 
   /* Other matrix types: */

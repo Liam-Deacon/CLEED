@@ -66,11 +66,9 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
   real faux;
   real vaux[4];
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_inp_overlayer): "
+  CONTROL_MSG(CONTROL,
       "entering leed_inp_overlayer MIN_DIST= %.3f, n_atoms = %d\n",
       MIN_DIST*BOHR, par->n_atoms);
-  #endif
 
   /* predefine some often used variables */
   n_atoms = par->n_atoms;
@@ -109,14 +107,12 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
   for(i_atoms=1; i_atoms<n_atoms; i_atoms++)
   {
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_inp_overlayer): pos: %.4f %.4f %.4f dist: %.4f\n",
-              atom_list[i_atoms].pos[1]*BOHR,
-              atom_list[i_atoms].pos[2]*BOHR,
-              atom_list[i_atoms].pos[3]*BOHR,
-              R_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] -
-                        atom_list[i_atoms].pos[3])*BOHR);
-    #endif
+    CONTROL_MSG(CONTROL, "pos: %.4f %.4f %.4f dist: %.4f\n",
+                          atom_list[i_atoms].pos[1]*BOHR,
+                          atom_list[i_atoms].pos[2]*BOHR,
+                          atom_list[i_atoms].pos[3]*BOHR,
+                          R_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] -
+                                 atom_list[i_atoms].pos[3])*BOHR);
 
     if( R_fabs(atom_list[i_atoms-1].pos[3]+vaux[3] - atom_list[i_atoms].pos[3])
         > MIN_DIST )
@@ -129,10 +125,8 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
        * - set up new origin of the layer (vaux);
        * - increase i_layer;
        */
-      #ifdef CONTROL
-      fprintf(STDCTR, "(leed_inp_overlayer): new layer, no_of_atoms[%d] = %d\n",
+      CONTROL_MSG(CONTROL, "new layer, no_of_atoms[%d] = %d\n",
                       i_layer, no_of_atoms[i_layer]);
-      #endif
 
       /* set up new inter-layer vector (vec) */
       *(vec + 3*i_layer + 1) = 0.;
@@ -181,10 +175,8 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
    * (no_of_atoms[i_layer] == 1).
    * - If so, reset vec and atom_list[n_atoms-1].pos.
    */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_inp_overlayer): no_of_atoms[%d] = %d\n",
-                     i_layer, no_of_atoms[i_layer]);
-  #endif
+  CONTROL_MSG(CONTROL_X,
+              "no_of_atoms[%d] = %d\n", i_layer, no_of_atoms[i_layer]);
 
   if(no_of_atoms[i_layer] == 1)
   {
@@ -216,7 +208,7 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
   #ifdef CONTROL_X
   for(i=0; i<i_layer; i++)
   {
-    fprintf(STDCTR, "(leed_inp_overlayer): vec_org: %.4f %.4f %.4f \n",
+    CONTROL_MSG(CONTROL_X, "vec_org: %.4f %.4f %.4f \n",
             *(vec+3*i+1) *BOHR, *(vec+3*i+2) *BOHR, *(vec+3*i+3) *BOHR);
   }
   #endif
@@ -244,7 +236,7 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
   #ifdef CONTROL_X
   for(i=0; i< i_layer; i++)
   {
-    fprintf(STDCTR, "(leed_inp_overlayer): vec_mod: %.4f %.4f %.4f \n",
+    CONTROL_MSG(CONTROL_X, "vec_mod: %.4f %.4f %.4f \n",
             *(vec+3*i+1) *BOHR, *(vec+3*i+2) *BOHR, *(vec+3*i+3) *BOHR);
   }
   #endif
@@ -257,24 +249,13 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
    */
 
   /* Allocate */
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_inp_overlayer): "
-            "overlayer atoms split up into %u layers\n", i_layer);
-  #endif
+  CONTROL_MSG(CONTROL, "overlayer atoms split up into %u layers\n", i_layer);
 
   if( (par->layers = (leed_layer*)
       malloc(i_layer * sizeof(leed_layer)) ) == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_inp_overlayer): "
-       "unable to allocate memory for overlayer\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("unable to allocate memory for overlayer\n");
+    ERROR_RETURN(-1);
   }
 
   /* Copy */
@@ -331,12 +312,9 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
      * Allocate structure element atoms in layer and copy the appropriate
      * entries from list atom_list into par->layers[i].atoms
      */
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(leed_inp_overlayer): no_of_atoms[%d] = %d\n",
-            i, no_of_atoms[i]);
-    fprintf(STDCTR, "(leed_inp_overlayer): par->layers[%d].n_atoms = %d\n",
-            i, par->layers[i].n_atoms);
-    #endif
+    CONTROL_MSG(CONTROL_X, "no_of_atoms[%d] = %d\n", i, no_of_atoms[i]);
+    CONTROL_MSG(CONTROL_X, "par->layers[%d].n_atoms = %d\n", i,
+                            par->layers[i].n_atoms);
 
     par->layers[i].atoms = (leed_atom*)
         malloc(no_of_atoms[i] * sizeof(leed_atom));
@@ -345,10 +323,7 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
     {
       if(atom_list[i_atoms].layer == i)
       {
-        #ifdef CONTROL_X
-        fprintf(STDCTR, "(leed_inp_overlayer): i_d = %d, i_atoms = %d\n",
-                i_d, i_atoms);
-        #endif
+        CONTROL_MSG(CONTROL_X, "i_d = %d, i_atoms = %d\n", i_d, i_atoms);
 
         par->layers[i].atoms[i_d].layer = i;
         par->layers[i].atoms[i_d].type = atom_list[i_atoms].type;
@@ -366,16 +341,8 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
 
     if(i_d != par->layers[i].n_atoms)
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (leed_inp_overlayer): "
-              "the numbers of atoms in layer %d do not match\n", i);
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(-1);
-      #endif
+      ERROR_MSG("the numbers of atoms in layer %d do not match\n", i);
+      ERROR_RETURN(-1);
     }
   } /* for i (loop over layers) */
 
@@ -383,10 +350,8 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
   free(vec);
   free(no_of_atoms);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_inp_overlayer): "
-      "leaving leed_inp_overlayer, return value = %d\n", i_layer);
-  #endif
+  CONTROL_MSG(CONTROL,
+              "leaving leed_inp_overlayer, return value = %d\n", i_layer);
 
   return(i_layer);
 } /* end of function leed_inp_overlayer */

@@ -82,9 +82,7 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
  * Enter search function sr_powell
  ***********************************************************************/
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(sr_po): Enter sr_powell #%i\n", i_par);
-  #endif
+  CONTROL_MSG(CONTROL, "Enter sr_powell #%i\n", i_par);
 
   fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
 
@@ -97,9 +95,7 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
  * Write final results to log file
  ***********************************************************************/
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(sr_po): %d iterations in sr_powell\n", nfunc);
-  #endif
+  CONTROL_MSG(CONTROL, "%d iterations in sr_powell\n", nfunc);
 
   if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
 

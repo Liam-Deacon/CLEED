@@ -67,10 +67,8 @@ void search_parse_args(size_t argc, char *argv[], real *delta,
     {
       if(*argv[i_arg] != '-')
       {
-        #ifdef ERROR
-        fprintf(STDERR, "*** error (SEARCH):\tsyntax error:\n");
+        ERROR_MSG("\tsyntax error:\n");
         search_usage(STDERR);
-        #endif
         exit(SR_FAILURE);
       }
       else
@@ -86,10 +84,7 @@ void search_parse_args(size_t argc, char *argv[], real *delta,
           }
           else
           {
-            #ifdef ERROR
-            fprintf(STDERR, "*** error (SEARCH): "
-                   "initial displacement value not given\n");
-            #endif
+            ERROR_MSG("initial displacement value not given\n");
             exit(SR_MISSING_ARGUMENT);
           }
         }
@@ -104,9 +99,7 @@ void search_parse_args(size_t argc, char *argv[], real *delta,
           }
           else
           {
-            #ifdef ERROR
-            fprintf(STDERR, "*** error (SEARCH): no input file specified\n");
-            #endif
+            ERROR_MSG("no input file specified\n");
             exit(SR_INVALID_INPUT_FILE);
           }
         }
@@ -121,9 +114,7 @@ void search_parse_args(size_t argc, char *argv[], real *delta,
           }
           else
           {
-            #ifdef ERROR
-            fprintf(STDERR, "*** error (SEARCH): no vertex file specified\n");
-            #endif
+            ERROR_MSG("no vertex file specified\n");
             exit(SR_INVALID_VERTEX_FILE);
           }
         }
@@ -134,9 +125,7 @@ void search_parse_args(size_t argc, char *argv[], real *delta,
           i_arg++;
           if (i_arg >= argc)
           {
-            #ifdef ERROR
-            fprintf(STDERR, "*** error (SEARCH): no search algorithm specified\n");
-            #endif
+            ERROR_MSG("no search algorithm specified\n");
             exit(SR_INVALID_SEARCH_TYPE);
           }
           if((strncmp(argv[i_arg], "si", 2) == 0) ||
@@ -158,10 +147,7 @@ void search_parse_args(size_t argc, char *argv[], real *delta,
           }
           else
           {
-            #ifdef ERROR
-            fprintf(STDERR, "*** error (SEARCH): "
-                "unknown search type \"%s\" (option -s)\n", argv[i_arg]);
-            #endif
+            ERROR_MSG("unknown search type \"%s\" (option -s)\n", argv[i_arg]);
             exit(SR_INVALID_SEARCH_TYPE);
           }
 
@@ -194,10 +180,7 @@ void search_parse_args(size_t argc, char *argv[], real *delta,
 
     if(strncmp(inp_file, "---", 3) == 0)
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (SEARCH): "
-             "no parameter input file (option -i) specified\n");
-      #endif
+      ERROR_MSG("no parameter input file (option -i) specified\n");
       exit(SR_INVALID_INPUT_FILE);
     }
 
@@ -232,11 +215,11 @@ int main(int argc, char *argv[])
   /* dimension of the search */
   n_dim = sr_search->n_par;
 
-  #ifdef CONTROL
+# if CONTROL
   fprintf(STDCTR, "(SEARCH): project name  = %s\n", sr_project);
   fprintf(STDCTR, "(SEARCH): log file name = %s\n", log_file);
   fprintf(STDCTR, "(SEARCH): dimension = %d\n", n_dim);
-  #endif
+# endif
 
 /***********************************************************************
  * Write header and geometrical details to log file
@@ -260,38 +243,38 @@ int main(int argc, char *argv[])
     /* POWELL'S METHOD */
     case(SR_POWELL):
     {
-      #if defined(USE_GSL) || defined(USE_GSL)
-         SR_NOT_IMPLEMENTED_ERROR("Powell's method");
-      #else
+#     if defined(USE_GSL)
+         ERROR_MSG("Powell's method search is not yet implemented.\n");
+         exit(SR_SEARCH_NOT_IMPLEMENTED);
+#     else
          SR_PO(n_dim, bak_file, log_file);
-      #endif
+#     endif
       break;
     } /* case SR_POWELL */
 
     /* SIMULATED ANNEALING */
     case(SR_SIM_ANNEALING):
     {
-      #if defined(USE_GSL) || defined(USE_GSL)
-         SR_NOT_IMPLEMENTED_ERROR("simulated annealing");
-      #else
+#     if defined(USE_GSL)
+      ERROR_MSG("Simulated annealing search is not yet implemented.\n");
+      exit(SR_SEARCH_NOT_IMPLEMENTED);
+#     else
          SR_SA(n_dim, delta, bak_file, log_file);
-      #endif
+#     endif
       break;
     } /* case SR_SIM_ANNEALING */
 
     /* GENETIC ALGORITHM */
     case(SR_GENETIC):
     {
-      SR_NOT_IMPLEMENTED_ERROR("genetic algorithm");
+      ERROR_MSG("Genetic algorithm search is not yet implemented.\n");
+      exit(SR_SEARCH_NOT_IMPLEMENTED);
       break;
     } /* case SR_GENETIC */
     
     default:
     {
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (SEARCH): "
-              "unknown search type \"%d\"\n", search_type);
-      #endif
+      ERROR_MSG("unknown search type \"%d\"\n", search_type);
       exit(SR_INVALID_SEARCH_TYPE);
     }
     

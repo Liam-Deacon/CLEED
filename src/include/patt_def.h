@@ -244,6 +244,8 @@ typedef struct patt_drawing
   bool std_in;              /*!< Indicates whether to use \c stdin as input */
   bool std_out;             /*!< Indicates whether to use \c stdout as output */
   bool interactive;         /*!< Indicates whether to run patt interactively */
+  size_t i_dom;
+  size_t i_spot;
 } patt_drawing;
 extern patt_drawing drawing_default;
 

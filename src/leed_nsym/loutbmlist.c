@@ -89,10 +89,8 @@ int leed_output_beam_list(leed_beam **p_beams_out,
       n_beams ++)
   { ; }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_output_beam_list): \tTotal No. of beams %.f eV = %d\n",
-                 eng->final*HART, n_beams);
-  #endif
+  CONTROL_MSG(CONTROL, "\tTotal No. of beams %.f eV = %d\n",
+              eng->final*HART, n_beams);
 
   if (*p_beams_out == NULL)
   {
@@ -107,15 +105,8 @@ int leed_output_beam_list(leed_beam **p_beams_out,
 
   if(beams_out == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (leed_output_beam_list): allocation error.\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(LEED_ALLOCATION_ERROR);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("allocation error.\n");
+    ERROR_EXIT_RETURN(LEED_ALLOCATION_ERROR, -1);
   }
 
   /* Write appropriate beams to beams_out
@@ -141,10 +132,7 @@ int leed_output_beam_list(leed_beam **p_beams_out,
   (beams_out + i_bm_out)->k_par = F_END_OF_LIST;
   n_beams = i_bm_out;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_output_beam_list): \t"
-                  "No. of non_evanescent beams = %d\n", n_beams);
-  #endif
+  CONTROL_MSG(CONTROL, "\tNo. of non_evanescent beams = %d\n", n_beams);
 
   /* Write energies, number of beams, and beams to output
    *

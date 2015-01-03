@@ -16,23 +16,23 @@ Changes:
 #include <math.h>
 #include "caoi_rfac.h"
 #include "gh_stddef.h"
-#include "proghelp.h"
+
+extern void caoi_rfac_info();
+extern void caoi_rfac_usage(FILE *);
 
 int main(int argc, char *argv[])
-
 {
-
   size_t i;
   int i_arg;
   size_t length = 0;
   int iaux;
-  char linebuffer[STRSIZE];
-  char string[STRSIZE];
+  char linebuffer[STRSZ];
+  char string[STRSZ];
   FILE *fp;
   FILE *fpp;
   char res_file[FILENAME_MAX];                 /* input/output files */
   char ctr_file[FILENAME_MAX];
-  char rfac_type[STRSIZE];
+  char rfac_type[STRSZ];
   float m_rfac_shift_range;
   float p_rfac_shift_range;
   float rfac_shift_step;
@@ -47,30 +47,26 @@ int main(int argc, char *argv[])
   float sum1;
 
 
-/*********************************************************************
- set default values 
-*********************************************************************/
+  /* set default values */
   m_rfac_shift_range = -10.;
   p_rfac_shift_range =  10.;
   rfac_shift_step = 0.5;
-  strncpy(rfac_type, "rp", STRSIZE);
+  strncpy(rfac_type, "rp", STRSZ);
   strncpy(res_file, "---", FILENAME_MAX);
   strncpy(ctr_file, "---", FILENAME_MAX);
   iaux = 0;
-/*********************************************************************
-  Decode arguments:
 
-    -c <ctr_file> - control file 
-
-    -t <res_file> - (output file) IV output.
-*********************************************************************/
-
+  /* Decode arguments:
+   *
+   * -c <ctr_file> - control file
+   * -t <res_file> - (output file) IV output.
+   */
   if (argc < 2) 
   {
-      #ifdef ERROR
-	  	fprintf(STDERR, "*** error (caoi_rfac_main): syntax error\n");
-	  	usage(STDERR);
-      #endif
+#if ERROR
+	  	ERROR_MSG("syntax error\n");
+	  	caoi_rfac_usage(STDERR);
+#endif
       exit(1);
   }
   
@@ -78,10 +74,10 @@ int main(int argc, char *argv[])
   {
     if(*argv[i_arg] != '-')
     {
-      #ifdef ERROR
-    	fprintf(STDERR, "*** error (caoi_rfac_main):\tsyntax error:\n");
-    	fprintf(STDERR, "\tusage: \tcaoi_rfac -t <res_file> -c <ctr_file>");
-      #endif
+#if ERROR
+      ERROR_MSG("syntax error:\n");
+    	caoi_rfac_usage(STDERR);
+#endif
       exit(1);
     }
     else
@@ -92,9 +88,7 @@ int main(int argc, char *argv[])
          strcmp(argv[i_arg], "--theory") == 0 )
       {
         i_arg++;
-        printf("\n%s\n",argv[i_arg]);
         strncpy(res_file, argv[i_arg], FILENAME_MAX);
-        printf("\n%s\n",res_file);
       } /* -t */
 
       /* Read parameter input file */
@@ -102,9 +96,7 @@ int main(int argc, char *argv[])
          strcmp(argv[i_arg], "--control") == 0 )
       {
         i_arg++;
-        printf("\n%s\n",argv[i_arg]);
         strncpy(ctr_file, argv[i_arg], FILENAME_MAX);
-        printf("\n%s\n",ctr_file);
       } /* -i */
 
       /* Read R factor type*/
@@ -112,9 +104,7 @@ int main(int argc, char *argv[])
          strcmp(argv[i_arg], "--rfactor") == 0 )
       {
         i_arg++;
-        printf("\n%s\n",argv[i_arg]);
-        strncpy(rfac_type, argv[i_arg], STRSIZE);
-        printf("\n%s\n",rfac_type);
+        strncpy(rfac_type, argv[i_arg], STRSZ);
       } /* -r */
 
 
@@ -123,9 +113,8 @@ int main(int argc, char *argv[])
          strcmp(argv[i_arg], "--shift") == 0 )
       {
         i_arg++;
-	
         sscanf(argv[i_arg], "%f,%f,%f", &m_rfac_shift_range,
-        		&p_rfac_shift_range, &rfac_shift_step);
+        		   &p_rfac_shift_range, &rfac_shift_step);
 	
       } /* -s */
       
@@ -133,7 +122,7 @@ int main(int argc, char *argv[])
       if ((strcmp(argv[i_arg], "-h") == 0) || 
           (strcmp(argv[i_arg], "--help") == 0))
       {
-        usage(stdout);
+        caoi_rfac_usage(stdout);
         exit(0);
       }
       
@@ -141,7 +130,7 @@ int main(int argc, char *argv[])
       if ((strcmp(argv[i_arg], "-V") == 0) ||
            (strcmp(argv[i_arg], "--version") == 0))
       {
-        info();
+        caoi_rfac_info();
         exit(0);
       }
 
@@ -149,53 +138,41 @@ int main(int argc, char *argv[])
     
   }  /* for i_arg */
 
-/*****************************************************************
-  Check arguments:
-  - check existence of ctr_file.
-  - check existence of res_file.
-******************************************************************/
-
+  /*
+   * Check arguments:
+   * - check existence of ctr_file.
+   * - check existence of res_file.
+   */
   if(strncmp(res_file, "---", 3) == 0)
   {
-    #ifdef ERROR
-	  fprintf(STDERR, "*** error (caoi_rfac_main):"
-			  " no .res file (option -t) specified\n");
-    #endif
+    ERROR_MSG("no .res file (option -t) specified\n");
     exit(1);
   }
 
   if(strncmp(ctr_file, "---", 3) == 0)
   {
-    #ifdef ERROR
-	  fprintf(STDERR, "*** error (caoi_rfac_main): "
-			  "no .ctr file (option -t) specified\n");
-    #endif
+    ERROR_MSG("no .ctr file (option -t) specified\n");
     exit(1);
   }
 
 
-/***********************************************************************
- Read sa value from the .bul file 
-************************************************************************/
+  /* Read sa value from the .bul file */
   if (strlen(ctr_file) > 3)
   {
-	length = strlen(ctr_file) - 4;     /* assume 3 char file extension */
+    length = strlen(ctr_file) - 4;     /* assume 3 char file extension */
   }
   strncpy(proj_name, ctr_file, length);
   strncpy(string, ctr_file, length);
   sprintf(string+length, ".bul");
 
 
-  if ((fp = fopen(string,"r")) == NULL)
+  if ((fp = fopen(string, "r")) == NULL)
   {
-    #ifdef ERROR
-	  fprintf(STDERR, "*** error (caoi_rfac_main): "
-			  "could not open output file \"%s\"\n", string);
-    #endif
+    ERROR_MSG("could not open output file \"%s\"\n", string);
     exit(1);
   }
 
-  while (fgets(linebuffer, STRSIZE, fp))
+  while (fgets(linebuffer, STRSZ, fp))
   {
     if (!strncasecmp(linebuffer, "sa:", 3))
     {
@@ -205,20 +182,17 @@ int main(int argc, char *argv[])
 
   fclose(fp);
 
-/************ Makes .ctr file for each angle **********/
-
+  /* Makes .ctr file for each angle */
   strncpy(string, ctr_file, length);
   sprintf(string+length, ".ctr");
   ctrinp(string);
 
-/********** Calls rfac progam sa times ********************/
-
-
+  /* Call rfac progam sa times */
   for (i=0; i<sa; i++)
   {
 
-    strncpy(string,proj_name,STRSIZE);
-    sprintf(string+length,"ia_%d",i+1);
+    strncpy(string, proj_name, STRSZ);
+    sprintf(string+length, "ia_%d",i+1);
 
     sprintf(linebuffer,
          "\"%s\" -t \"%s.res\" -c \"%s.ctr\" -r \"%s\" -s %.2f,%.2f,%.2f > \"%s.dum\"",
@@ -232,36 +206,31 @@ int main(int argc, char *argv[])
          string);                 /* project name for output file */
 
 
-    if (system (linebuffer)) 
+    if (system (linebuffer) != 0)
     {
-      fprintf(STDERR,
-        "*** error (caoi_rfac_main): system call: '%s' failed\n", linebuffer);
+      ERROR_MSG("system call: '%s' failed\n", linebuffer);
     }
 
   } /*for i*/
 
-/***************Read R factor value from .dum file*******************/
-
-  sum1=0;
-  avershift=0;
-  averfac=0;
-  sum=0;
+  /* Read R factor value from .dum file */
+  sum1 = 0;
+  avershift = 0;
+  averfac = 0;
+  sum = 0;
 
   for (i=0; i<sa; i++)
   {
-    strncpy(string, proj_name, STRSIZE);
+    strncpy(string, proj_name, STRSZ);
     sprintf(string+length, "ia_%u.dum", i+1);
 
-    if ((fpp = fopen(string,"r")) == NULL)
+    if ((fpp = fopen(string, "r")) == NULL)
     {
-      #ifdef ERROR
-    	fprintf(STDERR, "*** error (caoi_rfac_main): "
-    			"could not open output file \"%s\"\n", string);
-      #endif
+      ERROR_MSG("could not open output file \"%s\"\n", string);
       exit(1);
     }
 
-    while (fgets(linebuffer,STRSIZE,fpp)!= NULL)
+    while (fgets(linebuffer, STRSZ, fpp)!= NULL)
     {
       iaux = sscanf(linebuffer, 
                     "%f %f %f %f", &rfac, &faux, &shift, &enrange);
@@ -287,7 +256,7 @@ int main(int argc, char *argv[])
           "\n%f %f %f %f     #     Rp  RR  shift range\n", 
           averfac, sterror, avershift, averenr);
 
-/* Open proj_name.dum file and write the average R factor */
+  /* Open proj_name.dum file and write the average R factor */
   printf("\n%f %f %f %f     #     Rp  RR  shift range\n", 
             averfac, sterror, avershift, averenr);
   exit(0);

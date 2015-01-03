@@ -47,17 +47,17 @@ SET(CPACK_PACKAGE_NAME "CLEED")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Automated Surface Structure determination from LEED-IV curves")
 SET(CPACK_PACKAGE_VENDOR "Liam Deacon")
 SET(CPACK_PACKAGE_CONTACT "liam.deacon@diamond.ac.uk")
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/../LICENSE.txt")
-SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_BINARY_DIR}/../README.md")
-SET(CPACK_RESOURCE_FILE_NOTES "${CMAKE_CURRENT_BINARY_DIR}/../RELEASE_NOTES.txt")
-SET(CPACK_RESOURCE_FILE_CHANGELOG "${CMAKE_CURRENT_BINARY_DIR}/../ChangeLog.txt")
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
+SET(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/Readme.md")
+SET(CPACK_RESOURCE_FILE_NOTES "${CMAKE_SOURCE_DIR}/RELEASE_NOTES.txt")
+SET(CPACK_RESOURCE_FILE_CHANGELOG "${CMAKE_SOURCE_DIR}/ChangeLog.txt")
 SET(CPACK_PACKAGE_VERSION_MAJOR "2014")
 SET(CPACK_PACKAGE_VERSION_MINOR "07")
 SET(CPACK_PACKAGE_VERSION_PATCH "04")
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CLEED")
 SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY 
 "CLEED ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-SET(CPACK_PACKAGE_URL "http://www.reading.ac.uk/chemistry/about/staff/g-held.aspx")
+SET(CPACK_PACKAGE_URL "https://bitbucket.org/cleed/cleed")
 SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};ALL;/")
 
 # Set the options file that needs to be included inside CMakeCPackOptions.cmake
@@ -68,14 +68,15 @@ SET(SOURCE_BRANCH "Development")
 SET(LICENSE "GNU General Public License v3")
 
 # Project options
-OPTION(WITH_PHASESHIFTS "Set to ON to download and integrate PhaseShifts Python package" ON)
+OPTION(WITH_PHASESHIFTS "Set to ON to download and integrate PhaseShifts Python package" OFF)
 OPTION(BUILD_SHARED_LIBS "Set to OFF to build static libraries" ON)
 OPTION(USE_OPENMP "Set to OFF to have single threaded executables" ON)
 OPTION(WITH_QT "Set to ON to build Qt app frontends" ON)
 OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" ON)
 OPTION(INSTALL_DOC "Set to OFF to skip build/install Documentation" ON)
 OPTION(PACK_SOURCE "Set to OFF to pack without source code" ON)
-OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration - NOTE: this means the code is no longer open source" ON)
+OPTION(WITH_LAPACK "Set to OFF to build without BLAS/LAPACK support - NOTE: This options cannot be used at the same time as 'GSL_BACKEND'" ON)
+OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration - NOTE: this means the code is no longer open source" OFF)
 
 # set cmake module path
 IF (NOT CMAKE_MODULE_PATH)
@@ -134,7 +135,7 @@ IF (WITH_OPENCL STREQUAL "ON")
     INCLUDE_DIRECTORIES( ${OpenCL_INCLUDE_DIRS} ${OPENCL_INCLUDE_DIR} )
     IF (OpenCL_FOUND OR OPENCL_FOUND)
         SET (WITH_OPENCL ON)
-        ADD_DEFINITIONS(-D_USE_OPENCL)
+        ADD_DEFINITIONS(-DUSE_OPENCL)
         GET_FILENAME_COMPONENT(OPENCL_LINK_DIR "${OPENCL_LIBRARY}" PATH)
         FOREACH(OPENCL_LIBRARY_DIR in ${OPENCL_LIB_SEARCH_PATH})
             LINK_DIRECTORIES("${OPENCL_LIBRARY_DIR}")
@@ -150,15 +151,19 @@ IF (WITH_OPENCL STREQUAL "ON")
     ENDIF (OpenCL_FOUND OR OPENCL_FOUND)    
 ENDIF()
 
-# Check whether to build open source version of CLEED
+# Check whether to build open source version of CLEED using GSL
 IF (WITH_GSL STREQUAL "ON")
     set( GSL_FOUND OFF )
     set( GSL_CBLAS_FOUND OFF )
 
-    FIND_LIBRARY(GSL_LIBRARY NAMES gsl)
+    IF(WIN32)
+        FIND_LIBRARY(GSL_LIBRARY NAMES gsl HINTS "${CMAKE_SOURCE_PATH}/lib/win32")
+    ELSE(WIN32)
+        FIND_LIBRARY(GSL_LIBRARY NAMES gsl)
+    ENDIF(WIN32)
     IF (GSL_LIBRARY)
         SET (WITH_GSL ON)
-        ADD_DEFINITIONS(-D_USE_GSL)
+        ADD_DEFINITIONS(-DUSE_GSL)
         GET_FILENAME_COMPONENT(GSL_LIBRARY_DIR "${GSL_LIBRARY}" PATH)        
         LINK_DIRECTORIES("${GSL_LIBRARY_DIR}")
         IF (WIN32)
@@ -175,6 +180,20 @@ IF (WITH_GSL STREQUAL "ON")
     ELSE (GSL_LIBRARY)
         SET (WITH_GSL OFF)
     ENDIF (GSL_LIBRARY)
+ENDIF()
+
+# Alternatively, build using the BLAS/LAPACK backend (still open source)
+IF (LAPACK_BACKEND STREQUAL "ON")
+    set( WITH_LAPACK OFF )
+    set( BLAS_FOUND OFF )
+    set( LAPACK_FOUND OFF )
+
+    IF (WIN32)
+        FIND_LIBRARY(
+    ELSE(WIN32)
+        FIND_PACKAGE(BLAS REQUIRED)
+        FIND_PACKAGE(LAPACK REQUIRED)
+    ENDIF(WIN32)
 ENDIF()
 
 ##############################################################################
@@ -205,6 +224,7 @@ FIND_PROGRAM(PYTHON_EASY_INSTALL easy_install)
 FIND_PROGRAM(CYTHON NAMES cython cython.py)
 FIND_PROGRAM(F2PY_EXECUTABLE NAMES f2py f2py.py)
 
+
 # enable Fortran support
 ENABLE_LANGUAGE (Fortran)
 INCLUDE(FortranCInterface)
@@ -224,7 +244,7 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
     ENDIF (PARANOID)
     # set list of files to copy for running of program
     GET_FILENAME_COMPONENT(C_COMPILER_PARENT_DIR ${CMAKE_C_COMPILER} PATH)
-    FILE (GLOB RUNTIME_LIBRARIES ${C_COMPILER_PARENT_DIR}/*.dll)
+    FILE (GLOB RUNTIME_LIBRARIES "${C_COMPILER_PARENT_DIR}/*.dll")
 ELSEIF("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
     SET(WARNINGS "/W4 /WX /EHsc")
     SET(RUNTIME_LIBRARIES
@@ -305,6 +325,10 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
         ELSEIF (CC_HAS_G_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
         ENDIF()
+        
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+        SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+        SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
     
     ELSEIF (CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
         # optimise for fast & lean code

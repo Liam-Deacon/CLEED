@@ -76,11 +76,96 @@
  * (backend dependent) using either CBLAS, GSL or native implementation.
  */
 
+#if USE_GSL
+
+# if REAL_IS_FLOAT
+
+typedef gsl_vector_float cleed_vector;
+typedef gsl_vector_complex_float cleed_vector_complex;
+typedef gsl_matrix_float cleed_matrix;
+typedef gsl_matrix_complex_float cleed_matrix_complex;
+
+#define CLEED_MATRIX_GET(m, i, j)       gsl_matrix_float_get(m, i, j)
+#define CLEED_MATRIX_SET(m, i, j, x)    gsl_matrix_float_set(m, i, j, x)
+
+#define CLEED_MATRIX_COMPLEX_GET(m, i, j, c)                                  \
+  &gsl_matrix_complex_float_get(m, i, j).dat
+
+#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x, y)                               \
+  do { gsl_complex_float cmplx = {.dat[0] = (x), .dat[1] = (y)};              \
+       gsl_matrix_complex_float_set(m, i, j, cmplx);                          \
+     } while (0)
+
+#define CLEED_VECTOR_GET(v, i)            gsl_vector_float_get(v, i)
+#define CLEED_VECTOR_SET(v, i, x)         gsl_vector_float_set(v, i, x)
+#define CLEED_VECTOR_COMPLEX_GET(v, i)    &gsl_vector_complex_float_get(v, i).dat
+#define CLEED_VECTOR_COMPLEX_SET(v, i, x, y)                                  \
+  do { gsl_complex_float cmplx = {.dat[0] = (x), .dat[1] = (y)};              \
+       gsl_vector_complex_set(v, i, cmplx);                                   \
+  } while (0)
+
+# else
+
+typedef gsl_vector cleed_vector;
+typedef gsl_vector_complex cleed_vector_complex;
+typedef gsl_matrix cleed_matrix;
+typedef gsl_matrix_complex cleed_matrix_complex;
+
+#define CLEED_MATRIX_GET(m, i, j)
+#define CLEED_MATRIX_SET(m, i, j, val)
+#define CLEED_MATRIX_COMPLEX_GET(m, i, j)
+#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x)
+
+#define CLEED_VECTOR_GET(v, i)
+#define CLEED_VECTOR_SET(v, i, val)
+#define CLEED_VECTOR_COMPLEX_GET(v, i)
+#define CLEED_VECTOR_COMPLEX_SET(v, i, x)
+
+# endif
+
+#elif USE_CBLAS || USE_MKL || USE_LAPACK
+
+typedef real cleed_vector;
+typedef real cleed_vector_complex;
+typedef real cleed_matrix;
+typedef real cleed_matrix_complex;
+
+#define CLEED_MATRIX_GET(m, i, j)         gsl_matrix_get(m, i, j)
+#define CLEED_MATRIX_SET(m, i, j, x)      gsl_matrix_set(m, i, j, x)
+#define CLEED_MATRIX_COMPLEX_GET(m, i, j)
+#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x)
+
+#define CLEED_VECTOR_GET(v, i)
+#define CLEED_VECTOR_SET(v, i, x)
+#define CLEED_VECTOR_COMPLEX_GET(v, i)
+#define CLEED_VECTOR_COMPLEX_SET(v, i, x)
+
+#else /* USE_NATIVE */
+
+typedef real cleed_vector;
+typedef real cleed_vector_complex;
+typedef struct mat_str cleed_matrix;
+typedef struct mat_str cleed_matrix_complex;
+
+#define CLEED_MATRIX_GET(m, i, j)
+#define CLEED_MATRIX_SET(m, i, j, x)
+#define CLEED_MATRIX_COMPLEX_GET(m, i, j)
+#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x)
+
+#define CLEED_VECTOR_GET(v, i)
+#define CLEED_VECTOR_SET(v, i, x)
+#define CLEED_VECTOR_COMPLEX_GET(v, i)
+#define CLEED_VECTOR_COMPLEX_SET(v, i, x)
+
+
+#endif
+
 #if defined( USE_GSL )
 
 #ifdef REAL_IS_DOUBLE
 
-#define REAL_MATRIX                     gsl_matrix
+
+typedef REAL_MATRIX                     gsl_matrix
 #define COMPLEX_MATRIX                  gsl_matrix_complex
 
 #define REAL_MATRIX_ALLOC(rows,cols)    gsl_matrix_calloc((rows), (cols))
@@ -354,10 +439,10 @@ do {                                                                          \
 # define ZGETRI(n,a,lda,ipiv,info)                                            \
   LAPACKE_zgetri(CblasRowMajor), &(n), (a), &(lda), (ipiv), &(info) )
 #else
-# define SGETRF(m,n,a,lda,ipiv,info) sgetrf_(m,n,a,lda,ipiv,&(info))
-# define DGETRF(m,n,a,lda,ipiv,info) dgetrf_(m,n,a,lda,ipiv,&(info))
-# define CGETRF(m,n,a,lda,ipiv,info) cgetrf_(m,n,a,lda,ipiv,&(info))
-# define ZGETRF(m,n,a,lda,ipiv,info) zgetrf_(m,n,a,lda,ipiv,&(info))
+# define SGETRF(m,n,a,lda,ipiv,info) sgetrfac_(m,n,a,lda,ipiv,&(info))
+# define DGETRF(m,n,a,lda,ipiv,info) dgetrfac_(m,n,a,lda,ipiv,&(info))
+# define CGETRF(m,n,a,lda,ipiv,info) cgetrfac_(m,n,a,lda,ipiv,&(info))
+# define ZGETRF(m,n,a,lda,ipiv,info) zgetrfac_(m,n,a,lda,ipiv,&(info))
 # define SGETRI(n,a,lda,ipiv,info)   sgetri_(n,a,lda,ipiv,&(info))
 # define DGETRI(n,a,lda,ipiv,info)   dgetri_(n,a,lda,ipiv,&(info))
 # define CGETRI(n,a,lda,ipiv,info)   cgetri_(n,a,lda,ipiv,&(info))

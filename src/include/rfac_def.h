@@ -30,61 +30,58 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include <real.h>
+#include "real.h"
 
 /*********************************************************************
  * general definitions / constants
  *********************************************************************/
 
- /*! \define M2_H
- *  \brief convenience constant of \f$ \frac{2 m_e}{h} = 0.2631894506957162
- *  [eV^{-1} A^{-2}] \f$
- */
-#define M2_H      0.2631894506957162   /* 2*m/h       [eV^-1   A^-2] */
-
-/*! \define SQRT_M2_H
- *  \brief convenience constant of \f$ \sqrt{\frac{2 m_e}{h}} =
- *  0.5130199320647456 [eV^{-0.5} A^{-1}] \f$
- */
-#define SQRT_M2_H 0.5130199320647456   /* sqrt(2*m/h) [eV^-0.5 A^-1] */
-
 /*********************************************************************
  * special definitions
  *********************************************************************/
 
-/*! \define N_RFACTORS 6
- *  \brief The maximum number of possible R factors
- */
-#define N_RFACTORS     6       /* Number of possible R-factors */
-
-/*! \define ENG_TOLERANCE
+/*!
  *  \brief The accuracy in comparing energies using floating point.
  */
-#define ENG_TOLERANCE  0.1     /* accuracy in comparing energies */
+static const double ENG_TOLERANCE = 0.1;     /* accuracy in comparing energies */
 
-/*! \define IND_TOLERANCE
+/*!
  *  \brief The accuracy in comparing indices using floating point.
  */
-#define IND_TOLERANCE  0.02    /* accuracy in comparing indices */
+static const double IND_TOLERANCE = 0.02;    /* accuracy in comparing indices */
 
-/*! \define ZERO_TOLERANCE
+/*!
  *  \brief Any intensities smaller than this value are considered to be zero
  */
-#define ZERO_TOLERANCE 1.e-10  /*!< intensities smaller than this value
-                                * are considered to be zero */
+static const double ZERO_TOLERANCE = 1.e-10;  /*!< intensities smaller than this
+                                               * value are considered to be zero */
 
-#define I_FAIL       -1        /*!< integer return value if failed */
-#define F_FAIL       -1.       /*!< float return value if failed */
+static const int I_FAIL = -1;        /*!< integer return value if failed */
+static const real F_FAIL = -1.;      /*!< float return value if failed */
 
-#define SM_LORENTZ    1        /*!< flag for Lorentzian smooth */
-#define ALL_CURVES   NULL      /*!< flag for rf_cmpr: use all IV curves
+static const int SM_LORENTZ = 1;     /*!< flag for Lorentzian smooth */
+#define ALL_CURVES   NULL      /*!< flag for rfac_cmpr: use all IV curves
                                 * for R-factor calculation */
-#define DEFAULT_GROUP_ID  1    /*!< default group ID */
-#define AVERAGE_GROUP_ID -1    /*!< group ID for average over all curves */
+/*!
+ * \brief Ignore Features larger than 100eV (defines the lower limit in Fourier
+ * space when calculating Rg-Factor)
+ */
+static const real RG_IGNORE_MAX = 400.;
 
-/*
- Version 1.1
-*/
+/*!
+ *  \brief The maximum number of possible R factors
+ */
+enum {
+  N_RFACTORS = 6       /* Number of possible R-factors */
+};
+
+typedef enum
+{
+  END_OF_GROUP_ID = -1,
+  AVERAGE_GROUP_ID = 0,  /*!< default group ID */
+  NO_GROUP_ID,
+  DEFAULT_GROUP_ID        /*!< group ID for average over all curves */
+} rfac_group_id;
 
 /*!
  * Indicates the return/exit status of a function.
@@ -120,27 +117,10 @@ typedef enum {
   K_AXIS        /*!< Use an I(k) curve for R factor calculations */
 } rfac_axis;
 
-#define RG_IGNORE_MAX  400.    /*!< Ignore Features larger than 100eV (defines
-                                * the lower limit in Fourier space
-                                * when calculating Rg-Factor) */
 
 /*********************************************************************
  * structures and types
  *********************************************************************/
-
-/*!
- * Indicates which R-factors shall be calculated.
- */
-typedef struct
-{
-  rfac_axis ek;       /*!< Energy axis: I(E): 0; I(k): 1 (1.1) */
-  bool r_1;           /*!< R1-factor */
-  bool r_2;           /*!< R2-factor */
-  bool r_b;           /*!< Rb-factor */
-  bool r_g;           /*!< Rg-factor */
-  bool r_p;           /*!< Pendry's R-factor */
-} rfac_rf_switch;
-
 
 /*!
  * \brief Contains I(V) data pair at a single energy.
@@ -209,11 +189,10 @@ typedef struct          /* Holds diffraction spot data. */
 typedef struct            /* Struct for comparing two I(V) curves */
 {
   /* general */
-  int group_id;           /*!< Assignment to a certain group of
+  rfac_group_id group_id;/*!< Assignment to a certain group of
                            * curves e.g. integral/superstructure */
   real eng_0;             /*!< Energy of beam appearance (1.1) */
   rfac_spot spot_id;      /*!< One labeling set of spot indices */
-  size_t n_geo;           /*!< Number of different theoretical IV curves */
   
   /* theoretical data */
   rfac_iv *theory;        /*!< Pointer to theoretical IV curve data */
@@ -234,53 +213,18 @@ typedef struct            /* Struct for comparing two I(V) curves */
  */
 typedef struct                /* Holds CLI arguments as program properties */
 {
-  rfac_rf_switch r_switch;    /*!< Calculate an r-factor or not */
-  char *ctr_file;             /*!< Input control file string or path */
-  char *the_file;             /*!< Input theory file string or path */
-  char *out_file;             /*!< Output file string or path */
-  char *iv_file;              /*!< File name or path for IV curves */
-  bool iv_out;                /*!< Flag for output of IV curves */
-  rfactor_type r_type;        /*!< R-factor type */
-  real s_ini;                 /*!< Shift of initial energy */
-  real s_fin;                 /*!< Shift of final energy */
-  real s_step;                /*!< Shift of energy step */
-  real vi;                    /*!< Imaginary part of optical potential */
-  bool all_groups;            /*!< Flag: print R-factors of all group ID's */
-
-  /* added for compatability with older routines */
-  int *p_geo;
-  real *p_shift;
+  char ctr_file[FILENAME_MAX];  /*!< Input control file string or path */
+  char the_file[FILENAME_MAX];  /*!< Input theory file string or path */
+  char out_file[FILENAME_MAX];  /*!< Output file string or path */
+  char iv_file[FILENAME_MAX];   /*!< File name or path for IV curves */
+  rfactor_type r_type;          /*!< R-factor type */
+  real s_ini;                   /*!< Shift of initial energy */
+  real s_fin;                   /*!< Shift of final energy */
+  real s_step;                  /*!< Shift of energy step */
+  real vi;                      /*!< Imaginary part of optical potential */
+  bool all_groups;              /*!< Flag: print R-factors of all group ID's */
 
 } rfac_args;
-
-typedef struct
-{
- float rf;
- int geo;
- int shift;
-} rfac_par;
-
-/*!
- * Contains the minimum R-factor using different evaluation methods.
- */
-typedef struct
-{
- int group_id;
- rfac_par r_1;
- rfac_par r_2;
- rfac_par r_b1;
- rfac_par r_b2;
- rfac_par r_g;
- rfac_par r_p;
-} rfac_rmin;
-
-typedef struct rfref  /*! Relation between experimental and theory lists */
-{
- int i_min;           /*!< index of smallest energy in theor. list */
- int i_max;           /*!< index of largest energy in theor. list */
- int *pindex;         /*!< list of indices in exper. list corresponding to
-                       * theoretical energies */
-} rfac_ref;
 
 /*********************************************************************
  * End of include file

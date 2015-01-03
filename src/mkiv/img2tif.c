@@ -25,13 +25,13 @@
 #include <strings.h>
 
 #ifdef USE_MAGICK
-#include <wand/magick_wand.h>
+# include <wand/magick_wand.h>
 #endif
 
 #if defined(_WIN32) || defined(__WIN32__)
-#define PATH_SEPARATOR ';' /*!< Separator for PATH names on Windows */
+# define PATH_SEPARATOR ';' /*!< Separator for PATH names on Windows */
 #else
-#define PATH_SEPARATOR ':' /*!< Unix separator for PATH names */
+# define PATH_SEPARATOR ':' /*!< Unix separator for PATH names */
 #endif
 
 /*!
@@ -52,7 +52,7 @@ int img2tif(const char *img_filename, char *tif_filename)
     return(0); /* file is already a TIFF file */
   }
 
-  #ifdef USE_MAGICK /* convert image using ImageMagick */
+#ifdef USE_MAGICK /* convert image using ImageMagick */
   MagickWand *mw = NULL;
 
   /* Initialise Wand */
@@ -88,10 +88,10 @@ int img2tif(const char *img_filename, char *tif_filename)
   if(mw) mw = DestroyMagickWand(mw);
 
   MagickWandTerminus();
-  #else
+#else
   fprintf(stderr, "*warning (img2tif): cannot convert image '%s' to TIFF\n"
           "This function must be compiled and linked to the ImageMagick "
           "libraries\n", img_filename);
+#endif
   return(0);
-  #endif
 }

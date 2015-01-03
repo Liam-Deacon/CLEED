@@ -14,7 +14,7 @@
 
 /*! \file
  *
- * Implementation file for rf_splint() function.
+ * Implementation file for rfac_splint() function.
  */
 
 #include <stdlib.h>
@@ -22,7 +22,7 @@
 
 
 /*!
- * \fn rf_splint
+ * \fn rfac_splint
  *
  * \brief Cubic spline interpolation.
  *
@@ -43,7 +43,7 @@
  * \warning exits with \ref RFAC_BAD_IV_DATA if list is invalid.
  *
  */
-real rf_splint(real eng, rfac_iv_data *list, size_t leng)
+real rfac_splint(real eng, rfac_iv_data *list, size_t leng)
 {
   real y;
   int klo, khi, k;
@@ -51,20 +51,18 @@ real rf_splint(real eng, rfac_iv_data *list, size_t leng)
 
   /* Find the right place in list by means of bisection. */
   klo = 0;
-  khi = leng-1;
+  khi = (int)(leng)-1;
   while (khi-klo > 1)
   {
     k = (khi+klo) >> 1;                     /* integer division by 2 */
-    if (list[k].energy > eng) khi=k;
-    else klo=k;
+    if (list[k].energy > eng) khi = k;
+    else klo = k;
   }
 
   h = list[khi].energy - list[klo].energy;
   if (IS_EQUAL_REAL(h, 0.0))
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (cr_splint): Bad list input\n");
-    #endif
+    ERROR_MSG("Bad list input\n");
     exit(RFAC_BAD_IV_DATA);
   }
 
@@ -72,8 +70,8 @@ real rf_splint(real eng, rfac_iv_data *list, size_t leng)
   b = (eng - list[klo].energy)/h;
 
   /* Evaluate cubic spline polynomial */
-  y = a*list[klo].intens + b*list[khi].intens +
-     ( (a*a*a-a)*list[klo].deriv2 + (b*b*b-b)*list[khi].deriv2 )*(h*h)/6.0;
+  y = (real) (a*list[klo].intens + b*list[khi].intens +
+     ( (a*a*a-a)*list[klo].deriv2 + (b*b*b-b)*list[khi].deriv2 )*(h*h)/6.0);
 
   return(y);
 } /* end of function cr_splint */

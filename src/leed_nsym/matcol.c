@@ -41,28 +41,14 @@ mat matcol(const mat M, size_t col_num)
   /* check validity of the input matrices M1 and M2 */
   if (matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matcol): invalid input matrix\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid input matrix\n");
+    ERROR_RETURN(NULL);
   }
 
   if ( (col_num > M->cols) || (col_num < 1) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matcol): invalid column number\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid column number\n");
+    ERROR_RETURN(NULL);
   }
 
   /* Extract column */
@@ -147,17 +133,10 @@ mat matcol(const mat M, size_t col_num)
   else /* neither square nor normal, nor diagonal matrix */
   {
     /* matrix type is not implemented! */
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matcol): matrix type 0x%x not implemented\n",
+    ERROR_MSG("matrix type 0x%x not implemented\n",
             M->mat_type);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
     matfree(col);
-    return(NULL);
-    #endif
+    ERROR_RETURN(NULL);
   }
 
   return(col);

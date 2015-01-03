@@ -37,6 +37,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include "real.h"
 
 /*********************************************************************
  * definitions
@@ -58,54 +59,47 @@ extern "C" {
  * \def SR_EVALRF
  * \brief Entry into R factor evaluation function.
  */
-#if defined(USE_GSL) || defined(USE_GSL)
-    /* set search functions to GNU Scientific Library */
-    #define SR_SX     sr_sx_gsl
-    #define SR_SA     sr_sa_gsl
-    #define SR_PO     sr_po_gsl
-    #define SR_GA     sr_ga_gsl
-    #define SR_RDINP  sr_rdinp
-    #define SR_EVALRF sr_evalrf_gsl
-    #define I_PAR_0   0         /*!< start index for parameters */
-# else
-    /* use old search functions (not open source) */
-    #define SR_SX     sr_sx
-    #define SR_SA     sr_sa
-    #define SR_PO     sr_po
-    #define SR_GA     sr_ga
-    #define SR_RDINP  sr_rdinp
-    #define SR_EVALRF sr_evalrf
-    #define I_PAR_0   1         /*!< start index for parameters */
+#if USE_GSL /* set search functions to GNU Scientific Library */
+# define SR_SX     sr_sx_gsl
+# define SR_SA     sr_sa_gsl
+# define SR_PO     sr_po_gsl
+# define SR_GA     sr_ga_gsl
+# define SR_RDINP  sr_rdinp
+# define SR_EVALRF sr_evalrfac_gsl
+# define I_PAR_0   0         /*!< start index for parameters */
+#else /* use old search functions (not open source) */
+# define SR_SX     sr_sx
+# define SR_SA     sr_sa
+# define SR_PO     sr_po
+# define SR_GA     sr_ga
+# define SR_RDINP  sr_rdinp
+# define SR_EVALRF sr_evalrf
+# define I_PAR_0   1         /*!< start index for parameters */
 #endif
 
-#define R_TOLERANCE     5.0e-4  /*!< tolerance of R factors for termination */
+static const real R_TOLERANCE = 5.0e-4;  /*!< Tolerance of R-Factors for termination */
 
-#define DPOS            0.10    /*!< initial displacement of parameters from
-                                 * input geometry (used to set up the vertex
-                                 * for sr_amoeba) */
+static const real DPOS = 0.10; /*!< initial displacement of parameters from
+                                * input geometry (used to set up the vertex
+                                * for sr_amoeba) */
 
-#define MAX_ITER_AMOEBA 2000    /*!< max. number of iterations in sr_amoeba */
+static const size_t MAX_ITER_AMOEBA = 2000; /*!< Maximum number of
+                                             *   iterations in sr_amoeba() */
 
-#define MAX_ITER_POWELL 100     /*!< max. number of iterations in sr_powell */
-#define BRENT_TOLERANCE 2.0e-2  /*!< tolerance criterion in function brent()
-                                 * (used in linmin() )
-                                 */
+static const size_t MAX_ITER_POWELL = 100;  /*!< Maximum number of iterations
+                                             *   in sr_powell() */
+static const real BRENT_TOLERANCE = 2.0e-2; /*!< tolerance criterion in brent()
+                                             * (used in linmin() ) */
 
-#define FAC_THETA       5.      /*!< factor for displacement in \f$ \theta \f$ */
-#define FAC_PHI         50.     /*!< factor for displacement in \f$ \phi \f$ */
+static const real FAC_THETA = 5.; /*!< Factor for displacement in \f$ \theta \f$ */
+static const real FAC_PHI = 50.;  /*!< Factor for displacement in \f$ \phi \f$ */
 
 /* R-factor parameters  (used in sr_evalrf() ) */
-#define RFAC_TYP    "rp"        /*!< R factor type used for minimisation */
-#define RFAC_SHIFT_STEP   0.25  /*!< step in the search for min. shift (in eV) */
-#define RFAC_SHIFT_RANGE  10.   /*!< half of the search range for min.
-                                   shift (in eV) */
-#define SR_EVAL_DEF             /*!< indicated that the above parameters
-                                   have been defined */
-
-/*!
- * current version
- */
-#define SR_VERSION "1.0 (test version GH,SRP/02.04.03)"
+static const char RFAC_TYP[] = "rp"; /*!< R factor type used for minimisation */
+static const real RFAC_SHIFT_STEP = 0.25;  /*!< step in the search for minimum
+                                            *   shift (in eV) */
+static const real RFAC_SHIFT_RANGE = 10.;  /*!< half of the search range for
+                                            *   minimum shift (in eV) */
 
 /*********************************************************************
  * Preprocessor Macros
@@ -116,18 +110,11 @@ extern "C" {
  * \brief Convenience function for output.
  */
 #ifdef EXIT_ON_ERROR
-#define OPEN_ERROR(x)      fprintf(STDERR,                      \
-        "*** error (SEARCH): could not open file \"%s\"\n", x); \
-        exit(SR_FILE_IO_ERROR)
+# define OPEN_ERROR(x)  ERROR_MSG("could not open file \"%s\"\n", x);         \
+  exit(SR_FILE_IO_ERROR)
 #else
-#define OPEN_ERROR(x)      fprintf(STDERR,                      \
-        "*** error (SEARCH): could not open file \"%s\"\n", x)
+# define OPEN_ERROR(x)  ERROR_MSG("could not open file \"%s\"\n", x)
 #endif
-
-#define SR_NOT_IMPLEMENTED_ERROR(x)                             \
-    fprintf(STDERR, "***error (SEARCH): "                       \
-            "'%s' search is not yet implemented.\n", x);        \
-    exit(SR_SEARCH_NOT_IMPLEMENTED);
 
 /*********************************************************************
  * enums, structures and typedefs
@@ -245,8 +232,8 @@ typedef struct search
   real mir_dir[3];    /*!< Direction of mirror plane */
 
   /* R factor */
-  char rf_type[16];   /*!< R factor type */
-  real rf_range;      /*!< Shift range for R factor */
+  char rfac_type[16];   /*!< R factor type */
+  real rfac_range;      /*!< Shift range for R factor */
 
 } search;
 

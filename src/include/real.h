@@ -30,7 +30,7 @@
 /* define DOUBLE if neither FLOAT nor DOUBLE have been defined before. */
 #ifndef REAL_IS_DOUBLE
 #ifndef REAL_IS_FLOAT
-#define REAL_IS_DOUBLE
+#define REAL_IS_DOUBLE 1
 #endif
 #endif
 
@@ -54,9 +54,11 @@ extern "C" {
 #include <float.h>
 
 #ifndef TYPE_REAL
-#define TYPE_REAL
+#define TYPE_REAL double
 typedef double real;
 #endif
+
+#define REAL_FMT "l"
 
 /*
   Define macros for math operations of type double 
@@ -94,6 +96,8 @@ typedef double real;
 
 #ifdef REAL_IS_FLOAT
 #include <float.h>
+
+#define REAL_FMT
 
 #ifndef TYPE_REAL
 #define TYPE_REAL

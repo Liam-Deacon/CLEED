@@ -42,7 +42,7 @@
 #endif /* USE_NATIVE */
 #endif
 
-#ifdef __cplusplus__ /* Use C linkage if this is a C++ compiler */
+#ifdef __cplusplus /* Use C linkage if this is a C++ compiler */
 extern C {
 #endif /* __cplusplus__ */
 
@@ -58,7 +58,7 @@ int blas2mat(mat Mx, real *cblas_mx);
 
 void info_check(const char *routine, const int info);
 
-#ifdef __cplusplus__ /* Use C linkage if this is a C++ compiler */
+#ifdef __cplusplus /* Use C linkage if this is a C++ compiler */
 } /* extern C */
 #endif /* __cplusplus__ */
 

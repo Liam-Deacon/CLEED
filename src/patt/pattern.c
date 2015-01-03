@@ -110,7 +110,7 @@ void pattern_free(pattern *pat)
  * \param[in] pat #pattern instance
  * \return radius of \p pat
  */
-double pattern_get_radius(const pattern *pat)
+inline double pattern_get_radius(const pattern *pat)
 { return(pat->radius);}
 
 /*!
@@ -119,7 +119,7 @@ double pattern_get_radius(const pattern *pat)
  * \param[in,out] pat #pattern instance to modify.
  * \param[in] a1 The basis vector \f$ \vec{a_1} \f$
  */
-void pattern_set_a1(pattern *pat, const basis_vector *a1)
+inline void pattern_set_a1(pattern *pat, const basis_vector *a1)
 { pat->a1.x = a1->x; pat->a1.y = a1->y;}
 
 /*!
@@ -128,7 +128,7 @@ void pattern_set_a1(pattern *pat, const basis_vector *a1)
  * \param[in,out] pat #pattern instance to modify.
  * \param[in] a2 The basis vector \f$ \vec{a_2} \f$
  */
-void pattern_set_a2(pattern *pat, const basis_vector *a2)
+inline void pattern_set_a2(pattern *pat, const basis_vector *a2)
 { pat->a2.x = a2->x; pat->a2.y = a2->y;}
 
 /*!
@@ -137,7 +137,7 @@ void pattern_set_a2(pattern *pat, const basis_vector *a2)
  * \param[in,out] pat #pattern instance to modify.
  * \param radius Default (global) radius of spots in pattern.
  */
-void pattern_set_radius(pattern *pat, double radius)
+inline void pattern_set_radius(pattern *pat, double radius)
 { pat->radius = radius;}
 
 /*!
@@ -190,7 +190,7 @@ int pattern_set_max_domains(pattern *pat, size_t n_domains)
  * \param[in] pat #pattern instance containing domain information.
  * \return number of superstructure domains of \p pat
  */
-size_t pattern_get_n_domains(const pattern *pat)
+inline size_t pattern_get_n_domains(const pattern *pat)
 { return(pat->n_domains);}
 
 /*!
@@ -217,8 +217,8 @@ void pattern_set_title(pattern *pat, const char *title)
  * \param pat #pattern instance to query.
  * \return pointer to @pattern::title of \p pat
  */
-const char *pattern_get_title(const pattern *pat)
-{ return(pat->title);}
+inline const char *pattern_get_title(const pattern *pat)
+{ return((const char*)pat->title);}
 
 /*!
  * Reads \p file to determine the LEED pattern parameters and returns a
@@ -481,7 +481,7 @@ void pattern_set_superstructure_matrix(pattern *pat,
   pat->M_SS[domain].M22 = mat->M22;
 }
 
-const matrix_2x2 *get_superstructure_matrix(const pattern *pat, size_t domain)
+inline const matrix_2x2 *get_superstructure_matrix(const pattern *pat, size_t domain)
 {
   if (domain < pat->n_domains) return(&pat->M_SS[domain]);
   else return(NULL);
@@ -809,7 +809,5 @@ spots *pattern_calculate_superstructure_spots(const pattern *pat, size_t domain)
  * \param[in] pat #pattern instance to query.
  * \return boolean whether \p pat pattern is square.
  */
-bool pattern_is_square(const pattern *pat)
-{
-  return(pat->square);
-}
+inline bool pattern_is_square(const pattern *pat)
+{ return(pat->square); }

@@ -65,8 +65,8 @@
 int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                leed_var *v_par, leed_layer *layer, leed_beam *beams)
 {
-  static int old_set  = I_END_OF_LIST;
-  static int old_n_beams  = I_END_OF_LIST;
+  static int old_set = I_END_OF_LIST;
+  static int old_n_beams = I_END_OF_LIST;
   static int old_type = I_END_OF_LIST;
   static int old_l_max = I_END_OF_LIST;
 
@@ -94,24 +94,14 @@ int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
       ! IS_EQUAL_REAL((beams + n_beams)->k_par, F_END_OF_LIST);
       n_beams ++);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_ms_nd): l_max = %d, "
+  CONTROL_MSG(CONTROL, "l_max = %d, "
             "No of beams = %d, atom type = %d\n", l_max, n_beams, i_type);
-  #endif
 
   /* Check if t_type has the right value */
   if( (t_type != T_DIAG) && (t_type != T_NOND) )
   {
-
-    #ifdef ERROR
-    fprintf(STDERR, "***error (leed_ms_nd): unknown matrix type of t-matrix.\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("unknown matrix type of t-matrix.\n");
+    ERROR_EXIT(-1);
   }
 
   /* Check if the current beam set was used in the previous call.
@@ -124,9 +114,7 @@ int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
         (old_n_beams != n_beams)      ||
         (old_l_max   != l_max)           )
   {
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_ms_nd): recalculate lattice sum etc.\n");
-    #endif
+    CONTROL_MSG(CONTROL, "recalculate lattice sum etc.\n");
 
     /* calculate lattice sum */
     Llm = leed_ms_lsum_ii ( Llm, beams->k_r[0], beams->k_i[0], beams->k_r,
@@ -193,9 +181,7 @@ int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
      * the scattering matrix has to be recalculated if atom type is different. */
     if( old_type != i_type )
     {
-      #ifdef CONTROL
-      fprintf(STDCTR, "(leed_ms_nd): recalculate scattering matrix.\n");
-      #endif
+      CONTROL_MSG(CONTROL, "recalculate scattering matrix.\n");
 
       /* calculate scattering matrix */
       if(t_type == T_DIAG)
@@ -207,9 +193,7 @@ int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
       {
         Tii = leed_ms_tmat_nd_ii( Tii, Llm, v_par->p_tl[i_type], l_max);
 
-        #ifdef CONTROL
-        fprintf(STDCTR, "(leed_ms_nd): T_NOND \n");
-        #endif
+        CONTROL_MSG(CONTROL, "T_NOND \n");
       }
 
     } /* if i_type */

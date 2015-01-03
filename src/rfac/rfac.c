@@ -20,6 +20,7 @@
 #include "rfac.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*!
  * \brief intialize #rfac_iv object.
@@ -74,16 +75,115 @@ rfac_iv *rfac_iv_alloc(size_t n_eng)
   return(_iv);
 }
 
+rfac_args *rfac_args_init()
+{
+  rfac_args *args = (rfac_args*) malloc(sizeof(rfac_args));
+
+  if (args == NULL) return NULL;
+
+  strcpy(args->ctr_file, "\0");
+  strcpy(args->the_file, "\0");
+
+  args->s_ini = -10.;
+  args->s_fin =  10.;
+  args->s_step = 0.5;
+
+  args->r_type = RP_FACTOR;         /* default R factor: rp */
+
+  args->all_groups = 0;             /* display only averge over R-factors */
+  args->vi = 4.0;                   /* im. part of opt. potential */
+
+  strcpy(args->iv_file, "\0");             /* no output of IV curves */
+  strcpy(args->out_file, "\0");            /* will be treated as "stdout" */
+
+  return (args);
+}
+
 /*!
- * Free #rfac_iv object instance from memory.
+ * Free #rfac_iv structure instance from memory.
  */
 void rfac_iv_free(rfac_iv *_iv)
 {
   if (_iv != NULL)
   {
     if (_iv->data != NULL) free(_iv->data);
+    _iv->data = NULL;
     free(_iv);
+    _iv = NULL;
   }
+}
+
+/*!
+ * Performs a deep copy of an #rfac_iv structure.
+ *
+ * \param[out] dest Pointer to copied structure.
+ * \param[in] src Pointer to source structure.
+ *
+ * \warning Nothing will be done if \p src is \c NULL .
+ */
+void rfac_iv_copy(rfac_iv *dest, const rfac_iv *src)
+{
+  if (src == NULL) return; /* nothing to do */
+
+  /* allocate memory for dest if needed */
+  if (dest == NULL)
+    if ( ( dest = (rfac_iv *) malloc(sizeof(rfac_iv)) ) == NULL)
+        return;
+
+  /* free data is exists; to be allocated new memory later */
+  if (dest->data != NULL) free(dest->data);
+
+  /* copy member contents */
+  memcpy(dest, src, sizeof(rfac_iv));
+
+  /* allocate memory for new data */
+  dest->data = (rfac_iv_data *) malloc(dest->n_eng*sizeof(rfac_iv_data));
+
+  if (dest->data == NULL)
+  {
+    free(dest);
+    return;
+  }
+
+  /* copy data */
+  memcpy(dest->data, src->data, dest->n_eng*sizeof(rfac_iv_data));
+}
+
+/*!
+ * Frees an #rfac_ivcur structure from memory.
+ *
+ * \param[in] ivcur Pointer to #rfac_ivcur structure to free.
+ */
+void rfac_ivcur_free(rfac_ivcur *ivcur)
+{
+  if (ivcur == NULL) return;
+
+  rfac_iv_free(ivcur->experimental);
+  rfac_iv_free(ivcur->theory);
+
+  free(ivcur);
+  ivcur = NULL;
+}
+
+/*!
+ * Frees an array of #rfac_ivcur structures from memory.
+ *
+ * \param[in] ivcur Pointer to #rfac_ivcur structure to free.
+ * \warning \p ivcur array must be terminated with #END_OF_GROUP_ID for
+ * the \c group_id member of the final #rfac_iv_cur in the array.
+ */
+void rfac_ivcur_free_all(rfac_ivcur *ivcur)
+{
+  size_t n=0, i;
+
+  if (ivcur == NULL) return;
+  while(ivcur->group_id != END_OF_GROUP_ID)
+  {
+    n++;
+  }
+  for (i=n; i > 0; i--) /* free curves in reverse order - possibly safer? */
+      rfac_ivcur_free(&ivcur[i]);
+  free(ivcur);
 }
 
 /*!

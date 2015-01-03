@@ -41,15 +41,8 @@ mat matsqmod(mat Msq, const mat M)
   /* Check the input matrix */
   if (matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matsqmod): input matrix does not exist \n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("input matrix does not exist \n");
+    ERROR_RETURN(NULL);
   }
 
   /* Diagonal Matrix: */

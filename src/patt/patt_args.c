@@ -236,9 +236,8 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
         {
           if (drawing->n_files >= MAX_INPUT_FILES) 
           {
-            fprintf(stderr,
-                "***warning (patt): too many input files (max = %i) -"
-                "extra files will be ignored...\n", MAX_INPUT_FILES);
+            WARNING_MSG("too many input files (max = %i) -"
+                    "extra files will be ignored...\n", MAX_INPUT_FILES);
           } 
           else
           {
@@ -267,8 +266,7 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
         strcpy(drawing->output_filename, argv[i_arg]);
         if ((f = fopen(argv[i_arg], "w")) == NULL)
         {
-          fprintf(stderr, "***error (patt): failed to open '%s'\n",
-                  argv[i_arg]);
+          ERROR_MSG("failed to open '%s'\n", argv[i_arg]);
           exit(PATT_WRITE_ERROR);
         }
         fclose(f);
@@ -436,9 +434,8 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
          
          if (drawing->format == PATT_UNKNOWN_FORMAT)
          {
-           fprintf(stderr, "***error (patt): "
-                   "'%s' format is either not supported or is invalid - "
-                   "defaulting to 'ps'\n", argv[i_arg+1]);
+           ERROR_MSG("'%s' format is either not supported or is invalid - "
+                     "defaulting to 'ps'\n", argv[i_arg+1]);
            drawing->format = PATT_PS_OLD;
          }
        } /* < argc */
@@ -473,7 +470,7 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
   if ((drawing->footnote.label == NULL) ||
       (strlen(drawing->footnote.label) == 0))
   {
-    strcpy(drawing->footnote.label, PATT_PROG_VERSION);
+    strcpy(drawing->footnote.label, PATT_VERSION);
   }
   
   return(PATT_SUCCESS);

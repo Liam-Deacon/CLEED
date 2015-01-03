@@ -2,7 +2,6 @@
 
 using namespace cleed;
 
-
 void Matrix2x2::print(FILE *stream) 
 {
 ::matrix_2x2_printf(stream, mat);

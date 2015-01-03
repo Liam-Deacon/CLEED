@@ -36,10 +36,7 @@ int matarrfree(mat M)
   /* Check the validity of the pointer M */
   if ( matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matarrfree): improper input for 'M'\n");
-    #endif
-
+    ERROR_MSG("improper input for 'M'\n");
     return(-1);
   }
 

@@ -12,14 +12,14 @@
  *   GH/09.08.94 - creation
  *********************************************************************/
 
-/*! @file
+/*! \file
  *
  * Quantum mechanical calculations for the Hankel function.
  *
  * The file contains r_hank1() and c_hank1() which calculate the real
  * and complex parts of the Hankel functions, respectively.
  *
- * @note Functions tested for PI/2, PI, i and -i.
+ * \note Functions tested for PI/2, PI, i and -i.
  */
 
 #include <math.h>
@@ -75,15 +75,8 @@ mat r_hank1(mat Hl, real x, size_t l_max )
 
   if(IS_EQUAL_REAL(x, 0.))
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (r_hank1): invalid argument x = 0.\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid argument x = 0.\n");
+    ERROR_RETURN(NULL);
   }
  
   if (l_max < 1) l_max = 1;   /* we need at least that much storage */
@@ -168,15 +161,8 @@ mat c_hank1(mat Hl, real z_r, real z_i, size_t l_max )
   /* Check arguments z and l_max */
   if( IS_EQUAL_REAL(z_r, 0.) && IS_EQUAL_REAL(z_i, 0.) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (r_hank1): invalid argument z = (0., 0.)\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("invalid argument z = (0., 0.)\n");
+    ERROR_RETURN(NULL);
   }
 
   if (l_max < 1) l_max = 1;   /* we need at least that much storage */

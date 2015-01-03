@@ -23,25 +23,17 @@
 #ifndef LEED_AOI_H
 #define LEED_AOI_H
 
+#include "gh_stddef.h"
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
-#endif
-
-#include <stdio.h>
-
-#ifndef STRSIZE
-#define STRSIZE 256       /*!< maximum length of string */
-#endif
-
-#ifndef STDERR
-#define STDERR stderr     /*!< error stream for output */
 #endif
 
 #define PROG "cleed_aoi"
 #define PROG_COPYRIGHT "Copyright (C) 2008-2014 Georg Held\n" \
 "Copyright (C) 2007-2009 Zhasmina Zheleeva\n" \
 "Copyright (C) 2014 Liam Deacon"
-#define PROG_LICENSE ""
+#define PROG_LICENSE "GNU General Public License v3"
 #define PROG_VERSION ".. - Development"
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
 #define PROG_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 
@@ -64,16 +56,8 @@ extern "C" {
 /*********************************************************************
 include global values for multiple datasets
 *********************************************************************/
-/*!
- *  \brief provides the number of multiple a datasets
- */
 size_t sa;
-
-/*! \fn bsrinp(char \param *filebsr, int \param number)
- *  \param *filebsr The .bsr file to read from & write to.
- *  \param number The set number for multiple datasets.
- */
-void bsrinp(char *filebsr, size_t number);
+void bsrinp (char *filebsr, size_t number);
 
 /*********************************************************************
 END

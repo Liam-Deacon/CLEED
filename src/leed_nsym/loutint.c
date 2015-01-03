@@ -23,10 +23,6 @@
 
 #include "leed.h"
 
-#ifndef INT_TOLERANCE            /* should be defined in "leed_def.h" */
-#define INT_TOLERANCE 1.e-10               /*!< min intensity != 0. */
-#endif
-
 /*!
  * Prints beam intensities to file \p outfile
  *
@@ -50,15 +46,15 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
   size_t i_beams_now = 0, i_beams_all, i_out;
 
   mat Int = NULL;
-  real k_r  = R_sqrt(2*par->eng_v);
+  real k_r = R_sqrt(2*par->eng_v);
 
   /* Calculate intensities as the square of the moduli of the amplitudes. */
   Int = matsqmod(Int, Amp);
  
   /* Print intensities for non-evanescent beams */
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_output_int):"
-      "\t     beam\t  intensity\n\t\t\t== %.2f eV ==\n", par->eng_v*HART);
+#if CONTROL
+  CONTROL_MSG(CONTROL, "\t     beam\t  intensity\n\t\t\t== %.2f eV ==\n",
+              par->eng_v*HART);
   for (i_beams_now = 0, i_out = 0; i_beams_now < Int->rows; i_beams_now ++)
   {
     if((beams_now + i_beams_now)->k_par <= k_r)
@@ -88,9 +84,9 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
     */
   }
   fprintf(STDCTR, "\t\t(%d/%d)\n", i_beams_now, i_out);
-  #endif
+#endif
 
-  #ifdef CONTROL_ALL
+#if CONTROL_ALL
   fprintf(STDCTR, "\n(leed_output_int): all beams: \n");
 
   for (i_beams_all = 0;
@@ -102,7 +98,7 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
             (beams_all + i_beams_all)->ind_2);
   }
   fprintf(STDCTR, "\t\t(%d)\n", i_beams_all);
-  #endif
+#endif
 
   fprintf(outfile, "%.2f ", par->eng_v*HART);
 

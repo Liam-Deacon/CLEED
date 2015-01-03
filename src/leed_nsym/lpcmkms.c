@@ -25,9 +25,9 @@
 
 #include "leed.h"
 
-#define M_TOLERANCE 1.e-6             /*!< tolerance for floating point zero */
-#define SQRT_4PI3 2.0466534158929771  /*!< \f$ \sqrt{\frac{4 \pi}{3}} \f$ */
-#define SQRT_2_1  0.7071067811865475  /*!< \f$ 1 / sqrt(2) \f$ */
+static const double M_TOLERANCE = 1.e-6; /*!< tolerance for floating point zero */
+static const double SQRT_4PI3  = 2.0466534158929771; /*!< \f$ \sqrt{\frac{4 \pi}{3}} \f$ */
+static const double SQRT_2_1 = 0.7071067811865475;  /*!< \f$ 1 / sqrt(2) \f$ */
 
 
 /*!
@@ -78,9 +78,7 @@ int pc_mk_ms(mat *p_Mx,   mat *p_My,   mat *p_Mz,
   mat Mz, MzMz;
   mat Unity = NULL;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(pc_mk_ms): Enter function lmax = %d\n",l_max);
-  #endif
+  CONTROL_MSG(CONTROL, "Enter function lmax = %d\n", l_max);
 
   /* Call mk_cg_coef() to make sure that all C.G. coefficients are available. */
   mk_cg_coef(2*l_max);
@@ -110,9 +108,7 @@ int pc_mk_ms(mat *p_Mx,   mat *p_My,   mat *p_Mz,
    * !!! Note: BLM(l1,m1,l2,m3,l3,m3) = cg(l1,m1,l2,-m2,l3,-m3) !!!
    */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(pc_mk_ms): Start computing M_xyz matrices\n");
-  #endif
+  CONTROL_MSG(CONTROL, "Start computing M_xyz matrices\n");
 
   for(i_el = 1, l1 = 0; l1 <= l_max; l1 ++)
   {
@@ -154,28 +150,28 @@ int pc_mk_ms(mat *p_Mx,   mat *p_My,   mat *p_Mz,
     } /* m1 */
   } /* i_el */
  
-  #ifdef CONTROL_X
+#if CONTROL_X
   fprintf(STDCTR, "(pc_mk_ms): Mz: \n");
   matshow(Mz);
   fprintf(STDCTR, "(pc_mk_ms): Mx: \n");
   matshow(Mx);
   fprintf(STDCTR, "(pc_mk_ms): My: \n");
   matshow(My);
-  #endif
+#endif
 
   /* Create MxMx, MyMy, MzMz */
   MxMx = matmul(MxMx, Mx, Mx);
   MyMy = matmul(MyMy, My, My);
   MzMz = matmul(MzMz, Mz, Mz);
 
-  #ifdef CONTROL_X
+#if CONTROL_X
   fprintf(STDCTR, "(pc_mk_ms): MzMz: \n");
   matshowabs(MzMz);
   fprintf(STDCTR, "(pc_mk_ms): MxMx: \n");
   matshowabs(MxMx);
   fprintf(STDCTR, "(pc_mk_ms): MyMy: \n");
   matshowabs(MyMy);
-  #endif
+#endif
 
   /* Check trace of Sum MxMx + MyMy + MzMz: should be Unity */
   i_count = 0;
@@ -203,13 +199,8 @@ int pc_mk_ms(mat *p_Mx,   mat *p_My,   mat *p_Mz,
             if( (R_cabs(Unity->rel[i_el] -1., Unity->iel[i_el]) > M_TOLERANCE)
                && (l1 != l_max) )
             {
-
-              #ifdef ERROR
-              fprintf(STDERR, "*** error (pc_mk_ms): "
-                    "trace element (%d %d, %d %d) deviates from 1.: (%f,%f)\n",
-                    l1, m1, l3, m3, Unity->rel[i_el], Unity->iel[i_el]);
-              #endif
-
+              ERROR_MSG("trace element (%d %d, %d %d) deviates from 1.: (%f,%f)\n",
+                        l1, m1, l3, m3, Unity->rel[i_el], Unity->iel[i_el]);
               i_count ++;
             } /* if */
           } /* if l1 == l3 */
@@ -218,13 +209,8 @@ int pc_mk_ms(mat *p_Mx,   mat *p_My,   mat *p_Mz,
             if( ( R_cabs(Unity->rel[i_el], Unity->iel[i_el]) > M_TOLERANCE )
                && (l1 != l_max) && (l3 != l_max) )
             {
-
-              #ifdef ERROR
-              fprintf(STDERR, "*** error (pc_mk_ms): "
-                        "element (%d %d, %d %d) deviates from 0.: (%f,%f)\n",
+              ERROR_MSG("element (%d %d, %d %d) deviates from 0.: (%f,%f)\n",
                         l1, m1, l3, m3, Unity->rel[i_el], Unity->iel[i_el]);
-              #endif
-
               i_count ++;
             } /* if */
           } /* else */
@@ -235,28 +221,24 @@ int pc_mk_ms(mat *p_Mx,   mat *p_My,   mat *p_Mz,
     } /* m1 */
   } /* l1 */
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(pc_mk_ms): MxMx + MyMy + MzMz: \n");
+#if CONTROL_X
+  CONTROL_MSG(CONTROL_X, "MxMx + MyMy + MzMz: \n");
   matshowabs(Unity);
-  #endif
+#endif
 
   if( ! IS_EQUAL_REAL(R_cabs(trace_r, trace_i), 0.))
   {
     faux_r = R_cabs(trace_r - l_max_2, trace_i) / R_cabs(trace_r, trace_i);
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(pc_mk_ms): rel. error in trace of "
+    CONTROL_MSG(CONTROL, "rel. error in trace of "
             "MxMx + MyMy + MzMz: %.3f\n", faux_r);
-    #endif
   }
 
   *p_Mx = Mx; *p_MxMx = MxMx;
   *p_My = My; *p_MyMy = MyMy;
   *p_Mz = Mz; *p_MzMz = MzMz;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(pc_mk_ms): error counts (l < %d): %d\n", l_max, i_count);
-  #endif
+  ERROR_MSG("error counts (l < %d): %d\n", l_max, i_count);
 
   return (i_count);
 } /* end of function pc_mk_ms */

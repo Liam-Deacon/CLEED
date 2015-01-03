@@ -29,7 +29,7 @@ extern "C" {
  * Basic includes
  *********************************************************************/
 
-/*!FIXME: real is always double type */
+/*!FIXME: real is always double type? */
 #define REAL_IS_DOUBLE
 
 #include "real.h"

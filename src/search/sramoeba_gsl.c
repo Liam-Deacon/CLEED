@@ -52,7 +52,7 @@ double sr_amoeba_eval(const gsl_vector *v, void *params)
     int *dummy = (int *) params;
     dummy = dummy + 0;
     
-    return sr_evalrf_gsl(v);
+    return sr_evalrfac_gsl(v);
 }
 
 

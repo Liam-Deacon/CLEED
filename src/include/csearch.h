@@ -42,14 +42,12 @@ extern "C" {
  * Include type definitions and constant values and functions for SEARCH
  *********************************************************************/
 
-#if !defined(USE_GSL) && !defined(USE_GSL)
-  /* numerical receipes */
-  #include "nrr.h"              
-#else
-  /* GNU Scientific Library (open source) */
-  #include <gsl/gsl_vector.h>
-  #include <gsl/gsl_matrix.h>
-  #include <gsl/gsl_multimin.h>
+#if !defined(USE_GSL) /* use numerical receipes */
+# include "nrr.h"
+#else /* use the GNU Scientific Library (open source) */
+# include <gsl/gsl_vector.h>
+# include <gsl/gsl_matrix.h>
+# include <gsl/gsl_multimin.h>
 #endif
 
 #include "search_def.h"

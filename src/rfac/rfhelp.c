@@ -16,7 +16,7 @@
 
 /*! \file
  *
- * Implementation file for file_content(), rf_help() and rf_info() functions.
+ * Implementation file for file_content(), rfac_help() and rfac_info() functions.
  * functions.
  */
 
@@ -47,9 +47,11 @@ char *file_content(const char* filename)
     size = ftell(file);
     rewind(file);
 
-    content = calloc(size + 1, 1);
-
-    fread(content, 1, size, file);
+    if (size > 0)
+    {
+      content = calloc((size_t)size + 1, 1);
+      fread(content, 1, (size_t)size, file);
+    }
     fclose(file);
 
     return content;
@@ -61,7 +63,7 @@ char *file_content(const char* filename)
  * \param *output file pointer to direct output e.g. stderr
  *
  */
-void rf_help(FILE *output)
+void rfac_help(FILE *output)
 {
   char *contents = file_content(getenv("RF_HELP_FILE"));
 
@@ -134,13 +136,13 @@ void rf_help(FILE *output)
  * \brief Print information about the rfac program.
  *
  */
-void rf_info()
+void rfac_info()
 {
     printf("%s - version %s (%s)\n", RFAC, RFAC_VERSION, RFAC_PLAT);
     printf("%s\n", RFAC_SHORTDESC);
     printf("%s\n", RFAC_COPYRIGHT);
     printf("%s\n", RFAC_LICENSE);
-    printf("Contact: %s\n", RFAC_MAINTAINER);
+    printf("Contact: %s or %s\n", RFAC_MAINTAINER, RFAC_AUTHOR);
 }
 
 /********************************************************************/

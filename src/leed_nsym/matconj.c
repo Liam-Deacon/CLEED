@@ -42,10 +42,7 @@ mat matconj(mat Mt, const mat M)
   /* Check the input matrix */
   if (matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDOUT, "*** error (matconj): matrix does not exist \n");
-    #endif
-
+    ERROR_MSG("matrix does not exist \n");
     return(NULL);
   }
 

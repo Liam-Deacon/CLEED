@@ -27,11 +27,9 @@
 #include "caoi_leed.h"
 
 /*!
- * \fn bsrinp
- *
  * Makes sa ia_i.bsr files for each angle of incidence.
  *
- * \param *filebsr the root filename to which \p i_ang & .bsr are appended.
+ * \param filebsr Root filename to which \p i_ang & .bsr are appended.
  *
  * \warning exits on failure.
  *
@@ -44,17 +42,14 @@ void bsrinp(char *filebsr, size_t number)
 
   float ip, it;
 
-  char linebuffer[STRSIZE];
-  char helpstring[STRSIZE];
+  char linebuffer[STRSZ];
+  char helpstring[STRSZ];
 
   FILE *readstream;
   FILE *writestream;
 
-  printf("*** sa: %u ***\n", number);
-
-  #ifdef DEBUG
-    fprintf(STDERR, "***%s***\n", filebsr);
-  #endif
+  CONTROL_MSG(CONTROL, "sa: %u\n", number);
+  ERROR_MSG("%s\n", filebsr);
 
 /***********************************************************************
  Open .bsr file for reading
@@ -63,10 +58,7 @@ void bsrinp(char *filebsr, size_t number)
 
   if ((readstream = fopen (filebsr, "r")) == NULL)
   {
-    #ifdef ERROR
-      fprintf(STDERR, "*** error (caoi_leed_bsr): can not open file %s\n",
-              filebsr);
-    #endif
+    ERROR_MSG("can not open file %s\n", filebsr);
     exit(1);
   }
 
@@ -76,29 +68,24 @@ void bsrinp(char *filebsr, size_t number)
 ***********************************************************************/
 
   if (strlen(filebsr) > 4) length = strlen(filebsr) - 4;
-  #ifdef DEBUG
-    fprintf(STDERR, "***length = %d***\n", length);
-  #endif
+  ERROR_MSG("length = %d\n", length);
 
   for (i_ang = 0; i_ang < number; i_ang ++)
   {
-    fprintf(STDERR, "*** i_ang: %u ***\n", i_ang);
+    ERROR_MSG("i_ang: %u\n", i_ang);
     rewind(readstream);
     strncpy(linebuffer, filebsr, length);
-    fprintf(STDERR, "***%s***\n", linebuffer);
+    ERROR_MSG("%s\n", linebuffer);
     sprintf(linebuffer + length, "ia_%u.bsr", i_ang + 1);
-    fprintf(STDERR, "***%s***\n", linebuffer);
+    ERROR_MSG("%s\n", linebuffer);
 
     if ((writestream = fopen(linebuffer, "w")) == NULL)
     {
-      #ifdef ERROR
-      fprintf(STDERR,
-          "*** error (caoi_leed_bsr): can not open file %s\n", linebuffer);
-      #endif
+      ERROR_MSG("can not open file %s\n", linebuffer);
       exit(1);
     }
 
-    while (fgets(helpstring, STRSIZE, readstream))
+    while (fgets(helpstring, STRSZ, readstream))
     {
       if (!strncasecmp(helpstring, "ipt:", 4))
       {

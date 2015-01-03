@@ -1,5 +1,5 @@
 /*********************************************************************
- * <FILENAME>
+ *                      SRSA.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
@@ -9,19 +9,10 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
  * Changes:
- *29.12.95
- File contains:
-
-  sr_sa(int ndim, char *bak_file, char *log_file)
- Perform a search according to the SIMULATED ANNEALING (SIMPLEX) METHOD
- Driver for routine sr_amebsa (From Numerical Recipes)
-
-Changes
-GH/20.09.95 - Creation (copy from srsx.c)
-GH/29.12.95 - insert dpos in parameter list: initial displacement
-              can be specified through a command line option.
-
-***********************************************************************/
+ *   GH/20.09.95 - Creation (copy from srsx.c)
+ *   GH/29.12.95 - insert dpos in parameter list: initial displacement
+ *                 can be specified through a command line option.
+ ***********************************************************************/
 
 #include <stdio.h>
 #include <strings.h>
@@ -29,24 +20,23 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 #include <stdlib.h>
 #include "csearch.h"
 
-#define START_TEMP     3.5
-#define EPSILON        0.25
-#define ALPHA          4
-#define MAX_ITER_SA  200
-#define ITER_SA      100
-
-/**********************************************************************/
+static const float START_TEMP = 3.5;
+static const float EPSILON = 0.25;
+static const size_t MAX_ITER_SA = 200;
 
 long sa_idum = -1;                /*!< seed for random number generator */
 
-/*!
+/*! \file
  *
+ * Perform a search according to the SIMULATED ANNEALING (SIMPLEX) METHOD
+ * Driver for routine sr_amebsa (From Numerical Recipes)
  */
 void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
 {
 
-  int i_par, j_par;
-  int mpar, nfunc;
+  size_t i_par, j_par;
+  size_t mpar;
+  int nfunc;
 
   real temp, rmin;
   real *x,*y,**p;
@@ -71,7 +61,7 @@ void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
 
   x = vector(1, ndim);
   y = vector(1, mpar);
-  p = matrix(1, mpar,1, ndim);
+  p = matrix(1, mpar, 1, ndim);
 
   if(strncmp(bak_file, "---", 3) == 0)
   {
@@ -85,7 +75,7 @@ void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
 
     for (i_par = 1; i_par <= mpar; i_par ++)
     {
-      for (j_par =1;j_par <= ndim;j_par ++)
+      for (j_par =1; j_par <= ndim; j_par ++)
       {
         if(i_par == (j_par+1))
         {
@@ -97,9 +87,7 @@ void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
         }
       }
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "(sr_sa): Calculate function for vertex(%d)\n", i_par);
-      #endif
+      CONTROL_MSG(CONTROL, "Calculate function for vertex(%d)\n", i_par);
 
       y[i_par] = sr_evalrf(x);
     }
@@ -115,9 +103,7 @@ void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
  * Enter temperature loop
  ***********************************************************************/
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(sr_sa): Enter temperature loop\n");
-  #endif
+  CONTROL_MSG(CONTROL, "Enter temperature loop\n");
 
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
@@ -130,9 +116,7 @@ void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
   nfunc = -1;
   for(temp = START_TEMP; temp > R_TOLERANCE; temp *= (1. - EPSILON) )
   {
-    #ifdef CONTROL
-    fprintf(STDCTR,"(sr_sa): temperature = %.4f\n", temp);
-    #endif
+    CONTROL_MSG(CONTROL, "temperature = %.4f\n", temp);
 
     nfunc = MAX_ITER_SA;
     sr_amebsa(p, y, ndim, x, &rmin, temp, sr_evalrf, &nfunc, temp);
@@ -142,9 +126,7 @@ void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
  * Write final results to log file
  ***********************************************************************/
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(sr_sa): %d function evaluations in sr_amebsa\n", nfunc);
-  #endif
+  CONTROL_MSG(CONTROL, "%d function evaluations in sr_amebsa\n", nfunc);
 
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
@@ -158,7 +140,7 @@ void sr_sa(size_t ndim, real dpos, const char *bak_file, const char *log_file)
   {
     fprintf(log_stream, "%.6f ", x[j_par]);
   }
-  fprintf(log_stream,"\nrmin = %.6f\n", rmin);
+  fprintf(log_stream, "\nrmin = %.6f\n", rmin);
 
   fclose(log_stream);
 

@@ -1,7 +1,7 @@
 /************************************************************************
  *                        COORD.H
  *
- *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later. 
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -53,14 +53,19 @@ void coord_copy(coord *dst, const coord *src);
 void coord_printf(FILE *f, const coord *pos);
 
 #ifdef __cplusplus
-}
+} /* extern "C" */
 
 namespace cleed {
 
+class Basis;
+
 /*!
- * A C++ wrapper class for the #coord \c struct to give a more object-orientated interface.
+ * A C++ wrapper class for the #coord \c struct to give a more
+ * object-orientated interface.
  */
 class Coordinate {
+
+  friend class Basis;
 
   public:
     explicit Coordinate() : pos(::coord_init()) {}
@@ -87,11 +92,11 @@ class Coordinate {
     /* other methods */
     void print(FILE *f = stdout);
     
-  protected:
+  private:
     coord *pos;
 };
 
 } /* namespace cleed */
-#endif
+#endif /* __cpluscplus__ */
 
 #endif /* COORD_H */

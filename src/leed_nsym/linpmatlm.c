@@ -87,28 +87,23 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
     ERROR_MSG("unexpected EOF found while reading file \"%s\"\n", filename);
     exit(1);
   }
-   
-  #ifdef REAL_IS_DOUBLE
-  else if( sscanf(linebuffer, "%u %lf", &l_max_in, &eng) < 2)
-  #else
-  else if( sscanf(linebuffer, "%u %f",  &l_max_in, &eng) < 2)
-  #endif
+  else if( sscanf(linebuffer, "%u %" REAL_FMT "f", &l_max_in, &eng) < 2)
   {
-    #if ERROR
+#if ERROR
     fprintf(STDERR, "\n");
     ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
-    #endif
+#endif
 
     ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, NULL);
   }
 
-  #if WARNING
+#if WARNING
   if (l_max_in > l_max)
   {
     WARNING_MSG("dataset of input file is greater than specified matrix "
                 "(l_max: input %u, matrix %u)\n", l_max_in, l_max);
   }
-  #endif
+#endif
 
   eng = R_sqrt(2*eng);
 
@@ -131,21 +126,17 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
     i_str = 0;
     while(*(linebuffer+i_str) == ' ') i_str++;
 
-    #ifdef REAL_IS_DOUBLE
-    iaux = sscanf(linebuffer+i_str, "%u %d %u %d %d %d %lf %lf",
-    #else
-    iaux = sscanf(linebuffer+i_str, "%u %d %u %d %d %d %f %f",
-    #endif
+    iaux = sscanf(linebuffer+i_str,
+                  "%u %d %u %d %d %d %" REAL_FMT "f %" REAL_FMT "f",
                   &l1, &m1, &l2, &m2, &iaux1, &iaux2, &r_part, &i_part );
 
     if (iaux < 8 || iaux == EOF)
     {
-      #if ERROR
+#if ERROR
       fprintf(STDERR, "\n");
       ERROR_MSG("unable to read values from file \"%s\":\n%s",
                 filename, linebuffer);
-      #endif
-
+#endif
       ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, NULL);
     }
 

@@ -61,10 +61,8 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
   for(n_set = 0; phs_shifts[n_set].lmax != I_END_OF_LIST; n_set ++)
   { ; }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_par_mktl): energy = %.2f H, n_set = %d, l_max = %d\n",
+  CONTROL_MSG(CONTROL, "energy = %.2f H, n_set = %d, l_max = %d\n",
                   energy /*HART*/, n_set, l_max);
-  #endif
 
   if(p_tl == NULL)
   {
@@ -78,10 +76,8 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
 
     l_set_1 = phs_shifts[i_set].lmax + 1;
 
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(leed_par_mktl):i_set = %u, l_max(set) = %u, n_eng = %u\n",
+    CONTROL_MSG(CONTROL_X, "i_set = %u, l_max(set) = %u, n_eng = %u\n",
             i_set, l_set_1 - 1, phs_shifts[i_set].n_eng);
-    #endif
 
     p_tl[i_set] = matalloc(p_tl[i_set], l_set_1, 1, NUM_COMPLEX);
 
@@ -91,29 +87,17 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
     {
 
       /* Abort for too low energies */
-      #ifdef ERROR
-      fprintf(STDERR, "*** error (leed_par_mktl): "
-              "%.1f H is lower than the min. energy for set No. %u\n",
-              energy, i_set);
-      fprintf(STDERR, "\t => exit\n");
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
+      ERROR_MSG("%.1f H is lower than the min. energy for set No. %u\n",
+                energy, i_set);
       free(p_tl);
-      return(NULL);
-      #endif
+      ERROR_RETURN(NULL);
     } /* if (energy too low) */
     else if(energy >= phs_shifts[i_set].eng_max)
     {
       /* Extrapolate for too high energies */
-      #ifdef WARNING
-      fprintf(STDWAR, "* warning (leed_par_mktl): "
-              "%.2f H is higher than the max. energy for set No. %u\n",
-              energy, i_set);
-      fprintf(STDWAR, "\t => calculate extrapolated phase shift values\n");
-      #endif
+      WARNING_MSG("%.2f H is higher than the max. energy for set No. %u\n",
+                  "\t => calculate extrapolated phase shift values\n"
+                  energy, i_set);
 
       i_eng = phs_shifts[i_set].n_eng - 1;
       for(l = 0; l < l_set_1; l ++)
@@ -138,12 +122,11 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
                        energy, l_max, phs_shifts[i_set].lmax);
 
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "(leed_par_mktl): "
-              "after leed_par_temp_tl, dr[0] = %.3f A^2:\n",
-              phs_shifts[i_set].dr[0]*BOHR*BOHR);
+      CONTROL_MSG(CONTROL, "after leed_par_temp_tl, dr[0] = %.3f A^2:\n",
+                  phs_shifts[i_set].dr[0]*BOHR*BOHR);
+#if CONTROL
       matshow(p_tl[i_set]);
-      #endif
+#endif
 
     } /* else if (energy too high) */
     else
@@ -176,11 +159,11 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
       leed_par_temp_tl(p_tl[i_set], p_tl[i_set], phs_shifts[i_set].dr[0],
                        energy, l_max, phs_shifts[i_set].lmax);
 
-      #ifdef CONTROL
-      fprintf(STDCTR, "(leed_par_mktl): after leed_par_temp_tl, "
-              "dr[0] = %.3f A^2:\n", phs_shifts[i_set].dr[0]*BOHR*BOHR);
+      CONTROL_MSG(CONTROL, "after leed_par_temp_tl, "
+                  "dr[0] = %.3f A^2:\n", phs_shifts[i_set].dr[0]*BOHR*BOHR);
+#if CONTROL
       matshow(p_tl[i_set]);
-      #endif
+#endif
 
     } /* else (in the right energy range) */
 

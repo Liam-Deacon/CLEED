@@ -46,7 +46,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
 
   if (x_step <= 0.) 
   {
-    fprintf(stderr," *** error:  x step < or = 0.: %.3e\n", x_step);
+    ERROR_MSG("x step < or = 0.: %.3e\n", x_step);
     exit(1);
   }
 
@@ -70,7 +70,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   faux = cutoff * (1. + 3. / sqrt(tailoff) );    /* (empirical) */
   n_k  = (n_x*(size_t)rint(1.5 * faux)) + 1;
 
-  fprintf(out_stream, "# cutoff: %.3f, tailoff: %.3f => k range: %.3f\n",
+  CONTROL_MSG(CONTROL, "# cutoff: %.3f, tailoff: %.3f => k range: %.3f\n",
 			   cutoff, tailoff, faux);
   if (!stdout_flag)
   {
@@ -105,25 +105,20 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
     fk_c[i_k] = 0.;
   
 
-/* 
- (a) over linear part: 0 < x < x_0 and x[n_x-1] < x < x[n_x-1] + x_0
-*/
-
+    /* (a) over linear part: 0 < x < x_0 and x[n_x-1] < x < x[n_x-1] + x_0 */
     for (x_now = x_step, i_x = 0; x_now < x_0; x_now += x_step, i_x ++)
     {
       faux  = k[i_k] * x_now;
       fk_s[i_k] += (a3*x_now*x_now + a1)*x_now * sin(faux);
 	  
-	  #ifdef DEBUG
-      if (i_k == 0) fprintf(stdout,"%e %e\n", 
+      if (i_k == 0) CONTROL_MSG(CONTROL, "%e %e\n",
                       x_now, (a3*x_now*x_now + a1)*x_now );
-	  #endif
 
       faux  = k[i_k] * (x[n_x-1] - x[0] + x_0 + x_now);
       fk_s[i_k] += (b1 + b2 * x_now) * sin(faux);
 
 	  #ifdef DEBUG
-      if (i_k == 1) fprintf(stdout,"%e %e\n", 
+      if (i_k == 1) fprintf(stdout, "%e %e\n",
               (x[n_x-1] - x[0] + x_0 + x_now), (b1 + b2 * x_now) );
 	  #endif
     } /* for x_now */
@@ -141,9 +136,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
       faux  = k[i_k] * x_now;
       fk_s[i_k] += fx[i_x] * sin(faux);
 
-	 #ifdef DEBUG
-     if (i_k == 0) fprintf(stdout,"%e %e\n", x_now, fx[i_x] );
-	 #endif
+      if (i_k == 0) CONTROL_MSG(CONTROL, "%e %e\n", x_now, fx[i_x] );
 	 
     } /* for i_x */
 
@@ -181,11 +174,11 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   5 point smooth (if required):
 */
 
-  fprintf(out_stream,"# 5 point smooth\n");
+  fprintf(out_stream, "# 5 point smooth\n");
   if(!stdout_flag) printf("#> 5 point smooth\n");
 
   /* 1st data point no smooth */
-  fprintf(out_stream,"%e %e\n", x[0], fx[0] );
+  fprintf(out_stream, "%e %e\n", x[0], fx[0] );
 
   /* 2nd data point 3 point smooth */
   faux = 0.25 * (fx[0] + fx[2]) + 0.5 * fx[1];
@@ -211,5 +204,5 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   free(fk_s);
   free(fk_c);
   
-  return 0;
+  return(0);
 }

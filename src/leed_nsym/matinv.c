@@ -150,13 +150,6 @@ mat matinv(mat A_1, const mat A)
         ERROR_RETURN(NULL);
       }
 
-      /* produce pivot vector information */
-      #if CONTROL
-      CONTROL_MSG(CONTROL, "ipiv: ");
-      for (i=0; i<n; i++) fprintf(STDCTR, " %d", ipiv[i]);
-      fprintf(STDCTR, "\n");
-      #endif
-
       /* Finalise */
       REAL_CBLAS2MAT(A_1, a_1);
       REAL_MATRIX_FREE(a_1);
@@ -196,13 +189,6 @@ mat matinv(mat A_1, const mat A)
         ERROR_RETURN(NULL);
       }
 
-      /* produce pivot vector information */
-      #if CONTROL
-      CONTROL_MSG(CONTROL, "ipiv: ");
-      for (i=0; i<n; i++) fprintf(STDCTR, " %d", ipiv[i]);
-      fprintf(STDCTR, "\n");
-      #endif
-
       /* Finalise */
       COMPLEX_CBLAS2MAT(A_1, a_1);
       COMPLEX_MATRIX_FREE(a_1);
@@ -212,6 +198,14 @@ mat matinv(mat A_1, const mat A)
 
   } /* switch(A->num_type) */
 
+  /* produce pivot vector information */
+  #if CONTROL
+  CONTROL_MSG(CONTROL, "ipiv: ");
+  for (i=0; i<n; i++) fprintf(STDCTR, " %d", ipiv[i]);
+  fprintf(STDCTR, "\n");
+  #endif
+
+  /* clean up */
   matfree(Alu);
   free(ipiv);
 

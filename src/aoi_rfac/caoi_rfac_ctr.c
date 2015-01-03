@@ -27,7 +27,7 @@
 int ctrinp(const char *filectr)
 {
   char stringctr[FILENAME_MAX];
-  char workstr[STRSIZE];
+  char workstr[STRSZ];
 
   FILE *fpf;
   FILE *fp;
@@ -35,14 +35,11 @@ int ctrinp(const char *filectr)
   size_t ictr;
   size_t num;
 
-  strncpy(stringctr, filectr, STRSIZE);
+  strncpy(stringctr, filectr, STRSZ);
 
   if ((fp = fopen(filectr, "r")) == NULL)
   {
-	#ifdef ERROR
-      fprintf(STDERR, "*** error (caoi_rfac_ctr): "
-    		  "could not open output file \"%s\"\n", filectr);
-	#endif
+    ERROR_MSG("could not open output file \"%s\"\n", filectr);
     exit(1);
   }
 
@@ -60,14 +57,11 @@ int ctrinp(const char *filectr)
 
     if ((fpf=fopen(stringctr,"w")) == NULL)
     {
-	  #ifdef ERROR
-    	fprintf(STDERR, "*** error (caoi_rfac_ctr): "
-    			"could not open output file \"%s\"\n", stringctr);
-	  #endif
+      ERROR_MSG("could not open output file \"%s\"\n", stringctr);
       exit(1);
     }
 
-    while (fgets(stringctr, STRSIZE, fp))
+    while (fgets(stringctr, STRSZ, fp))
     {
       if (!strncasecmp(stringctr, "ia:", 3))
         {

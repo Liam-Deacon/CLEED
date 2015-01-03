@@ -48,8 +48,8 @@ size_t fts_read_data(FILE *in_stream, FILE *out_stream, double *x, double *fx)
       if(i_x >= N)
       {
         /* efficiently realloc N*2 amount of memory */
-        N*=2;
-        x =  (double *) realloc(x, N*sizeof(double) );
+        N *= 2;
+        x  = (double *) realloc(x, N*sizeof(double) );
         fx = (double *) realloc(fx, N*sizeof(double) );
       } /* if (i_x >= N) */
 
@@ -57,5 +57,5 @@ size_t fts_read_data(FILE *in_stream, FILE *out_stream, double *x, double *fx)
 
   }  /* for */
   
-  return i_x;
+  return(i_x);
 }

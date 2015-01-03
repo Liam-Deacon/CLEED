@@ -36,11 +36,6 @@
 #include "leed.h"
 #include "leed_def.h"
 
-
-#ifndef GEO_TOLERANCE          /* should be defined in "leed_def.h" */
-#define GEO_TOLERANCE 0.0001                /* ca. 0.00005 A */
-#endif
-
 #ifdef __STRICT_ANSI__
 char *strdup(const char *str) /* strdup is not standard C (its POSIX) */
 {
@@ -52,9 +47,9 @@ char *strdup(const char *str) /* strdup is not standard C (its POSIX) */
 #endif
 
 #if defined(WIN32) || defined(_WIN32)
-#define PATH_SEPARATOR "\\"
+static const char *PATH_SEPARATOR = "\\";
 #else
-#define PATH_SEPARATOR "/"
+static const char *PATH_SEPARATOR = "/";
 #endif
 
 static int i_phase = 0;      /* number of atom types */
@@ -123,16 +118,8 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     if(getenv("CLEED_PHASE") == NULL)
     {
 
-      #ifdef ERROR
-      fprintf(STDERR, " *** error (leed_leed_inp_phase): "
-          "environment variable CLEED_PHASE not defined\n");
-      #endif
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(-1);
-      #endif
+      ERROR_MSG("environment variable CLEED_PHASE not defined\n");
+      ERROR_RETURN(-1);
     }
     sprintf(filename, "%s%s%s.phs", getenv("CLEED_PHASE"),
             PATH_SEPARATOR, phaseinp);
@@ -177,26 +164,16 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   phs_shifts->t_type = t_type;
 
   /* Open and Read input file for a new set of phase shifts */
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_leed_inp_phase): Reading file \"%s\", i_phase = %d\n",
-           filename, i_phase-1);
-  #endif
+  CONTROL_MSG(CONTROL,
+              "Reading file \"%s\", i_phase = %d\n", filename, i_phase-1);
 
   /* Open input file.
    * Copy the full filename into phs_shifts->input_file.
    */
   if( (inp_stream = fopen(filename, "r")) == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_leed_inp_phase): "
-        "could not open file \"%s\"\n", filename);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("could not open file \"%s\"\n", filename);
+    ERROR_RETURN(-1);
   }
 
   phs_shifts->input_file = strdup(filename);
@@ -210,24 +187,13 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
 
   if ( linebuffer == NULL)     /* EOF found */
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_leed_inp_phase): "
-        "unexpected EOF found while reading file \"%s\"\n", filename);
-    #endif
+    ERROR_MSG("unexpected EOF found while reading file \"%s\"\n", filename);
     exit(1);
   }
   else if( sscanf(linebuffer, "%d %d %s", &neng, &lmax, eng_type) < 2)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_leed_inp_phase): "
-        "improper input line in file \"%s\":\n%s", filename, linebuffer);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
+    ERROR_RETURN(-1);
   }
 
   /* Define energy scale according to eng_type. The default is
@@ -237,25 +203,19 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   {
     eng_scale = 1./HART;
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_leed_inp_phase): Energy input in eV\n");
-    #endif
+    CONTROL_MSG(CONTROL, "Energy input in eV\n");
   }
   else if( !strncmp(eng_type, "Ry", 2) || !strncmp(eng_type, "RY", 2) )
   {
     eng_scale = 2.;
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_leed_inp_phase): Energy input in Rydberg (13.59 eV)\n");
-    #endif
+    CONTROL_MSG(CONTROL, "Energy input in Rydberg (13.59 eV)\n");
   }
   else
   {
     eng_scale = 1.;
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_leed_inp_phase): Energy input in Hartree (27.18 eV)\n");
-    #endif
+    CONTROL_MSG(CONTROL, "Energy input in Hartree (27.18 eV)\n");
   }
   
   /* Read energies and phase shifts.
@@ -276,11 +236,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
        i_eng ++)
   {
 
-    #ifdef REAL_IS_DOUBLE
-    sscanf(linebuffer, "%le", phs_shifts->energy+i_eng);
-    #else
-    sscanf(linebuffer, "%e", phs_shifts->energy+i_eng);
-    #endif
+    sscanf(linebuffer, "%" REAL_FMT "e", phs_shifts->energy+i_eng);
     phs_shifts->energy[i_eng] *= eng_scale;
    
     if (i_eng == 0)
@@ -296,12 +252,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     {
       for( i_str = 0, i = 0; i<nl; i++)
       {
-        #ifdef REAL_IS_DOUBLE
-        sscanf(linebuffer + i_str, "%le", phs_shifts->pshift+i_eng*nl+i);
-        #else
-        sscanf(linebuffer + i_str, "%e", phs_shifts->pshift+i_eng*nl+i);
-        #endif
-
+        sscanf(linebuffer + i_str, "%" REAL_FMT "e", phs_shifts->pshift+i_eng*nl+i);
         while((linebuffer[i_str] == ' ') || (linebuffer[i_str] == '-')) i_str++;
         while((linebuffer[i_str] != ' ') && (linebuffer[i_str] != '-')) i_str++;
       }
@@ -316,9 +267,9 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
  
   phs_shifts->n_eng = i_eng;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_leed_inp_phase): Number of energies = %d, lmax = %d\n",
-         phs_shifts->n_eng, phs_shifts->lmax);
+#if CONTROL
+  CONTROL_MSG(CONTROL, "Number of energies = %d, lmax = %d\n",
+              phs_shifts->n_eng, phs_shifts->lmax);
   fprintf(STDCTR, "\n\t  E(H)");
   for(i=0; i<nl; i++) fprintf(STDCTR, "\t  l=%2d",i);
   fprintf(STDCTR, "\n\n");
@@ -337,17 +288,16 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     fprintf(STDCTR, "\n");
   }
   fprintf(STDCTR, "\n");
-  #endif
+#endif
 
-  #ifdef WARNING
+#ifdef WARNING
   if(phs_shifts->n_eng != neng)
   {
-    fprintf(STDWAR, "*warning (leed_leed_inp_phase): "
-        "EOF found before reading all phase shifts:\n");
-    fprintf(STDWAR, "     expected energies: %3d, found: %3d, file: %s\n",
-            neng, i_eng+1, filename);
+    WARNING_MSG("EOF found before reading all phase shifts:\n"
+                "     expected energies: %3d, found: %3d, file: %s\n",
+                neng, i_eng+1, filename);
   }
-  #endif
+#endif
 
   return(i_phase-1);
 } /* end of function leed_leed_inp_phase */

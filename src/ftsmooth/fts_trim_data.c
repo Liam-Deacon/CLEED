@@ -56,7 +56,7 @@ size_t fts_trim_data(double *x, double *fx, size_t n_x,
   }  
   
   /* stop if no trimming required */
-  if(n_x == n_t) return n_x;
+  if(n_x == n_t) return(n_x);
   
   /* allocate new matrices */
   trim_x  = (double *) malloc (n_t * sizeof(double) );
@@ -85,12 +85,12 @@ size_t fts_trim_data(double *x, double *fx, size_t n_x,
   
   /* reallocate space for trimmed data
 	 using factors of STRSZ to reduce memory fragmentation */
-  if(n_t>STRSZ) N=(n_t-(n_t%STRSZ))*2; /* N=2^i blocks, where i is an integer */
-  else N=STRSZ;
+  if(n_t > STRSZ) N = (n_t-(n_t % STRSZ))*2; /* N=2^i blocks, where i is an integer */
+  else N = STRSZ;
 	
-  if(n_t>=N-1) 
+  if(n_t >= N-1)
   {
-    fprintf(stderr, "error: trimmed data (%i) > %i!\n", n_t, N);
+    ERROR_MSG("trimmed data (%i) > %i!\n", n_t, N);
     exit(-1);
   }
   
@@ -101,5 +101,5 @@ size_t fts_trim_data(double *x, double *fx, size_t n_x,
   free(trim_x);
   free(trim_fx);
   
-  return n_t;
+  return(n_t);
 }

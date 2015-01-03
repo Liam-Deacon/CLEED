@@ -59,7 +59,7 @@
  *
  * \retval 0 if no overlap.
  */
-size_t rf_mklide(real *eng, real *e_int, real *t_int,
+size_t rfac_mklide(real *eng, real *e_int, real *t_int,
               real de, real shift,
               rfac_iv_data *exp_list, size_t exp_leng,
               rfac_iv_data *the_list, size_t the_leng)
@@ -89,16 +89,16 @@ size_t rf_mklide(real *eng, real *e_int, real *t_int,
      energy += de, n_eng ++)
   {
     eng[n_eng]  = energy;
-    e_int[n_eng] = rf_splint(eng[n_eng],         exp_list, exp_leng);
-    t_int[n_eng] = rf_splint(eng[n_eng] - shift, the_list, the_leng);
+    e_int[n_eng] = rfac_splint(eng[n_eng],         exp_list, exp_leng);
+    t_int[n_eng] = rfac_splint(eng[n_eng] - shift, the_list, the_leng);
     e_max = MAX(e_int[n_eng], e_max);
     t_max = MAX(t_int[n_eng], t_max);
   }
 
   /* terminate lists */
-  eng[n_eng]  = F_END_OF_LIST;
-  e_int[n_eng] = F_END_OF_LIST;
-  t_int[n_eng] = F_END_OF_LIST;
+  eng[n_eng]   = (real) F_END_OF_LIST;
+  e_int[n_eng] = (real) F_END_OF_LIST;
+  t_int[n_eng] = (real) F_END_OF_LIST;
 
   #ifdef CONTROL
   fprintf(STDCTR, "(cr_mklist): (exp) n_eng: %d\n", n_eng);
@@ -116,4 +116,4 @@ size_t rf_mklide(real *eng, real *e_int, real *t_int,
   #endif
 
   return(n_eng);
-}  /* end of function rf_mklist */
+}  /* end of function rfac_mklist */

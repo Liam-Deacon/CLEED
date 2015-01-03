@@ -381,10 +381,10 @@ int lattice_set_output_filename(lattice *lat, const char *filename)
 /*!
  * Returns the @lattice::a_latt of \p lat
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return \f$ a \f$ lattice constant
+ * \param[in] lat Pointer to #lattice structure.
+ * \return \f$ a \f$ lattice constant
  */
-double lattice_get_a(const lattice *lat)
+inline double lattice_get_a(const lattice *lat)
 {
   return (lat->a_latt);
 }
@@ -392,10 +392,10 @@ double lattice_get_a(const lattice *lat)
 /*!
  * Returns the @lattice::b_latt of \p lat
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return \f$ b \f$ lattice constant
+ * \param[in] lat Pointer to #lattice structure.
+ * \return \f$ b \f$ lattice constant
  */
-double lattice_get_b(const lattice *lat)
+inline double lattice_get_b(const lattice *lat)
 {
   return (lat->b_latt);
 }
@@ -403,10 +403,10 @@ double lattice_get_b(const lattice *lat)
 /*!
  * Returns the @lattice::c_latt of \p lat
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return \f$ c \f$ lattice constant
+ * \param[in] lat Pointer to #lattice structure.
+ * \return \f$ c \f$ lattice constant
  */
-double lattice_get_c(const lattice *lat)
+inline double lattice_get_c(const lattice *lat)
 {
   return (lat->c_latt);
 }
@@ -415,10 +415,10 @@ double lattice_get_c(const lattice *lat)
  * Returns the maximum lateral displacement allowed for \p lat when
  * creating a lattice of atoms.
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return Maximum allowed lateral displacement.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return Maximum allowed lateral displacement.
  */
-double lattice_get_max_disp(const lattice *lat)
+inline double lattice_get_max_disp(const lattice *lat)
 {
   return (lat->max_disp);
 }
@@ -427,10 +427,10 @@ double lattice_get_max_disp(const lattice *lat)
  * Returns the maximum vertical displacement allowed for \p lat when
  * creating a lattice of atoms.
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return Maximum allowed vertical displacement.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return Maximum allowed vertical displacement.
  */
-double lattice_get_max_disp_z(const lattice *lat)
+inline double lattice_get_max_disp_z(const lattice *lat)
 {
   return (lat->max_disp_z);
 }
@@ -439,10 +439,10 @@ double lattice_get_max_disp_z(const lattice *lat)
  * Returns the maximum allowed number of layers for \p lat when
  * creating a lattice of atoms.
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return Maximum allowed number of layers.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return Maximum allowed number of layers.
  */
-size_t lattice_get_max_layers(const lattice *lat)
+inline size_t lattice_get_max_layers(const lattice *lat)
 {
   return (lat->max_layers);
 }
@@ -451,10 +451,10 @@ size_t lattice_get_max_layers(const lattice *lat)
  * Returns the maximum allowed number of lateral unit cells for \p lat
  * when creating a lattice of atoms.
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return Maximum allowed number of lateral unit cells.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return Maximum allowed number of lateral unit cells.
  */
-size_t lattice_get_max_cells(const lattice *lat)
+inline size_t lattice_get_max_cells(const lattice *lat)
 {
   return (lat->max_cells);
 }
@@ -462,10 +462,10 @@ size_t lattice_get_max_cells(const lattice *lat)
 /*!
  * Returns the Miller index \f$ h \f$ of \p lat .
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return \f$ h \f$ Miller index.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return \f$ h \f$ Miller index.
  */
-double lattice_get_h(const lattice *lat)
+inline double lattice_get_h(const lattice *lat)
 {
   return (lat->vec_h);
 }
@@ -473,10 +473,10 @@ double lattice_get_h(const lattice *lat)
 /*!
  * Returns the Miller index \f$ k \f$ of \p lat .
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return \f$ k \f$ Miller index.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return \f$ k \f$ Miller index.
  */
-double lattice_get_k(const lattice *lat)
+inline double lattice_get_k(const lattice *lat)
 {
   return (lat->vec_k);
 }
@@ -484,10 +484,10 @@ double lattice_get_k(const lattice *lat)
 /*!
  * Returns the Miller index \f$ l \f$ of \p lat .
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return \f$ l \f$ Miller index.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return \f$ l \f$ Miller index.
  */
-double lattice_get_l(const lattice *lat)
+inline double lattice_get_l(const lattice *lat)
 {
   return (lat->vec_l);
 }
@@ -495,10 +495,10 @@ double lattice_get_l(const lattice *lat)
 /*!
  * Returns the filename of the input file for \p lat
  *
- * @param[in] lat Pointer to #lattice structure holding filename.
- * @return String of input filename or path.
+ * \param[in] lat Pointer to #lattice structure holding filename.
+ * \return String of input filename or path.
  */
-const char *lattice_get_input_filename(const lattice *lat)
+inline const char *lattice_get_input_filename(const lattice *lat)
 {  
   const char *filename = (const char*) lat->input_filename;
   return (filename);
@@ -507,10 +507,10 @@ const char *lattice_get_input_filename(const lattice *lat)
 /*!
  * Returns the filename of the output file for \p lat
  *
- * @param[in] lat Pointer to #lattice structure holding filename.
- * @return String of output filename or path.
+ * \param[in] lat Pointer to #lattice structure holding filename.
+ * \return String of output filename or path.
  */
-const char *lattice_get_output_filename(const lattice *lat)
+inline const char *lattice_get_output_filename(const lattice *lat)
 {
   const char *filename = (const char*) lat->output_filename;
   return (filename);
@@ -519,10 +519,10 @@ const char *lattice_get_output_filename(const lattice *lat)
 /*!
  * Returns the number of atoms in the @lattice::atoms array of \p lat
  *
- * @param[in] lat Pointer to #lattice structure.
- * @return Number of atoms in structure.
+ * \param[in] lat Pointer to #lattice structure.
+ * \return Number of atoms in structure.
  */
-size_t lattice_get_n_atoms(const lattice *lat)
+inline size_t lattice_get_n_atoms(const lattice *lat)
 {
   return (lat->n_atoms);
 }
@@ -565,7 +565,7 @@ atom *lattice_get_atom(const lattice *lat, size_t index)
  * \param[in] lat Pointer to #lattice instance.
  * \return Pointer to a list of #atom objects.
  */
-const atom *lattice_get_atom_list(const lattice *lat)
+extern const atom *lattice_get_atom_list(const lattice *lat)
 {
   const atom *atoms = (const atom*) lat->atoms;
   return (atoms);

@@ -29,14 +29,14 @@
 #include "mat.h"
 #include "qm.h"
 
-#ifdef WARNING
-#define WARN_LEVEL 1.0
+#if WARNING
+# define WARN_LEVEL 1.0
 /* if a C.G-C exceeds this level, a warning message will be printed */
 #endif
 
-#define UNUSED     -1
+static const int UNUSED = -1;
 
-static double *cg_coef  = NULL;      /*!< Clebsh Gordan coefficients */
+static double *cg_coef = NULL;       /*!< Clebsh Gordan coefficients */
 
 static int l_max_coef = UNUSED;      /*!< l_max for the C.G.C */
 static int st_fac1    = UNUSED;
@@ -125,25 +125,16 @@ int mk_cg_coef(size_t l_max)
   /* If not, allocate memory for cg_coef */
   iaux = (2*l_max + 1)*(2*l_max + 2)/2 * (l_max + 1)*(l_max + 1) * (l_max/2 + 1);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(mk_cg_coef): cg_coef[%d] (%.3f Mb) for l_max = %2d\n",
+  CONTROL_MSG(CONTROL, "cg_coef[%d] (%.3f Mb) for l_max = %2d\n",
                       iaux, (real)iaux*sizeof(double) / MBYTE, l_max );
-  #endif
 
   if (cg_coef != NULL) free(cg_coef);
   cg_coef = (double *) calloc (iaux, sizeof(double));
   if (cg_coef == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "(mk_cg_coef): allocation error: cg_coef[%d] = %d bytes\n",
-            iaux, iaux*sizeof(double) );
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("allocation error: cg_coef[%d] = %d bytes\n",
+              iaux, iaux*sizeof(double) );
+    ERROR_RETURN(-1);
   }
 
   /* Static variables used to retrieve the C.G.C's */
@@ -195,11 +186,9 @@ int mk_cg_coef(size_t l_max)
             m2 = abs(m2pm);
             m3 = abs(m3pm);
 
-            #ifdef CONTROL_MK1
-            fprintf(STDCTR,
-              "(mk_cg_coef):     > [%1d,%1d(%1d)%1d,%1d(%1d)%1d,%1d(%1d)]\n",
-                                   l1,m1,m1pm,l2,m2,m2pm,l3,m3,m3pm);
-            #endif
+            CONTROL_MSG(CONTROL_ALL,
+                "     > [%1d,%1d(%1d)%1d,%1d(%1d)%1d,%1d(%1d)]\n",
+                l1, m1, m1pm, l2, m2, m2pm, l3, m3, m3pm);
 
             /* Find the address in storage space cp_coef:
              * C(l2,m2,l3,m3) and C(l3,m3,l2,m2) are identical:
@@ -244,12 +233,9 @@ int mk_cg_coef(size_t l_max)
                   (fac[2*lll + 1]*fac[lll -l1_s]*fac[lll -l2_s]*fac[lll -l3_s]);
             }
 
-            #ifdef CONTROL_MK1
-            fprintf(STDCTR,
-                   "[%1d,%1d,%1d,%1d,%1d,%1d] > [%1d,%1d,%1d,%1d,%1d,%1d]",
-                    l1,m1pm,l2,m2pm,l3,m3pm, l1_s,m1,l2_s,m2,l3_s,m3);
-            fprintf(STDCTR," fac_ls = %e\n", fac_ls);
-            #endif
+            CONTROL_MSG(CONTROL_ALL, "[%1d,%1d,%1d,%1d,%1d,%1d] > "
+                    "[%1d,%1d,%1d,%1d,%1d,%1d] fac_ls = %e\n", l1, m1pm, l2,
+                    m2pm, l3, m3pm, l1_s, m1, l2_s, m2, l3_s, m3, fac_ls);
 
             /* Calculate fac_m:
              * According to Pendry's book
@@ -293,15 +279,14 @@ int mk_cg_coef(size_t l_max)
             cg_coef[i_st1] = sign * fac_ls * fac_m * sum_m;
             cg_coef[i_st2] = sign * fac_ls * fac_m * sum_m;
 
-            #ifdef WARNING
+#ifdef WARNING
             if (cg_coef[i_st1] > WARN_LEVEL)
             {
-              fprintf(STDWAR, "* warning (mk_cg_coef): "
-                  "CG-C[%2d %2d %2d %2d %2d %2d] = %9.6f\n",
-                  l1, m1pm, l2, m2pm, l3, m3pm, cg_coef[i_st1]);
-              i_warn ++;
+              WARNING_MSG("CG-C[%2d %2d %2d %2d %2d %2d] = %9.6f\n",
+                          l1, m1pm, l2, m2pm, l3, m3pm, cg_coef[i_st1]);
+              i_warn++;
             }
-            #endif
+#endif
 
             #ifdef CONTROL_MK
             fprintf(STDCTR, " CG-C[%2d%2d%2d%2d%2d%2d] = %9.6f",
@@ -317,16 +302,12 @@ int mk_cg_coef(size_t l_max)
     } /* l2 */
   } /* l1 */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(mk_cg_coef): number of operations = %d\n", i_op);
-  #endif
+  CONTROL_MSG(CONTROL, "number of operations = %d\n", i_op);
 
-  #ifdef WARNING
   if (i_warn)
   {
-    fprintf(STDWAR, "* (mk_cg_coef): number of warnings   = %d\n", i_warn);
+    WARNING_MSG("number of warnings   = %d\n", i_warn);
   }
-  #endif
 
   free(fac);
 
@@ -426,10 +407,8 @@ double cg (int l1, int m1, int l2, int m2, int l3, int m3)
    */
   if (m1 < 0) { m1 = -m1; m2 = -m2; }
 
-  #ifdef CONTROL_CG
-  fprintf(STDCTR, "(cg:) l1:%2d, m1:%2d, l2:%2d, m2:%2d, l3:%2d, m3:%2d\n",
-           l1,m1,l2,m2,l3,m3 );
-  #endif
+  CONTROL_MSG(CONTROL_ALL, "l1:%2d, m1:%2d, l2:%2d, m2:%2d, l3:%2d, m3:%2d\n",
+            l1, m1, l2, m2, l3, m3 );
  
   i_st = (l1 * (l1 + 1)/2 + m1) * st_fac1 +
          (l2 * (l2 + 1)   + m2) * st_fac2 + l3/2;

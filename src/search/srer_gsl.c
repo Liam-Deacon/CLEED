@@ -79,7 +79,7 @@ void sr_er_gsl(size_t n_dim, real dpos, char *log_file)
   fprintf(log_stream, "=> displace parameters from minimum:\n");
   fclose(log_stream);
 
-  y_0 = sr_evalrf_gsl(x_0);
+  y_0 = sr_evalrfac_gsl(x_0);
 
 /***********************************************************************
   Read R factor value and RR factor for minimum
@@ -172,7 +172,7 @@ void sr_er_gsl(size_t n_dim, real dpos, char *log_file)
                   " Calculate function for parameter (%d)\n", i_par);
         #endif
 
-        gsl_vector_set(y, i_par-1, sr_evalrf_gsl(x));
+        gsl_vector_set(y, i_par-1, sr_evalrfac_gsl(x));
 
         rdel =  R_fabs(gsl_vector_get(y, i_par-1) - y_0) / pref;
       }

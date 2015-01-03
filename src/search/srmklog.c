@@ -40,7 +40,7 @@ void sr_mklog(const char *log_file)
     OPEN_ERROR(log_file);
   }
 
-  fprintf(log_stream, "CSEARCH - version %s\n\n", SR_VERSION);
+  fprintf(log_stream, "CSEARCH - version %s\n\n", SEARCH_VERSION);
   fprintf(log_stream, "=> Atoms in search:\n\n");
   for(i_atoms = 0; sr_atoms[i_atoms].type != I_END_OF_LIST; i_atoms ++)
   {

@@ -14,7 +14,7 @@
 
 /*! \file
  *
- * Implementation file for rf_spline() function.
+ * Implementation file for rfac_iv_spline() function.
  */
 
 #include <malloc.h>
@@ -26,14 +26,14 @@
  * \param[in,out] *list list of energy/intensity values to be
  * interpolated by cubic spline.
  * The function will generate the structure elements deriv2, which will
- * be used for interpolation in function rf_splint() .
+ * be used for interpolation in function rfac_splint() .
  *
  * For a description see Numerical Recipes in C Chapter 3.3.
  * The boundary conditions are set for a natural spline
  * (zero second derivative on both boundaries).
  *
  */
-void rf_spline(rfac_iv *iv)
+void rfac_iv_spline(rfac_iv *iv)
 {
   size_t i;
   int k;
@@ -68,5 +68,7 @@ void rf_spline(rfac_iv *iv)
   }
 
   free(buf);
+
+  iv->spline = true; /* update spline flag */
 
 }  /* end of function cr_spline */

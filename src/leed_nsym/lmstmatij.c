@@ -75,50 +75,31 @@ mat leed_ms_tmat_ij ( mat Gij, mat Llm, mat Tii, size_t l_max)
    */
   if (matcheck(Llm) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_ms_tmat_ij): "
-            "improper input for lattice sum\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("improper input for lattice sum\n");
+    ERROR_RETURN(NULL);
   }
 
   if  (matcheck(Tii) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (leed_ms_tmat_ij): "
-            "improper input for atomic scattering\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(NULL);
-    #endif
+    ERROR_MSG("improper input for atomic scattering\n");
+    ERROR_RETURN(NULL);
   }
 
   if(mk_cg_coef(l_max) != 0)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, "* warning (leed_ms_tmat_ij): "
-            "C.G. coefficients had to be recalculated\n");
-    #endif
+    WARNING_MSG("C.G. coefficients had to be recalculated\n");
   }
 
   /* Allocate Gij */
   Gij = matalloc(Gij, n, n, NUM_COMPLEX);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ij): Llm:\n");
+#if CONTROL
+  CONTROL_MSG(CONTROL, "\nLlm:\n");
   for(i3 = 1; i3 <= Llm->rows; i3++)
   {
-    printf("(%8.5f, %8.5f)\n", Llm->rel[i3], Llm->iel[i3]);
+    fprintf(STDCTR, "(%8.5f, %8.5f)\n", Llm->rel[i3], Llm->iel[i3]);
   }
-  #endif
+#endif
 
   /* Loop over (l1,m1),(l2,m2): Set up  -Gij(l1,m1; l2,m2).
    *
@@ -180,18 +161,18 @@ mat leed_ms_tmat_ij ( mat Gij, mat Llm, mat Tii, size_t l_max)
     } /* m1 */
   } /* l1 */
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ij): Gij: \n");
+#if CONTROL
+  CONTROL_MSG(CONTROL, "\nGij: \n");
   matshow (Gij);
-  #endif
+#endif
 
   /* Final matrix multiplication: Gij -> -Tii * Gij */
   Gij = matmul(Gij, Tii, Gij);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ms_tmat_ij): Tii*Gij: \n");
+#if CONTROL
+  CONTROL_MSG(CONTROL, "\nTii*Gij: \n");
   matshow (Gij);
-  #endif
+#endif
 
   return(Gij);
 } /* end of function leed_ms_tmat_ij */

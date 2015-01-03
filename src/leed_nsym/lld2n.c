@@ -95,10 +95,8 @@ mat leed_ld_2n (mat Rpm, mat Tpp_a,  mat Tmm_a,  mat Rpm_a,  mat Rmp_a,
 
   abs_new = matabs(Tpp);
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_ld_2n):vec between periodic stacks(%.3f %.3f %.3f)\n",
+  CONTROL_MSG(CONTROL_X, "vec between periodic stacks(%.3f %.3f %.3f)\n",
          vec_aa[1] * BOHR,vec_aa[2] * BOHR,vec_aa[3] * BOHR);
-  #endif
 
   for (i_layer = 1; abs_new >  LD_TOLERANCE; i_layer *= 2)
   /*
@@ -112,18 +110,13 @@ mat leed_ld_2n (mat Rpm, mat Tpp_a,  mat Tmm_a,  mat Rpm_a,  mat Rmp_a,
 
     abs_new = matabs(Tpp)/(Tpp->cols*Tpp->rows);
    
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(leed_ld_2n): No. of layers (i_layer) = "
+    CONTROL_MSG(CONTROL_X, "No. of layers (i_layer) = "
         "%3d, abs_new = %.1e, tol = %.1e\n", i_layer, abs_new, LD_TOLERANCE);
-    #endif
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "\n(leed_ld_2n): "
-      "No. of layers included in final iteration: %d;\n", i_layer);
-  fprintf(STDCTR, "         modulus of transmission matrix: %.0e (tol: %.0e)\n",
-          abs_new, LD_TOLERANCE);
-  #endif
+  CONTROL_MSG(CONTROL, "No. of layers included in final iteration: %d;\n"
+              "         modulus of transmission matrix: %.0e (tol: %.0e)\n",
+              i_layer, abs_new, LD_TOLERANCE);
 
   /* free memory and return */
   matfree(Tpp);

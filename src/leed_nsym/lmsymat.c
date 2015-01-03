@@ -66,11 +66,9 @@ mat leed_ms_ymat(mat Ymat, size_t l_max, const leed_beam *beams, size_t n_beams)
   for (i_beams = 0, off = 1; i_beams < n_beams; i_beams ++, off += ll_max)
   {
 
-    #ifdef CONTROL
-    fprintf(STDCTR, "(leed_ms_ymat): cos(th): (%.3f %.3f), phi: %.3f\n",
+    CONTROL_MSG(CONTROL, "cos(th): (%.3f %.3f), phi: %.3f\n",
              (beams+i_beams)->cth_r,
              (beams+i_beams)->cth_i, (beams+i_beams)->phi);
-    #endif
 
     Ylm = c_ylm(Ylm, (beams+i_beams)->cth_r, (beams+i_beams)->cth_i,
                      (beams+i_beams)->phi, l_max);

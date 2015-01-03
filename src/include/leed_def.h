@@ -52,11 +52,11 @@ extern "C" {
  * (Source: CRC Handbook, 73rd Edition)
  *********************************************************************/
 
-#define HART  27.2113962       /*!< Hartree in eV */
-#define BOHR  0.529177249      /*!< Bohr radius in Angstroms */
-#define MEL_U 5.48579903e-4    /*!< electron mass in amu (atomic mass units) */
-#define U_MEL 1822.88850636    /*!< 1 amu in multiples of the electron mass */
-#define KB    3.16682941e-6    /*!< Boltzmann constant in Hartree/K */
+static const double HART = 27.2113962;  /*!< Hartree in eV */
+static const double BOHR = 0.529177249; /*!< Bohr radius in Angstroms */
+static const double MEL_U = 5.48579903e-4; /*!< electron mass in amu */
+static const double U_MEL = 1822.88850636; /*!< 1 amu in multiples of electron mass */
+static const double KB = 3.16682941e-6;  /*!< Boltzmann constant in Hartree/K */
 
 /*********************************************************************
  * Program parameters
@@ -69,38 +69,36 @@ extern "C" {
 /*!
  * Default path name for phase shift input relative to HOME directory
  */
-#define PHASE_PATH "phase"
+//static const char *PHASE_PATH = "phase";
                                
-/*! \def DEF_TEMP 
- *
- * default temperature for calculating thermal vibrations */
-#define DEF_TEMP 300.
+/*!
+ * Default temperature for calculating thermal vibrations
+ */
+static const double DEF_TEMP = 300.;
 
-/*! \def R_FOR_LMAX
- *
- * default muffin-tin-radius (in BOHR) used to calculate l_max (if not given) */
-#define R_FOR_LMAX 2.0         
+/*!
+ * Default muffin-tin-radius (in BOHR) used to calculate l_max (if not given)
+ */
+static const double R_FOR_LMAX = 2.0;
 
 /* Threshold values */
-/*! \def MIN_DIST
- *
- * Minimum distance for Layer Doubling in BOHR (1.0 A) */
-#define MIN_DIST 1.5
+/*!
+ * Minimum distance for Layer Doubling in BOHR (1.0 A)
+ */
+static const double MIN_DIST = 1.5;
 
-/*! \def R_FOR_LMAX
- * 
- * start value for variable imag. opt. potential (100. eV/HART) */
-#define VI_START 3.67493 
+/*!
+ * Start value for variable imag. opt. potential (100. eV/HART)
+ */
+static const double VI_START = 3.67493;
 
 /* Tolerances */
-/*! \def E_TOLERANCE
- *  \brief tolerance for energies in HARTREE (0.027eV) */
-#define E_TOLERANCE    1.e-3   /*!< tolerance for comparing two energies */
-#define GEO_TOLERANCE  1.e-3   /*!< tolerance for geometrical parameters in BOHR */
-#define INT_TOLERANCE  1.e-10  /*!< min. intensity > 0. */
-#define K_TOLERANCE    1.e-4   /*!< tolerance for k_par in (BOHR)^-1 */
-#define LD_TOLERANCE   1.e-4   /*!< convergence criterion for layer doubling */
-#define WAVE_TOLERANCE 1.e-4   /*!< tolerance for wave amplitudes */
+static const double E_TOLERANCE = 1.e-3;    /*!< tolerance for comparing two energies */
+static const double GEO_TOLERANCE = 1.e-3;  /*!< tolerance for geometrical parameters in BOHR */
+static const double INT_TOLERANCE = 1.e-10; /*!< min. intensity > 0. */
+static const double K_TOLERANCE = 1.e-4;    /*!< tolerance for k_par in (BOHR)^-1 */
+static const double LD_TOLERANCE = 1.e-4;   /*!< convergence criterion for layer doubling */
+static const double WAVE_TOLERANCE = 1.e-4; /*!< tolerance for wave amplitudes */
 
 /* Flags for mirror planes etc. */
 
@@ -142,23 +140,26 @@ typedef enum {
                            *   is incorrect */
 } leed_error;
 
-#define NOSYM      101  /*!< Indicates no symmetry for structure */
-#define MONO_2ROT  102  /*!< Monoclinic structure with 2-fold rot. symmetry */
-#define MONO_1MIR  111  /*!< Monoclinic structure with 1 mirror plane */
 
-#define REC_2ROT   202  /*!< Rectangular structure with 2-fold rot. symmetry */
-#define REC_1MIR   211  /*!< Rectangular structure with 1 mirror plane */
-#define REC_2MIR   221  /*!< Rectangular structure with 2 mirror planes */
+typedef enum {
+  NOSYM     = 101,  /*!< Indicates no symmetry for structure */
+  MONO_2ROT = 102,  /*!< Monoclinic structure with 2-fold rot. symmetry */
+  MONO_1MIR = 111,  /*!< Monoclinic structure with 1 mirror plane */
 
-#define HEX_1MIR   311  /*!< Hexagonal structure with 1 mirror plane */
-#define HEX_3ROT   303  /*!< Hexagonal structure with 3-fold rot. symmetry */
-#define HEX_3MIR   331  /*!< Hexagonal structure with 3 mirror planes */
+  REC_2ROT  = 202,  /*!< Rectangular structure with 2-fold rot. symmetry */
+  REC_1MIR  = 211,  /*!< Rectangular structure with 1 mirror plane */
+  REC_2MIR  = 221,  /*!< Rectangular structure with 2 mirror planes */
 
-#define SQ_2ROT    402  /*!< Square structure with 2-fold rotational symmetry */
-#define SQ_4ROT    404  /*!< Square structure with 4-fold rotational symmetry */
-#define SQ_1MIR    411  /*!< Square structure with 1 mirror planes */
-#define SQ_2MIR    421  /*!< Square structure with 2 mirror planes */
-#define SQ_4MIR    441  /*!< Square structure with 4 mirror planes */
+  HEX_1MIR  = 311,  /*!< Hexagonal structure with 1 mirror plane */
+  HEX_3ROT  = 303,  /*!< Hexagonal structure with 3-fold rot. symmetry */
+  HEX_3MIR  = 331,  /*!< Hexagonal structure with 3 mirror planes */
+
+  SQ_2ROT   = 402,  /*!< Square structure with 2-fold rotational symmetry */
+  SQ_4ROT   = 404,  /*!< Square structure with 4-fold rotational symmetry */
+  SQ_1MIR   = 411,  /*!< Square structure with 1 mirror planes */
+  SQ_2MIR   = 421,  /*!< Square structure with 2 mirror planes */
+  SQ_4MIR   = 441   /*!< Square structure with 4 mirror planes */
+} leed_symmetry;
 
 /* current version No. now in file leed_ver.h */
 
@@ -178,7 +179,6 @@ typedef struct leed_atom /*! Holds properties of a single atom */
   real pos[4];     /*!< relative position inside the unit cell */
   real dwf;        /*!< Debye-Waller factor */
 } leed_atom;
-
 
 /*! \typedef leed_layer
  *  \brief contains all properties of a single Bravais layer. */
@@ -205,7 +205,6 @@ typedef struct leed_layer /*! Holds properties of a single Bravais layer */
   leed_atom *atoms;       /*!< properties of the atoms within the composite
                            * (or Bravais) layers */
 } leed_layer;
-
 
 /*! \typedef leed_crystal
  *
@@ -291,9 +290,8 @@ typedef struct leed_phase  /*! Holds parameters for a single phase shift */
   real *pshift;        /*!< array of phase shift values */
  
   real dr[4];
-  char *input_file;    /*!< name of input file */
+  char input_file[FILENAME_MAX];    /*!< name of input file */
 } leed_phase;
-
 
 /*! \typedef leed_beam
  *  \brief Contains all parameters of a specific beam in k-space. */
@@ -384,7 +382,7 @@ typedef struct leed_energy /*! Contains all parameters that change during
 } leed_energy;
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-}
+
 #endif
 
 #endif /* LEED_DEF_H */

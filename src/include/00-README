@@ -1,0 +1,94 @@
+PRELIMINARY VERSION - no thorough tests yet! Use at your own risk.
+
+CLEED version locally modified for UIBK by Michael.Fink@uibk.ac.at
+
+Modifications:
+- minor changes to Makefiles and install script, support multiple machines
+- in matmul.c: replaced textbook-style matrix multiplication by BLAS *gemm
+- in matinv.c: replaced Numerical Recipes matrix inversion by
+  LAPACK *getrf and *getri routines
+- added auxiliary routines - convert matrices from/to BLAS/LAPACK
+  storage conventions
+
+Ported and preliminarily verified on Leo3.uibk.ac.at cluster, vanilla
+ubuntu 14.04 machine. Compiles also on Cygwin
+
+How to build:
+
+1. Unpack tar in $HOME
+   will create directory tree $HOME/CLEED/CLEED_DIS_1309_safe-mod-mgjf
+
+2. Add
+
+     . $HOME/CLEED/CLEED_DIS_1309_safe-mod-mgjf/BIN/set_env
+
+   to your $HOME/.bashrc file and run this command in current shell (note
+   the period)
+
+3. On Leo3: also add command
+
+     module load intel/12.1 intel-mkl/10.3
+
+   to your $HOME/.bashrc file and run this command in current shell
+
+   On Cygwin : install GNU compilers, lapack and lapack-devel
+   It appears that this will automatically also install BLAS
+
+   On Ubuntu: install GNU compilers, LAPACK and BLAS. You may also
+   want to install openblas and/or atlas and run the atlas tuning sequence
+
+4. Do:
+
+  . $HOME/CLEED/CLEED_DIS_1309_safe-mod-mgjf/BIN/set_env
+  module load intel/12.1 intel-mkl/10.3 # (only on leo3)
+  cd $CLEED_HOME
+  vi Makefile        # (or whatever editor)
+    comment out/uncomment sections for your system
+  make clobber
+  make all
+  make install
+
+How to run:
+
+1. make sure on that set_env has been sourced into your current shell
+  (echo $CLEED_HOME).
+
+2. If you are using a multithreaded BLAS library (such as MKL, openblas,
+  or ATLAS), set the environment variable OMP_NUM_THREADS to the
+  desired number of threads (no more than your machine, if using SGE,
+  see example below.
+
+  Example for workstatin machine:
+
+  export OMP_NUM_THREADS=2
+
+  On Leo3, instead, create an SGE job file (assuming modules have been
+  loaded and CLEED environment set in $HOME/.bashrc) - change values as
+  needed:
+
+   $ cat cleed-example.sge
+  #!/bin/bash
+  #$ -cwd
+  #$ -j yes
+  #$ -pe openmp 2
+  #$ -l h_rt=40:00:00
+  export OMP_NUM_THREADS=$NSLOTS
+  csearch -i xxxx.inp
+
+3. Start your program
+
+  Workstation:
+  csearch -i xxxx.inp
+
+  Leo3:
+  qsub cleed-example
+
+  NSLOTS (and then by virtue of the export command, OMP_NUM_THREADS) is
+  automatically set to the number of slots given in the "-pe openmp n"
+  directive.
+
+  Due to the moderate degree of parallelism, use a maximum of 2-4
+  threads when turnaround time is more important than efficiency
+  (speedup compared to original version is 2.75 - 4). If you are
+  interested in throughput, use only one thread (omit the "-pe"
+  directive) to minimize resource usage.

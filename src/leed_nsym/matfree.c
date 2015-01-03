@@ -34,10 +34,7 @@ int matfree( mat M )
   /* check input matrix */
   if ( matcheck(M) < 1)
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matfree): improper input \n");
-    #endif
-
+    ERROR_MSG("improper input \n");
     return(-1);
   }
 

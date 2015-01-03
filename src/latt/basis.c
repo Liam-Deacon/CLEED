@@ -22,10 +22,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifndef TOLERANCE
-#define TOLERANCE 1E-2
-#endif
-
+static const double TOLERANCE = 0.01;
 
 /*!
  * Initializes #basis object in memory.
@@ -125,9 +122,12 @@ void basis_printf(FILE *f, const basis *basis)
  */
 void basis_copy(basis *dst, const basis *src)
 {
-  const basis *tmp = (const basis*) src;
-  basis_set_vectors(dst, &tmp->a[0], &tmp->a[1], &tmp->a[2]);
-  basis_free(tmp);
+  if (dst == NULL) dst = basis_init();
+  if (dst != NULL)
+  {
+    const basis *tmp = (const basis*) src;
+    basis_set_vectors(dst, &tmp->a[0], &tmp->a[1], &tmp->a[2]);
+  }
 }
 
 /*!
@@ -139,7 +139,7 @@ void basis_copy(basis *dst, const basis *src)
  */
 size_t basis_get_allocated_size(const basis *_basis)
 {
-	return (sizeof(basis)/sizeof(basis));
+	return (sizeof(_basis)/sizeof(basis));
 }
 
 /*!

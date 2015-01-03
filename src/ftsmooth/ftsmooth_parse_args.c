@@ -13,8 +13,10 @@ Changes:
   LD/2014.04.24 - creation (split from ftsmooth.c)
 *********************************************************************/
 
-#include "ftsmooth.h"
+#include <stdio.h>
+#include <limits.h>
 
+#include "ftsmooth.h"
 
 /****************************************************************
 *						PARSE ARGUMENTS							*
@@ -48,7 +50,7 @@ int parse_args(int argc, char *argv[],
     i_arg++;
     if ((in_stream = fopen(argv[i_arg],"r")) == NULL)
     {
-     fprintf(stderr,"error: failed to open '%s'",argv[i_arg]);
+     ERROR_MSG("failed to open '%s'",argv[i_arg]);
      exit(1);
     }
 	*stdin_flag = 0;
@@ -59,9 +61,9 @@ int parse_args(int argc, char *argv[],
    {
     i_arg++;
     fclose(out_stream); /* !will always close stdout! */
-    if ((out_stream = fopen(argv[i_arg],"w")) == NULL)
+    if ((out_stream = fopen(argv[i_arg], "w")) == NULL)
     {
-     fprintf(stderr,"error: failed to open '%s'",argv[i_arg]);
+     ERROR_MSG("failed to open '%s'", argv[i_arg]);
      exit(1);
     }
 	*stdout_flag = 0;
@@ -91,7 +93,7 @@ int parse_args(int argc, char *argv[],
      i_arg++;
      if (i_arg >= argc) 
      {
-       fprintf(stderr, "***error (ftsmooth): no mode defined\n");
+       ERROR_MSG("no mode defined\n");
        exit(1);
      }
      *mode = *argv[i_arg];
@@ -100,8 +102,7 @@ int parse_args(int argc, char *argv[],
       case 'n': case 's':
         break;
       default:
-        fprintf(stderr, 
-            "***error (ftsmooth): Wrong mode option: \"%c\"\n", *mode);
+        ERROR_MSG("Wrong mode option: \"%c\"\n", *mode);
         exit(1);
      }
    }
@@ -171,7 +172,7 @@ int parse_args(int argc, char *argv[],
   } /* else */
  }  /* for i_arg */
 
- return 0;
+ return(0);
 }
 
 /********************************************************************
@@ -211,56 +212,52 @@ Encoding as follows:
     switch (argv[pos])
 	  {
 	    case ':':
-		  if(islowerbound)
-		    if(!strcmp(str, "\0"))
-			  lbound[*i_r] = atof(str);
-			printf("%s\n", str);
-		  islowerbound = (islowerbound+1) % 2;
-		  strcpy(str, "\0");
-		  break;
+        if(islowerbound)
+          if(!strcmp(str, "\0"))
+            lbound[*i_r] = atof(str);
+        printf("%s\n", str);
+        islowerbound = (islowerbound+1) % 2;
+        strcpy(str, "\0");
+        break;
 		  
 	    case ',': /* change to next dataset */
-		  if(islowerbound) /* redimension bound arrays */
-		  {
-		    lbound[*i_r] = DBL_MIN;
-			if(!strcmp(str, "\0"))
-		      ubound[*i_r] = atof(str);
-			else
-			  break; /* both bounds could be anything */
-		  }
-		  else
-		  {
-			if(!strcmp(str, "\0"))
-		      ubound[*i_r] = atof(str);
-			printf("%s\n", str);
-		  }
-		  
-		  ubound = (double *) realloc(ubound, (*i_r+1)*sizeof(double));
-		  lbound = (double *) realloc(lbound, (*i_r+1)*sizeof(double));
-		  *i_r = (*i_r)+1;
-		  islowerbound = (islowerbound+1) % 2;
-		  strcpy(str, "\0");
-		  break;
+        if(islowerbound) /* redimension bound arrays */
+        {
+          lbound[*i_r] = DBL_MIN;
+          if(!strcmp(str, "\0")) ubound[*i_r] = atof(str);
+          else break; /* both bounds could be anything */
+        }
+        else
+        {
+        if(!strcmp(str, "\0"))
+            ubound[*i_r] = atof(str);
+        printf("%s\n", str);
+        }
+
+        ubound = (double *) realloc(ubound, (*i_r+1)*sizeof(double));
+        lbound = (double *) realloc(lbound, (*i_r+1)*sizeof(double));
+        *i_r = (*i_r)+1;
+        islowerbound = (islowerbound+1) % 2;
+        strcpy(str, "\0");
+        break;
 		
 	    case '*': case 'i': /* ignore */
-		  if(islowerbound)
-		    lbound[*i_r] = DBL_MIN;
-		  else
-		    ubound[*i_r] = DBL_MAX;
-		  islowerbound = (islowerbound+1) % 2;
-		  strcpy(str, "\0");
+	      if(islowerbound) lbound[*i_r] = DBL_MIN;
+	      else ubound[*i_r] = DBL_MAX;
+	      islowerbound = (islowerbound+1) % 2;
+	      strcpy(str, "\0");
 	      break;
 	    
-		default:
-		  if(isdigit(argv[pos]) || (argv[pos] == '-'))
-		  {
-		    ichar[0] = argv[pos];
-		    strcat(str, ichar);
-		  }
-		  break;
-	   }
+	    default:
+	      if(isdigit(argv[pos]) || (argv[pos] == '-'))
+	      {
+	        ichar[0] = argv[pos];
+	        strcat(str, ichar);
+	      }
+	      break;
+	  } /* switch */
     pos++;
-  }
+  } /* while */
   
   if(!islowerbound) ubound[*i_r-1] = DBL_MAX;
   

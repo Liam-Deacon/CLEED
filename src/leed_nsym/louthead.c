@@ -47,8 +47,6 @@ void leed_output_header(FILE *outfile)
   fprintf(outfile, "#ts %s", asctime(l_time) );
   fprintf(outfile, "#\n");
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_out_head): Start date: %s", asctime(l_time) );
-  #endif
+  CONTROL_MSG(CONTROL, "Start date: %s", asctime(l_time) );
  
 }  /* end of function leed_out_head */

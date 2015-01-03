@@ -31,30 +31,12 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#ifdef USE_GSL
+#if USE_GSL
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #endif
 
 #include "csearch.h"
-
-#ifdef ERROR
-#ifdef EXIT_ON_ERROR
-#define ALLERR(x) \
-        fprintf(STDERR, " *** error (sr_rdver): allocation error (%s)\n", x); \
-        exit(SR_ALLOC_ERROR)
-#else
-#define ALLERR(x) \
-        fprintf(STDERR, " *** error (sr_rdver): allocation error (%s)\n", x); \
-        return(SR_ALLOC_ERROR)
-#endif
-#else      /* ifdef ERROR */
-#ifdef EXIT_ON_ERROR
-#define ALLERR(x) exit(SR_ALLOC_ERROR)
-#else
-#define ALLERR(x) return(SR_ALLOC_ERROR)
-#endif
-#endif
 
 /*!
  * Read vertex for simplex algorithm from backup file.
@@ -77,136 +59,84 @@
  * \note exits with \ref search_error code if failed and \c EXIT_ON_ERROR
  * defined.
  */
-#ifdef USE_GSL
+#if USE_GSL
 int sr_rdver(const char *ver_file, gsl_vector *y, gsl_matrix *p, int n_dim)
 #else
 int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
 #endif
 {
-
   FILE *ver_stream;
 
   char linebuffer[STRSZ];                   /* input buffer */
-  size_t i_str, n_str=STRSZ;
+  size_t i_str, n_str;
 
   size_t i_par, j_par;                        /* counter, dummy  variables */
   size_t m_par;
 
-  #ifdef USE_GSL
   real faux = 0.;
-  #endif
 
   /* START INPUT: Open and Read vertex file */
   if( (ver_stream = fopen(ver_file, "r")) == NULL)
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (sr_rdver): "
-           "could not open file \"%s\"\n", ver_file);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(SR_FILE_IO_ERROR);
-    #else
-    return(SR_FILE_IO_ERROR);
-    #endif
+    ERROR_MSG("could not open file \"%s\"\n", ver_file);
+    ERROR_EXIT_RETURN(SR_FILE_IO_ERROR, SR_FILE_IO_ERROR);
   }
 
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(sr_rdver): Reading file \"%s\"\n", ver_file);
-  #endif
+  CONTROL_MSG(CONTROL_X, "Reading file \"%s\"\n", ver_file);
 
-  while ( *fgets(linebuffer, n_str, ver_stream) == '#');
+  while ( *fgets(linebuffer, STRSZ, ver_stream) == '#');
   sscanf(linebuffer, "%u %u", &i_par, &m_par);
 
   if( n_dim < 0)
   {
-    #ifdef WARNING
-    fprintf(STDWAR, " * warning (sr_rdver): "
-            "n_dim < 0: dimensions are not checked\n");
-    #endif
-
+    WARNING_MSG("n_dim < 0: dimensions are not checked\n");
     n_dim = (int)i_par;
   }
   else if( (i_par != (size_t)n_dim) || (m_par != (size_t)n_dim + 1) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, " *** error (sr_rdver): "
-            "dimensions do not match: %u/%u, %u/%u\n",
-            i_par, n_dim, m_par, n_dim + 1);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(SR_INVALID_VERTEX_FILE);
-    #else
-    return(SR_INVALID_VERTEX_FILE);
-    #endif
-
+    ERROR_MSG("dimensions do not match: %u/%u, %u/%u\n",
+              i_par, n_dim, m_par, n_dim + 1);
+    ERROR_EXIT_RETURN(SR_INVALID_VERTEX_FILE, SR_INVALID_VERTEX_FILE);
   }
 
   n_str = m_par * 15;
 
   i_par = 1;
-  while( (fgets(linebuffer, n_str, ver_stream) != NULL) && (i_par <= m_par) )
+  while( (fgets(linebuffer, (int)n_str, ver_stream) != NULL) && (i_par <= m_par) )
   {
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(%s): %s", ver_file, linebuffer);
-    #endif
+    CONTROL_MSG(CONTROL_X, "(%s): %s", ver_file, linebuffer);
 
     if( *linebuffer != '#')
     {
       i_str = 0;
       while(linebuffer[i_str] == ' ') i_str ++;
 
-      #ifdef USE_GSL
+#     if USE_GSL
 
       while(linebuffer[i_str] == ' ') i_str ++;
-        #ifdef REAL_IS_DOUBLE
-          sscanf(linebuffer+i_str, "%le", &faux);
-          gsl_vector_set(y, i_par, faux);
-        #endif
-        #ifdef REAL_IS_FLOAT
-          sscanf(linebuffer+i_str, "%e", &faux);
-          gsl_vector_set(y, i_par, faux);
-        #endif
+      sscanf(linebuffer+i_str, "%" REAL_FMT "e", &faux);
+      gsl_vector_set(y, i_par, faux);
 
-        for(j_par = 0; j_par < ndim; j_par ++)
-        {
-          while(linebuffer[i_str] != ' ') i_str ++;
-          while(linebuffer[i_str] == ' ') i_str ++;
-          #ifdef REAL_IS_DOUBLE
-            sscanf(linebuffer+i_str, "%le", &faux);
-            gsl_matrix_set(p, i_par, j_par, faux);
-          #endif
-          #ifdef REAL_IS_FLOAT
-           sscanf(linebuffer+i_str, "%e", &faux);
-           gsl_matrix_set(p, i_par, j_par, faux);
-          #endif
-        }
+      for(j_par = 0; j_par < ndim; j_par ++)
+      {
+        while(linebuffer[i_str] != ' ') i_str ++;
+        while(linebuffer[i_str] == ' ') i_str ++;
+        sscanf(linebuffer+i_str, "%" REAL_FMT "e", &faux);
+        gsl_matrix_set(p, i_par, j_par, faux);
+      }
 
-      #else /* USE_GSL */
+#     else /* USE_GSL */
 
-      #ifdef REAL_IS_DOUBLE
-      sscanf(linebuffer+i_str,"%le", y + i_par);
-      #endif
-      #ifdef REAL_IS_FLOAT
-      sscanf(linebuffer+i_str,"%e", y + i_par);
-      #endif
+      sscanf(linebuffer+i_str, "%" REAL_FMT "e", y + i_par);
 
       for(j_par = 1; j_par <= (size_t)n_dim; j_par ++)
       {
         while(linebuffer[i_str] != ' ') i_str ++;
         while(linebuffer[i_str] == ' ') i_str ++;
-
-        #ifdef REAL_IS_DOUBLE
-        sscanf(linebuffer+i_str, "%le", p[i_par] + j_par);
-        #endif
-        #ifdef REAL_IS_FLOAT
-        sscanf(linebuffer+i_str, "%e", p[i_par] + j_par);
-        #endif
-
+        sscanf(linebuffer+i_str, "%" REAL_FMT "e", p[i_par] + j_par);
       }
 
-      #endif /* USE_GSL */
+#     endif /* USE_GSL */
 
       i_par ++;
 
@@ -214,36 +144,36 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
 
   }   /* while: read input file */
 
-  #ifdef CONTROL_X
+# if CONTROL_X
   fprintf(STDCTR, "\n");
-  #endif
+# endif
 
   /* END OF INPUT: Close input file.*/
   fclose(ver_stream);
 
-  #ifdef CONTROL
+# if CONTROL
   fprintf(STDCTR, "(sr_rdver): vertex read from \"%s\":\n", ver_file);
   for (i_par = 1; i_par<= m_par; i_par++)
   {
     fprintf(STDCTR, "(%2d) %7.4f :", i_par,
-      #ifdef USE_GSL
-      gsl_vector_get(y, i_par));
-      #else
-      y[i_par]);
-      #endif
+#   if USE_GSL
+    gsl_vector_get(y, i_par));
+#   else
+    y[i_par]);
+#   endif
     for(j_par=1; j_par<= (size_t)n_dim; j_par++)
     {
       fprintf(STDCTR, " %6.3f",
-          #ifdef USE_GSL
+#         ifdef USE_GSL
           gsl_matrix_get(p, i_par, j_par));
-          #else
+#         else
           p[i_par][j_par]);
-          #endif
+#         endif
     }
     fprintf(STDCTR, "\n");
   }
   fflush(STDCTR);
-  #endif
+# endif
 
   return(SR_SUCCESS);
 }  /* end of function sr_rdver */

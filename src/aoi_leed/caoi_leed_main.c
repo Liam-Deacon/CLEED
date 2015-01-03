@@ -23,7 +23,9 @@
 #include <string.h>
 
 #include "caoi_leed.h"
-#include "proghelp.h"
+
+extern void caoi_leed_info();
+extern void caoi_leed_usage(FILE *);
 
 int main (int argc, char *argv[])
 {
@@ -35,33 +37,29 @@ int main (int argc, char *argv[])
   char par_file[FILENAME_MAX];
   char res_file[FILENAME_MAX];
 
-  char linebuffer[STRSIZE];
-  char helpstring[STRSIZE];
-  char line_buffer[STRSIZE];
+  char linebuffer[STRSZ];
+  char helpstring[STRSZ];
+  char line_buffer[STRSZ];
 
   FILE *inp_stream;
   FILE *write_stream;
   FILE *read_stream;
 
-/*****************************************************************
- Preset program parameters
-******************************************************************/
-
+  /* Preset program parameters */
   sa = 999;
 
   strncpy(bsr_file, "---", FILENAME_MAX);
   strncpy(par_file, "---", FILENAME_MAX);
   strncpy(res_file, "leed.res", FILENAME_MAX);
 
-/*****************************************************************
-Decode arguments:
- -b project name for modified bulk file
- -i parameter file for overlayer
- -o project name for output file
-******************************************************************/
+  /* Decode arguments:
+   * -b project name for modified bulk file
+   * -i parameter file for overlayer
+   * -o project name for output file
+   */
   if (argc < 2)
   {
-    usage(STDERR);
+    caoi_leed_usage(STDERR);
     exit(1);
   }
 
@@ -69,15 +67,9 @@ Decode arguments:
   {
     if(*argv[i_arg] != '-')
     {
-	  #ifdef ERROR
-    	fprintf(STDERR,"*** error (caoi_leed_main):\tsyntax error:\n");
-    	fprintf(STDERR,"\tusage: \n\t"
-    			"caoi_leed"
-    			"-b <bsr_file>"
-    			"-i <par_file>"
-    			"-v <vertex_file>"
-    			"-o <res_file>""\n");
-	  #endif
+      ERROR_MSG("\tsyntax error:\n%s",
+          "\tusage: \n\tcaoi_leed -b <bsr_file>"
+    			"-i <par_file> -v <vertex_file> -o <res_file>\n");
       exit(1);
     }
     else
@@ -87,7 +79,7 @@ Decode arguments:
       if(strcmp(argv[i_arg], "-h") == 0 ||
          strcmp(argv[i_arg], "--help") == 0) 
       {
-        usage(stdout);
+        caoi_leed_usage(stdout);
         exit(0);
       }  
 
@@ -95,7 +87,7 @@ Decode arguments:
       if(strcmp(argv[i_arg], "-V") == 0 || 
          strcmp(argv[i_arg], "--version") == 0)
       {
-        info(); 
+        caoi_leed_info();
         exit(0);
       }
       
@@ -123,18 +115,13 @@ Decode arguments:
     } /* else */
   }  /* for i_arg */
 
-/*****************************************************************
-  Check arguments:
-  - check existence of par_file.
-  - if bsr_file is not specified use par_file instead.
-******************************************************************/
-
+  /* Check arguments:
+   * - check existence of par_file.
+   * - if bsr_file is not specified use par_file instead.
+   */
   if(strncmp(par_file, "---", 3) == 0)
   {
-	#ifdef ERROR
-	  fprintf(STDERR, "*** error (caoi_leed_main): "
-			  "no parameter file (option -i) specified\n");
-	#endif
+    ERROR_MSG("no parameter file (option -i) specified\n");
     exit(1);
   }
 
@@ -143,25 +130,18 @@ Decode arguments:
     strncpy(bsr_file, par_file, FILENAME_MAX);
   }
 
-/*****************************************************************
- Initialize "sa" with the number of angles of incidence
-
-******************************************************************/
-
+  /* Initialize "sa" with the number of angles of incidence */
   length = strlen(par_file) - 4;
   strncpy(linebuffer, par_file, length);
   sprintf(linebuffer+length, ".bsr");
 
   if ((inp_stream = fopen(linebuffer,"r")) == NULL)
   {
-	#ifdef ERROR
-      fprintf(STDERR, "*** error (caoi_leed_main): "
-    		  "could not open output file \"%s\"\n", linebuffer);
-	#endif
+    ERROR_MSG("could not open output file \"%s\"\n", linebuffer);
     exit(1);
   }
 
-  while (fgets(linebuffer, STRSIZE, inp_stream))
+  while (fgets(linebuffer, STRSZ, inp_stream))
   {
     if (!strncasecmp(linebuffer, "sa:", 3))
     {
@@ -171,10 +151,7 @@ Decode arguments:
 
   if (sa == 999)
   {
-	#ifdef ERROR
-      fprintf(STDERR,
-      "*** error (caoi_leed_main): could not read sa: from the .bsr file");
-	#endif
+    ERROR_MSG("could not read sa: from the .bsr file\n");
     exit(1);
   }
 
@@ -187,14 +164,9 @@ Decode arguments:
 
   bsrinp(bsr_file, sa);
 
-  #ifdef CONTROL_X
-  	fprintf(STDERR, "*** caoi_leed_main: sa = %d ***\n", sa);
-  #endif
+  CONTROL_MSG(CONTROL, "sa = %d ***\n", sa);
 
-/*****************************************************************
- Calls cleed_nsym program for each angle of incidence
-*****************************************************************/
-
+  /* Call cleed_nsym program for each angle of incidence */
   for (i_ang = 0; i_ang < sa; i_ang ++)
   {
 
@@ -221,19 +193,13 @@ Decode arguments:
 
    } /*for i_ang*/
 
-/*********************************************************************
- Makes proj_name.res = proj_nameia_1.res + proj_nameia_2.res + ...
-*********************************************************************/
-
+  /* Make proj_name.res = proj_nameia_1.res + proj_nameia_2.res + ... */
   strncpy(linebuffer, par_file, length);
   sprintf(linebuffer + length, ".res");
 
   if ((write_stream = fopen(linebuffer,"w")) == NULL)
   {
-	#ifdef ERROR
-      fprintf(STDERR, "*** error (caoi_leed_main): "
-    		  "could not open output file \"%s\"\n", linebuffer);
-	#endif
+    ERROR_MSG("could not open output file \"%s\"\n", linebuffer);
     exit(1);
   }
 
@@ -243,16 +209,13 @@ Decode arguments:
     sprintf(helpstring + length, "ia_%u.res", i_ang + 1);
     if ((read_stream = fopen(helpstring,"r")) == NULL)
     {
-	  #ifdef ERROR
-        fprintf(STDERR, "*** error (caoi_leed_main): "
-        		"could not open output file \"%s\"\n", helpstring);
-	  #endif
+      ERROR_MSG("could not open output file \"%s\"\n", helpstring);
       exit(1);
     }
 
     fprintf(write_stream, "Copy of %s\n", helpstring);
 
-    while (fgets(line_buffer , STRSIZE, read_stream))
+    while (fgets(line_buffer , STRSZ, read_stream))
     {
       fprintf(write_stream, "%s", line_buffer);
     }
@@ -262,7 +225,7 @@ Decode arguments:
   } /* for i_ang */
 
   fclose(write_stream);
-  fclose(STDERR);
+  fflush(STDERR);
 
   return(0);
 

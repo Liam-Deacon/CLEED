@@ -42,28 +42,14 @@ real matdiff(const mat M1, const mat M2)
   /* check validity of the input matrices M1 and M2 */
   if ( (matcheck(M1) < 1) || (matcheck(M2) < 1) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matdiff): invalid input matrix\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_MSG("invalid input matrix\n");
+    ERROR_RETURN(-1.);
   }
 
   if ((M1->cols != M2->cols) || (M1->rows != M2->rows) )
   {
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matdiff): matrix dimensions do not match\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_MSG("matrix dimensions do not match\n");
+    ERROR_RETURN(-1.);
   }
 
   /* Calculate difference for valid matrix types */
@@ -107,15 +93,8 @@ real matdiff(const mat M1, const mat M2)
   else /* one matrix is diagonal */
   {
     /* diagonal matrices are not implemented! */
-    #ifdef ERROR
-    fprintf(STDERR, "*** error (matdiff): diagonal matrices not implemented\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1.);
-    #endif
+    ERROR_MSG("diagonal matrices not implemented\n");
+    ERROR_RETURN(-1.);
   }
 
   return(diff);

@@ -1,11 +1,12 @@
 #include <math.h>
 #include "csearch.h"
 
-#define GOLD 1.618034
-#define GLIMIT 100.0
-#define TINY 1.0e-20
 #define SIGN(a,b) ((b) > 0.0 ? fabs(a) : -fabs(a))
 #define SHFT(a,b,c,d) (a)=(b);(b)=(c);(c)=(d);
+
+static const real GOLD = 1.618034;
+static const real GLIMIT = 100.0;
+static const real TINY = 1.0e-20;
 
 void mnbrak(real *ax, real *bx, real *cx, 
             real *fa, real *fb, real *fc, real (*func)(real) )
@@ -59,9 +60,5 @@ void mnbrak(real *ax, real *bx, real *cx,
 	}
 }
 
-#undef GOLD
-#undef GLIMIT
-#undef TINY
-#undef MAX
 #undef SIGN
 #undef SHFT

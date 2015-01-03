@@ -17,6 +17,7 @@
  *   LD/18.06.2013 - allow trimming of datasets with '--range <arg1> <arg2>'
  *********************************************************************/
 
+#include <stdio.h>
 #include "ftsmooth.h"
 
 int main(int argc, char *argv[])

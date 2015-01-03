@@ -90,7 +90,7 @@ FILE *log_stream;
        fprintf(STDCTR,"(sr_sx): Calculate function for vertex(%d)\n", i_par);
      #endif
 
-     gsl_vector_set(y, i_par-1, sr_evalrf_gsl(x));
+     gsl_vector_set(y, i_par-1, sr_evalrfac_gsl(x));
    }
  }
  else

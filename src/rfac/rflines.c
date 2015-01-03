@@ -19,13 +19,13 @@
 
 /*! \file
  *
- * Implementation file for rf_lines(), rf_nclines() and rf_clines() functions.
+ * Implementation file for rfac_lines(), rfac_nclines() and rfac_clines() functions.
  */
 
 #include <stdio.h>
 
 /*!
- * \fn rf_lines
+ * \fn rfac_lines
  *
  * Count '\r' and '\n' in \p buffer.
  *
@@ -33,7 +33,7 @@
  *
  * \return number of lines.
  */
-size_t rf_lines(const char *buffer)
+size_t rfac_lines(const char *buffer)
 {
  size_t lines, i;
 
@@ -48,7 +48,7 @@ size_t rf_lines(const char *buffer)
 /**********************************************************************/
 
 /*!
- * \fn rf_nclines
+ * \fn rfac_nclines
  *
  * Count '\r' and '\n' in \p buffer, but exclude comment lines.
  *
@@ -56,7 +56,7 @@ size_t rf_lines(const char *buffer)
  *
  * \return number of lines without comments.
  */
-size_t rf_nclines(const char *buffer)
+size_t rfac_nclines(const char *buffer)
 {
  size_t lines, comm, i;
 
@@ -75,7 +75,7 @@ size_t rf_nclines(const char *buffer)
 /**********************************************************************/
 
 /*!
- * \fn rf_clines
+ * \fn rfac_clines
  *
  * Count '\r' and '\n' in \p buffer.
  * If 1st character in line is '#' then add to count.
@@ -84,7 +84,7 @@ size_t rf_nclines(const char *buffer)
  *
  * \return number of comment lines.
  */
-size_t rf_clines(const char *buffer)
+size_t rfac_clines(const char *buffer)
 {
  size_t comm, i;
 

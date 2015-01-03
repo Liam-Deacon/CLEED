@@ -25,9 +25,9 @@
 #ifndef __gsl_aux_H__
 #define __gsl_aux_H__
 
-#ifdef __cplusplus__ /* if this is a C++ compiler then use C linkage */
+#ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 extern C {
-#endif /* __cplusplus__ */
+#endif /* __cplusplus */
 
 /* includes */
 #include <gsl/gsl_matrix.h>
@@ -61,7 +61,7 @@ void gsl2blas(real *cblas_mx, real *cblas_mx_cmplx,
               int cblas_type);
 
 
-#ifdef __cplusplus__ /* if this is a C++ compiler then use C linkage */
+#ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 namespace cleed {
 
 /* classes */
@@ -69,6 +69,6 @@ namespace cleed {
 } /* namespace cleed */
 
 }
-#endif /* __cplusplus__ */
+#endif /* __cplusplus */
 
 #endif /* __gsl_aux_H__ */
