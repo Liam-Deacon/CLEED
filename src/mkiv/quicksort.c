@@ -14,7 +14,7 @@
 
 /*! \file
  *
- * Contains quicksort() and partition() functions for handling #mkiv_reflex arrays.
+ * Contains mkiv_quicksort() and partition() functions for handling #mkiv_reflex arrays.
  */
 
 #include "mkiv.h"
@@ -27,7 +27,7 @@
  * \param low_ptr Pointer to the lower end of #mkiv_reflex array.
  * \param up_ptr Pointer to the upper end of #mkiv_reflex array.
  */
-void quicksort(mkiv_reflex *low_ptr, mkiv_reflex *up_ptr)
+void mkiv_quicksort(mkiv_reflex *low_ptr, mkiv_reflex *up_ptr)
 {
   mkiv_reflex *piv_ptr;          /* pointer to angle point              */
   mkiv_reflex *partition();      /* make partition                      */
@@ -35,10 +35,10 @@ void quicksort(mkiv_reflex *low_ptr, mkiv_reflex *up_ptr)
   if (low_ptr < up_ptr)          /* if there's something to sort        */
   {
     piv_ptr = partition(low_ptr, up_ptr); /* divide in sortable parts */
-    quicksort(low_ptr, piv_ptr-1);        /* sort lower part          */
-    quicksort(piv_ptr, up_ptr);           /* sort upper part          */
+    mkiv_quicksort(low_ptr, piv_ptr-1);        /* sort lower part          */
+    mkiv_quicksort(piv_ptr, up_ptr);           /* sort upper part          */
   }
-} /* end of function quicksort */
+} /* end of function mkiv_quicksort */
 
 /*!
  * Divides the table into two parts referring to the angle point.

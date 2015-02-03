@@ -46,36 +46,39 @@
  * \param accb Integration area ratios.
  *  * \return
  */
-int get_int(size_t nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_image *imask,
-            mkiv_vector *scale, float angle, float use_cur, int bg, float mins2n,
-            int verb, float verh, float acci, float accb)
+int mkiv_calc_intensities(size_t nspot, mkiv_reflex *spot, mkiv_image *image,
+            mkiv_image *imask, mkiv_vector *scale,
+            double angle, double use_cur, int bg, double mins2n,
+            int verb, double verh, double acci, double accb)
 {
-  register int i, j, k, val, pos;
+  register int i, j, val, pos;
+  register size_t k;
   int a_back;
   int e_counter=0, *e_count;        /* no.of pixels within spot area      */
   int b_counter=0, *b_count;        /* no.of pixels within background area*/
-  float x_fac, y_fac, xy_fac, ellipse, b_norm;
-  float sgma, sgmb;
+  double x_fac, y_fac, xy_fac, ellipse, b_norm;
+  double sgma, sgmb;
 
   register size_t cols = image->rows;        /* define image size */
   register size_t rows = image->cols;
 
-  float h = scale->xx;
-  float v = scale->yy;
+  double h = scale->xx;
+  double v = scale->yy;
 
-  unsigned short *im = (unsigned short *)image->imagedata;
-  unsigned short *mask = (unsigned short *)imask->imagedata;
+  uint16_t *im = (uint16_t *)image->imagedata;
+  uint16_t *mask = (uint16_t *)imask->imagedata;
 
   /* Allocate memory for e_count, b_count */
   e_count = (int *)calloc( nspot, sizeof(int) );
   b_count = (int *)calloc( nspot, sizeof(int) );
   if ( e_count == NULL || b_count == NULL )
   {
-    ERR_EXIT(getint : Memory allocation failed)
+    ERROR_MSG("Memory allocation failed\n");
+    ERROR_RETURN(-1);
   }
 
   /* Initialize */
-  angle *= (float)PI / 180.;
+  angle *= PI / 180.;
   x_fac = PYTH2(cos(angle)/h, sin(angle)/v);
   y_fac = PYTH2(sin(angle)/h, cos(angle)/v);
   xy_fac = sin(angle) * cos(angle) * (2./(h*h) - 2./(v*v) );
@@ -109,13 +112,15 @@ int get_int(size_t nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_image *ima
    */
 
     /* loop over relative coordinates */
-    a_back = RND( verh * MAX(h,v) );
+    a_back = int_round( verh * max(h,v) );
     for (j = -a_back; j <= a_back; j++)
     {
       for (i = -a_back; i <= a_back; i++)
       {
         /* equation (3) - see above */
-        ellipse = (i*i* x_fac) + (j*j* y_fac) + (i*j* xy_fac);
+        ellipse = ((double)(i*i)* x_fac) +
+                   (double)((j*j)* y_fac) +
+                   (double)((i*j)* xy_fac);
         if (ellipse > SQUARE(verh)) continue;    /* outside */
         if (ellipse <= 1.) e_counter++;
         else               b_counter++;
@@ -124,22 +129,22 @@ int get_int(size_t nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_image *ima
         for (k = 0; k < nspot; k++)
         {
           if( spot[k].control & SPOT_GOOD_S2N ) continue; /*already done*/
-          pos = ( (int)spot[k].yy + j)*cols + (int)spot[k].xx + i;
+          pos = (int)( (spot[k].yy + j)*cols ) + (int)spot[k].xx + i;
                 
-          if ( pos < 0 || pos >= cols*rows ) continue; /* out of frame */
+          if ( pos < 0 || pos >= (int)(cols*rows) ) continue; /* out of frame */
           if ( imask && !mask[pos] ) continue; /* outside masked area */
           val = im[ pos ];
 
           if (ellipse > 1.)
           {
             b_count[k]++;
-            spot[k].s2u += val;
-            spot[k].s2n += SQUARE(val);
+            spot[k].s2u += (double)val;
+            spot[k].s2n += SQUARE( (double)val );
           }
           else
           {
             e_count[k]++;
-            spot[k].intensity += val;
+            spot[k].intensity += (double)val;
           }
         }
       }
@@ -149,22 +154,25 @@ int get_int(size_t nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_image *ima
     for (k = 0; k < nspot; k++)
     {
       if( spot[k].control & SPOT_GOOD_S2N ) continue;
-      if ( (float)e_count[k]/(float)e_counter < acci ||
-           (float)b_count[k]/(float)b_counter < accb )
+      if ( (double)e_count[k]/(double)e_counter < acci ||
+           (double)b_count[k]/(double)b_counter < accb )
       {
             
         spot[k].control |= SPOT_OUT;
         spot[k].intensity = INT_OUT;
-        VPRINT(" (%5.2f,%5.2f)  %3.0f|%3.0f  ***out***\n",
-        spot[k].lind1,spot[k].lind2,spot[k].xx,spot[k].yy );
+        if ( verb & VERBOSE )
+        {
+          printf(" (%5.2f,%5.2f)  %3.0f|%3.0f  ***out***\n",
+               spot[k].lind1, spot[k].lind2, spot[k].xx, spot[k].yy );
+        }
         continue;
     }
 	
-    b_norm = (float)e_count[k] / (float)b_count[k];
+    b_norm = (double)e_count[k] / (double)b_count[k];
     if ( b_norm < TOLERANCE || b_norm > 1./TOLERANCE ) continue;
 
-    sgma =sqrt( spot[k].s2n -SQUARE(spot[k].s2u)/b_count[k] )/b_count[k];
-    sgmb =spot[k].intensity/e_count[k] -spot[k].s2u/b_count[k];
+    sgma = sqrt( spot[k].s2n -SQUARE(spot[k].s2u)/b_count[k] )/b_count[k];
+    sgmb = spot[k].intensity/e_count[k] -spot[k].s2u/b_count[k];
     spot[k].s2n = sqrt( spot[k].s2n*b_count[k] - SQUARE(spot[k].s2u) );
     spot[k].s2n /= spot[k].s2u;
 
@@ -183,7 +191,7 @@ int get_int(size_t nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_image *ima
     }
     spot[k].s2n = spot[k].s2u / spot[k].s2n;
 
-    QQ {
+    if (QQ(verb)) {
       printf(" (%5.2f,%5.2f)", spot[k].lind1, spot[k].lind2);
       printf("  %3.0f|%3.0f", spot[k].xx, spot[k].yy);
       printf("  i:%7.3f", spot[k].intensity);
@@ -192,8 +200,8 @@ int get_int(size_t nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_image *ima
       printf("  snn:%5.1f", sgmb/sgma);
     }
     if ( spot[k].s2n > mins2n )spot[k].control |= SPOT_GOOD_S2N;
-    else QQ printf(" bad");
-    QQ printf("\n");
+    else if (QQ(verb)) printf(" bad");
+    if (QQ(verb)) printf("\n");
   }
   free(e_count);
   free(b_count);

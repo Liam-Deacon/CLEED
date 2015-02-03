@@ -1,5 +1,5 @@
 /*********************************************************************
- *                       DRAWBOUND.C
+ *                       mkiv_draw_bounds.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
@@ -16,7 +16,7 @@
 
 /*! \file
  *
- * Implements drawbound() function.
+ * Implements mkiv_draw_bounds() function.
  */
 
 #include "mkiv.h"
@@ -33,19 +33,19 @@
 
 /*!
  * Draws the boundaries of the LEED-screen. This is either the mask or
- * router/rinner if no mask was defined.
+ * r_outer/r_inner if no mask was defined.
  *
  * \param image LEED image.
  * \param imask Mask image.
  * \param center positioninates of center of LEED pattern on image.
- * \param router Outer radius of LEED screen from \p center .
- * \param rinner Inner radius of LEED screen from \p center .
+ * \param r_outer Outer radius of LEED screen from \p center .
+ * \param r_inner Inner radius of LEED screen from \p center .
  * \param write If > 0 then write to "ima.byte", else write to \p fname
  * \param fname Output filename string.
  *  * \return
  */
-int drawbound(mkiv_image *image, mkiv_image *imask, mkiv_position *center, 
-              float router, float rinner, int write, char *fname)
+int mkiv_draw_bounds(mkiv_image *image, mkiv_image *imask, mkiv_position *center, 
+              double r_outer, double r_inner, int write, char *fname)
 {
   size_t i, j;
   int k;
@@ -55,35 +55,35 @@ int drawbound(mkiv_image *image, mkiv_image *imask, mkiv_position *center,
   size_t cols = image->rows;
   size_t rows = image->cols;
 
-  unsigned short max_val;
+  uint16_t max_val;
 
   double phi;
 
-  unsigned short *mask, *im;
+  uint16_t *mask, *im;
   char file_path[FILENAME_MAX];
 
-  im = (unsigned short *) image->imagedata ;
+  im = (uint16_t *) image->imagedata ;
 
   if (!imask)
   {
-    /* no mask -> draw router, rinner */
+    /* no mask -> draw r_outer, r_inner */
     for (k=-20; k<=20; k++)
     {
       /* draw center */
-      im[v*cols + (h + k)] = WHITE;
-      im[(v + k)*cols + h] = WHITE;
+      im[(int)(v*cols) + ((int)h + k)] = WHITE;    /* brute force casting */
+      im[((int)v + k)*(int)cols + (int)h] = WHITE; /* brute force casting */
     }
     for (phi=0; phi < 2*PI; phi+=.005)
     {
-      /* draw router and rinner */
-      im[cols*(int)(v + rinner*sin(phi)) + h + (int)(rinner*cos(phi))] = WHITE;
-      im[cols*(int)(v + router*sin(phi)) + h + (int)(router*cos(phi))] = WHITE;
+      /* draw r_outer and r_inner */
+      im[cols*(int)(v + r_inner*sin(phi)) + h + (int)(r_inner*cos(phi))] = WHITE;
+      im[cols*(int)(v + r_outer*sin(phi)) + h + (int)(r_outer*cos(phi))] = WHITE;
     }
   }
   else
   {
     /* use mask */
-    mask = (unsigned short *) imask->imagedata;
+    mask = (uint16_t *) imask->imagedata;
 
     /* First: find max. value: */
     max_val = 1;
@@ -131,9 +131,10 @@ int drawbound(mkiv_image *image, mkiv_image *imask, mkiv_position *center,
     
   if (write)      /* write to "ima.byte" if desired */
   {
-    if (out_tif(image, file_path))
+    if (mkiv_output_tif(image, file_path))
     {
-      ERR_EXIT_X("(drawbound): failed to write to '%s'!", file_path);
+      ERROR_MSG("failed to write to '%s'!", file_path);
+      ERROR_RETURN(-1);
     }
   }
     

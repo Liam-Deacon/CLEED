@@ -17,7 +17,7 @@
 
 /*! \file
  *
- * Contains out_tif() high-level function for converting and outputting a TIFF
+ * Contains mkiv_output_tif() high-level function for converting and outputting a TIFF
  * image to file.
  */
 
@@ -28,7 +28,7 @@
 /*!
  * Converts internal #mkiv_image into TIFF parameters for display purposes and
  * then writes the new data into an output TIFF file. This function is used in
- * markref.c and drawbound.c
+ * markref.c and mkiv_draw_bounds.c
  *
  * \param[in] mat_image The internal matrix structure for handling image data.
  * \param[in] filename Filename or path string for output TIFF image.
@@ -37,7 +37,7 @@
  * \retval -1 if the function was unable to allocate memory for TIFF image.
  * \retval >0 The number of errors that occurred when calling sub-functions.
  */
-int out_tif(const mkiv_image *mat_image, const char *filename)
+int mkiv_output_tif(const mkiv_image *mat_image, const char *filename)
 {
   mkiv_tif_values *tif_image;
   int i_aux = 0;
@@ -46,26 +46,19 @@ int out_tif(const mkiv_image *mat_image, const char *filename)
   tif_image = (mkiv_tif_values *)malloc(sizeof(mkiv_tif_values));
   if(tif_image == NULL)
   {
-    #ifdef EXIT_ON_ERROR
-    fprintf(stderr, "***error (out_tif): "
-           "failed to allocate memory for tif_image\n");
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("failed to allocate memory for tif_image\n");
+    ERROR_RETURN(-1);
   }
   tif_image->buf = NULL;
 
   /* Convert mkiv_image into tif_values & copy all imagedata to buf*/
-  if (conv_mat2tif(mat_image, tif_image) != 0) i_aux++;
+  if (mkiv_mat2tif(mat_image, tif_image) != 0) i_aux++;
 
   /* Write the 8 bit TIFF to a file */
-  if (writetif(tif_image, filename) != 0) i_aux++;
+  if (mkiv_tif_write(tif_image, filename) != 0) i_aux++;
 
   free(tif_image->buf);
   free(tif_image);
 
-  if (i_aux > 0) return(i_aux);
-
-  return(0);
+  return(i_aux);
 }

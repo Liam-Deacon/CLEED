@@ -11,11 +11,11 @@
  *
  * Changes:
  *   GH/02.09.92 - creation
- *   CS/21.09.93 - allow nstep
+ *   CS/21.09.93 - allow n_step
  *********************************************************************/
 
 /*! \file
- * Implements bkgnd_smooth() function.
+ * Implements mkiv_bkgnd_smooth() function.
  */
 
 /*!
@@ -24,30 +24,30 @@
  *
  * \param int_norm
  * \param numb
- * \param nstart
- * \param nstep
+ * \param n_start
+ * \param n_step
  * \param width
  * \return The averaged (smoothed) intensity value.
  */
-float bkgnd_smooth(float *int_norm, int numb, int nstart, int nstep, int width)
+double mkiv_bkgnd_smooth(double *int_norm, int numb, int n_start, int n_step, int width)
 {
   int i, n_ini;
-  float int_avg = 0;
-  float fac = 1.;
+  double int_avg = 0;
+  double fac = 1.;
 
-  if ( nstep > 0 )
+  if ( n_step > 0 )
   {
-    n_ini = (numb - nstep*width < nstart) ? nstart : (numb - nstep*width);
+    n_ini = (numb - n_step*width < n_start) ? n_start : (numb - n_step*width);
   }
   else
   {
-    n_ini = (numb - nstep*width > nstart) ? nstart : (numb - nstep*width);
+    n_ini = (numb - n_step*width > n_start) ? n_start : (numb - n_step*width);
   }
 
   /* linearly weighted average over the last n_max numbers */
   for ( i = n_ini;
-        (i <= numb && nstep > 0) || (i >= numb && nstep < 0);
-        i += nstep, fac += 1.)
+        (i <= numb && n_step > 0) || (i >= numb && n_step < 0);
+        i += n_step, fac += 1.)
   {
     int_avg += int_norm[i] * fac;
   }

@@ -10,25 +10,30 @@
 #include <string.h>
 #include "mkiv_funcs.h"
 
-char *filename(char *fname, int n)
+char *reverse(char *s)
 {
-  char *strrchr();
+  size_t c, i, j;
 
-  ito3a(n, 1+strrchr(fname, '.') );
+  for(i=0, j = strlen(s)-1; i < j; i++, j--)
+  {
+    c = s[i];
+    s[i] = s[j];
+    s[j] = c;
+  }
 
-  return (fname);
+  return(0);
 }
 
 int ito3a(int n, char *s)
 {
-  unsigned int i = 0;
+  size_t i = 0;
   int sign;
 
   if ( (sign=n) < 0 ) n = -n;
         
   do
   {
-	  s[i++] = n % 10 + '0';
+    s[i++] = n % 10 + '0';
   } while ((n /= 10) > 0);
      
   while (i < strlen(s)) s[i++] = '0';
@@ -41,16 +46,8 @@ int ito3a(int n, char *s)
   return(0);
 }
 
-char *reverse(char *s)
+char *filename(char *fname, int n)
 {
-  size_t c, i, j;
-
-  for(i=0, j = strlen(s)-1; i < j; i++, j--)
-  {
-	  c = s[i];
-	  s[i] = s[j];
-	  s[j] = c;
-  }
-     
-  return(0);
+  ito3a(n, 1+strrchr(fname, '.') );
+  return (fname);
 }

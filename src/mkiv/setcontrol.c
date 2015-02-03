@@ -14,7 +14,7 @@
 
 /*! \file
  *
- * Contains setcontrol() function to set the control bits of each mkiv_reflex.
+ * Contains mkiv_set_control() function to set the control bits of each mkiv_reflex.
  */
 
 #include "mkiv.h"
@@ -26,26 +26,26 @@
  *
  * \param nspot Number of measurable reflexes.
  * \param spot Pointer to array of measurable reflexes.
- * \param ndesi Number of desired (marked) reflexes.
+ * \param n_desi Number of desired (marked) reflexes.
  * \param desi Pointer to array of desired (marked) reflexes.
- * \param nref Number of reference reflexes.
+ * \param n_ref Number of reference reflexes.
  * \param ref Pointer to array of reference reflexes.
  *  * \return
  */
-int setcontrol(size_t nspot, mkiv_reflex *spot, size_t ndesi, mkiv_index *desi,
-               size_t nref, mkiv_index *ref)
+int mkiv_set_control(size_t nspot, mkiv_reflex *spot, size_t n_desi, mkiv_index *desi,
+               size_t n_ref, mkiv_index *ref)
 {
   register size_t k, i;
 
   /* preset the control bytes */
   for (k=0; k < nspot; k++) spot[k].control = 0;
-  for (i=0; i < ndesi; i++) desi[i].control = -1;
-  for (i=0; i < nref;  i++) ref[i].control = -1;
+  for (i=0; i < n_desi; i++) desi[i].control = -1;
+  for (i=0; i < n_ref;  i++) ref[i].control = -1;
 
   /* loop over all spots */
   for (k=0; k < nspot; k++)
   {
-    for (i=0; i < ndesi; i++)
+    for (i=0; i < n_desi; i++)
     {
       if (PYTH( spot[k].lind1-desi[i].lind1,
                 spot[k].lind2-desi[i].lind2 ) > TOLERANCE) continue;
@@ -55,7 +55,7 @@ int setcontrol(size_t nspot, mkiv_reflex *spot, size_t ndesi, mkiv_index *desi,
       break;
     }
 
-    for (i=0; i < nref; i++)
+    for (i=0; i < n_ref; i++)
     {
       if( PYTH( spot[k].lind1-ref[i].lind1,
                 spot[k].lind2-ref[i].lind2 ) > TOLERANCE) continue;

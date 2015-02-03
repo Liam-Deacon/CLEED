@@ -34,7 +34,7 @@
  *
  * \see fimax()
  */
-int calcoi(size_t nspot, mkiv_reflex spot[], float range, mkiv_image *image)
+int mkiv_calc_spot_disc(size_t nspot, mkiv_reflex spot[], double range, mkiv_image *image)
 {
   register size_t i;
   register int v, h, val, pos;       /* auxiliaries */
@@ -60,7 +60,7 @@ int calcoi(size_t nspot, mkiv_reflex spot[], float range, mkiv_image *image)
     high = MIN( h0 + (int)range, (int)cols-1 );
 
     lowv = MAX( v0 - (int)range, 0 );
-    higv = MIN( v0 + (int)range, rows-1 );
+    higv = MIN( v0 + (int)range, (int)rows-1 );
 
     /* loop over integration area rectangle */
     hsum = 0;
@@ -71,8 +71,8 @@ int calcoi(size_t nspot, mkiv_reflex spot[], float range, mkiv_image *image)
     {
       for( h=lowh; h<=high; h++)
       {
-        pos = v*cols + h;
-        if ( pos >= cols*rows || pos < 0 ) continue; /* out of frame */
+        pos = v*(int)cols + h;
+        if ( pos >= (int)(cols*rows) || pos < 0 ) continue; /* out of frame */
         val = im[pos];
         hsum += val * (h - h0);
         vsum += val * (v - v0);
@@ -83,8 +83,8 @@ int calcoi(size_t nspot, mkiv_reflex spot[], float range, mkiv_image *image)
     /* calculate the center of gravity according to the formula :
 	   * mean(x) = sum(val * x) / sum(val)
 	   */
-    spot[i].xx = h0 + (float)hsum/(float)valsum;
-    spot[i].yy = v0 + (float)vsum/(float)valsum;
+    spot[i].xx = h0 + (double)hsum/(double)valsum;
+    spot[i].yy = v0 + (double)vsum/(double)valsum;
   }
 
   return(0);

@@ -1,12 +1,12 @@
 /*********************************************************************
- *                        READINP.C
+ *                        mkiv_read_inp.C
  *
  *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
  *
- *  Licensed under GNU General Public License 3.0 or later.
+ *  Limiddlesed under GNU General Public Limiddlese 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
- * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ * @limiddlese GPL-3.0+ <http://spdx.org/limiddleses/GPL-3.0+>
  *
  * Changes:
  *    CS/07.09.93 - creation
@@ -14,7 +14,7 @@
 
 /*! \file
  *
- * Implements readinp() , getdomain() and getindices() functions.
+ * Implements mkiv_read_inp() , getdomain() and getindices() functions.
  */
 
 #include <ctype.h>
@@ -24,76 +24,72 @@
 #include "mkiv.h"
 #include "inputs.h"
 
+void mkiv_input_free(mkiv_input *inp)
+{
+  if (inp != NULL)
+  {
+    free(inp);
+  }
+}
+
+mkiv_input *mkiv_input_init()
+{
+  mkiv_input *inp = (mkiv_input *)calloc(1, sizeof(mkiv_input));
+
+  if (inp == NULL)
+  {
+    ERROR_MSG("Unable to allocate memory for input parameters\n");
+    ERROR_RETURN(NULL);
+  }
+
+  /* Preset variables */
+  inp->n_start  = 40;
+  inp->n_stop = 400;
+  inp->e_step = 1;
+  inp->center.xx  = 250;
+  inp->center.yy = 250;
+  inp->r_outer  = 230;
+  inp->r_inner  = 0;
+  inp->bkgnd = 2;
+  inp->smooth = -1;
+  inp->kpl_10 = 2.6771;
+  inp->n_dom = 0;
+
+  return (inp);
+}
+
 /*!
  * Reads some necessary data statements from the file mkiv.inp
  * if variables don't occur in the input file, defaults are taken instead
  *
- * \param[out] verb Flag for verbose output.
- * \param[in,out] inp_path
- * \param[in,out] param_path
- * \param[out] ref_name
- * \param[out] mask_name
- * \param[out] nstart
- * \param[out] nstop
- * \param[out] e_step Energy step.
- * \param[out] cen Center of screen.
- * \param[out] router Outer radius of screen.
- * \param[out] rinner Inner radius of screen.
- * \param[out] bg Flag for background.
- * \param[out] smooth Flag for smoothing.
- * \param kpl_10 Length of the k_parallel vector in the <1,0> direction.
- * \param[out] ndom Number of superstructure domains in \p superlat .
- * \param[out] superlat Array of superstructure domains.
- * \param[out] ndesi Number of desired reflexes in \p desi .
- * \param[out] desi Array of desired reflexes.
- * \param[out] nref Number of reference reflexes in \p ref .
- * \param[out] ref Array of reference reflexes.
- * \param[out] nexcl Number of excluded reflexes in \p excl .
- * \param[out] excl Array of excluded reflexes.
- *  * \return C style return code indicating function success.
- * \retval 0 if successful.
- * \retval -1 if unsuccessful.
+ * \param[in,out] args Pointer to arguments needed for reading input files.
+ *  * \return Pointer to #mkiv_input structure on success.
+ * \retval Pointer to #mkiv_input struct if successful.
+ * \retval \c NULL if unsuccessful.
  */
-int readinp(int verb, char *inp_path, char *param_path, char *ref_name, 
-            char *mask_name, size_t *nstart, size_t *nstop, float *e_step,
-            mkiv_position *cen, float *router, float *rinner, int *bg,
-            int *smooth, float *kpl_10, size_t *ndom, mkiv_domain *superlat,
-            size_t *ndesi, mkiv_index *desi, size_t *nref, mkiv_index *ref,
-            size_t *nexcl, mkiv_index *excl )
+mkiv_input *mkiv_input_read(mkiv_args *args)
 {
-  int i;
-  size_t nndom = 0;
-  float fac, interim;
+  mkiv_input *inp = mkiv_input_init();
+
+  if (inp == NULL)
+  {
+    ERROR_RETURN(NULL);
+  }
+
+  size_t i;
+  size_t nn_dom = 0;
+  double fac, interim;
   char buf[STRSZ], var[STRSZ];
   FILE *fp;
 
-  /* Preset variables */
-  *nstart	= 40;
-  *nstop = 400;
-  *e_step	= 1;
-  cen->xx	= 250;
-  cen->yy	= 250;
-  *router	= 230;
-  *rinner	= 0;
-  *bg = 2;
-  *smooth = -1;
-  *kpl_10 = 2.6771;
-  *ndom = 0;
-
   /* Open statement */
-  if (inp_path == NULL) strcpy(inp_path, "mkiv.inp");
-  if ( (fp = fopen(inp_path, "r")) == NULL)
+  if (args->inp_path == NULL) strcpy(args->inp_path, "mkiv.inp");
+  if ( (fp = fopen(args->inp_path, "r")) == NULL)
   {
-    fprintf(stderr, "***error (readinp): failed to open '%s'\n",
-            inp_path);
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("failed to open '%s'\n", args->inp_path);
+    ERROR_RETURN(-1);
   }
-  else printf("\nreading input from \"%s\":\n", inp_path);
+  else printf("\nreading input from \"%s\":\n", args->inp_path);
      
   /* Read data */
   while ( fgets(buf, STRSZ, fp) != NULL && *buf!='.' )
@@ -107,89 +103,88 @@ int readinp(int verb, char *inp_path, char *param_path, char *ref_name,
     }
     switch (i+1)
     {
-      case  1 :  sscanf( buf, "%s %s", var, ref_name); break;
-      case  2 :  sscanf( buf, "%s %s", var, mask_name); break;
-      case  3 :  sscanf( buf, "%s %d", var, nstart); break;
-      case  4 :  sscanf( buf, "%s %d", var, nstop); break;
-      case  5 :  sscanf( buf, "%s %f", var, e_step); break;
-      case  6 :  sscanf( buf, "%s %d", var, &(cen->xx)); break;
-      case  7 :  sscanf( buf, "%s %d", var, &(cen->yy)); break;
-      case  8 :  sscanf( buf, "%s %f", var, router); break;
-      case  9 :  sscanf( buf, "%s %f", var, rinner); break;
-      case 10 :  sscanf( buf, "%s %d", var, bg); break;
-      case 11 :  sscanf( buf, "%s %d", var, smooth); break;
-      case 12 :  sscanf( buf, "%s %f", var, kpl_10); break;
-      case 13 :  sscanf( buf, "%s %d", var, ndom); break;
-      case 14 :  getdomain( buf, &superlat[nndom++]);	break;
-      case 15 :  getindices( fp, buf, ndesi, desi, nref,
-                             ref, nexcl, excl); break;
+      case  1 :  sscanf( buf, "%s %s", var, inp->ref_name); break;
+      case  2 :  sscanf( buf, "%s %s", var, args->mask_path); break;
+      case  3 :  sscanf( buf, "%s %u", var, &inp->n_start); break;
+      case  4 :  sscanf( buf, "%s %u", var, &inp->n_stop); break;
+      case  5 :  sscanf( buf, "%s %lf", var, &inp->e_step); break;
+      case  6 :  sscanf( buf, "%s %d", var, &(inp->center.xx)); break;
+      case  7 :  sscanf( buf, "%s %d", var, &(inp->center.yy)); break;
+      case  8 :  sscanf( buf, "%s %lf", var, &inp->r_outer); break;
+      case  9 :  sscanf( buf, "%s %lf", var, &inp->r_inner); break;
+      case 10 :  sscanf( buf, "%s %d", var, &inp->bkgnd); break;
+      case 11 :  sscanf( buf, "%s %d", var, &inp->smooth); break;
+      case 12 :  sscanf( buf, "%s %lf", var, &inp->kpl_10); break;
+      case 13 :  sscanf( buf, "%s %u", var, &inp->n_dom); break;
+      case 14 :  mkiv_read_domain( buf, &(inp->superlat[nn_dom++]));	break;
+      case 15 :  mkiv_read_indices( fp, buf,
+                                    &inp->n_desi, inp->desi, &inp->n_ref,
+                                    inp->ref, &inp->n_excl, inp->excl); break;
       default :
       {
         buf[strlen(buf)-1] = '\0';
-        fprintf(stderr, "***error (readinp):"
-                " wrong arguments in line '%s' \n", buf);
+        ERROR_MSG("wrong arguments in line '%s'\n", buf);
       }
     }
   }
   fclose(fp);
 
-  if (param_path == NULL) strcpy(param_path, "mkiv.param");
-  if ( (fp = fopen(param_path, "w")) == NULL)
+  if (args->param_path == NULL) strcpy(args->param_path, "mkiv.param");
+  if ( (fp = fopen(args->param_path, "w")) == NULL)
   {
-    fprintf(stderr, "***error (readvar): unable to write to '%s'\n",
-            param_path);
+    ERROR_MSG("unable to write to '%s'\n", args->param_path);
   }
   else
   {
-    VPRINT("writing parameter input-values to '%s'\n\n", param_path);
-    fprintf(fp, "ref_name = %s \n", ref_name);
-    fprintf(fp, "mask_name = %s \n", mask_name);
-    fprintf(fp, "nstart = %d \n", *nstart);
-    fprintf(fp, "nstop = %d \n", *nstop);
-    fprintf(fp, "n_step = %f \n", *e_step);
-    fprintf(fp, "center = (%d,%d) \n", cen->xx, cen->yy);
-    fprintf(fp, "router = %.0f \n",*router);
-    fprintf(fp, "rinner = %.0f \n", *rinner);
-    fprintf(fp, "bg = %s \n", ((*var&&(*bg==2))?"YES":"NO"));
+    if (args->verbose & VERBOSE) printf("writing parameter input-values to '%s'\n\n", args->param_path);
+    fprintf(fp, "ref_name = %s \n", inp->ref_name);
+    fprintf(fp, "mask_name = %s \n", args->mask_path);
+    fprintf(fp, "n_start = %d \n", inp->n_start);
+    fprintf(fp, "n_stop = %d \n", inp->n_stop);
+    fprintf(fp, "n_step = %f \n", inp->e_step);
+    fprintf(fp, "center = (%d,%d) \n", inp->center.xx, inp->center.yy);
+    fprintf(fp, "r_outer = %.0f \n", inp->r_outer);
+    fprintf(fp, "r_inner = %.0f \n", inp->r_inner);
+    fprintf(fp, "bg = %s \n", ((*var&&(inp->bkgnd==2))?"YES":"NO"));
     fprintf(fp, "smoothcurrent = %s \n",
-                ((*var&&(*smooth==-1))?"YES":"NO"));
-    fprintf(fp, "kp_len_10 = %f \n", *kpl_10);
-    fprintf(fp, "ndom = %d \n", *ndom);
-    for (i=0; i < *ndom; i++)
+                ((*var&&(inp->smooth==-1))?"YES":"NO"));
+    fprintf(fp, "kp_len_10 = %f \n", inp->kpl_10);
+    fprintf(fp, "n_dom = %d \n", inp->n_dom);
+    for (i=0; i < inp->n_dom; i++)
     {
-      fprintf(fp, "%f %f %f %f \n",
-                superlat[i].lind11, superlat[i].lind12,
-                superlat[i].lind21, superlat[i].lind22);
+      fprintf(fp, "%lf %lf %lf %lf \n",
+              inp->superlat[i].lind11, inp->superlat[i].lind12,
+              inp->superlat[i].lind21, inp->superlat[i].lind22);
     }
-    fprintf(fp, "ndesi = %d \n", *ndesi);
+    fprintf(fp, "n_desi = %d \n", inp->n_desi);
 
-    for (i=0; i< * ndesi && i < 9; i++)
+    for (i=0; i < inp->n_desi && i < 9; i++)
     {
-      fprintf(fp, "%f %f \n", desi[i].lind1, desi[i].lind2);
+      fprintf(fp, "%lf %lf \n", inp->desi[i].lind1, inp->desi[i].lind2);
     }
-    if (i < *ndesi) fprintf(fp, "\t.\n\t.\n\t.\n\n");
+    if (i < inp->n_desi) fprintf(fp, "\t.\n\t.\n\t.\n\n");
     fclose(fp);
   }
 
-  printf("Total of %d spots.\n",*ndesi);
-  if (*nref > 2)  printf("%d spots used for recalibration;\n", *nref);
+  printf("Total of %d spots.\n", inp->n_desi);
+  if (inp->n_ref > 2)  printf("%d spots used for recalibration;\n", inp->n_ref);
   else            printf("Recalibration with most intense spots;\n");
-  printf(" No maximum search for %d spots.\n", *nexcl);
+  printf(" No maximum search for %d spots.\n", inp->n_excl);
 
   /* inversion of superlattice matrices */
-  for (i=0; i < *ndom; i++)
+  for (i=0; i < inp->n_dom; i++)
   {
-    fac = superlat[i].lind11 * superlat[i].lind22 -
-          superlat[i].lind12 * superlat[i].lind21;
-    interim = superlat[i].lind11;
-    superlat[i].lind11 = superlat[i].lind22 / fac;
-    superlat[i].lind22 = interim / fac;
-    interim = superlat[i].lind12;
-    superlat[i].lind12 = -superlat[i].lind21 / fac;
-    superlat[i].lind21 = -interim / fac;
+    fac = inp->superlat[i].lind11 * inp->superlat[i].lind22 -
+          inp->superlat[i].lind12 * inp->superlat[i].lind21;
+    interim = inp->superlat[i].lind11;
+    inp->superlat[i].lind11 = inp->superlat[i].lind22 / fac;
+    inp->superlat[i].lind22 = interim / fac;
+    interim = inp->superlat[i].lind12;
+    inp->superlat[i].lind12 = -inp->superlat[i].lind21 / fac;
+    inp->superlat[i].lind21 = -interim / fac;
   }
     
-  return(0);
+  return(inp);
 }
 
 
@@ -201,12 +196,12 @@ int readinp(int verb, char *inp_path, char *param_path, char *ref_name,
  *  * \return Value returned by sscanf() if an error occurs.
  * \retval 0 Otherwise
  */
-int getdomain(const char *buffer, mkiv_domain *superlat)
+int mkiv_read_domain(const char *buffer, mkiv_domain *superlat)
 {
   char var[STRSZ];
   int aux;
 
-  aux = sscanf( buffer, "%s %f %f %f %f", var,
+  aux = sscanf( buffer, "%s %lf %lf %lf %lf", var,
                         &superlat->lind11,
                         &superlat->lind12,
                         &superlat->lind21,
@@ -223,76 +218,54 @@ int getdomain(const char *buffer, mkiv_domain *superlat)
  *
  * \param fp File pointer to input file.
  * \param buffer Line buffer string for input.
- * \param[out] ndesi Number of desired reflexes in \p desi .
+ * \param[out] n_desi Number of desired reflexes in \p desi .
  * \param[out] desi Array of desired reflexes.
- * \param[out] nref Number of reference reflexes in \p ref .
+ * \param[out] n_ref Number of reference reflexes in \p ref .
  * \param[out] ref Array of reference reflexes.
- * \param[out] nexcl Number of excluded reflexes in \p excl .
+ * \param[out] n_excl Number of excluded reflexes in \p excl .
  * \param[out] excl Array of excluded reflexes.
  *  * \return C style return code indicating function success.
  * \retval 0 if successful.
  * \retval -1 if unsuccessful.
  */
-int getindices(FILE *fp, char *buffer, size_t *ndesi, mkiv_index *desi,
-               size_t *nref, mkiv_index *ref, size_t *nexcl, mkiv_index *excl)
+int mkiv_read_indices(FILE *fp, char *buffer, size_t *n_desi, mkiv_index *desi,
+                size_t *n_ref, mkiv_index *ref, size_t *n_excl, mkiv_index *excl)
 {
   char var[STRSZ];
   size_t j;
 
-  if (sscanf( buffer, "%s %u", var, ndesi) < 2)
+  if (sscanf( buffer, "%s %u", var, n_desi) < 2)
   {
-    fprintf(stderr, "***error (getindices): malformed input '%s' for number "
-        "of desired reflexes\n", buffer);
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("malformed input '%s' for number of desired reflexes\n", buffer);
+    ERROR_RETURN(-1);
   }
-  for ( j=0; fgets(buffer, STRSZ, fp) != NULL && j<*ndesi; j++)
+  for ( j=0; fgets(buffer, STRSZ, fp) != NULL && j < *n_desi; j++)
   {
     if ( buffer[0] == 'r' )
     {
-      if (sscanf( ++buffer, "%f %f", &ref[*nref].lind1, &ref[*nref].lind2) < 2)
+      if (sscanf( ++buffer, "%lf %lf", &ref[*n_ref].lind1, &ref[*n_ref].lind2) < 2)
       {
-        fprintf(stderr, "***error (getindices): malformed (h, k) index "
-                "input '%s' for referenced mkiv_reflex\n", buffer);
-
-        #ifdef EXIT_ON_ERROR
-        exit(1);
-        #elif RETURN_ON_ERROR
-        return(-1);
-        #endif
+        ERROR_MSG("malformed (h, k) index input '%s' for referenced "
+                  "mkiv_reflex\n", buffer);
+        ERROR_RETURN(-1);
       }
-      ++*nref;
+      ++*n_ref;
     }
     if ( buffer[0] == 'i' )
     {
-      if (sscanf(++buffer, "%f %f",
-                 &excl[*nexcl].lind1, &excl[*nexcl].lind2) < 2)
+      if (sscanf(++buffer, "%lf %lf",
+                 &excl[*n_excl].lind1, &excl[*n_excl].lind2) < 2)
       {
-        fprintf(stderr, "***error (getindices): malformed (h, k) index "
-                "input '%s' for ignored mkiv_reflex\n", buffer);
-
-        #ifdef EXIT_ON_ERROR
-        exit(1);
-        #elif RETURN_ON_ERROR
-        return(-1);
-        #endif
+        ERROR_MSG("malformed (h, k) index "
+                  "input '%s' for ignored mkiv_reflex\n", buffer);
+        ERROR_RETURN(-1);
       }
-      ++*nexcl;
+      ++*n_excl;
     }
-    if (sscanf( buffer, "%f %f", &desi[j].lind1, &desi[j].lind2))
+    if (sscanf( buffer, "%lf %lf", &desi[j].lind1, &desi[j].lind2))
     {
-      fprintf(stderr, "***error (getindices): "
-              "malformed (h, k) index input '%s' for mkiv_reflex\n", buffer);
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #elif RETURN_ON_ERROR
-      return(-1);
-      #endif
+      ERROR_MSG("malformed (h, k) index input '%s' for mkiv_reflex\n", buffer);
+      ERROR_RETURN(-1);
     }
   }
 

@@ -1,5 +1,5 @@
 /*********************************************************************
- *                        MKMASK.C
+ *                        mkiv_mk_mask.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
@@ -19,7 +19,7 @@
 
 /*! \file
  *
- * Contains mkmask() function for drawing boundaries of the LEED screen onto an
+ * Contains mkiv_mk_mask() function for drawing boundaries of the LEED screen onto an
  * image, producing a mask.
  */
 
@@ -30,8 +30,8 @@
  * Draws a mask for the boundaries of the LEED screen.
  * \param[in,out] image Pointer to #mkiv_image image data structure.
  * \param[in] center positioninate of the center of the LEED screen.
- * \param router Radius of the outer boundary of the LEED screen.
- * \param rinner Radius of the inner boundary of the LEED screen (i.e the
+ * \param r_outer Radius of the outer boundary of the LEED screen.
+ * \param r_inner Radius of the inner boundary of the LEED screen (i.e the
  * region which is shadowed by the electron gun).
  * \param write Flag indicating write action:
  * - write > 0 : write to "ima.byte".
@@ -42,61 +42,51 @@
  * \retval 0 if function completed successfully.
  * \retval -1 if the function encountered an error and #EXIT_ON_ERROR is not
  * defined.
- * \note If \p center , \p router or \p rinner contain negative values then
+ * \note If \p center , \p r_outer or \p r_inner contain negative values then
  * the modulus of that value will be used. An additional warning message will
- * be printed if #WARNING is defined.
+ * be printed if #WARNING_LOG is defined.
  */
-int mkmask(mkiv_image *image, const mkiv_position *center, float router, float rinner,
-          int write, const char *mask_path)
+int mkiv_mk_mask(mkiv_image *image, const mkiv_position *center,
+                 double r_outer, double r_inner, int write, const char *mask_path)
 {
-  float phi, rad;
+  double phi, rad;
   size_t i;
   size_t cols = image->rows;
   size_t n_size = image->rows * image->cols;
   int x0 = center->xx;
   int y0 = center->yy;
   char fname[FILENAME_MAX];
-  unsigned short *mask = (unsigned short *) image->imagedata;
+  uint16_t *mask = (uint16_t *) image->imagedata;
 
   /* check for negative values */
-  if (router < 0)
+  if (r_outer < 0)
   {
-    #ifdef WARNING
-    fprintf(stderr, "*warning (mkmask): "
-            "radius router < 0; will use |router|\n");
-    #endif
-    router = fabs(router);
+    WARNING_MSG("radius r_outer %6.4lf < 0; will use |r_outer|\n", r_outer);
+    r_outer = fabs(r_outer);
   }
-  if (rinner < 0)
+  if (r_inner < 0)
   {
-    #ifdef WARNING
-    fprintf(stderr, "*warning (mkmask): "
-            "radius rinner < 0; will use |rinner|\n");
-    #endif
-    rinner = fabs(rinner);
+    WARNING_MSG("radius r_inner %6.4lf < 0; will use |r_inner|\n", r_inner);
+    r_inner = fabs(r_inner);
   }
   if (x0 < 0)
   {
-    #ifdef WARNING
-    fprintf(stderr, "*warning (mkmask): x-center x0 < 0; will use |x0|\n");
-    #endif
+    WARNING_MSG("x-center x0 < 0; will use |x0|\n");
     x0 = abs(x0);
   }
   if (y0 < 0)
   {
-    #ifdef WARNING
-    fprintf(stderr, "*warning (mkmask): y-center y0 < 0; will use |y0|\n");
-    #endif
+    WARNING_MSG("y-center y0 < 0; will use |y0|\n");
     y0 = abs(y0);
   }
 
-  /* no mask -> draw router, rinner */
+  /* no mask -> draw r_outer, r_inner */
   for (i=0; i < n_size; i++) mask[i] = 0;
 
   for (phi=0; phi < 2*PI; phi+=.001)
   {
-    /* draw router and rinner */
-    for( rad = rinner; rad <= router; rad += 0.5)
+    /* draw r_outer and r_inner */
+    for( rad = r_inner; rad <= r_outer; rad += 0.5)
     {
       mask[cols*(int)(y0 + rad*sin(phi)) + x0 + (int)(rad*cos(phi))] = 0xFFFF;
     }
@@ -117,21 +107,18 @@ int mkmask(mkiv_image *image, const mkiv_position *center, float router, float r
 
   if (write)
   {
-    if (out_tif(image, fname))
+    if (mkiv_output_tif(image, fname))
     {
-      fprintf(stderr, "***error (out_tif): write to '%s' failed!\n", fname);
+      ERROR_MSG("write to '%s' failed!\n", fname);
     }
   }
   else
   {
     fprintf(stderr, "write mask to '%s'\n", fname);
-    if (out_tif(image, fname))
+    if (mkiv_output_tif(image, fname) != 0)
     {
-      #ifdef EXIT_ON_ERROR
-      ERR_EXIT_X("(out_tif): write to '%s' failed!\n", fname);
-      #else
-      return(-1);
-      #endif
+      ERROR_MSG("write to '%s' failed!\n", fname);
+      ERROR_RETURN(-1);
     }
   }
   return(0);

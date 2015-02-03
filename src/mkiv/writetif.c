@@ -21,6 +21,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include "mkiv.h"
 
 #define TIFF_SET_FIELD(img, tag, val) TIFFSetField(img->tif_out, tag, val)
@@ -32,14 +34,15 @@
  * \param[in] filename File path to write to.
  *  * \return
  */
-int writetif(mkiv_tif_values *tifimage, const char *filename)
+int mkiv_tif_write(mkiv_tif_values *tifimage, const char *filename)
 {
-  unsigned long row;
+  uint64_t row;
 
   if (tifimage->tif_out != NULL) free(tifimage->tif_out);
   if ( (tifimage->tif_out = (TIFF *) TIFFOpen(filename, "w")) == NULL)
   {
-    fprintf(stderr, "***error (writetif): cannot write to '%s'\n", filename);
+    ERROR_MSG("cannot write to '%s'\n", filename);
+    ERROR_RETURN(-1);
   }
 
   TIFF_SET_FIELD(tifimage, TIFFTAG_IMAGEWIDTH, tifimage->imagewidth);

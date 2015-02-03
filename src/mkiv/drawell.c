@@ -1,5 +1,5 @@
 /*********************************************************************
- *                       DRAWELL.C
+ *                       mkiv_draw_ellipse.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
@@ -16,9 +16,9 @@
 
 /*! \file
  *
- * Implements the function drawell()
+ * Implements the function mkiv_draw_ellipse()
  */
-
+#include <math.h>
 #include "mkiv.h"
 
 /*!
@@ -32,32 +32,36 @@
  * \param verh ratio background/integration signal of ellipses
  * \return
  */
-int drawell(int nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_vector *scale,
-            float angle, float verh)
+int mkiv_draw_ellipse(size_t n_spot, mkiv_reflex spot[], mkiv_image *image,
+                      mkiv_vector *scale, double angle, double verh)
 {
-  register int i,j,k,pos;
   int a_back;
-  int cols, rows, n_size;
+  register int i, j;
+  register size_t k;
+  register uint32_t pos;
+  uint32_t cols, rows, n_size;
 
-  float x_fac, y_fac, xy_fac, ell;
-  float h = scale->xx;
-  float v = scale->yy;
+  double x_fac, y_fac, xy_fac, ell;
+  double h = scale->xx;
+  double v = scale->yy;
 
-  unsigned short max_val;
-  unsigned short *im;
+  uint16_t max_val;
+  uint16_t *im = (uint16_t *)image->imagedata;
+
+  /* return if key params are null */
+  if (image == NULL || scale == NULL || im == NULL) return(-1);
 
   /* initialize values */
   cols = image->rows;
   rows = image->cols;
-  im = (unsigned short *)image->imagedata;
 
   /* find maximum value in image->imagedata */
   n_size = cols * rows;
   max_val = 1;
 
-  for( i = 0; i < n_size; i ++)
+  for( pos = 0; pos < n_size; pos++)
   {
-    max_val = MAX(max_val, im[i]);
+    max_val = MAX(max_val, im[pos]);
   }
 
   angle *= PI/180.;
@@ -65,17 +69,17 @@ int drawell(int nspot, mkiv_reflex spot[], mkiv_image *image, mkiv_vector *scale
   y_fac = PYTH2(sin(angle)/h,cos(angle)/v);
   xy_fac = sin(angle) * cos(angle) * ( 2./(h*h) - 2./(v*v) );
 
-  a_back = RND( verh * MAX(h,v) );
+  a_back = int_round( verh * fmax(h, v) );
   for (j = -a_back; j <= a_back; j++)
   {
     for (i = -a_back; i <= a_back; i++)
     {
-      ell = i*i*x_fac + j*j*y_fac + i*j*xy_fac;
+      ell = (double)(i*i)*x_fac + (double)(j*j)*y_fac + (double)(i*j)*xy_fac;
 
-      if (fabs(ell-1.)>.07 && fabs(ell-SQUARE(verh))>.13) continue;
+      if (fabs(ell - 1.) > .07 && fabs(ell - SQUARE(verh)) > .13) continue;
 
       /* loop over spots */
-      for (k = 0; k < nspot; k++)
+      for (k = 0; k < n_spot; k++)
       {
         if ( spot[k].control & SPOT_OUT ) continue;
 

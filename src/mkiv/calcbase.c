@@ -1,5 +1,5 @@
 /*********************************************************************
- *                        CALCBASE.C
+ *                        mkiv_calc_basis.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
@@ -36,13 +36,14 @@
  * \p cor < 0 : no recorrection, no input-origin
  * \p cor = 0 : recorrection with spot.cos_th
  */
-short calcbase(size_t naux, mkiv_reflex aux[], mkiv_vector a[],
-               float ratio, int distance, int trip_max, float cor)
+size_t mkiv_calc_basis(size_t naux, mkiv_reflex aux[], mkiv_vector a[],
+                      double ratio, int distance, size_t trip_max, double cor)
 {
-  register int i, j, k, ntrip;
-  float det, x11, x12, x21, x22;          /* Matrix to invert */
-  float cor_fac;
-  float dposh[2], dposv[2], dind1[2], dind2[2];
+  register size_t i, j, k;
+  register size_t ntrip;
+  double det, x11, x12, x21, x22;          /* Matrix to invert */
+  double cor_fac;
+  double dposh[2], dposv[2], dind1[2], dind2[2];
   static mkiv_vector V_ZERO = { 0., 0., 0.};
 
   /* Initialization */
@@ -72,7 +73,7 @@ short calcbase(size_t naux, mkiv_reflex aux[], mkiv_vector a[],
 	    dind1[1] = aux[j].lind1 - aux[i].lind1;
 	    dind2[1] = aux[j].lind2 - aux[i].lind2;
 
-	    for (k=j+1; k<naux; k++)
+	    for (k=j+1; k < naux; k++)
 	    {
 	      dposh[2] = aux[k].xx - aux[i].xx;
 	      dposv[2] = aux[k].yy - aux[i].yy;
@@ -84,7 +85,7 @@ short calcbase(size_t naux, mkiv_reflex aux[], mkiv_vector a[],
 	           PYTH( dposh[2],dposv[2] ) < distance ) continue;
 
 	      det = dind1[1]*dind2[2] - dind2[1]*dind1[2];
-	      if ( fabs(det)>.3 && fabs(det)<1./TOLERANCE )
+	      if ( fabs(det)>.3 && fabs(det) < 1./TOLERANCE )
 	      {
 	        ntrip++;
 	        det = 1./det;
@@ -110,10 +111,10 @@ short calcbase(size_t naux, mkiv_reflex aux[], mkiv_vector a[],
 
   if (ntrip > 0)
   {
-    a[1].xx /= ntrip;
-    a[1].yy /= ntrip;
-    a[2].xx /= ntrip;
-    a[2].yy /= ntrip;
+    a[1].xx /= (double)ntrip;
+    a[1].yy /= (double)ntrip;
+    a[2].xx /= (double)ntrip;
+    a[2].yy /= (double)ntrip;
   }
   a[1].len = PYTH( a[1].xx , a[1].yy );
   a[2].len = PYTH( a[2].xx , a[2].yy );
@@ -125,8 +126,8 @@ short calcbase(size_t naux, mkiv_reflex aux[], mkiv_vector a[],
 	}
   else                   /* with input origin */
   {
-    a[0].xx *= naux;
-    a[0].yy *= naux;
+    a[0].xx *= (double)naux;
+    a[0].yy *= (double)naux;
   }
 
   for (i=0; i < naux; i++)
@@ -134,8 +135,8 @@ short calcbase(size_t naux, mkiv_reflex aux[], mkiv_vector a[],
     a[0].xx +=aux[i].xx -aux[i].lind1*a[1].xx -aux[i].lind2*a[2].xx;
     a[0].yy +=aux[i].yy -aux[i].lind1*a[1].yy -aux[i].lind2*a[2].yy;
   }
-  a[0].xx /= naux;
-  a[0].yy /= naux;
+  a[0].xx /= (double)naux;
+  a[0].yy /= (double)naux;
   a[0].len = PYTH( a[0].xx , a[0].yy );
 
   return(ntrip);

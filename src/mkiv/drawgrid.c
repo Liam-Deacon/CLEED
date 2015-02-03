@@ -1,5 +1,5 @@
 /*********************************************************************
- *                       DRAWBOUND.C
+ *                       mkiv_draw_bounds.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
@@ -25,7 +25,7 @@
  * \param write If 1: write to "ima.byte", else: use \p fname
  * \param fname Filename of output file.
  */
-int drawgrid(mkiv_image *image, int write, const char *fname)
+int mkiv_draw_grid(mkiv_image *image, int write, const char *fname)
 {
   size_t i, j, num;
   size_t cols = image->cols;
@@ -57,9 +57,10 @@ int drawgrid(mkiv_image *image, int write, const char *fname)
     
   if (write)      /* write to "ima.byte" if desired */
   {
-    if (out_tif(image, fname))
+    if (mkiv_output_tif(image, fname))
     {
-      ERR_EXIT_X("(drawgrid): writing image '%s' failed!", fname);
+      ERROR_MSG("writing image '%s' failed!\n", fname);
+      ERROR_RETURN(-1);
     }
   }
     

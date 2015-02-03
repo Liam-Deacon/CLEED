@@ -36,21 +36,17 @@
  * \retval 0 if successful.
  * \retval -1 if \p chr is invalid.
  */
-int sign(mkiv_image *image, unsigned char chr,
-         size_t xx, size_t yy, unsigned short value)
+int mkiv_sign(mkiv_image *image, uint8_t chr, int xx, int yy, uint16_t value)
 {
   register size_t j, k, pos;
   size_t i, cols = image->rows, rows = image->cols;
-  unsigned short *im = (unsigned short *)image->imagedata;
+  uint16_t *im = (uint16_t*)image->imagedata;
 
   chr -= 45;
   if (chr > 34 ) /* unsigned so always positive due to wrapping */
   {
-    #ifdef EXIT_ON_ERROR
-    ERR_EXIT("(sign): unknown character!");
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("unknown character!");
+    ERROR_RETURN(-1);
   }
 
   pos = cols*yy + xx;

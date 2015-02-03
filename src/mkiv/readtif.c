@@ -1,5 +1,5 @@
 /*********************************************************************
- *                        READTIF.C
+ *                        mkiv_read_tif.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
@@ -19,12 +19,13 @@
 
 /*! \file
  *
- * Contains readtif() function for reading a TIFF file from disk and storing as
+ * Contains mkiv_read_tif() function for reading a TIFF file from disk and storing as
  * a #tif_values structure.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include "mkiv.h"
 
 #define TIFF_GET_FIELD(tif, tag, val) TIFFGetField(tif->tif_in, tag, &tif->val)
@@ -37,7 +38,7 @@
  *  * \return Integer representing function success (using normal C convention).
  * \retval -1 if function encounters an error and #EXIT_ON_ERROR is not defined.
  */
-int readtif(mkiv_tif_values *tifimage, const char *input)
+int mkiv_read_tif(mkiv_tif_values *tifimage, const char *input)
 {
   unsigned long row;
   long imagelength, scanlinesize;
@@ -48,13 +49,8 @@ int readtif(mkiv_tif_values *tifimage, const char *input)
     if ( (tifimage = (mkiv_tif_values*)
                         malloc(sizeof(mkiv_tif_values))) == NULL )
     {
-      fprintf(stderr, "***error (readtif): tifimage is NULL\n");
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(-1);
-      #endif
+      ERROR_MSG("tifimage is NULL\n");
+      ERROR_EXIT_RETURN(1, -1);
     }
   }
   else /* free buffer */
@@ -66,14 +62,8 @@ int readtif(mkiv_tif_values *tifimage, const char *input)
   /* Open input file and read parameters */
   if ( !file_exists(input) )
   {
-    fprintf(stderr, "***error (readtif): "
-            "cannot read tiff file '%s'\n", input);
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("cannot read tiff file '%s'\n", input);
+    ERROR_EXIT_RETURN(1, -1);
   }
   tifimage->tif_in = (TIFF *)TIFFOpen(input, "r");
 
@@ -100,50 +90,38 @@ int readtif(mkiv_tif_values *tifimage, const char *input)
    *  imagelength =  2 * tifimage->imagelength;
    *  scanlinesize = TIFFScanlineSize(tifimage->tif_in);
    */
-  fprintf(stdout, "(v_readtif): read file %s\n", input);
+  fprintf(stdout, "(v_mkiv_read_tif): read file %s\n", input);
 
   if(tifimage->bitspersample == 8)
   {
-      fprintf(stdout, "(v_readtif): 8 bit TIFF\n");
+      fprintf(stdout, "(v_mkiv_read_tif): 8 bit TIFF\n");
       imagelength =  tifimage->imagelength;
       scanlinesize = TIFFScanlineSize(tifimage->tif_in);
   }
   else if(tifimage->bitspersample == 16)
   {
-      fprintf(stdout, "(v_readtif): 16 bit TIFF\n" );
+      fprintf(stdout, "(v_mkiv_read_tif): 16 bit TIFF\n" );
       /* before: imagelength =  2* tifimage->imagelength; */
       imagelength =  tifimage->imagelength;
       scanlinesize = TIFFScanlineSize(tifimage->tif_in);
   }
   else
   {
-      fprintf(stderr, "***error (readtif): "
-              "unknown TIFF format: bitspersample = %d\n",
+      ERROR_MSG("unknown TIFF format: bitspersample = %d\n",
               tifimage->bitspersample);
-
-      #ifdef EXIT_ON_ERROR
-      exit(1);
-      #else
-      return(-1);
-      #endif
+      ERROR_EXIT_RETURN(1, -1);
   }
 
-  fprintf(stdout, "(readtif): length = %ld, width = %ld, "
-          "scanlinesize = %ld, buffersize = %ld\n",
+  fprintf(stdout, "(mkiv_read_tif): length = %ld, width = %ld, "
+          "scanlinesize = %ld, buffersize = %" PRIu64 "\n",
           imagelength, tifimage->imagewidth, scanlinesize,
           imagelength * scanlinesize);
 
-  tifimage->buf = (char *)malloc(imagelength * scanlinesize);
+  tifimage->buf = (char *)malloc((size_t)(imagelength * scanlinesize) * sizeof(char));
   if(tifimage->buf == NULL) 
   {
-    fprintf(stderr,"***error (readtif): "
-            "memory allocation failed (buffer)\n");
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("memory allocation failed (buffer)\n");
+    ERROR_EXIT_RETURN(1, -1);
   }
 
   for (row = 0; row < tifimage->imagelength; row++)
@@ -154,18 +132,18 @@ int readtif(mkiv_tif_values *tifimage, const char *input)
   }
 
   #ifdef CONTROL
-  fprintf(stdout, "(readtif):\n");
-  fprintf(stdout, "imagewidth = %d\n", tifimage->imagewidth);
-  fprintf(stdout, "imagelength = %d\n", tifimage->imagelength);
-  fprintf(stdout, "bitspersample = %d\n", tifimage->bitspersample);
-  fprintf(stdout, "compression = %d\n", tifimage->compression);
-  fprintf(stdout, "photometricinterpretation = %d\n",
+  fprintf(stdout, "(mkiv_read_tif):\n");
+  fprintf(stdout, "imagewidth = %" PRIu64 "\n", tifimage->imagewidth);
+  fprintf(stdout, "imagelength = %" PRIu64 "\n", tifimage->imagelength);
+  fprintf(stdout, "bitspersample = %" PRIu16 "\n", tifimage->bitspersample);
+  fprintf(stdout, "compression = %" PRIu16 "\n", tifimage->compression);
+  fprintf(stdout, "photometricinterpretation = %" PRIu16 "\n",
           tifimage->photometricinterpretation);
-  fprintf(stdout, "stripoffsets = %d\n", tifimage->stripoffsets);
-  fprintf(stdout, "rowsperstrip = %d\n", tifimage->rowsperstrip);
-  fprintf(stdout, "stripbytecounts = %d\n", tifimage->stripbytecounts);
-  fprintf(stdout, "xresolution = %d\n", tifimage->xresolution);
-  fprintf(stdout, "yresolution = %d\n", tifimage->yresolution);
+  fprintf(stdout, "stripoffsets = %" PRIu64 "\n", tifimage->stripoffsets);
+  fprintf(stdout, "rowsperstrip = %" PRIu64 "\n", tifimage->rowsperstrip);
+  fprintf(stdout, "stripbytecounts = %" PRIu64 "\n", tifimage->stripbytecounts);
+  fprintf(stdout, "xresolution = %f\n", tifimage->xresolution);
+  fprintf(stdout, "yresolution = %f\n", tifimage->yresolution);
   fprintf(stdout, "planarconfiguration = %d\n",
           tifimage->planarconfiguration);
   fprintf(stdout, "resolutionunit = %d\n",tifimage->resolutionunit);

@@ -29,6 +29,8 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
+#include "mkiv.h"
+
 /* platform specific implementations - handled with C preprocessor */
 #if defined(_WIN32) || defined(__WIN32__) || defined(_WIN32_) || defined(WIN32)
 #include <tchar.h>
@@ -68,6 +70,8 @@ const char *timestamp()
 int file_exists(const char *filename)
 {
   plat_stat buffer;
+  if (filename == NULL) return (0);
+  if (filename[0] == '\0') return (0);
   return (STAT_FUNCTION (filename, &buffer) == 0);
 }
 
@@ -87,13 +91,13 @@ int file_copy(const char *src_path, const char *dst_path)
 
   if( (p = fopen(src_path, "r")) == NULL)
   {
-    fprintf(stderr, "***error (file_copy): cannot open: %s\n", src_path);
+    ERROR_MSG("cannot open: %s\n", src_path);
     return(-1);
   }
 
   if( (q = fopen(dst_path, "w")) == NULL)
   {
-    fprintf(stderr, "***error (file_copy): cannot open: %s\n", dst_path);
+    ERROR_MSG("cannot open: %s\n", dst_path);
     return(-1);
   }
   while( (ch = getc(p)) != EOF) putc(ch,q);
@@ -164,7 +168,7 @@ char* file_content(const char* filename)
 
   char* content = calloc(size + 1, 1);
 
-  fread(content,1,size,file);
+  fread(content, 1, size, file);
   fclose(file);
 
   return(content);
@@ -181,18 +185,15 @@ char* file_content(const char* filename)
  * with the extension removed. It must be freed when you're finished with it.
  * \retval \c NULL if \p str is \c NULL or the new string can't be allocated
  */
-char *remove_ext(char* str, char dot, char sep) {
-  char *retstr, *lastdot, *lastsep;
+const char *remove_ext(const char* str, char dot, char sep) {
+  char *retstr = (char *)calloc(FILENAME_MAX, sizeof(char));
+  char *lastdot, *lastsep;
 
   /* Error checks and allocate string */
-  if (str == NULL) return NULL;
-  if ( (retstr = (char*)malloc(strlen(str) + 1*sizeof(char))) == NULL)
-  {
-    return NULL;
-  }
+  if (str == NULL || retstr) return NULL;
 
   /* Make a copy and find the relevant characters */
-  strcpy (retstr, str);
+  strncpy(retstr, str, FILENAME_MAX);
   lastdot = strrchr (retstr, dot);
   lastsep = (sep == 0) ? NULL : strrchr (retstr, sep);
 

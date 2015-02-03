@@ -37,11 +37,11 @@
  *  * \return
  * \retval 0 on successful completion.
  */
-int calca(float *kappa, float *en_old, float energy,
-      mkiv_vector a[], float *range, float range_min, float rel_range,
-      mkiv_vector *scale, float scale_min, mkiv_vector rel_scale)
+int mkiv_calc_area(double *kappa, double *en_old, double energy,
+      mkiv_vector a[], double *range, double range_min, double rel_range,
+      mkiv_vector *scale, double scale_min, mkiv_vector rel_scale)
 {
-   float fval;
+   double fval;
 
    *kappa = sqrt(*en_old/energy);
    a[1].xx *= *kappa;

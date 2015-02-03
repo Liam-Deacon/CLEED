@@ -17,7 +17,7 @@
 
 /*! \file
  *
- * Contains plot_indices() function for labelling reflexes within a LEED image.
+ * Contains mkiv_plot_indices() function for labelling reflexes within a LEED image.
  */
 
 #include <stdlib.h>
@@ -32,16 +32,16 @@
  * measurable reflexes.
  *  * \return
  */
-int plot_indices(mkiv_image *image, size_t nspot, const mkiv_reflex *spot)
+int mkiv_plot_indices(mkiv_image *image, size_t nspot, const mkiv_reflex *spot)
 {
   int xx, yy;        /* coordinates assigned to a sign or number */
   size_t k, j;
   size_t n_size = image->cols * image->rows;
-  char chr;
-  float ind[2];            /* auxiliary for mkiv_reflex indices */
+  uint8_t chr;
+  double ind[2];            /* auxiliary for mkiv_reflex indices */
 
-  unsigned short *im = (unsigned short *)image->imagedata;
-  unsigned short max_val= 1;
+  uint16_t *im = (uint16_t *)image->imagedata;
+  uint16_t max_val = 1;
 
   /* find maximum intensity in image */
   for(k=0; k < n_size; k++) max_val = MAX(max_val, im[k]);
@@ -60,44 +60,44 @@ int plot_indices(mkiv_image *image, size_t nspot, const mkiv_reflex *spot)
     for (j=0; j < 2; j++)
     {
       /* Check if index has a negative sign */
-      if (ind[j] < 0) sign (image, 45, xx+=7, yy, max_val);
+      if (ind[j] < 0) mkiv_sign (image, 45, xx+=7, yy, max_val);
 
       /* Check if index has an integer part */
       ind[j] = fabs(ind[j]);
       if (fabs(ind[j] - 0.) < DBL_EPSILON || ind[j] >= 1. )
       {
-        sign (image, (int)ind[j] %10 +48, xx+=7, yy, max_val);
+        mkiv_sign (image, (uint8_t)ind[j]%10 + 48, xx+=7, yy, max_val);
       }
 
       /* Check if index has a fractional part */
       if ( NAT(ind[j]) == 0 )
       {
-        switch( (int)( 100 * ind[j] ) % 100 )
+        switch( (uint8_t)( 100 * ind[j] ) % 100 )
         {
-          case (int)50.00: chr = 60; break; /* 1/2 */
-          case (int)33.33: chr = 61; break; /* 1/3 */
-          case (int)16.67: chr = 62; break; /* 1/6 */
-          case (int)14.28: chr = 63; break; /* 1/7 */
-          case (int)66.67: chr = 64; break; /* 2/3 */
-          case (int)83.33: chr = 65; break; /* 5/6 */
-          case (int)12.50: chr = 68; break; /* 1/8 */
-          case (int)37.50: chr = 69; break; /* 3/8 */
-          case (int)62.50: chr = 70; break; /* 5/8 */
-          case (int)87.50: chr = 71; break; /* 7/8 */
-          case (int)28.57: chr = 72; break; /* 2/7 */
-          case (int)42.86: chr = 73; break; /* 3/7 */
-          case (int)57.14: chr = 74; break; /* 4/7 */
-          case (int)71.43: chr = 75; break; /* 5/7 */
-          case (int)85.71: chr = 76; break; /* 6/7 */
-          case (int)25.00: chr = 77; break; /* 1/4 */
-          case (int)75.00: chr = 78; break; /* 3/4 */
+          case (uint8_t)50.00: chr = 60; break; /* 1/2 */
+          case (uint8_t)33.33: chr = 61; break; /* 1/3 */
+          case (uint8_t)16.67: chr = 62; break; /* 1/6 */
+          case (uint8_t)14.28: chr = 63; break; /* 1/7 */
+          case (uint8_t)66.67: chr = 64; break; /* 2/3 */
+          case (uint8_t)83.33: chr = 65; break; /* 5/6 */
+          case (uint8_t)12.50: chr = 68; break; /* 1/8 */
+          case (uint8_t)37.50: chr = 69; break; /* 3/8 */
+          case (uint8_t)62.50: chr = 70; break; /* 5/8 */
+          case (uint8_t)87.50: chr = 71; break; /* 7/8 */
+          case (uint8_t)28.57: chr = 72; break; /* 2/7 */
+          case (uint8_t)42.86: chr = 73; break; /* 3/7 */
+          case (uint8_t)57.14: chr = 74; break; /* 4/7 */
+          case (uint8_t)71.43: chr = 75; break; /* 5/7 */
+          case (uint8_t)85.71: chr = 76; break; /* 6/7 */
+          case (uint8_t)25.00: chr = 77; break; /* 1/4 */
+          case (uint8_t)75.00: chr = 78; break; /* 3/4 */
           default : chr = 66;
         }
-        sign (image, chr, xx+=7, yy, max_val);
+        mkiv_sign (image, chr, xx+=7, yy, max_val);
       }
 
       /* Plot a semicolon between indices */
-      if (j == 0) sign (image, 59, xx+=7, yy, max_val);
+      if (j == 0) mkiv_sign (image, 59, xx+=7, yy, max_val);
     }
   }
 

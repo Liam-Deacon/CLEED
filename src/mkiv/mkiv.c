@@ -31,6 +31,7 @@
 #include <strings.h>
 #include <ctype.h>
 #include <time.h>
+#include <inttypes.h>
 
 #include "tiffio.h"
 #include "mkiv.h"
@@ -73,139 +74,80 @@
   beam.smo
 ***************************************************************************/
 
-#ifdef BUILD_LIBRARY == 1
+#if (BUILD_LIBRARY == 1)
 int mkiv_main(int argc, char *argv[])
 #else
 int main(int argc, char *argv[])
 #endif
 {
-  mkiv_image *mat_image;       /* resulting LEED-image as a matrix     */
-  mkiv_image *mat_mask;        /* mask that defines visible LEED-screen*/
+  mkiv_image *mat_image = NULL;  /* resulting LEED-image as a matrix     */
+  mkiv_image *mat_mask = NULL;   /* mask that defines visible LEED-screen*/
 
-  mkiv_tif_values *tif_image;    /* resulting LEED-image in TIFF-format  */
-  mkiv_tif_values *tif_mask;     /* mask that defines visible LEED-screen*/
+  mkiv_tif_values *tif_image = NULL;  /* resulting LEED-image in TIFF-format  */
+  mkiv_tif_values *tif_mask = NULL;   /* mask that defines visible LEED-screen*/
 
-  mkiv_position center;          /* LEED-screen center                   */
-  float router, rinner, radius;  /* bounds of visible screen             */
-  float ratio;                   /* (screen radius)/(camera distance)    */
+  double radius;  /* bounds of visible screen             */
 
-  float e_step = 1.;             /* energy step between images           */
-
-  int numb;                      /* run through number for subsequent    */
-                                 /* leed image data files                */
-  int numb_2;                    /* run through display of images        */
-  int nstart,nstop;              /* number of first and last LEED image  */
-  int n_show;                    /* process images                       */
-  int n_show_2;                  /* show image after each n_show_2 images*/
-  int repetitions;		           /* number of repetitions of frame       */
+  size_t numb;                      /* run through number for subsequent    */
+                                    /* leed image data files                */
+  int numb_2;                       /* run through display of images        */
+  int n_show;                       /* process images                       */
+  int n_show_2;                     /* show image after each n_show_2 images*/
 
   char *linebuffer;
 
-  char *filename();              /* filename of actual leed image        */
-
   char *fname2;
-  char fname[STRSZ];             /* filename of first leed image         */
-  char maskname[STRSZ];
+  char fname[STRSZ] = "\0";         /* filename of first leed image         */
 
-  float kappa;                   /* comp. factor sqrt(en_old/energy)     */
-  float energy, en_old, en_ref;  /* current, former and ref. beam energy */
-  float k_10;                    /* parallel length of (1,0) beam        */
-  float s2n_ref;                 /* min S/N ratio for basis recalibration*/
+  double kappa;                   /* comp. factor sqrt(en_old/energy)     */
+  double energy, en_old, en_ref;  /* current, former and ref. beam energy */
 
   mkiv_vector a[3], newa[3];     /* a[0] = origin = (0,0)-mkiv_reflex         */
   mkiv_vector da[3];             /* a[1],a[2] = rec. lattice vectors     */
                                  /* vector.(len,xx,yy)                   */
 
-  size_t nspot, spot_max;        /* number of used, max array-members    */
+  size_t n_spot, spot_max;        /* number of used, max array-members    */
   mkiv_reflex *spot;                  /* list of measurable reflexes          */
                                  /* spot.(kp_len,lind1/2,x0,y0,xx,yy,    */
                                  /*    cos_th,intensity,s2u,s2n,control) */
 
-  mkiv_reflex *mem4spots();           /* subroutine allocating memory 4 spots */
-  float inty[I_MAX];             /* intensity values interim storage     */
+  double inty[I_MAX];             /* intensity values interim storage     */
 
-  size_t ndesi, nexcl, nref;     /* number of used array-members         */
-  mkiv_index desi[I_MAX];        /* indices of the desired reflexes      */
-  mkiv_index excl[I_MAX];        /* indices of the excluded reflexes     */
-  mkiv_index ref[I_MAX];         /* indices of the reference reflexes    */
-                                 /* lindex.(lind1,lind2,control)         */
-
-  size_t ndom;                   /* number of domains                    */
-  mkiv_domain superl[D_MAX];     /* basic superlattice vectors           */
-                                 /* in units of a[1],a[2]                */
-                                 /* domain.(lind11,lind12,lind21,lind22) */
-
-  int bg;                        /* 0: no background subtraction         */
-  float range, rel_range;        /* range for maximum search             */
+  double range, rel_range;        /* range for maximum search             */
   mkiv_vector scale, rel_scale;  /* scaling factors for integration area */
-  float angle;                   /*angle between the broadening direction*/
+  double angle;                   /*angle between the broadening direction*/
                                  /* of the reflexes and horizontal axis  */
-  float int_norm[E_MAX];         /* beam current                         */
-  float use_cur;                 /* beam current currently used          */
-  int mod_cur;                   /* 0: use stored beam current
-                                    1: smooth stored beam current
-                                   -1: use mod_cur as beam current       */
-
-  /* variables from mkiv.var */
-  float cos_min, cos_max;        /* min/max cosine for reference spots   */
-  float verh, acci, accb;        /* integration area ratios              */
-  int distance;                  /* min distance for reference spots     */
-  int update;                    /* QQ -> step for updating output files */
-  int step;                      /* step for fimax                       */
-  int trip_max;                  /* max number of triples for recalib.   */
-  float scale_min, range_min;    /* min for scale/range                  */
-  float s2n_good, s2n_bad;       /* thresholds for good/bad spots        */
-  int ref_min;                   /* min no. of predef spots for recalib. */
-  float sec_range;               /* range(2nd loop)=range(1st)/sec_range */
-  float ref_dev;      		       /* max. deviation of new base/origin    */
-  float bas_rat;
+  double int_norm[E_MAX];         /* beam current                         */
+  double use_cur;                 /* beam current currently used          */
 
   /* auxiliaries */
-  size_t i;
-  int k, nnref;
-  int flag, save_intermediates, make_mask;
+  size_t i, nnref;
+  int k;
+  int flag;
 
   /* inputs from command line: */
-  int verb;                      /* verb&VERBOSE -> more info about run  */
-                                 /* verb&QUICK -> quick and quiet mode   */
-
-  /* filenames */
-  char *fname_mkiv_ima = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *fname_mkiv_inp = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *fname_mkiv_dat = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *fname_mkiv_var = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *fname_mkiv_par = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *fname_mkiv_pos = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *fname_beam_raw = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *fname_beam_smo = (char*)malloc(sizeof(char)*FILENAME_MAX);
-  char *dummy = (char*)malloc(sizeof(char)*FILENAME_MAX);
 
   /* open statements */
-  FILE *fopen(), *cur_stream, *smcur_stream, *iv_stream;
+  FILE *cur_stream, *smcur_stream, *iv_stream;
 
   /* initialise strings */
   fname[0] = '\0';
-  maskname[0] = '\0';
+  linebuffer = (char *)malloc(sizeof(char) * STRSZ);
+  linebuffer[0] = '\0';
 
   /* MAIN BEFORE ENERGY - LOOP */
 
-  /* initialise filenames */
-  strcpy(fname_mkiv_ima, "ima.byte");
-  strcpy(fname_mkiv_inp, "mkiv.inp");
-  strcpy(fname_mkiv_dat, "mkiv.ivdat");
-  strcpy(fname_mkiv_var, "mkiv.var");
-  strcpy(fname_mkiv_pos, "mkiv.pos");
-  strcpy(fname_mkiv_par, "mkiv.param");
-  strcpy(fname_beam_raw, "beam.raw");
-  strcpy(fname_beam_smo, "beam.smo");
+  /* parse command line arguments */
+  mkiv_args *args = mkiv_get_args(argc, argv);
+  mkiv_input *inputs = mkiv_input_read(args);
+  mkiv_params *params = mkiv_params_read(args);
 
   /* backup existing old output files */
-  file_backup(fname_mkiv_dat);
-  file_backup(fname_beam_raw);
-  file_backup(fname_beam_smo);
+  file_backup(args->ivdat_path);
+  file_backup(args->beam_raw_path);
+  file_backup(args->beam_smoothed_path);
 
   /* preset variables */
-  verb = flag = save_intermediates = repetitions = make_mask = 0;
   n_show = n_show_2 = 1;
 
   /* Allocate memory for mat/tif_image and mat/tif_mask */
@@ -217,164 +159,32 @@ int main(int argc, char *argv[])
   tif_mask  = (mkiv_tif_values *)malloc(sizeof( mkiv_tif_values ));
   tif_image->buf = tif_mask->buf = NULL;
 
-  linebuffer = (char *)malloc(STRSZ);
-
-  /* decode arguments */
-  if (argc <= 1)
+  /* Read mask, if existing, else use r_outer,r_inner for masking */
+  if( !file_exists(args->mask_path) )
   {
-    ERR_EXIT("mkiv : wrong arguments - see 'mkiv -h' for usage.");
-  }
-  for (i=1; i<=argc; i++)
-  {
-    while (*++*argv != '\0' || i < argc)
-    {
-      if (ARG_IS("-h") || ARG_IS("--help"))
-      {
-        mkiv_usage(stdout);
-        exit(0);
-      }
-      else if (ARG_IS("-i") || ARG_IS("--input"))
-      {
-        if (i+1 < argc)
-        {
-          strcpy(dummy, argv[i+1]);
-          if (file_exists(dummy))
-          {
-            fprintf(stderr, "***warning: '%s' is a filename not a prefix\n",
-                    dummy);
-            fprintf(stderr, "\tattempting to find files...");
-            dummy = remove_ext(argv[i+1], '.', '/');
-          }
-
-          /* populate file names */
-          strcpy(fname_mkiv_inp, dummy);
-          strcpy(fname_mkiv_pos, dummy);
-          strcpy(fname_mkiv_var, dummy);
-          strcat(fname_mkiv_inp, ".inp");
-          strcat(fname_mkiv_pos, ".pos");
-          strcat(fname_mkiv_var, ".var");
-
-          /* check files exist */
-          sprintf(dummy, "'%s' does not exist!\n", fname_mkiv_inp);
-          if (!file_exists(fname_mkiv_inp)) ERR_EXIT(dummy);
-          sprintf(dummy, "'%s' does not exist!\n", fname_mkiv_pos);
-          if (!file_exists(fname_mkiv_pos)) ERR_EXIT(dummy);
-          sprintf(dummy, "'%s' does not exist!\n", fname_mkiv_var);
-          if (!file_exists(fname_mkiv_var)) ERR_EXIT(dummy);
-                            
-        }
-      }
-      else if (ARG_IS("-s") || ARG_IS("--save-images"))
-      {
-        /* save processed images ('ima.byte' */
-        save_intermediates = 1;
-      }
-      else if (ARG_IS("-m") || ARG_IS("--mask"))
-      {
-        STRCPY_ARG(maskname);
-      }
-      else if (ARG_IS("-M") || ARG_IS("--make-mask"))
-      {
-        make_mask = 1;
-      }
-      else if (ARG_IS("-o") || ARG_IS("--output"))
-      {
-        STRCPY_ARG(fname_mkiv_dat);
-      }
-      else if (ARG_IS("-p") || ARG_IS("--param"))
-      {
-        STRCPY_ARG(fname_mkiv_par);
-      }
-      else if (ARG_IS("-P") || ARG_IS("--pos"))
-      {
-        STRCPY_ARG(fname_mkiv_pos);
-      }
-      else if (ARG_IS("-V") || ARG_IS("--version"))
-      {
-        mkiv_info();
-        exit(0);
-      }
-      else if (ARG_IS("-v") || ARG_IS("--verbose")) verb |= VERBOSE;
-      else if (ARG_IS("-V") || ARG_IS("--version")) verb |= QUICK;
-      else if (ARG_IS("-b") || ARG_IS("--current"))
-      {
-        if ( --argc && isdigit(**++argv) ) mod_cur = atoi(*argv);
-        else ERR_EXIT("mkiv : wrong arguments for beam current.");
-      }
-      else if (ARG_IS("-q") || ARG_IS("--quiet") || ARG_IS("--quick"))
-      {
-        verb |= QUICK;
-      }
-      else ERR_EXIT("mkiv : wrong arguments - see 'mkiv -h' for usage.");
-    }
-  }
-
-  /* Some necessary inputs and inversion of superlattice matrix */
-  readinp(verb,
-          fname_mkiv_inp,
-          fname_mkiv_par,
-          fname,                /* name of the reference image */
-          maskname,	    	      /* name of the file containing mask */
-          &nstart, &nstop,      /* number of first and last input file */
-          &e_step,  		        /* stepsize for energy-loop */
-          &center,              /* center of the image */
-          &router, &rinner,     /* outer and inner radius of the screen */
-          &bg,                  /* 0: no background subtraction */
-          &mod_cur,             /* mode of current treatment */
-          &k_10, 	              /* parallel length of (1,0) */
-          &ndom, superl,        /* superstructure matrix */
-          &ndesi, desi,         /* number and list of spots */
-          &nref, ref,           /* spots used for basis recalibration */
-          &nexcl, excl          /* spots without max. search */
-	      );
-
-  readvar(verb,
-          fname_mkiv_var,
-          fname_mkiv_par,
-          &cos_min, &cos_max,
-          &verh, &acci, &accb,
-          &distance,
-          &update,
-          &step,
-          &trip_max,
-          &scale_min, &range_min,
-          &s2n_good, &s2n_bad,
-          &ref_min,
-          &sec_range,
-          &s2n_ref,
-          &ref_dev,
-          &bas_rat,
-          &rel_range,
-          &rel_scale, &angle,
-          &ratio
-         );
-
-  /* Read mask, if existing, else use router,rinner for masking */
-  if(maskname[0] == '\0' && file_exists(maskname))
-  {
-    fprintf(stdout, "\nusing router, rinner for masking. \n");
+    fprintf(stdout, "\nusing r_outer, r_inner for masking. \n");
   }
   else
   {
-    readtif(tif_mask, maskname);
-    fprintf(stdout, "\nusing %s for masking. \n", maskname);
+    mkiv_read_tif(tif_mask, args->mask_path);
+    fprintf(stdout, "\nusing '%s' for masking. \n", args->mask_path);
   }
 
   /* Read image */
-  readtif(tif_image, fname);
+  mkiv_read_tif(tif_image, fname);
 
   /* Convert TIFF image (tif_values) into a matrix (mkiv_image) so that
    * MKIV is able to process them */
-  conv_tif2mat(tif_image, mat_image);
+  mkiv_tif2mat(tif_image, mat_image);
     
-  if (save_intermediates)
+  if (args->save_intermediates)
   {
-    strcpy(fname_mkiv_ima, remove_ext(fname, '.', '/'));
-    strcat(fname_mkiv_ima, ".byte");
+    strcpy(args->mask_path, remove_ext(fname, '.', '/'));
+    strcat(args->mask_path, ".byte");
   }
-  out_tif(mat_image, fname_mkiv_ima);
+  mkiv_output_tif(mat_image, args->mask_path);
 
-  if(tif_mask != NULL) conv_tif2mat(tif_mask, mat_mask);
+  if(tif_mask != NULL) mkiv_tif2mat(tif_mask, mat_mask);
   else
   {
     free(mat_mask);
@@ -384,8 +194,8 @@ int main(int argc, char *argv[])
   /* Read energy and beam current from file header */
 
   /*
-     en_old = en_ref = (float)(mat_image->ispare1 &0xFFFF)/(mat_image->ispare1 >> 16);
-     *int_norm = (float)(mat_image->ispare2 &0xFFFF)/(mat_image->ispare2 >> 16); 
+     en_old = en_ref = (double)(mat_image->ispare1 &0xFFFF)/(mat_image->ispare1 >> 16);
+     *int_norm = (double)(mat_image->ispare2 &0xFFFF)/(mat_image->ispare2 >> 16);
    */
 
   /* !!!!!!!!!!!!!!!!!!!!!!! */
@@ -393,20 +203,28 @@ int main(int argc, char *argv[])
   *int_norm = 100.;
   /* !!!!!!!!!!!!!!!!!!!!!!! */
 
-  /* draw the mask or rinner, router and the center of the image and display */
-  fprintf(stdout, "draw LEED-screen boundaries \n");
-  drawbound(mat_image, mat_mask, &center, router, rinner, -1, fname_mkiv_ima);
+  /* draw the mask or r_inner, r_outer and the center of the image and display */
+  if (args->show_bounds)
+    mkiv_draw_bounds(mat_image, mat_mask,
+                     &inputs->center, inputs->r_outer,
+                     inputs->r_inner, -1, args->mask_path);
 
   /* only needed to produce a mask: */
-  if (make_mask) mkmask(mat_image, &center, router, rinner, -1, maskname);
+  if (args->make_mask)
+    mkiv_mk_mask(mat_image, &inputs->center,
+                 inputs->r_outer, inputs->r_inner, -1, args->mask_path);
 
   /* Allocate memory for the input reference spots for the first frame */
   spot = (mkiv_reflex*) malloc(100*sizeof(mkiv_reflex));
-  if (spot == NULL) ERR_EXIT("mkiv : memory allocation for ref_inp failed");
+  if (spot == NULL)
+  {
+    ERROR_MSG("memory allocation for mkiv_ref_inp failed\n");
+    ERROR_RETURN(-1);
+  }
 
   /* Input of reference spots */
-  ref_inp(&nspot, spot, verb, fname_mkiv_pos);
-  while ( nspot < 3 ) ref_inp(&nspot, spot, 0, fname_mkiv_pos);
+  mkiv_ref_inp(&n_spot, spot, args->verbose, args->pos_path);
+  while ( n_spot < 3 ) mkiv_ref_inp(&n_spot, spot, 0, args->pos_path);
 
   /* Input of reference energy */
   fprintf(stdout, "energy of reference image (in eV):\n");
@@ -415,25 +233,24 @@ int main(int argc, char *argv[])
   fprintf(stdout, "energy = %f eV\n", en_ref);
 
   /* Compute basic vectors and origin */
-  fprintf(stderr,"calculate new base and origin\n");
-  calcbase(nspot, spot,  /* input: no.of and list of spots */
-           a,            /* output: rec.lattice vectors, origin */
-           ratio,        /* ratio radius/camera distance */
-           distance/4,   /* min distance for recalibr. spots */
-           trip_max,     /* max number of triples for recalib */
-           -1.);         /* cor_fac<0 : no recorrection, no input-orig.*/
+  fprintf(stderr, "calculate new base and origin\n");
+  mkiv_calc_basis(n_spot, spot,  /* input: no.of and list of spots */
+           a,                   /* output: rec.lattice vectors, origin */
+           params->ratio,       /* ratio radius/camera distance */
+           params->distance/4,  /* min distance for recalibr. spots */
+           params->trip_max,    /* max number of triples for recalib */
+           -1.);                /* cor_fac<0 : no recorrection, no input-orig.*/
 
   /* Free allocated memory */
   free(spot);
 
   /* Allocate memory for struct spot array using highest energy 1000eV */
-  calca(&kappa, &en_old, 1000., a,
-        &range, 0., rel_range, &scale, 0., rel_scale);
-  spot = mem4spots( &spot_max, a, ndom, superl, mat_image);
-  fprintf(stdout, "number of spots memory was allocated to : %d \n",
-          spot_max);
+  mkiv_calc_area(&kappa, &en_old, 1000., a,
+        &range, 0., rel_range, &params->scale, 0., rel_scale);
+  spot = mkiv_reflex_alloc( &spot_max, a, inputs->n_dom, inputs->superlat, mat_image);
+  fprintf(stdout, "allocated memory for %d spots\n", spot_max);
 
-  calca(&kappa, &en_old, en_ref, a,
+  mkiv_calc_area(&kappa, &en_old, en_ref, a,
         &range, 0., rel_range, &scale, 0., rel_scale);
 
   fprintf(stdout, "orig: %.0f,%.0f ,", a[0].yy, a[0].xx);
@@ -443,61 +260,69 @@ int main(int argc, char *argv[])
   /* Compute reciprocal lattice and create a table of spots containing:
    * indices, positions, k-value, cos_th */
   fprintf(stdout, "compute reciprocal lattice\n");
-  calcspotpos(a, ndom, superl, spot_max, &nspot, spot, nexcl, excl,
-              mat_mask, router, 0., &radius, en_old, ratio, k_10);
+  mkiv_calc_spot_positions(a, inputs->n_dom, inputs->superlat, spot_max, &n_spot, spot, inputs->n_excl, inputs->excl,
+              mat_mask, inputs->r_outer, 0., &radius, en_old, params->ratio, inputs->kpl_10);
   fprintf(stdout, "New lattice - sin: %6.4f, radius:%7.1f, \n",
-          k_10*H2M/sqrt(en_old), radius);
-  fprintf(stderr, "spots: %d\n", nspot);
+          inputs->kpl_10*H2M/sqrt(en_old), radius);
+  fprintf(stderr, "spots: %d\n", n_spot);
 
   /* Set the spot.control bits according to the lists desi,ref */
   fprintf(stderr, "set control according to desi,ref \n");
-  QQ setcontrol(nspot, spot, ndesi,desi, nref, ref);
+  if (QQ(args->verbose))
+    mkiv_set_control(n_spot, spot,
+                     inputs->n_desi, inputs->desi,
+                     inputs->n_ref, inputs->ref);
 
   /* Mark measurable reflexes */
   fprintf(stderr, "draw circles around spots\n");
-  mark_reflex(nspot, spot, mat_image,    /* list of spots, image */
+  mkiv_mark_reflex(n_spot, spot, mat_image,    /* list of spots, image */
               THICK, range, WHITE,       /* width,radius,color of circles*/
-              -1, fname_mkiv_ima);       /* draw indices & output filename */
+              -1, args->mask_path);       /* draw indices & output filename */
 
   /* ENERGY - LOOP */
 
   /* Open files "mkiv.ivdat", "beam_raw" and "beam_smo" */
-  char *msg = (char*) malloc(512);
+  iv_stream = fopen(args->ivdat_path, "w");
+  if (iv_stream == NULL)
+  {
+    ERROR_MSG("Unable to write to iv data file '%s'\n", args->ivdat_path);
+    ERROR_RETURN(-1);
+  }
     
-  fprintf(stderr, "Open output files\n");
-
-  iv_stream = fopen(fname_mkiv_dat, "w");
-  sprintf(msg, "(mkiv_main): '%s' open failed!", fname_mkiv_dat);
-  if (iv_stream == NULL) ERR_EXIT(msg);
+  cur_stream = fopen(args->beam_raw_path, "w");
+  if (cur_stream == NULL)
+  {
+    ERROR_MSG("Unable to write to raw beam file '%s'\n", args->beam_raw_path);
+    ERROR_RETURN(-1);
+  }
     
-  cur_stream = fopen(fname_beam_raw, "w");
-  sprintf(msg, "(mkiv_main): '%s' open failed!", fname_beam_raw);
-  if (cur_stream == NULL) ERR_EXIT(msg);
-    
-  smcur_stream = fopen(fname_beam_smo, "w");
-  sprintf(msg, "(mkiv_main): '%s' open failed!", fname_beam_smo);
-  if (smcur_stream == NULL) ERR_EXIT(msg);
+  smcur_stream = fopen(args->beam_smoothed_path, "w");
+  if (smcur_stream == NULL)
+  {
+    ERROR_MSG("Unable to write to smoothed beam file '%s'\n", args->beam_smoothed_path);
+    ERROR_RETURN(-1);
+  }
  
   /* Make list header */
   fprintf(iv_stream, " h     ");
-  for (i=0; i<ndesi; i++)
+  for (i=0; i < inputs->n_desi; i++)
   {
-    fprintf(iv_stream, "%10.2f", desi[i].lind1);
+    fprintf(iv_stream, "%10.2f", inputs->desi[i].lind1);
   }
   fprintf(iv_stream, "\n k     ");
-  for (i=0; i<ndesi; i++)
+  for (i=0; i < inputs->n_desi; i++)
   {
-    fprintf(iv_stream, "%10.2f", desi[i].lind2);
+    fprintf(iv_stream, "%10.2f", inputs->desi[i].lind2);
   }
   fprintf(iv_stream, "\n nenergy\n");
 
   /* Loop for data files */
-  fprintf(stderr, "nstart = %d, nstop = %d \n", nstart, nstop);
+  fprintf(stderr, "n_start = %d, n_stop = %d \n", inputs->n_start, inputs->n_stop);
     
   /* int i_e_step; */
   /* i_e_step = (int)e_step; */
     
-  numb_2 = nstart;
+  numb_2 = inputs->n_start;
   #ifdef USE_OPENMP
 
   /* Default to maximum parallization if OMP_NUM_THREADS environment variable
@@ -510,100 +335,114 @@ int main(int argc, char *argv[])
 
   #pragma omp parallel for
   #endif /* _USE_OPNEMP */
-  for ( numb = nstart;
-        ((numb<=nstop)&&(e_step>0)) || ((numb>=nstop)&&(e_step<0)); 
-        numb += e_step)  /* note the dodgy cast from float to int */
+  for ( numb = inputs->n_start;
+        ( (numb <= inputs->n_stop) && (inputs->e_step > 0) ) ||
+        ( (numb >= inputs->n_stop) && (inputs->e_step < 0) );
+        numb += (size_t)inputs->e_step)  /* note the dodgy cast from double to int */
   {
     /* Read image and convert tif_values to mkiv_image */
     fname2 = filename(fname, numb);
     fprintf(stderr, "read data from file \"%s\" and convert \n",
             fname2);
 
-    readtif(tif_image, fname2);
-    conv_tif2mat(tif_image, mat_image);
+    mkiv_read_tif(tif_image, fname2);
+    mkiv_tif2mat(tif_image, mat_image);
 
     /* Read energy from file header */
-    energy = (float)numb;
+    energy = (double)numb;
 
     /* Compute contraction of new basic vectors, range and scale */
-    calca(&kappa, &en_old, energy, a,
-          &range, range_min, rel_range, &scale, scale_min, rel_scale);
+    mkiv_calc_area(&kappa, &en_old, energy, a, &params->range, params->range_min,
+                   rel_range, &params->scale, params->scale_min, rel_scale);
 
     /* use current from file and smooth it when desired */
-    int_norm[numb]= 100.;
+    int_norm[numb] = 100.;
     use_cur = int_norm[numb];
-    if (mod_cur < 0) use_cur = bkgnd_smooth(int_norm, numb, nstart, e_step, 10);
-    if (mod_cur > 0) use_cur = (float)mod_cur;
+    if (params->modify_current < 0)
+      use_cur = mkiv_bkgnd_smooth(int_norm, numb, inputs->n_start, inputs->e_step, 10);
+    if (params->modify_current > 0) use_cur = (double)params->modify_current;
 
     printf("\n\n");
-    QQ printf("#####################################################\n");
-    QQ printf("\t\t FILE NAME: %s\n", fname);
+    if (QQ(args->verbose)) printf("#####################################################\n");
+    if (QQ(args->verbose)) printf("\t\t FILE NAME: %s\n", fname);
     printf("\t\t ENERGY: %6.1f eV \n", energy);
-    QQ printf("\t\t CURRENT: %7.1f (%7.1f)nA\n", int_norm[numb], use_cur);
+    if (QQ(args->verbose)) printf("\t\t CURRENT: %7.1f (%7.1f)nA\n", int_norm[numb], use_cur);
     printf("#####################################################\n");
     printf("New range for Max. search: %.1f pixels.\n", range);
     printf("Elliptical integration area : (%.1f*%.1f) pixels.\n",
            scale.xx, scale.yy);
-    VPRINT("orig: %.0f,%.0f , a1: %.0f,", a[0].yy, a[0].xx, a[1].yy);
-    VPRINT("%.0f , a2: %.0f,%.0f \n", a[1].xx, a[2].yy, a[2].xx);
+    if (args->verbose & VERBOSE )
+      printf("orig: %.0f,%.0f , a1: %.0f,", a[0].yy, a[0].xx, a[1].yy);
+    if (args->verbose & VERBOSE )
+      printf("%.0f , a2: %.0f,%.0f \n", a[1].xx, a[2].yy, a[2].xx);
 
     /* Compute new reciprocal lattice */
-    calcspotpos(a, ndom, superl, spot_max, &nspot, spot, nexcl, excl,
-                mat_mask, router+range, rinner-range,
-                    &radius, energy, ratio, k_10);
-    QQ printf("New lattice : sin: %6.4f, radius:%7.1f, \n",
-              k_10*H2M/sqrt(energy), radius);
+    mkiv_calc_spot_positions(a, inputs->n_dom, inputs->superlat,
+                             spot_max, &n_spot, spot,
+                             inputs->n_excl, inputs->excl,
+                             mat_mask, inputs->r_outer+params->range,
+                             inputs->r_inner-params->range,
+                             &radius, energy, params->ratio, inputs->kpl_10);
+    if (QQ(args->verbose)) printf("New lattice : sin: %6.4f, radius:%7.1f, \n",
+                                  inputs->kpl_10 * H2M/sqrt(energy), radius);
 
     /* Sort the table in increasing order of k_par */
-    QQ quicksort(spot, spot+nspot-1);
+    if (QQ(args->verbose)) mkiv_quicksort(spot, spot+n_spot-1);
 
     /* Set the spot.control bits according to the lists desi,ref */
-    setcontrol(nspot, spot, ndesi, desi, nref, ref);
+    mkiv_set_control(n_spot, spot,
+                     inputs->n_desi, inputs->desi,
+                     inputs->n_ref, inputs->ref);
 
     /* Find spot maxima */
-    printf("%d spots measurable. \n", nspot);
-    QQ
+    printf("%d spots measurable. \n", n_spot);
+    if (QQ(args->verbose))
     {
       printf("    Max. search for: \n");
-      for (i=0; i<nspot; i++)
+      for (i=0; i < n_spot; i++)
       {
-        printf("(%5.2f,%5.2f)%1li; ",
+        printf("(%5.2f,%5.2f)%1" PRId64 "; ",
                 spot[i].lind1, spot[i].lind2, spot[i].control);
       }
       printf("\n");
     }
         
     /* For spots not found in list excl, the maximum is determined */
-    VPRINT("find maximum \n");
-    fimax4(nspot, spot,       /* number and list of measurable spots */
-           step,              /* step size for max search */
-           range, mat_image); /* range for max search, LEED image */
+    if (args->verbose & VERBOSE ) printf("find maximum \n");
+    mkiv_find_imax(n_spot, spot,       /* number and list of measurable spots */
+           params->step,              /* step size for max search */
+           params->range, mat_image); /* range for max search, LEED image */
 
     /* Find the exact positions
        (i.e. center of gravity method) of all wanted spots*/
-    VPRINT("calculate center of intensity \n");
-    calcoi(nspot, spot,       /* number and list of measurable spots */
+    if (args->verbose & VERBOSE ) printf("calculate center of intensity \n");
+    mkiv_calc_spot_disc(n_spot, spot,       /* number and list of measurable spots */
            range, mat_image); /* range for cog search, LEED image */
 
     /* Compute total intensity of the reflexes */
-    if(bg <=1) ERR_EXIT("no more implemented background!");
+    if(inputs->bkgnd <= 1)
+    {
+      ERROR_MSG("no more implemented background!\n");
+      ERROR_RETURN(-1);
+    }
 
-    VPRINT("get intensities of spots \n");
-    get_int(nspot,spot,          /* number and list of measurable spots */
+    if (args->verbose & VERBOSE ) printf("get intensities of spots \n");
+    mkiv_calc_intensities(
+            n_spot, spot,         /* number and list of measurable spots */
             mat_image, mat_mask, /* LEED image, mask */
-            &scale,              /* half axes of the ellip. integr. area*/
-            angle,               /* angle of int.area versus horizontal */
+            &params->scale,              /* half axes of the ellip. integr. area*/
+            params->angle,               /* angle of int.area versus horizontal */
             use_cur,             /* primary beam current (normalization)*/
-            bg-1,                /* (1,!=1)=(y/n)background subtraction */
-            s2n_good, verb,      /* if s2n < s2n_good -> bad spot */
-            verh, acci, accb);   /* integr. area ratios */
+            inputs->bkgnd-1,                /* (1,!=1)=(y/n)background subtraction */
+            params->s2n_good, args->verbose,      /* if s2n < s2n_good -> bad spot */
+            params->verh, params->acci, params->accb);   /* integr. area ratios */
 
     /* For spots with bad s/n-ratio, use calculated position */
     fprintf(stderr,"spots with bad s/n again : \n");
-    for( i=0; i<nspot; i++)
+    for( i=0; i < n_spot; i++)
     {
       if (PYTH(spot[i].xx - spot[i].x0, spot[i].yy - spot[i].y0)
-            < range/sec_range)
+            < params->range/params->sec_range)
       {
         spot[i].control |= SPOT_GOOD_S2N;
       }
@@ -613,76 +452,75 @@ int main(int argc, char *argv[])
     }
 
     /* Second run for spots with bad s/n : use range/sec_range, step=1 */
-    fimax4(nspot, spot, 1, range/sec_range, mat_image);
-    calcoi(nspot, spot, range, mat_image);
-    get_int(nspot, spot, mat_image, mat_mask, &scale, angle,
-            use_cur, bg-1, s2n_bad, verb, verh, acci, accb);
+    mkiv_find_imax(n_spot, spot, 1, params->range/params->sec_range, mat_image);
+    mkiv_calc_spot_disc(n_spot, spot, params->range, mat_image);
+    mkiv_calc_intensities(n_spot, spot, mat_image, mat_mask, &params->scale, params->angle,
+            use_cur, inputs->bkgnd-1, params->s2n_bad, args->verbose,
+            params->verh, params->acci, params->accb);
 
     /* Draw integration area boundaries into image */
     if(numb % n_show == 0)
     {
-      drawbound(mat_image, mat_mask, &center, router, rinner, -1, fname_mkiv_ima);
+      mkiv_draw_bounds(mat_image, mat_mask, &inputs->center,
+                      inputs->r_outer, inputs->r_inner, -1, args->mask_path);
+      mkiv_draw_ellipse(n_spot, spot, mat_image, &params->scale, params->angle, params->verh);
 
-      fprintf(stderr, "draw ellipses around found positions\n");
-      fprintf(stderr, "drawell:\n");
-      drawell(nspot, spot, mat_image, &scale, angle, verh);
-      fprintf(stderr, "mark_reflex:\n");
-      mark_reflex(nspot, spot, mat_image, /* list of spots, image */
+      mkiv_mark_reflex(n_spot, spot, mat_image, /* list of spots, image */
                   THICK, range, WHITE,    /* width,radius,color of circles */
-                  0, dummy);              /* don't draw indices */
+                  0, "mask.byte");              /* don't draw indices */
       numb_2++;
       /* if(numb_2 % n_show_2 == 0) XV;  // antiquated xv command */
     }
 
     /* Save intensity values */
     fprintf(stderr, "Save intensity values:\n");
-    for (i=0; i<ndesi; i++)
+    for (i=0; i < inputs->n_desi; i++)
     {
-      k = desi[i].control;
-      if (k == -1)  inty[i] = INT_OUT;
+      k = inputs->desi[i].control;
+      if (k == -1) inty[i] = INT_OUT;
       else inty[i] = spot[k].intensity;
     }
 
     /* Calculate basis with true spot positions */
     fprintf(stderr, "Calculate basis:\n");
     nnref = 0;
-    for (i=0; i<nspot; i++)
+    for (i=0; i < n_spot; i++)
     {
-      if (spot[i].s2n < s2n_ref ||
-          spot[i].cos_th < cos_min || spot[i].cos_th > cos_max)
+      if (spot[i].s2n < params->s2n_ref ||
+          spot[i].cos_th < params->cos_min || spot[i].cos_th > params->cos_max)
       {
-        spot[i--] = spot[--nspot];
+        spot[i--] = spot[--n_spot];
       }
       else if (spot[i].control & SPOT_REF) nnref++;
     }
 
     /* not enough satisfying spots found -> no recalibration possible */
-    if(nspot < 3) printf("No basis recalibration possible. \n");
+    if(n_spot < 3) printf("No basis recalibration possible.\n");
     else /* use reference spots */
     {
-      if( nnref >= ref_min )
+      if( nnref >= params->ref_min )
       {
-        printf("Basis recalibration, S/N > %.2f ", s2n_ref);
+        printf("Basis recalibration, S/N > %.2f ", params->s2n_ref);
         printf("(%d predefined spots)\n", nnref);
-        for(i=0; i<nspot; i++)
+        for(i=0; i<n_spot; i++)
         {
-          if( !( spot[i].control & SPOT_REF ) ) spot[i--] = spot[--nspot];
+          if( !( spot[i].control & SPOT_REF ) ) spot[i--] = spot[--n_spot];
         }
       }
 
       /* not enough predef. spots with satisfying s2n ratio -> use most intense
        * spots for recalibration */
       else printf("Basis recalibration, S/N > %.2f (%d spots)\n",
-                  s2n_ref, nspot);
+                  params->s2n_ref, n_spot);
 
       /* enough satisfying spots found -> recalibration */
       newa[0] = a[0];
-      i = calcbase(nspot,spot,  /* input: reference spots */
-                   newa,        /* output: basis, input+output: origin */
-                   ratio,       /* ratio radius/distance  */
-                   distance,    /* min distance for recalibr. spots */
-                   trip_max,    /* max number of triples for recalib */
-                   0.);         /* recorrect with cos_th  */
+      i = mkiv_calc_basis(n_spot, spot, /* input: reference spots */
+                   newa,                /* output: basis, input+output: origin */
+                   params->ratio,       /* ratio radius/distance  */
+                   params->distance,    /* min distance for recalibr. spots */
+                   params->trip_max,    /* max number of triples for recalib */
+                   0.);                 /* recorrect with cos_th  */
            
       /* Allow  delta = sqrt( fabs(en_old - energy) ) * range / 4.
        * as variation of the origin and the lattice vectors */
@@ -690,79 +528,85 @@ int main(int argc, char *argv[])
       if (!i) printf("Sorry, no triples for recalibration found.\n");
       else
       {
-        for (k=0; k<=2; k++)
+        for (k=0; k <= 2; k++)
         {
           da[k].xx = newa[k].xx - a[k].xx;
           da[k].yy = newa[k].yy - a[k].yy;
           da[k].len = PYTH( da[k].xx, da[k].yy );
         }
-        if (da[0].len>ref_dev || da[1].len>ref_dev || da[2].len>ref_dev)
+        if (da[0].len > params->ref_dev ||
+            da[1].len > params->ref_dev ||
+            da[2].len > params->ref_dev)
         {
           flag = DEV_BIG;
         }
         else flag = DEV_SMALL;
-        QQ printf("Used %d triples of spots for recalibration.\n",i);
-        printf("dorig:(%.0f,%.0f); ", da[0].yy, da[0].xx);
-        printf("da1:(%.0f,%.0f); ", da[1].yy, da[1].xx);
-        printf("da2:(%.0f,%.0f);\n", da[2].yy, da[2].xx);
+        if (QQ(args->verbose)) printf("Used %d triples of spots for recalibration.\n",i);
+        printf("orig:(%.0f,%.0f); ", da[0].yy, da[0].xx);
+        printf("a1:(%.0f,%.0f); ", da[1].yy, da[1].xx);
+        printf("a2:(%.0f,%.0f);\n", da[2].yy, da[2].xx);
 
         /* take the new values for the origin and the basic lattice vectors */
         for (i=0; i<3; i++)
         {
-          a[i].xx = ( 1. - bas_rat ) * a[i].xx + bas_rat * newa[i].xx;
-          a[i].yy = ( 1. - bas_rat ) * a[i].yy + bas_rat * newa[i].yy;
+          a[i].xx = ( 1. - params->bas_rat ) * a[i].xx + params->bas_rat * newa[i].xx;
+          a[i].yy = ( 1. - params->bas_rat ) * a[i].yy + params->bas_rat * newa[i].yy;
           a[i].len = PYTH( a[i].xx , a[i].yy );
         }
       }  /* if i ... */
     }  /* if nnref ... */
 
     /* if the deviation between old and new a[] is too big, repeat frame */
-    if (flag == DEV_BIG && i && ++repetitions<11)
+    if (flag == DEV_BIG && i && ++params->repetitions < 11)
     {
-      numb -= e_step;
+      numb -= inputs->e_step;
       printf("same frame again because of too big base/orig-deviation\n");
     }
-    /* update files fname_beam_raw, fname_beam_smo and fname_mkiv_dat" */
+    /* update files args->beam_raw_path, args->beam_smoothed_path and args->ivdat_path" */
     else
     {
-      repetitions = 0;
-      VPRINT("updating output ivdat and beam.cur files... \n");
+      params->repetitions = 0;
+      if (args->verbose & VERBOSE)
+        printf("updating output ivdat and beam.cur files... \n");
       fprintf(cur_stream, "%f\t%f\n", energy, int_norm[numb]);
       fprintf(smcur_stream, "%f\t%f\n", energy, use_cur);
       fprintf(iv_stream, "%6.1f", energy);
-      for (i=0; i<ndesi; i++ ) fprintf(iv_stream, " %10.5f", inty[i]);
+      for (i=0; i < inputs->n_desi; i++ ) fprintf(iv_stream, " %10.5f", inty[i]);
       fprintf(iv_stream, "\n");
-      QQ fflush(NULL);       /* flush all buffered output files */
-      else if ((nstop-numb)%update == 0) fflush(NULL);
+      if (QQ(args->verbose)) fflush(NULL);       /* flush all buffered output files */
+      else if ((inputs->n_stop-numb) % params->update_freq == 0) fflush(NULL);
     }
 
   }
   /* END OF ENERGY - LOOP */
 
-  /* release memory that was allocated for spot structure array */
-  free(spot);
-
   /* close output files */
   fclose(iv_stream);
   fclose(cur_stream);
 
-  /* copy fname_mkiv_dat to fname.ivdat */
-  char *fname_ivdat = (char*)malloc(strlen(fname) + 7 * sizeof(char));
+  /* copy args->ivdat_path to fname.ivdat */
+  char fname_ivdat[strlen(fname)];
   strcpy(fname_ivdat, fname);
   strcat(fname_ivdat, ".ivdat");
-  if (!strcmp(fname_mkiv_dat, fname_ivdat))
+  if (!strcmp(args->ivdat_path, fname_ivdat))
   {
-      file_copy(fname_mkiv_dat, fname_ivdat);
+    file_copy(args->ivdat_path, fname_ivdat);
   }
 
-  /* copy fname_mkiv_par to fname.param */
-  char *fname_param = (char*)malloc(strlen(fname) + 7 * sizeof(char));
+  /* copy args->param_path to fname.param */
+  char fname_param[strlen(fname) + 7];
   strcpy(fname_param, fname);
   strcat(fname_param, ".param");
-  if (strcmp(fname_mkiv_par, fname_param) == 0)
+  if (strcmp(args->param_path, fname_param) == 0)
   {
-    file_copy(fname_mkiv_par, fname_param);
+    file_copy(args->param_path, fname_param);
   }
+
+  /* release memory that was allocated */
+  free(spot);
+  mkiv_args_free(args);
+  mkiv_params_free(params);
+  mkiv_input_free(inputs);
 
   return(0);
 }

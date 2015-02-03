@@ -20,8 +20,8 @@
  * Converts the image matrix parameters (mkiv_image)
  * into TIFF parameters (tif_values) and applies log scaling for displaying.
  * It then allocates memory for \c buf and copies all \c imagedata to \c buf.
- * It is used in function writetif() (writetif.c), a routine in functions
- * such as drawbound() .
+ * It is used in function mkiv_tif_write() (mkiv_tif_write.c), a routine in functions
+ * such as mkiv_draw_bounds() .
  */
 
 #include "mkiv.h"
@@ -36,20 +36,20 @@
  * either \c NULL or point to a valid array of characters.
  *  * \return
  */
-int conv_mat2tif(const mkiv_image *mat_image, mkiv_tif_values *tif_image)
+int mkiv_mat2tif(const mkiv_image *mat_image, mkiv_tif_values *tif_image)
 {
   unsigned long i;
   size_t n_size;
 
-  unsigned short *data_shor;
-  unsigned char *data_char;
+  uint16_t *data_shor;
+  uint8_t *data_char;
 
-  unsigned short pix_shor, max_val, min_val;
-  unsigned char pix_char;
+  uint16_t pix_shor, max_val, min_val;
+  uint8_t pix_char;
 
-  unsigned char *lut;
+  uint8_t *lut;
 
-  float norm;
+  double norm;
      
   /*  Convert mkiv_image into tif_values */
   tif_image->imagewidth  = mat_image->rows;
@@ -83,21 +83,21 @@ int conv_mat2tif(const mkiv_image *mat_image, mkiv_tif_values *tif_image)
 
   /* Allocate memory for tif_image pointer buf */
   n_size = tif_image->imagelength * tif_image->imagewidth;
-  data_char = (unsigned char *) malloc(sizeof(unsigned char)*n_size);
+  data_char = (uint8_t *) malloc(sizeof(uint8_t)*n_size);
 
   if (data_char == NULL)
   { 
-    fprintf (stderr, "*** error (conv_mat2tif_log): Failed to allocate memory");
-    exit(1);
+    ERROR_MSG("Failed to allocate memory for buf\n");
+    ERROR_RETURN(-1);
   }
 
   /* First: find minimum / maxiumum value in mat_image->imagedata */
 
   /* Allocate memory for LUT */
-  lut = (unsigned char *)calloc(256, sizeof(char));
+  lut = (uint8_t *)calloc(256, sizeof(uint8_t));
   for (i=0; i < 256; i++)
   {
-    lut[i] = (unsigned char) (46.018 * log( (double) i ) );
+    lut[i] = (uint8_t) (46.018 * log( (double) i ) );
 /*
     lut[i] = (unsigned char) ( 318.75 *  i / (i + 63.75) );
     lut[i] = (unsigned char) (46.018 * log( (double) i ) );
@@ -105,7 +105,7 @@ int conv_mat2tif(const mkiv_image *mat_image, mkiv_tif_values *tif_image)
 */
   }
 
-  data_shor = (unsigned short *)mat_image->imagedata;
+  data_shor = (uint16_t *)mat_image->imagedata;
 
   max_val = 1;
   min_val = data_shor[0];
@@ -119,20 +119,20 @@ int conv_mat2tif(const mkiv_image *mat_image, mkiv_tif_values *tif_image)
   if (max_val > min_val) norm = 255. / (max_val - min_val);
   else norm = 255.;
 
-  fprintf(stdout, "(conv_mat2tif_log): min/max_val = %d/%d, norm = %f\n",
+  fprintf(stdout, "(mkiv_mat2tif_log): min/max_val = %d/%d, norm = %f\n",
                    min_val, max_val, norm);
 
   /* normalize all imagedata and copy to buf */
   for (i=0; i < n_size; i++)
   {
     pix_shor = *(data_shor + i);
-    pix_char = (unsigned char)( (pix_shor - min_val) * norm);
+    pix_char = (uint8_t)( (pix_shor - min_val) * norm);
     *(data_char + i) = lut[pix_char];
   }                
 
   if (tif_image->buf != NULL)
   {
-    fprintf(stderr, "(conv_mat2tif_log): free buffer\n");
+    fprintf(stderr, "(mkiv_mat2tif_log): free buffer\n");
     free(tif_image->buf);
   }
   tif_image->buf = (char*) data_char;
