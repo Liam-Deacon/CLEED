@@ -18,21 +18,19 @@
  * \date 9 Dec 2014
  */
 
-#include "RFactor.h"
 #include <algorithm>
 #include <iterator>
+#include "RFactor/RFactor.h"
 
 using namespace cleed;
+using std::size_t;
 
+/*
 RFactor::RFactor(const string &control_filepath, const string &theory_filepath) {
   this->args = RFactorArgs(control_filepath, theory_filepath);
   this->updateIVs(control_filepath, theory_filepath);
   this->calculateRFactor();
-}
-
-RFactor::~RFactor() {
-
-}
+} /*
 
 /* operators */
 inline bool RFactor::operator==(const RFactor &other) const {
@@ -58,7 +56,7 @@ void RFactor::updateIVs(const string &control_filepath, const string &theory_fil
                                              theory_filepath.c_str()  );
   size_t n = 0;
   while (ivcur_ptr[n].group_id == END_OF_GROUP_ID) {n++;}
-  this->iv_datasets.assign(ivcur_ptr, ivcur_ptr+n);
+  //this->iv_datasets.assign(ivcur_ptr, ivcur_ptr+n);
 
   // free memory
   rfac_ivcur_free_all(ivcur_ptr);

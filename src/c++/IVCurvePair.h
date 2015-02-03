@@ -41,14 +41,16 @@ namespace cleed {
       ~IVCurvePair();
 
       /* operator overloads */
-      IVCurvePair &operator=(const IVCurvePair &other);
-      IVCurvePair &operator=(const rfac_ivcur *ivcur_ptr);
+      //IVCurvePair operator=(const IVCurvePair &other);
+      //IVCurvePair operator=(const rfac_ivcur *ivcur_ptr);
 
       /* getters */
       double getWeighting() const;
       double getEnergyOfFirstAppearance() const;
       double getOverlap() const;
       int getGroupID() const;
+
+      const rfac_ivcur *getIVPairPtr() const;
 
       /* setters */
       void calculateOverlap();

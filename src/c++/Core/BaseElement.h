@@ -1,5 +1,5 @@
 /*********************************************************************
- *                      Element.h
+ *                      BaseElement.h
  *
  *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
  *
@@ -12,13 +12,15 @@
 
 /*! \file
  *
- * 
+ * Header for a basic element class.
  */
 
-#ifndef __Element_h__
-#define __Element_h__
+#ifndef __BaseElement_h__
+#define __BaseElement_h__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */ 
+
+#include <string>
 
 using std::size_t;
 using std::string;
@@ -35,9 +37,14 @@ public:
   virtual ~BaseElement();
 
   /* getters */
-  std::size_t getAtomicNumber();
-  std::string getElementName();
-  std::string getElementSymbol();
+  virtual std::size_t getAtomicNumber() const;
+  virtual std::string getElementName() const;
+  virtual std::string getElementSymbol() const;
+
+  /* setters */
+  virtual void setAtomicNumber(std::size_t Z);
+  virtual void setElementName(const std::string &name);
+  virtual void setElementSymbol(const char symbol[]);
 
 private:
   std::size_t atomicNumber;
@@ -49,4 +56,4 @@ private:
 
 #endif /* __cplusplus */
 
-#endif /* __Element_h__ */
+#endif /* __BaseElement_h__ */

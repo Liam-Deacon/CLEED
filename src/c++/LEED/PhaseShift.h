@@ -20,14 +20,14 @@
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
-#include "real.h"
+#include "cleed_real.h"
 #include "leed_def.h"
 #include <vector>
 #include <string>
 
 namespace cleed {
 
-class PhaseShift {
+class PhaseShift : public leed_phase {
 
   public:
     PhaseShift();
@@ -38,14 +38,14 @@ class PhaseShift {
     PhaseShift &operator+(const PhaseShift& phsh);
 
     /* getters */
-    int getLmax();
-    leed_matrix_diag getMatrixType();
-    real getMaxEnergy();
-    real getMinEnergy();
-    std::vector<real> getEnergyList();
-    std::vector<real> getPhaseShiftValuesList();
-    std::vector<real> getDeltaRList();
-    std::size_t getNumEnergies();
+    int getLmax() const;
+    leed_matrix_diag getMatrixType() const;
+    real getMaxEnergy() const;
+    real getMinEnergy() const;
+    std::vector<real> getEnergyList() const;
+    std::vector<real> getPhaseShiftValuesList() const;
+    std::vector<real> getDeltaRList() const;
+    std::size_t getNumberOfEnergies() const;
 
     /* setters */
     void setLmax(int lmax);
@@ -60,9 +60,6 @@ class PhaseShift {
     void setDeltaR(real dr[4]);
 
     void setDataFromFile();
-
-  private:
-    leed_phase *phsh_ptr;
 };
 
 } /* namespace cleed */

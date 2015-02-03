@@ -1,5 +1,5 @@
 /*********************************************************************
- *                      Crystal.h
+ *                      LEED.h
  *
  *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
  *
@@ -12,22 +12,29 @@
 
 /*! \file
  *
- * Defines an object orientated wrapper class for leed_crystal structure.
+ * C++ wrapper class for leed structure.
  */
 
-#ifndef __Crystal_h__
-#define __Crystal_h__
+#ifndef __LEED_h__
+#define __LEED_h__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
-using namespace std;
+#include "leed_def.h"
 
 namespace cleed {
 
+class LEED {
+  public:
+    LEED();
+    ~LEED();
 
+  private:
+
+};
 
 } /* namespace CLEED */
 
 #endif /* __cplusplus */
 
-#endif /* __Crystal_h__ */
+#endif /* __LEED_h__ */

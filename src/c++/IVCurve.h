@@ -49,7 +49,7 @@ namespace cleed {
 
 /* classes */
 
-  class IVCurve {
+  class IVCurve : public rfac_iv {
 
     friend class RFactor;
 

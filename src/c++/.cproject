@@ -2,7 +2,7 @@
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.mingw.base.868482903">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.868482903" moduleId="org.eclipse.cdt.core.settings" name="Default">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.868482903" moduleId="org.eclipse.cdt.core.settings" name="Debug.lib.MinGW">
 				<externalSettings>
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/c++"/>
@@ -20,15 +20,17 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactExtension="" artifactName="cleed++" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" description="" errorParsers="org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.toolchain.gnu.mingw.base.868482903" name="Default" parent="org.eclipse.cdt.build.core.emptycfg" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="" prebuildStep="">
+				<configuration artifactExtension="" artifactName="cleed++" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" description="Windows DLL" errorParsers="org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.toolchain.gnu.mingw.base.868482903" name="Debug.lib.MinGW" parent="org.eclipse.cdt.build.core.emptycfg" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="" prebuildStep="">
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.mingw.base.868482903.474468868" name="/" resourcePath="">
 						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.base.172836607" name="cdt.managedbuild.toolchain.gnu.mingw.base" superClass="cdt.managedbuild.toolchain.gnu.mingw.base" unusedChildren="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.1374643539" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
 							<builder buildPath="${workspace_loc:/c++}/Default" errorParsers="" id="cdt.managedbuild.tool.gnu.builder.mingw.base.747379364" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.101507346" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
 								<option id="gnu.cpp.compiler.option.include.paths.1301976395" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CLEED/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/c++}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cleed++}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.1153707105" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.951690506" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -36,10 +38,20 @@
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.268871018" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.base.1697165361" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
+								<option id="gnu.c.compiler.option.include.paths.23492965" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cleed++}&quot;"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.15879203" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.274172594" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
 								<option defaultValue="true" id="gnu.cpp.link.option.shared.929989847" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.paths.1793290489" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac/Debug.lib.MinGW}&quot;"/>
+								</option>
+								<option id="gnu.cpp.link.option.libs.630139133" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="rfac"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1434789074" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -47,6 +59,8 @@
 							</tool>
 							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.522384027" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 								<option id="gnu.both.asm.option.include.paths.73857899" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cleed++}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CLEED/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/c++}&quot;"/>
 								</option>
@@ -59,11 +73,19 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="PhaseShift.cc" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="rfac;cdt.managedbuild.toolchain.gnu.mingw.base.1725996879.1465611127" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/rfac"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/rfac/Debug.lib.MinGW"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="rfac" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -78,19 +100,19 @@
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.868482903;cdt.managedbuild.toolchain.gnu.mingw.base.868482903.474468868;cdt.managedbuild.tool.gnu.c.compiler.base.1697165361;cdt.managedbuild.tool.gnu.c.compiler.input.15879203">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.868482903;cdt.managedbuild.toolchain.gnu.mingw.base.868482903.474468868;cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1828847357;cdt.managedbuild.tool.gnu.c.compiler.input.782950281">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.1114281100;cdt.managedbuild.toolchain.gnu.mingw.base.1114281100.240320506;cdt.managedbuild.tool.gnu.c.compiler.mingw.base.63988771;cdt.managedbuild.tool.gnu.c.compiler.input.1285190638">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.868482903;cdt.managedbuild.toolchain.gnu.mingw.base.868482903.474468868;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.101507346;cdt.managedbuild.tool.gnu.cpp.compiler.input.268871018">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.868482903;cdt.managedbuild.toolchain.gnu.mingw.base.868482903.474468868;cdt.managedbuild.tool.gnu.c.compiler.base.1697165361;cdt.managedbuild.tool.gnu.c.compiler.input.15879203">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.1114281100;cdt.managedbuild.toolchain.gnu.mingw.base.1114281100.240320506;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1715693281;cdt.managedbuild.tool.gnu.cpp.compiler.input.665085222">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.868482903;cdt.managedbuild.toolchain.gnu.mingw.base.868482903.474468868;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.101507346;cdt.managedbuild.tool.gnu.cpp.compiler.input.268871018">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.1114281100;cdt.managedbuild.toolchain.gnu.mingw.base.1114281100.240320506;cdt.managedbuild.tool.gnu.c.compiler.mingw.base.63988771;cdt.managedbuild.tool.gnu.c.compiler.input.1285190638">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>

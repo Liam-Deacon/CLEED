@@ -20,16 +20,17 @@
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
+#include <cstddef>
+#include <vector>
 #include "leed_def.h"
-#include "Atom.h"
+#include "LEED/LEEDAtom.h"
 
 using namespace std;
 
 namespace cleed {
 
-class Layer {
+class Layer : public leed_layer {
   public:
-
     Layer();
     Layer(const leed_layer *layer);
     ~Layer();
@@ -37,7 +38,7 @@ class Layer {
     /* getters */
     bool isPeriodic();
     std::size_t getLayerNumber();
-    std::size_t getNumAtoms();
+    std::size_t getNumberOfAtoms();
     leed_structure getLayerType();
     std::vector<real> getA1();
     std::vector<real> getA2();
@@ -57,11 +58,9 @@ class Layer {
     void setRelativeArea(real area);
     void setAtoms(std::vector<Atom> atomList);
     void setAtoms(const leed_atom *atoms, std::size_t n);
-    void setAtom(leed_atom atom, int index);
-    void setAtom(Atom atom, int index);
+    void setAtom(leed_atom *atom, int index);
+    void setAtom(LEEDAtom &atom, int index);
 
-  private:
-    leed_layer *layer_ptr;
 };
 
 } /* namespace CLEED */
