@@ -587,9 +587,10 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   /* Test rotational symmetry for composite layer.
    * - Therefore rotate all atoms in the layer
    * - Check if you reach this position */
+  /*!TODO: include cleed_sym
   if(n_rot > 1) n_rot = leed_check_rotation_sym(par);
   if(n_mir > 0) n_mir = leed_check_mirror_sym(par);
-
+  */
   /* The useful control of all variables. */
   #if CONTROL
   fprintf(STDCTR, "ROT = %d  MIRRORPLANES %d \n", n_rot, n_mir);

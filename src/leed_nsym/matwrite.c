@@ -30,7 +30,7 @@
  * \return total number of bytes written to \p file
  * \retval -1 if function encountered an error and #EXIT_ON_ERROR is not
  * defined.
- * \note Error and control messages can be enabled by defining #ERROR and
+ * \note Error and control messages can be enabled by defining #ERROR_LOG and
  * #CONTROL respectively when compiling.
  */
 int matwrite(const mat M, FILE *file)

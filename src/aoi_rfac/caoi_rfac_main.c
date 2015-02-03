@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
    */
   if (argc < 2) 
   {
-#if ERROR
+#if ERROR_LOG
 	  	ERROR_MSG("syntax error\n");
 	  	caoi_rfac_usage(STDERR);
 #endif
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
   {
     if(*argv[i_arg] != '-')
     {
-#if ERROR
+#if ERROR_LOG
       ERROR_MSG("syntax error:\n");
     	caoi_rfac_usage(STDERR);
 #endif

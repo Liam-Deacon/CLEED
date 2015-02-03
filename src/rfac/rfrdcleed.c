@@ -82,6 +82,7 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
        int_sum;                    /* sum of all intensities */
 
   char *line_buffer;
+  char fmt_buffer[STRSZ];
 
   rfac_iv_data *list;
   rfac_spot *beam;
@@ -140,7 +141,8 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
       sscanf(line_buffer+3, "%u", &i_beam);
       if(i_beam < n_beam)
       {
-        sscanf(line_buffer+3, "%d %" REAL_FMT "f %" REAL_FMT "f",
+        sprintf(fmt_buffer, "%%d %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+        sscanf(line_buffer+3, fmt_buffer,
                &iaux,                        /* not used */
                &beam[i_beam].index1,         /* beam indices */
                &beam[i_beam].index2 );
@@ -237,7 +239,8 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
 
       /* Read energy first, then intensities. */
       i_str = 0;
-      sscanf(line_buffer+i_str, "%" REAL_FMT "f", &(list[i_eng].energy) );
+      sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
+      sscanf(line_buffer+i_str, fmt_buffer, &(list[i_eng].energy) );
       
       /* go to end of line ? */
       while(line_buffer[i_str] == ' ') i_str++;
@@ -247,9 +250,10 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
       fprintf(STDCTR, "e: %f i:", list[i_eng].energy);
 #     endif
   
+      sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
       for( i_beam = 0; (i_beam <= n_beam) &&
-           (sscanf(line_buffer+i_str,
-              "%" REAL_FMT "f", &(beam[i_beam].f_val2) ) != EOF);
+           (sscanf(line_buffer+i_str, fmt_buffer,
+             &(beam[i_beam].f_val2) ) != EOF);
            i_beam++)
       {
         while(line_buffer[i_str] == ' ') i_str++;

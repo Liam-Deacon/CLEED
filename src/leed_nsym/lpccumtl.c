@@ -125,7 +125,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
   {
     l_max_0 = l_max_t;
 
-    #ifdef WARNING
+    #ifdef WARNING_LOG
     fprintf(STDWAR, "* warning (leed_par_cumulative_tl): "
             "input phase shifts are only used up to l_max = %u\n", l_max_0);
     #endif
@@ -148,8 +148,8 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
         for(m2 = -l2; m2 <= l2; m2 ++, lm2 ++)
           if((l1 == l2) && (m1 == m2) )
           {
-            RMATEL(lm1, lm2, T_n) = - tl_aux->rel[l1+1] / kappa;
-            IMATEL(lm1, lm2, T_n) = - tl_aux->iel[l1+1] / kappa;
+            *rmatel(lm1, lm2, T_n) = - tl_aux->rel[l1+1] / kappa;
+            *imatel(lm1, lm2, T_n) = - tl_aux->iel[l1+1] / kappa;
           }
 
 #if CONTROL_X

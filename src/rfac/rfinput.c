@@ -76,6 +76,7 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
   char exp_file[FILENAME_MAX];/* name of experimental input file */
   char index_list[STRSZ];     /* command line for averaging theoretical
 			                         * indices */
+  char fmt_buffer[STRSZ];     /* buffer for format specifier */
 
 /*********************************************************************
  * Copy theoretical input file to the_buffer
@@ -101,6 +102,9 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
   CONTROL_MSG(CONTROL_X, "n_cur = %d\n", n_cur);
 
   cur_list = (rfac_ivcur*) calloc(n_cur, sizeof(rfac_ivcur));
+
+  /* set real format specifier */
+  sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
 
 /*********************************************************************
  * Scan through control file.
@@ -186,7 +190,7 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
        if ( !strncmp("wt=", line_buffer+i, 3) )
        {
          i+=3;
-         sscanf(line_buffer+i, "%" REAL_FMT "f", &(cur_list[i_cur].weight));
+         sscanf(line_buffer+i, fmt_buffer, &(cur_list[i_cur].weight));
        } /* if "id=" */
 
 
@@ -194,7 +198,7 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
        if ( !strncmp("e0=", line_buffer+i, 3) )
        {
          i+=3;
-         sscanf(line_buffer+i, "%" REAL_FMT "f", &(cur_list[i_cur].eng_0));
+         sscanf(line_buffer+i, fmt_buffer, &(cur_list[i_cur].eng_0));
        } /* if "e0=" */
 
 

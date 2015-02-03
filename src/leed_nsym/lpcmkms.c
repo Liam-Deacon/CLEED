@@ -57,7 +57,7 @@ static const double SQRT_2_1 = 0.7071067811865475;  /*!< \f$ 1 / sqrt(2) \f$ */
  *
  * \todo Finish documentation of function parameters.
  */
-int pc_mk_ms(mat *p_Mx,   mat *p_My,   mat *p_Mz, 
+int pc_mk_ms(mat *p_Mx, mat *p_My, mat *p_Mz,
              mat *p_MxMx, mat *p_MyMy, mat *p_MzMz, size_t l_max)
 {
 

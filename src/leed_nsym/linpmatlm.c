@@ -68,6 +68,7 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
   real eng;
   real r_part, i_part;
 
+  char fmt_buffer[STRSZ];
   char linebuffer[STRSZ];
   FILE *inp_stream;
 
@@ -82,14 +83,15 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
    * energy and the maximum l quantum number (lmax). */
   while( *fgets(linebuffer, STRSZ, inp_stream) == '#'); /* skip comment lines */
 
+  sprintf(fmt_buffer, "%%u %%%sf", CLEED_REAL_FMT);
   if ( linebuffer == NULL)     /* EOF found */
   {
     ERROR_MSG("unexpected EOF found while reading file \"%s\"\n", filename);
     exit(1);
   }
-  else if( sscanf(linebuffer, "%u %" REAL_FMT "f", &l_max_in, &eng) < 2)
+  else if( sscanf(linebuffer, fmt_buffer, &l_max_in, &eng) < 2)
   {
-#if ERROR
+#if ERROR_LOG
     fprintf(STDERR, "\n");
     ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
 #endif
@@ -97,7 +99,7 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
     ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, NULL);
   }
 
-#if WARNING
+#if WARNING_LOG
   if (l_max_in > l_max)
   {
     WARNING_MSG("dataset of input file is greater than specified matrix "
@@ -121,18 +123,19 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
    * matrixposition 1: (l1 + 1)l1 + m1 + 1
    * matrixposition 2: (l2 + 2)l2 + m2 + 1
    */
+  sprintf(fmt_buffer, "%%u %%d %%u %%d, %%d %%d %%%sf %%%sf",
+          CLEED_REAL_FMT, CLEED_REAL_FMT);
   while(fgets(linebuffer, STRSZ, inp_stream) != NULL)
   {
     i_str = 0;
     while(*(linebuffer+i_str) == ' ') i_str++;
 
-    iaux = sscanf(linebuffer+i_str,
-                  "%u %d %u %d %d %d %" REAL_FMT "f %" REAL_FMT "f",
+    iaux = sscanf(linebuffer+i_str, fmt_buffer,
                   &l1, &m1, &l2, &m2, &iaux1, &iaux2, &r_part, &i_part );
 
     if (iaux < 8 || iaux == EOF)
     {
-#if ERROR
+#if ERROR_LOG
       fprintf(STDERR, "\n");
       ERROR_MSG("unable to read values from file \"%s\":\n%s",
                 filename, linebuffer);
@@ -145,8 +148,8 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
       pos_1 = (l1 + 1)*l1 + m1 + 1;
       pos_2 = (l2 + 1)*l2 + m2 + 1;
 
-      RMATEL(pos_1, pos_2, Mat) = eng * r_part ;
-      IMATEL(pos_1, pos_2, Mat) = eng * i_part ;
+      *rmatel(pos_1, pos_2, Mat) = eng * r_part ;
+      *imatel(pos_1, pos_2, Mat) = eng * i_part ;
     }
 
   } /* End while */

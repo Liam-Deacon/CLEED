@@ -23,6 +23,7 @@
 #include <float.h>
 #include <math.h>
 #include "lattice.h"
+#include "gh_stddef.h"
 
 /*!
  * Prints member values of #lattice instance \p lat
@@ -1031,9 +1032,9 @@ int lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
   coord_printf(stderr, &b2);
   #endif
 
-  lat->a_latt = COORD_MAGNITUDE(a1);
-  lat->b_latt = COORD_MAGNITUDE(a2);
-  lat->c_latt = COORD_MAGNITUDE(a3);
+  lat->a_latt = coord_get_magnitude(a1);
+  lat->b_latt = coord_get_magnitude(a2);
+  lat->c_latt = coord_get_magnitude(a3);
 
   lat->a_nn = lat->a_latt;
   if(lat->b_latt < lat->a_nn) lat->a_nn = lat->b_latt;

@@ -97,10 +97,10 @@ FILE *out_stream;
 
  while (fgets(line_buffer, STRSZ, in_stream) != NULL )
  {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
        sscanf(line_buffer, "%le", &faux_r);
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
        sscanf(line_buffer, "%e", &faux_r);
 #endif
 /*
@@ -116,10 +116,10 @@ FILE *out_stream;
      fprintf(stdout," = %.2f eV\n", faux_r);
      for( i_str = 0, l = 0; l <= l_max; l++)
      {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
        sscanf(line_buffer + i_str, "%le", delta2+l);
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
        sscanf(line_buffer + i_str, "%e", delta2+l);
 #endif
        delta2[l] *= 2.;

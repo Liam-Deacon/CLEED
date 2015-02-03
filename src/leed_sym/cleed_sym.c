@@ -39,7 +39,7 @@ version 1.1
 #include "leed.h"
 #include "leed_def.h"
 #include "leed_ver_sym.h" /* defines LEED_VERSION and LEED_NAME */
-#include "proghelp.h"
+#include "leed_help.h"
 
 enum {
   FLAG_NONE=0,
@@ -147,7 +147,7 @@ FILE *res_stream;
  {
   if(*argv[i_arg] != '-')
   {
-#if ERROR
+#if ERROR_LOG
    ERROR_MSG("\tusage: \t%s -i <par_file> -o <res_file>"
              " [-b <bul_file> -r <pro_name> -w <pro_name> -h -V]\n", LEED_PROG);
 #endif
@@ -193,7 +193,7 @@ FILE *res_stream;
     strncpy(res_file, argv[i_arg], STRSZ);
     if ((res_stream = fopen(res_file,"w")) == NULL)
     {
-#ifdef ERROR
+#ifdef ERROR_LOG
      fprintf(STDERR,
      "*** error (%s): could not open output file \"%s\"\n", 
      LEED_NAME, res_file);
@@ -210,7 +210,7 @@ FILE *res_stream;
     strncpy(pro_name, argv[i_arg], STRSZ);
     if ((pro_stream = fopen(pro_name,"r")) == NULL)
     {
-#ifdef ERROR
+#ifdef ERROR_LOG
      fprintf(STDERR,
      "*** error (%s): could not open project file \"%s\" for reading\n",
      LEED_NAME, pro_name);
@@ -227,7 +227,7 @@ FILE *res_stream;
     strncpy(pro_name, argv[i_arg], STRSZ);
     if ((pro_stream = fopen(pro_name,"w")) == NULL)
     {
-#ifdef ERROR
+#ifdef ERROR_LOG
      fprintf(STDERR,
      "*** error (%s): could not open project file \"%s\" for writing\n",
      LEED_NAME, pro_name);
@@ -247,7 +247,7 @@ FILE *res_stream;
 
  if(strncmp(par_file, "---", 3) == 0)
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR,
    "*** error (%s): no parameter input file (option -i) specified\n", LEED_NAME);
 #endif
@@ -261,7 +261,7 @@ FILE *res_stream;
 
  if(strncmp(res_file, "leed.res", 8) == 0)
  {
-#ifdef WARNING
+#ifdef WARNING_LOG
    fprintf(STDWAR,
            "* warning (%s): no output file (option -o) specified\n", LEED_NAME);
    fprintf(STDWAR,"\toutput will be written to file \"%s\"\n", res_file);
@@ -269,7 +269,7 @@ FILE *res_stream;
 
    if ((res_stream = fopen(res_file,"w")) == NULL)
    {
-#ifdef ERROR
+#ifdef ERROR_LOG
      fprintf(STDERR,
      "*** error (%s): could not open output file \"%s\"\n",
      LEED_NAME, res_file);
@@ -323,7 +323,7 @@ FILE *res_stream;
 
    default:
    {
-     #ifdef ERROR
+     #ifdef ERROR_LOG
        fprintf(STDERR, "*** error (%s): unsupported ctr_flag\n", LEED_NAME);
      #endif
      exit(1);
@@ -343,7 +343,7 @@ FILE *res_stream;
 
 #ifdef CONTROL
  fprintf(STDCTR, "(%s): E_ini = %.1f, E_fin = %.1f, E_stp %.1f\n", 
-         LEED_NAME, eng->ini*HART, eng->fin*HART, eng->stp*HART);
+         LEED_NAME, eng->initial*HART, eng->final*HART, eng->step*HART);
 #endif
 
 /*********************************************************************
@@ -405,7 +405,7 @@ FILE *res_stream;
   **********************************************************/
 #ifdef CONTROL_FLOW
         fprintf(STDCTR, "(%s periodic): bulk layer %d/%d, set %d/%d\n", 
-                LEED_NAME, 0, bulk->nlayers - 1, i_set, n_set - 1);
+                LEED_NAME, 0, bulk->n_layers - 1, i_set, n_set - 1);
 #endif
         if( (bulk->layers + 0)->n_atoms == 1)
         {
@@ -428,7 +428,7 @@ FILE *res_stream;
         {
 #ifdef CONTROL_FLOW
         fprintf(STDCTR, "(%s periodic): bulk layer %d/%d, set %d/%d\n", 
-                LEED_NAME, i_layer, bulk->nlayers - 1, i_set, n_set - 1);
+                LEED_NAME, i_layer, bulk->n_layers - 1, i_set, n_set - 1);
 #endif
 
     /*************************************************************** 
@@ -481,7 +481,7 @@ FILE *res_stream;
         {
 #ifdef CONTROL_FLOW
         fprintf(STDCTR, "(%s): bulk layer %d/%d, set %d/%d\n", 
-                LEED_NAME, i_layer, bulk->nlayers - 1, i_set, n_set - 1);
+                LEED_NAME, i_layer, bulk->n_layers - 1, i_set, n_set - 1);
 #endif
           if( (bulk->layers + i_layer)->n_atoms == 1)
           {
@@ -504,7 +504,7 @@ FILE *res_stream;
     ********************************************************************/
           Rpm = leed_ld_2lay_rpm(Rpm, Rpm, Tpp_s, Tmm_s, Rpm_s, Rmp_s,
                           beams_set, (bulk->layers + i_layer)->vec_from_last);
-        }  /* if( i_layer == bulk->nlayers - 1 ) */
+        }  /* if( i_layer == bulk->n_layers - 1 ) */
 
    /********************************************************
      Insert reflection matrix for this beam set into R_bulk.
@@ -548,7 +548,7 @@ FILE *res_stream;
     {
 #ifdef CONTROL_FLOW
       fprintf(STDCTR, "(%s): overlayer %d/%d\n", 
-              LEED_NAME, i_layer, over->nlayers - 1);
+              LEED_NAME, i_layer, over->n_layers - 1);
 #endif
   /***********************************************************
      Calculate scattering matrices for a single overlayer layer
@@ -572,7 +572,7 @@ FILE *res_stream;
      - if the current layer is the bottom-most (i_layer == 0),
        the inter layer vector is calculated from the vectors between
        top-most bulk layer and origin 
-       ( (bulk->layers + nlayers)->vec_to_next )
+       ( (bulk->layers + n_layers)->vec_to_next )
        and origin and bottom-most overlayer
        (over->layers + 0)->vec_from_last.
 

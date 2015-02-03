@@ -275,11 +275,11 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
   if(ctrol == 0) p_cryst->n_rot = n_rot;
   else p_cryst->n_rot = 1;
 
-  /* WARNING if no rotational symmetry */
+  /* WARNING_LOG if no rotational symmetry */
   if(p_cryst->n_rot == 1)
   {
     ;
-    #ifdef WARNING
+    #ifdef WARNING_LOG
     fprintf(STDWAR, "*warning (leed_check_rotation_sym): "
         "No rotational symmetry\n");
     #endif
@@ -547,10 +547,10 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   if(ctrol == 0) p_cryst->n_mir = n_mir;
   else p_cryst->n_mir = 0;
 
-  /* WARNING if no rotational symmetry */
+  /* WARNING_LOG if no rotational symmetry */
   if(p_cryst->n_mir == 0)
   {
-    #ifdef WARNING
+    #ifdef WARNING_LOG
     fprintf(STDWAR, "*warning (leed_check_mirror_sym): no mirror symmetry\n");
     #endif
   }

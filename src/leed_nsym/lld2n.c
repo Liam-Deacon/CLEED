@@ -9,7 +9,7 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
  * Changes:
- *   GH/21.01.95 - change WARNING to CONTROL; CONTROL to CONTROL_X
+ *   GH/21.01.95 - change WARNING_LOG to CONTROL; CONTROL to CONTROL_X
  *   WB/16.04.98 - CONTROL vec_aa
  *********************************************************************/
 

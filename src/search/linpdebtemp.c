@@ -23,7 +23,7 @@
  * wish the leed_inp_debye_temp() function to stop program execution on failure.
  *
  * \note Additional output is available by adding the defines
- * \c WARNING , \c CONTROL and \c ERROR during compilation.
+ * \c WARNING_LOG , \c CONTROL and \c ERROR_LOG during compilation.
  */
 
 #include <math.h>

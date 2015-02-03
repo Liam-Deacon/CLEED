@@ -229,7 +229,7 @@ int latt_main(int argc, char *argv[])   /* compile as library function */
   b2_len = b1_len = lat->max_disp * lat->a_nn; /* = 10. * a_nn; */
 
   coord_set(b3, 0., 0., -(lat->max_disp_z) * lat->a_nn); /* -10. * a_nn; */
-  b3_len = COORD_MAGNITUDE(b3);
+  b3_len = coord_get_magnitude(b3);
 
   n_max = abs((int)(lat->max_disp_z * 2.)); /* n_max = 20; */
 
@@ -259,12 +259,12 @@ int latt_main(int argc, char *argv[])   /* compile as library function */
           faux->x = (n1 * a1->x) + (n2 * a2->x) + (n3 * a3->x);
           faux->y = (n1 * a1->y) + (n2 * a2->y) + (n3 * a3->y);
             
-          if ( ( COORD_MAGNITUDE(faux) < (b3_len + TOLERANCE) ) && 
+          if ( ( coord_get_magnitude(faux) < (b3_len + TOLERANCE) ) &&
                ( faux->z > (b3->z - TOLERANCE) ) )
           {
 
-            COORD_COPY(b3, faux);
-            b3_len = COORD_MAGNITUDE(b3);
+            coord_copy(b3, faux);
+            b3_len = coord_get_magnitude(b3);
 
             ind[2][0] = n1;
             ind[2][1] = n2;
@@ -279,13 +279,13 @@ int latt_main(int argc, char *argv[])   /* compile as library function */
         {
           faux->x = (n1 * a1->x) + (n2 * a2->x) + (n3 * a3->x);
           faux->y = (n1 * a1->y) + (n2 * a2->y) + (n3 * a3->y);
-          faux_len = COORD_MAGNITUDE(faux);
+          faux_len = coord_get_magnitude(faux);
 
           if (faux_len > TOLERANCE)
           {
             if (faux_len < b1_len)
             {   
-              COORD_COPY(b1, faux);
+              coord_copy(b1, faux);
               b1_len = faux_len;
 
               ind[0][0] = n1;
@@ -297,7 +297,7 @@ int latt_main(int argc, char *argv[])   /* compile as library function */
             else if ( (faux_len < b2_len) && ( fabs((faux->x * b1->y) - 
                                             (faux->y * b1->x)) > TOLERANCE ) )
             {
-              COORD_COPY(b2, faux);
+              coord_copy(b2, faux);
               b2_len = faux_len;
 
               ind[1][0] = n1;

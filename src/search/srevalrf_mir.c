@@ -77,6 +77,7 @@ real sr_evalrfac_mir(real *par)
   struct tm *l_time;
   time_t t_time;
 
+  char fmt_buffer[STRSZ];
   char line_buffer[STRSZ];
   char log_file[STRSZ];
   char par_file[STRSZ];
@@ -230,11 +231,14 @@ real sr_evalrfac_mir(real *par)
   sprintf(line_buffer, "%s.dum", sr_project);
   io_stream = fopen(line_buffer, "r");
 
+  sprintf(fmt_buffer, "%%%sf %%%sf %%%sf",
+          CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
   while( fgets(line_buffer, STRSZ, io_stream) != NULL)
   {
-    if( (iaux = sscanf(line_buffer,
-                       "%" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
-                       &rfac, &faux, &shift) ) == 3) break;
+    if( (iaux = sscanf(line_buffer, fmt_buffer, &rfac, &faux, &shift) ) == 3)
+    {
+      break;
+    }
   }
 
   /* Stop with error message if reading error */

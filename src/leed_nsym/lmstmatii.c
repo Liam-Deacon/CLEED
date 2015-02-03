@@ -165,8 +165,8 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
            */
           cri_mul(&faux_r, &faux_i,
                   sum_i, -sum_r, Tl->rel[l1+1], Tl->iel[l1+1]);
-          RMATEL(iev1, iev2, Gev) = faux_r;
-          IMATEL(iev1, iev2, Gev) = faux_i;
+          *rmatel(iev1, iev2, Gev) = faux_r;
+          *imatel(iev1, iev2, Gev) = faux_i;
 
         } /* m2 */
       } /* l2 */
@@ -218,8 +218,8 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
            */
           cri_mul(&faux_r, &faux_i,
                   sum_i, -sum_r, Tl->rel[l1+1], Tl->iel[l1+1]);
-          RMATEL(iod1, iod2, God) = faux_r;
-          IMATEL(iod1, iod2, God) = faux_i;
+          *rmatel(iod1, iod2, God) = faux_r;
+          *imatel(iod1, iod2, God) = faux_i;
 
         } /* m2 */
       } /* l2 */

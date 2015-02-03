@@ -89,7 +89,7 @@ mat matcol(const mat M, size_t col_num)
         }
 
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     } /* switch */
   } /* matrix type is not diagonal */
   else if (M->mat_type == MAT_DIAG)
@@ -127,7 +127,7 @@ mat matcol(const mat M, size_t col_num)
         *(col->iel + col_num) = *(M->iel + col_num);
 
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     } /* switch */
   } /* matrix type is diagonal */
   else /* neither square nor normal, nor diagonal matrix */

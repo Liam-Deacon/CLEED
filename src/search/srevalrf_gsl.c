@@ -119,7 +119,7 @@ FILE *io_stream, *log_stream;
 
  if(getenv("CSEARCH_LEED") == NULL)
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR, " *** error (sr_evalrf): "
         "CSEARCH_LEED environment variable not defined\n");
 #endif
@@ -128,7 +128,7 @@ FILE *io_stream, *log_stream;
  
  if(getenv("CSEARCH_RFAC") == NULL)
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR, " *** error (sr_evalrf): "
         "CSEARCH_RFAC environment variable not defined\n");
 #endif
@@ -254,10 +254,10 @@ FILE *io_stream, *log_stream;
  while( fgets(line_buffer, STRSZ, io_stream) != NULL)
  {
    if(
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
        (iaux = sscanf(line_buffer, "%lf %lf %lf", &rfac, &faux, &shift) )
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
        (iaux = sscanf(line_buffer, "%f %f %f",    &rfac, &faux, &shift) )
 #endif
        == 3) break;

@@ -19,7 +19,7 @@
  * \author Georg Held <g.held@reading.ac.uk>
  * \brief Check rotation symmetry
  *
- * \note The defines \c CONTROL_X and \c ERROR produce additional terminal
+ * \note The defines \c CONTROL_X and \c ERROR_LOG produce additional terminal
  * output when added to the list of definitions during compilation.
  *
  * \todo fix \c GEO_TOLERANCE \c #undef
@@ -31,9 +31,6 @@
 #include <stdlib.h>
 
 #include "csearch.h"
-
-#undef  GEO_TOLERANCE
-#define GEO_TOLERANCE  0.001
 
 /*!
  * Check for rotation symmetry

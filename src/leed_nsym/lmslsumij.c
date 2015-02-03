@@ -201,7 +201,7 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
   if (epsilon < 1.) r_max = -log(epsilon) / k_i;
   else              r_max = epsilon;
 
-#if WARNING
+#if WARNING_LOG
   if( r_max > WARN_LEVEL)    /* poor convergence */
   {
     WARNING_MSG("damping very weak: k_i = %.2e, eps = %.2e\n", k_i, epsilon);

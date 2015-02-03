@@ -60,7 +60,7 @@ real ** R_n;
 
  if( (n_rot < 1) || (n_rot == 5) || (n_rot > 6) )
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR,"*** error (leed_beam_get_rotation_matrices): wrong argument n_rot = %d.\n", n_rot);
 #endif
    return(NULL);

@@ -78,10 +78,12 @@ int main(int argc, char *argv[])
     	  lbound, ubound, &del_flag);
   #endif
 	  
-  fprintf(out_stream, "# Sin Fourier Smooth: version %3.1f\n", FTSMOOTH_VERSION);
+  fprintf(out_stream, "# Sin Fourier Smooth: version %3.1f\n",
+          (double)atof(FTSMOOTH_PROG_VERSION));
   if (!stdout_flag) /* print if out_stream not equal to stdout */
   {
-    printf("#> Sin Fourier Smooth: version %3.1f\n", FTSMOOTH_VERSION);
+    printf("#> Sin Fourier Smooth: version %3.1f\n",
+           (double)atof(FTSMOOTH_PROG_VERSION));
   }
 
   /*

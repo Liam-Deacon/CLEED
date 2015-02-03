@@ -49,6 +49,7 @@ rfac_iv_data *rfac_iv_read(const char *filename)
 
   char line_buffer[STRSZ];
   char *buffer;
+  char fmt_buffer[STRSZ];
   rfac_iv *iv = rfac_iv_init();
 
   /*
@@ -56,6 +57,9 @@ rfac_iv_data *rfac_iv_read(const char *filename)
    * count lines  without comments (i.e. number of data pairs)
    * allocate memory for expt. IV curve
    */
+
+  sprintf(fmt_buffer, "%%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+
   #ifdef CONTROL
   fprintf(STDCTR, "(cr_rdexpt): opening \"%s\"\n", filename);
   #endif
@@ -94,8 +98,7 @@ rfac_iv_data *rfac_iv_read(const char *filename)
       CONTROL_MSG(CONTROL_X, "(%s): %e %e\n", filename,
                   iv->data[i].energy, iv->data[i].intens);
 
-      if(sscanf(line_buffer, "%" REAL_FMT "f %" REAL_FMT "f",
-                &iv->data[i].energy, &iv->data[i].intens) == 2)
+      if(sscanf(line_buffer, fmt_buffer, &iv->data[i].energy, &iv->data[i].intens) == 2)
       {
 
         /* search for max. intensity */
@@ -152,8 +155,8 @@ rfac_iv_data *rfac_iv_read(const char *filename)
   CONTROL_MSG(CONTROL, "iv_cur structure written\n");
  
   /* set last energy and intensities to termination value */
-  iv->data[i].energy = (real) FEND_OF_LIST;  /* termination */
-  iv->data[i].intens = (real) FEND_OF_LIST;  /* termination */
+  iv->data[i].energy = (real) F_END_OF_LIST;  /* termination */
+  iv->data[i].intens = (real) F_END_OF_LIST;  /* termination */
   iv->n_eng = i;
 
   CONTROL_MSG(CONTROL, "list terminations set\n");

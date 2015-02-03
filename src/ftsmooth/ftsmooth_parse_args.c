@@ -31,7 +31,11 @@ int parse_args(int argc, char *argv[],
 {
  int i_arg;
  
- if (!argc) {ftsmooth_usage(stderr);exit(1);}
+ if (argc == 0)
+ {
+   ftsmooth_usage(stderr);
+   exit(1);
+ }
  
  for (i_arg = 1; i_arg < argc; i_arg++)
  {
@@ -50,7 +54,7 @@ int parse_args(int argc, char *argv[],
     i_arg++;
     if ((in_stream = fopen(argv[i_arg],"r")) == NULL)
     {
-     ERROR_MSG("failed to open '%s'",argv[i_arg]);
+     ERROR_MSG("failed to open '%s'\n", argv[i_arg]);
      exit(1);
     }
 	*stdin_flag = 0;
@@ -63,7 +67,7 @@ int parse_args(int argc, char *argv[],
     fclose(out_stream); /* !will always close stdout! */
     if ((out_stream = fopen(argv[i_arg], "w")) == NULL)
     {
-     ERROR_MSG("failed to open '%s'", argv[i_arg]);
+     ERROR_MSG("failed to open '%s'\n", argv[i_arg]);
      exit(1);
     }
 	*stdout_flag = 0;
@@ -167,7 +171,7 @@ int parse_args(int argc, char *argv[],
    if(!strcmp(argv[i_arg], "--version") || !strcmp(argv[i_arg], "-V"))
    {
      ftsmooth_info();
-	 exit(0);
+     exit(0);
    }
   } /* else */
  }  /* for i_arg */

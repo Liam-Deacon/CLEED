@@ -30,24 +30,25 @@ GH/19.09.95 - BRENT_TOLERANCE defined in "search_def.h" (to 2.e-2
    static variables communicating with 
    function f1dim 
 */
-static int ncom = 0;
-static real *pcom = 0, *xicom = 0, (*nrfunc)();
+static size_t ncom = 0;
+static cleed_vector *pcom = NULL;
+static cleed_vector *xicom = NULL;
+static cleed_real (*nrfunc)();
 
-void linmin(real *p, real *xi, int n, real *fret, real (*func)() )
+void linmin(real *p, real *xi, size_t n, real *fret, real (*func)() )
 {
-	int j;
-	real xx, xmin, fx, fb, fa, bx, ax;
-	real *vector();
+	size_t j;
+	real xx, xmin, fx, fb, fa, bx, ax, faux;
 
 	ncom = n;
-	pcom = vector(1, n);
-	xicom = vector(1, n);
+	pcom = CLEED_VECTOR_ALLOC(n);
+	xicom = CLEED_VECTOR_ALLOC(n);
 	nrfunc = func;
 
-	for (j=1; j<=n; j++)
+	for (j=0; j<n; j++)
 	{
-		pcom[j]=p[j];
-		xicom[j]=xi[j];
+		CLEED_VECTOR_SET(pcom, j, CLEED_VECTOR_GET(p, j));
+		CLEED_VECTOR_SET(xicom, j, CLEED_VECTOR_GET(xi, j));
 	}
 
 	ax = 0.0;
@@ -56,26 +57,29 @@ void linmin(real *p, real *xi, int n, real *fret, real (*func)() )
 	mnbrak(&ax, &xx, &bx, &fa, &fx, &fb, f1dim);
 	*fret = brent(ax, xx, bx, f1dim, BRENT_TOLERANCE, &xmin);
 
-	for (j=1; j<=n; j++)
+	for (j=0; j<n; j++)
 	{
-		xi[j] *= xmin;
-		p[j] += xi[j];
+	  faux = CLEED_VECTOR_GET(xi, j);
+		CLEED_VECTOR_SET(xi, j, faux*xmin);
+		CLEED_VECTOR_SET(p, j, CLEED_VECTOR_GET(p, j) + faux);
 	}
 
-	free_vector(xicom,1);
-	free_vector(pcom,1);
+	CLEED_VECTOR_FREE(xicom);
+	CLEED_VECTOR_FREE(pcom);
 }
 
 real f1dim(real x)
 {
-  int j;
-  real f, *xt, *vector();
+  size_t j;
+  real f;
+  cleed_vector *xt = CLEED_VECTOR_ALLOC(ncom);
 
-  xt = vector(1, ncom);
-  for (j=1; j<=ncom; j++) xt[j] = pcom[j] + x*xicom[j];
+  for (j=0; j<ncom; j++)
+    CLEED_VECTOR_SET(xt, j,
+        CLEED_VECTOR_GET(pcom, j) + x*CLEED_VECTOR_GET(xicom, j));
 
   f = (*nrfunc)(xt);
 
-  free_vector(xt,1);
+  CLEED_VECTOR_FREE(xt);
   return f;
 }

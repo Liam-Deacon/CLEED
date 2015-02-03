@@ -1,15 +1,29 @@
+/************************************************************************
+ *                            LATT_PARSE_ARGS.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ ***********************************************************************/
 
 /*! \file
  *
  * Parses command line arguments to \c latt program.
  */
 
-#include "latt.h"
-#include "atom.h"
-#include "lattice.h"
 #include <stdio.h>
 #include <strings.h>
 #include <limits.h>
+
+#include "latt.h"
+#include "atom.h"
+#include "lattice.h"
+#include "gh_stddef.h"
 
 /*!
  * Processes the command line arguments to \c latt into #lattice \p latt .
@@ -18,7 +32,7 @@
  * \param argv Array of strings containing command line arguments to process.
  * \param latt Pointer to #lattice \c struct for processed arguments.
  */
-void latt_parse_args(int argc, char *argv[], lattice *latt)
+int latt_parse_args(int argc, char *argv[], lattice *latt)
 {
   int i_arg; 
   atom *atom_list = (atom*) malloc(sizeof(atom));
@@ -53,56 +67,120 @@ void latt_parse_args(int argc, char *argv[], lattice *latt)
     
     if(*argv[i_arg] != '-')
     {
-      fprintf(stderr, "SYNTAX ERROR:\n\n");
+      fprintf(stderr, "SYNTAX ERROR_LOG:\n\n");
       latt_usage(stderr);
-	  exit(INVALID_ARGUMENT_ERROR);
+      exit(INVALID_ARGUMENT_ERROR);
     }
     else
     {
       /* a lattice constant a */
-      if ARG_ISH("-a", 2)
+      if ( !strncmp(argv[i_arg], "-a", 2) )
       {
-        ARG_PARSE_FLOAT(latt->a_latt);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->a_latt = (float)atof(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
 
       /* b lattice constant b */
-      if ARG_ISH("-b", 2)
+      if ( !strncmp(argv[i_arg], "-b", 2) )
       {
-        ARG_PARSE_FLOAT(latt->b_latt);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->b_latt = (float)atof(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
    
       /* c: lattice constant c */
-      if ARG_ISH("-c", 2)
+      if ( !strncmp(argv[i_arg], "-c", 2) )
       {
-        ARG_PARSE_FLOAT(latt->c_latt);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->c_latt = (float)atof(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
 
       /* d: maximum displacement in x & y */
-      if (ARG_ISH("-d", 2) || ARG_IS("--max-displacement"))
+      if ( ( !strncmp(argv[i_arg], "-d", 2) ) ||
+           ( !strcmp(argv[i_arg], "--max-displacement") ) )
       {
-        ARG_PARSE_FLOAT(latt->max_disp_z);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->max_disp_z = (float)atof(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
 
       /* nlayers */
-      if ARG_IS("--max-layers")
+      if ( !strcmp(argv[i_arg], "--max-layers") )
       {
-        ARG_PARSE_INT(latt->max_layers);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->max_layers = (size_t)atoi(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
 
       /* ncells */
-      if ARG_IS("--max-cells")
+      if ( !strcmp(argv[i_arg], "--max-cells") )
       {
-        ARG_PARSE_INT(latt->max_cells);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->max_cells = (size_t)atoi(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
 
       /* natoms */
-      if ARG_IS("--max-atoms")
+      if ( !strcmp(argv[i_arg], "--max-atoms") )
 	    {
-        ARG_PARSE_INT(latt->max_atoms);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->max_atoms = (size_t)atoi(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
 	    }
 	
       /* h */
-      if ARG_IS("-h")
+      if ( !strcmp(argv[i_arg], "-h") )
       {
         i_arg++;
       
@@ -118,21 +196,20 @@ void latt_parse_args(int argc, char *argv[], lattice *latt)
       }
 
       /* help */
-      if ARG_ISH("--help", 6)
+      if ( !strncmp(argv[i_arg], "--help", 6) )
       {
         latt_usage(stdout);
         exit(0);
       }
    
       /* i: open input file (read complicated basis) */
-      if (ARG_ISH("-i", 2) || ARG_IS("--input"))
+      if (( !strncmp(argv[i_arg], "-i", 2)) || (!strcmp(argv[i_arg], "--input")) )
       {
         i_arg++;
      
         if (i_arg >= argc) 
         {
-          fprintf(stderr, "*** error (latt_main): "
-                  "missing input file argument for '-i'\n");
+          ERROR_MSG("missing input file argument for '-i'\n");
           exit(INVALID_ARGUMENT_ERROR);
         }
      
@@ -147,36 +224,54 @@ void latt_parse_args(int argc, char *argv[], lattice *latt)
       }
 
       /* k */
-      if ARG_IS("-k")
+      if ( !strcmp(argv[i_arg], "-k") )
       {
-        ARG_PARSE_FLOAT(latt->vec_k);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->vec_k = (float)atof(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
 
       /* l */
-      if ARG_IS("-l")
+      if ( !strcmp(argv[i_arg], "-l") )
       {
-        ARG_PARSE_FLOAT(latt->vec_l);
+        if (i_arg < argc)
+        {
+          i_arg++;
+          latt->vec_l = (float)atof(argv[i_arg]);
+        }
+        else
+        {
+          ERROR_MSG("missing value for option '%s'\n", argv[i_arg]);
+          ERROR_RETURN(INVALID_ARGUMENT_ERROR);
+        }
       }
 
       /* n: name of atoms */
-      if(ARG_IS("-n") || ARG_IS("--atom"))
+      if(!strcmp(argv[i_arg], "-n") || !strcmp(argv[i_arg], "--atom"))
       {
         i_arg++;
         if (i_arg < argc) 
         {
-          strncpy(at_name, argv[i_arg], NAMSZ);
-          latt->atoms->element = at_name;
+          if (latt->atoms[0].element == NULL)
+            latt->atoms[0].element = (char*) calloc(NAMSZ, sizeof(char));
+          strncpy(latt->atoms[0].element, argv[i_arg], NAMSZ);
         }
         else 
         {
-          fprintf(stderr, "*** error (latt): "
-                  "no atom name specified\n");
+          ERROR_MSG("no atom name specified\n");
           exit(INVALID_ARGUMENT_ERROR);
         }
       }
 
       /* s  script index for line 2 of output file */
-      if (ARG_IS("-s") || ARG_IS("--script"))
+      if (!strcmp(argv[i_arg], "-s") || !strcmp(argv[i_arg], "--script"))
       {
         i_arg++;
         if (i_arg < argc) strcpy(latt->script, argv[i_arg]);
@@ -184,29 +279,28 @@ void latt_parse_args(int argc, char *argv[], lattice *latt)
       }
 
       /* t  lattice type */
-      if (ARG_ISH("-t", 2) || ARG_IS("--lattice"))
+      if ( (!strncmp(argv[i_arg], "-t", 2) ) || (!strcmp(argv[i_arg], "--lattice")) )
       {
         i_arg++;
-        if      ARG_ISH("fc", 2) {latt->latt_type = LAT_FCC;}
-        else if ARG_ISH("hc", 2) {latt->latt_type = LAT_HCP;}
-        else if ARG_ISH("bc", 2) {latt->latt_type = LAT_BCC;}
-        else if ARG_ISH("di", 2) {latt->latt_type = LAT_DIA;}
+        if      ( !strncmp(argv[i_arg], "fc", 2) ) {latt->latt_type = LAT_FCC;}
+        else if ( !strncmp(argv[i_arg], "hc", 2) ) {latt->latt_type = LAT_HCP;}
+        else if ( !strncmp(argv[i_arg], "bc", 2) ) {latt->latt_type = LAT_BCC;}
+        else if ( !strncmp(argv[i_arg], "di", 2) ) {latt->latt_type = LAT_DIA;}
         else 
         {
-          fprintf(stderr, "*** error: "
-                  "%s is an invalid argument\n", argv[i_arg]);
+          ERROR_MSG("%s is an invalid argument\n", argv[i_arg]);
         }
       }
 
       /* Print version */
-      if (ARG_IS("--version") || ARG_IS("-V"))
+      if (!strcmp(argv[i_arg], "--version") || !strcmp(argv[i_arg], "-V"))
       {
         latt_info();
         exit(0);
 	  }
 	
       /* Open output files (output and info) */
-      if (ARG_ISH("-o", 2) || ARG_IS("--output"))
+      if ( (!strncmp(argv[i_arg], "-o", 2)) || !strcmp(argv[i_arg], "--output"))
       {
         i_arg++;
         if (i_arg >= argc) break;
@@ -226,5 +320,6 @@ void latt_parse_args(int argc, char *argv[], lattice *latt)
   lattice_debug(latt);
   fprintf(stderr, "** debug (latt_parse_args): finished parsing args.\n");
   #endif
- 
+
+  return(0);
 }

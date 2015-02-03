@@ -196,22 +196,22 @@ mat * p_Tii;                    /* Array of Bravais layer scattering matrices */
 
  iaux = 0;
  if (matcheck(*p_Tpp)  < 0) {
-#ifdef ERROR
+#ifdef ERROR_LOG
 fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (1st argument)\n");
 #endif
   iaux = 1; }
  if (matcheck(*p_Tmm)  < 0) {
-#ifdef ERROR
+#ifdef ERROR_LOG
 fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (2nd argument)\n");
 #endif
   iaux = 1; }
  if (matcheck(*p_Rmp)  < 0) {
-#ifdef ERROR
+#ifdef ERROR_LOG
 fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (3rd argument)\n");
 #endif
   iaux = 1; }
  if (matcheck(*p_Rpm)  < 0) {
-#ifdef ERROR
+#ifdef ERROR_LOG
 fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argument)\n");
 #endif
   iaux = 1; }
@@ -252,7 +252,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
        find maximum l necessary for all atom types
 */
 
- n_atoms = layer->natoms;
+ n_atoms = layer->n_atoms;
  atoms = (leed_atom *) calloc(n_atoms+1, sizeof(leed_atom) );
 
  n_type = (atoms+0)->type;;
@@ -379,7 +379,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
  p_Tii = (mat *) malloc(n_type * sizeof(mat));
  if( p_Tii  == NULL )
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR,"*** error (leed_ms_compl): Allocation error for p_Tii\n");
 #endif
 #ifdef EXIT_ON_ERROR

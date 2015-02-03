@@ -39,22 +39,8 @@
 
 #include "csearch.h"
 
-#ifndef GEO_TOLERANCE
-#define GEO_TOLERANCE 0.0001
-#endif
-
-#ifndef PREF_DEBWAL
-#define PREF_DEBWAL 1559.04170632481439  /*!< prefactor for the evaluation
-                                          * of \f$ <dr^2> \f$ from temperature
-                                          * and Debye temperature:
-                                          * \f$ \frac{9}{m k_B} \f$ */
-#endif
-
-#define DEF_TEMP 300.                    /*!< default temperature */
-#define BUFSZ    1024                    /*!< max. length of input line */
-#ifndef STRSZ
-#define STRSZ  256
-#endif
+static const double GEOM_TOLERANCE = 0.0001;
+enum { BUFSZ = 1024 };                   /*!< max. length of input line */
 
 extern search_atom *sr_atoms;
 extern search *sr_search;
@@ -125,7 +111,7 @@ int sr_rdinp(const char *inp_file)
   FILE *inp_stream;
 
   int iaux;                     /* counter, dummy  variables */
-  int i_c, i_str;
+  int i_c, i_str, i_dummy;
 
   size_t i_atoms, n_atoms;
   size_t i_types, n_types;
@@ -149,6 +135,8 @@ int sr_rdinp(const char *inp_file)
   struct type_str *types;      /* this vector of structure type_str is
                                   used to read and treat the input atomic
                                   properties */
+
+  char fmt_buffer[STRSZ];
 
 /********************************************************************
  * First: find project name
@@ -243,8 +231,9 @@ int sr_rdinp(const char *inp_file)
      */
     if( !strncasecmp(buf+i_str, "a1:", 3) )
     {
-      if( sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
-                 a1+1, a1+2, a1+3) < 2)
+      sprintf(fmt_buffer, " %%%sf %%%sf %%%sf",
+              CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer, a1+1, a1+2, a1+3) < 2)
       {
         ERROR_MSG("need at least x/y coordinates of a1\n");
         ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
@@ -253,8 +242,9 @@ int sr_rdinp(const char *inp_file)
    
     else if( !strncasecmp(buf+i_str, "a2:" ,3) )
     {
-      if( sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
-                 a2+1, a2+2, a2+3) < 2)
+      sprintf(fmt_buffer, " %%%sf %%%sf %%%sf",
+                 CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer, a2+1, a2+2, a2+3) < 2)
       {
         ERROR_MSG("need at least x/y coordinates of a2\n");
         ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
@@ -268,7 +258,8 @@ int sr_rdinp(const char *inp_file)
      * */
     else if( !strncasecmp(buf+i_str,"b1:",3) )
     {
-      if( sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f",
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer,
          (sr_search->b_lat)+1, (sr_search->b_lat)+3 ) < 2)
       {
         ERROR_MSG("need x/y coordinates of b1\n");
@@ -279,7 +270,8 @@ int sr_rdinp(const char *inp_file)
 
     else if( !strncasecmp(buf+i_str, "b2:", 3) )
     {
-      if( sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f",
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer,
            (sr_search->b_lat)+2, (sr_search->b_lat)+4 ) < 2)
       {
         ERROR_MSG("need x/y coordinates of b2\n");
@@ -295,12 +287,14 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "m1:", 3) )
     {
-      sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f", m_super+1, m_super+2);
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      sscanf(buf+i_str+3, fmt_buffer, m_super+1, m_super+2);
     } /* m1 */
 
     else if( !strncasecmp(buf+i_str, "m2:", 3) )
     {
-      sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f", m_super+3, m_super+4);
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      sscanf(buf+i_str+3, fmt_buffer, m_super+3, m_super+4);
     } /* m2 */
 
     /* Added for the angle search (SRP, GH/02.04.03) */
@@ -311,7 +305,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "ip:", 3) )
     {
-      iaux = sscanf(buf+i_str+3, " %" REAL_FMT "f", &(sr_search->phi_0) );
+      sprintf(fmt_buffer, " %%%sf", CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+3, fmt_buffer, &(sr_search->phi_0) );
     } /* case ip */
 
     /*
@@ -320,7 +315,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "it:", 3) )
     {
-      iaux = sscanf(buf+i_str+3, " %" REAL_FMT "f", &(sr_search->theta_0) );
+      sprintf(fmt_buffer, " %%%sf", CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+3, fmt_buffer, &(sr_search->theta_0) );
     } /* case it */
 
   } /* while: read *.bul file for lattice parameters */
@@ -353,8 +349,9 @@ int sr_rdinp(const char *inp_file)
      */
     if( !strncasecmp(buf+i_str,"a1:",3) )
     {
-      if( sscanf(buf+i_str+3," %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
-                 a1+1, a1+2, a1+3) < 2)
+      sprintf(fmt_buffer, " %%%sf %%%sf %%%sf",
+              CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer, a1+1, a1+2, a1+3) < 2)
       {
         ERROR_MSG("need at least x/y coordinates of a1\n");
         ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
@@ -363,8 +360,9 @@ int sr_rdinp(const char *inp_file)
    
     else if( !strncasecmp(buf+i_str,"a2:",3) )
     {
-      if( sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
-                 a2+1, a2+2, a2+3) < 2)
+      sprintf(fmt_buffer, " %%%sf %%%sf %%%sf",
+                    CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer, a2+1, a2+2, a2+3) < 2)
       {
         ERROR_MSG("need at least x/y coordinates of a2\n");
         ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
@@ -377,7 +375,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "b1:", 3) )
     {
-      if( sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f",
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer,
            (sr_search->b_lat)+1, (sr_search->b_lat)+3 ) < 2)
       {
         ERROR_MSG("need x/y coordinates of b1\n");
@@ -387,7 +386,8 @@ int sr_rdinp(const char *inp_file)
 
     else if( !strncasecmp(buf+i_str, "b2:", 3) )
     {
-      if( sscanf(buf+i_str+3, " %" REAL_FMT "f %" REAL_FMT "f",
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      if( sscanf(buf+i_str+3, fmt_buffer,
            (sr_search->b_lat)+2, (sr_search->b_lat)+4 ) < 2)
       {
         ERROR_MSG("need x/y coordinates of b2\n");
@@ -401,12 +401,14 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "m1:", 3) )
     {
-      sscanf(buf+i_str+3 ," %" REAL_FMT "f %" REAL_FMT "f", m_super+1, m_super+2);
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      sscanf(buf+i_str+3, fmt_buffer, m_super+1, m_super+2);
     } /* m1 */
 
     else if( !strncasecmp(buf+i_str, "m2:", 3) )
     {
-      sscanf(buf+i_str+3 ," %" REAL_FMT "f %" REAL_FMT "f", m_super+3, m_super+4);
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      sscanf(buf+i_str+3, fmt_buffer, m_super+3, m_super+4);
     } /* m2 */
 
     /*
@@ -418,7 +420,7 @@ int sr_rdinp(const char *inp_file)
       sr_atoms = (search_atom *) realloc(
                  sr_atoms, (n_atoms+2) * sizeof(search_atom) );
 
-      /* preset xyz_par with NULL ref and nref with I_END_OF_LIST */
+      /* preset xyz_par with NULL ref and n_ref with I_END_OF_LIST */
       (sr_atoms+n_atoms)->x_par = NULL;
       (sr_atoms+n_atoms)->y_par = NULL;
       (sr_atoms+n_atoms)->z_par = NULL;
@@ -426,8 +428,10 @@ int sr_rdinp(const char *inp_file)
       (sr_atoms+n_atoms)->ref = U_END_OF_LIST;
       (sr_atoms+n_atoms)->n_ref = U_END_OF_LIST;
 
-      iaux = sscanf(buf+i_str+3, " %s %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT
-                    "f %s %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
+      sprintf(fmt_buffer, " %%S %%%sf %%%sf %%%sf %%%sf %%%sf %%%sf",
+              CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT,
+              CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+3, fmt_buffer,
                     (sr_atoms+n_atoms)->name,
                     &((sr_atoms+n_atoms)->x),
                     &((sr_atoms+n_atoms)->y),
@@ -486,7 +490,7 @@ int sr_rdinp(const char *inp_file)
         }
         else
         {
-#         if WARNING
+#         if WARNING_LOG
           WARNING_MSG("Could not interpret input: %s", whatnext);
           for(i_str=1; i_str<=iaux-5; i_str++)
           {
@@ -503,7 +507,7 @@ int sr_rdinp(const char *inp_file)
       {
         if(strcmp( (types+i_types)->name, sr_atoms[n_atoms].name ) == 0)
         {
-          (sr_atoms+n_atoms)->type = i_types;
+          (sr_atoms+n_atoms)->type = (int)i_types;
           break;
         }
       }
@@ -517,7 +521,7 @@ int sr_rdinp(const char *inp_file)
         strcpy( (types+i_types)->name, sr_atoms[n_atoms].name);
         (types+i_types)->r_min = F_END_OF_LIST;
 
-        sr_atoms[n_atoms].type = i_types;
+        sr_atoms[n_atoms].type = (int)i_types;
         n_types ++;
       }
 
@@ -535,7 +539,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "ip:", 3) )
     {
-      iaux = sscanf(buf+i_str+3, " %" REAL_FMT "f", &(sr_search->phi_0) );
+      sprintf(fmt_buffer, " %%%sf", CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+3, fmt_buffer, &(sr_search->phi_0) );
     } /* case ip */
 
     /*
@@ -545,7 +550,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "it:", 3) )
     {
-      iaux = sscanf(buf+i_str+3, " %" REAL_FMT "f", &(sr_search->theta_0) );
+      sprintf(fmt_buffer, " %%%sf", CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+3, fmt_buffer, &(sr_search->theta_0) );
     } /* case it */
 
     /* End of the bit for the angle search added by SRP on 25th March -03. */
@@ -556,7 +562,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "rfr:", 4) )
     {
-      iaux = sscanf(buf+i_str+4, "%" REAL_FMT "f", &(sr_search->rfac_range) );
+      sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+4, fmt_buffer, &(sr_search->rfac_range) );
     }
 
     /*
@@ -578,7 +585,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "rm:", 3) )
     {
-      iaux = sscanf(buf+i_str+3 ," %s %" REAL_FMT "f", atom_name, &faux);
+      sprintf(fmt_buffer, " %%s %%%sf", CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+3 , fmt_buffer, atom_name, &faux);
 
       /* Write the current r_min parameter to existing
        * structure element in types */
@@ -615,8 +623,9 @@ int sr_rdinp(const char *inp_file)
       }
       else
       {
-        iaux = sscanf(buf+i_str+3,
-                " %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f %" REAL_FMT "f",
+        sprintf(fmt_buffer, " %%%sf %%%sf %%%sf %%%sf",
+                CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
+        iaux = sscanf(buf+i_str+3, fmt_buffer,
                 (sr_search->mir_point)+1, (sr_search->mir_point)+2,
                 (sr_search->mir_dir)+1,   (sr_search->mir_dir)+2   );
       }
@@ -635,7 +644,8 @@ int sr_rdinp(const char *inp_file)
       }
       else
       {
-        iaux = sscanf(buf+i_str+3, " %d %" REAL_FMT "f %" REAL_FMT "f",
+        sprintf(fmt_buffer, " %%d %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+        iaux = sscanf(buf+i_str+3, fmt_buffer,
                       &(sr_search->rot_deg),
                       (sr_search->rot_axis)+1,
                       (sr_search->rot_axis)+2);
@@ -649,7 +659,7 @@ int sr_rdinp(const char *inp_file)
      *   set sr_search->z_only to 1 if no argument,
      *   to the argument value otherwise
      */
-    else if( !strncasecmp(buf+i_str,"sz:",3) )
+    else if( !strncasecmp(buf+i_str, "sz:", 3) )
     {
       if(n_par != 0)
       {
@@ -657,8 +667,8 @@ int sr_rdinp(const char *inp_file)
       }
       else
       {
-        iaux = sscanf(buf+i_str+3, " %d", &(sr_search->z_only) );
-        if(iaux < 1) sr_search->z_only = 1;
+        iaux = sscanf(buf+i_str+3, " %d", &i_dummy);
+        sr_search->z_only = (i_dummy != 0 && iaux > 0) ? (true) : (false);
         if (sr_search->z_only)
         {
           CONTROL_MSG(CONTROL, "Only variation of vertical parameters\n");
@@ -674,9 +684,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "sa:", 3) )
     {
-      iaux = sscanf(buf+i_str+3, " %d", &(sr_search->sr_angle) );
-      if(iaux < 1) sr_search->sr_angle = 1;
-
+      iaux = sscanf(buf+i_str+3, " %d", &i_dummy);
+      sr_search->sr_angle = (i_dummy != 0 && iaux > 0) ? (true) : (false);
       if (sr_search->sr_angle)
       {
         CONTROL_MSG(CONTROL, "Angle search is on\n");
@@ -749,9 +758,11 @@ int sr_rdinp(const char *inp_file)
         while(buf[i_str] == ' ') i_str ++;
 
         iaux = (int)strlen(buf);
+        sprintf(fmt_buffer, "%%%se", CLEED_REAL_FMT);
         for( i_par = 1; (i_par <= n_par) && (i_str < iaux) ; i_par ++)
         {
-          sscanf(buf+i_str, "%" REAL_FMT "e", paux + i_par);
+
+          sscanf(buf+i_str, fmt_buffer, paux + i_par);
 
           while( (i_str < iaux) && (buf[i_str] != ' ') ) i_str ++;
           while( (i_str < iaux) && (buf[i_str] == ' ') ) i_str ++;
@@ -801,7 +812,8 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "zr:", 3) )
     {
-      iaux = sscanf(buf+i_str+3 ," %" REAL_FMT "f %" REAL_FMT "f",
+      sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+      iaux = sscanf(buf+i_str+3, fmt_buffer,
             &(sr_search->z_min), &(sr_search->z_max) );
     } /* case zr */
 
@@ -851,7 +863,7 @@ int sr_rdinp(const char *inp_file)
   /* Copy r_min for all atoms from type list */
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {
-    i_types = (sr_atoms+i_atoms)->type;
+    i_types = (size_t)(sr_atoms+i_atoms)->type;
     if( IS_EQUAL_REAL((types+i_types)->r_min, F_END_OF_LIST) )
     {
       WARNING_MSG("no min. r available for atom type %s "
@@ -872,12 +884,12 @@ int sr_rdinp(const char *inp_file)
    * Calculate b_lat if the first input type was used.
    * Determine max. x/y search range from b_lat.
    */
-  if( R_hypot(sr_search->b_lat[1], sr_search->b_lat[3]) < GEO_TOLERANCE)
+  if( R_hypot(sr_search->b_lat[1], sr_search->b_lat[3]) < GEOM_TOLERANCE)
   {
     /* There was no input of superstructure lattice vectors
      * => use matrix to calculate them. b_t = m*a_t */
-    if( (R_hypot(a1[1], a1[2]) < GEO_TOLERANCE) ||
-        (R_hypot(a2[1], a2[2]) < GEO_TOLERANCE)  )
+    if( (R_hypot(a1[1], a1[2]) < GEOM_TOLERANCE) ||
+        (R_hypot(a2[1], a2[2]) < GEOM_TOLERANCE)  )
     {
       ERROR_MSG("Cannot determine lattice parameters\n");
       ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
@@ -949,7 +961,7 @@ int sr_rdinp(const char *inp_file)
   fprintf(STDCTR, "\n(sr_rdinp): %d parameters, atoms:\n", n_par);
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {
-    fprintf(STDCTR, "\n%d \"%s\" (%6.3f, %6.3f, %6.3f) ref: %d nref: %d",
+    fprintf(STDCTR, "\n%d \"%s\" (%6.3f, %6.3f, %6.3f) ref: %d n_ref: %d",
             i_atoms, (sr_atoms + i_atoms)->name,
             (sr_atoms + i_atoms)->x, (sr_atoms + i_atoms)->y,
             (sr_atoms + i_atoms)->z,

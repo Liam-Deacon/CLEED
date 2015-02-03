@@ -74,7 +74,7 @@ int mat2gsl(gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
       {
         i_row = ((i-1) % Mx->rows);
         i_col = (i - i_row) / Mx->rows;
-        gsl_matrix_set(gsl_mx_cmplx, i_row+1, i_col+1, (double)*ptrx);
+        gsl_matrix_set(gsl_mx, i_row+1, i_col+1, (double)*ptrx);
       }
 
       break;
@@ -319,7 +319,7 @@ int gsl2cblas(real *cblas_mx, real *cblas_mx_cmplx,
                int cblas_type)
 {
   size_t i, incr;
-  size_t gsl_px, ptrx, ptix, *gsl_ptr;
+  size_t *gsl_px, *ptrx, *ptix, *gsl_ptr;
   size_t nrows, ncols;
   int gsl_type;
 

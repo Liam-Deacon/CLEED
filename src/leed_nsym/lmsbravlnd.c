@@ -65,12 +65,13 @@
 int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                leed_var *v_par, leed_layer *layer, leed_beam *beams)
 {
-  static int old_set = I_END_OF_LIST;
-  static int old_n_beams = I_END_OF_LIST;
-  static int old_type = I_END_OF_LIST;
-  static int old_l_max = I_END_OF_LIST;
+  /*!FIXME: change statics to constants as in gh_stddef.h */
+  static int old_set = -9999;
+  static int old_n_beams = -9999;
+  static int old_type = -9999;
+  static int old_l_max = -9999;
 
-  static real old_eng = F_END_OF_LIST;
+  static real old_eng = -9999.;
 
   static mat Llm = NULL, Tii = NULL;
   static mat Yin_p = NULL, Yin_m = NULL, Yout_p = NULL, Yout_m = NULL;
@@ -101,7 +102,7 @@ int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   if( (t_type != T_DIAG) && (t_type != T_NOND) )
   {
     ERROR_MSG("unknown matrix type of t-matrix.\n");
-    ERROR_EXIT(-1);
+    ERROR_RETURN(-1);
   }
 
   /* Check if the current beam set was used in the previous call.

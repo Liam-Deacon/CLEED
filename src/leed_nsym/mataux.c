@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "real.h"
+#include "cleed_real.h"
 
 /*!
  * Converts a row-major ordered C matrix to a column-major ordered FORTRAN

@@ -16,7 +16,7 @@
  
 Changes:
 
-GH/17.08.94 - insert REAL_IS_DOUBLE and REAL_IS_FLOAT for sscanf.
+GH/17.08.94 - insert CLEED_REAL_IS_DOUBLE and CLEED_REAL_IS_FLOAT for sscanf.
 GH/20.04.95 - read superstructure matrix
 GH/19.07.95 - read vibrational amplitudes (root mean square)
 GH/25.07.95 - introduce structure element "layers" in bulk_par
@@ -162,7 +162,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
  bulk_par->temp = DEF_TEMP;
 
- bulk_par->ntypes = 0;
+ bulk_par->n_types = 0;
 
  bulk_par->n_rot = 1;
  bulk_par->rot_axis[1] = bulk_par->rot_axis[2] = 0.;
@@ -173,7 +173,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 ********************************************************************/
  if( (inp_stream = fopen(filename, "r")) == NULL) 
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR,
   "*** error (leed_inp_read_bul): could not open file \"%s\"\n",filename);
 #endif
@@ -205,14 +205,14 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        {
          case('1'): 
          {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            if( sscanf(linebuffer+i_str+3," %lf %lf %lf", a1+1, a1+2, a1+3) < 2)
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            if( sscanf(linebuffer+i_str+3," %f %f %f", a1+1, a1+2, a1+3) < 2)
 #endif
            {
-#ifdef ERROR
+#ifdef ERROR_LOG
              fprintf(STDERR, 
                "*** error (leed_inp_read_bul): nead at least x/y coordinates of a1\n");
 #endif
@@ -228,14 +228,14 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
          case('2'): 
          {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            if( sscanf(linebuffer+i_str+3," %lf %lf %lf", a2+1, a2+2, a2+3) < 2)
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            if( sscanf(linebuffer+i_str+3," %f %f %f", a2+1, a2+2, a2+3) < 2)
 #endif
            { 
-#ifdef ERROR
+#ifdef ERROR_LOG
              fprintf(STDERR, 
                "*** error (leed_inp_read_bul): nead at least x/y coordinates of a2\n");
 #endif
@@ -251,10 +251,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
          case('3'): 
          {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            sscanf(linebuffer+i_str+3 ," %lf %lf %lf", a3+1, a3+2, a3+3);
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            sscanf(linebuffer+i_str+3 ," %f %f %f", a3+1, a3+2, a3+3);
 #endif
            for(i=1; i<=3; i++) a3[i] /= BOHR;
@@ -273,16 +273,16 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        {
          case('1'):
          {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            if( sscanf(linebuffer+i_str+3," %lf %lf", 
                (bulk_par->b)+1, (bulk_par->b)+3 ) < 2)
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            if( sscanf(linebuffer+i_str+3," %f %f",
                (bulk_par->b)+1, (bulk_par->b)+3 ) < 2)
 #endif
            {
-#ifdef ERROR
+#ifdef ERROR_LOG
              fprintf(STDERR,
                "*** error (leed_inp_read_bul): nead x/y coordinates of b1\n");
 #endif
@@ -298,16 +298,16 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
          case('2'):
          {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            if( sscanf(linebuffer+i_str+3," %lf %lf",
                (bulk_par->b)+2, (bulk_par->b)+4 ) < 2)
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            if( sscanf(linebuffer+i_str+3," %f %f",
                (bulk_par->b)+2, (bulk_par->b)+4 ) < 2)
 #endif
            {
-#ifdef ERROR
+#ifdef ERROR_LOG
              fprintf(STDERR,
                "*** error (leed_inp_read_bul): nead x/y coordinates of b2\n");
 #endif
@@ -353,21 +353,21 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        switch( *(linebuffer+i_str+1) )
        {
          case('1'): {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            sscanf(linebuffer+i_str+3 ," %lf %lf", 
                   bulk_par->m_recip+1, bulk_par->m_recip+2);
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            sscanf(linebuffer+i_str+3 ," %f %f", 
                   bulk_par->m_recip+1, bulk_par->m_recip+2);
 #endif
            break; }
          case('2'): {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            sscanf(linebuffer+i_str+3 ," %lf %lf", 
                   bulk_par->m_recip+3, bulk_par->m_recip+4);
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            sscanf(linebuffer+i_str+3 ," %f %f", 
                   bulk_par->m_recip+3, bulk_par->m_recip+4);
 #endif
@@ -387,7 +387,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        {
      /* "po" is known to function leed_read_overlayer, all others cause warning */
          if( (*(linebuffer+i_str+1) != 'o') && (*(linebuffer+i_str+1) != 'O') )
-#ifdef WARNING
+#ifdef WARNING_LOG
            fprintf(STDWAR,
 "* warning (leed_inp_read_bul): could not interpret line \n\t%s\t(in file \"%s\")\n",
            linebuffer, filename);
@@ -398,10 +398,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        atoms_rd = ( leed_atom *) realloc( 
                    atoms_rd, (i_atoms+2) * sizeof(leed_atom) );
 
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
        iaux = sscanf(linebuffer+i_str+3 ," %s %lf %lf %lf %s %lf %lf %lf",
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
        iaux = sscanf(linebuffer+i_str+3 ," %s %f %f %f %s %f %f %f",
 #endif
               phaseinp, 
@@ -480,7 +480,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
            }
          else
            {
-#ifdef WARNING
+#ifdef WARNING_LOG
              fprintf(STDWAR,
                  "* warning (leed_inp_read_bul): Could not interpret input: ");
              fprintf(STDWAR,"%s", whatnext);
@@ -492,8 +492,8 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        }
 
      /* input of atomic phase shifts */
-       atoms_rd[i_atoms].type = leed_leed_inp_phase(phaseinp, vaux, p_phs_shifts);
-       bulk_par->ntypes = MAX(atoms_rd[i_atoms].type+1, bulk_par->ntypes);
+       atoms_rd[i_atoms].type = leed_inp_phase(phaseinp, vaux, p_phs_shifts);
+       bulk_par->n_types = MAX(atoms_rd[i_atoms].type+1, bulk_par->n_types);
 
        i_atoms ++;
        break;
@@ -507,10 +507,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        switch( *(linebuffer+i_str+1) )
        {
          case('i'): case('I'): {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            sscanf(linebuffer+i_str+3 ," %lf", &(bulk_par->vi));
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            sscanf(linebuffer+i_str+3 ," %f", &(bulk_par->vi));
 #endif
            (bulk_par->vi) /= HART;
@@ -518,7 +518,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
            if (bulk_par->vi < 0.)
            {
              bulk_par->vi = -bulk_par->vi;
-#ifdef WARNING
+#ifdef WARNING_LOG
              fprintf(STDWAR, "* warning (leed_inp_read_bul):");
              fprintf(STDWAR,
                "Vi must be positive, use the negative value of input %.1f\n", 
@@ -528,10 +528,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
            break; }
 
          case('r'): case('R'): {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            sscanf(linebuffer+i_str+3 ," %lf", &(bulk_par->vr));
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            sscanf(linebuffer+i_str+3 ," %f", &(bulk_par->vr));
 #endif
            (bulk_par->vr) /= HART;
@@ -539,7 +539,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
            if (bulk_par->vr > 0.)
            {
              bulk_par->vr = -bulk_par->vr;
-#ifdef WARNING
+#ifdef WARNING_LOG
              fprintf(STDWAR, "* warning (leed_inp_read_bul):");
              fprintf(STDWAR,
                "Vr must be negative, use the negative value of input %.1f\n",
@@ -560,16 +560,16 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
       {
       case('r'): case('R'):
         {
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
            if( sscanf(linebuffer+i_str+3,"%d %lf %lf",
                &(bulk_par->n_rot),(bulk_par->rot_axis)+1,(bulk_par->rot_axis)+2) < 3)
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
            if( sscanf(linebuffer+i_str+3,"%d %f %f",
                &(bulk_par->n_rot),(bulk_par->rot_axis)+1,(bulk_par->rot_axis)+2) < 3)
 #endif
            {
-#ifdef ERROR
+#ifdef ERROR_LOG
              fprintf(STDERR,
                "*** error (leed_inp_read_bul): need x/y coordinates of rotaxis\n");
 #endif
@@ -594,16 +594,16 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  
          i = 2 *i_plane -1;
          j = 2 *i_plane -2; 
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
          if(sscanf(linebuffer+i_str+3," %lf %lf ",
             (bulk_par->m_plane)+j ,(bulk_par->m_plane)+i) < 2) 
 #endif
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
          if(sscanf(linebuffer+i_str+i," %f %f ",
             (bulk_par->m_plane)+j ,(bulk_par->m_plane)+i) < 2)
 #endif
          {
-#ifdef ERROR
+#ifdef ERROR_LOG
              fprintf(STDERR,
                "*** error (leed_inp_read_bul): need x/y coordinates of mirrorplane\n");
 #endif
@@ -649,7 +649,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
               recognized key words
    ***********************************/
      {
-#ifdef WARNING
+#ifdef WARNING_LOG
        fprintf(STDWAR,
   "* warning (leed_inp_read_bul): could not interpret line \n\t%s\t(in file \"%s\")\n",
        linebuffer, filename);
@@ -703,7 +703,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 *************************************************************************/
  if(i_atoms < 1)
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR,
    "*** error (leed_inp_read_bul): could not find any bulk atoms (i_atoms = %d)\n", 
    i_atoms);
@@ -729,7 +729,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 /* check if the z-components of a1 and a2 are 0. */
  if( ! IS_EQUAL_REAL(a1[3], 0.0) || ! IS_EQUAL_REAL(a2[3], 0.0) )
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR, " *** error (leed_inp_read_bul):\n");
    fprintf(STDERR,
            " Vectors a1 and a2 are not parallel to the surface (xy plane)\n");
@@ -856,7 +856,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
   (R_fabs(bulk_par->m_super[3]-R_nint(bulk_par->m_super[3])) > GEO_TOLERANCE) ||
   (R_fabs(bulk_par->m_super[4]-R_nint(bulk_par->m_super[4])) > GEO_TOLERANCE) )
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
   fprintf(STDERR, 
           "*** error (leed_inp_read_bul): superstructure is not commensurate \n");
 #endif
@@ -991,7 +991,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  {
    if(atoms_rd[i].pos[3] - atoms_rd[0].pos[3] < a3[3])
    {
-#ifdef WARNING
+#ifdef WARNING_LOG
       fprintf(STDWAR,
       "* warning (leed_inp_read_bul): Some coordinates of bulk atoms exceede the\n");
       fprintf(STDWAR,
@@ -1007,7 +1007,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  }
  i_atoms = i;
  atoms_rd[i_atoms].type = I_END_OF_LIST;
- bulk_par->natoms = i_atoms;
+ bulk_par->n_atoms = i_atoms;
  
 /************************************************************************
    ATTENTION 
@@ -1017,7 +1017,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    if the test is negative the program break
 *************************************************************************/
  if(bulk_par->n_rot >= 1 || bulk_par->n_mir > 0)
-    i_layer = leed_leed_inp_bul_layer_sym(bulk_par, atoms_rd, a3);
+    i_layer = leed_inp_bul_layer_sym(bulk_par, atoms_rd, a3);
 
 /**************
  else if(bulk_par->n_rot = 1 && bulk_par->n_mir < 1)
@@ -1025,7 +1025,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 ***************/
  else
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
   fprintf(STDERR,"(leed_inp_read_bul): n_rot is not set to a real positve number\n");
   fprintf(STDERR,"(leed_inp_read_bul): check the inputfile.\n exit now\n");
   exit(0);
@@ -1037,7 +1037,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  free(atoms_rd);
 
  bulk_par->dmin = R_fabs(bulk_par->layers[0].vec_from_last[3]);
- for(i=0; i < bulk_par->nlayers - 1 /* origin is not relevant */; i++)
+ for(i=0; i < bulk_par->n_layers - 1 /* origin is not relevant */; i++)
  {
    bulk_par->dmin = 
             MIN(bulk_par->dmin, R_fabs(bulk_par->layers[i].vec_to_next[3]) );

@@ -23,6 +23,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "csearch.h"
+#include "gh_stddef.h"
 
 /*!
  * Performs an amoeba (downhill simplex) search.
@@ -36,50 +37,58 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 {
 
   size_t i_par, j_par;  /* matrix index (loop) variables */
-  size_t mpar, nfunc;
-
-  real *x, *y, **p;
+  size_t nfunc;
+  size_t mpar = n_dim + 1;
+  cleed_real faux;
 
   FILE *log_stream;
 
+  cleed_vector *x = CLEED_VECTOR_ALLOC(n_dim);
+  cleed_vector *y = CLEED_VECTOR_ALLOC(mpar);
+  cleed_basic_matrix *p = CLEED_BASIC_MATRIX_ALLOC(mpar, n_dim);
+
   /* SIMPLEX METHOD */
-  if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
+  if( (log_stream = fopen(log_file, "a")) == NULL)
+  {
+    ERROR_MSG("Could not open log file '%s' for reading\n", log_file);
+  }
+
   fprintf(log_stream, "=> SIMPLEX SEARCH:\n\n");
 
   /* Set up vertex if no vertex file was specified, read vertex otherwise. */
-  mpar = n_dim + 1;
-
-  x = vector(1, n_dim);
-  y = vector(1, mpar);
-  p = matrix(1, mpar,1, n_dim);
-
   if(strncmp(bak_file, "---", 3) == 0)
   {
     fprintf(log_stream, "=> Set up vertex:\n");
     fclose(log_stream);
 
-    for(i_par = 1; i_par <= n_dim; i_par ++)
-    {
-      p[1][i_par] = 0.;
-    }
+    /* redundant if calloc memory:
+     * for(i_par = 0; i_par < n_dim; i_par ++)
+     * {
+     *   CLEED_BASIC_MATRIX_SET(p, 0, i_par, mpar, n_dim, 0.);
+     * }
+    */
 
-    for (i_par = 1; i_par <= mpar; i_par ++)
+    for (i_par = 0; i_par < mpar; i_par ++)
     {
-      for (j_par =1; j_par <= n_dim; j_par ++)
+      for (j_par = 0; j_par < n_dim; j_par ++)
       {
         if(i_par == (j_par+1))
         {
-          x[j_par] = p[i_par][j_par] = p[1][j_par] + dpos;
+          faux = CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim) + dpos;
+          CLEED_BASIC_MATRIX_SET(p, i_par, j_par, mpar, n_dim, faux);
+          CLEED_VECTOR_SET(x, j_par, faux);
         }
         else
         {
-         x[j_par] = p[i_par][j_par] = p[1][j_par];
+          faux = CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim);
+          CLEED_BASIC_MATRIX_SET(p, i_par, j_par, mpar, n_dim, faux);
+          CLEED_VECTOR_SET(x, j_par, faux);
         }
       } /* for j_par */
 
       CONTROL_MSG(CONTROL, "Calculate function for vertex(%d)\n", i_par);
 
-      y[i_par] = sr_evalrf(x);
+      CLEED_VECTOR_SET(y, i_par, SR_RF(x));
 
    } /* for i_par */
 
@@ -87,7 +96,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   else
   {
     fprintf(log_stream, "=> Read vertex from \"%s\":\n", bak_file);
-    sr_rdver(bak_file, y, p, n_dim);
+    sr_rdver(bak_file, y, p, (int)n_dim);
     fclose(log_stream);
   }
 
@@ -95,55 +104,66 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 
   CONTROL_MSG(CONTROL, "Enter amoeba\n");
 
-  if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
+  if( (log_stream = fopen(log_file, "a")) == NULL)
+  {
+    ERROR_MSG("Could not append to log file '%s'\n", log_file);
+  }
   fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
   fclose(log_stream);
 
-  sr_amoeba(p, y, n_dim, R_TOLERANCE, sr_evalrf, &nfunc);
+  sr_amoeba(p, y, n_dim, R_TOLERANCE, SR_RF, &nfunc);
 
   /* Write final results to log file */
 
   CONTROL_MSG(CONTROL, "%d function evaluations in sr_amoeba\n", nfunc);
 
-  if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
+  if( (log_stream = fopen(log_file, "a")) == NULL)
+  {
+    ERROR_MSG("Could not append to log file '%s'\n", log_file);
+  }
 
   fprintf(log_stream, "\n=> No. of function evaluations in sr_amoeba: %3d\n",
           nfunc);
   fprintf(log_stream, "=> Vertices and function values of final 3-d simplex:\n");
  
   /* print 1st line */
-  fprintf(log_stream, "%3d:",1);
-  for (j_par = 1; j_par <= n_dim; j_par++ )
+  fprintf(log_stream, "%3d:", 0);
+  for (j_par = 0; j_par < n_dim; j_par++ )
   {
-    fprintf(log_stream, "%7.4f ", p[1][j_par]);
+    fprintf(log_stream, "%7.4f ", CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim));
   }
-  fprintf(log_stream, "%7.4f\n", y[1]);
+  fprintf(log_stream, "%7.4f\n", CLEED_VECTOR_GET(y, 0));
 
   /* print other lines */
-  for (i_par = 2; i_par <= mpar; i_par++ )
+  for (i_par = 1; i_par < mpar; i_par++ )
   {
     fprintf(log_stream, "%3d ", i_par);
-    for (j_par = 1; j_par <= n_dim; j_par++ )
+    for (j_par = 0; j_par < n_dim; j_par++ )
     {
-      fprintf(log_stream, "%7.4f ", p[i_par][j_par]);
-      p[1][j_par] += p[i_par][j_par];
+      faux = CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim);
+      fprintf(log_stream, "%7.4f ", faux);
+      faux += CLEED_BASIC_MATRIX_GET(p, i_par, j_par, mpar, n_dim);
+      CLEED_BASIC_MATRIX_SET(p, 0, j_par, mpar, n_dim, faux);
     }
-    fprintf(log_stream, "%7.4f\n", y[i_par]);
-    y[1] += y[i_par];
+    faux = CLEED_VECTOR_GET(y, i_par);
+    fprintf(log_stream, "%7.4f\n", faux);
+    faux += CLEED_VECTOR_GET(y, 0);
+    CLEED_VECTOR_SET(y, 0, faux);
   }
  
   fprintf(log_stream, "\navg:");
-  for (j_par=1; j_par<=n_dim; j_par++ )
+  for (j_par=0; j_par < n_dim; j_par++ )
   {
-    fprintf(log_stream, "%7.4f ",p[1][j_par]/mpar);
+    fprintf(log_stream, "%7.4f ",
+        CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim) / mpar);
   }
-  fprintf(log_stream,"%7.4f\n",y[1]/mpar);
+  fprintf(log_stream, "%7.4f\n", CLEED_VECTOR_GET(y, 0) / mpar);
 
   fclose(log_stream);
 
   /* free memory */
-  free_matrix(p, 1, mpar, 1);
-  free_vector(y, 1);
-  free_vector(x, 1);
+  CLEED_VECTOR_FREE(x);
+  CLEED_VECTOR_FREE(y);
+  CLEED_BASIC_MATRIX_FREE(p);
 
 } /* end of function sr_sx */

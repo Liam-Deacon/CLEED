@@ -91,6 +91,9 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
 
   FILE *inp_stream;
   char linebuffer[STRSZ];         /* input buffer */
+  char fmt_buffer[STRSZ];
+
+  sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
 
   /* If *p_var_par or *p_eng_par are NULL: allocate memory. */
   if (*p_var_par == NULL)
@@ -160,27 +163,27 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('f'): /* final energy */
           {
-            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
+            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
             eng_par->final = faux/HART;
             break;
           }
 
           case('i'): /* initial energy */
           {
-            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
+            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
             eng_par->initial = faux/HART;
             break;
           }
 
           case('p'): /* epsilon */
           {
-            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &(var_par->epsilon) );
+            sscanf(linebuffer+i_str+3, fmt_buffer, &(var_par->epsilon) );
             break;
           }
 
           case('s'): /* energy step */
           {
-            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
+            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
             eng_par->step = faux/HART;
             break;
           }
@@ -196,14 +199,14 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('t'): /* theta */
           {
-            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
+            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
             var_par->theta = DEG_TO_RAD * faux;
             break;
           }
 
           case('p'): /* phi */
           {
-            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &faux);
+            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
             var_par->phi = DEG_TO_RAD * faux;
             break;
           }
@@ -234,7 +237,7 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('e'):
           {
-            sscanf(linebuffer+i_str+3, "%" REAL_FMT "f", &(var_par->vi_exp));
+            sscanf(linebuffer+i_str+3, fmt_buffer, &(var_par->vi_exp));
             break;
           }
            
@@ -316,7 +319,7 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
     WARNING_MSG("l_max = %d <= 0\n", var_par->l_max);
 
     faux = R_sqrt(2. * eng_par->final) * R_FOR_LMAX;
-    var_par->l_max = (int)R_nint(faux);
+    var_par->l_max = (int)(R_nint(faux));
 
     WARNING_MSG("calculate value %d from Efin = %.1f eV and "
                 "assumed Rmax = %.1f A.\n", var_par->l_max,

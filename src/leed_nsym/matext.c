@@ -64,7 +64,7 @@ mat matextract(mat Msm, const mat Mbg,
       (end_col > Mbg->cols)
    )
   {
-    ERROR_MSG("matrix indices do not match:\n");
+    ERROR_MSG("matrix indices do not match:\n"
               "\trows: %d -> %d (%d)\tcols:%d -> %d (%d)\n",
               off_row, end_row, Mbg->rows, off_col, end_col, Mbg->cols);
     ERROR_RETURN(NULL);

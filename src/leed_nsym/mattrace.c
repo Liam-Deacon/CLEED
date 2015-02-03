@@ -83,7 +83,7 @@ int mattrace(mat tra, const mat M)
           *(tra->rel) += *ptr;
         }
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     }  /* switch */
   }   /* else */
 

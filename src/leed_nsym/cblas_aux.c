@@ -62,7 +62,7 @@ int mat2cblas ( real *cblas_mx, int cblas_num, mat Mx )
 
   /* check that output matrix has been allocated memory */
   if (cblas_mx == NULL)
-    cblas_mx = (real*)calloc(incre*Mx->rows*Mx->cols*sizeof(real));
+    cblas_mx = (real*)calloc(incre*Mx->rows*Mx->cols, sizeof(real));
   if (cblas_mx == NULL)
   {
     ERROR_MSG("cannot allocate memory for output matrix\n");
@@ -210,7 +210,9 @@ int mat2blas ( real *blas_mx, int blas_num, mat Mx )
 
   /* check that output matrix has been allocated memory */
   if (blas_mx == NULL)
-    blas_mx = (real*)calloc(incre*Mx->rows*Mx->cols*sizeof(real));
+  {
+    blas_mx = (real*)calloc(incre*Mx->rows*Mx->cols, sizeof(real));
+  }
   if (blas_mx == NULL)
   {
     ERROR_MSG("cannot allocate memory for output matrix\n");

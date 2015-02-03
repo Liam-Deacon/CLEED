@@ -98,7 +98,7 @@ real pref_i;
      (matcheck(Yxlm) < 1) ||
      (matcheck(Mkk)  < 0) )
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    if(matcheck(Mlm)  < 1)
      fprintf(STDERR," *** error (ms_ltok): invalid input matrix Mlm\n");
    if (matcheck(Ylm)  < 1)
@@ -121,7 +121,7 @@ real pref_i;
     ((matcheck(Ylm) + (matcheck(Yxlm)) < 1) ||
      (matcheck(Mkk)  < 0) )
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
      fprintf(STDERR," *** error (ms_ltok): invalid input matrices\n");
 #endif
 #ifdef EXIT_ON_ERROR
@@ -137,7 +137,7 @@ real pref_i;
      Yxlm = ms_ytoyx(Yxlm, Ylm);
    else /* Ylm == NULL */
    {
-#ifdef ERROR
+#ifdef ERROR_LOG
      fprintf(STDERR," *** error (ms_ltok): Yxlm = Ylm = NULL\n");
 #endif
 #ifdef EXIT_ON_ERROR

@@ -493,12 +493,12 @@ void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
   size_t i_dom = drawing->i_dom;
   size_t spot = drawing->i_spot;
   int ii;
-  char *color;
-  float *a1;
-  float *a2;
+  char *color = NULL;
+  float *a1 = NULL;
+  float *a2 = NULL;
   float spot_radius;
   char dummystr[10][STRSZ];
-  char *vectors_str;
+  char *vectors_str = NULL;
 
   int compare[2];
   char dom_str[STRSZ];

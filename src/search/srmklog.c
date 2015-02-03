@@ -37,7 +37,7 @@ void sr_mklog(const char *log_file)
 
   if( (log_stream = fopen(log_file, "w")) == NULL)
   {
-    OPEN_ERROR(log_file);
+    ERROR_MSG("Could not write to log file '%s'\n", log_file);
   }
 
   fprintf(log_stream, "CSEARCH - version %s\n\n", SEARCH_VERSION);

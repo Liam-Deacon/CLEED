@@ -26,16 +26,6 @@ GH/08.08.95 - Creation (copy from leed_write_par).
 
 #include "leed.h"
 
-#ifdef ERROR
-#ifdef EXIT_ON_ERROR
-#define ERR_MESS0(x)   fprintf(STDERR,x); exit(1) 
-#define ERR_MESS1(x,y) fprintf(STDERR,x,y); exit(1) 
-#else
-#define ERR_MESS0(x)   fprintf(STDERR,x); return(-1) 
-#define ERR_MESS1(x,y) fprintf(STDERR,x,y); return(-1)
-#endif
-#endif
-
 /********************************************************************/
 
 int leed_read_par( leed_crystal ** p_bulk_par,
@@ -117,26 +107,25 @@ leed_beam  *beams;
    if( ( bulk_par = (leed_crystal *) malloc( sizeof(leed_crystal) ))
        == NULL)
    {
-     ERR_MESS0("*** error (leed_read_par): allocation error (bulk parameters)\n");
+     ERROR_MSG("allocation error (bulk parameters)\n");
    }
  }
 
 /* read parameters */
  if( fread(bulk_par, sizeof(leed_crystal), 1, file) != 1 )
  {
-   ERR_MESS0(
-   "*** error (leed_read_par): input error while reading bulk parameters\n");
+   ERROR_MSG("input error while reading bulk parameters\n");
  }
  tot_size += sizeof(leed_crystal);
 
 /* allocate memory for bulk_par->layers */
 
- number = bulk_par->nlayers;
+ number = bulk_par->n_layers;
  if( ( bulk_par->layers = 
        (leed_layer *) malloc( number * sizeof(leed_layer) ))
      == NULL)
  {
-   ERR_MESS0("*** error (leed_read_par): allocation error (bulk layers)\n");
+   ERROR_MSG("allocation error (bulk layers)\n");
  }
 
 #ifdef CONTROL
@@ -145,23 +134,22 @@ leed_beam  *beams;
 
 /* read layers */
  if( fread(bulk_par->layers, sizeof(leed_layer), number, file) 
-     != (unsigned int) bulk_par->nlayers )
+     != (unsigned int) bulk_par->n_layers )
  {
-   ERR_MESS0(
-   "*** error (leed_read_par): output error while reading bulk layers\n");
+   ERROR_MSG("output error while reading bulk layers\n");
  }
  tot_size += sizeof(leed_layer) * number;
 
 /* atoms */
- for(i = 0; i < (unsigned int) bulk_par->nlayers; i ++)
+ for(i = 0; i < (unsigned int) bulk_par->n_layers; i ++)
  {
 /* allocate */
-   number = (bulk_par->layers + i)->natoms;
+   number = (bulk_par->layers + i)->n_atoms;
    if( ( (bulk_par->layers + i)->atoms = 
          (leed_atom *) malloc( number * sizeof(leed_atom) ))
        == NULL)
    {
-     ERR_MESS1("*** error (leed_read_par): allocation error (bulk atoms)(%d)\n", i);
+     ERROR_MSG("allocation error (bulk atoms)(%d)\n", i);
    }
 
 #ifdef CONTROL
@@ -173,9 +161,7 @@ leed_beam  *beams;
                sizeof(leed_atom), number, file) 
        != number )
    {
-     ERR_MESS1(
- "*** error (leed_read_par): output error while reading atoms of bulk layer %d\n",
-             i);
+     ERROR_MSG("output error while reading atoms of bulk layer %d\n", i);
    }
    tot_size += sizeof(leed_atom) * number;
  }
@@ -196,8 +182,8 @@ leed_beam  *beams;
 /* Read number of sets */
  if( fread(&n_phs, sizeof(int), 1, file) != 1 )
  {
-   ERR_MESS0(
- "*** error (leed_read_par): output error while reading No. of phase shifts.\n");
+   ERROR_MSG("output error while reading No. of phase shifts.\n");
+   ERROR_RETURN(-1);
  }
  tot_size += sizeof(int);
 
@@ -215,15 +201,16 @@ leed_beam  *beams;
          (leed_phase *) malloc( (n_phs + 1) * sizeof(leed_phase) ))
        == NULL)
    {
-     ERR_MESS0("*** error (leed_read_par): allocation error (phase shifts)\n");
+     ERROR_MSG("allocation error (phase shifts)\n");
+     ERROR_RETURN(-1);
    }
  }
 
 /* Read phase shift parameters  (including terminating set) */
  if( fread(phs_shifts, sizeof(leed_phase), n_phs+1, file) != n_phs+1 )
  {
-   ERR_MESS0(
-   "*** error (leed_read_par): output error while reading phase shift parameters\n");
+   ERROR_MSG("output error while reading phase shift parameters\n");
+   ERROR_RETURN(-1);
  }
  tot_size += sizeof(leed_phase) * (n_phs+1);
 
@@ -231,70 +218,60 @@ leed_beam  *beams;
  {
 
 /* allocate memory for energies */
-   number = (phs_shifts + i)->neng;
+   number = (phs_shifts + i)->n_eng;
 
    if( ( (phs_shifts + i)->energy =
          (real *) malloc( number * sizeof(real) ))
         == NULL)
    {
-     ERR_MESS1("*** error (leed_read_par): allocation error (ph. shift eng.)(%d)\n",
-               i);
+     ERROR_MSG("allocation error (ph. shift eng.)(%d)\n", i);
    }
    
 /* read energies */
    if( fread( (phs_shifts + i)->energy, sizeof(real), number, file) != number)
    {
-     ERR_MESS1(
-"*** error (leed_read_par): input error while reading phase shift energies (%d)\n",
-             i);
+     ERROR_MSG("input error while reading phase shift energies (%d)\n", i);
+     ERROR_RETURN(-1);
    }
    tot_size += sizeof(real) * number;
 
 /* allocate memory for phase shifts */
-   number = (phs_shifts + i)->neng * ( (phs_shifts + i)->lmax + 1);
+   number = (phs_shifts + i)->n_eng * ( (phs_shifts + i)->lmax + 1);
 
    if( ( (phs_shifts + i)->pshift =
          (real *) malloc( number * sizeof(real) ))
         == NULL)
    {
-     ERR_MESS1("*** error (leed_read_par): allocation error (ph. shifts)(%d)\n",i);
+     ERROR_MSG("allocation error (ph. shifts)(%d)\n", i);
+     ERROR_RETURN(-1);
    }
 
 #ifdef CONTROL
-   fprintf(STDCTR,"\tset %d: neng = %d, lmax = %d, ", 
-           i, (phs_shifts + i)->neng, (phs_shifts + i)->lmax );
+   fprintf(STDCTR,"\tset %d: n_eng = %d, lmax = %d, ",
+           i, (phs_shifts + i)->n_eng, (phs_shifts + i)->lmax );
 #endif
 
 /* read phase shifts */
    if( fread( (phs_shifts + i)->pshift, sizeof(real), number, file) != number)
    {
-     ERR_MESS1(
-"*** error (leed_read_par): input error while reading phase shifts (%d)\n", i);
+     ERROR_MSG("input error while reading phase shifts (%d)\n", i);
+     ERROR_RETURN(-1);
    }
    tot_size += sizeof(real) * number;
 
 /* read length of file name */
    if( fread( &number, sizeof(int), 1, file)!= 1)
    {
-     ERR_MESS1(
-   "*** error (leed_read_par): input error while reading ph. shift file name (%d)\n",
-             i);
+     ERROR_MSG("input error while reading ph. shift file name (%d)\n", i);
+     ERROR_RETURN(-1);
    }
    tot_size += sizeof(int) * 1;
 /* allocate memory for file name */
-   if( ( (phs_shifts + i)->input_file =
-         (char *) malloc( number * sizeof(char) ))
-        == NULL)
-   {
-     ERR_MESS1(
-     "*** error (leed_read_par): allocation error (ph. shifts file name)(%d)\n", i);
-   }
 /* read file name */
    if( fread( (phs_shifts + i)->input_file, sizeof(char), number, file) 
        != number)
    {
-     ERR_MESS1(
-"*** error (leed_read_par): input error while reading phase shifts input file (%d)\n", i);
+     ERROR_MSG("input error while reading phase shifts input file (%d)\n", i);
    }
    tot_size += sizeof(char) * number;
 
@@ -312,19 +289,18 @@ leed_beam  *beams;
 /* allocate memory for par */
  if( par == NULL)
  {
-   if( ( par = (leed_var *) malloc( sizeof(leed_var) ))
-       == NULL)
+   if( ( par = (leed_var *) malloc( sizeof(leed_var) )) == NULL)
    {
-     ERR_MESS0(
-     "*** error (leed_read_par): allocation error (program parameters)\n");
+     ERROR_MSG("allocation error (program parameters)\n");
+     ERROR_RETURN(-1);
    }
  }
 
 /* read parameters */
  if( fread(par, sizeof(leed_var), 1, file) != 1 )
  {
-   ERR_MESS0(
-   "*** error (leed_read_par): input error while reading control parameters\n");
+   ERROR_MSG("input error while reading control parameters\n");
+   ERROR_RETURN(-1);
  }
  tot_size += sizeof(leed_var) * 1;
 
@@ -339,22 +315,23 @@ leed_beam  *beams;
    if( ( eng = (leed_energy *) malloc( sizeof(leed_energy) ))
        == NULL)
    {
-     ERR_MESS0("*** error (leed_read_par): allocation error (energy parameters)\n");
+     ERROR_MSG("allocation error (energy parameters)\n");
+     ERROR_RETURN(-1);
    }
  }
 
 /* read parameters */
  if( fread(eng, sizeof(leed_energy), 1, file) != 1 )
  {
-   ERR_MESS0(
-   "*** error (leed_read_par): input error while reading energy parameters\n");
+   ERROR_MSG("input error while reading energy parameters\n");
+   ERROR_RETURN(-1);
  }
  tot_size += sizeof(leed_energy) * 1;
 
 #ifdef CONTROL
  fprintf(STDCTR,
  "(leed_read_par): Read energy parameters: Eini = %.1f, Efin = %.1f, Estp = %.1f\n",
- eng->ini, eng->fin, eng->stp);
+ eng->initial, eng->final, eng->step);
 #endif
 
 
@@ -366,8 +343,8 @@ leed_beam  *beams;
 /* Read number of beams */
  if( fread(&number, sizeof(int), 1, file) != 1 )
  {
-   ERR_MESS0(
-   "*** error (leed_read_par): input error while reading No. of beams.\n");
+   ERROR_MSG("input error while reading No. of beams.\n");
+   ERROR_RETURN(-1);
  }
  tot_size += sizeof(int) * 1;
 #ifdef CONTROL
@@ -377,17 +354,17 @@ leed_beam  *beams;
 /* Allocate memory for beam list */
  if( beams == NULL)
  {
-   if( ( beams = (leed_beam *) malloc( number * sizeof(leed_beam) ))
-       == NULL)
+   if( ( beams = (leed_beam *) malloc( number * sizeof(leed_beam) )) == NULL)
    {
-     ERR_MESS0("*** error (leed_read_par): allocation error (energy parameters)\n");
+     ERROR_MSG("allocation error (energy parameters)\n");
    }
  }
 
 /* Read beam list */
  if( fread(beams, sizeof(leed_beam), number, file) != number )
  {
-   ERR_MESS0( "*** error (leed_read_par): input error while reading beam list\n");
+   ERROR_MSG("input error while reading beam list\n");
+   ERROR_RETURN(-1);
  }
  tot_size += sizeof(leed_beam) * number;
 
@@ -404,13 +381,13 @@ leed_beam  *beams;
 
  if( fread(&number, sizeof(int), 1, file) != 1 )
  {
-   ERR_MESS0(
-"*** error (leed_read_par): input error while reading control number\n");
+   ERROR_MSG("input error while reading control number\n");
+   ERROR_RETURN(-1);
  }
  if( number != tot_size)
  {
-   ERR_MESS1(
-   "*** error (leed_read_par): %d bytes are missing\n", number - tot_size);
+   ERROR_MSG("%d bytes are missing\n", number - tot_size);
+   ERROR_RETURN(-1);
  }
  tot_size += sizeof(int) * 1;
 

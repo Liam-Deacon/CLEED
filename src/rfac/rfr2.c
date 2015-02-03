@@ -59,10 +59,10 @@ real rfac_r2(const real *eng, const real *e_int, const real *t_int)
   the_avg = 0.;
 
   for(i_eng = 0;
-      ! IS_EQUAL_REAL(eng[i_eng], F_END_OF_LIST); i_eng ++)
+      ! IS_EQUAL_REAL(eng[i_eng], (real)F_END_OF_LIST); i_eng ++)
   {
-    exp_sq_sum += SQUARE( e_int[i_eng] );
-    the_sq_sum += SQUARE( t_int[i_eng] );
+    exp_sq_sum += (real)SQUARE( (double)e_int[i_eng] );
+    the_sq_sum += (real)SQUARE( (double)t_int[i_eng] );
     the_avg    += t_int[i_eng];
   }
   n_eng = i_eng;
@@ -79,10 +79,10 @@ real rfac_r2(const real *eng, const real *e_int, const real *t_int)
   for(i_eng = 0; i_eng < n_eng; i_eng ++)
   {
     aux = t_int[i_eng] - norm_te * e_int[i_eng];
-    rfac_sum +=  SQUARE(aux);
+    rfac_sum +=  (real)SQUARE((double)aux);
 
     aux = t_int[i_eng] - the_avg;
-    norm_sum += SQUARE(aux);
+    norm_sum += (real)SQUARE((double)aux);
   }
 
   if (norm_sum < 0.)

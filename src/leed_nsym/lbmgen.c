@@ -187,7 +187,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
 
   } /* for n1 */
  
-  #if WARNING
+  #if WARNING_LOG
   if( i_set != n_set)
   {
     WARNING_MSG("wrong number of beam sets found.\n"

@@ -33,15 +33,10 @@ GH/19.09.95 - Criterion of termination is absolute deviation in vertex
 
 #include "csearch.h"
 
-#ifndef MAX_ITER_POWELL      
-#define MAX_ITER_POWELL 200
-#endif
-
 int powell (const gsl_vector *x, void *params, gsl_vector *f)
 {
    /*!TODO: this is where the code needs to evaluate the current set 
             of parameters... PLEASE HELP! */
-
    return GSL_SUCCESS;
 }
 
@@ -86,7 +81,7 @@ RETURN VALUES:
     int status = GSL_CONTINUE;
     size_t n = x->size;
 
-	*fret = (*f)(x);
+    *fret = (*f)(x);
 
     const gsl_multiroot_fsolver_type *T = gsl_multiroot_fsolver_hybrid;
     gsl_multiroot_fsolver *solver = gsl_multiroot_fsolver_alloc(T, n);
@@ -100,8 +95,9 @@ RETURN VALUES:
     gsl_multiroot_fsolver_set(solver, &F, x);    
     
     /* iterate solver to find solution */
-    for (*iter = 0; *iter < MAX_ITER_POWELL && 
-                    status == GSL_CONTINUE; *iter += 1) 
+    for (*iter = 0;
+         *iter < MAX_ITER_POWELL && status == GSL_CONTINUE;
+         *iter += 1)
     {
         /* Iterate one step of the solver */
         status = gsl_multiroot_fsolver_iterate(solver);
@@ -110,26 +106,23 @@ RETURN VALUES:
         x_root = gsl_multiroot_fsolver_root(solver);
 
         *fret = f (fgsl_multiroot_fsolver_f(solver));
-        fprintf(STDCTR, "(sr_powell_gsl): ITERATION NO: %d, FRET = %f\n", 
-                *iter, *fret);
+        CONTROL_MSG(CONTROL, "ITERATION NO: %d, FRET = %f\n", *iter, *fret);
         
         /* Check to see if the solution is within epsilon */
         status = gsl_multiroot_test_residual(solver->f, (double) epsilon);
         
     }
     
-    
     /* Free the solver */
     gsl_multiroot_fsolver_free(solver);
 
     if (status == GSL_CONTINUE) {
-        fprintf(STDERR, "***error (sr_powell_gsl): too many iterations\n");
+        ERROR_MSG("too many iterations\n");
     } else if (status != GSL_SUCCESS) {
-        fprintf(STDERR, "***error (sr_powell_gsl): %s\n", 
-                gsl_strerror(status));
+        ERROR_MSG("%s\n", gsl_strerror(status));
     }
     
-    return status;
+    return (status);
 } /* end of function sr_powell_gsl */
 
 /**********************************************************************/

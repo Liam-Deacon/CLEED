@@ -12,7 +12,7 @@
  *20.09.95
 file contains function:
 
-  void sr_amebsa(real **p, real *y, int ndim, 
+  void sr_amebsa(real **p, real *y, int n_dim, 
                  real *pb, real *yb, 
                  real ftol, real (*funk)(), int *iter, real temptr)
 
@@ -75,7 +75,7 @@ char ver_file[STRSZ];
 
 int i,ilo,ihi;
 int j, m, n; 
-int ndim = y->size;
+int n_dim = y->size;
 int mpts = y->size + 1;
 real rtol, sum, swap;
 real yhi, ylo, ynhi, ysave, yt, ytry;
@@ -84,7 +84,7 @@ char *old_file;
 char *new_file;
 time_t result;
 
- gsl_vector *psum = gsl_vector_alloc(ndim);
+ gsl_vector *psum = gsl_vector_alloc(n_dim);
  tt = -temptr;
  GET_PSUM
 
@@ -153,7 +153,7 @@ time_t result;
      gsl_vector_set(y, 0, gsl_vector_get(y, ilo);
      gsl_vector_set(y, ilo, swap);
      
-     for( n = 0; n < ndim; n++)
+     for( n = 0; n < n_dim; n++)
      {
        swap = gsl_matrix_get(p, 0, n);
        gsl_matrix_set(p, 0, n, gsl_matrix_get(p, ilo, n));
@@ -170,7 +170,7 @@ time_t result;
 
    *iter -= 2;
 
-   ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, -1.0);
+   ytry = amotsa(p, y, psum, n_dim, pb, yb, funk, ihi, &yhi, -1.0);
 
    if( ytry <= ylo )
    {
@@ -178,7 +178,7 @@ time_t result;
    Result better than the best point, so try an additional 
    extrapolation by a factor of 2.
 */
-     ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 2.0);
+     ytry = amotsa(p, y, psum, n_dim, pb, yb, funk, ihi, &yhi, 2.0);
    }
    else if( ytry >= ynhi )
    {
@@ -188,7 +188,7 @@ time_t result;
    contraction. 
 */
      ysave = yhi;
-     ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 0.5);
+     ytry = amotsa(p, y, psum, n_dim, pb, yb, funk, ihi, &yhi, 0.5);
 
      if( ytry >= ysave)
      {
@@ -200,7 +200,7 @@ time_t result;
        {
          if( i != ilo)
          {
-           for (j=0; j < ndim; j++)
+           for (j=0; j < n_dim; j++)
            { 
               gsl_vector_set(psum, j, 0.5*(gsl_matrix_get(p, i, j) 
                                         + gsl_matrix_get(p, ilo, j)));
@@ -211,8 +211,8 @@ time_t result;
          }
        } /* for i */
 
-       *iter -= ndim;
-       for (n=0; n < ndim; n++)
+       *iter -= n_dim;
+       for (n=0; n < n_dim; n++)
        {
          for (sum=0.0, m=0; m < mpts; m++) 
             sum += gsl_matrix_get(p, m, n);
@@ -248,11 +248,11 @@ time_t result;
 
    strcpy(ver_file, new_file);
    ver_stream = fopen(ver_file, "w");
-   fprintf(ver_stream,"%d %d %s\n", ndim, mpts, sr_project);
+   fprintf(ver_stream,"%d %d %s\n", n_dim, mpts, sr_project);
    for (i=0; i < mpts; i++) 
    {
      fprintf(ver_stream,"%e ", gsl_vector_get(y, i));
-     for(j=0; j < ndim; j++) 
+     for(j=0; j < n_dim; j++) 
        fprintf(ver_stream,"%e ", gsl_matrix_get(p, i, j));
      fprintf(ver_stream,"\n");
    }
@@ -289,15 +289,15 @@ real amotsa(
 {
 
 int j;
-int ndim = y->size;
+int n_dim = y->size;
 real fac1, fac2, yflu, ytry;
 real faux, faux2;
 
- gsl_vector *ptry = gsl_vector_alloc(ndim);
- fac1 = (1.0-fac)/ndim;
+ gsl_vector *ptry = gsl_vector_alloc(n_dim);
+ fac1 = (1.0-fac)/n_dim;
  fac2 = fac1-fac;
 
- for (j=0; j < ndim; j++) 
+ for (j=0; j < n_dim; j++) 
    gsl_vector_set(ptry, j, gsl_vector_get(psum, j)*fac1 
                                 - gsl_matrix_get(p, ihi, j)*fac2);
 
@@ -308,7 +308,7 @@ real faux, faux2;
 /*
   Save the best ever
 */
-   for(j=0; j < ndim; j++) 
+   for(j=0; j < n_dim; j++) 
      gsl_vector_set(pb, j, gsl_vector_get(ptry, j);
    *yb = ytry;
  }
@@ -325,7 +325,7 @@ real faux, faux2;
  {
    gsl_vector_set(y, ihi, ytry);
    *yhi = yflu;
-   for(j = 0; j < ndim; j++)
+   for(j = 0; j < n_dim; j++)
    {
      faux = gsl_vector_get(psum, j);
      faux2 = gsl_vector_get(ptry, j);

@@ -36,31 +36,13 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <strings.h>
 #include <time.h>
 #include <math.h>
-#include <stdlib.h>
 
 #include "csearch.h"
 #include "copy_file.h"
-
-/*
-  Define the following parameters if not yet defined in "search_def.h"
-*/
-#ifndef SR_EVAL_DEF
-#define RFAC_TYP    "rp"
-#define RFAC_SHIFT_STEP   0.5
-#define RFAC_SHIFT_RANGE  5.
-#endif
-
-#ifndef FAC_THETA
-#define FAC_THETA 5.
-#endif
-
-#ifndef FAC_PHI
-#define FAC_PHI   50.
-#endif
-
 
 #define SYS_ERROR_TO_LOG(x)   log_stream = fopen(log_file, "a"); \
      fprintf(log_stream,"*** system call \"%s\" failed ***", x); \
@@ -86,7 +68,7 @@ extern char *sr_project;
  *
  * \return R factor.
  */
-real sr_evalrf(real *par)
+real sr_evalrf(cleed_vector *par)
 {
   static real rfac_min = 100.;
   static real rfac_max = 0.;
@@ -102,9 +84,13 @@ real sr_evalrf(real *par)
   struct tm *l_time;
   time_t t_time;
 
+  char fmt_buffer[STRSZ];
   char line_buffer[STRSZ];
   char log_file[STRSZ];
   char par_file[STRSZ];
+
+  char old_path[FILENAME_MAX];
+  char new_path[FILENAME_MAX];
 
   FILE *io_stream, *log_stream;
 
@@ -150,14 +136,13 @@ real sr_evalrf(real *par)
 
   if( (rgeo > 1.) && (n_calc > 1) )
   {
-    #ifdef CONTROL
-    fprintf(STDCTR, " return rfac_max: %.4f rtot = %.4f\n",
-            rfac_max, rgeo + rfac_max);
-    #endif
+    CONTROL_MSG(CONTROL, "return rfac_max: %.4f rtot = %.4f\n",
+                rfac_max, rgeo + rfac_max);
+
     log_stream = fopen(log_file, "a");
 
     fprintf(log_stream, "#%3d par:", n_eval);
-    for(i_par=1; i_par <= sr_search->n_par; i_par++)
+    for(i_par=0; i_par < sr_search->n_par; i_par++)
     {
       fprintf(log_stream, " %.3f", par[i_par]);
     }
@@ -178,15 +163,13 @@ real sr_evalrf(real *par)
 
   #ifdef SHORTCUT
   rfac = 0.;
-  for (i_par = 1; i_par <= sr_search->n_par; i_par ++)
+  for (i_par = 0; i_par < sr_search->n_par; i_par ++)
   {
     rfac += 1 - cos(PI*(par[i_par] - 2.3)) +  R_fabs(par[i_par] - 2.3);
   }
   rfac /= sr_search->n_par;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, " rfac = %.4f rtot = %.4f\n", rfac, rgeo + rfac);
-  #endif
+  CONTROL_MSG(CONTROL, "rfac = %.4f rtot = %.4f\n", rfac, rgeo + rfac);
 
   rfac_min = MIN(rfac, rfac_min);
   rfac_max = MAX(rfac, rfac_max);
@@ -230,10 +213,14 @@ real sr_evalrf(real *par)
   sprintf(line_buffer, "%s.dum", sr_project);
   io_stream = fopen(line_buffer, "r");
 
+  sprintf(fmt_buffer, "%%%sf %%%sf %%%sf",
+          CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
   while( fgets(line_buffer, STRSZ, io_stream) != NULL)
   {
-    if( (iaux = sscanf(line_buffer, "%" REAL_FMT "f %" REAL_FMT "f %"
-                       REAL_FMT "f", &rfac, &faux, &shift) ) == 3) break;
+    if( (iaux = sscanf(line_buffer, fmt_buffer, &rfac, &faux, &shift) ) == 3)
+    {
+      break;
+    }
   }
 
   /* Stop with error message if reading error */
@@ -248,42 +235,32 @@ real sr_evalrf(real *par)
 
   fclose (io_stream);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, " rfac = %.4f\n", rfac);
-  #endif
+  CONTROL_MSG(CONTROL, "rfac = %.4f\n", rfac);
 
   /* If this is the minimum R factor copy *.res file to *.rmin */
   if(rfac < rfac_min)
   {
     /* removed dependence on cp system call */
-    char old_path[strlen(sr_project)+5];
-    char new_path[strlen(sr_project)+5];
    
     /* res file */
-    strcpy(old_path, sr_project);
-    strcat(old_path, ".res");
-    strcpy(new_path, sr_project);
-    strcat(old_path, ".rmin");
+    sprintf(old_path, "%s%s", sr_project, ".res");
+    sprintf(new_path, "%s%s", sr_project, ".rmin");
     if (copy_file(old_path, new_path))
     {
       COPY_ERROR_TO_LOG(old_path, new_path);
     }
    
     /* par file */
-    strcpy(old_path, sr_project);
-    strcat(old_path, ".par");
-    strcpy(new_path, sr_project);
-    strcat(old_path, ".pmin");
+    sprintf(old_path, "%s%s", sr_project, ".par");
+    sprintf(new_path, "%s%s", sr_project, ".pmin");
     if (copy_file(old_path, new_path))
     {
       COPY_ERROR_TO_LOG(old_path, new_path);
     }
    
     /* bsr file */
-    strcpy(old_path, sr_project);
-    strcat(old_path, ".bsr");
-    strcpy(new_path, sr_project);
-    strcat(old_path, ".bmin");
+    sprintf(old_path, "%s%s", sr_project, ".bsr");
+    sprintf(new_path, "%s%s", sr_project, ".bmin");
     if (copy_file(old_path, new_path))
     {
       COPY_ERROR_TO_LOG(old_path, new_path);
@@ -301,7 +278,7 @@ real sr_evalrf(real *par)
   log_stream = fopen(log_file, "a");
 
   fprintf(log_stream, "#%3d par:", n_eval);
-  for(i_par=1; i_par <= sr_search->n_par_geo; i_par++)
+  for(i_par=0; i_par < sr_search->n_par_geo; i_par++)
   {
    fprintf(log_stream, " %.3f", par[i_par]);
   }

@@ -22,13 +22,11 @@
 
 #include "mat.h"
 
-#define MINVAL  1.e-6
-#define ZFORM   " ---  "
-#define RMAXCOL  50
-#define RFORM     "%5.3f "
-#define R_DIAFORM "  *.** "
-#define C_DIAFORM "( *.**, *.**) "
-
+static const real MINVAL = 1.e-6;
+static const char* ZFORM = " ---  ";
+static const size_t RMAXCOL = 50;
+static const char* RFORM = "%5.3f ";
+static const char* R_DIAFORM = "  *.** ";
 
 /*!
  * Prints the modulus of the elements of matrix \p M to #STDOUT
@@ -83,8 +81,8 @@ void matshowabs(const mat M)
             {
               for (i_c = 1; i_c <= maxcol; ++i_c)
               {
-                if( (faux = cri_abs(RMATEL(i_r, i_c, M),
-                                    IMATEL(i_r, i_c, M))) > MINVAL)
+                if( (faux = cri_abs(*rmatel(i_r, i_c, M),
+                                    *imatel(i_r, i_c, M))) > MINVAL)
                 {
                   fprintf(STDOUT, RFORM, faux);
                 }
@@ -95,7 +93,7 @@ void matshowabs(const mat M)
             fprintf(STDOUT, "\n");
 
             break;
-          } /* case COMPLEX */
+          } /* case CLEED_COMPLEX */
         }  /* switch num_type */
         break;
       }  /* MAT_NORMAL, MAT_SQUARE */
@@ -137,7 +135,7 @@ void matshowabs(const mat M)
             fprintf(STDOUT, "\n");
 
             break;
-          } /* case COMPLEX */
+          } /* case CLEED_COMPLEX */
         }  /* switch num_type */
 
         break;

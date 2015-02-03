@@ -11,7 +11,7 @@
                msltok obsolete).
  GH/03.09.97 - set return value to 1
 
-*********************************************************************/
+ *********************************************************************/
 
 #include <math.h>
 #include <malloc.h>
@@ -19,14 +19,8 @@
 
 #include "leed.h"
 
-
-/*======================================================================*/
-/*======================================================================*/
-
-int leed_ms ( mat *p_Tpp, mat *p_Rpm,
-               leed_var *v_par,
-               leed_layer * layer,
-               leed_beam * beams)
+int leed_ms ( mat *p_Tpp, mat *p_Rpm, leed_var *v_par, leed_layer *layer,
+              leed_beam *beams)
 
 /************************************************************************
 
@@ -76,142 +70,131 @@ int leed_ms ( mat *p_Tpp, mat *p_Rpm,
 
   1  upon successful completion
 
-*************************************************************************/
+ *************************************************************************/
 {
-int n_beams, i_beams;
-int l_max;
-int i_type;
-int iaux, i_c;
+  int n_beams, i_beams;
+  int l_max;
+  int i_type;
+  int iaux, i_c;
 
-real pref_i, faux_r, faux_i;
-real *ptr_r, *ptr_i;
+  real pref_i, faux_r, faux_i;
+  real *ptr_r, *ptr_i;
 
-static mat Llm = NULL, Gii = NULL;
-static mat Yin_p = NULL, Yin_m = NULL, Yout = NULL;
+  static mat Llm = NULL, Gii = NULL;
+  static mat Yin_p = NULL, Yin_m = NULL, Yout = NULL;
 
-static real old_eng = F_END_OF_LIST;
+  static real old_eng = (double)I_END_OF_LIST;  /*!FIXME */
 
-static int old_set  = I_END_OF_LIST;
-static int old_n_beams  = I_END_OF_LIST;
-static int old_type = I_END_OF_LIST;
-static int old_l_max = I_END_OF_LIST;
+  static int old_set = I_END_OF_LIST;
+  static int old_n_beams  = I_END_OF_LIST;
+  static int old_type = I_END_OF_LIST;
+  static int old_l_max = I_END_OF_LIST;
 
-/*************************************************************************
- Preset often used values: i_type, l_max, n_beams
-*************************************************************************/
- 
- i_type = (layer->atoms)->type;
+  /* Preset often used values: i_type, l_max, n_beams */
+  i_type = (layer->atoms)->type;
+  l_max = v_par->l_max;
 
- l_max = v_par->l_max;
+  for(n_beams = 0;
+      ! IS_EQUAL_REAL((beams + n_beams)->k_par, F_END_OF_LIST); n_beams ++);
 
- for(n_beams = 0; 
-     ! IS_EQUAL_REAL((beams + n_beams)->k_par, F_END_OF_LIST); n_beams ++);
+  CONTROL_MSG(CONTROL, "l_max = %d, No of beams = %d, atom type = %d\n",
+              l_max, n_beams, i_type);
 
-#ifdef CONTROL
- fprintf(STDCTR,"(leed_ms): l_max = %d, No of beams = %d, atom type = %d\n", 
-         l_max, n_beams, i_type);
-#endif
+  /*************************************************************************
+   * Check if the current beam set was used in the previous call.
+   * - if not, recalculate lattice sum, scattering matrix, and spherical
+   * harmonics.
+   * - if yes, reuse lattice sum, scattering matrix, and spherical
+   * harmonics and recalculate the (lm) scattering matrix only if the
+   * atom type has changed.
+   *************************************************************************/
 
-/*************************************************************************
- Check if the current beam set was used in the previous call.
- - if not, recalculate lattice sum, scattering matrix, and spherical 
-   harmonics.
- - if yes, reuse lattice sum, scattering matrix, and spherical
-   harmonics and recalculate the (lm) scattering matrix only if the
-   atom type has changed.
-*************************************************************************/
-
- if( !(IS_EQUAL_REAL(old_eng, v_par->eng_r)) || 
+  if( !(IS_EQUAL_REAL(old_eng, v_par->eng_r)) ||
       (old_set     != beams->set)   ||
       (old_n_beams != n_beams)      ||
       (old_l_max   != l_max)           )
- {
+  {
 #ifdef CONTROL
- fprintf(STDCTR,"(leed_ms): recalculate lattice sum etc.\n");
+    fprintf(STDCTR,"(leed_ms): recalculate lattice sum etc.\n");
 #endif
 
-/* First, reset energy, beam_set, and beam_num */
-   old_eng = v_par->eng_r;
-   old_set = beams->set;
-   old_n_beams = n_beams;
-   old_l_max = l_max;
-   
-/* calculate lattice sum */
-   Llm = leed_ms_lsum_ii ( Llm, beams->k_r[0], beams->k_i[0], beams->k_r,
-                      layer->a_lat, 2*l_max, v_par->epsilon );
-/* calculate scattering matrix */
-   Gii = leed_ms_tmat_ii( Gii, Llm, v_par->p_tl[i_type], l_max);
-   Gii = mattrans(Gii, Gii);
+    /* First, reset energy, beam_set, and beam_num */
+    old_eng = v_par->eng_r;
+    old_set = beams->set;
+    old_n_beams = n_beams;
+    old_l_max = l_max;
 
-/* Yout = Y(k+) */
-   Yout  = leed_ms_ymat(Yout, l_max, beams, n_beams);
-/* Yin_p: Y*(k+) for transmission matrix. */
-   Yin_p = leed_ms_yp_yxp(Yin_p, Yout);
-/* Yin_m: Y*(k-) for reflection matrix. */
-   Yin_m = leed_ms_yp_yxm(Yin_m, Yout);
+    /* calculate lattice sum */
+    Llm = leed_ms_lsum_ii ( Llm, beams->k_r[0], beams->k_i[0], beams->k_r,
+        layer->a_lat, 2*l_max, v_par->epsilon );
 
-  /********************************************************************** 
-   Loop over k' (exit beams: rows of Yout): 
-    - Multiply with factor i 8 PI^2 / (|k|*A*k'_z) 
-    - i_beams is (row number - 1) and equal to the index of exit beams 
-  **********************************************************************/
+    /* calculate scattering matrix */
+    Gii = leed_ms_tmat_ii( Gii, Llm, v_par->p_tl[i_type], l_max);
+    Gii = mattrans(Gii, Gii);
 
-   pref_i = 8.*PI*PI / (beams->k_r[0] * layer->rel_area);
+    /* Yout = Y(k+) */
+    Yout  = leed_ms_ymat(Yout, l_max, beams, n_beams);
 
-   ptr_r = Yout->rel + 1;
-   ptr_i = Yout->iel + 1;
-   for(i_beams = 0; i_beams < Yout->rows; i_beams ++)
-   {
-     cri_mul(&faux_r, &faux_i, 0., pref_i, 
-             (beams+i_beams)->Akz_r, (beams+i_beams)->Akz_i);
-     for(i_c = 0; i_c < Yout->cols; i_c ++, ptr_r ++, ptr_i ++ )
-     {
-       cri_mul(ptr_r, ptr_i, *ptr_r, *ptr_i, faux_r, faux_i); 
-     }
-   }  /* i_beams */
+    /* Yin_p: Y*(k+) for transmission matrix. */
+    Yin_p = leed_ms_yp_yxp(Yin_p, Yout);
 
-  /**********************************************************************
-   Matrix product Yout * Gii (exit beams)
-  **********************************************************************/
-   Gii = matmul(Gii, Yout, Gii);
- }
- else 
- {
-  /*************************************************************************
-   The current beam set was used already in the previous call: only
-   the scattering matrix has to be recalculated if atom type is different.
-  *************************************************************************/
+    /* Yin_m: Y*(k-) for reflection matrix. */
+    Yin_m = leed_ms_yp_yxm(Yin_m, Yout);
 
-   if( old_type != i_type )
-   {
-#ifdef CONTROL
- fprintf(STDCTR,"(leed_ms): recalculate scattering matrix.\n");
-#endif
+    /**********************************************************************
+     * Loop over k' (exit beams: rows of Yout):
+     * - Multiply with factor i 8 PI^2 / (|k|*A*k'_z)
+     * - i_beams is (row number - 1) and equal to the index of exit beams
+     **********************************************************************/
 
-  /* reset old_type */
-     old_type = i_type;
+    pref_i = 8.*PI*PI / (beams->k_r[0] * layer->rel_area);
 
-  /* calculate scattering matrix */
-     Gii = leed_ms_tmat_ii( Gii, Llm, v_par->p_tl[i_type], l_max);
-     Gii = mattrans(Gii, Gii);
+    ptr_r = Yout->rel + 1;
+    ptr_i = Yout->iel + 1;
+    for(i_beams = 0; i_beams < Yout->rows; i_beams ++)
+    {
+      cri_mul(&faux_r, &faux_i, 0., pref_i,
+          (beams+i_beams)->Akz_r, (beams+i_beams)->Akz_i);
+      for(i_c = 0; i_c < Yout->cols; i_c ++, ptr_r ++, ptr_i ++ )
+      {
+        cri_mul(ptr_r, ptr_i, *ptr_r, *ptr_i, faux_r, faux_i);
+      }
+    }  /* i_beams */
 
-  /**********************************************************************
-   Matrix product Yout * Gii (exit beams)
-  **********************************************************************/
-     Gii = matmul(Gii, Yout, Gii);
-   }
- }
- 
- *p_Rpm = matmul(*p_Rpm, Gii, Yin_m);
- *p_Tpp = matmul(*p_Tpp, Gii, Yin_p);
+    /* Matrix product Yout * Gii (exit beams) */
+    Gii = matmul(Gii, Yout, Gii);
+  }
+  else
+  {
+    /*************************************************************************
+     * The current beam set was used already in the previous call: only
+     * the scattering matrix has to be recalculated if atom type is different.
+     *************************************************************************/
+    if( old_type != i_type )
+    {
+      CONTROL_MSG(CONTROL, "recalculate scattering matrix.\n");
 
-/* Add unscattered wave to transmission matrix */
+      /* reset old_type */
+      old_type = i_type;
 
- iaux = (*p_Tpp)->rows * (*p_Tpp)->cols;
- for(i_c = 1; i_c <= iaux; i_c += (*p_Tpp)->cols + 1)
-   (*p_Tpp)->rel[i_c] += 1.;
- 
- return(1);
+      /* calculate scattering matrix */
+      Gii = leed_ms_tmat_ii( Gii, Llm, v_par->p_tl[i_type], l_max);
+      Gii = mattrans(Gii, Gii);
+
+      /* Matrix product Yout * Gii (exit beams) */
+      Gii = matmul(Gii, Yout, Gii);
+    }
+  }
+
+  *p_Rpm = matmul(*p_Rpm, Gii, Yin_m);
+  *p_Tpp = matmul(*p_Tpp, Gii, Yin_p);
+
+  /* Add unscattered wave to transmission matrix */
+  iaux = (*p_Tpp)->rows * (*p_Tpp)->cols;
+  for(i_c = 1; i_c <= iaux; i_c += (*p_Tpp)->cols + 1)
+  {
+    (*p_Tpp)->rel[i_c] += 1.;
+  }
+
+  return(1);
 } /* end of function leed_ms */
-
-/*======================================================================*/

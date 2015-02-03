@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "real.h"
+#include "cleed_real.h"
 #include "mat.h"
 #include "mat_aux.h"
 #include "cblas_aux.h"
@@ -63,9 +63,11 @@
  */
 mat matinv(mat A_1, const mat A)
 {
-  int i, n, info;
+  int i, info;
 
   int *ipiv;
+
+  size_t n = 0;
 
   mat Alu = NULL;
 
@@ -122,38 +124,38 @@ mat matinv(mat A_1, const mat A)
     /* Real matrix (NUM_REAL) */
     case (NUM_REAL):
     {
-      REAL_MATRIX a = REAL_MATRIX_ALLOC(n, n);
-      REAL_MAT2CBLAS(a, Alu);
+      cleed_matrix *a = CLEED_MATRIX_REAL_ALLOC(n, n);
+      CLEED_REAL_MAT2CBLAS(a, Alu);
 
       /* do LU decomposition and matrix inversion */
-      REAL_LU_DECOMPOSITION(a, n, ipiv, info);
+      CLEED_REAL_LU_DECOMPOSITION(a, n, ipiv, info);
       if (info != 0)
       {
         ERROR_MSG("LU decomposition failed with code %i\n", info);
-        REAL_MATRIX_FREE(a);
+        CLEED_MATRIX_REAL_FREE(a);
         matfree(Alu);
         free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* now perform the LU back-substitution */
-      REAL_MATRIX a_1 = REAL_MATRIX_ALLOC(n, n);
+      cleed_matrix *a_1 = CLEED_MATRIX_REAL_ALLOC(n, n);
 
-      REAL_MATRIX_INVERSION(a, n, ipiv, a_1, info);
+      CLEED_MATRIX_REAL_INVERSION(a, n, ipiv, a_1, info);
       if (info != 0)
       {
         ERROR_MSG("real matrix inversion failed with code %i\n", info);
-        REAL_MATRIX_FREE(a);
-        REAL_MATRIX_FREE(a_1);
+        CLEED_MATRIX_REAL_FREE(a);
+        CLEED_MATRIX_REAL_FREE(a_1);
         matfree(Alu);
         free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* Finalise */
-      REAL_CBLAS2MAT(A_1, a_1);
-      REAL_MATRIX_FREE(a_1);
-      REAL_MATRIX_FREE(a);
+      CLEED_REAL_CBLAS2MAT(A_1, a_1);
+      CLEED_MATRIX_REAL_FREE(a_1);
+      CLEED_MATRIX_REAL_FREE(a);
 
       break;
     }  /* REAL */
@@ -161,49 +163,49 @@ mat matinv(mat A_1, const mat A)
     /* Complex matrix (NUM_COMPLEX) */
     case (NUM_COMPLEX):
     {
-      COMPLEX_MATRIX a = COMPLEX_MATRIX_ALLOC(n, n);
-      COMPLEX_MAT2CBLAS(a, Alu);
+      cleed_matrix_complex *a = CLEED_MATRIX_COMPLEX_ALLOC(n, n);
+      CLEED_COMPLEX_MAT2CBLAS(a, Alu);
 
       /* do LU decomposition and matrix inversion */
-      COMPLEX_LU_DECOMPOSITION(a, n, ipiv, info);
+      CLEED_COMPLEX_LU_DECOMPOSITION(a, n, ipiv, info);
       if (info != 0)
       {
         ERROR_MSG("LU decomposition failed with code %i\n", info);
-        COMPLEX_MATRIX_FREE(a);
+        CLEED_MATRIX_COMPLEX_FREE(a);
         matfree(Alu);
         free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* now perform the LU back-substitution */
-      COMPLEX_MATRIX a_1 = COMPLEX_MATRIX_ALLOC(n, n);
+      cleed_matrix_complex *a_1 = CLEED_MATRIX_COMPLEX_ALLOC(n, n);
 
-      COMPLEX_MATRIX_INVERSION(a, n, ipiv, a_1, info);
+      CLEED_MATRIX_COMPLEX_INVERSION(a, n, ipiv, a_1, info);
       if (info != 0)
       {
         ERROR_MSG("complex matrix inversion failed with code %i\n", info);
-        COMPLEX_MATRIX_FREE(a);
-        COMPLEX_MATRIX_FREE(a_1);
+        CLEED_MATRIX_COMPLEX_FREE(a);
+        CLEED_MATRIX_COMPLEX_FREE(a_1);
         matfree(Alu);
         free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* Finalise */
-      COMPLEX_CBLAS2MAT(A_1, a_1);
-      COMPLEX_MATRIX_FREE(a_1);
-      COMPLEX_MATRIX_FREE(a);
+      CLEED_COMPLEX_CBLAS2MAT(A_1, a_1);
+      CLEED_MATRIX_COMPLEX_FREE(a_1);
+      CLEED_MATRIX_COMPLEX_FREE(a);
       break;
-    } /* COMPLEX */
+    } /* CLEED_COMPLEX */
 
   } /* switch(A->num_type) */
 
   /* produce pivot vector information */
-  #if CONTROL
+#if CONTROL
   CONTROL_MSG(CONTROL, "ipiv: ");
   for (i=0; i<n; i++) fprintf(STDCTR, " %d", ipiv[i]);
   fprintf(STDCTR, "\n");
-  #endif
+#endif
 
   /* clean up */
   matfree(Alu);

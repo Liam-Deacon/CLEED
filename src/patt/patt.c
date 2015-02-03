@@ -91,7 +91,6 @@ int main(int argc, char *argv[])
 int patt_session(const patt_drawing *drawing)
 {
   char buf[BUFSIZ];
-  char u;
 
   printf("%s [%s] - %s\n", PATT, PATT_VERSION, PATT_SHORTDESC);
   printf("%s\n", PATT_COPYRIGHT);

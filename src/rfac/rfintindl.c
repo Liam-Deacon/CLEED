@@ -27,13 +27,6 @@
 
 #include "rfac.h"       /* rf specific definitions */
 
-#ifdef REAL_IS_DOUBLE
-#define REAL_FORM "%lf"
-#endif
-#ifdef REAL_IS_FLOAT
-#define REAL_FORM "%f"
-#endif
-
 /*!
  * Interpreter for averaging different beams from theoretical input
  * file.
@@ -59,6 +52,9 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
 
   real test1, test2;
   real scale;
+  char fmt_buffer[STRSZ];
+
+  sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
 
   /* reset all scaling factors in list beam */
   for (j=0; j < n_beam; j++)
@@ -68,8 +64,8 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
 
   i = 0;
   scale = 1.0;
-  test1 = (real) FEND_OF_LIST;
-  test2 = (real) FEND_OF_LIST;
+  test1 = (real) F_END_OF_LIST;
+  test2 = (real) F_END_OF_LIST;
 
   do
   {
@@ -80,10 +76,10 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
     if(command_line[i] == '(')
     {
       i++;
-      sscanf(command_line+i, REAL_FORM, &test1);
+      sscanf(command_line+i, fmt_buffer, &test1);
       while (command_line[i] != ',') i++;
       i++;
-      sscanf(command_line+i, REAL_FORM, &test2);
+      sscanf(command_line+i, fmt_buffer, &test2);
       while (command_line[i] != ')') i++;
       i++;
     }
@@ -100,9 +96,9 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
       i++;
       if(scale < 0. )
       {
-        sscanf(command_line+i, REAL_FORM, &scale);
+        sscanf(command_line+i, fmt_buffer, &scale);
       }
-      else sscanf(command_line+i, REAL_FORM, &scale);
+      else sscanf(command_line+i, fmt_buffer, &scale);
 
       /* skip over possible signs of scaling factor */
       while ( (command_line[i] < '0') || (command_line[i] > '9') ) i++;
@@ -121,7 +117,7 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
                (beam+j)->index1, (beam+j)->index2, (beam+j)->f_val1);
         #endif
       }
-      else if(test1 > FEND_OF_LIST)
+      else if(test1 > (real) F_END_OF_LIST)
         printf(">rfac_intindl: Could not find (%5.2f,%5.2f) in input file\n",
                test1, test2);
       else
@@ -129,8 +125,8 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
     }
 
     /* reset scale and test1/2 for next beam */
-    test1 = (real) FEND_OF_LIST;
-    test2 = (real) FEND_OF_LIST;
+    test1 = (real) F_END_OF_LIST;
+    test2 = (real) F_END_OF_LIST;
     scale = 1.0;
 
     while ( (command_line[i] != '+') && (command_line[i] != '-') &&

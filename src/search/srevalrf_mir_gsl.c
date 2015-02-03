@@ -43,7 +43,7 @@ LD/01.07.2014 - Update for compatibility with the GNU Scientific Library
 #include "copy_file.h"
 
 #define CONTROL
-#define ERROR
+#define ERROR_LOG
 
 /*
   Define the following parameters if not yet defined in "search_def.h"
@@ -123,7 +123,7 @@ char *new_path;
 
  if( (getenv("CSEARCH_LEED") == NULL) || (getenv("CSEARCH_RFAC") == NULL) )
  {
-   #ifdef ERROR
+   #ifdef ERROR_LOG
      fprintf(STDERR, " *** error (sr_evalrfac_gsl):"
              " CSEARCH_LEED or CSEARCH_RFAC not defined\n");
    #endif
@@ -298,10 +298,10 @@ char *new_path;
  while( fgets(line_buffer, STRSZ, io_stream) != NULL)
  {
    if(
-       #ifdef REAL_IS_DOUBLE
+       #ifdef CLEED_REAL_IS_DOUBLE
        (iaux = sscanf(line_buffer, "%lf %lf %lf", &rfac, &faux, &shift) )
        #endif
-       #ifdef REAL_IS_FLOAT
+       #ifdef CLEED_REAL_IS_FLOAT
        (iaux = sscanf(line_buffer, "%f %f %f",    &rfac, &faux, &shift) )
        #endif
        == 3) break;

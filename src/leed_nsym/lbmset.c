@@ -27,7 +27,7 @@
 
 /*!
  * Finds the beams belonging to a certain beam set ("set") and write them to the
- * list @p p_beams_out .
+ * list \p p_beams_out .
  *
  * \param[out] p_beams_out Pointer to the list of beams included in the beam set.
  * The list will be terminated by #F_END_OF_LIST in the
@@ -39,10 +39,10 @@
  *
  * \param set set for which the beams are extracted.
  *
- * \return number of beams in the list pointed to by @p p_beams.
+ * \return number of beams in the list pointed to by \p p_beams.
  * \retval -1 if failed (not implemented)
- * @warning The program will exit if memory cannot be allocated for
- * @p p_beams_out
+ * \warning The program will exit if memory cannot be allocated for
+ * \p p_beams_out
  */
 int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, int set)
 {
@@ -77,7 +77,7 @@ int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, int set)
   if(beams_out == NULL)
   {
     ERROR_MSG("allocation error.\n");
-    RETURN_ERROR(LEED_ALLOCATION_ERROR);
+    ERROR_RETURN(LEED_ALLOCATION_ERROR);
   }
 
   /*

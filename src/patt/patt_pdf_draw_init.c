@@ -14,7 +14,7 @@ int pdf_draw_init(HPDF_Doc *pdf, int ifiles, char *title_str,
 
 
   if (!pdf) {
-      printf ("ERROR: cannot create pdf object.\n");
+      printf ("ERROR_LOG: cannot create pdf object.\n");
       return 1;
   }
 

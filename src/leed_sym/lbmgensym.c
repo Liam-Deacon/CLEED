@@ -402,7 +402,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
        bm_off[i_set].n_eqb_s =
            bm_off[i_set].n_eqb_s * bm_off[i_set].n_eqb_b;
 
-#if WARNING
+#if WARNING_LOG
        if( bm_off[i_set].n_eqb_s != n_rot)
        {
          WARNING_MSG("n_eqb_s * n_eqb_b = %d "
@@ -950,7 +950,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
       if( bm_off[i_set].n_eqb_s > 0)
       {
         bm_off[i_set].n_eqb_s = bm_off[i_set].n_eqb_s*bm_off[i_set].n_eqb_b;
-#if WARNING
+#if WARNING_LOG
         if( bm_off[i_set].n_eqb_s != 2*n_mir)
         {
           WARNING_MSG("n_eqb_s * n_eqb_b = %d "

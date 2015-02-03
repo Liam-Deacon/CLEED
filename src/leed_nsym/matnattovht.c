@@ -120,9 +120,9 @@ void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",
-                RMATEL(i1, i2, Mbg),
-                IMATEL(i1, i2, Mbg),
-                cri_abs(RMATEL(i1, i2, Mbg), IMATEL(i1, i2, Mbg)) );
+                *rmatel(i1, i2, Mbg),
+                *imatel(i1, i2, Mbg),
+                cri_abs(*rmatel(i1, i2, Mbg), *imatel(i1, i2, Mbg)) );
         if(n2 % 6 == 0) fprintf(STDOUT, "\n  (%3d) ", n2+1);
       } /* m2 */
     } /* l2 */
@@ -135,9 +135,9 @@ void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",
-                RMATEL(i1, i2, Mbg),
-                IMATEL(i1, i2, Mbg),
-                cri_abs(RMATEL(i1, i2, Mbg), IMATEL(i1, i2, Mbg)) );
+                *rmatel(i1, i2, Mbg),
+                *imatel(i1, i2, Mbg),
+                cri_abs(*rmatel(i1, i2, Mbg), *imatel(i1, i2, Mbg)) );
         if(n2 % 6 == 0) fprintf(STDOUT, "\n  (%3d) ", n2+1);
       } /* m2 */
     } /* l2 */
@@ -150,9 +150,9 @@ void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",
-                RMATEL(i1, i2, Mbg),
-                IMATEL(i1, i2, Mbg),
-                cri_abs(RMATEL(i1, i2, Mbg), IMATEL(i1, i2, Mbg)) );
+                *rmatel(i1, i2, Mbg),
+                *imatel(i1, i2, Mbg),
+                cri_abs(*rmatel(i1, i2, Mbg), *imatel(i1, i2, Mbg)) );
         if(n2 % 6 == 0) fprintf(STDOUT, "\n  (%3d) ", n2+1);
       } /* m2 */
     } /* l2 */
@@ -165,8 +165,8 @@ void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",
-                RMATEL(i1, i2, Mbg), IMATEL(i1, i2, Mbg),
-                cri_abs(RMATEL(i1, i2, Mbg), IMATEL(i1, i2, Mbg)) );
+                *rmatel(i1, i2, Mbg), *imatel(i1, i2, Mbg),
+                cri_abs(*rmatel(i1, i2, Mbg), *imatel(i1, i2, Mbg)) );
         if(n2 % 6 == 0) fprintf(STDOUT, "\n  (%3d) ", n2+1);
       } /* m2 */
     } /* l2 */

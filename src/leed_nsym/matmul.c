@@ -69,8 +69,8 @@ mat matmul(mat Mr, const mat M1, const mat M2)
   int result_num_type;
 
   #if ( USE_CBLAS || USE_GSL || USE_MKL )
-  REAL_MATRIX *m1, *m2, *mr;      /* cblas matrices passed to cblas_[sf]gemm */
-  COMPLEX_MATRIX *m1c, *m2c, *mr; /* cblas matrices passed to cblas_[cz]gemm */
+  cleed_matrix_real *m1, *m2, *mr;      /* cblas matrices passed to cblas_[sf]gemm */
+  cleed_matrix_complex *m1c, *m2c, *mr; /* cblas matrices passed to cblas_[cz]gemm */
   #else
   mat m1 = M1, m2 = M2, mr = Mr;
   mat m1c = M1, m2c = M2, mrc = Mr;
@@ -95,7 +95,7 @@ mat matmul(mat Mr, const mat M1, const mat M2)
   /* check size of real */
   if ( sizeof(real) != sizeof(float) && sizeof(real) != sizeof(double) )
   {
-    ERROR_MSG("unexpected sizeof(real)=%lu\n", sizeof(real));
+    ERROR_MSG("unexpected sizeof(real)=%u\n", sizeof(real));
     ERROR_RETURN(NULL);
   }
 
@@ -106,24 +106,24 @@ mat matmul(mat Mr, const mat M1, const mat M2)
      * - no intermediary storage for operands
      * - no conversion to complex
      */
-    mr = REAL_MATRIX_ALLOC(M1->rows, M2->cols);
+    mr = CLEED_MATRIX_REAL_ALLOC(M1->rows, M2->cols);
 
     /* matrices are stored as row major */
-    REAL_MAT2CBLAS(m1, M1);
-    REAL_MAT2CBLAS(m2, M2);
+    CLEED_REAL_MAT2CBLAS(m1, M1);
+    CLEED_REAL_MAT2CBLAS(m2, M2);
 
     result_num_type = NUM_REAL;
   }
   else
   {
     /* at least one operand is complex */
-    mrc = COMPLEX_MATRIX_ALLOC(M1->rows, M2->cols);
+    mrc = CLEED_MATRIX_COMPLEX_ALLOC(M1->rows, M2->cols);
 
-    m1c = COMPLEX_MATRIX_ALLOC(M1->rows, M1->cols);
-    m2c = COMPLEX_MATRIX_ALLOC(M2->rows, M2->cols);
+    m1c = CLEED_MATRIX_COMPLEX_ALLOC(M1->rows, M1->cols);
+    m2c = CLEED_MATRIX_COMPLEX_ALLOC(M2->rows, M2->cols);
 
-    COMPLEX_MAT2CBLAS(m1c, M1);
-    COMPLEX_MAT2CBLAS(m2c, M2);
+    CLEED_COMPLEX_MAT2CBLAS(m1c, M1);
+    CLEED_COMPLEX_MAT2CBLAS(m2c, M2);
 
     result_num_type = NUM_COMPLEX;
   }
@@ -138,36 +138,37 @@ mat matmul(mat Mr, const mat M1, const mat M2)
   {
    case (NUM_REAL):
    {
-     real alpha = 1.0 ;
-     real beta =  0.0 ;
+     real alpha = 1.0;
+     real beta =  0.0;
 
-     REAL_CBLAS_GEMM(alpha, m1, M1->rows, M1->cols,
+     CLEED_REAL_CBLAS_GEMM(alpha, m1, M1->rows, M1->cols,
                             m2, M2->cols, beta, mr);
-     REAL_CBLAS2MAT(mrc, Mr);
+     CLEED_REAL_CBLAS2MAT(mrc, Mr);
+     break;
    }  /* endcase NUM_REAL */
-   break;
 
    case (NUM_COMPLEX):
    {
-     COMPLEX(alpha, 1.0, 0.0);
-     COMPLEX(beta, 0.0, 0.0);
+     cleed_complex alpha = CLEED_COMPLEX_INIT(1.0, 0.0);
+     cleed_complex beta = CLEED_COMPLEX_INIT(0.0, 0.0);
 
-     COMPLEX_CBLAS_GEMM(alpha, m1c, M1->rows, M1->cols,
+     CLEED_COMPLEX_CBLAS_GEMM(alpha, m1c, M1->rows, M1->cols,
                                m2c, M2->cols, beta, mrc);
-     COMPLEX_CBLAS2MAT(mrc, Mr);
+     CLEED_COMPLEX_CBLAS2MAT(mrc, Mr);
+     break;
    }  /* endcase NUM_COMPLEX */
-   break ;
+
   }   /* endswitch */
 
   /* free memory */
   #ifndef USE_NATIVE
-  REAL_MATRIX_FREE(m1);
-  REAL_MATRIX_FREE(m2);
-  REAL_MATRIX_FREE(mr);
+  CLEED_MATRIX_REAL_FREE(m1);
+  CLEED_MATRIX_REAL_FREE(m2);
+  CLEED_MATRIX_REAL_FREE(mr);
 
-  COMPLEX_MATRIX_FREE(m1c);
-  COMPLEX_MATRIX_FREE(m2c);
-  COMPLEX_MATRIX_FREE(mrc);
+  CLEED_MATRIX_COMPLEX_FREE(m1c);
+  CLEED_MATRIX_COMPLEX_FREE(m2c);
+  CLEED_MATRIX_COMPLEX_FREE(mrc);
   #endif
 
   return(Mr);

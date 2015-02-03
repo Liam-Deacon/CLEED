@@ -88,7 +88,7 @@ mat matrow(mat row, mat M, int row_num)
         }
 
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     }   /* switch */
   }     /* matrix type is not diagonal */
 
@@ -129,7 +129,7 @@ mat matrow(mat row, mat M, int row_num)
         *(row->iel + row_num) = *(M->iel + row_num);
 
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     }   /* switch */
   }     /* matrix type is diagonal */
 

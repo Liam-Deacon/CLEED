@@ -10,7 +10,7 @@
  *********************************************************************/
 
 /*!
- * Find minimum by simplex algorithm. (From Num. Rec.)
+ * Finds the minimum by simulated annealing with simplex algorithm. (From Num. Rec.)
  */
 
 #include <math.h>
@@ -22,49 +22,44 @@
 #include "csearch.h"
 #include "copy_file.h"
 
-#ifndef MAX_ITER_AMOEBA        /* should be defined in "search_def.h" */
-#define MAX_ITER_AMOEBA 500
-#endif
-
 extern char *sr_project;   /* project name */
 extern long sa_idum;       /* seed for ran1, defined and initialized in main */
 
-#define GET_PSUM \
-for (n=1;n<=ndim;n++)                              \
-{                                                  \
-  for (sum=0.0, m=1; m<=mpts; m++) sum += p[m][n]; \
-  psum[n]=sum;                                     \
-}
-
 static real tt;            /* communicates with amotsa */
 
-real amotsa(real **, real *, real *, int , real *, real *,
-            real (*)(), int , real *, real );
+static inline real fluct( long *i_ptr );
 
-real fluct(long*);
+real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n_dim,
+            cleed_vector *pb, cleed_real *yb, cleed_real (*funk)(),
+            size_t ihi, cleed_real *yhi, cleed_real fac);
 
-void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
-               real ftol, real (*funk)(), int *iter, real temptr)
+void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
+    cleed_vector *pb, cleed_vector *yb, cleed_real ftol,
+    cleed_real (*funk)(), size_t *iter, cleed_real temptr)
 {
-
   FILE *ver_stream;
   char ver_file[STRSZ];
 
-  int i,ilo,ihi;
-  int j, m, n;
-  int mpts;
+  size_t i, ilo, ihi;
+  size_t j, m, n;
+  size_t mpts = n_dim+1;
   real rtol, sum, swap;
-  real yhi, ylo, ynhi, ysave, yt, ytry, *psum;
+  real yhi, ylo, ynhi, ysave, yt, ytry;
+  cleed_vector *psum = CLEED_VECTOR_ALLOC(n_dim);
 
-  char *old_file;
-  char *new_file;
+  char old_file[FILENAME_MAX];
+  char new_file[FILENAME_MAX];
   time_t result;
 
-  mpts = ndim+1;
-  psum = vector(1,ndim);
   tt = -temptr;
-  GET_PSUM
 
+  /* get sum of parameters */
+  for (n=0; n < n_dim; n++)
+  {
+    for (sum=0.0, m=0; m < mpts; m++)
+      sum += CLEED_BASIC_MATRIX_GET(p, m, n, mpts, n_dim);
+    CLEED_VECTOR_SET(psum, n, sum);
+  }
 
   /* LOOP */
   for (;;)
@@ -72,15 +67,15 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
     /* Determine which point is highest (worst), next-highest, & lowest (best).
      *
      * Whenever we look at a vertex, it gets a random thermal fluctuation. */
-    ilo = 1;
-    ihi = 2;
-    ynhi = ylo = y[1] + tt*fluct(&sa_idum);
-    yhi =        y[2] + tt*fluct(&sa_idum);
+    ilo = 0;
+    ihi = 1;
+    ynhi = ylo = CLEED_VECTOR_GET(y, 0) + tt*fluct(&sa_idum);
+    yhi = CLEED_VECTOR_GET(y, 1) + tt*fluct(&sa_idum);
 
     if( ylo > yhi )
     {
-      ihi = 1;
-      ilo = 2;
+      ihi = 0;
+      ilo = 1;
       ynhi = yhi;
       yhi  = ylo;
       ylo  = ynhi;
@@ -88,9 +83,9 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
 
     /* Loop over the points in the simplex.
      * Add thermal fluctuations to each point */
-    for (i=3; i<=mpts; i++)
+    for (i=2; i < mpts; i++)
     {
-      yt = y[i] + tt*fluct(&sa_idum);
+      yt = CLEED_VECTOR_GET(y, i) + tt*fluct(&sa_idum);
       if( yt <= ylo )
       {
         ilo = i;
@@ -116,15 +111,16 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
     if( (rtol < ftol) || (*iter < 0) )
     {
       /* If returning, put best value in slot 1 */
-      swap = y[1];
-      y[1] = y[ilo];
-      y[ilo] = swap;
-     
-      for( n=1; n <= ndim; n++)
+      swap = CLEED_VECTOR_GET(y, 0);
+      CLEED_VECTOR_SET(y, 0, CLEED_VECTOR_GET(y, ilo));
+      CLEED_VECTOR_SET(y, ilo, swap);
+
+      for(n=0; n < n_dim; n++)
       {
-        swap = p[1][n];
-        p[1][n] = p[ilo][n];
-        p[ilo][n] = swap;
+        swap = CLEED_BASIC_MATRIX_GET(p, 0, n, mpts, n_dim);
+        CLEED_BASIC_MATRIX_SET(p, 0, n, mpts, n_dim,
+          CLEED_BASIC_MATRIX_GET(p, ilo, n, mpts, n_dim));
+        CLEED_BASIC_MATRIX_SET(p, ilo, n, mpts, n_dim, swap);
       }
       break;
     }
@@ -134,13 +130,13 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
      * the high point. */
     *iter -= 2;
 
-    ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, -1.0);
+    ytry = amotsa(p, y, psum, n_dim, pb, yb, funk, ihi, &yhi, -1.0);
 
     if( ytry <= ylo )
     {
       /* Result better than the best point, so try an additional
        * extrapolation by a factor of 2. */
-      ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 2.0);
+      ytry = amotsa(p, y, psum, n_dim, pb, yb, funk, ihi, &yhi, 2.0);
     }
     else if( ytry >= ynhi )
     {
@@ -148,28 +144,36 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
        * look for an intermediate lower point, i.e. do a one-dimensional
        * contraction. */
       ysave = yhi;
-      ytry = amotsa(p, y, psum, ndim, pb, yb, funk, ihi, &yhi, 0.5);
+      ytry = amotsa(p, y, psum, n_dim, pb, yb, funk, ihi, &yhi, 0.5);
 
       if( ytry >= ysave)
       {
         /* Can't seem to get rid of that high point. Better contract around
          * the lowest (best) point. */
-        for( i=1; i <= mpts; i++ )
+        for(i=0; i < mpts; i++ )
         {
           if( i != ilo)
           {
-            for (j=1; j<=ndim; j++)
+            for (j=0; j < n_dim; j++)
             {
-              psum[j]=0.5*(p[i][j] + p[ilo][j]);
-              p[i][j]=psum[j];
+              CLEED_VECTOR_SET(psum, j, 0.5*(
+                CLEED_BASIC_MATRIX_GET(p, i, j, mpts, n_dim) +
+                CLEED_BASIC_MATRIX_GET(p, ilo, j, mpts, n_dim)) );
+              CLEED_BASIC_MATRIX_SET(p, i, j, mpts, n_dim, CLEED_VECTOR_GET(psum, j));
             }
-
-            y[i]=(*funk)(psum);
+            CLEED_VECTOR_SET(y, i, (*funk)(psum));
           }
         } /* for i */
 
-        *iter -= ndim;
-        GET_PSUM;                   /* Recompute psum */
+        *iter -= n_dim;
+
+        /* Recompute psum */
+        for (n=0; n < n_dim; n++)
+        {
+          for (sum=0.0, m=0; m < mpts; m++)
+            sum += CLEED_BASIC_MATRIX_GET(p, m, n, mpts, n_dim);
+          CLEED_VECTOR_SET(psum, n, sum);
+        }
       } /* ytry >= ysave */
     } /* ytry >= ynhi */
     else
@@ -177,16 +181,12 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
       /* Correct the evaluation count */
       (*iter) ++;
     }
-   
+
     /* Write y/p to backup file */
-    old_file = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
-    new_file = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
-   
+
     /* remove 'cp' system call dependence */
-    strcpy(old_file, sr_project);
-    strcpy(new_file, sr_project);
-    strcat(old_file, ".ver");
-    strcat(new_file, ".vbk");
+    sprintf(old_file, "%s%s", sr_project, ".ver");
+    sprintf(new_file, "%s%s", sr_project, ".vbk");
     if (copy_file(old_file, new_file) != 0)
     {
       ERROR_MSG("failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
@@ -194,91 +194,88 @@ void sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
     }
 
     strcpy(ver_file, new_file);
-    ver_stream = fopen(ver_file,"w");
-    fprintf(ver_stream,"%d %d %s\n",ndim, mpts, sr_project);
-    for (i = 1; i<= mpts; i++)
+    ver_stream = fopen(ver_file, "w");
+    fprintf(ver_stream, "%d %d %s\n", n_dim, mpts, sr_project);
+    for (i=0; i < mpts; i++)
     {
-      fprintf(ver_stream,"%e ", y[i]);
-      for(j=1; j<= ndim; j++) fprintf(ver_stream,"%e ", p[i][j]);
-      fprintf(ver_stream,"\n");
+      fprintf(ver_stream, "%e ", y[i]);
+      for(j=0; j < n_dim; j++)
+        fprintf(ver_stream, "%e ", CLEED_BASIC_MATRIX_GET(p, i, j, mpts, n_dim));
+      fprintf(ver_stream, "\n");
     }
-   
+
     /* add date */
     result = time(NULL);
     fprintf(ver_stream, "%s\n", asctime(localtime(&result)));
-   
+
     fclose(ver_stream);
 
   } /* end of BIG LOOP */
 
-  free_vector(psum,1);
+  CLEED_VECTOR_FREE(psum);
 
 } /* end of function sr_amebsa */
 
 
-real amotsa(real **p, real *y, real *psum, int ndim, 
-                   real *pb, real *yb,
-                   real (*funk)(), int ihi, real *yhi, real fac)
-
-/***************************************************************************
-  Write y/p to backup file
-***************************************************************************/
+real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n_dim,
+            cleed_vector *pb, cleed_real *yb, cleed_real (*funk)(),
+            size_t ihi, cleed_real *yhi, cleed_real fac)
 {
 
-int j;
-real fac1, fac2, yflu, ytry, *ptry;
+  size_t j;
+  real fac1, fac2, yflu, ytry, faux, *ptry;
 
- ptry=vector(1,ndim);
- fac1=(1.0-fac)/ndim;
- fac2=fac1-fac;
+  ptry = CLEED_VECTOR_ALLOC(n_dim);
+  fac1 = (1.0 - fac)/n_dim;
+  fac2 = fac1 - fac;
 
- for (j=1; j<=ndim; j++) 
-   ptry[j]=psum[j]*fac1 - p[ihi][j]*fac2;
+  for (j=0; j < n_dim; j++)
+    CLEED_VECTOR_SET(ptry, j, CLEED_VECTOR_GET(psum, j)*fac1 -
+                     CLEED_BASIC_MATRIX_GET(p, ihi, j, n_dim+1, n_dim)*fac2);
 
- ytry=(*funk)(ptry);
+  ytry = (*funk)(ptry);
 
- if (ytry < *yb) 
- {
-/*
+  if (ytry < *yb)
+  {
+    /*
   Save the best ever
-*/
-   for(j=1; j<=ndim; j++) 
-     pb[j] = ptry[j];
-   *yb = ytry;
- }
+     */
+    for(j=0; j < n_dim; j++)
+      CLEED_VECTOR_SET(pb, j, CLEED_VECTOR_GET(ptry, j));
+    *yb = ytry;
+  }
 
-/***************************************************************************
-  We added a thermal fluctuation to all the current vertices, but we
-  subtract it here, so as to give the simplex a thermal "Brownian motion":
-  it likes to accept any suggested change.
-***************************************************************************/
+  /***************************************************************************
+   * We added a thermal fluctuation to all the current vertices, but we
+   * subtract it here, so as to give the simplex a thermal "Brownian motion":
+   * it likes to accept any suggested change.
+   ***************************************************************************/
 
- yflu = ytry - tt*fluct(&sa_idum);
+  yflu = ytry - tt*fluct(&sa_idum);
 
- if(yflu < *yhi)
- {
-   y[ihi] = ytry;
-   *yhi = yflu;
-   for(j=1; j<=ndim; j++)
-   {
-     psum[j] += ptry[j] - p[ihi][j];
-     p[ihi][j] = ptry[j];
-   }
- }
+  if(yflu < *yhi)
+  {
+    CLEED_VECTOR_SET(y, ihi, ytry);
+    *yhi = yflu;
+    for(j=0; j < n_dim; j++)
+    {
+      faux = CLEED_VECTOR_GET(psum, j);
+      CLEED_VECTOR_SET(psum, j, faux + CLEED_VECTOR_GET(ptry, j) -
+                CLEED_BASIC_MATRIX_GET(p, ihi, j, n_dim+1, n_dim));
+      CLEED_BASIC_MATRIX_SET(p, ihi, j, n_dim+1, n_dim, CLEED_VECTOR_GET(ptry, j));
+    }
+  }
 
- free_vector(ptry,1);
- return ytry;
+  CLEED_VECTOR_FREE(ptry);
+  return (ytry);
 
 }  /* end of function amotsa */
 
 /**************************************************************************/
 
-real fluct( long *i_ptr )
+static inline real fluct( long *i_ptr )
 {
-real res;
-
-  res = R_log( ran1(i_ptr) );
-  return(res);
+  return ( (real)R_log( ran1(i_ptr) ) );
 }  /* end of function amotsa */
 
 /**************************************************************************/

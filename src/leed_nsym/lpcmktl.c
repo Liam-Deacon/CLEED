@@ -95,8 +95,8 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
     else if(energy >= phs_shifts[i_set].eng_max)
     {
       /* Extrapolate for too high energies */
-      WARNING_MSG("%.2f H is higher than the max. energy for set No. %u\n",
-                  "\t => calculate extrapolated phase shift values\n"
+      WARNING_MSG("%.2f H is higher than the max. energy for set No. %u\n"
+                  "\t => calculate extrapolated phase shift values\n",
                   energy, i_set);
 
       i_eng = phs_shifts[i_set].n_eng - 1;

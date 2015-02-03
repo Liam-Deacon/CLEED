@@ -285,7 +285,7 @@ basis *basis_rotate_basis(const basis *_basis, double **R)
 basis *basis_angle_rotate(const basis *a, double alpha, 
                             double beta, double gamma)
 {
-  basis *new_basis = (basis*) malloc(sizeof(basis));
+  basis *new_basis = (basis*) calloc(1, sizeof(basis));
   if (new_basis == NULL) return NULL;
 
   /* rotate original basis vectors */
@@ -325,7 +325,7 @@ double **normal_get_rotation_matrix(const coord *normal)
   }
 
   /* calculate rotation matrix */
-  normal_len = COORD_MAGNITUDE(normal);
+  normal_len = coord_get_magnitude(normal);
   cos_t = normal->z / normal_len;
   sin_t = sqrt ( 1 - cos_t*cos_t);
 
@@ -474,9 +474,9 @@ void basis_set_a3(basis *_basis, const coord *a3)
  */
 coord *basis_get_normal(const basis *_basis, const miller_hkl *hkl)
 {
-  const coord *a1 = BASIS_VECTOR_PTR(_basis, 0);
-  const coord *a2 = BASIS_VECTOR_PTR(_basis, 1);
-  const coord *a3 = BASIS_VECTOR_PTR(_basis, 2);
+  const coord *a1 = (const coord *) &_basis->a[0];
+  const coord *a2 = (const coord *) &_basis->a[1];
+  const coord *a3 = (const coord *) &_basis->a[2];
   coord *normal = coord_init();
   
   if (normal == NULL) return NULL;

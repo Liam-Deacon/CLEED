@@ -25,23 +25,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef USE_GSL
-#include <gsl/gsl_vector.h>
-#endif
-
-#ifdef USE_GSL
-#define VECTOR_SET(vec, i, val)     gsl_vector_set(vec, i, val)
-#define VECTOR_ALLOC(vec, n)        gsl_vector* vec = gsl_vector_alloc(n)
-#define VECTOR_FREE(vec)            gsl_vector_free(vec)
-#define
-#else
-#define VECTOR_SET(vec, i, val)   vec[i] = val
-#define VECTOR_ALLOC(vec, n)      real* vec = vector(1, n)
-#define VECTOR_FREE(vec)          free_vector(vec, 1)
-#endif
-
 #include "csearch.h"
-
 
 extern char *sr_project;
 
@@ -54,64 +38,56 @@ extern char *sr_project;
  */
 void sr_er(size_t n_dim, real dpos, const char *log_file)
 {
-
+  char fmt_buffer[STRSZ];
   char line_buffer[STRSZ];
 
   int iaux = 0;
   size_t i_par, j_par;
-  size_t m_par = n_dim+1;
 
   real y_0;
 
-  #ifdef USE_GSL
-  gsl_vector *x = gsl_vector_alloc(n_dim);
-  gsl_vector *x_0 = gsl_vector_calloc(n_dim);
-  gsl_vector *y = gsl_vector_alloc(n_dim);
-  gsl_vector *err = gsl_vector_alloc(n_dim);
-  gsl_vector *del = gsl_vector_alloc(n_dim);
-  #else
-  real *x = vector(1, (int)n_dim);
-  real *x_0 = vector(1, (int)n_dim);
-  real *y = vector(1, (int)n_dim);
-  real *err = vector(1, (int)n_dim);
-  real *del = vector(1, (int)n_dim);
-  #endif /* _USE-GSL */
+  /* allocate memory and preset variables */
+  cleed_vector *x = CLEED_VECTOR_ALLOC(n_dim);
+  cleed_vector *x_0 = CLEED_VECTOR_ALLOC(n_dim);
+  cleed_vector *y = CLEED_VECTOR_ALLOC(n_dim);
+  cleed_vector *err = CLEED_VECTOR_ALLOC(n_dim);
+  cleed_vector *del = CLEED_VECTOR_ALLOC(n_dim);
 
-  real pref, rtol, rr, dr, rfac, rdel=0.;
+  real faux, pref, rtol, rr, dr, rfac, rdel=0.;
 
   FILE *io_stream, *log_stream;
 
   /* write title to log file */
-  if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
-  fprintf(log_stream, "=> DETERMINE ERROR BARS:\n\n");
-
-  /* allocate memory and preset variables */
-  m_par = n_dim + 1;
+  if( (log_stream = fopen(log_file, "a")) == NULL)
+  {
+    ERROR_MSG("Could not append to log file '%s'\n", log_file);
+  }
+  fprintf(log_stream, "=> DETERMINE ERROR_LOG BARS:\n\n");
 
   /* Calculate R factor for minimum. */
   fprintf(log_stream, "=> displace parameters from minimum:\n");
   fclose(log_stream);
 
-  for(i_par = 1; i_par <= n_dim; i_par ++) VECTOR_SET(x_0, i_par, 0.);
+  /*! changed first element of i_par loop from 1 to 0 */
+  for(i_par = 0; i_par < n_dim; i_par ++) CLEED_VECTOR_SET(x_0, i_par, 0.);
 
-  y_0 = SR_EVALRF(x_0);
+  y_0 = SR_RF(x_0);
 
   /* Read R factor value and RR factor for minimum */
   sprintf(line_buffer, "%s.dum", sr_project);
   io_stream = fopen(line_buffer, "r");
 
+  sprintf(fmt_buffer, "%%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
   while( fgets(line_buffer, STRSZ, io_stream) != NULL)
-  { ;
-    if( (iaux = sscanf(line_buffer, "%" REAL_FMT "f %" REAL_FMT "f",
-                       &rfac, &rr) ) == 2) break;
+  {
+    if( (iaux = sscanf(line_buffer, fmt_buffer, &rfac, &rr) ) == 2) break;
   }
 
   /* Stop with error message if reading error */
   if( iaux != 2)
   {
     log_stream = fopen(log_file, "a");
-    fprintf(log_stream, "*** error (srer): cannot read output from '%s'\n",
-            getenv("CSEARCH_RFAC"));
+    ERROR_MSG("cannot read output from log file '%s'\n", getenv("CSEARCH_RFAC"));
     fclose(log_stream);
     exit(SR_ENVIRONMENT_VARIABLE_ERROR);
   }
@@ -121,19 +97,12 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   pref = y_0 * rr;
   rtol = R_TOLERANCE / rr;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(sr_er): rfac = %.4f, rr = %.4f, rdel = %.4f\n", rfac, rr, rdel);
-  #endif
+  CONTROL_MSG(CONTROL, "rfac = %.4f, rr = %.4f, rdel = %.4f\n", rfac, rr, rdel);
 
   /* Calculate R factors for displacements */
-  for (i_par = 1; i_par <= n_dim; i_par ++)
+  for (i_par = 0; i_par < n_dim; i_par ++)
   {
-    #ifdef USE_GSL
-    gsl_vector_set(del, i_par-1, pos);
-    #else
-    del[i_par] = dpos;
-    #endif
-
+    CLEED_VECTOR_SET(del, i_par, dpos);
     rdel = 1.;
 
     do
@@ -153,40 +122,28 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
       }
       else
       {
-        #ifdef USE_GSL
-        gsl_vector_set(del, i_par-1,
-                        gsl_vector_get(del, i_par-1) / R_sqrt(rdel));
-        #else
-        del[i_par] = del[i_par] / R_sqrt(rdel);
-        #endif
+        CLEED_VECTOR_SET(del, i_par,
+                         CLEED_VECTOR_GET(del, i_par) / R_sqrt(rdel));
 
-        for (j_par = 1; j_par <= n_dim; j_par ++)
+        for (j_par = 0; j_par < n_dim; j_par ++)
         {
           if(i_par == j_par)
           {
-            #ifdef USE_GSL
-            gsl_vector_set(x, j_par-1, gsl_vector_get(x_0, j_par-1)
-                                          + gsl_vector_get(del, j_par-1));
-            #else
-            x[j_par] = x_0[j_par] + del[j_par];
-            #endif
+            CLEED_VECTOR_SET(x, j_par, CLEED_VECTOR_GET(x_0, j_par) +
+                                       CLEED_VECTOR_GET(del, j_par));
           }
-          #ifdef USE_GSL
-          else gsl_vector_set(x, j_par-1, gsl_vector_get(x_0, j_par-1));
-          #else
-          else x[j_par] = x_0[j_par];
-          #endif
+          else
+          {
+            CLEED_VECTOR_SET(x, j_par, CLEED_VECTOR_GET(x_0, j_par));
+          }
         }
 
         CONTROL_MSG(CONTROL, "Calculate function for parameter (%d)\n", i_par);
 
-        #ifdef USE_GSL
-        gsl_vector_set(y, i_par-1, SR_EVALRF(x));
-        rdel = R_fabs(gsl_vector_get(y, i_par-1) - y_0) / pref;
-        #else
-        y[i_par] = sr_evalrf(x);
-        rdel = R_fabs(y[i_par] - y_0) / pref;
-        #endif
+        /* evaluate R-factor */
+        CLEED_VECTOR_SET(y, i_par, SR_RF(x));
+        rdel = R_fabs(CLEED_VECTOR_GET(y, i_par) - y_0) / pref;
+
       }
 
     }
@@ -195,27 +152,21 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   } /* for i_par */
 
   /* Calculate error bars and write to log file */
-  #ifdef USE_GSL
-  pref = gsl_vector_get(y, 0) * rr;
-  for (i_par = 1; i_par <= ndim; i_par ++)
+  pref = CLEED_VECTOR_GET(y, 0) * rr;
+  for (i_par = 0; i_par < n_dim; i_par ++)
   {
-    gsl_vector_set(del, i_par-1, R_fabs(gsl_vector_get(del, i_par-1)) );
+    CLEED_VECTOR_SET(del, i_par, R_fabs(CLEED_VECTOR_GET(del, i_par)) );
   }
-  #else
-  pref = y[1] * rr;
-  for (i_par = 1; i_par <= n_dim; i_par ++) del[i_par] = R_fabs(del[i_par]);
-  #endif
 
-  if( (log_stream = fopen(log_file, "a")) == NULL) { OPEN_ERROR(log_file); }
-
-  fprintf(log_stream, "\n=> ERROR BARS:\n\n");
-  for (i_par = 1; i_par <= n_dim; i_par ++)
+  if( (log_stream = fopen(log_file, "a")) == NULL)
   {
-    #ifdef USE_GSL
-    dr = gsl_vector_get(y, i_par-1) - y_0;
-    #else
-    dr = y[i_par] - y_0;
-    #endif
+    ERROR_MSG("Could not append to log file '%s'\n", log_file);
+  }
+
+  fprintf(log_stream, "\n=> ERROR_LOG BARS:\n\n");
+  for (i_par = 0; i_par < n_dim; i_par ++)
+  {
+    dr = CLEED_VECTOR_GET(y, i_par) - y_0;
 
     if (dr < 0.)
     {
@@ -225,26 +176,16 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
 
     if( ! IS_EQUAL_REAL(dr, 0.))
     {
-      #ifdef USE_GSL
-      faux = R_sqrt(pref/dr) * gsl_vector_get(del, i_par-1);
-      gsl_vector_set(err, i_par-1, faux);
+      faux = R_sqrt(pref/dr) * CLEED_VECTOR_GET(del, i_par);
+      CLEED_VECTOR_SET(err, i_par, faux);
       fprintf(log_stream, "%2d: del R = %.4f; del par = %.4f\n",
               i_par, dr, faux);
-      #else
-      err[i_par] = R_sqrt(pref/dr) * del[i_par];
-      fprintf(log_stream, "%2d: del R = %.4f; del par = %.4f\n",
-              i_par, dr, err[i_par]);
-      #endif
     }
     else
     {
-      #ifdef USE_GSL
-      gsl_vector_set(err, i_par-1, -1.);
-      #else
-      err[i_par] = -1.;
-      #endif
+      CLEED_VECTOR_SET(err, i_par, -1.);
       fprintf(log_stream, "%2d: del R = %.4f; del par ** undefined **\n",
-             i_par, dr);
+              i_par, dr);
     }
 
   } /* for i_par */
@@ -252,10 +193,10 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   fclose(log_stream);
 
   /* free memory */
-  VECTOR_FREE(y);
-  VECTOR_FREE(x);
-  VECTOR_FREE(x_0);
-  VECTOR_FREE(del);
-  VECTOR_FREE(err);
+  CLEED_VECTOR_FREE(y);
+  CLEED_VECTOR_FREE(x);
+  CLEED_VECTOR_FREE(x_0);
+  CLEED_VECTOR_FREE(del);
+  CLEED_VECTOR_FREE(err);
 
 } /* end of function sr_er */

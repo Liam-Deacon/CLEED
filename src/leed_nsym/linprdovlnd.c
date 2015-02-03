@@ -129,7 +129,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
   /* START INPUT: Open and Read input file */
   if( (inp_stream = fopen(filename, "r")) == NULL)
   {
-    #ifdef ERROR
+    #ifdef ERROR_LOG
     fprintf(STDERR, "*** error (leed_read_overlayer): "
             "could not open file \"%s\"\n", filename);
     #endif
@@ -181,7 +181,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
         atoms_rd = ( leed_atom *) realloc(
                    atoms_rd, (i_atoms+2) * sizeof(leed_atom) );
 
-        #ifdef REAL_IS_DOUBLE
+        #ifdef CLEED_REAL_IS_DOUBLE
         iaux = sscanf(linebuffer+i_str+3 ," %s %lf %lf %lf %s %lf %lf %lf",
         #else
         iaux = sscanf(linebuffer+i_str+3 ," %s %f %f %f %s %f %f %f",
@@ -263,7 +263,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
           }
           else
           {
-            #ifdef WARNING
+            #ifdef WARNING_LOG
             fprintf(STDWAR, "* warning (leed_read_overlayer): "
                     "Could not interpret input: ");
             fprintf(STDWAR, "%s", whatnext);
@@ -293,7 +293,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
         if( (*(linebuffer+i_str+1) != 'r') && (*(linebuffer+i_str+1) != 'R') )
         break;
 
-        #ifdef REAL_IS_DOUBLE
+        #ifdef CLEED_REAL_IS_DOUBLE
         sscanf(linebuffer+i_str+3, " %lf", &(over_par->vr));
         #else
         sscanf(linebuffer+i_str+3 ," %f", &(over_par->vr));
@@ -305,7 +305,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
         {
           over_par->vr = -over_par->vr;
 
-          #ifdef WARNING
+          #ifdef WARNING_LOG
           fprintf(STDWAR, "* warning (leed_read_overlayer):");
           fprintf(STDWAR, "Vr must be negative, use the negative value "
                   "of input %.1f\n", over_par->vr*HART);
@@ -330,7 +330,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
       default:
       /* print warning for unrecognized key words */
       {
-        #ifdef WARNING
+        #ifdef WARNING_LOG
         fprintf(STDWAR, "* warning (leed_read_overlayer): "
                 "could not interpret line \n\t%s\t(in file \"%s\")\n",
                 linebuffer, filename);

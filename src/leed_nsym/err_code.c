@@ -133,7 +133,7 @@ char *cl_err_code (cl_int err_in)
             return (char*)" CL_INVALID_PROPERTY ";
 #endif
         default:
-            return (char*)"UNKNOWN ERROR";
+            return (char*)"UNKNOWN ERROR_LOG";
 
     }
 }

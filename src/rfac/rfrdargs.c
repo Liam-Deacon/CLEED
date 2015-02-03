@@ -27,8 +27,6 @@
 
 #include "rfac.h"
 
-#define ARG_IS(text) (strcmp(argv[i], text) == 0)
-
 /*!
  * Read argument list from command line and set the adequate parameters
  * for the program (structure crargs)
@@ -94,6 +92,7 @@
 rfac_args *rfac_rdargs(int argc, char **argv)
 {
   int i, j;
+  char fmt_buffer[STRSZ];
 
   /* structure containing all program parameters:
     char *ctrfile              - input control file
@@ -123,7 +122,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
     if(argv[i][0] == '-')
     {
      
-      if (ARG_IS("-a") || ARG_IS("--print"))
+      if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--print"))
       {
         /* 
          -a <flag>: specify which group ID's appear in output.
@@ -153,7 +152,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
     
       } /* case a */
 
-      else if (ARG_IS("-c") || ARG_IS("--control"))
+      else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--control"))
       {
         /* 
          -c <filename>: specify control file for averaging and assigning
@@ -168,7 +167,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         }
       } /* case c */
 
-      else if (ARG_IS("-h") || ARG_IS("--help")) 
+      else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
       {
         /*
             call help function
@@ -177,7 +176,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         exit(RFAC_SUCCESS);
       } /* case h */
 
-      else if (ARG_IS("-o") || ARG_IS("--output"))
+      else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output"))
       {
         /* 
            -o <output file>: specify a file name for the r factor output to be
@@ -194,7 +193,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         }
       } /* case o */
 
-      else if (ARG_IS("-r") || ARG_IS("--rfactor"))
+      else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--rfactor"))
       {
         /* 
          -r <r_factor>: specify which R-factor should be used for comparison.
@@ -226,7 +225,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         }
       } /* case r */
 
-      else if (ARG_IS("-s") || ARG_IS("--shift"))
+      else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--shift"))
       {
         /* 
          -s <shift>: specify an energy range for shifting experimental and 
@@ -236,7 +235,10 @@ rfac_args *rfac_rdargs(int argc, char **argv)
     
         if (++i < argc)
         {
-          j = sscanf(argv[i], "%" REAL_FMT "f,%" REAL_FMT "f,%" REAL_FMT "f",
+          /* set real format specifier */
+          sprintf(fmt_buffer, "%%%sf,%%%sf,%%%sf",
+                  CLEED_REAL_FMT, CLEED_REAL_FMT, CLEED_REAL_FMT);
+          j = sscanf(argv[i], fmt_buffer,
                      &(args->s_ini), &(args->s_fin), &(args->s_step));
 
           switch (j)     /* j is the number of arguments */
@@ -270,7 +272,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         }
       } /* case s */
 
-      else if (ARG_IS("-t") || ARG_IS("--theory"))
+      else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--theory"))
       {
         /*
           -t <filename>: specify theoretical input file
@@ -285,7 +287,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       } /* case t */
 
 
-      else if (ARG_IS("-v") || ARG_IS("--potential"))
+      else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--potential"))
       {
         /* 
            -v <potential>: imaginary part of optical potential (used for
@@ -304,7 +306,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         }
       } /* case v */
 
-      else if (ARG_IS("-w") || ARG_IS("--write"))
+      else if (!strcmp(argv[i], "-w") || !strcmp(argv[i], "--write"))
       {
         /*
          -w <filename>: specify file name for IV curves
@@ -320,7 +322,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         }
       } /* case w */
 
-      else if (ARG_IS("-V") || ARG_IS("--version"))
+      else if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version"))
       {
         rfac_info();
         exit(0);

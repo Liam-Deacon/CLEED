@@ -13,7 +13,7 @@
  *   GH/03.04.95 - Calculate Yl-m explicitly in c_ylm.
  *   GH/05.08.95 - mk_ylm_coef is a global function (not static anymore),
  *                 i.e. it can be called from outside this file.
- *   GH/10.08.95 - WARNING output at the end of mk_ylm_coef.
+ *   GH/10.08.95 - WARNING_LOG output at the end of mk_ylm_coef.
  *********************************************************************/
 
 /*! \file
@@ -33,7 +33,6 @@
 #include "qm.h"
 
 static const size_t MEM_BLOCK = 256;  /* memory block for coef */
-static const int UNUSED = -1;
 
 static real *coef  = NULL;      /* coefficients in the power series of Ylm */
 
@@ -42,9 +41,11 @@ static real *i_pre = NULL;
 static real *r_prec = NULL;     /* prefactors used to calculate Yl-m c_ylm */
 static real *i_prec = NULL;
 
-static int l_max_coef = UNUSED;
-static int l_max_r = UNUSED;
-static int l_max_c = UNUSED;
+static const int UNUSED = -1;
+
+static int l_max_coef = -1;
+static int l_max_r = -1;
+static int l_max_c = -1;
 
 /************************************************************************
 
@@ -88,7 +89,8 @@ static int l_max_c = UNUSED;
  */
 mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
 {
-  int iaux, off;
+  size_t iaux;
+  int off;
   int l, m;                      /* quantum numbers l,m */
   int lamb;                      /* power of x */
 
@@ -108,7 +110,7 @@ mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
    */
   if ( l_max > l_max_coef )
   {
-#if WARNING
+#if WARNING_LOG
     if(l_max_coef != UNUSED)
     {
       WARNING_MSG("recalculating coefficients: old l_max = %d, new = %d\n",
@@ -278,7 +280,7 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
    */
   if ( l_max > l_max_coef )
   {
-#if WARNING
+#if WARNING_LOG
     if(l_max_coef != UNUSED)
     {
       WARNING_MSG("recalculating coefficients: old l_max = %d, new = %d\n",
@@ -389,19 +391,19 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
 
 /*!
  * Produce the coefficients needed to calculate spherical harmonics in
- * functions r_ylm and c_ylm.
+ * functions r_ylm() and c_ylm() .
  *
- * \return Coefficient of @p l_max
+ * \return Coefficient of /p l_max
  */
 int mk_ylm_coef(size_t l_max)
 {
   int i;
-  int iaux;
+  size_t iaux;
   int index;                   /* index */
   size_t i_mem;                /* number of memory blocks allocated */
 
-  size_t l;
-  int m, lamb;
+  size_t l, m;
+  int lamb;
 
   double *fac;
 
@@ -464,7 +466,7 @@ int mk_ylm_coef(size_t l_max)
       {
         coef[index] = sgn * pre_lm *
                      (real) ( fac[2*lamb] / 
-                             (fac[lamb] * fac[l - lamb] * fac[2*lamb -l -m]));
+                             (fac[lamb] * fac[l - lamb] * fac[2*lamb - l - m]));
         CONTROL_MSG(CONTROL_ALL, "l:%2d, m:%2d, lamb:%2d, coef[%2d]:%7.3f\n",
                l, m, lamb, index, coef[index]);
         sgn = -sgn;

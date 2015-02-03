@@ -89,7 +89,7 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
   if(*p_beams_out == NULL)
   {
     ERROR_MSG("allocation error.\n");
-    ERROR_EXIT(LEED_ALLOCATION_ERROR);
+    ERROR_EXIT_RETURN(LEED_ALLOCATION_ERROR, LEED_ALLOCATION_ERROR);
   }
  else
  {

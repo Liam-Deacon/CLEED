@@ -73,13 +73,13 @@ real vaux[2];
 
 #ifdef CONTROL
  fprintf(STDCTR,"(leed_inp_overlayer_sym): entering leed_inp_overlayer_sym MIN_DIST= %.3f n_atoms = %d\n", 
-         MIN_DIST*BOHR ,  par->natoms);
+         MIN_DIST*BOHR ,  par->n_atoms);
 #endif
 /************************************************************************
   predefine some often used variables
 *************************************************************************/
 
- n_atoms = par->natoms;
+ n_atoms = par->n_atoms;
  n_rot = par->n_rot;
  n_mir = par->n_mir;
 
@@ -216,11 +216,11 @@ real vaux[2];
 
 
 /****** update several parameters ******/
- par->natoms = n_atoms;
+ par->n_atoms = n_atoms;
  atom_list[n_atoms].type = I_END_OF_LIST;
 
  i_layer ++;
- par->nlayers = i_layer;
+ par->n_layers = i_layer;
 
 #ifdef CONTROL_X
  for(i=0; i< i_layer; i++)
@@ -231,7 +231,7 @@ real vaux[2];
 #endif
 
 /************************************************************************
-  Make shure that all registry shifts are the shortest possible.
+  Make sure that all registry shifts are the shortest possible.
 *************************************************************************/
 
  for(i=0; i< i_layer; i++)
@@ -289,7 +289,7 @@ real vaux[2];
    - lattice vectors (from par->a)
    - interlayer vectors 
 *********************************************************************/
-   par->layers[i].natoms = no_of_atoms[i];
+   par->layers[i].n_atoms = no_of_atoms[i];
    par->layers[i].periodic = 0;
 
    for(i_c = 1; i_c < 5; i_c ++)
@@ -323,7 +323,7 @@ real vaux[2];
    par->layers[j].atoms
 **************************************************************************/
    par->layers[i].atoms =
-     (leed_atom *) malloc(par->layers[i].natoms * sizeof(leed_atom) );
+     (leed_atom *) malloc(par->layers[i].n_atoms * sizeof(leed_atom) );
 
    for( i_c = 0, i_atoms = 0; i_atoms < n_atoms ; i_atoms ++)
    {
@@ -341,9 +341,9 @@ real vaux[2];
        i_c ++;
      }
    } /* for i_atoms */
-   if(i_c != par->layers[i].natoms)
+   if(i_c != par->layers[i].n_atoms)
    {
-#ifdef ERROR
+#ifdef ERROR_LOG
      fprintf(STDERR,
 "*** error (leed_inp_overlayer_sym): the numbers of atoms in layer %d do not match\n", i);
 #endif
@@ -392,7 +392,7 @@ fprintf(STDCTR,"a_lat( %.3f %.3f %.3f %.3f)\n",
                    par->layers[i_c].a_lat[3]*BOHR,par->layers[i_c].a_lat[4]*BOHR);
 fprintf(STDCTR,"atom_position:\n");
 
-  for(i = 0 ; i < par->layers[i_c].natoms ; i++)
+  for(i = 0 ; i < par->layers[i_c].n_atoms ; i++)
         fprintf(STDCTR,"\t atom%d :(%.3f %.3f %.3f) type%d\n",i+1,
                              par->layers[i_c].atoms[i].pos[1]*BOHR,
                              par->layers[i_c].atoms[i].pos[2]*BOHR,

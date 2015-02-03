@@ -24,15 +24,15 @@
 
 #include "mat.h"
 
-#define RFORM     "%6.3f "
-#define R_DIAFORM "  *.** "
+static const char* RFORM = "%6.3f ";
+static const char* R_DIAFORM = "  *.** ";
 
-#define CFORM_2    "(%7.4f,%7.4f) "
-#define CFORM_ZERO "  -.----, -.----  "
-#define MIN_VALUE  0.00005
+static const char* CFORM_2 = "(%7.4f,%7.4f) ";
+static const char* CFORM_ZERO = "  -.----, -.----  ";
+static const real MIN_VALUE = 0.00005;
 
-#define CMAXCOL  16
-#define C_DIAFORM "( *.**, *.**) "
+enum { CMAXCOL = 16};
+static const char* C_DIAFORM = "( *.**, *.**) ";
 
 /*!
  * Prints the elements of matrix \p M to #STDOUT
@@ -40,7 +40,7 @@
  * \param[in] M Matrix to print.
  *
  * \note If the matrix does not exist then the function returns (after
- * printing an error message if #ERROR is defined).
+ * printing an error message if #ERROR_LOG is defined).
  */
 void matshow(const mat M)
 {
@@ -66,7 +66,7 @@ void matshow(const mat M)
             {
               for (i_c = 1; i_c <= M->cols; i_c ++)
               {
-                fprintf(STDOUT, RFORM, RMATEL(i_r,i_c,M));
+                fprintf(STDOUT, RFORM, *rmatel(i_r,i_c,M));
               }
               fprintf(STDOUT, "\n");
             }
@@ -82,15 +82,15 @@ void matshow(const mat M)
               fprintf(STDOUT, "%3d:    ", i_r);
               for (i_c = 1; i_c <= M->cols; i_c ++)
               {
-                if( (R_fabs(RMATEL(i_r, i_c, M)) < MIN_VALUE) &&
-                    (R_fabs(IMATEL(i_r, i_c, M)) < MIN_VALUE) )
+                if( (R_fabs(*rmatel(i_r, i_c, M)) < MIN_VALUE) &&
+                    (R_fabs(*imatel(i_r, i_c, M)) < MIN_VALUE) )
                 {
                   fprintf(STDOUT, CFORM_ZERO);
                 }
                 else
                 {
-                  fprintf(STDOUT, CFORM_2, RMATEL(i_r, i_c, M),
-                      IMATEL(i_r, i_c, M));
+                  fprintf(STDOUT, CFORM_2, *rmatel(i_r, i_c, M),
+                      *imatel(i_r, i_c, M));
                 }
                 if( (i_c % CMAXCOL == 0) && (i_c < M->cols) )
                 {
@@ -102,7 +102,7 @@ void matshow(const mat M)
             fprintf(STDOUT, "\n");
 
             break;
-          } /* case COMPLEX */
+          } /* case CLEED_COMPLEX */
 
         }  /* switch num_type */
 
@@ -146,7 +146,7 @@ void matshow(const mat M)
             fprintf(STDOUT, "\n");
 
             break;
-          } /* case COMPLEX */
+          } /* case CLEED_COMPLEX */
 
         }  /* switch num_type */
 

@@ -78,7 +78,7 @@ size_t leed_update_phase(size_t n)
  * \param[out] p_phs_shifts Double pointer to the phase shifts.
  * \return number of phase shifts.
  * \retval -1 on failure and if #EXIT_ON_ERROR is not defined.
- * \note Additional output can be enabled by defining #ERROR and #WARNING when
+ * \note Additional output can be enabled by defining #ERROR_LOG and #WARNING_LOG when
  * compiling.
  * \warning The phase shifts in the input file must be for increasing energies.
  * \todo Check behavior is maintained from previous version.
@@ -91,11 +91,12 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   char filename[STRSZ];
   char linebuffer[STRSZ];
   char eng_type[STRSZ];
+  char fmt_buffer[STRSZ];
 
   leed_phase *phs_shifts;
 
   int i;
-  int i_str, i_eng;
+  size_t i_str, i_eng;
 
   size_t neng, lmax, nl;       /* neng = No. of energies to be read
                                 * lmax = max. quantum number;
@@ -126,13 +127,16 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   }
   else sprintf(filename, "%s", phaseinp);
 
+  /* set real format specifier */
+  sprintf(fmt_buffer, "%%%se", CLEED_REAL_FMT);
+
   if(i_phase > 0)
   {
     /* Compare filename, dr, and t_type with previous phaseshifts.
      * Return the corresponding phase shift number if the same combination has
      * already been read.
      */
-    for(i=0; i<i_phase; i++)
+    for(i=0; i < i_phase; i++)
     {
       if( (!strcmp( (*p_phs_shifts + i)->input_file, filename) )         &&
           ( R_fabs(dr[1] - (*p_phs_shifts + i)->dr[1]) < GEO_TOLERANCE ) &&
@@ -176,7 +180,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     ERROR_RETURN(-1);
   }
 
-  phs_shifts->input_file = strdup(filename);
+  strcpy(phs_shifts->input_file, filename);
 
   /* Read the first line of the input file which contains the number of
    * energies to be read in (neng) and the maximum phase shift quantum
@@ -236,7 +240,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
        i_eng ++)
   {
 
-    sscanf(linebuffer, "%" REAL_FMT "e", phs_shifts->energy+i_eng);
+    sscanf(linebuffer, fmt_buffer, phs_shifts->energy+i_eng);
     phs_shifts->energy[i_eng] *= eng_scale;
    
     if (i_eng == 0)
@@ -252,7 +256,8 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     {
       for( i_str = 0, i = 0; i<nl; i++)
       {
-        sscanf(linebuffer + i_str, "%" REAL_FMT "e", phs_shifts->pshift+i_eng*nl+i);
+        sscanf(linebuffer + i_str, fmt_buffer,
+               phs_shifts->pshift + i_eng*nl + i);
         while((linebuffer[i_str] == ' ') || (linebuffer[i_str] == '-')) i_str++;
         while((linebuffer[i_str] != ' ') && (linebuffer[i_str] != '-')) i_str++;
       }
@@ -271,13 +276,13 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   CONTROL_MSG(CONTROL, "Number of energies = %d, lmax = %d\n",
               phs_shifts->n_eng, phs_shifts->lmax);
   fprintf(STDCTR, "\n\t  E(H)");
-  for(i=0; i<nl; i++) fprintf(STDCTR, "\t  l=%2d",i);
+  for(i=0; i < nl; i++) fprintf(STDCTR, "\t  l=%2d",i);
   fprintf(STDCTR, "\n\n");
 
   for(i_eng = 0; i_eng < phs_shifts->n_eng; i_eng ++)
   {
     fprintf(STDCTR, "\t%7.4f", phs_shifts->energy[i_eng]);
-    for(i=0; i<nl; i++)
+    for(i=0; i < nl; i++)
     {
       if( ! IS_EQUAL_REAL(phs_shifts->pshift[i_eng*nl+i], 0.0))
       {
@@ -290,7 +295,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   fprintf(STDCTR, "\n");
 #endif
 
-#ifdef WARNING
+#ifdef WARNING_LOG
   if(phs_shifts->n_eng != neng)
   {
     WARNING_MSG("EOF found before reading all phase shifts:\n"

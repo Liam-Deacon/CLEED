@@ -50,8 +50,8 @@
 #define CONTROL
 #endif
 
-#define WARNING
-#define ERROR
+#define WARNING_LOG
+#define ERROR_LOG
 
 #define CTR_NORMAL       998
 #define CTR_EARLY_RETURN 999
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
   {
     if(*argv[i_arg] != '-')
     {
-      #ifdef ERROR
+      #ifdef ERROR_LOG
       leed_usage(stderr);
       #endif
       exit(1);
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
         strncpy(res_file, argv[i_arg], STRSZ);
         if ((res_stream = fopen(res_file,"w")) == NULL)
         {
-          #ifdef ERROR
+          #ifdef ERROR_LOG
           fprintf(STDERR, "*** error (%s): "
                   "could not open output file \"%s\"\n", LEED_NAME, res_file);
           #endif
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
         strncpy(pro_name, argv[i_arg], STRSZ);
         if ((pro_stream = fopen(pro_name, "r")) == NULL)
         {
-          #ifdef ERROR
+          #ifdef ERROR_LOG
           fprintf(STDERR, "*** error (%s): "
                   "could not open project file \"%s\" for reading\n",
                   LEED_NAME, pro_name);
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
         strncpy(pro_name, argv[i_arg], STRSZ);
         if ((pro_stream = fopen(pro_name,"w")) == NULL)
         {
-          #ifdef ERROR
+          #ifdef ERROR_LOG
           fprintf(STDERR, "*** error (%s): "
                   "could not open project file \"%s\" for writing\n",
                   LEED_NAME, pro_name);
@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
    */
   if(strncmp(par_file, "---", 3) == 0)
   {
-    #ifdef ERROR
+    #ifdef ERROR_LOG
     fprintf(STDERR, "***error (%s): "
             "no parameter input file (option -i) specified\n", LEED_NAME);
     #endif
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 
   if(strncmp(res_file, "leed.res", 8) == 0)
   {
-    #ifdef WARNING
+    #ifdef WARNING_LOG
     fprintf(STDWAR, "*warning (%s): "
             "no output file (option -o) specified\n", LEED_NAME);
     fprintf(STDWAR, "\toutput will be written to file \"%s\"\n", res_file);
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 
     if ((res_stream = fopen(res_file,"w")) == NULL)
     {
-      #ifdef ERROR
+      #ifdef ERROR_LOG
       fprintf(STDERR, "***error (%s): "
               "could not open output file \"%s\"\n", LEED_NAME, res_file);
       #endif

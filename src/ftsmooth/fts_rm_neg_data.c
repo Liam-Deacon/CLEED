@@ -19,6 +19,7 @@
  */
 
 #include "ftsmooth.h"
+#include "gh_stddef.h"
 
 /*!
  * Removes negative \p fx entries.

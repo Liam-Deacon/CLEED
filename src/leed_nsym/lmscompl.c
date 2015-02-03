@@ -108,6 +108,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   size_t n_atoms, i_atoms, j_atoms;
   size_t n_beams, k, l;
   size_t n_plane;
+  size_t i, n;
 
   real d_ij[4];
   real faux_r, faux_i;
@@ -246,17 +247,17 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {
-    iaux = 0;
+    n = 0;
     for(j_atoms = 0; j_atoms < n_atoms; j_atoms ++)
     {
       if( R_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] )
          < GEO_TOLERANCE )
-      { iaux ++; }
+      { n ++; }
     }    /* for j_atoms */
    
-    if(iaux > n_plane)
+    if(n > n_plane)
     {
-      n_plane = iaux;
+      n_plane = n;
       z_plane = (atoms+i_atoms)->pos[3];
     }
 
@@ -372,8 +373,8 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
    * - Add identity to Mbg and invert giant matrix.
    * - free storage space for interlayer lattice sums.
    */
-  iaux = l_max_2 * n_atoms;
-  Mbg = matalloc(Mbg, iaux, iaux, NUM_COMPLEX);
+  n = l_max_2 * n_atoms;
+  Mbg = matalloc(Mbg, n, n, NUM_COMPLEX);
   Mark = matalloc(Mark, n_atoms, n_atoms, NUM_REAL);
 
   for(i_atoms = 0, off_row = 1; i_atoms < n_atoms;
@@ -505,16 +506,15 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   Ylm = leed_ms_ymat(Ylm, l_max, beams, n_beams);
 
   /* allocate storage space (Ylm->rows = number of beams) */
-  iaux = l_max_2 * n_atoms;
-  L_p = matalloc(L_p, n_beams, iaux, NUM_COMPLEX);
-  L_m = matalloc(L_m, n_beams, iaux, NUM_COMPLEX);
+  n = l_max_2 * n_atoms;
+  L_p = matalloc(L_p, n_beams, n, NUM_COMPLEX);
+  L_m = matalloc(L_m, n_beams, n, NUM_COMPLEX);
 
-  R_p = matalloc(R_p, iaux, n_beams, NUM_COMPLEX);
-  R_m = matalloc(R_m, iaux, n_beams, NUM_COMPLEX);
+  R_p = matalloc(R_p, n, n_beams, NUM_COMPLEX);
+  R_m = matalloc(R_m, n, n_beams, NUM_COMPLEX);
 
 
-  CONTROL_MSG(CONTROL, "Prepare matrices R_x and L_x (%d x %d)\n",
-              n_beams, iaux);
+  CONTROL_MSG(CONTROL, "Prepare matrices R_x and L_x (%d x %d)\n", n_beams, n);
 
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {
@@ -775,7 +775,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   /* Add propagator of the unscattered wave to Tpp/Tmm:
    * exp[-ikz(+) * (zn - z1)]
    */
-  for(iaux = 1, k = 0; k < n_beams; iaux += n_beams + 1, k ++)
+  for(i = 1, k = 0; k < n_beams; i += n_beams + 1, k ++)
   {
     /* exp[-ikz(+) * (zn - z1)] */
     cri_mul(&faux_r, &faux_i,
@@ -787,10 +787,10 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                     k, faux_r, faux_i, pref_r);
     #endif
 
-    *(Tmm->rel+iaux) += faux_r;
-    *(Tmm->iel+iaux) += faux_i;
-    *(Tpp->rel+iaux) += faux_r;
-    *(Tpp->iel+iaux) += faux_i;
+    *(Tmm->rel+i) += faux_r;
+    *(Tmm->iel+i) += faux_i;
+    *(Tpp->rel+i) += faux_r;
+    *(Tpp->iel+i) += faux_i;
   }
 
   CONTROL_MSG(CONTROL, " ... completed\n");

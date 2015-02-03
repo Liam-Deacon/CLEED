@@ -31,11 +31,6 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#if USE_GSL
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#endif
-
 #include "csearch.h"
 
 /*!
@@ -59,14 +54,11 @@
  * \note exits with \ref search_error code if failed and \c EXIT_ON_ERROR
  * defined.
  */
-#if USE_GSL
-int sr_rdver(const char *ver_file, gsl_vector *y, gsl_matrix *p, int n_dim)
-#else
-int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
-#endif
+int sr_rdver(const char *ver_file, cleed_vector *y, cleed_basic_matrix *p, int n_dim)
 {
   FILE *ver_stream;
 
+  char fmt_buffer[STRSZ];
   char linebuffer[STRSZ];                   /* input buffer */
   size_t i_str, n_str;
 
@@ -83,6 +75,8 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
   }
 
   CONTROL_MSG(CONTROL_X, "Reading file \"%s\"\n", ver_file);
+
+  sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
 
   while ( *fgets(linebuffer, STRSZ, ver_stream) == '#');
   sscanf(linebuffer, "%u %u", &i_par, &m_par);
@@ -101,7 +95,7 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
 
   n_str = m_par * 15;
 
-  i_par = 1;
+  i_par = 0;
   while( (fgets(linebuffer, (int)n_str, ver_stream) != NULL) && (i_par <= m_par) )
   {
     CONTROL_MSG(CONTROL_X, "(%s): %s", ver_file, linebuffer);
@@ -111,32 +105,16 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
       i_str = 0;
       while(linebuffer[i_str] == ' ') i_str ++;
 
-#     if USE_GSL
+      sscanf(linebuffer+i_str, fmt_buffer, &faux);
+      CLEED_VECTOR_SET(y, i_par, faux);
 
-      while(linebuffer[i_str] == ' ') i_str ++;
-      sscanf(linebuffer+i_str, "%" REAL_FMT "e", &faux);
-      gsl_vector_set(y, i_par, faux);
-
-      for(j_par = 0; j_par < ndim; j_par ++)
+      for(j_par = 0; j_par < (size_t)n_dim; j_par ++)
       {
         while(linebuffer[i_str] != ' ') i_str ++;
         while(linebuffer[i_str] == ' ') i_str ++;
-        sscanf(linebuffer+i_str, "%" REAL_FMT "e", &faux);
-        gsl_matrix_set(p, i_par, j_par, faux);
+        sscanf(linebuffer+i_str, fmt_buffer, &faux);
+        CLEED_BASIC_MATRIX_SET(p, i_par, j_par, m_par, (size_t)n_dim, faux);
       }
-
-#     else /* USE_GSL */
-
-      sscanf(linebuffer+i_str, "%" REAL_FMT "e", y + i_par);
-
-      for(j_par = 1; j_par <= (size_t)n_dim; j_par ++)
-      {
-        while(linebuffer[i_str] != ' ') i_str ++;
-        while(linebuffer[i_str] == ' ') i_str ++;
-        sscanf(linebuffer+i_str, "%" REAL_FMT "e", p[i_par] + j_par);
-      }
-
-#     endif /* USE_GSL */
 
       i_par ++;
 
@@ -153,22 +131,12 @@ int sr_rdver(const char *ver_file, real *y, real **p, int n_dim)
 
 # if CONTROL
   fprintf(STDCTR, "(sr_rdver): vertex read from \"%s\":\n", ver_file);
-  for (i_par = 1; i_par<= m_par; i_par++)
+  for (i_par = 0; i_par < m_par; i_par++)
   {
-    fprintf(STDCTR, "(%2d) %7.4f :", i_par,
-#   if USE_GSL
-    gsl_vector_get(y, i_par));
-#   else
-    y[i_par]);
-#   endif
-    for(j_par=1; j_par<= (size_t)n_dim; j_par++)
+    fprintf(STDCTR, "(%2d) %7.4f :", i_par, CLEED_VECTOR_GET(y, i_par));
+    for(j_par=0; j_par < (size_t)n_dim; j_par++)
     {
-      fprintf(STDCTR, " %6.3f",
-#         ifdef USE_GSL
-          gsl_matrix_get(p, i_par, j_par));
-#         else
-          p[i_par][j_par]);
-#         endif
+      fprintf(STDCTR, " %6.3f", CLEED_BASIC_MATRIX_GET(p, i_par, j_par, m_par, (size_t)n_dim));
     }
     fprintf(STDCTR, "\n");
   }

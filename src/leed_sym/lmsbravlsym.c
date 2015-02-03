@@ -117,7 +117,7 @@ mat Yin_p, Yin_m, Yout;
 
  if( (l_type != BULK) && (l_type != OVER) )
  {
-#ifdef ERROR
+#ifdef ERROR_LOG
    fprintf(STDERR,
    " *** error (leed_ms_sym): unidentified bulk_over type = %d\n", l_type);
 #endif

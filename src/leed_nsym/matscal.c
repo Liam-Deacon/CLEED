@@ -109,7 +109,7 @@ mat matscal(mat Mr, const mat Mi, real num_r, real num_i )
       }
 
       break;
-    }  /* case COMPLEX */
+    }  /* case CLEED_COMPLEX */
   }   /* switch */
 
   return(Mr);

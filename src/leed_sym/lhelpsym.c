@@ -13,7 +13,7 @@ Changes:
 *********************************************************************/
 
 #include "leed_ver_sym.h"
-#include "proghelp.h"
+#include "leed_help.h"
 
 void usage_sym(FILE *output) {
     fprintf(output,"\tusage: \t%s -i <par_file> -o <res_file>", PROG);

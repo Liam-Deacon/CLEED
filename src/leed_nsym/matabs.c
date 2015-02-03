@@ -73,7 +73,7 @@ real matabs(const mat M)
           mabs += R_cabs(*ptr_r, *ptr_i);
         }
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     } /* switch */
   } /* matrix type is not diagonal */
   else  if (M->mat_type == MAT_DIAG)
@@ -99,7 +99,7 @@ real matabs(const mat M)
           mabs += R_cabs(*ptr_r, *ptr_i);
         }
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     } /* switch */
   } /* diag. matrix */
   else /* not a valid matrix type */

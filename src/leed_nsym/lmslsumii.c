@@ -24,7 +24,7 @@
 
 #include "leed.h"
 
-#ifdef WARNING
+#ifdef WARNING_LOG
 #define WARN_LEVEL 1000
 #endif
 
@@ -212,7 +212,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
   if (epsilon < 1.) r_max = - log(epsilon) / k_i;
   else              r_max = epsilon;
 
-#if WARNING
+#if WARNING_LOG
   if( r_max > WARN_LEVEL)    /* poor convergence */
   WARNING_MSG("damping very weak: k_i = %.2e, eps = %.2e\n", k_i, epsilon);
 #endif

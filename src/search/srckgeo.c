@@ -30,20 +30,14 @@
 #include <time.h>
 #include <math.h>
 
-#ifdef USE_GSL
-#include <gsl/gsl_vector.h>
-#endif
-
 #include "csearch.h"
 
 #define GEO_PREF 10.                 /*!< rgeo is 1 if the actual distance
                                       * between two atoms is by 1/GEO_PREF
                                       * smaller than the sum of their min.
                                       * radii */
-
 extern struct search_atom *sr_atoms;
 extern struct search *sr_search;
-extern char *sr_project;
 
 /*!
  * Perfoms geometry assessment of \p par parameter vector.
@@ -51,11 +45,7 @@ extern char *sr_project;
  * \param par pointer to parameter vector to evaluate.
  * \return nearest neighbour distance (?)
  */
-#ifdef USE_GSL
-real sr_ckgeo_gsl(const gsl_vector *par)
-#else
-real sr_ckgeo(const real *par)
-#endif
+real sr_ckgeo(const cleed_vector *par)
 {
   size_t i_atoms, j_atoms, n_atoms;
   size_t i_par;
@@ -81,32 +71,20 @@ real sr_ckgeo(const real *par)
 
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {
-    x[i_atoms] = (sr_atoms + i_atoms)->x;
-    y[i_atoms] = (sr_atoms + i_atoms)->y;
-    z[i_atoms] = (sr_atoms + i_atoms)->z;
+    x[i_atoms] = sr_atoms[i_atoms].x;
+    y[i_atoms] = sr_atoms[i_atoms].y;
+    z[i_atoms] = sr_atoms[i_atoms].z;
 
-    #ifdef USE_GSL
     for(i_par = 0; i_par < sr_search->n_par_geo; i_par ++)
     {
-      faux = gsl_vector_get(par, i_par);
+      faux = CLEED_VECTOR_GET(par, i_par);
       if(!sr_search->z_only)
       {
-        x[i_atoms] += faux * (sr_atoms + i_atoms)->x_par[i_par];
-        y[i_atoms] += faux * (sr_atoms + i_atoms)->y_par[i_par];
+        x[i_atoms] += faux * sr_atoms[i_atoms].x_par[i_par];
+        y[i_atoms] += faux * sr_atoms[i_atoms].y_par[i_par];
       }
-      z[i_atoms] += faux * (sr_atoms + i_atoms)->z_par[i_par];
+      z[i_atoms] += faux * sr_atoms[i_atoms].z_par[i_par];
     }
-    #else
-    for(i_par = 1; i_par <= sr_search->n_par_geo; i_par ++)
-    {
-      if(!sr_search->z_only)
-      {
-        x[i_atoms] += par[i_par] * (sr_atoms + i_atoms)->x_par[i_par];
-        y[i_atoms] += par[i_par] * (sr_atoms + i_atoms)->y_par[i_par];
-      }
-      z[i_atoms] += par[i_par] * (sr_atoms + i_atoms)->z_par[i_par];
-    }
-    #endif
 
   } /* for i_atoms */
 
@@ -137,7 +115,7 @@ real sr_ckgeo(const real *par)
 
     for(j_atoms = i_atoms + 1; j_atoms < n_atoms; j_atoms ++)
     {
-      d_min = (sr_atoms + i_atoms)->r_min + (sr_atoms + j_atoms)->r_min;
+      d_min = sr_atoms[i_atoms].r_min + sr_atoms[j_atoms].r_min;
       d_min2 = SQUARE(d_min);
      
       d_z = z[j_atoms] - z[i_atoms];
@@ -154,8 +132,9 @@ real sr_ckgeo(const real *par)
           d_x = x[j_atoms] - x[i_atoms] +
                   i1 * sr_search->b_lat[1] + i2 * sr_search->b_lat[2];
           d_x *= d_x;
+
           d_y = y[j_atoms] - y[i_atoms] +
-             i1 * sr_search->b_lat[3] + i2 * sr_search->b_lat[4];
+                  i1 * sr_search->b_lat[3] + i2 * sr_search->b_lat[4];
           d_y *= d_y;
        
           if(d_min2 - d_x - d_y > 0.)

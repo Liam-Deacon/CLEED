@@ -33,12 +33,12 @@
 #include <math.h>
 #include "csearch.h"
 
-void search_parse_args(size_t argc, char *argv[], real *delta,
+void search_parse_args(int argc, char *argv[], real *delta,
                        search_method *search_type, char *inp_file,
                        char *bak_file)
 {
 
-  size_t i_arg;
+  int i_arg;
 
   /*********************************************************************
    * Preset program parameters and
@@ -243,32 +243,21 @@ int main(int argc, char *argv[])
     /* POWELL'S METHOD */
     case(SR_POWELL):
     {
-#     if defined(USE_GSL)
-         ERROR_MSG("Powell's method search is not yet implemented.\n");
-         exit(SR_SEARCH_NOT_IMPLEMENTED);
-#     else
-         SR_PO(n_dim, bak_file, log_file);
-#     endif
+      SR_PO(n_dim, bak_file, log_file);
       break;
     } /* case SR_POWELL */
 
     /* SIMULATED ANNEALING */
     case(SR_SIM_ANNEALING):
     {
-#     if defined(USE_GSL)
-      ERROR_MSG("Simulated annealing search is not yet implemented.\n");
-      exit(SR_SEARCH_NOT_IMPLEMENTED);
-#     else
-         SR_SA(n_dim, delta, bak_file, log_file);
-#     endif
+      SR_SA(n_dim, delta, bak_file, log_file);
       break;
     } /* case SR_SIM_ANNEALING */
 
     /* GENETIC ALGORITHM */
     case(SR_GENETIC):
     {
-      ERROR_MSG("Genetic algorithm search is not yet implemented.\n");
-      exit(SR_SEARCH_NOT_IMPLEMENTED);
+      SR_GA(n_dim, -1., bak_file, log_file); //!TODO
       break;
     } /* case SR_GENETIC */
     

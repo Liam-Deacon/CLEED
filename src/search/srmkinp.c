@@ -34,7 +34,7 @@ char line_buffer[STRSZ];
  * \return C return code indicating function success.
  * \retval 0 if successful.
  */
-int sr_mkinp(const char *filename, const real *par, size_t iter)
+int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
 {
   size_t i_atoms, i_par;
   size_t i_str;
@@ -64,33 +64,33 @@ int sr_mkinp(const char *filename, const real *par, size_t iter)
   fprintf(iv_par, "# overlayer (SEARCH No: %d)\n", iter);
 
   /* Write all other lines to iv_input */
-  for( i_atoms = 0; (sr_atoms + i_atoms)->type != I_END_OF_LIST; i_atoms ++)
+  for( i_atoms = 0; sr_atoms[i_atoms].type != I_END_OF_LIST; i_atoms ++)
   {
-    x = (sr_atoms + i_atoms)->x;
-    y = (sr_atoms + i_atoms)->y;
-    z = (sr_atoms + i_atoms)->z;
+    x = sr_atoms[i_atoms].x;
+    y = sr_atoms[i_atoms].y;
+    z = sr_atoms[i_atoms].z;
 
-    for(i_par = 1; i_par <= (sr_search->n_par_geo); i_par ++)
+    for(i_par = 0; i_par < (sr_search->n_par_geo); i_par ++)
     {
       if(!sr_search->z_only)
       {
-        x += par[i_par] * (sr_atoms + i_atoms)->x_par[i_par];
-        y += par[i_par] * (sr_atoms + i_atoms)->y_par[i_par];
+        x += CLEED_VECTOR_GET(par, i_par) * sr_atoms[i_atoms].x_par[i_par];
+        y += CLEED_VECTOR_GET(par, i_par) * sr_atoms[i_atoms].y_par[i_par];
       }
-      z += par[i_par] * (sr_atoms + i_atoms)->z_par[i_par];
+      z += CLEED_VECTOR_GET(par, i_par) * sr_atoms[i_atoms].z_par[i_par];
     }
 
     fprintf(iv_par, "po: %s %f %f %f dr1 %f\n",
-                    (sr_atoms + i_atoms)->name,
-                    x, y, z,
-                    (sr_atoms + i_atoms)->dr);
+            sr_atoms[i_atoms].name, x, y, z, sr_atoms[i_atoms].dr);
   } /* for i_atoms */
 
   /* angle search */
   if(sr_search->sr_angle)
   {
-    phi =   sr_search->phi_0   + par[sr_search->i_par_phi]   * FAC_PHI;
-    theta = sr_search->theta_0 + par[sr_search->i_par_theta] * FAC_THETA;
+    phi =   sr_search->phi_0   +
+            CLEED_VECTOR_GET(par, sr_search->i_par_phi)   * FAC_PHI;
+    theta = sr_search->theta_0 +
+            CLEED_VECTOR_GET(par, sr_search->i_par_theta) * FAC_THETA;
   }
   else
   {

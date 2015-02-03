@@ -14,83 +14,47 @@
  *                 rather than relative deviation.
  ***********************************************************************/
 
-#include <math.h>
+/*!
+ * \note The relative convergence criterion has been replaced by absolute value.
+ */
 
-#if USE_GSL
-# include <gsl/gsl_vector.h>
-#endif
+#include <math.h>
 
 #include "csearch.h"
 
-#ifndef MAX_ITER_POWELL      /* should be defined in "search_def.h" */
-#define MAX_ITER_POWELL 200
-#endif
-
-static real sqrarg;
-#define SQR(a) (sqrarg=(a),sqrarg*sqrarg)
-
 /*!
- *  Find minimum by using Powell's method (Num. Rec. chap. 10.5)
+ *  Find minimum by using Powell's method (Num. Rec. chap. 10.5).
+ *  For a description see Num. Rec. p. 412ff.
  *
- * @param[in,out] p Pointer to vector containing the initial starting point
+ * \param[in,out] p Pointer to vector containing the initial starting point
  * p[1..n]. After completion, \p p returns the coordinates of the minimum.
- * @param[in,out] xi
- * @param n
- * @param ftol
- * @param[out] iter Number of iterations.
- * @param[out] fret Minimum function value found in the search.
- * @param[in] func Pointer to function to be minimised.
+ * \param[in,out] xi \p n \times \p n matrix whose columns contain the initial set
+ * of directions (usually \p n unit vectors). After completion, \p xi returns
+ * the then-current direction set.
+ * \param n Dimension of the search.
+ * \param[in] ftol Convergence criterion the absolute tolerance in the
+ * function value such that failure to decrease by more than  this amount on
+ * one iteration signals completion.
+ * \param[out] iter Number of iterations.
+ * \param[out] fret Minimum function value found in the search.
+ * \param[in] func Pointer to function to be minimised.
  * \see linmin()
  */
-void sr_powell(real *p, real **xi, int n, 
-               real ftol, int *iter, real *fret, 
-               real (*func)() )
-
-/***********************************************************************
-  real **xi - (input, output) matrix [1..n][1..n] whose columns contain 
-            the initial set of directions (usually the n unit vectors).
-            After completion, xi returns the then-current direction set.
-           
-  int n - (input) dimension of the search
-
-  real ftol - (input) convergence criterion the absolute tolerance in the
-            function value such that failure to decrease by more than 
-            this amount on one iteration signals completion.
-
-  int *iter - (output)
-
-  real *fret - (output)
-  
-  real (*func)() - (input)
-
-
-DESIGN:
-
-  For a description see Num. Rec. p. 412ff.
-
-  - relative convergence criterion has been replaced by absolute value.
-
-FUNCTION CALLS:
-
-  linmin
-
-RETURN VALUES:
-
- none
-
-***********************************************************************/
+void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
+               cleed_real ftol, size_t *iter, cleed_real *fret,
+               cleed_real (*func)() )
 {
-	int i,ibig,j;
-	real t,fptt,fp,del;
-	real *pt,*ptt,*xit,*vector();
+	size_t i, ibig, j;
+	real t, fptt, fp, del;
 
-	pt=vector(1,n);
-	ptt=vector(1,n);
-	xit=vector(1,n);
-	*fret=(*func)(p);
+	cleed_vector *pt = CLEED_VECTOR_ALLOC(n);
+	cleed_vector *ptt = CLEED_VECTOR_ALLOC(n);
+	cleed_vector *xit = CLEED_VECTOR_ALLOC(n);
+
+	*fret = (*func)(p);
 
 	/* Save the initial point */
-	for (j=1;j<=n;j++) pt[j]=p[j];
+	for (j=0; j < n; j++) CLEED_VECTOR_SET(pt, j, CLEED_VECTOR_GET(p,j));
 
 	/* Start loop over iterations */
 	for (*iter=1 ; ; (*iter)++)
@@ -105,53 +69,65 @@ RETURN VALUES:
      * - record if it was the largest decrease so far.
      */
 
-		for (i=1;i<=n;i++) {
-			for (j=1;j<=n;j++) xit[j]=xi[j][i];
-			fptt=(*fret);
-			linmin(p,xit,n,fret,func);
-			if (fabs(fptt-(*fret)) > del) {
-				del=fabs(fptt-(*fret));
-				ibig=i;
+		for (i=0; i<n; i++)
+		{
+			for (j=0; j<n; j++)
+      {
+			  CLEED_VECTOR_SET(xit, j, CLEED_BASIC_MATRIX_GET(xi, j, i, n, n));
+      }
+			fptt = (*fret);
+			linmin(p, xit, n, fret, func);
+			if (fabs( fptt - (*fret) ) > del)
+			{
+				del = fabs( fptt - (*fret) );
+				ibig = i;
 			}
 		}
 
 		/* Check termination criterion*/
-		if (2.0*fabs(fp-(*fret)) <= ftol) 
+		if (2.0*fabs( fp - (*fret) ) <= ftol)
     {
-			free_vector(xit, 1);
-			free_vector(ptt, 1);
-			free_vector(pt, 1);
-      fprintf(STDCTR, "(sr_powell): ITERATION NO: %d, FRET = %f\n",
-              *iter, *fret);
+			CONTROL_MSG(CONTROL, "ITERATION NO: %u, FRET = %f\n", *iter, *fret);
+      CLEED_VECTOR_FREE(pt);
+      CLEED_VECTOR_FREE(ptt);
+      CLEED_VECTOR_FREE(xit);
 			return;
 		}
 		if (*iter == MAX_ITER_POWELL) 
-		  nrerror("Too many iterations in routine POWELL");
+		{
+		  ERROR_MSG("Too many iterations in routine POWELL\n");
+		  CLEED_VECTOR_FREE(pt);
+      CLEED_VECTOR_FREE(ptt);
+      CLEED_VECTOR_FREE(xit);
+		  exit(1);
+		}
 
     /* Construct the extrapolated point and the average direction moved.
      * Save the old starting point.
      */
-		for (j=1;j<=n;j++)
+		for (j=0; j<n; j++)
 		{
-			ptt[j]=2.0*p[j]-pt[j];
-			xit[j]=p[j]-pt[j];
-			pt[j]=p[j];
+			CLEED_VECTOR_SET(ptt, j, 2.0*CLEED_VECTOR_GET(p, j) - CLEED_VECTOR_GET(pt, j));
+			CLEED_VECTOR_SET(xit, j, CLEED_VECTOR_GET(p, j) - CLEED_VECTOR_GET(pt, j));
+			CLEED_VECTOR_SET(pt, j, CLEED_VECTOR_GET(p, j));
 		}
 
 		/* function value at extrapolated point */
 		fptt = (*func)(ptt);
 		if (fptt < fp)
 		{
-			t = 2.0*(fp-2.0*(*fret)+fptt)*SQR(fp-(*fret)-del)-del*SQR(fp-fptt);
+			t = 2.0*(fp - 2.0*(*fret) + fptt)*pow((fp - (*fret) - del), 2) -
+			    del*pow((fp - fptt), 2);
 			if (t < 0.0)
 			{
 			  /* Move to the minimum of the new direction, and save the new direction */
-				linmin(p,xit,n,fret,func);
-				for (j=1; j<=n; j++) xi[j][ibig] = xit[j];
+				linmin(p, xit, n, fret, func);
+				for (j=0; j<n; j++)
+        {
+				  CLEED_BASIC_MATRIX_SET( xi, j, ibig, n, n, CLEED_VECTOR_GET(xit, j) );
+        }
 			}
 		}
-    fprintf(STDCTR,"(sr_powell): ITERATION NO: %d, FRET = %f\n", *iter, *fret);
+    CONTROL_MSG(CONTROL, "ITERATION NO: %u, FRET = %f\n", *iter, *fret);
 	}
 } /* end of function sr_powell */
-
-#undef SQR

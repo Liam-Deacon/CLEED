@@ -13,7 +13,7 @@
  *   GH/03.04.95 - Calculate Yl-m explicitly in c_ylm.
  *   GH/05.08.95 - mk_ylm_coef is a global function (not static anymore),
  *                 i.e. it can be called from outside this file.
- *   GH/10.08.95 - WARNING output at the end of mk_ylm_coef.
+ *   GH/10.08.95 - WARNING_LOG output at the end of mk_ylm_coef.
  *********************************************************************/
 
 /*! \file
@@ -32,7 +32,7 @@
 #include "qm.h"
 
 
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
 static const real ACC = 30.0; /*!< Accuracy for float */
 #else
 static const real ACC = 40.0; /*!< Accuracy for double */

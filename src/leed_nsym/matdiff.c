@@ -87,7 +87,7 @@ real matdiff(const mat M1, const mat M2)
           diff += R_fabs(*ptr_1 - *ptr_2);
         }
         break;
-      } /* case COMPLEX */
+      } /* case CLEED_COMPLEX */
     } /* switch */
   } /* matrix type is not diagonal */
   else /* one matrix is diagonal */

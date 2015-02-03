@@ -29,7 +29,7 @@
 #include "mat.h"
 #include "qm.h"
 
-#if WARNING
+#if WARNING_LOG
 # define WARN_LEVEL 1.0
 /* if a C.G-C exceeds this level, a warning message will be printed */
 #endif
@@ -38,9 +38,9 @@ static const int UNUSED = -1;
 
 static double *cg_coef = NULL;       /*!< Clebsh Gordan coefficients */
 
-static int l_max_coef = UNUSED;      /*!< l_max for the C.G.C */
-static int st_fac1    = UNUSED;
-static int st_fac2    = UNUSED;
+static int l_max_coef = -1;      /*!< l_max for the C.G.C */
+static int st_fac1    = -1;
+static int st_fac2    = -1;
 
 /*!
  * Calculates all Clebsh Gordan coefficients
@@ -279,7 +279,7 @@ int mk_cg_coef(size_t l_max)
             cg_coef[i_st1] = sign * fac_ls * fac_m * sum_m;
             cg_coef[i_st2] = sign * fac_ls * fac_m * sum_m;
 
-#ifdef WARNING
+#ifdef WARNING_LOG
             if (cg_coef[i_st1] > WARN_LEVEL)
             {
               WARNING_MSG("CG-C[%2d %2d %2d %2d %2d %2d] = %9.6f\n",
