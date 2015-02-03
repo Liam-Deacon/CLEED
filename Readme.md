@@ -9,8 +9,8 @@ experimental IV data curves with those simulated by the cleed program and a 'goo
 with the R-Factor program crfac. Optimisation of the input parameters is performed by csearch.
 
 A (still rather incomplete) documentation of the program package can be found 
-in 'doc/CLEED_Manual.pdf', but it is probably best to send me an email, with all 
-input files, to <g.held@reading.ac.uk> when you encounter any problems (I am sure you will ...)
+in 'doc/CLEED_Manual.pdf', but it is probably best to send an email, with all 
+input files, to <g.held@reading.ac.uk> when you encounter any problems...
 
 Installation
 ------------
