@@ -101,7 +101,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                   leed_var *v_par, leed_layer *layer, leed_beam *beams)
 {
   int iaux;
-  int off_row, off_col;
+  size_t off_row, off_col;
 
   size_t l_max, l_max_2;
   int i_type, n_type;
@@ -250,7 +250,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     n = 0;
     for(j_atoms = 0; j_atoms < n_atoms; j_atoms ++)
     {
-      if( R_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] )
+      if( cleed_real_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] )
          < GEO_TOLERANCE )
       { n ++; }
     }    /* for j_atoms */
@@ -274,7 +274,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
    */
   for(i_atoms = 0, j_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {
-    if( R_fabs( (atoms+i_atoms)->pos[3] - z_plane ) < GEO_TOLERANCE )
+    if( cleed_real_fabs( (atoms+i_atoms)->pos[3] - z_plane ) < GEO_TOLERANCE )
     {
       /* Exchange atom parameters if i_atoms != j_atoms */
       if( i_atoms != j_atoms )
@@ -292,7 +292,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
       }  /* if i_atoms ... */
 
       j_atoms ++;
-    }  /* if R_fabs ... */
+    }  /* if cleed_real_fabs ... */
   }  /* for i_atoms */
 
 #ifdef CONTROL
@@ -423,11 +423,11 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
         for( k = i_atoms + 1; k < n_atoms; k ++)
           for( l = i_atoms + 1; l < n_atoms; l ++)
           {
-            if ( (R_fabs((atoms+l)->pos[1]-(atoms+k)->pos[1]-d_ij[1]) <
+            if ( (cleed_real_fabs((atoms+l)->pos[1]-(atoms+k)->pos[1]-d_ij[1]) <
                 GEO_TOLERANCE) &&
-                (R_fabs((atoms+l)->pos[2]-(atoms+k)->pos[2]-d_ij[2]) <
+                (cleed_real_fabs((atoms+l)->pos[2]-(atoms+k)->pos[2]-d_ij[2]) <
                 GEO_TOLERANCE) &&
-                (R_fabs((atoms+l)->pos[3]-(atoms+k)->pos[3]-d_ij[3]) <
+                (cleed_real_fabs((atoms+l)->pos[3]-(atoms+k)->pos[3]-d_ij[3]) <
                 GEO_TOLERANCE))
             {
               /*
@@ -441,7 +441,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
               ;
 
               CONTROL_MSG(CONTROL, "         = d(%d->%d)\n", k, l);
-            } /* if R_fabs ... */
+            } /* if cleed_real_fabs ... */
 
           } /* for k,l */
 

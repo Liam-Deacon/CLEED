@@ -31,7 +31,7 @@
  * \return Pointer to the extracted row matrix.
  * \retval \c NULL if failed and #EXIT_ON_ERROR not defined.
  */
-mat matrow(mat row, mat M, int row_num)
+mat matrow(mat row, mat M, size_t row_num)
 {
   real *ptr_r, *ptr_M, *ptr_end;
   
@@ -53,93 +53,121 @@ mat matrow(mat row, mat M, int row_num)
   /* Extract row */
   row = matalloc(row, 1, M->cols, M->num_type);
 
-  if ( (M->mat_type == MAT_NORMAL) || (M->mat_type == MAT_SQUARE) )
+  switch(M->mat_type)
   {
-    switch(M->num_type)
+    case(MAT_NORMAL): case(MAT_SQUARE):
     {
-      case(NUM_REAL):
+      switch(M->num_type)
       {
-        for (ptr_M = M->rel + M->cols*(row_num - 1) + 1,
-             ptr_r = row->rel + 1, ptr_end = ptr_M + M->cols;
-             ptr_M <= ptr_end; ptr_r ++, ptr_M ++)
+        case(NUM_REAL):
         {
-          *ptr_r = *ptr_M;
+          for (ptr_M = M->rel + M->cols*(row_num - 1) + 1,
+              ptr_r = row->rel + 1, ptr_end = ptr_M + M->cols;
+              ptr_M <= ptr_end; ptr_r ++, ptr_M ++)
+          {
+            *ptr_r = *ptr_M;
+          }
+
+          break;
+        } /* case REAL */
+
+        case(NUM_COMPLEX):
+        {
+          /* first real part */
+          for (ptr_M = M->rel + M->cols*(row_num - 1) + 1,
+              ptr_r = row->rel + 1, ptr_end = ptr_M + M->cols;
+              ptr_M <= ptr_end; ptr_r ++, ptr_M ++)
+          {
+            *ptr_r = *ptr_M;
+          }
+
+          /* now imaginary part */
+          for (ptr_M = M->iel + M->cols*(row_num - 1) + 1,
+              ptr_r = row->iel + 1, ptr_end = ptr_M + M->cols;
+              ptr_M <= ptr_end; ptr_r ++, ptr_M ++)
+          {
+            *ptr_r = *ptr_M;
+          }
+
+          break;
+        } /* case CLEED_COMPLEX */
+
+        case(NUM_IMAG): case(NUM_MASK): default:
+        {
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(NULL);
+          break;
         }
 
-        break;
-      } /* case REAL */
+      } /* switch (M->num_type) */
 
-      case(NUM_COMPLEX):
-      {
-        /* first real part */
-        for (ptr_M = M->rel + M->cols*(row_num - 1) + 1,
-             ptr_r = row->rel + 1, ptr_end = ptr_M + M->cols;
-             ptr_M <= ptr_end; ptr_r ++, ptr_M ++)
-        {
-          *ptr_r = *ptr_M;
-        }
+      break;
 
-        /* now imaginary part */
-        for (ptr_M = M->iel + M->cols*(row_num - 1) + 1,
-             ptr_r = row->iel + 1, ptr_end = ptr_M + M->cols;
-             ptr_M <= ptr_end; ptr_r ++, ptr_M ++)
-        {
-          *ptr_r = *ptr_M;
-        }
+    } /* matrix type is not diagonal */
 
-        break;
-      } /* case CLEED_COMPLEX */
-    }   /* switch */
-  }     /* matrix type is not diagonal */
-
-  else if (M->mat_type == MAT_DIAG)
-  {
-    switch(M->num_type)
+    case(MAT_DIAG):
     {
-      case(NUM_REAL):
+      switch(M->num_type)
       {
-        for ( ptr_r = row->rel + 1, ptr_end = ptr_r + M->cols;
-              ptr_r <= ptr_end; ptr_r ++)
+        case(NUM_REAL):
         {
-          *ptr_r = 0.;
-        }
-
-        *(row->rel + row_num) = *(M->rel + row_num);
-        break;
-      } /* case REAL */
-
-      case(NUM_COMPLEX):
-      {
-        /* first real part */
-        for ( ptr_r = row->rel + 1, ptr_end = ptr_r + M->cols;
+          for ( ptr_r = row->rel + 1, ptr_end = ptr_r + M->cols;
               ptr_r <= ptr_end; ptr_r ++)
+          {
+            *ptr_r = 0.;
+          }
+
+          *(row->rel + row_num) = *(M->rel + row_num);
+          break;
+        } /* case REAL */
+
+        case(NUM_COMPLEX):
         {
-          *ptr_r = 0.;
-        }
-
-        *(row->rel + row_num) = *(M->rel + row_num);
-
-        /* now imaginary part */
-        for ( ptr_r = row->iel + 1, ptr_end = ptr_r + M->cols;
+          /* first real part */
+          for ( ptr_r = row->rel + 1, ptr_end = ptr_r + M->cols;
               ptr_r <= ptr_end; ptr_r ++)
+          {
+            *ptr_r = 0.;
+          }
+
+          *(row->rel + row_num) = *(M->rel + row_num);
+
+          /* now imaginary part */
+          for ( ptr_r = row->iel + 1, ptr_end = ptr_r + M->cols;
+              ptr_r <= ptr_end; ptr_r ++)
+          {
+            *ptr_r = 0.;
+          }
+
+          *(row->iel + row_num) = *(M->iel + row_num);
+
+          break;
+        } /* case CLEED_COMPLEX */
+
+
+        case(NUM_IMAG): case(NUM_MASK): default:
         {
-          *ptr_r = 0.;
-        }
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(NULL);
+          break;
+        } /* default case */
 
-        *(row->iel + row_num) = *(M->iel + row_num);
+      } /* switch (M->num_type) */
 
-        break;
-      } /* case CLEED_COMPLEX */
-    }   /* switch */
-  }     /* matrix type is diagonal */
+      break;
 
-  else /* neither square nor normal, nor diagonal matrix */
-  {
-    /* matrix type is not implemented! */
-    ERROR_MSG("matrix type 0x%x not implemented\n", M->mat_type);
-    matfree(row);
-    ERROR_RETURN(NULL);
-  }
+    } /* matrix type is diagonal */
+
+    default: /* neither square nor normal, nor diagonal matrix */
+    {
+      /* matrix type is not implemented! */
+      ERROR_MSG("matrix type 0x%x not implemented\n", M->mat_type);
+      matfree(row);
+      ERROR_RETURN(NULL);
+      break;
+    }
+
+}
 
   return(row);
 }  /* end of function matrow */

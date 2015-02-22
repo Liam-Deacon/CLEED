@@ -68,7 +68,7 @@ real rfac_r2(const real *eng, const real *e_int, const real *t_int)
   n_eng = i_eng;
 
   the_avg =  the_avg / ( (real)n_eng );
-  norm_te = R_sqrt(the_sq_sum/exp_sq_sum);
+  norm_te = cleed_real_sqrt(the_sq_sum/exp_sq_sum);
 
   CONTROL_MSG(CONTROL, "<It>: %e\n", (float)the_avg);
   CONTROL_MSG(CONTROL, "norm: %f \n", (float)norm_te);
@@ -90,7 +90,7 @@ real rfac_r2(const real *eng, const real *e_int, const real *t_int)
     ERROR_MSG("norm_sum is negative: %e\n", (float)norm_sum);
     return((real)RFAC_FAILURE);
   }
-  else aux = R_sqrt(rfac_sum/norm_sum);
+  else aux = cleed_real_sqrt(rfac_sum/norm_sum);
 
   return(aux);
 }  /* end of function cr_r2 */

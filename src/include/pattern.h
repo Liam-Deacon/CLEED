@@ -27,10 +27,15 @@
 #include "gh_stddef.h"
 #include <stdbool.h>
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-  #include <list>
+#if (!__GNUC__)
+# define __attribute__(x) /* empty to disable GCC attribute extension */
+#endif
 
-  extern "C" {
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+#include <list>
+
+namespace cleed {
+extern "C" {
 #endif
 
 /*! \typedef pattern
@@ -50,83 +55,75 @@ typedef struct _pattern
 extern pattern pattern_default; 
 
 /* pattern functions */
+__attribute__((returns_nonnull, alloc_size(1)))
 pattern *pattern_alloc(size_t n_domains);
 
+__attribute__((returns_nonnull, alloc_size(1)))
 pattern *pattern_init(size_t n_domains);
 
+__attribute__((returns_nonnull, nonnull))
 pattern *pattern_read(FILE *file);
 
+__attribute__((nonnull))
 void pattern_free(pattern *pat);
 
+__attribute__((nonnull))
 double pattern_get_radius(const pattern *pat);
 
+__attribute__((nonnull))
 bool pattern_is_square(const pattern *pat);
 
+__attribute__((nonnull))
 bool pattern_domain_is_commensurate(const pattern *pat, size_t domain);
 
+__attribute__((nonnull))
 size_t pattern_get_n_domains(const pattern *pat);
 
+__attribute__((nonnull, returns_nonnull))
 const char *pattern_get_title(const pattern *pat);
 
+__attribute__((nonnull(2)))
 void pattern_printf(FILE *stream, const pattern *pat);
 
+__attribute__((nonnull))
 void pattern_set_a1(pattern *pat, const basis_vector *a1);
 
+__attribute__((nonnull))
 void pattern_set_a2(pattern *pat, const basis_vector *a2);
 
+__attribute__((nonnull))
 void pattern_set_radius(pattern *pat, double radius);
 
+__attribute__((nonnull(1)))
 void pattern_set_title(pattern *pat, const  char *title);
 
+__attribute__((nonnull))
 void pattern_set_square(pattern *pat, bool is_square);
 
+__attribute__((nonnull))
 int pattern_set_max_domains(pattern *pat, size_t n_domains);
 
+__attribute__((nonnull))
 void pattern_set_superstructure_matrix(pattern *pat, const matrix_2x2 *mat,
                                        size_t domain);
         
+__attribute__((nonnull, returns_nonnull))
 const matrix_2x2 *get_superstructure_matrix(const pattern *pat, size_t domain);
 
+__attribute__((nonnull, returns_nonnull))
 spots *pattern_calculate_substrate_spots(const pattern *pat);
 
+__attribute__((nonnull, returns_nonnull))
 spots *pattern_calculate_superstructure_spots(const pattern *pat,
-                                                size_t domain);
+                                              size_t domain);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
-
-namespace cleed {
-
-/*! \class Pattern
- *  \brief C++ wrapper class for pattern struct and associated functions.
- */
-class Pattern {
-  public:
-    Pattern();
-    ~Pattern();
-    
-    void setTitle(std::string title);
-    void setBasisVectorA1(double x, double y);
-    void setBasisVectorA2(double x, double y);
-    int setNumberOfDomains(std::size_t ndom);
-    void setRadius(double radius);
-    void setSuperStructureMatrix(Matrix2x2 mat, std::size_t domain);
-    void setSquare(bool isSquare);
-    
-    const std::string getTitle();
-    size_t getNumberOfDomains();
-    double getRadius();
-    const std::list<double> getBasisVectorA1();
-    const std::list<double> getBasisVectorA2();
-    const std::list<Matrix2x2> getSuperStructureMatrices();
-    bool isSquare();
-    
-  protected:
-    pattern pat;
-};
-
 } /* namespace cleed */
-
 #endif /* __cplusplus */
+
+#ifdef __attribute__
+# undef __attribute__
+#endif
 
 #endif /* PATTERN_H */

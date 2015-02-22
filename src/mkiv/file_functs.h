@@ -31,4 +31,4 @@ int file_move(const char *src_path, const char *dst_path);
 char *file_content(const char *filename);
 
 /* remove extension */
-char *remove_ext(char *str, char dot, char sep);
+const char *remove_ext(const char *str, char dot, char sep);

@@ -37,6 +37,10 @@
 #ifndef SEARCH_FUNC_H
 #define SEARCH_FUNC_H
 
+#if (!__GNUC__)
+# define __attribute__(x) /* empty to disable GCC attribute extension */
+#endif
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
@@ -45,46 +49,36 @@ extern "C" {
 #include <string.h>
 #include "search_def.h"
 
-#if !defined(USE_GSL) /* Original CLEED Interface */
-
-/* sramoeba.c */
-void sr_amoeba(real **, real *, int, real, real (*)(), int *);
-real sr_amotry(real **, real *, real *, int, real (*)(), int, int *, real);
-
-/* sramebsa.c */
-void sr_amebsa(real **, real *, int , real *, real *, real,
-               real (*)(), int *, real);
-real sr_amotsa(real **, real *, real *, int, real *, real *,
-               real (*)(), int, real *, real);
-real sr_fluct(long *);
-
-/* srpowell.c */
-void sr_powell(real *, real **, int, real, int *, real *, real (*)() );
-
 /* Drivers */
-void sr_sa(size_t, real, const char *, const char *);
-void sr_sx(size_t, real, const char *, const char *);
-void sr_po(size_t, const char *, const char *);
-void sr_er(size_t, real, const char *);
+__attribute__((nonnull)) void sr_ga(size_t, real, const char *, const char *);
+__attribute__((nonnull)) void sr_sa(size_t, real, const char *, const char *);
+__attribute__((nonnull)) void sr_sx(size_t, real, const char *, const char *);
+__attribute__((nonnull)) void sr_po(size_t, const char *, const char *);
+__attribute__((nonnull)) void sr_er(size_t, real, const char *);
 
 /* file input|output */
-real sr_ckgeo(const real *);
-size_t sr_ckrot(search_atom *, search *);
-real sr_evalrf(real *);
-int  sr_mkinp(const char *, const real *, size_t);
-int  sr_mkinp_mir(const char *, const real *, size_t);
-void sr_mklog(const char *);
-int  sr_rdinp(const char *);
-int  sr_rdver(const char * , real *, real **, int);
+__attribute__((nonnull)) real sr_ckgeo(const cleed_vector *);
+__attribute__((nonnull)) size_t sr_ckrot(search_atom *, search *);
+__attribute__((nonnull)) real sr_evalrf(cleed_vector *);
+__attribute__((nonnull)) int sr_mkinp(const char *, const cleed_vector *, size_t);
+__attribute__((nonnull)) int sr_mkinp_mir(const char *, const real *, size_t);
+__attribute__((nonnull)) void sr_mklog(const char *);
+__attribute__((nonnull)) int sr_rdinp(const char *);
+__attribute__((nonnull)) int sr_rdver(const char *ver_file,
+                                      cleed_vector *y,
+                                      cleed_basic_matrix *p,
+                                      int n_dim);
 
-#else /* GNU Scientific Interface */
+#if USE_CBLAS || USE_LAPACK || USE_MKL /* BLAS interface */
+
+#elif USE_GSL /* GNU Scientific Library Interface */
 
 /* sramoeba_gsl.c - downhill simplex */
-int sr_amoeba_gsl(gsl_matrix *, gsl_vector *, real , size_t *);
+int sr_amoeba(cleed_basic_matrix *, cleed_vector *, real , size_t *);
 double sr_amoeba_eval(const gsl_vector *, void *);
 
 /* sramebsa_gsl.c - simulated annealing */
-void sr_amebsa_gsl(gsl_matrix *, gsl_vector *, gsl_vector *, real *, 
+void sr_amebsa_gsl(gsl_matrix *, gsl_vector *, gsl_vector *, real *,
                    real, real (*)(), size_t *, real);
 real sr_amotsa(gsl_matrix *, gsl_vector *, gsl_vector *, gsl_vector *, real *,
                real *, real (*)(), int , real *, real);
@@ -94,21 +88,41 @@ real sr_fluct(long *);
 int sr_powell_gsl(gsl_vector *, gsl_matrix *, real, size_t *, real *);
 void sr_linmin_gsl(gsl_vector *, gsl_vector *, real *, real (*)());
 
-/* Drivers */
-void sr_sa_gsl(size_t, real, char *, char *);     /* Simulated Annealing  */
-void sr_sx_gsl(size_t, real, char *, char *);     /* Simplex method       */
-void sr_po_gsl(size_t, char *, char *);           /* Powell's method      */
-void sr_er_gsl(size_t, real, char *);             /* error evaluation     */
+#else /* Original CLEED Interface - uses NR routines */
 
-/* file input|output */
-real sr_ckgeo(const gsl_vector *);
-int sr_ckrot(search_atom *, search *);
-double sr_evalrfac_gsl(const gsl_vector *);
-int sr_mkinp_gsl(const gsl_vector *, int, const char *);
-int sr_mkinp_mir(const char *, gsl_vector *, int);
-void sr_mklog(const char *);
-int sr_rdinp(const char * );
-int sr_rdver(const char *, gsl_vector *, gsl_matrix *, int);
+#define SR_RF sr_evalrf
+#define SR_ER sr_er
+#define SR_SX sr_sx
+#define SR_SA sr_sa
+#define SR_PO sr_po
+#define SR_GA sr_ga
+
+/* sramoeba.c */
+__attribute__((nonnull))
+void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
+               cleed_real ftol, cleed_real (*funk)(), size_t *nfunk);
+
+__attribute__((nonnull))
+real sr_amotry(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum,
+               size_t n_dim, cleed_real (*funk)(), size_t ihi,
+               size_t *nfunk, cleed_real fac);
+
+/* sramebsa.c */
+__attribute__((nonnull))
+void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
+               cleed_vector *pb, cleed_vector *yb, cleed_real ftol,
+               cleed_real (*funk)(), size_t *iter, cleed_real temptr);
+
+__attribute__((nonnull))
+real sr_amotsa(cleed_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n_dim,
+               cleed_vector *pb, cleed_real *yb, cleed_real (*funk)(),
+               size_t ihi, cleed_real *yhi, cleed_real fac);
+
+/* srpowell.c */
+__attribute__((nonnull))
+void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
+               cleed_real ftol, size_t *iter, cleed_real *fret,
+               cleed_real (*func)() );
 
 #endif 
 
@@ -120,7 +134,11 @@ void search_usage(FILE *);
 void search_info();
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-}
+} /* extern "C" */
+#endif
+
+#ifdef __attribute__
+# undef __attribute__
 #endif
 
 #endif /* SEARCH_FUNC_H */

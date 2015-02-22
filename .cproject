@@ -122,7 +122,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src/leed_nsym"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src/rfac"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src/search"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

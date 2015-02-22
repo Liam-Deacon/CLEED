@@ -174,5 +174,5 @@ int leed_output_beam_list(leed_beam **p_beams_out,
   /* write beams_out back to pointer */
   *p_beams_out = beams_out;
 
-  return(n_beams);
+  return((int)n_beams);
 } /* end of function leed_output_beam_list */

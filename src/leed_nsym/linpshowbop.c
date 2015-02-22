@@ -35,7 +35,7 @@
 void leed_inp_show_beam_op(leed_crystal *bulk_par,
                           leed_crystal *over_par, leed_phase *phs_shifts)
 {
-  int i, j;                      /* counter variables */
+  size_t i, j;                      /* counter variables */
 
    /* First show general information */
   fprintf(STDOUT, "*****************************"
@@ -89,7 +89,7 @@ void leed_inp_show_beam_op(leed_crystal *bulk_par,
 
   fprintf(STDOUT, "\ncomments (overlayer):\n");
 
-  for( i=0; *(over_par->comments + i) != NULL; i++)
+  for( i=0; *(over_par->comments + i) != NULL; i++ )
   {
     fprintf(STDOUT, "\t%s", *(over_par->comments + i));
   }
@@ -97,14 +97,14 @@ void leed_inp_show_beam_op(leed_crystal *bulk_par,
   /* Overlayer atoms  (from top to bottom) */
   fprintf(STDOUT, "\noverlayer atoms (%d layers):\n\n", over_par->n_layers);
 
-  for(i= over_par->n_layers - 1; i >= 0; i--)
+  for( i = over_par->n_layers; i > 0; i-- )
   {
     if( over_par->layers[i].periodic == 0 ) fprintf(STDOUT,"np:");
     else         fprintf(STDOUT,"p: ");
 
     fprintf(STDOUT, "\tover_par->layers[%d].natoms = %d\n",
         i, over_par->layers[i].n_atoms);
-    for( j = 0; j < over_par->layers[i].n_atoms; j ++)
+    for( j = 0; j < over_par->layers[i].n_atoms; j ++ )
     {
       fprintf(STDOUT, "\tpos: (%7.4f  %7.4f  %7.4f) A",
               over_par->layers[i].atoms[j].pos[1]*BOHR,
@@ -138,13 +138,13 @@ void leed_inp_show_beam_op(leed_crystal *bulk_par,
           bulk_par->layers[bulk_par->n_layers-1].vec_to_next[2]*BOHR,
           bulk_par->layers[bulk_par->n_layers-1].vec_to_next[3]*BOHR );
 
-  for(i = bulk_par->n_layers - 1; i >= 0; i--)
+  for( i = bulk_par->n_layers; i > 0; i-- )
   {
 
     if( bulk_par->layers[i].periodic == 0 ) fprintf(STDOUT, "np:");
     else fprintf(STDOUT, "p: ");
 
-    for( j = 0; j < bulk_par->layers[i].n_atoms; j ++)
+    for( j = 0; j < bulk_par->layers[i].n_atoms; j ++ )
     {
       fprintf(STDOUT, "\tpos: (%7.4f  %7.4f  %7.4f) A",
               bulk_par->layers[i].atoms[j].pos[1]*BOHR,
@@ -170,7 +170,7 @@ void leed_inp_show_beam_op(leed_crystal *bulk_par,
   j = MAX(bulk_par->n_types, over_par->n_types);
 
   fprintf(STDOUT, "\n%d different sets of phase shifts used:\n", j);
-  for(i = 0; i < j; i ++)
+  for( i = 0; i < j; i ++ )
   {
     fprintf(STDOUT,
            "(%d)\t%s \n\t%d energies, lmax = %d, sqrt(<dr^2>_T) = %.3f A, ",
@@ -178,7 +178,7 @@ void leed_inp_show_beam_op(leed_crystal *bulk_par,
            (phs_shifts+i)->input_file, 
            (phs_shifts+i)->n_eng,
            (phs_shifts+i)->lmax,
-           R_sqrt( (phs_shifts+i)->dr[0] ) * BOHR);
+           cleed_real_sqrt( (phs_shifts+i)->dr[0] ) * BOHR);
 
     if ((phs_shifts+i)->t_type == T_DIAG)
     {

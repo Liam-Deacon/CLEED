@@ -78,7 +78,7 @@ mat *leed_par_mktl_nd(mat *p_tl, const leed_phase *phs_shifts,
    * for each set of phase shifts. */
   for(i_set = 0; i_set < n_set; i_set ++)
   {
-    l_set_1 = phs_shifts[i_set].lmax + 1;
+    l_set_1 = (size_t)phs_shifts[i_set].lmax + 1;
 
     /* check for unknown t_type */
     if( (phs_shifts[i_set].t_type != T_DIAG) &&
@@ -125,8 +125,8 @@ mat *leed_par_mktl_nd(mat *p_tl, const leed_phase *phs_shifts,
              * ( phs_shifts[i_set].energy[i_eng] - energy);
 
         iaux = 1 + l;
-        faux_r = R_cos(delta);
-        faux_i = R_sin(delta);
+        faux_r = cleed_real_cos(delta);
+        faux_i = cleed_real_sin(delta);
         cri_mul(p_tl[i_set]->rel+iaux, p_tl[i_set]->iel+iaux,
               faux_r, faux_i, faux_i, 0.);
       }
@@ -181,8 +181,8 @@ mat *leed_par_mktl_nd(mat *p_tl, const leed_phase *phs_shifts,
              * ( phs_shifts[i_set].energy[i_eng] - energy);
 
         iaux = 1 + l;
-        faux_r = R_cos(delta);
-        faux_i = R_sin(delta);
+        faux_r = cleed_real_cos(delta);
+        faux_i = cleed_real_sin(delta);
         cri_mul(p_tl[i_set]->rel+iaux, p_tl[i_set]->iel+iaux,
                 faux_r, faux_i, faux_i, 0.);
       }

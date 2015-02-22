@@ -22,15 +22,16 @@
 #ifndef COORD_H
 #define COORD_H
 
-#define COORD_COPY(a, b) {a->x = b->x; a->y = b->y; a->z = b->z;}
-#define COORD_COPY_XYZ(a, x0, y0, z0) {a->x = x0; a->y = y0; a->z = z0;}
-#define COORD_MAGNITUDE(a) (sqrt(a->x*a->x + a->y*a->y + a->z*a->z))
+#include <stdio.h>
+#include <stddef.h>
+
+#if !__GNUC__
+#define __attribute__(x) /* empty - disables GNU attribute extension */
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <stdio.h>
 
 typedef struct {
   double x;       /*!< x-axis position */
@@ -38,65 +39,26 @@ typedef struct {
   double z;       /*!< z-axis position */
 } coord;          /*!< Structure for x,y,z coordinates */
 
-coord *coord_init();
-void coord_free(coord *pos);
-double coord_get_x(const coord *pos);
-double coord_get_y(const coord *pos);
-double coord_get_z(const coord *pos);
-double coord_get_magnitude(const coord *pos);
-size_t coord_get_allocated_size(const coord *pos);
-void coord_set_x(coord *pos, double x);
-void coord_set_y(coord *pos, double y);
-void coord_set_z(coord *pos, double z);
-void coord_set(coord *pos, double x, double y, double z);
-void coord_copy(coord *dst, const coord *src);
-void coord_printf(FILE *f, const coord *pos);
+__attribute__((returns_nonnull)) coord *coord_init();
+__attribute__((nonnull)) void coord_free(coord *pos);
+__attribute__((nonnull)) double coord_get_x(const coord *pos);
+__attribute__((nonnull)) double coord_get_y(const coord *pos);
+__attribute__((nonnull)) double coord_get_z(const coord *pos);
+__attribute__((nonnull)) double coord_get_magnitude(const coord *pos);
+__attribute__((nonnull)) size_t coord_get_allocated_size(const coord *pos);
+__attribute__((nonnull)) void coord_set_x(coord *pos, double x);
+__attribute__((nonnull)) void coord_set_y(coord *pos, double y);
+__attribute__((nonnull)) void coord_set_z(coord *pos, double z);
+__attribute__((nonnull)) void coord_set(coord *pos, double x, double y, double z);
+__attribute__((nonnull)) void coord_copy(coord *dst, const coord *src);
+__attribute__((nonnull(2))) void coord_printf(FILE *f, const coord *pos);
 
 #ifdef __cplusplus
 } /* extern "C" */
+#endif /* __cplusplus */
 
-namespace cleed {
-
-class Basis;
-
-/*!
- * A C++ wrapper class for the #coord \c struct to give a more
- * object-orientated interface.
- */
-class Coordinate {
-
-  friend class Basis;
-
-  public:
-    explicit Coordinate() : pos(::coord_init()) {}
-    Coordinate(double x, double y, double z);
-    Coordinate(const Coordinate &position);
-    Coordinate(const coord *position);
-    ~Coordinate();
-    
-    /* setters */
-    void setX(double x);
-    void setY(double y);
-    void setZ(double z);
-    void setCoordinate(double x, double y, double z);
-    void setCoordinate(const Coordinate &position);
-    void setCoordinate(const coord *position);
-    
-    /* getters */
-    double getMagnitude();
-    double getX();
-    double getY();
-    double getZ();
-    const coord *get_coord();
-    
-    /* other methods */
-    void print(FILE *f = stdout);
-    
-  private:
-    coord *pos;
-};
-
-} /* namespace cleed */
-#endif /* __cpluscplus__ */
+#ifdef __attribute__
+# undef __attribute__
+#endif
 
 #endif /* COORD_H */

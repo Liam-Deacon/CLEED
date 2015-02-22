@@ -45,7 +45,7 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
   size_t mpts = n_dim+1;
   real rtol, sum, swap;
   real yhi, ylo, ynhi, ysave, yt, ytry;
-  cleed_vector *psum = CLEED_VECTOR_ALLOC(n_dim);
+  cleed_vector *psum = cleed_vector_alloc(n_dim);
 
   char old_file[FILENAME_MAX];
   char new_file[FILENAME_MAX];
@@ -57,8 +57,8 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
   for (n=0; n < n_dim; n++)
   {
     for (sum=0.0, m=0; m < mpts; m++)
-      sum += CLEED_BASIC_MATRIX_GET(p, m, n, mpts, n_dim);
-    CLEED_VECTOR_SET(psum, n, sum);
+      sum += cleed_basic_matrix_get(p, m, n, n_dim);
+    cleed_vector_set(psum, n, sum);
   }
 
   /* LOOP */
@@ -69,8 +69,8 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
      * Whenever we look at a vertex, it gets a random thermal fluctuation. */
     ilo = 0;
     ihi = 1;
-    ynhi = ylo = CLEED_VECTOR_GET(y, 0) + tt*fluct(&sa_idum);
-    yhi = CLEED_VECTOR_GET(y, 1) + tt*fluct(&sa_idum);
+    ynhi = ylo = cleed_vector_get(y, 0) + tt*fluct(&sa_idum);
+    yhi = cleed_vector_get(y, 1) + tt*fluct(&sa_idum);
 
     if( ylo > yhi )
     {
@@ -85,7 +85,7 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
      * Add thermal fluctuations to each point */
     for (i=2; i < mpts; i++)
     {
-      yt = CLEED_VECTOR_GET(y, i) + tt*fluct(&sa_idum);
+      yt = cleed_vector_get(y, i) + tt*fluct(&sa_idum);
       if( yt <= ylo )
       {
         ilo = i;
@@ -111,16 +111,16 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
     if( (rtol < ftol) || (*iter < 0) )
     {
       /* If returning, put best value in slot 1 */
-      swap = CLEED_VECTOR_GET(y, 0);
-      CLEED_VECTOR_SET(y, 0, CLEED_VECTOR_GET(y, ilo));
-      CLEED_VECTOR_SET(y, ilo, swap);
+      swap = cleed_vector_get(y, 0);
+      cleed_vector_set(y, 0, cleed_vector_get(y, ilo));
+      cleed_vector_set(y, ilo, swap);
 
       for(n=0; n < n_dim; n++)
       {
-        swap = CLEED_BASIC_MATRIX_GET(p, 0, n, mpts, n_dim);
-        CLEED_BASIC_MATRIX_SET(p, 0, n, mpts, n_dim,
-          CLEED_BASIC_MATRIX_GET(p, ilo, n, mpts, n_dim));
-        CLEED_BASIC_MATRIX_SET(p, ilo, n, mpts, n_dim, swap);
+        swap = cleed_basic_matrix_get(p, 0, n, n_dim);
+        cleed_basic_matrix_set(p, 0, n, n_dim,
+            cleed_basic_matrix_get(p, ilo, n, n_dim));
+        cleed_basic_matrix_set(p, ilo, n, n_dim, swap);
       }
       break;
     }
@@ -156,12 +156,12 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
           {
             for (j=0; j < n_dim; j++)
             {
-              CLEED_VECTOR_SET(psum, j, 0.5*(
-                CLEED_BASIC_MATRIX_GET(p, i, j, mpts, n_dim) +
-                CLEED_BASIC_MATRIX_GET(p, ilo, j, mpts, n_dim)) );
-              CLEED_BASIC_MATRIX_SET(p, i, j, mpts, n_dim, CLEED_VECTOR_GET(psum, j));
+              cleed_vector_set(psum, j, 0.5*(
+                cleed_basic_matrix_get(p, i, j, n_dim) +
+                cleed_basic_matrix_get(p, ilo, j, n_dim)) );
+              cleed_basic_matrix_set(p, i, j, n_dim, cleed_vector_get(psum, j));
             }
-            CLEED_VECTOR_SET(y, i, (*funk)(psum));
+            cleed_vector_set(y, i, (*funk)(psum));
           }
         } /* for i */
 
@@ -171,8 +171,8 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
         for (n=0; n < n_dim; n++)
         {
           for (sum=0.0, m=0; m < mpts; m++)
-            sum += CLEED_BASIC_MATRIX_GET(p, m, n, mpts, n_dim);
-          CLEED_VECTOR_SET(psum, n, sum);
+            sum += cleed_basic_matrix_get(p, m, n, n_dim);
+          cleed_vector_set(psum, n, sum);
         }
       } /* ytry >= ysave */
     } /* ytry >= ynhi */
@@ -200,7 +200,7 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
     {
       fprintf(ver_stream, "%e ", y[i]);
       for(j=0; j < n_dim; j++)
-        fprintf(ver_stream, "%e ", CLEED_BASIC_MATRIX_GET(p, i, j, mpts, n_dim));
+        fprintf(ver_stream, "%e ", cleed_basic_matrix_get(p, i, j, n_dim));
       fprintf(ver_stream, "\n");
     }
 
@@ -212,7 +212,7 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
 
   } /* end of BIG LOOP */
 
-  CLEED_VECTOR_FREE(psum);
+  cleed_vector_free(psum);
 
 } /* end of function sr_amebsa */
 
@@ -225,13 +225,13 @@ real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n
   size_t j;
   real fac1, fac2, yflu, ytry, faux, *ptry;
 
-  ptry = CLEED_VECTOR_ALLOC(n_dim);
+  ptry = cleed_vector_alloc(n_dim);
   fac1 = (1.0 - fac)/n_dim;
   fac2 = fac1 - fac;
 
   for (j=0; j < n_dim; j++)
-    CLEED_VECTOR_SET(ptry, j, CLEED_VECTOR_GET(psum, j)*fac1 -
-                     CLEED_BASIC_MATRIX_GET(p, ihi, j, n_dim+1, n_dim)*fac2);
+    cleed_vector_set(ptry, j, cleed_vector_get(psum, j)*fac1 -
+                     cleed_basic_matrix_get(p, ihi, j, n_dim)*fac2);
 
   ytry = (*funk)(ptry);
 
@@ -241,7 +241,7 @@ real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n
   Save the best ever
      */
     for(j=0; j < n_dim; j++)
-      CLEED_VECTOR_SET(pb, j, CLEED_VECTOR_GET(ptry, j));
+      cleed_vector_set(pb, j, cleed_vector_get(ptry, j));
     *yb = ytry;
   }
 
@@ -255,18 +255,18 @@ real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n
 
   if(yflu < *yhi)
   {
-    CLEED_VECTOR_SET(y, ihi, ytry);
+    cleed_vector_set(y, ihi, ytry);
     *yhi = yflu;
     for(j=0; j < n_dim; j++)
     {
-      faux = CLEED_VECTOR_GET(psum, j);
-      CLEED_VECTOR_SET(psum, j, faux + CLEED_VECTOR_GET(ptry, j) -
-                CLEED_BASIC_MATRIX_GET(p, ihi, j, n_dim+1, n_dim));
-      CLEED_BASIC_MATRIX_SET(p, ihi, j, n_dim+1, n_dim, CLEED_VECTOR_GET(ptry, j));
+      faux = cleed_vector_get(psum, j);
+      cleed_vector_set(psum, j, faux + cleed_vector_get(ptry, j) -
+                cleed_basic_matrix_get(p, ihi, j, n_dim));
+      cleed_basic_matrix_set(p, ihi, j, n_dim, cleed_vector_get(ptry, j));
     }
   }
 
-  CLEED_VECTOR_FREE(ptry);
+  cleed_vector_free(ptry);
   return (ytry);
 
 }  /* end of function amotsa */
@@ -275,7 +275,7 @@ real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n
 
 static inline real fluct( long *i_ptr )
 {
-  return ( (real)R_log( ran1(i_ptr) ) );
+  return ( (real)cleed_real_log( ran1(i_ptr) ) );
 }  /* end of function amotsa */
 
 /**************************************************************************/

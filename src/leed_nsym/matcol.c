@@ -90,6 +90,12 @@ mat matcol(const mat M, size_t col_num)
 
         break;
       } /* case CLEED_COMPLEX */
+
+      case(NUM_MASK) : case(NUM_IMAG) : default:
+        ERROR_MSG("Unsupported M matrix type (%s)\n", strmtype(M->num_type));
+        ERROR_RETURN(NULL);
+        break;
+
     } /* switch */
   } /* matrix type is not diagonal */
   else if (M->mat_type == MAT_DIAG)
@@ -128,6 +134,13 @@ mat matcol(const mat M, size_t col_num)
 
         break;
       } /* case CLEED_COMPLEX */
+
+      case(NUM_MASK) : case(NUM_IMAG) : default:
+        ERROR_MSG("Unsupported data type for diagonal matrix (%s)\n",
+                  strmtype(M->num_type));
+        ERROR_RETURN(NULL);
+        break;
+
     } /* switch */
   } /* matrix type is diagonal */
   else /* neither square nor normal, nor diagonal matrix */

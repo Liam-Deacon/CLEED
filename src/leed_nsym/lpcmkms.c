@@ -112,29 +112,29 @@ int pc_mk_ms(mat *p_Mx, mat *p_My, mat *p_Mz,
 
   for(i_el = 1, l1 = 0; l1 <= l_max; l1 ++)
   {
-    for(m1 = -l1; m1 <= l1; m1 ++)
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 ++)
     {
       for(l3 = 0; l3 <= l_max; l3 ++)
       {
-        for(m3 = -l3; m3 <= l3; m3 ++, i_el ++)
+        for(m3 = -(int)l3; m3 <= (int)l3; m3 ++, i_el ++)
         {
-          cri_powi(&faux_r, &faux_i, l3 - l1);
+          cri_powi(&faux_r, &faux_i, (int)l3 - (int)l1);
 
           /* Eq. 30: m2 = 0, l2 = 1 */
           /* pref = SQRT_4PI3 * M1P(m3) * blm(l1, m1, 1, 0, l3,-m3); */
-          pref = SQRT_4PI3 * M1P(m3) * cg(l1, m1, 1, 0, l3, m3);
+          pref = SQRT_4PI3 * M1P(m3) * cg((int)l1, m1, 1, 0, (int)l3, m3);
           Mz->rel[i_el] = pref * faux_r;
           Mz->iel[i_el] = pref * faux_i;
 
           /* Eq. 31: m2 = +/-1, l2 = 1 for blm/cg */
           /* pref = SQRT_4PI3 * M1P(m3) * blm(l1, m1, 1, 1, l3,-m3); */
-          pref = SQRT_4PI3 * M1P(m3) * cg(l1, m1, 1,-1, l3, m3);
+          pref = SQRT_4PI3 * M1P(m3) * cg((int)l1, m1, 1,-1, (int)l3, m3);
           Mp_r = pref * faux_r;
           Mp_i = pref * faux_i;
 
           /* Eq. 31: m2 = -/+1, l2 = 1 for blm/cg */
           /* pref = SQRT_4PI3 * M1P(m3) * blm(l1, m1, 1,-1, l3,-m3); */
-          pref = SQRT_4PI3 * M1P(m3) * cg(l1, m1, 1, 1, l3, m3);
+          pref = SQRT_4PI3 * M1P(m3) * cg((int)l1, m1, 1, 1, (int)l3, m3);
           Mm_r = pref * faux_r;
           Mm_i = pref * faux_i;
 
@@ -179,11 +179,11 @@ int pc_mk_ms(mat *p_Mx, mat *p_My, mat *p_Mz,
 
   for(i_el = 1, l1 = 0; l1 <= l_max; l1 ++)
   {
-    for(m1 = -l1; m1 <= l1; m1 ++)
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 ++)
     {
       for(l3 = 0; l3 <= l_max; l3 ++)
       {
-        for(m3 = -l3; m3 <= l3; m3 ++, i_el ++)
+        for(m3 = -(int)l3; m3 <= (int)l3; m3 ++, i_el ++)
         {
           Unity->rel[i_el] = MxMx->rel[i_el] +
                               MyMy->rel[i_el] + MzMz->rel[i_el];
@@ -196,7 +196,7 @@ int pc_mk_ms(mat *p_Mx, mat *p_My, mat *p_Mz,
             trace_r += Unity->rel[i_el];
             trace_i += Unity->iel[i_el];
            
-            if( (R_cabs(Unity->rel[i_el] -1., Unity->iel[i_el]) > M_TOLERANCE)
+            if( (cleed_real_cabs(Unity->rel[i_el] -1., Unity->iel[i_el]) > M_TOLERANCE)
                && (l1 != l_max) )
             {
               ERROR_MSG("trace element (%d %d, %d %d) deviates from 1.: (%f,%f)\n",
@@ -206,7 +206,7 @@ int pc_mk_ms(mat *p_Mx, mat *p_My, mat *p_Mz,
           } /* if l1 == l3 */
           else /* off-diagonal elements */
           {
-            if( ( R_cabs(Unity->rel[i_el], Unity->iel[i_el]) > M_TOLERANCE )
+            if( ( cleed_real_cabs(Unity->rel[i_el], Unity->iel[i_el]) > M_TOLERANCE )
                && (l1 != l_max) && (l3 != l_max) )
             {
               ERROR_MSG("element (%d %d, %d %d) deviates from 0.: (%f,%f)\n",
@@ -226,9 +226,9 @@ int pc_mk_ms(mat *p_Mx, mat *p_My, mat *p_Mz,
   matshowabs(Unity);
 #endif
 
-  if( ! IS_EQUAL_REAL(R_cabs(trace_r, trace_i), 0.))
+  if( ! IS_EQUAL_REAL(cleed_real_cabs(trace_r, trace_i), 0.))
   {
-    faux_r = R_cabs(trace_r - l_max_2, trace_i) / R_cabs(trace_r, trace_i);
+    faux_r = cleed_real_cabs(trace_r - l_max_2, trace_i) / cleed_real_cabs(trace_r, trace_i);
 
     CONTROL_MSG(CONTROL, "rel. error in trace of "
             "MxMx + MyMy + MzMz: %.3f\n", faux_r);

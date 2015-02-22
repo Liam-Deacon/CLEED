@@ -69,7 +69,7 @@ int rfac_iv_sort(rfac_iv *iv)
   /* check equidistance */
   for (i = 1, iv->equidist = 1; i< iv->n_eng-1; i++)
   {
-    if (R_fabs ((2*iv->data[i].energy -
+    if (cleed_real_fabs ((2*iv->data[i].energy -
         iv->data[i+1].energy - iv->data[i-1].energy) )
       >  ENG_TOLERANCE )
     {

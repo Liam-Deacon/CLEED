@@ -23,38 +23,54 @@
 #ifndef RFAC_FUNC_H
 #define RFAC_FUNC_H
 
+#include "attributes.h"
+#include "rfac_def.h"
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
-
-#include "rfac_def.h"
 
 /*********************************************************************
  * General routines (utility functions)
  *********************************************************************/
 
+NONNULL()
 int bgets(const char *, long, long, char *);  /*!< get string from buffer */
+
+NONNULL() RETURNS_NONNULL
 char *file2buffer(const char *);              /*!< copy file to buffer */
+
+NONNULL() RETURNS_NONNULL
 rfac_args *rfac_rdargs(int, char **);           /*!< read argument list */
 
+NONNULL()
 size_t rfac_lines(const char *);               /*!< count lines */
+
+NONNULL()
 size_t rfac_clines(const char *);              /*!< count comment lines */
+
+NONNULL()
 size_t rfac_nclines(const char *);             /*!< count data lines */
 
+NONNULL() RETURNS_NONNULL
 char *rfac_version(char *);                    /*!< current program version */
+
 void rfac_help(FILE *);                        /*!< help function */
 void rfac_info();                              /*!< version information, etc. */
 
 /* line interpreter */
+NONNULL()
 void rfac_intindl(char *, rfac_spot *, size_t);
 
 /*********************************************************************
  * data output
  *********************************************************************/
 /* copy control file to output */
+NONNULL()
 int rfac_ctr2out(char *, FILE * );
 
 /* general output function */
+NONNULL()
 int rfac_output(rfac_args *,  rfac *, size_t, size_t);
 
 /*********************************************************************
@@ -62,62 +78,90 @@ int rfac_output(rfac_args *,  rfac *, size_t, size_t);
  *********************************************************************/
 
 /* general input routine */
+NONNULL() RETURNS_NONNULL
 rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file);
 
+NONNULL() RETURNS_NONNULL
 rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *, char *, char *);
 
 /* read input of IV data */
+NONNULL() RETURNS_NONNULL
 rfac_iv_data *rfac_iv_read(const char *filename);
 
 /*********************************************************************
  * sort, spline, smooth
  *********************************************************************/
+NONNULL()
 int rfac_lorentz(rfac_ivcur *, real, const char *); /* smooth IV curves */
 
+NONNULL()
 real rfac_splint(real, rfac_iv_data *, size_t);  /* prepare cubic spline */
 
+NONNULL()
 void rfac_iv_spline(rfac_iv *);                /* prepare cubic spline */
+
+NONNULL()
 int rfac_iv_sort(rfac_iv *iv);                 /* sort IV curve by energy */
 
+NONNULL()
 int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi);
 /*********************************************************************
  * r_factors
  *********************************************************************/
+NONNULL()
 size_t rfac_mklide(real *, real *, real *, real , real,
                  rfac_iv_data *, size_t, rfac_iv_data *, size_t);
 
 /* prepare comparison */
+NONNULL()
 size_t rfac_mklist(real *, real *, real *, real,
                  rfac_iv_data *, size_t, rfac_iv_data *, size_t);
 
 /* R1 factor */
+NONNULL()
 real rfac_r1(const real *, const real *, const real *);
 
 /* R2 factor */
+NONNULL()
 real rfac_r2(const real *, const real *, const real *);
 
 /* Rb1 factor */
+NONNULL()
 real rfac_rb(const real *, const real *, const real *);
 
 /* Pendry's R factor */
+NONNULL()
 real rfac_rp(const real *, const real *, const real *, real);
 
 /* Minimum R factor */
+NONNULL()
 real rfac_rmin(rfac_ivcur *, rfac_args *, real *, real *, real *);
 
 /*********************************************************************
  * low-level routines
  *********************************************************************/
+RETURNS_NONNULL
 rfac_args *rfac_args_init();
 
+RETURNS_NONNULL
 rfac_iv *rfac_iv_init();
+
+RETURNS_NONNULL ALLOC_SIZE(1)
 rfac_iv *rfac_iv_alloc(size_t);
+
+NONNULL()
 void rfac_iv_free(rfac_iv*);
+
+NONNULL()
 void rfac_iv_copy(rfac_iv *dest, const rfac_iv *src);
 
+NONNULL()
 void rfac_ivcur_free(rfac_ivcur*);
+
+NONNULL()
 void rfac_ivcur_free_all(rfac_ivcur*);
 
+NONNULL(1)
 int rfac_iv_to_arrays(const rfac_iv *, double *, double *, size_t *);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */

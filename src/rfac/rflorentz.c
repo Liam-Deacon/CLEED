@@ -100,8 +100,8 @@ int rfac_lorentz(rfac_ivcur *iv_cur, real vi, const char *ctr)
         }
 
         /* Find energy range for integral */
-        faux = vi * R_sqrt(1./EPSILON - 1.);
-        n_range = (size_t)R_nint(faux / e_step);
+        faux = vi * cleed_real_sqrt(1./EPSILON - 1.);
+        n_range = (size_t)cleed_real_nint(faux / e_step);
 
         CONTROL_MSG(CONTROL, "[theory] e_step: %.1f n_range: %d\n",
                     e_step, n_range);
@@ -192,8 +192,8 @@ int rfac_lorentz(rfac_ivcur *iv_cur, real vi, const char *ctr)
       }
 
       /* Find energy range for integral */
-      faux = vi * R_sqrt(1./EPSILON - 1.);
-      n_range = (size_t)R_nint(faux / e_step);
+      faux = vi * cleed_real_sqrt(1./EPSILON - 1.);
+      n_range = (size_t)cleed_real_nint(faux / e_step);
 
       CONTROL_MSG(CONTROL, "[expt] e_step: %.1f n_range: %d\n", e_step, n_range);
 
@@ -309,8 +309,8 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
     }
 
     /* Find energy range for integral */
-    faux = vi * R_sqrt(1./EPSILON - 1.);
-    n_range = (size_t)R_nint(faux / e_step);
+    faux = vi * cleed_real_sqrt(1./EPSILON - 1.);
+    n_range = (size_t)cleed_real_nint(faux / e_step);
 
     CONTROL_MSG(CONTROL, "e_step: %.1f n_range: %d\n", e_step, n_range);
 

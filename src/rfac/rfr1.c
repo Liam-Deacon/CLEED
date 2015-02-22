@@ -59,9 +59,9 @@ real rfac_r1(const real *eng, const real *e_int, const real *t_int)
   the_sum = 0.;
 
   for(i_eng = 0;
-     ! IS_EQUAL_REAL(eng[i_eng], F_END_OF_LIST); i_eng ++)
+     ! IS_EQUAL_REAL(eng[i_eng], (real)F_END_OF_LIST); i_eng ++)
   {
-    exp_sum += R_fabs( e_int[i_eng] );
+    exp_sum += cleed_real_fabs( e_int[i_eng] );
     the_sum += t_int[i_eng];
   }
   n_eng = i_eng;
@@ -74,8 +74,8 @@ real rfac_r1(const real *eng, const real *e_int, const real *t_int)
   norm_sum = 0.;
   for(i_eng = 0; i_eng < n_eng; i_eng ++)
   {
-    rfac_sum   += R_fabs( t_int[i_eng] - norm_te * e_int[i_eng] );
-    norm_sum += R_fabs( t_int[i_eng] - the_sum );
+    rfac_sum   += cleed_real_fabs( t_int[i_eng] - norm_te * e_int[i_eng] );
+    norm_sum += cleed_real_fabs( t_int[i_eng] - the_sum );
   }
 
   return (rfac_sum/norm_sum);

@@ -29,7 +29,7 @@
 
 #include "mat.h"
 
-#define CAB2RI(a,b)  (a)*(a) + (b)*(b)
+static inline real cab2ri(real a, real b) { return ( pow(a, 2) + pow(b, 2) ); }
 
 /*!
  * Perform LU decomposition (first step of matrix inversion) for a
@@ -53,10 +53,10 @@
  */
 int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
 {
-  int d;
+  int d=1;
 
-  int i_r, i_c;
-  int i_max;
+  size_t i_r, i_c;
+  size_t i, i_max=1;
   const real TINY = 1.e-20;
 
   real big, dum, sumr, sumi;
@@ -66,7 +66,6 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
   real *ptr_end;             /* used as counters in the innermost loops */
 
   vv = (real *)malloc( (n+1) * sizeof(real) );
-  d = i_max = 1;            /* initialise */
 
   /* get implicit scaling information */
   for (i_r = 1; i_r <= n; i_r ++ )  /* loop over rows */
@@ -74,11 +73,9 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
     big = 0.0;
 
     /* loop over cols */
-    for ( ptrr1 = ar + (i_r - 1)*n + 1, ptri1 = ai + (i_r - 1)*n + 1,
-          ptr_end = ar + (i_r -1)*n + n;
-          ptrr1 <= ptr_end; ptrr1 ++, ptri1 ++)
+    for ( i = (i_r - 1)*n + 1; i <= (i_r -1)*n + n; i ++ )
     {
-      if ((dum = R_cabs(*ptrr1, *ptri1)) > big) big = dum;
+      if ((dum = cleed_real_cabs(ar[i], ai[i])) > big) big = dum;
     }
     if (IS_EQUAL_REAL(big, 0.0))
     {
@@ -92,8 +89,8 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
   {                               /* NR eq 2.3.12 except for i_r == i_c */
     for (i_r = 1; i_r < i_c; i_r ++)
     {
-      sumr = *(ar + (i_r - 1)*n + i_c);
-      sumi = *(ai + (i_r - 1)*n + i_c);
+      sumr = ar[(i_r - 1)*n + i_c];
+      sumi = ai[(i_r - 1)*n + i_c];
    
       for (ptrr1 = ar + (i_r - 1)*n + 1, ptri1 = ai + (i_r - 1)*n + 1,
            ptrr2 = ar + i_c, ptri2 = ai + i_c,
@@ -104,8 +101,8 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
         sumi -= (*ptrr1 * *ptri2) + (*ptri1 * *ptrr2);
       }
            
-      *(ar + (i_r - 1)*n + i_c) = sumr;
-      *(ai + (i_r - 1)*n + i_c) = sumi;
+      ar[(i_r - 1)*n + i_c] = sumr;
+      ai[(i_r - 1)*n + i_c] = sumi;
     } /* for i_r */
 
     /* Initialize for the search for largest pivot element
@@ -131,7 +128,7 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
       *(ai + (i_r - 1)*n + i_c) = sumi;
 
       /* Figure of merit for the pivot: is it better than the best so far? */
-      if ( ( dum = vv[i_r] * R_cabs(sumr,sumi) )  >= big)
+      if ( ( dum = vv[i_r] * cleed_real_cabs(sumr,sumi) )  >= big)
       {
         big = dum;
         i_max = i_r;
@@ -168,7 +165,7 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
     if (i_c != n)
     {
       /* sum = 1/a(i_c, i_c) */
-      dum = CAB2RI( *(ar + (i_c - 1)*n + i_c), *(ai + (i_c - 1)*n + i_c) );
+      dum = cab2ri( *(ar + (i_c - 1)*n + i_c), *(ai + (i_c - 1)*n + i_c) );
       sumr =   (*(ar + (i_c - 1)*n + i_c)) / dum;
       sumi = - (*(ai + (i_c - 1)*n + i_c)) / dum;
 
@@ -217,7 +214,7 @@ int c_ludcmp(real *ar, real *ai, size_t *indx, size_t n)
 int c_luinv(real *inv_r, real *inv_i,
             real *lu_r,  real *lu_i, size_t *indx, size_t n)
 {
-  int i_c, i_i, i_r;
+  size_t i_c, i_i, i_r;
 
   real sumr, sumi, dum;
 
@@ -293,7 +290,7 @@ int c_luinv(real *inv_r, real *inv_i,
       }
 
       /* Store a component of the solution vector x: b = sum/a(i,i) */
-      dum = CAB2RI(*(lu_r + (i_r - 1)*n + i_r), *(lu_i + (i_r - 1)*n + i_r));
+      dum = cab2ri(*(lu_r + (i_r - 1)*n + i_r), *(lu_i + (i_r - 1)*n + i_r));
       *(inv_r + (i_r - 1)*n + i_c) = (sumr* *(lu_r + (i_r-1)*n + i_r) +
                                       sumi* *(lu_i + (i_r-1)*n + i_r))/dum;
       *(inv_i + (i_r - 1)*n + i_c) = (sumi* *(lu_r + (i_r-1)*n + i_r) -
@@ -336,7 +333,7 @@ int c_luinv(real *inv_r, real *inv_i,
  */
 int c_lubksb(real *lur, real *lui, size_t *indx, real *br,  real *bi, size_t n)
 {
-  int i_i, i_r;
+  size_t i_i, i_r;
 
   real sumr, sumi, dum;
   real *ptrr1, *ptrr2, *ptr_end;  /* pointers used in innermost loops */
@@ -396,7 +393,7 @@ int c_lubksb(real *lur, real *lui, size_t *indx, real *br,  real *bi, size_t n)
     }
 
     /* Store a component of the solution vector x: b = sum/a(i,i) */
-    dum = CAB2RI(*(lur + (i_r - 1)*n + i_r), *(lui + (i_r - 1)*n + i_r));
+    dum = cab2ri(*(lur + (i_r - 1)*n + i_r), *(lui + (i_r - 1)*n + i_r));
     *(br + (i_r - 1)*n + 1) = (sumr* *(lur + (i_r-1)*n + i_r) +
                                sumi* *(lui + (i_r-1)*n + i_r))/dum;
     *(bi + (i_r - 1)*n + 1) = (sumi* *(lur + (i_r-1)*n + i_r) -

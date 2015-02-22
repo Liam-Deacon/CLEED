@@ -31,7 +31,7 @@ extern "C" {
 /*********************************************************************
  * Other includes
  *********************************************************************/
-#include "real.h"
+#include "cleed_real.h"
 #include "cpl_macr.h"
 #include "cpl_func.h"
 

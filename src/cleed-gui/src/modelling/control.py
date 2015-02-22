@@ -83,7 +83,7 @@ class Control(object):
     def __init__(self, controlList=[]):
         '''contolList is an array of ControlItems'''
         self.controlItems = []
-        self.setControlItems(controlList)
+        self.mkiv_set_controlItems(controlList)
         
     def __repr__(self):
         return "Control(%s)" % ",".join([item.__repr__() 
@@ -96,7 +96,7 @@ class Control(object):
         '''set comment for control'''
         self.comment = str(comment)
     
-    def setControlItems(self, items):
+    def mkiv_set_controlItems(self, items):
         self.controlItems = []
         for item in items:
             if not isinstance(item, ControlItem):

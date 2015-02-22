@@ -68,7 +68,7 @@ static const real ACC = 40.0; /*!< Accuracy for double */
  * mathematical functions" by Abramowitz and Stegun (p.452) and in Num. Rec.
  * (p. 181/ p. 235). The start index is chosen as
  *
- * \code l_start =  l_max + (int) R_sqrt(ACC*l_max) \endcode
+ * \code l_start =  l_max + (int) cleed_real_sqrt(ACC*l_max) \endcode
  *
  *  Where \c ACC determines the accuracy of the approximation (Num. Rec.: 40.0
  *  for double precision).
@@ -141,8 +141,8 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
   }
   else
   {
-    faux_r = R_cos(z_r);
-    faux_i = R_sin(z_r);
+    faux_r = cleed_real_cos(z_r);
+    faux_i = cleed_real_sin(z_r);
   }
 
   /* pref_r/i are used for cosh/sinh(z_i) */
@@ -153,8 +153,8 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
   }
   else
   {
-    pref_r = R_cosh(z_i);
-    pref_i = R_sinh(z_i);
+    pref_r = cleed_real_cosh(z_i);
+    pref_i = cleed_real_sinh(z_i);
   }
 
   /* sin(z) = sin(z_r)*cosh(z_i) + i*cos(z_r)*sinh(z_i) */
@@ -220,7 +220,7 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
   /*
    * The remaining Jl are calculated according to Miller's formula
    *
-   * - Downwards recurrence from an l_start =  l_max + (int) R_sqrt(ACC*n)
+   * - Downwards recurrence from an l_start =  l_max + (int) cleed_real_sqrt(ACC*n)
    *  Fl_start   = 0.
    *  Fl_start-1 = 1.
    *  Fl-1 (z) = (2*l+1)/z Fl(z) - Fl+1(z)
@@ -230,7 +230,7 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
 
   if(l_int < l_max)
   {
-    l_start = l_max + (int) R_sqrt(ACC*l_max);
+    l_start = l_max + (size_t) cleed_real_sqrt(ACC*l_max);
     F_r = (real *)malloc( (l_start+2) * sizeof(real) );
     F_i = (real *)malloc( (l_start+2) * sizeof(real) );
 
@@ -250,7 +250,7 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
     /* calculate normalizing factor J0 / F0 */
     cri_div(&pref_r, &pref_i, Jl->rel[1], Jl->iel[1], F_r[1], F_i[1]);
 
-    l_int = MAX(2, l_int+1);
+    l_int = MAX(2u, l_int+1);
     for(l = l_int; l <= l_max; l++)
     {
       cri_mul(Jl->rel+l+1, Jl->iel+l+1, pref_r, pref_i, F_r[l+1], F_i[l+1]);

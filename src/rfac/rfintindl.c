@@ -105,8 +105,8 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
     }
 
     /* check compatibility with input indices and clear scale. */
-    for (j=0; ( ( R_fabs( (beam+j)->index1 - test1) +
-                R_fabs( (beam+j)->index2 - test2) ) > IND_TOLERANCE) 
+    for (j=0; ( ( cleed_real_fabs( (beam+j)->index1 - test1) +
+                cleed_real_fabs( (beam+j)->index2 - test2) ) > IND_TOLERANCE) 
 	                && (j < n_beam); j++);
     {
       if (j < n_beam)

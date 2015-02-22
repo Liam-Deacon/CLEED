@@ -44,7 +44,7 @@ SET (MATOBJ
     ${cleed_nsym_SOURCE_DIR}/matalloc.c
     ${cleed_nsym_SOURCE_DIR}/matarralloc.c
     ${cleed_nsym_SOURCE_DIR}/matarrfree.c
-    ${cleed_nsym_SOURCE_DIR}/matcgau.c
+    #${cleed_nsym_SOURCE_DIR}/matcgau.c
     ${cleed_nsym_SOURCE_DIR}/matcheck.c
     ${cleed_nsym_SOURCE_DIR}/matclu.c
     ${cleed_nsym_SOURCE_DIR}/matcol.c
@@ -156,7 +156,7 @@ SET (MSOBJ
     ${cleed_nsym_SOURCE_DIR}/lmstmatij.c   
     ${cleed_nsym_SOURCE_DIR}/lmsymat.c     
     ${cleed_nsym_SOURCE_DIR}/lmsymatset.c  
-    ${cleed_nsym_SOURCE_DIR}/lmsymmat.c    
+    ${cleed_nsym_SOURCE_DIR}/lmsymat.c    
     ${cleed_nsym_SOURCE_DIR}/lmsypy.c
 )
 
@@ -165,7 +165,7 @@ SET (MSOBJSYM
     ${cleed_sym_SOURCE_DIR}/lmscompksum.c 
     ${cleed_sym_SOURCE_DIR}/lmsbravlsym.c 
     ${cleed_sym_SOURCE_DIR}/lmsbravl.c    
-    ${cleed_sym_SOURCE_DIR}/lmscompl.c    
+    ${cleed_nsym_SOURCE_DIR}/lmscompl.c    
     ${cleed_sym_SOURCE_DIR}/lmsltok.c
 )
 

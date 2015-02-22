@@ -111,10 +111,10 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
                           atom_list[i_atoms].pos[1]*BOHR,
                           atom_list[i_atoms].pos[2]*BOHR,
                           atom_list[i_atoms].pos[3]*BOHR,
-                          R_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] -
+                          cleed_real_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] -
                                  atom_list[i_atoms].pos[3])*BOHR);
 
-    if( R_fabs(atom_list[i_atoms-1].pos[3]+vaux[3] - atom_list[i_atoms].pos[3])
+    if( cleed_real_fabs(atom_list[i_atoms-1].pos[3]+vaux[3] - atom_list[i_atoms].pos[3])
         > MIN_DIST )
     {
       /* New layer:
@@ -162,7 +162,7 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
       i_layer ++;
       no_of_atoms[i_layer] = 0;
 
-    }  /* if R_fabs ... */
+    }  /* if cleed_real_fabs ... */
 
     atom_list[i_atoms].layer = i_layer;
     no_of_atoms[i_layer] ++;
@@ -335,11 +335,11 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
 
         par->layers[i].atoms[i_d].dwf = atom_list[i_atoms].dwf;
 
-       i_d ++;
+        i_d ++;
       }
     } /* for i_atoms */
 
-    if(i_d != par->layers[i].n_atoms)
+    if((size_t)i_d != par->layers[i].n_atoms)
     {
       ERROR_MSG("the numbers of atoms in layer %d do not match\n", i);
       ERROR_RETURN(-1);
@@ -353,5 +353,5 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
   CONTROL_MSG(CONTROL,
               "leaving leed_inp_overlayer, return value = %d\n", i_layer);
 
-  return(i_layer);
+  return((int)i_layer);
 } /* end of function leed_inp_overlayer */

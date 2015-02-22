@@ -345,7 +345,7 @@ real fluct( long *i_ptr )
 {
 real res;
 
-  res = R_log( ran1(i_ptr) );
+  res = cleed_real_log( ran1(i_ptr) );
   return(res);
 }  /* end of function amotsa */
 

@@ -32,6 +32,7 @@ typedef struct basis_vector
 {
   double x;
   double y;
+  double z;
 } basis_vector;
 extern basis_vector basis_vector_default; 
 

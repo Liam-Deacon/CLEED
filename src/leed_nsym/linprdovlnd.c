@@ -78,9 +78,9 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
   char phaseinp[STRSZ];
   char whatnext[STRSZ];
 
-  int i, j, iaux;                /* counter, dummy  variables */
-  int i_str;
-  int i_com;
+  int iret, iaux;                /* counter, dummy  variables */
+  size_t i, j, i_str;
+  size_t i_com;
   size_t i_atoms;
   size_t i_layer;
 
@@ -129,27 +129,15 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
   /* START INPUT: Open and Read input file */
   if( (inp_stream = fopen(filename, "r")) == NULL)
   {
-    #ifdef ERROR_LOG
-    fprintf(STDERR, "*** error (leed_read_overlayer): "
-            "could not open file \"%s\"\n", filename);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("could not open file \"%s\"\n", filename);
+    ERROR_RETURN(-1);
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_read_overlayer): Reading file \"%s\"\n", filename);
-  #endif
+  CONTROL_MSG(CONTROL, "Reading file \"%s\"\n", filename);
 
   while ( fgets(linebuffer, STRSZ, inp_stream) != NULL)
   {
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(leed_read_overlayer): %s", linebuffer);
-    #endif
+    CONTROL_MSG(CONTROL_X, "%s", linebuffer);
 
     /* find first non blank character */
     for( i_str = 0;  *(linebuffer+i_str) == ' '; i_str ++);
@@ -254,7 +242,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
             if(iaux >= 8) bulk_par->temp = vaux[3];
 
             vaux[0] = leed_inp_debye_temp(vaux[1] , vaux[2] , bulk_par->temp );
-            vaux[1] = vaux[2] = vaux[3] = R_sqrt(vaux[0])/SQRT3;
+            vaux[1] = vaux[2] = vaux[3] = cleed_real_sqrt(vaux[0])/SQRT3;
 
             #ifdef CONTROL_X
             fprintf(STDCTR, "(leed_read_overlayer): temp = %.1f dr = %.3f\n",
@@ -264,10 +252,8 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
           else
           {
             #ifdef WARNING_LOG
-            fprintf(STDWAR, "* warning (leed_read_overlayer): "
-                    "Could not interpret input: ");
-            fprintf(STDWAR, "%s", whatnext);
-            for(i=1; i<=iaux-5; i++) fprintf(STDWAR, " %.3f", vaux[i]);
+            WARNING_MSG("Could not interpret input: %s", whatnext);
+            for(i=1; i<=(size_t)fabs(iaux-5); i++) fprintf(STDWAR, " %.3f", vaux[i]);
             fprintf(STDWAR, "\n");
             #endif
 
@@ -305,11 +291,8 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
         {
           over_par->vr = -over_par->vr;
 
-          #ifdef WARNING_LOG
-          fprintf(STDWAR, "* warning (leed_read_overlayer):");
-          fprintf(STDWAR, "Vr must be negative, use the negative value "
-                  "of input %.1f\n", over_par->vr*HART);
-          #endif
+          WARNING_MSG("Vr must be negative, use the negative value "
+                      "of input %.1f\n", over_par->vr*HART);
         }
         break;
       } /* case 'v' */
@@ -330,11 +313,8 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
       default:
       /* print warning for unrecognized key words */
       {
-        #ifdef WARNING_LOG
-        fprintf(STDWAR, "* warning (leed_read_overlayer): "
-                "could not interpret line \n\t%s\t(in file \"%s\")\n",
-                linebuffer, filename);
-        #endif
+        WARNING_MSG("could not interpret line \n\t%s\t(in file \"%s\")\n",
+                    linebuffer, filename);
         break;
       }
     } /* switch linebuffer */
@@ -343,10 +323,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
   fclose(inp_stream);
 
   /* END OF INPUT: process input data if there were any (i_atoms > 0) */
-  #ifdef CONTROL_X
-  fprintf(STDCTR, "(leed_read_overlayer): "
-      "start processing: i_atoms = %d\n", i_atoms);
-  #endif
+  CONTROL_MSG(CONTROL_X, "start processing: i_atoms = %d\n", i_atoms);
 
   atoms_rd[i_atoms].type = I_END_OF_LIST;
   over_par->n_atoms = i_atoms;
@@ -384,9 +361,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
     /* Sort the atoms specified through atoms_rd.pos according to their z
      * coordinates (smallest z first). */
 
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "(leed_read_overlayer): sorting \n");
-    #endif
+    CONTROL_MSG(CONTROL_X, "sorting \n");
 
     for(i=0; i<i_atoms; i++)
       for(j=i+1; j<i_atoms; j++)
@@ -402,8 +377,8 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
     /* - Distribute the atoms to layers.
      * - Find the minimum interlayer distance.
      */
-    i_layer = leed_inp_overlayer(over_par, atoms_rd);
-
+    iret = leed_inp_overlayer(over_par, atoms_rd);
+    i_layer = (iret >= 0) ? (size_t)iret : 0u;
     free(atoms_rd);
 
     /* Find the minimum interlayer distance in bulk and overlayer.
@@ -413,7 +388,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
      */
     over_par->dmin = bulk_par->dmin;
 
-    faux = R_fabs( over_par->layers[0].vec_from_last[3] +
+    faux = cleed_real_fabs( over_par->layers[0].vec_from_last[3] +
                    bulk_par->layers[bulk_par->n_layers-1].vec_to_next[3] );
     over_par->dmin = MIN(over_par->dmin, faux);
 
@@ -424,13 +399,10 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
 
     for(i=1; i < over_par->n_layers; i++)
     {
-      #ifdef CONTROL
-      fprintf(STDCTR, "(leed_read_overlayer): "
-              "interlayer distance [%d] = %5.2f\n", i,
+      CONTROL_MSG(CONTROL, "interlayer distance [%d] = %5.2f\n", i,
               over_par->layers[i].vec_from_last[3]*BOHR);
-      #endif
       over_par->dmin =
-        MIN(over_par->dmin, R_fabs(over_par->layers[i].vec_from_last[3]) );
+        MIN(over_par->dmin, cleed_real_fabs(over_par->layers[i].vec_from_last[3]) );
     }
 
   } /* if i_atoms > 0 */
@@ -497,7 +469,7 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
            (*(p_phs_shifts)+i)->input_file,
            (*(p_phs_shifts)+i)->n_eng,
            (*(p_phs_shifts)+i)->lmax,
-           R_sqrt( (*(p_phs_shifts)+i)->dr[0] ) *BOHR);
+           cleed_real_sqrt( (*(p_phs_shifts)+i)->dr[0] ) *BOHR);
   }
   printf("***********************"
          "(leed_read_overlayer)"

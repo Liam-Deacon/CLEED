@@ -47,14 +47,14 @@ void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
 	size_t i, ibig, j;
 	real t, fptt, fp, del;
 
-	cleed_vector *pt = CLEED_VECTOR_ALLOC(n);
-	cleed_vector *ptt = CLEED_VECTOR_ALLOC(n);
-	cleed_vector *xit = CLEED_VECTOR_ALLOC(n);
+	cleed_vector *pt = cleed_vector_alloc(n);
+	cleed_vector *ptt = cleed_vector_alloc(n);
+	cleed_vector *xit = cleed_vector_alloc(n);
 
 	*fret = (*func)(p);
 
 	/* Save the initial point */
-	for (j=0; j < n; j++) CLEED_VECTOR_SET(pt, j, CLEED_VECTOR_GET(p,j));
+	for (j=0; j < n; j++) cleed_vector_set(pt, j, cleed_vector_get(p,j));
 
 	/* Start loop over iterations */
 	for (*iter=1 ; ; (*iter)++)
@@ -73,7 +73,7 @@ void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
 		{
 			for (j=0; j<n; j++)
       {
-			  CLEED_VECTOR_SET(xit, j, CLEED_BASIC_MATRIX_GET(xi, j, i, n, n));
+			  cleed_vector_set(xit, j, cleed_basic_matrix_get(xi, j, i, n));
       }
 			fptt = (*fret);
 			linmin(p, xit, n, fret, func);
@@ -88,17 +88,17 @@ void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
 		if (2.0*fabs( fp - (*fret) ) <= ftol)
     {
 			CONTROL_MSG(CONTROL, "ITERATION NO: %u, FRET = %f\n", *iter, *fret);
-      CLEED_VECTOR_FREE(pt);
-      CLEED_VECTOR_FREE(ptt);
-      CLEED_VECTOR_FREE(xit);
+      cleed_vector_free(pt);
+      cleed_vector_free(ptt);
+      cleed_vector_free(xit);
 			return;
 		}
 		if (*iter == MAX_ITER_POWELL) 
 		{
 		  ERROR_MSG("Too many iterations in routine POWELL\n");
-		  CLEED_VECTOR_FREE(pt);
-      CLEED_VECTOR_FREE(ptt);
-      CLEED_VECTOR_FREE(xit);
+		  cleed_vector_free(pt);
+      cleed_vector_free(ptt);
+      cleed_vector_free(xit);
 		  exit(1);
 		}
 
@@ -107,9 +107,9 @@ void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
      */
 		for (j=0; j<n; j++)
 		{
-			CLEED_VECTOR_SET(ptt, j, 2.0*CLEED_VECTOR_GET(p, j) - CLEED_VECTOR_GET(pt, j));
-			CLEED_VECTOR_SET(xit, j, CLEED_VECTOR_GET(p, j) - CLEED_VECTOR_GET(pt, j));
-			CLEED_VECTOR_SET(pt, j, CLEED_VECTOR_GET(p, j));
+			cleed_vector_set(ptt, j, 2.0*cleed_vector_get(p, j) - cleed_vector_get(pt, j));
+			cleed_vector_set(xit, j, cleed_vector_get(p, j) - cleed_vector_get(pt, j));
+			cleed_vector_set(pt, j, cleed_vector_get(p, j));
 		}
 
 		/* function value at extrapolated point */
@@ -124,7 +124,7 @@ void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
 				linmin(p, xit, n, fret, func);
 				for (j=0; j<n; j++)
         {
-				  CLEED_BASIC_MATRIX_SET( xi, j, ibig, n, n, CLEED_VECTOR_GET(xit, j) );
+				  cleed_basic_matrix_set( xi, j, ibig, n, cleed_vector_get(xit, j) );
         }
 			}
 		}

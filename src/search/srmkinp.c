@@ -74,10 +74,10 @@ int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
     {
       if(!sr_search->z_only)
       {
-        x += CLEED_VECTOR_GET(par, i_par) * sr_atoms[i_atoms].x_par[i_par];
-        y += CLEED_VECTOR_GET(par, i_par) * sr_atoms[i_atoms].y_par[i_par];
+        x += cleed_vector_get(par, i_par) * sr_atoms[i_atoms].x_par[i_par];
+        y += cleed_vector_get(par, i_par) * sr_atoms[i_atoms].y_par[i_par];
       }
-      z += CLEED_VECTOR_GET(par, i_par) * sr_atoms[i_atoms].z_par[i_par];
+      z += cleed_vector_get(par, i_par) * sr_atoms[i_atoms].z_par[i_par];
     }
 
     fprintf(iv_par, "po: %s %f %f %f dr1 %f\n",
@@ -88,9 +88,9 @@ int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
   if(sr_search->sr_angle)
   {
     phi =   sr_search->phi_0   +
-            CLEED_VECTOR_GET(par, sr_search->i_par_phi)   * FAC_PHI;
+            cleed_vector_get(par, sr_search->i_par_phi)   * FAC_PHI;
     theta = sr_search->theta_0 +
-            CLEED_VECTOR_GET(par, sr_search->i_par_theta) * FAC_THETA;
+            cleed_vector_get(par, sr_search->i_par_theta) * FAC_THETA;
   }
   else
   {

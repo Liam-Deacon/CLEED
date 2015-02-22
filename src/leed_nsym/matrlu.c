@@ -48,17 +48,16 @@
  */
 int r_ludcmp(real *a, size_t *indx, size_t n)
 {
-  int d;
+  int d=1;
 
   size_t i_r, i_c;
-  size_t i_max;
+  size_t i_max=1;
 
   real big, dum, sum;
   real *vv;                     /* vv stores the implicit scaling of each row */
   real *ptr1, *ptr2, *ptr_end;  /* used as counters in the innermost loops */
 
   vv = (real *)malloc( (n+1) * sizeof(real) );
-  d = i_max = 1;
 
   /* get implicit scaling information */
   for (i_r = 1; i_r <= n; i_r ++ )  /* loop over rows */
@@ -192,19 +191,19 @@ int r_ludcmp(real *a, size_t *indx, size_t n)
  */
 int r_luinv(real *inv, const real *lu, size_t *indx, size_t n)
 {
+  size_t i, j;
   size_t i_c, i_i, i_r;
 
   real sum;
-  real *ptr1, *ptr2, *ptr_end;  /* pointers used in innermost loops */
 
   /* First, preset inv as nxn identity matrix. */
-  for (ptr1 = inv + 1, ptr_end = inv + n*n; ptr1 <= ptr_end; ptr1 ++)
+  for (i = 1; i <= n*n; i++)
   {
-    *ptr1 = 0.;
+    inv[i] = 0.;
   }
-  for (ptr1 = inv + 1, ptr_end = inv + n*n; ptr1 <= ptr_end; ptr1 += n+1)
+  for (i = 1; i <= n*n; i += n+1)
   {
-    *ptr1 = 1.0;
+    inv[i] = 1.0;
   }
 
   /* Backsubstitution starts here. */
@@ -214,36 +213,34 @@ int r_luinv(real *inv, const real *lu, size_t *indx, size_t n)
     /* loop through columns of inv (i.e. over rows) */
     for (i_r = 1; i_r <= n; i_r ++)
     {
-      sum = *(inv + (indx[i_r] - 1)*n + i_c);
-      *(inv + (indx[i_r] - 1)*n + i_c) = *(inv + (i_r - 1)*n + i_c);
+      sum = inv[(indx[i_r] - 1)*n + i_c];
+      inv[(indx[i_r] - 1)*n + i_c] = inv[(i_r - 1)*n + i_c];
 
       if (i_i)
       {
-        for (ptr1 = lu  + (i_r - 1)*n + i_i,
-             ptr2 = inv + (i_i - 1)*n + i_c,
-             ptr_end = lu + (i_r - 1)*n + i_r;
-             ptr1 < ptr_end; ptr1 ++, ptr2 += n )
+        for (i = (i_r - 1)*n + i_i, j = (i_i - 1)*n + i_c;
+             i < (i_r - 1)*n + i_r;
+             i ++, j += n )
         {
-          sum -= (*ptr1) * (*ptr2);
+          sum -= (lu[i]) * (inv[j]);
         }
       }
       else if ( ! IS_EQUAL_REAL(sum, 0.0)) i_i = i_r;
 
-      *(inv + (i_r - 1)*n + i_c) = sum;
+      inv[(i_r - 1)*n + i_c] = sum;
     }
 
     for (i_r = n; i_r >= 1; i_r --)
     {
-      sum = *(inv + (i_r - 1)*n + i_c);
-      for (ptr1 = lu  + (i_r - 1)*n + i_r + 1,
-           ptr2 = inv + i_r*n + i_c,
-           ptr_end = lu + (i_r - 1)*n + n;
-           ptr1 <= ptr_end; ptr1 ++, ptr2 += n )
+      sum = inv[(i_r - 1)*n + i_c];
+      for (i = (i_r - 1)*n + i_r + 1, j = i_r*n + i_c;
+           i <= (i_r - 1)*n + n;
+           i++, j += n )
       {
-        sum -= (*ptr1) * (*ptr2);
+        sum -= (lu[i]) * (inv[j]);
       }
 
-      *(inv + (i_r - 1)*n + i_c) = sum/(*(lu + (i_r - 1)*n + i_r));
+      inv[(i_r - 1)*n + i_c] = sum/(lu[(i_r - 1)*n + i_r]);
     }
 
   } /* for i_c */
@@ -274,10 +271,10 @@ int r_luinv(real *inv, const real *lu, size_t *indx, size_t n)
  */
 real *r_lubksb(const real *lu, const size_t *indx, real *br, size_t n)
 {
+  size_t i, j;
   size_t i_c, i_i, i_r;
 
   real sum;
-  real *ptr1, *ptr2, *ptr_end;  /* pointers used in innermost loops */
 
   for (i_c = 1; i_c <= n; i_c ++)     /* loop over columns of br */
   {
@@ -285,36 +282,33 @@ real *r_lubksb(const real *lu, const size_t *indx, real *br, size_t n)
     /* loop through columns of br (i.e. over rows) */
     for (i_r = 1; i_r <= n; i_r ++)
     {
-      sum = *(br + (indx[i_r] - 1)*n + i_c);
-      *(br + (indx[i_r] - 1)*n + i_c) = *(br + (i_r - 1)*n + i_c);
+      sum = br[(indx[i_r] - 1)*n + i_c];
+      br[(indx[i_r] - 1)*n + i_c] = br[(i_r - 1)*n + i_c];
 
       if (i_i)
       {
-        for (ptr1 = lu  + (i_r - 1)*n + i_i,
-             ptr2 = br + (i_i - 1)*n + i_c,
-             ptr_end = lu + (i_r - 1)*n + i_r;
-             ptr1 < ptr_end; ptr1 ++, ptr2 += n )
+        for (i = (i_r - 1)*n + i_i, j = (i_i - 1)*n + i_c;
+             i < (i_r - 1)*n + i_r; i ++, j += n )
         {
-          sum -= (*ptr1) * (*ptr2);
+          sum -= (lu[i]) * (br[j]);
         }
       }
       else if ( ! IS_EQUAL_REAL(sum, 0.0)) i_i = i_r;
 
-      *(br + (i_r - 1)*n + i_c) = sum;
+      br[(i_r - 1)*n + i_c] = sum;
     }
 
     for (i_r = n; i_r >= 1; i_r --)
     {
-      sum = *(br + (i_r - 1)*n + i_c);
-      for (ptr1 = lu  + (i_r - 1)*n + i_r + 1,
-           ptr2 = br + i_r*n + i_c,
-           ptr_end = lu + (i_r - 1)*n + n;
-           ptr1 <= ptr_end; ptr1 ++, ptr2 += n )
+      sum = br[(i_r - 1)*n + i_c];
+      for (i = (i_r - 1)*n + i_r + 1, j = i_r*n + i_c;
+           i <= (i_r - 1)*n + n;
+           i ++, j += n )
       {
-        sum -= (*ptr1) * (*ptr2);
+        sum -= (lu[i]) * (br[j]);
       }
 
-      *(br + (i_r - 1)*n + i_c) = sum/(*(lu + (i_r - 1)*n + i_r));
+      br[(i_r - 1)*n + i_c] = sum/(lu[(i_r - 1)*n + i_r]);
     }
 
   } /* for i_c */

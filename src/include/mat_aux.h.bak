@@ -29,273 +29,151 @@
 #ifndef __mat_aux_h__
 #define __mat_aux_h__
 
+#include "cleed_matrix.h"
+
 /*****************************************************
  * Define useful Preprocessor MACROS for matrix types
  *****************************************************/
 
 /*!
- * \define REAL_MATRIX_ALLOC(rows,cols)
+ * \define CLEED_MATRIX_REAL_ALLOC(rows,cols)
  * Allocates memory for a real matrix using either CBLAS, GSL or native
  * interface.
  *
- * \define COMPLEX_MATRIX_ALLOC(rows,cols)
+ * \define CLEED_MATRIX_COMPLEX_ALLOC(rows,cols)
  * Allocates memory for a complex matrix using either CBLAS, GSL or native
  * interface.
  *
- * \define REAL_MATRIX_FREE(a)
+ * \define CLEED_MATRIX_REAL_FREE(a)
  * Frees a real matrix from memory using either CBLAS, GSL or native interface.
  *
- * \define COMPLEX_MATRIX_FREE(a)
+ * \define CLEED_MATRIX_COMPLEX_FREE(a)
  * Frees a complex matrix from memory using either CBLAS, GSL or native interface.
  *
- * \define COMPLEX(z,r,i)
+ * \define CLEED_COMPLEX(z,r,i)
  * Allocates the complex number \c z with real and imaginary parts.
  *
- * \define REAL_MAT2CBLAS(Mx,cblas_mx)
+ * \define CLEED_REAL_MAT2CBLAS(Mx,cblas_mx)
  * Converts from native real matrix to CBLAS format (which will be the GSL
  * implementation if \c USE_GSL is defined).
  *
- * \define COMPLEX_MAT2CBLAS(Mx,cblas_mx)
+ * \define CLEED_COMPLEX_MAT2CBLAS(Mx,cblas_mx)
  * Converts from native complex matrix to CBLAS format (which will be the GSL
  * implementation if \c USE_GSL is defined).
  *
- * \define REAL_CBLAS2MAT(cblas_mx,Mx)
+ * \define CLEED_REAL_CBLAS2MAT(cblas_mx,Mx)
  * Converts from CBLAS real matrix (may be GSL implementation if \c USE_GSL is
  * defined) to the native matrix type.
  *
- * \define COMPLEX_CBLAS2MAT(cblas_mx,Mx)
+ * \define CLEED_COMPLEX_CBLAS2MAT(cblas_mx,Mx)
  * Converts from CBLAS complex matrix (may be GSL implementation if \c USE_GSL
  * is defined) to the native matrix type.
  *
- * \define REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)
+ * \define CLEED_REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)
  * Macro for performing matrix multiplication involving real matrices
  * (backend dependent) using either CBLAS, GSL or native implementation.
  *
- * \define COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)
+ * \define CLEED_COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)
  * Macro for performing matrix multiplication involving complex matrices
  * (backend dependent) using either CBLAS, GSL or native implementation.
  */
 
-#if USE_GSL
-
-# if REAL_IS_FLOAT
-
-typedef gsl_vector_float cleed_vector;
-typedef gsl_vector_complex_float cleed_vector_complex;
-typedef gsl_matrix_float cleed_matrix;
-typedef gsl_matrix_complex_float cleed_matrix_complex;
-
-#define CLEED_MATRIX_GET(m, i, j)       gsl_matrix_float_get(m, i, j)
-#define CLEED_MATRIX_SET(m, i, j, x)    gsl_matrix_float_set(m, i, j, x)
-
-#define CLEED_MATRIX_COMPLEX_GET(m, i, j, c)                                  \
-  &gsl_matrix_complex_float_get(m, i, j).dat
-
-#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x, y)                               \
-  do { gsl_complex_float cmplx = {.dat[0] = (x), .dat[1] = (y)};              \
-       gsl_matrix_complex_float_set(m, i, j, cmplx);                          \
-     } while (0)
-
-#define CLEED_VECTOR_GET(v, i)            gsl_vector_float_get(v, i)
-#define CLEED_VECTOR_SET(v, i, x)         gsl_vector_float_set(v, i, x)
-#define CLEED_VECTOR_COMPLEX_GET(v, i)    &gsl_vector_complex_float_get(v, i).dat
-#define CLEED_VECTOR_COMPLEX_SET(v, i, x, y)                                  \
-  do { gsl_complex_float cmplx = {.dat[0] = (x), .dat[1] = (y)};              \
-       gsl_vector_complex_set(v, i, cmplx);                                   \
-  } while (0)
-
-# else
-
-typedef gsl_vector cleed_vector;
-typedef gsl_vector_complex cleed_vector_complex;
-typedef gsl_matrix cleed_matrix;
-typedef gsl_matrix_complex cleed_matrix_complex;
-
-#define CLEED_MATRIX_GET(m, i, j)
-#define CLEED_MATRIX_SET(m, i, j, val)
-#define CLEED_MATRIX_COMPLEX_GET(m, i, j)
-#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x)
-
-#define CLEED_VECTOR_GET(v, i)
-#define CLEED_VECTOR_SET(v, i, val)
-#define CLEED_VECTOR_COMPLEX_GET(v, i)
-#define CLEED_VECTOR_COMPLEX_SET(v, i, x)
-
-# endif
-
-#elif USE_CBLAS || USE_MKL || USE_LAPACK
-
-typedef real cleed_vector;
-typedef real cleed_vector_complex;
-typedef real cleed_matrix;
-typedef real cleed_matrix_complex;
-
-#define CLEED_MATRIX_GET(m, i, j)         gsl_matrix_get(m, i, j)
-#define CLEED_MATRIX_SET(m, i, j, x)      gsl_matrix_set(m, i, j, x)
-#define CLEED_MATRIX_COMPLEX_GET(m, i, j)
-#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x)
-
-#define CLEED_VECTOR_GET(v, i)
-#define CLEED_VECTOR_SET(v, i, x)
-#define CLEED_VECTOR_COMPLEX_GET(v, i)
-#define CLEED_VECTOR_COMPLEX_SET(v, i, x)
-
-#else /* USE_NATIVE */
-
-typedef real cleed_vector;
-typedef real cleed_vector_complex;
-typedef struct mat_str cleed_matrix;
-typedef struct mat_str cleed_matrix_complex;
-
-#define CLEED_MATRIX_GET(m, i, j)
-#define CLEED_MATRIX_SET(m, i, j, x)
-#define CLEED_MATRIX_COMPLEX_GET(m, i, j)
-#define CLEED_MATRIX_COMPLEX_SET(m, i, j, x)
-
-#define CLEED_VECTOR_GET(v, i)
-#define CLEED_VECTOR_SET(v, i, x)
-#define CLEED_VECTOR_COMPLEX_GET(v, i)
-#define CLEED_VECTOR_COMPLEX_SET(v, i, x)
-
-
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+namespace cleed {
 #endif
 
 #if defined( USE_GSL )
+  
+# ifdef CLEED_REAL_IS_DOUBLE
 
-#ifdef REAL_IS_DOUBLE
+#   define CLEED_REAL_MAT2CBLAS(Mx,cblas_mx)     mat2gsl((cblas_mx),NULL,NUM_REAL,(Mx))
+#   define CLEED_COMPLEX_MAT2CBLAS(Mx,cblas_mx)  mat2gsl(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
 
+#   define CLEED_REAL_CBLAS2MAT(cblas_mx,Mx)     gsl2mat((cblas_mx),NULL,NUM_REAL,(Mx))
+#   define CLEED_COMPLEX_CBLAS2MAT(cblas_mx,Mx)  gsl2mat(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
 
-typedef REAL_MATRIX                     gsl_matrix
-#define COMPLEX_MATRIX                  gsl_matrix_complex
-
-#define REAL_MATRIX_ALLOC(rows,cols)    gsl_matrix_calloc((rows), (cols))
-#define COMPLEX_MATRIX_ALLOC(rows,cols) gsl_matrix_complex_calloc((rows), (cols))
-
-#define REAL_MATRIX_FREE(a)             gsl_matrix_free((a))
-#define COMPLEX_MATRIX_FREE(a)          gsl_matrix_complex_free((a))
-
-#define REAL_MAT2CBLAS(Mx,cblas_mx)     mat2gsl((cblas_mx),NULL,NUM_REAL,(Mx))
-#define COMPLEX_MAT2CBLAS(Mx,cblas_mx)  mat2gsl(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
-
-#define REAL_CBLAS2MAT(cblas_mx,Mx)     gsl2mat((cblas_mx),NULL,NUM_REAL,(Mx))
-#define COMPLEX_CBLAS2MAT(cblas_mx,Mx)  gsl2mat(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
-
-#define REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
+#   define CLEED_REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
 gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, (alpha), (m1), (m2), (beta), (mr))
 
-#define COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
+#   define CLEED_COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
 gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, (alpha), (m1), (m2), (beta), (mr))
 
-#define COMPLEX(z,r,i) gsl_complex (z)={.dat[0]=(double)(r),.dat[1]=(double)(i)}
+#   define CLEED_COMPLEX_INIT(r,i) {.dat[0]=(double)(r),.dat[1]=(double)(i)}
+#   define CLEED_COMPLEX_SET(z,r,i)                                              \
+do {z.dat[0] = (double)r; z.dat[1] = (double)i;} while (0)
 
-#else
+# else
 
-#define REAL_MATRIX                     gsl_matrix_float
-#define COMPLEX_MATRIX                  gsl_matrix_complex_float
+#   define CLEED_REAL_MAT2CBLAS(Mx,cblas_mx)     mat2gsl((cblas_mx),NULL,NUM_REAL,(Mx))
+#   define CLEED_COMPLEX_MAT2CBLAS(Mx,cblas_mx)  mat2gsl(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
 
-#define REAL_MATRIX_ALLOC(rows,cols)    gsl_matrix_float_calloc((rows),(cols))
-#define COMPLEX_MATRIX_ALLOC(rows,cols) gsl_matrix_complex_float_calloc((rows),(cols))
+#   define CLEED_REAL_CBLAS2MAT(cblas_mx,Mx)     gsl2mat((cblas_mx),NULL,NUM_REAL,(Mx))
+#   define CLEED_COMPLEX_CBLAS2MAT(cblas_mx,Mx)  gsl2mat(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
 
-#define REAL_MATRIX_FREE(a)             gsl_matrix_float_free((a))
-#define COMPLEX_MATRIX_FREE(a)          gsl_matrix_complex_float_free((a))
-
-#define REAL_MAT2CBLAS(Mx,cblas_mx)     mat2gsl((cblas_mx),NULL,NUM_REAL,(Mx))
-#define COMPLEX_MAT2CBLAS(Mx,cblas_mx)  mat2gsl(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
-
-#define REAL_CBLAS2MAT(cblas_mx,Mx)     gsl2mat((cblas_mx),NULL,NUM_REAL,(Mx))
-#define COMPLEX_CBLAS2MAT(cblas_mx,Mx)  gsl2mat(NULL,(cblas_mx),NUM_COMPLEX,(Mx))
-
-#define REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
+#   define CLEED_REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
 gsl_blas_sgemm(CblasNoTrans, CblasNoTrans, (alpha), (m1), (m2), (beta), (mr))
 
-#define COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
+#   define CLEED_COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
 gsl_blas_cgemm(CblasNoTrans, CblasNoTrans, (alpha), (m1), (m2), (beta), (mr))
 
-#define COMPLEX(z,r,i)                                                        \
-gsl_complex_float (z) = {.dat[0]=(float)(r), .dat[1]=(float)(i)}
+#   define CLEED_COMPLEX_INIT(r,i) {.dat[0]=(float)(r), .dat[1]=(float)(i)}
+#   define CLEED_COMPLEX_SET(z,r,i)                                              \
+do {z.dat[0] = (float)r; z.dat[1] = (float)i;} while (0)
 
-#endif /* sizeof(real) */
+# endif /* sizeof(real) */
 
 #elif defined( USE_CBLAS ) || defined( USE_MKL ) /* CBLAS */
 
-#define REAL_MATRIX                     real
-#define COMPLEX_MATRIX                  real
+# ifdef CLEED_REAL_IS_DOUBLE
 
-#define REAL_MATRIX_ALLOC(rows,cols)    (real*)calloc((cols)*(rows)*sizeof(real))
-#define COMPLEX_MATRIX_ALLOC(rows,cols) (real*)calloc(2*(cols)*(rows)*sizeof(real))
-
-#define REAL_MATRIX_FREE(a)             free((a))
-#define COMPLEX_MATRIX_FREE(a)          free((a))
-
-#define REAL_MAT2CBLAS(Mx,cblas_mx)     mat2cblas((cblas_mx),NUM_REAL,(Mx))
-#define COMPLEX_MAT2CBLAS(Mx,cblas_mx)  mat2cblas((cblas_mx),NUM_COMPLEX,(Mx))
-
-#define REAL_CBLAS2MAT(cblas_mx,Mx)     cblas2mat((Mx),(cblas_mx))
-#define COMPLEX_CBLAS2MAT(cblas_mx,Mx)  cblas2mat((Mx),(cblas_mx))
-
-#define COMPLEX(z,i,r)                  real z[2] = {(real)(i), (real)(r)}
-
-#ifdef REAL_IS_DOUBLE
-
-#define REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
+#   define CLEED_REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
 cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,                        \
             (m1_rows), (m2_cols), (m1_cols),                                  \
             (alpha), (double*)(m1), (m1_cols),                                \
             (double*)(m2), (m2_cols),                                         \
             (beta), (double*)(mr), (m2_cols))
 
-#define COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
+#   define CLEED_COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
 cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,                        \
             (m1_rows), (m2_cols), (m1_cols),                                  \
             (alpha), (double*)(m1), (m1_cols),                                \
             (double*)(m2), (m2_cols),                                         \
             (beta), (double*)(mr), (m2_cols))
 
-#else
+# else
 
-#define REAL_CBLAS_GEMM(alpha,m1,m1_cols,m2,m2_cols,beta,mr)                  \
+#   define CLEED_REAL_CBLAS_GEMM(alpha,m1,m1_cols,m2,m2_cols,beta,mr)                  \
 cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,                        \
             (m1_rows), (m2_cols), (m1_cols),                                  \
             (alpha), (float*)(m1), (m1_cols),                                 \
             (float*)(m2), (m2_cols),                                          \
             (beta), (float*)(mr), (m2_cols))
 
-#define COMPLEX_CBLAS_GEMM(alpha,m1,m1_cols,m2,m2_cols,beta,mr)               \
+#   define CLEED_COMPLEX_CBLAS_GEMM(alpha,m1,m1_cols,m2,m2_cols,beta,mr)               \
 cblas_cgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,                        \
             (m1_rows), (m2_cols), (m1_cols),                                  \
             (alpha), (float*)(m1), (m1_cols),                                 \
             (float*)(m2), (m2_cols),                                          \
             (beta), (float*)(mr), (m2_cols))
 
-#endif /* sizeof(real) */
+# endif /* sizeof(real) */
 
 #else /* native interface */
 
-#define REAL_MATRIX                     mat
-#define COMPLEX_MATRIX                  mat
+# define CLEED_REAL_MAT2CBLAS(Mx,cblas_mx)     matcopy(cblas_mx, Mx)
+# define CLEED_COMPLEX_MAT2CBLAS(Mx,cblas_mx)  matcopy(cblas_mx, Mx)
 
-#define REAL_MATRIX_ALLOC(rows,cols)    matalloc(NULL,(rows),(cols),NUM_REAL)
-#define COMPLEX_MATRIX_ALLOC(rows,cols) matalloc(NULL,(rows),(cols),NUM_COMPLEX)
+# define CLEED_REAL_CBLAS2MAT(cblas_mx,Mx)     matcopy(Mx, cblas_mx)
+# define CLEED_COMPLEX_CBLAS2MAT(cblas_mx,Mx)  matcopy(Mx, cblas_mx)
 
-#define REAL_MATRIX_FREE(a)             matfree(a)
-#define COMPLEX_MATRIX_FREE(a)          matfree(a)
-
-#define REAL_MAT2CBLAS(Mx,cblas_mx)     matcopy(cblas_mx, Mx)
-#define COMPLEX_MAT2CBLAS(Mx,cblas_mx)  matcopy(cblas_mx, Mx)
-
-#define REAL_CBLAS2MAT(cblas_mx,Mx)     matcopy(Mx, cblas_mx)
-#define COMPLEX_CBLAS2MAT(cblas_mx,Mx)  matcopy(Mx, cblas_mx)
-
-#define REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
+# define CLEED_REAL_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)          \
 do {                                                                          \
   register real rsum;                                                         \
   register real *ptr1, *ptr2, *ptr_end, *ptrr;                                \
                                                                               \
-  size_t i;                                                                   \
   size_t i_c2, i_r1;                                                          \
                                                                               \
   size_t i_cr1 = (m1)->rows * (m1)->cols;                                     \
-  size_t i_cr2 = (m2)->rows * (m2)->cols;                                     \
                                                                               \
   CONTROL_MSG(CONTROL, "entering real loop\n");                               \
                                                                               \
@@ -312,18 +190,16 @@ do {                                                                          \
     }                                                                         \
 } while(0) /* native real matrix multiplication */
 
-#define COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
+# define CLEED_COMPLEX_CBLAS_GEMM(alpha,m1,m1_rows,m1_cols,m2,m2_cols,beta,mr)       \
 do {                                                                          \
   register real rsum, isum;                                                   \
   register real *ptri1, *ptri2, *ptr_end;                                     \
   register real *ptrr1, *ptrr2;                                               \
   register real *ptrr, *ptri;                                                 \
                                                                               \
-  size_t i;                                                                   \
   size_t i_c2, i_r1;                                                          \
                                                                               \
   size_t i_cr1 = (m1)->rows * (m1)->cols;                                     \
-  size_t i_cr2 = (m2)->rows * (m2)->cols;                                     \
                                                                               \
   CONTROL_MSG(CONTROL, "entering complex loop\n");                            \
                                                                               \
@@ -396,8 +272,6 @@ do {                                                                          \
     } /* m2 is complex */                                                     \
 } while(0) /* native complex matrix multiplication */
 
-#define COMPLEX(z,r,i) real z = 0.
-
 #endif /* end USE_GSL */
 
 /********************************************************************
@@ -449,122 +323,98 @@ do {                                                                          \
 # define ZGETRI(n,a,lda,ipiv,info)   zgetri_(n,a,lda,ipiv,&(info))
 #endif
 
-#ifdef REAL_IS_FLOAT
-# define REAL_ILAENV(P,N,M)    ILAENV((P), "SGETRI", " ", (N), (M), (M), (M));
-# define COMPLEX_ILAENV(P,N,M) ILAENV((P), "CGETRI", " ", (N), (M), (M), (M));
-# define REAL_GETRF(m,n,a,lda,ipiv,info)    SGETRF(m,n,a,lda,ipiv,info)
-# define REAL_GETRI(n,a,lda,ipiv,info)      SGETRI(n,a,lda,ipiv,info)
-# define COMPLEX_GETRF(m,n,a,lda,ipiv,info) CGETRF(m,n,a,lda,ipiv,info)
-# define COMPLEX_GETRI(n,a,lda,ipiv,info)   CGETRI(n,a,lda,ipiv,info)
+#ifdef CLEED_REAL_IS_FLOAT
+# define CLEED_REAL_ILAENV(P,N,M)    ILAENV((P), "SGETRI", " ", (N), (M), (M), (M));
+# define CLEED_COMPLEX_ILAENV(P,N,M) ILAENV((P), "CGETRI", " ", (N), (M), (M), (M));
+# define CLEED_REAL_GETRF(m,n,a,lda,ipiv,info)    SGETRF(m,n,a,lda,ipiv,info)
+# define CLEED_REAL_GETRI(n,a,lda,ipiv,info)      SGETRI(n,a,lda,ipiv,info)
+# define CLEED_COMPLEX_GETRF(m,n,a,lda,ipiv,info) CGETRF(m,n,a,lda,ipiv,info)
+# define CLEED_COMPLEX_GETRI(n,a,lda,ipiv,info)   CGETRI(n,a,lda,ipiv,info)
 #else
-# define REAL_ILAENV(P,N,M)    ILAENV((P), "DGETRI", " ", (N), (M), (M), (M))
-# define COMPLEX_ILAENV(P,N,M) ILAENV((P), "ZGETRI", " ", (N), (M), (M), (M))
-# define REAL_GETRF(m,n,a,lda,ipiv,info)    DGETRF(m,n,a,lda,ipiv,info)
-# define REAL_GETRI(n,a,lda,ipiv,info)      DGETRI(n,a,lda,ipiv,info)
-# define COMPLEX_GETRF(m,n,a,lda,ipiv,info) ZGETRF(m,n,a,lda,ipiv,info)
-# define COMPLEX_GETRI(n,a,lda,ipiv,info)   ZGETRI(n,a,lda,ipiv,info)
+# define CLEED_REAL_ILAENV(P,N,M)    ILAENV((P), "DGETRI", " ", (N), (M), (M), (M))
+# define CLEED_COMPLEX_ILAENV(P,N,M) ILAENV((P), "ZGETRI", " ", (N), (M), (M), (M))
+# define CLEED_REAL_GETRF(m,n,a,lda,ipiv,info)    DGETRF(m,n,a,lda,ipiv,info)
+# define CLEED_REAL_GETRI(n,a,lda,ipiv,info)      DGETRI(n,a,lda,ipiv,info)
+# define CLEED_COMPLEX_GETRF(m,n,a,lda,ipiv,info) ZGETRF(m,n,a,lda,ipiv,info)
+# define CLEED_COMPLEX_GETRI(n,a,lda,ipiv,info)   ZGETRI(n,a,lda,ipiv,info)
 #endif
 
 /*!
- * \define REAL_LU_DECOMPOSITION
+ * \define CLEED_REAL_LU_DECOMPOSITION
  * Macro that performs LU decomposition for a real matrix.
  *
- * \define COMPLEX_LU_DECOMPOSITION
+ * \define CLEED_COMPLEX_LU_DECOMPOSITION
  * Macro that performs LU decomposition for a complex matrix.
  *
- * \define REAL_MATRIX_INVERSION
+ * \define CLEED_MATRIX_REAL_INVERSION
  * Macro for performing real matrix inversion.
  *
- * \define COMPLEX_MATRIX_INVERSION
+ * \define CLEED_MATRIX_COMPLEX_INVERSION
  * Macro for performing complex matrix inversion.
  *
  */
 
 #if USE_GSL
-#define REAL_LU_DECOMPOSITION(m, perm, s, info)                               \
+# define CLEED_REAL_LU_DECOMPOSITION(m, perm, s, info)                               \
 (info = gsl_linalg_LU_decomp (m, perm, &s))
 
-#define COMPLEX_LU_DECOMPOSITION(m, perm, s, info)                            \
+# define CLEED_COMPLEX_LU_DECOMPOSITION(m, perm, s, info)                            \
 (info = gsl_linalg_complex_LU_decomp (m, perm, &s))
 
-#define REAL_MATRIX_INVERSION(m, perm, inverse, info)                         \
+# define CLEED_MATRIX_REAL_INVERSION(m, perm, inverse, info)                         \
 (info = gsl_linalg_LU_invert (m, perm, inverse))
 
-#define COMPLEX_MATRIX_INVERSION(m, perm, inverse, info)                      \
+# define CLEED_MATRIX_COMPLEX_INVERSION(m, perm, inverse, info)                      \
 ((info) = gsl_linalg_complex_LU_invert (m, perm, inverse))
 
 #elif ( USE_CBLAS || USE_MKL || USE_LAPACK )
 
-#define REAL_LU_DECOMPOSITION(a, perm, n, info)                               \
-  REAL_GETRF( &(n), &(n), (a), &(n), (perm), (info) );
+# define CLEED_REAL_LU_DECOMPOSITION(a, perm, n, info)                               \
+  CLEED_REAL_GETRF( &(n), &(n), (a), &(n), (perm), (info) );
 
-#define COMPLEX_LU_DECOMPOSITION(a, perm, n, info)                            \
-  COMPLEX_GETRF( &(n), &(n), (a), &(n), &(perm), (info) );
+# define CLEED_COMPLEX_LU_DECOMPOSITION(a, perm, n, info)                            \
+  CLEED_COMPLEX_GETRF( &(n), &(n), (a), &(n), &(perm), (info) );
 
-#define REAL_MATRIX_INVERSION(a, n, perm, inverse, info)                      \
+# define CLEED_MATRIX_REAL_INVERSION(a, n, perm, inverse, info)                      \
   do {                                                                        \
       const int p1 = 1, m1 = -1;                                              \
-      int nb = REAL_ILAENV(&p1, &(n), &m1);                                   \
+      int nb = CLEED_REAL_ILAENV(&p1, &(n), &m1);                                   \
       int lwork = (n)*nb;                                                     \
-      REAL_MATRIX work = REAL_MATRIX_ALLOC((n), nb);                          \
-      REAL_GETRI( (n), (a), (perm), work, &lwork, (info));                    \
-      REAL_MATRIX_FREE(work);                                                 \
+      CLEED_MATRIX_REAL work = CLEED_MATRIX_REAL_ALLOC((n), nb);                          \
+      CLEED_REAL_GETRI( (n), (a), (perm), work, &lwork, (info));                    \
+      CLEED_MATRIX_REAL_FREE(work);                                                 \
 } while(0);
 
-#define COMPLEX_MATRIX_INVERSION(a, n, perm, inverse, info)                   \
+# define CLEED_MATRIX_COMPLEX_INVERSION(a, n, perm, inverse, info)                   \
   do {                                                                        \
     const int p1 = 1, m1 = -1;                                                \
-    int nb = COMPLEX_ILAENV(&p1, &(n), &m1);                                  \
+    int nb = CLEED_COMPLEX_ILAENV(&p1, &(n), &m1);                                  \
     int lwork = (n)*nb;                                                       \
-    COMPLEX_MATRIX work = COMPLEX_MATRIX_ALLOC((n), nb);                      \
-    COMPLEX_GETRI( (n), (a), (perm), work, &lwork, (info));                   \
-    COMPLEX_MATRIX_FREE(work);                                                \
+    CLEED_MATRIX_COMPLEX work = CLEED_MATRIX_COMPLEX_ALLOC((n), nb);                      \
+    CLEED_COMPLEX_GETRI( (n), (a), (perm), work, &lwork, (info));                   \
+    CLEED_MATRIX_COMPLEX_FREE(work);                                                \
 } while(0);
 
 #else /* USE_NATIVE */
 
-#define REAL_LU_DECOMPOSITION(m, perm, n, info)                               \
-((info) = r_ludcmp((m)->rel, perm, (m)->cols))
+# define CLEED_REAL_LU_DECOMPOSITION(m, perm, n, info)                               \
+((info) = r_ludcmp((m)->rel, &(perm), (m)->cols))
 
-#define COMPLEX_LU_DECOMPOSITION(m, perm, n, info)                            \
-((info) = c_ludcmp((m)->rel, (m)->iel, perm, (m)->cols))
+# define CLEED_COMPLEX_LU_DECOMPOSITION(m, perm, n, info)                            \
+((info) = c_ludcmp((m)->rel, (m)->iel, &(perm), (m)->cols))
 
-#define REAL_MATRIX_INVERSION(m, n, perm, inverse, info)                      \
-((info) = r_luinv ((inverse)->rel, (inverse)->iel,                            \
-                  (m)->rel, (m)->iel, (perm), (m)->cols))
+# define CLEED_MATRIX_REAL_INVERSION(m, n, perm, inverse, info)                      \
+((info) = r_luinv((inverse)->rel, (inverse)->iel, &(perm), (m)->cols))
 
-#define COMPLEX_MATRIX_INVERSION(m, n, perm, inverse, info)                   \
+# define CLEED_MATRIX_COMPLEX_INVERSION(m, n, perm, inverse, info)                   \
 ((info) = c_luinv((inverse)->rel, (inverse)->iel,                             \
-                  (m)->rel, (m)->iel, (perm), (m)->cols))
+                  (m)->rel, (m)->iel, &(perm), (m)->cols))
 
 #endif
 
-
-#ifdef __cplusplus__ /* if this is a C++ compiler then use C linkage */
-extern C {
-#endif /* __cplusplus__ */
-
-/* includes */
-
-
-/* defines */
-
-
-/* enums, structs and typedefs */
-
-
-/* functions */
-
-
-
-#ifdef __cplusplus__ /* if this is a C++ compiler then use C linkage */
-namespace cleed {
-
-/* classes */
-
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* namespace cleed */
+#endif
 
-}
-#endif /* __cplusplus__ */
 
 #endif /* __mat_aux_h__ */

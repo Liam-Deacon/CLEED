@@ -16,7 +16,7 @@ include file for real Num. Rec. routines.
 #ifndef NRR_H
 #define NRR_H
 
-#include "real.h"
+#include "cleed_real.h"
 #include "nrr_util.h"
 #include "nrr_func.h"
 

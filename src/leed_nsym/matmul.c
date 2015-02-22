@@ -35,8 +35,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "mat.h"
-#include "cblas_aux.h"
+#include "cleed_blas.h"
 
 #ifdef USE_OPENCL
 #include "err_code.h"
@@ -68,15 +67,13 @@ mat matmul(mat Mr, const mat M1, const mat M2)
 {
   int result_num_type;
 
-  #if ( USE_CBLAS || USE_GSL || USE_MKL )
-  cleed_matrix_real *m1, *m2, *mr;      /* cblas matrices passed to cblas_[sf]gemm */
-  cleed_matrix_complex *m1c, *m2c, *mr; /* cblas matrices passed to cblas_[cz]gemm */
-  #else
-  mat m1 = M1, m2 = M2, mr = Mr;
-  mat m1c = M1, m2c = M2, mrc = Mr;
-  #endif
+
+  cleed_matrix *m1, *m2, *mr;            /* matrices passed to cblas_[sf]gemm */
+  cleed_matrix_complex *m1c, *m2c, *mrc; /* matrices passed to cblas_[cz]gemm */
 
   /* check input matrices */
+  m1 = m2 = mr = NULL;
+  m1c = m2c = mrc = NULL;
 
   /* check validity of the input matrices */
   if ((matcheck(M1) < 1) || (matcheck(M2) < 1))
@@ -106,24 +103,24 @@ mat matmul(mat Mr, const mat M1, const mat M2)
      * - no intermediary storage for operands
      * - no conversion to complex
      */
-    mr = CLEED_MATRIX_REAL_ALLOC(M1->rows, M2->cols);
+    mr = cleed_matrix_alloc(M1->rows, M2->cols);
 
     /* matrices are stored as row major */
-    CLEED_REAL_MAT2CBLAS(m1, M1);
-    CLEED_REAL_MAT2CBLAS(m2, M2);
+    CLEED_REAL_MAT2CBLAS(M1, m1);
+    CLEED_REAL_MAT2CBLAS(M2, m2);
 
     result_num_type = NUM_REAL;
   }
   else
   {
     /* at least one operand is complex */
-    mrc = CLEED_MATRIX_COMPLEX_ALLOC(M1->rows, M2->cols);
+    mrc = cleed_matrix_complex_alloc(M1->rows, M2->cols);
 
-    m1c = CLEED_MATRIX_COMPLEX_ALLOC(M1->rows, M1->cols);
-    m2c = CLEED_MATRIX_COMPLEX_ALLOC(M2->rows, M2->cols);
+    m1c = cleed_matrix_complex_alloc(M1->rows, M1->cols);
+    m2c = cleed_matrix_complex_alloc(M2->rows, M2->cols);
 
-    CLEED_COMPLEX_MAT2CBLAS(m1c, M1);
-    CLEED_COMPLEX_MAT2CBLAS(m2c, M2);
+    CLEED_COMPLEX_MAT2CBLAS(M1, m1c);
+    CLEED_COMPLEX_MAT2CBLAS(M2, m2c);
 
     result_num_type = NUM_COMPLEX;
   }
@@ -145,6 +142,11 @@ mat matmul(mat Mr, const mat M1, const mat M2)
                             m2, M2->cols, beta, mr);
      CLEED_REAL_CBLAS2MAT(mrc, Mr);
      break;
+
+     /* should never reach here: */
+     alpha = alpha*1;
+     beta = beta*1;
+     break;
    }  /* endcase NUM_REAL */
 
    case (NUM_COMPLEX):
@@ -156,20 +158,23 @@ mat matmul(mat Mr, const mat M1, const mat M2)
                                m2c, M2->cols, beta, mrc);
      CLEED_COMPLEX_CBLAS2MAT(mrc, Mr);
      break;
+
+     /* should never reach here: */
+     alpha[0] = alpha[0]*1;
+     beta[0] = beta[0]*1;
+     break;
    }  /* endcase NUM_COMPLEX */
 
   }   /* endswitch */
 
   /* free memory */
-  #ifndef USE_NATIVE
-  CLEED_MATRIX_REAL_FREE(m1);
-  CLEED_MATRIX_REAL_FREE(m2);
-  CLEED_MATRIX_REAL_FREE(mr);
+  cleed_matrix_free(m1);
+  cleed_matrix_free(m2);
+  cleed_matrix_free(mr);
 
-  CLEED_MATRIX_COMPLEX_FREE(m1c);
-  CLEED_MATRIX_COMPLEX_FREE(m2c);
-  CLEED_MATRIX_COMPLEX_FREE(mrc);
-  #endif
+  cleed_matrix_complex_free(m1c);
+  cleed_matrix_complex_free(m2c);
+  cleed_matrix_complex_free(mrc);
 
   return(Mr);
 }  /* end of function matmul */

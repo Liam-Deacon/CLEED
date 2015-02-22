@@ -34,8 +34,6 @@
 /* if a C.G-C exceeds this level, a warning message will be printed */
 #endif
 
-static const int UNUSED = -1;
-
 static double *cg_coef = NULL;       /*!< Clebsh Gordan coefficients */
 
 static int l_max_coef = -1;      /*!< l_max for the C.G.C */
@@ -114,39 +112,41 @@ int mk_cg_coef(size_t l_max)
   double fac_l, fac_ls;
   double sign;
 
+  size_t uaux;
+
   /*****************************************
    * Check if the C.G.C had been
    * calculated already:
    *****************************************/
 
   /* If yes, return 0. */
-  if( (l_max <= l_max_coef) && (cg_coef != NULL) ) return(0);
+  if( ((int)l_max <= l_max_coef) && (cg_coef != NULL) ) return(0);
 
   /* If not, allocate memory for cg_coef */
-  iaux = (2*l_max + 1)*(2*l_max + 2)/2 * (l_max + 1)*(l_max + 1) * (l_max/2 + 1);
+  uaux = (2*l_max + 1)*(2*l_max + 2)/2 * (l_max + 1)*(l_max + 1) * (l_max/2 + 1);
 
   CONTROL_MSG(CONTROL, "cg_coef[%d] (%.3f Mb) for l_max = %2d\n",
-                      iaux, (real)iaux*sizeof(double) / MBYTE, l_max );
+                      uaux, (real)uaux*sizeof(double) / MBYTE, l_max );
 
   if (cg_coef != NULL) free(cg_coef);
-  cg_coef = (double *) calloc (iaux, sizeof(double));
+  cg_coef = (double *) calloc (uaux, sizeof(double));
   if (cg_coef == NULL)
   {
     ERROR_MSG("allocation error: cg_coef[%d] = %d bytes\n",
-              iaux, iaux*sizeof(double) );
+              uaux, uaux*sizeof(double) );
     ERROR_RETURN(-1);
   }
 
   /* Static variables used to retrieve the C.G.C's */
-  st_fac1 = (l_max + 1)*(l_max + 1) * (l_max/2 + 1);
-  st_fac2 = (l_max/2 + 1);
-  l_max_coef = l_max;
+  st_fac1 = (int)pow((l_max + 1), 2u) * (int)(l_max/2 + 1);
+  st_fac2 = (int)(l_max/2 + 1);
+  l_max_coef = (int)l_max;
 
   /* Produce a list of factorials */
-  iaux = 4*l_max + 1;
-  fac = (double *) malloc( (iaux + 1) * sizeof(double) );
+  uaux = 4*l_max + 1;
+  fac = (double *) malloc( (uaux + 1) * sizeof(double) );
  
-  for (fac[0] = 1. , i = 1; i <= iaux; i ++ )
+  for (fac[0] = 1. , i = 1; i <= (int)uaux; i ++ )
   {
     fac[i] = fac[i-1] * i;
   }
@@ -155,7 +155,7 @@ int mk_cg_coef(size_t l_max)
    * Loops over l2,l3,l1,m1,m2
    */
   i_op = 0; i_warn = 0;
-  for (l2 = 0; l2 <= l_max; l2 ++)
+  for (l2 = 0; l2 <= (int)l_max; l2 ++)
   {
     for (l3 = 0; l3 <= l2; l3 ++)
     {

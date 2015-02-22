@@ -62,7 +62,7 @@ void matshowabs(const mat M)
             {
               for (i_c = 1; i_c <= maxcol; ++i_c)
               {
-                if( (faux = R_fabs(RMATEL(i_r, i_c, M))) > MINVAL)
+                if( (faux = cleed_real_fabs(RMATEL(i_r, i_c, M))) > MINVAL)
                 {
                   fprintf(STDOUT, RFORM, faux);
                 }
@@ -94,6 +94,12 @@ void matshowabs(const mat M)
 
             break;
           } /* case CLEED_COMPLEX */
+
+          case(NUM_IMAG): case(NUM_MASK): default:
+            ERROR_MSG("Unsupported data type for matrix M (%s)\n", strmtype(M->num_type));
+            return;
+            break;
+
         }  /* switch num_type */
         break;
       }  /* MAT_NORMAL, MAT_SQUARE */
@@ -108,7 +114,7 @@ void matshowabs(const mat M)
             {
               for (i_c = 1; i_c <= maxcol; ++i_c)
               {
-                if(i_r == i_c) fprintf(STDOUT, RFORM, R_fabs(M->rel[i_r]));
+                if(i_r == i_c) fprintf(STDOUT, RFORM, cleed_real_fabs(M->rel[i_r]));
                 else           fprintf(STDOUT, R_DIAFORM);
               }
               fprintf(STDOUT, "\n");
@@ -136,10 +142,21 @@ void matshowabs(const mat M)
 
             break;
           } /* case CLEED_COMPLEX */
+
+          case(NUM_IMAG): case(NUM_MASK): default:
+            ERROR_MSG("Unsupported data type for matrix M (%s)\n", strmtype(M->num_type));
+            return;
+            break;
+
         }  /* switch num_type */
 
         break;
       }  /* MAT_DIAG */
+
+      case(MAT_SCALAR): default:
+        ERROR_MSG("Unsupported matrix type\n");
+        return;
+        break;
     }  /* switch mat_type */
   }   /* else */
 

@@ -21,8 +21,8 @@ SET(FTSMOOTH_VERSION_MAJOR "${CPACK_PACKAGE_VERSION_MAJOR}")
 SET(FTSMOOTH_VERSION_MINOR "${CPACK_PACKAGE_VERSION_MINOR}")
 SET(FTSMOOTH_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}")
 SET(FTSMOOTH_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
-CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/ftsmooth.h.in"
-   "${PROJECT_SOURCE_DIR}/src/include/ftsmooth.h" IMMEDIATE @ONLY )
+CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/ftsmooth_ver.h.in"
+   "${PROJECT_SOURCE_DIR}/src/include/ftsmooth_ver.h" IMMEDIATE @ONLY )
 
 ###############################################################################
 # Sources
@@ -34,11 +34,11 @@ SET (ftsmoothlib_SRCS
     ftsmooth_debug.c
     ftsmooth_help.c
     ftsmooth_parse_args.c
-    offset_data.c
-    print_data.c
-    read_data.c
-    remove_negative_data.c
-    trim_data.c
+    fts_offset_data.c
+    fts_print_data.c
+    fts_read_data.c
+    fts_rm_neg_data.c
+    fts_trim_data.c
 )
 
 SET (ftsmooth_SRCS ftsmooth_main.c)

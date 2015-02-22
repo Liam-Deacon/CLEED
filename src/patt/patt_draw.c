@@ -14,7 +14,7 @@
  * Contains the patt_draw() function.
  *
  * \note Depending on the output @patt_drawing::format , and whether the program
- * is compiled with \c _USE_CAIRO defined and linked to libcairo, then Cairo
+ * is compiled with \c USE_CAIRO defined and linked to libcairo, then Cairo
  * is used as a vector graphics backend. Otherwise, the old postscript routines
  * are used for generating the LEED pattern.
  */
@@ -38,7 +38,7 @@
 int patt_draw(const patt_drawing *drawing)
 {
 
-  #ifdef _USE_CAIRO /* use Cairo graphics backend */
+  #ifdef USE_CAIRO /* use Cairo graphics backend */
     return(patt_draw_cairo(drawing));
   #else /* old postscript backend */
     if ((drawing->format == PATT_PS_OLD) ||

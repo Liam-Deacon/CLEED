@@ -24,7 +24,7 @@
  * Other includes
  *********************************************************************/
 #include "gh_stddef.h"
-#include "real.h"
+#include "cleed_real.h"
 #include "cpl.h"
 #include "mat.h"
 #include "qm_func.h"

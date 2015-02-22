@@ -35,7 +35,8 @@
  */
 mat matarralloc(mat M, size_t length)
 {
-  int mat_ch, i_mat;
+  int mat_ch;
+  size_t i_mat;
 
   if( (mat_ch = matcheck(M)) < 0)
   {

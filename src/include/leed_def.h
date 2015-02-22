@@ -39,13 +39,13 @@
 #ifndef LEED_DEF_H
 #define LEED_DEF_H
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 #include "leed_ver.h"
-#include "real.h"
+#include "cleed_real.h"
 #include "mat_def.h"
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+namespace cleed {
+#endif
 
 /*********************************************************************
  * Fundamental constants/conversion factors
@@ -167,6 +167,10 @@ typedef enum {
  *structures and types
  *********************************************************************/
 
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
+
 /*! \typedef leed_atom
  *  \brief Contains all properties of a single atom in the model */
 typedef struct leed_atom /*! Holds properties of a single atom */
@@ -186,7 +190,7 @@ typedef struct leed_layer /*! Holds properties of a single Bravais layer */
 {
   size_t no_of_layer;       /*!< number of layer in array */
   leed_structure bulk_over; /*!< BULK (0) or OVER */
-  int  periodic;            /*!< 1: layer is part of the periodically
+  int periodic;             /*!< 1: layer is part of the periodically
                              *      repeated bulk unit cell.
                              *   0: layer is only used once.
                              */
@@ -225,7 +229,7 @@ typedef struct leed_crystal /*! Holds all crystallographic parameters */
   size_t n_mir;    /*!< number of mirror plane */
   real *m_plane;   /*!< points define mirror plane */
   real *alpha;     /*!< angle in degree */
-  leed_mirror_sym symmetry;  /*!< NOSYM(0) ROTSYM(1) MIRRORSYM(2) RMSYM(3)*/
+  leed_symmetry symmetry;  /*!< NOSYM(0) ROTSYM(1) MIRRORSYM(2) RMSYM(3)*/
 
   /* 1x1 unit cell */
   real a[5];       /*!< basis vectors of the real 2-dim unit cell stored as
@@ -382,7 +386,8 @@ typedef struct leed_energy /*! Contains all parameters that change during
 } leed_energy;
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-
+} /* extern "C" */
+} /* namespace cleed */
 #endif
 
 #endif /* LEED_DEF_H */

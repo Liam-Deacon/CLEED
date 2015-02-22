@@ -47,85 +47,105 @@ mat matconj(mat Mt, const mat M)
   }
 
   /* First diagonal matrices: A diagonal matrix needs just to be conjugated */
-  if (M->mat_type == MAT_DIAG)
+  switch (M->mat_type)
   {
-    switch(M->num_type)
+    case(MAT_DIAG):
     {
-      case(NUM_REAL):
+      switch(M->num_type)
       {
-        /* No changes necessary for real diagonal matrices. */
-        Mt = matcopy(Mt,M);
-        return(Mt);
-        break;
-      } /* NUM_REAL */
-
-      case(NUM_COMPLEX):
-      {
-        /* Only conjugate complex for complex diagonal matrices. */
-        Mt = matcopy(Mt,M);
-        ptr_o_end = Mt->iel+Mt->rows;
-        for(ptr_o = Mt->iel+1; ptr_o <= ptr_o_end; ptr_o ++)
+        case(NUM_REAL):
         {
-          *ptr_o = - (*ptr_o);
-        }
-        return(Mt);
-        break;
-      }  /* NUM_COMPLEX */
-    }  /* switch M->num_type */
-  }  /* if diagonal */
+          /* No changes necessary for real diagonal matrices. */
+          Mt = matcopy(Mt,M);
+          return(Mt);
+          break;
+        } /* NUM_REAL */
 
-  /* Now non-diagonal matrices */
-  else  /* not diagonal matrix */
-  {
-    switch(M->num_type)
+        case(NUM_COMPLEX):
+        {
+          /* Only conjugate complex for complex diagonal matrices. */
+          Mt = matcopy(Mt,M);
+          ptr_o_end = Mt->iel+Mt->rows;
+          for(ptr_o = Mt->iel+1; ptr_o <= ptr_o_end; ptr_o ++)
+          {
+            *ptr_o = - (*ptr_o);
+          }
+          return(Mt);
+          break;
+        }  /* NUM_COMPLEX */
+
+        case(NUM_IMAG) : case(NUM_MASK): default:
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(Mr);
+          break;
+
+      }  /* switch (M->num_type) */
+
+      break;
+
+    }  /* case(NUM_DIAG) */
+
+    /* Now non-diagonal matrices */
+    case(MAT_SQUARE): case(MAT_NORMAL): case(MAT_MASK): case(MAT_SCALAR): default:
     {
-      case(NUM_REAL):
+      switch(M->num_type)
       {
-        /* Only do transposition for real matrix */
-        Mt = mattrans(Mt, M);
-        return(Mt);
-        break;
-      } /* NUM_REAL */
-
-      case(NUM_COMPLEX):
-      {
-        /* Do transposition and conjugation for a complex matrix */
-        Maux = matcopy(NULL,M);
-        Mt = matalloc(Mt, Maux->cols, Maux->rows, Maux->num_type);
-
-        /* real part: only transposition */
-        ptr_o_end = Maux->rel;
-        for(i_r = 1; i_r <= Maux->rows; i_r ++)
+        case(NUM_REAL):
         {
-          ptr_o = ptr_o_end + 1;
-          ptr_o_end += Maux->cols;
-          ptr_t = Mt->rel + i_r;
-          for(; ptr_o <= ptr_o_end; ptr_o ++, ptr_t += Maux->rows)
-          {
-            *ptr_t = *ptr_o;
-          }
-        } /* for i_r */
+          /* Only do transposition for real matrix */
+          Mt = mattrans(Mt, M);
+          return(Mt);
+          break;
+        } /* NUM_REAL */
 
-        /* Imaginary part: transposition and conjugation */
-        ptr_o_end = Maux->iel;
-        for(i_r = 1; i_r <= Maux->rows; i_r ++)
+        case(NUM_COMPLEX):
         {
-          ptr_o = ptr_o_end + 1;
-          ptr_o_end += Maux->cols;
-          ptr_t = Mt->iel + i_r;
-          for(; ptr_o <= ptr_o_end; ptr_o ++, ptr_t += Maux->rows)
+          /* Do transposition and conjugation for a complex matrix */
+          Maux = matcopy(NULL,M);
+          Mt = matalloc(Mt, Maux->cols, Maux->rows, Maux->num_type);
+
+          /* real part: only transposition */
+          ptr_o_end = Maux->rel;
+          for(i_r = 1; i_r <= Maux->rows; i_r ++)
           {
-            *ptr_t = -(*ptr_o);
-          }
-        } /* for i_r */
-        matfree(Maux);
-        return(Mt);
-        break;
-      } /* NUM_COMPLEX */
+            ptr_o = ptr_o_end + 1;
+            ptr_o_end += Maux->cols;
+            ptr_t = Mt->rel + i_r;
+            for(; ptr_o <= ptr_o_end; ptr_o ++, ptr_t += Maux->rows)
+            {
+              *ptr_t = *ptr_o;
+            }
+          } /* for i_r */
 
-    }  /* switch */
+          /* Imaginary part: transposition and conjugation */
+          ptr_o_end = Maux->iel;
+          for(i_r = 1; i_r <= Maux->rows; i_r ++)
+          {
+            ptr_o = ptr_o_end + 1;
+            ptr_o_end += Maux->cols;
+            ptr_t = Mt->iel + i_r;
+            for(; ptr_o <= ptr_o_end; ptr_o ++, ptr_t += Maux->rows)
+            {
+              *ptr_t = -(*ptr_o);
+            }
+          } /* for i_r */
+          matfree(Maux);
+          return(Mt);
+          break;
+        } /* NUM_COMPLEX */
 
-  } /* else */
+        case(NUM_IMAG) : case(NUM_MASK): default:
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(Mr);
+          break;
+
+      }  /* switch (M->num_type) */
+
+      break;
+
+    } /* non-diagonal cases */
+
+  } /* switch (M->mat_type) */
 
   return(NULL);
 } /* end of function matconj */

@@ -128,7 +128,7 @@ real vaux[2];
 
  for(i_atoms=1; i_atoms<n_atoms; i_atoms++)
  {
-  if( R_fabs(atom_list[i_atoms-1].pos[3]+vaux[0] - atom_list[i_atoms].pos[3]) 
+  if( cleed_real_fabs(atom_list[i_atoms-1].pos[3]+vaux[0] - atom_list[i_atoms].pos[3]) 
         > MIN_DIST )
   {
 /*********************************************************************
@@ -174,7 +174,7 @@ real vaux[2];
      vaux[0] = atom_list[i_atoms].pos[3];
      atom_list[i_atoms].pos[3] = 0.;
 
-  }  /* if R_fabs ... */
+  }  /* if cleed_real_fabs ... */
 
   /***********************************************************************
    set up new atom position.

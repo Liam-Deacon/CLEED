@@ -44,10 +44,10 @@
  * \warning The program will exit if memory cannot be allocated for
  * \p p_beams_out
  */
-int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, int set)
+int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, size_t set)
 {
-  int i_beams_in, i_beams_out;
-  int n_beams_out;
+  size_t i_beams_in, i_beams_out;
+  size_t n_beams_out;
 
   leed_beam *beams_out;
 
@@ -109,5 +109,5 @@ int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, int set)
   /* Set k_par of the last element of the list to the terminating value. */
   (beams_out + i_beams_out)->k_par = F_END_OF_LIST;
 
-  return(i_beams_out);
+  return((int)i_beams_out);
 }  /* end of function leed_beam_set */

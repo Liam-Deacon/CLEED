@@ -91,11 +91,7 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
   }
   else if( sscanf(linebuffer, fmt_buffer, &l_max_in, &eng) < 2)
   {
-#if ERROR_LOG
-    fprintf(STDERR, "\n");
     ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
-#endif
-
     ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, NULL);
   }
 
@@ -107,7 +103,7 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
   }
 #endif
 
-  eng = R_sqrt(2*eng);
+  eng = cleed_real_sqrt(2*eng);
 
   CONTROL_MSG(CONTROL, "l_max_in: %u, eng %f)\n", l_max_in, eng);
 
@@ -135,18 +131,18 @@ mat leed_inp_mat_lm(mat Mat, size_t l_max, const char *filename)
 
     if (iaux < 8 || iaux == EOF)
     {
-#if ERROR_LOG
-      fprintf(STDERR, "\n");
       ERROR_MSG("unable to read values from file \"%s\":\n%s",
                 filename, linebuffer);
-#endif
       ERROR_EXIT_RETURN(LEED_FILE_IO_ERROR, NULL);
     }
 
     if ((l1 <= l_max) && (l2 <= l_max))
     {
-      pos_1 = (l1 + 1)*l1 + m1 + 1;
-      pos_2 = (l2 + 1)*l2 + m2 + 1;
+      if (m1 < 0) pos_1 = (l1 + 1)*l1 - (size_t)abs(m1) + 1;
+      else        pos_1 = (l1 + 1)*l1 + (size_t)m1 + 1;
+
+      if (m2 < 0) pos_2 = (l2 + 1)*l2 - (size_t)abs(m2) + 1;
+      else        pos_2 = (l2 + 1)*l2 + (size_t)m2 + 1;
 
       *rmatel(pos_1, pos_2, Mat) = eng * r_part ;
       *imatel(pos_1, pos_2, Mat) = eng * i_part ;

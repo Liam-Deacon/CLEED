@@ -31,12 +31,20 @@
 extern "C" {
 #endif
 
+#if !__GNUC__
+#define __attribute__(x) /* empty */
+#endif
+
 /*********************************************************************
  * Input
  *********************************************************************/
 /* Decide which atoms belong to which layer; file linplayer.c */
-int leed_inp_bul_layer(leed_crystal *, leed_atom *, real *);
-int leed_inp_bul_layer_sym(leed_crystal *, leed_atom *, real *);
+__attribute__((nonnull(1,2,3)))
+int leed_inp_bul_layer(leed_crystal *, leed_atom *, const real *);
+
+__attribute__((nonnull(1,2,3)))
+int leed_inp_bul_layer_sym(leed_crystal *, leed_atom *, const real *);
+
 real leed_inp_debye_temp(real , real , real );
 int leed_inp_overlayer(leed_crystal *, leed_atom *);
 int leed_inp_overlayer_sym(leed_crystal *, leed_atom *);
@@ -45,7 +53,7 @@ int leed_inp_overlayer_sym(leed_crystal *, leed_atom *);
 mat leed_inp_mat_lm(mat, size_t, const char *);
 
 /* read phase shifts; file linpphase.c */
-int leed_inp_phase(char *, real *, leed_phase **);
+int leed_inp_phase(const char *, real *, leed_phase **);
 int leed_inp_phase_nd(const char *, real *, int, leed_phase **);
 size_t leed_update_phase(size_t);
 
@@ -98,7 +106,7 @@ int leed_beam_get_selection(leed_beam **, leed_beam *,
              leed_var *, real);
 
 /* Find the beams of a particular beam set (lbmset.c) */
-int leed_beam_set(leed_beam **, leed_beam *, int);
+int leed_beam_set(leed_beam **, leed_beam *, size_t);
 
 /*********************************************************************
  * Parameter control
@@ -113,9 +121,9 @@ mat *leed_par_mktl(mat *, const leed_phase *, size_t, real);
 mat *leed_par_mktl_nd(mat *, const leed_phase *, size_t, real);
 
 /* temperature dependent scattering factors */
-mat leed_par_temp_tl(mat, mat, real, real, int, int);
+mat leed_par_temp_tl(mat, mat, real, real, size_t, size_t);
 mat leed_par_cumulative_tl(mat, mat, real, real, real, real, size_t, size_t);
-int pc_mk_ms(mat *, mat *, mat *, mat *, mat *, mat *, int);
+int pc_mk_ms(mat *, mat *, mat *, mat *, mat *, mat *, size_t);
 
 /*********************************************************************
  * Output
@@ -199,6 +207,10 @@ mat leed_ms_comp_k_sum(mat, leed_beam *, leed_atom *, int, int, int);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
+#endif
+
+#ifdef __attribute__
+# undef __attribute__
 #endif
 
 #endif /* LEED_FUNC_H */

@@ -132,24 +132,24 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
       }
 
       /* formula for ...  of lattice vector */
-      integ[0] = R_fabs((vecrot[1] * a1x - vecrot[0] * a1y)/det) ;
-      integ[1] = R_fabs((vecrot[1] * a2x - vecrot[0] * a2y)/(-det));
-      integ[2] = R_fabs((vecrot[3] * a1x - vecrot[2] * a1y)/det) ;
-      integ[3] = R_fabs((vecrot[3] * a2x - vecrot[2] * a2y)/(-det));
+      integ[0] = cleed_real_fabs((vecrot[1] * a1x - vecrot[0] * a1y)/det) ;
+      integ[1] = cleed_real_fabs((vecrot[1] * a2x - vecrot[0] * a2y)/(-det));
+      integ[2] = cleed_real_fabs((vecrot[3] * a1x - vecrot[2] * a1y)/det) ;
+      integ[3] = cleed_real_fabs((vecrot[3] * a2x - vecrot[2] * a2y)/(-det));
 
       for(i=0; i < p_cryst->n_layers; i++)
       {
         integ[4 + 2 * i] =
-            R_fabs((vecrot[2*i+5] * a1x - vecrot[2*i+4] * a1y)/det) ;
+            cleed_real_fabs((vecrot[2*i+5] * a1x - vecrot[2*i+4] * a1y)/det) ;
         integ[5 + 2 * i] =
-            R_fabs((vecrot[2*i+5] * a2x - vecrot[2*i+4] * a2y)/(-det));
+            cleed_real_fabs((vecrot[2*i+5] * a2x - vecrot[2*i+4] * a2y)/(-det));
       }
 
       /* test for integer */
       for(i=0; i < n_size; i++)
       {
-        faux = integ[i] - R_nint(integ[i]);
-        if(R_fabs(faux) > EPSILON)
+        faux = integ[i] - cleed_real_nint(integ[i]);
+        if(cleed_real_fabs(faux) > EPSILON)
         {
           ctrol = 1;
 
@@ -175,7 +175,7 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
           } /* end else */
           #endif
    
-        } /* if R_fabs ...*/
+        } /* if cleed_real_fabs ...*/
 
       } /*for i */
    
@@ -238,15 +238,15 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
                           p_cryst->layers[i].atoms[i_d].pos[1];
                 vaux[1] = position[3*i_c+1] -
                           p_cryst->layers[i].atoms[i_d].pos[2];
-                integ[0] = R_fabs((vaux[1] * a1x - vaux[0] * a1y)/det) ;
-                integ[1] = R_fabs((vaux[1] * a2x - vaux[0] * a2y)/(-det));
+                integ[0] = cleed_real_fabs((vaux[1] * a1x - vaux[0] * a1y)/det) ;
+                integ[1] = cleed_real_fabs((vaux[1] * a2x - vaux[0] * a2y)/(-det));
 
-                vaux[0] = integ[0] - R_nint(integ[0]);
-                vaux[1] = integ[1] - R_nint(integ[1]);
-                if(R_fabs(vaux[0]) > EPSILON || R_fabs(vaux[1]) > EPSILON)
+                vaux[0] = integ[0] - cleed_real_nint(integ[0]);
+                vaux[1] = integ[1] - cleed_real_nint(integ[1]);
+                if(cleed_real_fabs(vaux[0]) > EPSILON || cleed_real_fabs(vaux[1]) > EPSILON)
                 {
                   ctrol++ ;
-                } /* if R_fabs */
+                } /* if cleed_real_fabs */
 
               } /* if IS_EQUAL_REAL */
 
@@ -370,8 +370,8 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   {
     if(ctrol == 0)
     {
-      R_m[1] = R_cos(2* p_cryst->alpha[i_mir]);
-      R_m[2] = R_sin(2* p_cryst->alpha[i_mir]);
+      R_m[1] = cleed_real_cos(2* p_cryst->alpha[i_mir]);
+      R_m[2] = cleed_real_sin(2* p_cryst->alpha[i_mir]);
       R_m[3] = R_m[2];
       R_m[4] = - R_m[1];
 
@@ -403,24 +403,24 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
       }
 
       /* formula for ...  of lattice vector */
-      integ[0] = R_fabs((vecrot[1] * a1x - vecrot[0] * a1y)/det) ;
-      integ[1] = R_fabs((vecrot[1] * a2x - vecrot[0] * a2y)/(-det));
-      integ[2] = R_fabs((vecrot[3] * a1x - vecrot[2] * a1y)/det) ;
-      integ[3] = R_fabs((vecrot[3] * a2x - vecrot[2] * a2y)/(-det));
+      integ[0] = cleed_real_fabs((vecrot[1] * a1x - vecrot[0] * a1y)/det) ;
+      integ[1] = cleed_real_fabs((vecrot[1] * a2x - vecrot[0] * a2y)/(-det));
+      integ[2] = cleed_real_fabs((vecrot[3] * a1x - vecrot[2] * a1y)/det) ;
+      integ[3] = cleed_real_fabs((vecrot[3] * a2x - vecrot[2] * a2y)/(-det));
 
       for(i=0; i < p_cryst->n_layers; i++)
       {
         integ[4 + 2 * i] =
-            R_fabs((vecrot[2*i+5] * a1x - vecrot[2*i+4] * a1y)/det) ;
+            cleed_real_fabs((vecrot[2*i+5] * a1x - vecrot[2*i+4] * a1y)/det) ;
         integ[5 + 2 * i] =
-            R_fabs((vecrot[2*i+5] * a2x - vecrot[2*i+4] * a2y)/(-det));
+            cleed_real_fabs((vecrot[2*i+5] * a2x - vecrot[2*i+4] * a2y)/(-det));
       }
 
       /* test for integer */
       for(i=0; i < n_size ; i++)
       {
-        faux = integ[i] - R_nint(integ[i]);
-        if(R_fabs(faux) > EPSILON)
+        faux = integ[i] - cleed_real_nint(integ[i]);
+        if(cleed_real_fabs(faux) > EPSILON)
         {
           ctrol = 1;
 
@@ -449,7 +449,7 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
           }/* end else */
           #endif
 
-        }/* if R_fabs ...*/
+        }/* if cleed_real_fabs ...*/
 
       }/*for i */
 
@@ -512,12 +512,12 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
                           p_cryst->layers[i].atoms[i_d].pos[1];
                 vaux[1] = position[3*i_c+1] -
                           p_cryst->layers[i].atoms[i_d].pos[2];
-                integ[0] = R_fabs((vaux[1] * a1x - vaux[0] * a1y)/det) ;
-                integ[1] = R_fabs((vaux[1] * a2x - vaux[0] * a2y)/(-det));
+                integ[0] = cleed_real_fabs((vaux[1] * a1x - vaux[0] * a1y)/det) ;
+                integ[1] = cleed_real_fabs((vaux[1] * a2x - vaux[0] * a2y)/(-det));
 
-                vaux[0] = integ[0] - R_nint(integ[0]);
-                vaux[1] = integ[1] - R_nint(integ[1]);
-                if(R_fabs(vaux[0]) > EPSILON || R_fabs(vaux[1]) > EPSILON)
+                vaux[0] = integ[0] - cleed_real_nint(integ[0]);
+                vaux[1] = integ[1] - cleed_real_nint(integ[1]);
+                if(cleed_real_fabs(vaux[0]) > EPSILON || cleed_real_fabs(vaux[1]) > EPSILON)
                 {
                   ctrol++ ;
                 }

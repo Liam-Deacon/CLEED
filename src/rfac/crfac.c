@@ -79,7 +79,7 @@ int main(int argc, char *argv[])        /* compile as standalone program */
   }  /* for i_list */
  
   r_min = rfac_rmin(iv_cur, args, &r_min, &s_min, &e_range);
-  rr = R_sqrt(args->vi * 8. / e_range);
+  rr = cleed_real_sqrt(args->vi * 8. / e_range);
 
 #if CONTROL
   switch (args->r_type)

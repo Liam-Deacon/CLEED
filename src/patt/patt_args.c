@@ -408,7 +408,7 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
        if (i_arg+1 < argc)
        {
 
-         #ifdef _USE_CAIRO
+         #ifdef USE_CAIRO
          
          drawing->format = PATT_UNKNOWN_FORMAT;
 
@@ -430,7 +430,7 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
            if (strcasecmp(argv[i_arg], "svg") == 0) drawing->format = PATT_SVG;
          #endif /* CAIRO_HAS_SVG_SURFACE */
          
-         #endif /* _USE_CAIRO */
+         #endif /* USE_CAIRO */
          
          if (drawing->format == PATT_UNKNOWN_FORMAT)
          {

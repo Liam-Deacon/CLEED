@@ -247,7 +247,7 @@ int leed_read_overlayer_sym(leed_crystal **p_over_par,
             vaux[0] *= vaux[0];
 #ifdef CONTROL_X
             fprintf(STDCTR, "(leed_read_overlayer): dr_x = %.3f dr = %.3f\n",
-                vaux[1]*BOHR, R_sqrt(vaux[0])*BOHR);
+                vaux[1]*BOHR, cleed_real_sqrt(vaux[0])*BOHR);
 #endif
           }
 
@@ -276,13 +276,13 @@ int leed_read_overlayer_sym(leed_crystal **p_over_par,
             /* changed GH/29.09.00
              faux = bulk_par->temp/vaux[1];
              vaux[0] = PREF_DEBWAL / (vaux[2] * vaux[1]) *
-                       R_sqrt(0.0625 + faux*faux);
+                       cleed_real_sqrt(0.0625 + faux*faux);
              vaux[0] = 0.5 * PREF_DEBWAL / (vaux[2] * vaux[1]) *
-                       R_sqrt(0.0625 + faux*faux);
+                       cleed_real_sqrt(0.0625 + faux*faux);
              */
 
             vaux[0] = leed_inp_debye_temp(vaux[1] , vaux[2] , bulk_par->temp );
-            vaux[1] = vaux[2] = vaux[3] = R_sqrt(vaux[0])/SQRT3;
+            vaux[1] = vaux[2] = vaux[3] = cleed_real_sqrt(vaux[0])/SQRT3;
 
 #ifdef CONTROL_X
             fprintf(STDCTR, "(leed_read_overlayer): temp = %.1f dr = %.3f\n",
@@ -466,37 +466,37 @@ int leed_read_overlayer_sym(leed_crystal **p_over_par,
       ERROR_RETURN(-1);
     }
 
-    i_layer = i_layer; /* remove unused variable warning */
+    i_layer = i_layer*1; /* remove unused variable warning */
 
     free(atoms_rd);
 
     /************************************************************************
   Set the symmetry flags
      *************************************************************************/
-    vaux[1] = R_atan2(bulk_par->b[3],bulk_par->b[1]);
-    vaux[2] = R_atan2(bulk_par->b[4],bulk_par->b[2]);
-    faux = R_fabs(vaux[1] - vaux[2]);
+    vaux[1] = cleed_real_atan2(bulk_par->b[3],bulk_par->b[1]);
+    vaux[2] = cleed_real_atan2(bulk_par->b[4],bulk_par->b[2]);
+    faux = cleed_real_fabs(vaux[1] - vaux[2]);
 
     vaux[0] = bulk_par->b[1]*bulk_par->b[2] + bulk_par->b[3]*bulk_par->b[4];
-    vaux[1] = R_hypot(bulk_par->b[1],bulk_par->b[3]);
-    vaux[2] = R_hypot(bulk_par->b[2],bulk_par->b[4]);
+    vaux[1] = cleed_real_hypot(bulk_par->b[1],bulk_par->b[3]);
+    vaux[2] = cleed_real_hypot(bulk_par->b[2],bulk_par->b[4]);
 
     if(over_par->n_mir > 0 || over_par->n_rot > 1)
     {
-      if((R_fabs(faux - PI/3) < GEO_TOLERANCE || R_fabs(faux - 2*PI/3) < GEO_TOLERANCE  ) &&
-          (R_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)                                        )
+      if((cleed_real_fabs(faux - PI/3) < GEO_TOLERANCE || cleed_real_fabs(faux - 2*PI/3) < GEO_TOLERANCE  ) &&
+          (cleed_real_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)                                        )
       {
         over_par->symmetry = 300 + 10 * over_par->n_mir +  over_par->n_rot;
       }
 
-      else if(R_fabs(vaux[0]) < GEO_TOLERANCE &&
-          R_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)
+      else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE &&
+          cleed_real_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)
       {
         over_par->symmetry = 400 + 10 * over_par->n_mir +  over_par->n_rot;
       }
 
-      else if(R_fabs(vaux[0]) < GEO_TOLERANCE &&
-          R_fabs(vaux[1] - vaux[2]) > GEO_TOLERANCE)
+      else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE &&
+          cleed_real_fabs(vaux[1] - vaux[2]) > GEO_TOLERANCE)
       {
         over_par->symmetry = 200 + 10 * over_par->n_mir +  over_par->n_rot;
       }
@@ -602,7 +602,7 @@ int leed_read_overlayer_sym(leed_crystal **p_over_par,
      */
     over_par->dmin = bulk_par->dmin;
 
-    faux = R_fabs( over_par->layers[0].vec_from_last[3] +
+    faux = cleed_real_fabs( over_par->layers[0].vec_from_last[3] +
         bulk_par->layers[bulk_par->n_layers-1].vec_to_next[3] );
     over_par->dmin = MIN(over_par->dmin, faux);
 #ifdef CONTROL
@@ -617,7 +617,7 @@ int leed_read_overlayer_sym(leed_crystal **p_over_par,
           i, over_par->layers[i].vec_from_last[3]*BOHR);
 #endif
       over_par->dmin =
-          MIN(over_par->dmin, R_fabs(over_par->layers[i].vec_from_last[3]) );
+          MIN(over_par->dmin, cleed_real_fabs(over_par->layers[i].vec_from_last[3]) );
     }
 
   }    /* if i_atoms > 0 */
@@ -685,7 +685,7 @@ int leed_read_overlayer_sym(leed_crystal **p_over_par,
         (*(p_phs_shifts)+i_c)->input_file,
         (*(p_phs_shifts)+i_c)->neng,
         (*(p_phs_shifts)+i_c)->lmax,
-        R_sqrt( (*(p_phs_shifts)+i_c)->dr[0] ) *BOHR);
+        cleed_real_sqrt( (*(p_phs_shifts)+i_c)->dr[0] ) *BOHR);
 
   printf("***********************(leed_read_overlayer)***********************\n");
 #endif

@@ -147,7 +147,7 @@ real sr_evalrfac_mir(real *par)
 #ifdef SHORTCUT
   rfac = 0.;
   for (i_par = 1; i_par <= sr_search->n_par; i_par ++)
-    rfac += 1 - cos(PI*(par[i_par] -2.3)) + R_fabs(par[i_par] - 2.3);
+    rfac += 1 - cos(PI*(par[i_par] -2.3)) + cleed_real_fabs(par[i_par] - 2.3);
   rfac /= sr_search->n_par;
 
 # ifdef CONTROL

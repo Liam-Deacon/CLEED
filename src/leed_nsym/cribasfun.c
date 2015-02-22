@@ -86,7 +86,7 @@ void cri_div(real *res_r, real *res_i,
             real num_r, real num_i, real den_r, real den_i)
 {
 real r, faux;
- if (R_fabs(den_r) >= R_fabs(den_i))
+ if (cleed_real_fabs(den_r) >= cleed_real_fabs(den_i))
  {
    r = den_i/den_r;
    faux = den_r + r*den_i;
@@ -122,18 +122,18 @@ void cri_sqrt(real *res_r, real *res_i, real arg_r, real arg_i)
   }
   else
   {
-    x = R_fabs(arg_r);
-    y = R_fabs(arg_i);
+    x = cleed_real_fabs(arg_r);
+    y = cleed_real_fabs(arg_i);
 
     if (x >= y)
     {
       r = y/x;
-      w = R_sqrt(x)*R_sqrt(0.5*(1.0 + R_sqrt(1.0 + r*r)));
+      w = cleed_real_sqrt(x)*cleed_real_sqrt(0.5*(1.0 + cleed_real_sqrt(1.0 + r*r)));
     }
     else
     {
       r = x/y;
-      w = R_sqrt(y)*R_sqrt(0.5*(r+R_sqrt(1.0+r*r)));
+      w = cleed_real_sqrt(y)*cleed_real_sqrt(0.5*(r+cleed_real_sqrt(1.0+r*r)));
     }
     if (arg_r > 0.0)
     {
@@ -166,21 +166,21 @@ void cri_exp(real *res_r, real *res_i, real arg_r, real arg_i)
   real faux;
   if (IS_EQUAL_REAL(arg_i, 0.))
   {
-    *res_r = R_exp(arg_r);
+    *res_r = cleed_real_exp(arg_r);
     *res_i = 0.;
   }
   else
   {
     if (IS_EQUAL_REAL(arg_r, 0.))
     {
-      *res_r = R_cos(arg_i);
-      *res_i = R_sin(arg_i);
+      *res_r = cleed_real_cos(arg_i);
+      *res_i = cleed_real_sin(arg_i);
     }
     else
     {
-      faux = R_exp(arg_r);
-      *res_r = faux * R_cos(arg_i);
-      *res_i = faux * R_sin(arg_i);
+      faux = cleed_real_exp(arg_r);
+      *res_r = faux * cleed_real_cos(arg_i);
+      *res_i = faux * cleed_real_sin(arg_i);
     }
   }
 } /* end of function cri_exp */
@@ -212,21 +212,21 @@ void cri_expi(real *res_r, real *res_i, real arg_r, real arg_i)
   /* From now on expi is identical to exp. */
   if (IS_EQUAL_REAL(arg_i, 0.))
   {
-    *res_r = R_exp(arg_r);
+    *res_r = cleed_real_exp(arg_r);
     *res_i = 0.;
   }
   else
   {
     if (IS_EQUAL_REAL(arg_r, 0.))
     {
-      *res_r = R_cos(arg_i);
-      *res_i = R_sin(arg_i);
+      *res_r = cleed_real_cos(arg_i);
+      *res_i = cleed_real_sin(arg_i);
     }
     else
     {
-      faux = R_exp(arg_r);
-      *res_r = faux * R_cos(arg_i);
-      *res_i = faux * R_sin(arg_i);
+      faux = cleed_real_exp(arg_r);
+      *res_r = faux * cleed_real_cos(arg_i);
+      *res_i = faux * cleed_real_sin(arg_i);
     }
   }
 } /* end of function cri_expi */

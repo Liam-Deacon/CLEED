@@ -21,19 +21,18 @@
 
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_matrix.h>
+#include <stdbool.h>
+#include <string.h>
 #include "mat.h"
 
 /*!
  * Converts a GSL matrix into a native CLEED matrix. The GSL matrix can be
- * either real (\p gsl_mx ) or complex (\p gsl_mx_cmplx ) and the output
- * matrix is controlled with \p mm_type .
+ * either real or complex and the output matrix is controlled with \p gsl_type .
  *
- * \param[out] gsl_mx Pointer to a real GSL matrix. If this matrix has already
+ * \param[out] gsl_mx_ptr Pointer to a real GSL matrix. If this matrix has already
  * been allocated it will be first freed then reallocated memory.
- * \param[out] gsl_mx_cmplx Pointer to a complex GSL matrix. If this matrix
- * has already been allocated it will be first freed then reallocated memory.
  * \param mx_type Desired output type for GSL matrix. Can be either \c
- * NUM_REAL to allocate \p gsl_mx or \c NUM_COMPLEX to allocate \p gsl_mx_cmplx .
+ * NUM_REAL or \c NUM_COMPLEX .
  * \param[in] Mx Pointer to native matrix type (may be \c NULL ).
  * \note If the input matrix is \c NULL for the desired output type (e.g.
  * \c NUM_REAL ), then the output matrix will be returned as \c NULL .
@@ -43,61 +42,93 @@
  * \retval 1 if operation type defined by \p gsl_num is invalid
  * and #EXIT_ON_ERROR is not defined.
  */
-int mat2gsl(gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
-            int gsl_num, mat Mx)
+int mat2gsl(const mat Mx, void *gsl_mx_ptr, mat_enum gsl_type)
 {
-  size_t i;
-  size_t i_row, i_col;
-  real *ptrx, *ptix;
-  gsl_complex z;
+  size_t i, j;
 
-  /* we permit real<-real, complex<-real, complex<-complex */
-  if ( (gsl_num == NUM_REAL) && (Mx->num_type == NUM_REAL) ) i = 1;
-  else if ( gsl_num == NUM_COMPLEX ) i = 2;
+  gsl_matrix *gsl_mx = NULL;
+  gsl_matrix_complex *gsl_mx_cmplx = NULL;
+
+  bool shortcut = (sizeof(real) == sizeof(double)) ? true : false;
+
+  /* cast gsl_mx_ptr to correct type of matrix */
+  if (gsl_type == NUM_REAL)
+    gsl_mx = (gsl_matrix *) gsl_mx_ptr;
+  else if (gsl_type == NUM_COMPLEX)
+    gsl_mx_cmplx = (gsl_matrix_complex *) gsl_mx_ptr;
   else
   {
-    ERROR_MSG("invalid operand type: %d %d\n", gsl_num, Mx->num_type);
+    ERROR_MSG("Incorrect value for gsl matrix type (neither real or complex)\n");
+    ERROR_RETURN(1);
+  }
+
+  /* we permit real<-real, real<-complex, complex<-real, complex<-complex */
+  if ( !((gsl_type == NUM_REAL || gsl_type == NUM_COMPLEX) &&
+       (Mx->num_type == NUM_REAL || Mx->num_type == NUM_COMPLEX)) )
+  {
+    ERROR_MSG("invalid operand type: %d %d\n", gsl_type, Mx->num_type);
     ERROR_RETURN(1);
   }
 
   switch (Mx->num_type)
   {
-    case NUM_REAL:
+    case (NUM_REAL):
     {
-      /* allocate memory */
+      /* allocate memory for real gsl matrix */
       if (gsl_mx != NULL) gsl_matrix_free(gsl_mx);
-      gsl_mx = gsl_matrix_calloc(Mx->rows, Mx->cols);
+      gsl_mx = (gsl_matrix *) gsl_matrix_calloc(Mx->rows, Mx->cols);
 
-      for ( i = 1 , ptrx = Mx->rel+1 ;
-            i <= Mx->rows * Mx->cols ;
-            i++ , ptrx++)
+      if (shortcut == true)
       {
-        i_row = ((i-1) % Mx->rows);
-        i_col = (i - i_row) / Mx->rows;
-        gsl_matrix_set(gsl_mx, i_row+1, i_col+1, (double)*ptrx);
+        memcpy((void*)gsl_mx->data, (const void*)Mx->rel+1,
+               sizeof(real)*(Mx->rows * Mx->cols));
       }
-
-      break;
-    }
-
-    case NUM_COMPLEX:
-    {
-      /* allocate memory */
-      if (gsl_mx_cmplx != NULL) gsl_matrix_complex_free(gsl_mx_cmplx);
-      gsl_mx_cmplx = gsl_matrix_complex_calloc(Mx->rows, Mx->cols);
-
-      for ( i = 1 , ptrx = Mx->rel+1 , ptix = Mx->iel+1 ;
-            i <= Mx->rows * Mx->cols ;
-            i++ , ptrx++ , ptix++ )
+      else
       {
+        for ( i=0; i < Mx->rows * Mx->cols; i++ )
+        {
+          gsl_mx->data[i] = (double)Mx->rel[i+1];
+          /*
+          // slower method
+          i_row = ((i-1) % Mx->rows);
+          i_col = (i - i_row) / Mx->rows;
+          gsl_matrix_set(gsl_mx, i_row+1, i_col+1, (double)Mx->rel[i]);
+          */
+        }
+      }
+      break;
+    } /* NUM_REAL */
+
+    case (NUM_COMPLEX):
+    {
+      /* allocate memory for complex gsl_matrix */
+      if (gsl_mx_cmplx != NULL) gsl_matrix_complex_free(gsl_mx_cmplx);
+      gsl_mx_cmplx = (gsl_matrix_complex *)
+                        gsl_matrix_complex_calloc(Mx->rows, Mx->cols);
+
+      for ( i=0, j=0; i < Mx->rows * Mx->cols; i++, j+=2 )
+      {
+        // faster - but potentially dangerous: assumes data is 2 x cols x rows
+        gsl_mx_cmplx->data[j] = Mx->rel[i+1];
+        gsl_mx_cmplx->data[j+1] = Mx->iel[i+1];
+        /*
+        // slow assignment method:
         z.dat[0] = (double)*ptrx;
         z.dat[1] = (double)*ptix;
         i_row = ((i-1) % Mx->rows);
         i_col = (i - i_row) / Mx->rows;
         gsl_matrix_complex_set(gsl_mx_cmplx, i_row, i_col, z);
+        */
       }
       break;
-    }
+    } /* NUM_COMPLEX */
+
+    case (NUM_IMAG): case (NUM_MASK): default:
+    {
+      ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(Mx->num_type));
+      ERROR_RETURN(-1);
+      break;
+    } /* default case */
 
   }
   return(0);
@@ -124,14 +155,49 @@ int mat2gsl(gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
  * input matrices are \c NULL and #EXIT_ON_ERROR is not defined.
  *
  */
-int gsl2mat(gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
-             int mat_type, mat Mx)
+int gsl2mat(const void *gsl_mx_ptr, mat_enum gsl_type, mat Mx, mat_enum mat_type)
 {
-  size_t i, incr, i_row, i_col;
+  size_t i, j, incr;
   size_t nrows, ncols;
-  real *ptrx, *ptix, *gsl_ptr;
-  double *gsl_px;
-  int gsl_type = NUM_REAL;
+  const double *gsl_data_ptr = NULL;
+
+  const gsl_matrix *gsl_mx = NULL;
+  const gsl_matrix_complex *gsl_mx_cmplx = NULL;
+
+  bool shortcut = (sizeof(real) == sizeof(double)) ? true : false;
+
+  /* cast gsl_mx_ptr to correct type of matrix */
+  if (gsl_type == NUM_REAL)
+    gsl_mx = (const gsl_matrix *) gsl_mx_ptr;
+  else if (gsl_type == NUM_COMPLEX)
+    gsl_mx_cmplx = (const gsl_matrix_complex *) gsl_mx_ptr;
+  else
+  {
+    ERROR_MSG("Incorrect value for gsl matrix type (neither real nor complex)\n");
+    ERROR_RETURN(1);
+  }
+
+  /* determine parameters */
+  if (gsl_mx != NULL)
+  {
+    nrows = gsl_mx->size1;
+    ncols = gsl_mx->size2;
+    gsl_data_ptr = (const double *) gsl_mx->data;
+    incr = 1;
+  }
+  else if (gsl_mx_cmplx != NULL)
+  {
+    nrows = gsl_mx_cmplx->size1;
+    ncols = gsl_mx_cmplx->size2;
+    gsl_data_ptr = (const double *) gsl_mx_cmplx->data;
+    incr = 2;
+  }
+  else /* invalid operation */
+  {
+    ERROR_MSG("both input matrices are NULL or invalid operation type %s->%s\n",
+              strmtype(gsl_type), strmtype(mat_type));
+    ERROR_RETURN(1);
+  }
 
   if (Mx != NULL) matfree(Mx); /* free old memory */
 
@@ -139,60 +205,51 @@ int gsl2mat(gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
   {
     case NUM_REAL:
     {
-      if (gsl_mx != NULL)
-      {
-        nrows = gsl_mx->size1;
-        ncols = gsl_mx->size2;
-        gsl_ptr = gsl_mx->data;
-        incr = 1;
-      }
-      else if (gsl_mx_cmplx != NULL)
-      {
-        nrows = gsl_mx_cmplx->size1;
-        ncols = gsl_mx_cmplx->size2;
-        gsl_ptr = gsl_mx->data;
-        incr = 2;
-      }
-      else /* invalid operation */
-      {
-        ERROR_MSG("both input matrices are NULL or "
-                  "invalid operation type %d->%d\n", gsl_type, mat_type);
-        ERROR_RETURN(1);
-      }
-
-      matalloc(Mx, gsl_mx->size1, gsl_mx->size2, NUM_REAL);
+      matalloc(Mx, nrows, ncols, NUM_REAL);
 
       /* populate matrix data */
-      for ( i = 1 , gsl_px = gsl_mx->data, ptrx = Mx->rel+1 ;
-            i <= Mx->rows * Mx->cols ;
-            i++ , gsl_px++, ptrx++ )
+      if (shortcut == true && incr == 1)
       {
-        *ptrx = *gsl_px;
+        memcpy((void*)Mx->rel+1, (const void*)gsl_data_ptr,
+                  sizeof(real)*nrows*ncols);
       }
+      else
+      {
+        for ( i=0, j=0; i < nrows*ncols; i++ , j+=incr )
+        {
+          Mx->rel[i+1] = gsl_data_ptr[j];
+        }
+      }
+
       return(0);
       break;
-    }
+    } /* NUM_REAL */
 
-    case NUM_COMPLEX:
+    case (NUM_COMPLEX):
     {
       if (gsl_mx_cmplx != NULL)
       {
-        matalloc(Mx, gsl_mx->size1, gsl_mx->size2, NUM_COMPLEX);
+        matalloc(Mx, nrows, ncols, NUM_COMPLEX);
 
         /* populate complex matrix data */
-        for ( i = 1 , gsl_px = gsl_mx_cmplx->data,
-              ptrx = Mx->rel+1, ptix = Mx->iel+1 ;
-              i <= Mx->rows * Mx->cols ;
-              i++ , gsl_px+=2, ptrx++)
+        for ( i=0, j=0; i < nrows*ncols; i++, j+=incr )
         {
-          *ptrx = *gsl_px;
-          *ptix = *(gsl_px+1);
+          Mx->rel[i+1] = gsl_data_ptr[j];
+          Mx->iel[i+1] = gsl_data_ptr[j+1];
         }
       }
       return(0);
       break;
-    }
-  }
+    } /* NUM_COMPLEX */
+
+    case NUM_IMAG: case NUM_MASK:
+    default:
+    {
+      ERROR_MSG("CLEED matrix type (%s) not supported\n", strmtype(mat_type));
+      break;
+    } /* default */
+
+  } /* case (Mx->num_type) */
 
   Mx = NULL; /* because input matrix is NULL */
   return(-1);
@@ -220,38 +277,37 @@ int gsl2mat(gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
  * \retval 1 if operation type defined by \p gsl_num is invalid
  * and #EXIT_ON_ERROR is not defined.
  */
-int cblas2gsl(real *cblas_mx, real *cblas_mx_cmplx,
-               void *gsl_mx, void *gsl_mx_cmplx,
-               int gsl_type, size_t cols, size_t rows)
+int cblas2gsl(const real *cblas_mx, mat_enum cblas_type, void *gsl_mx_ptr,
+               mat_enum gsl_type, size_t cols, size_t rows)
 {
-  size_t i, i_row, i_col;
-  real *cblas_ptrx, *cblas_ptix, *cblas_ptr;
-  gsl_complex z;
-  int cblas_type = NUM_REAL;
+  size_t i;
 
-  if (cblas_mx != NULL && cblas_mx_cmplx != NULL)
-  {
-    cblas_type = NUM_COMPLEX;
-  }
+  gsl_matrix *gsl_mx = NULL;
+  gsl_matrix_complex *gsl_mx_cmplx = NULL;
 
-  /* check which matrix to read from if output is real */
-  if (cblas_mx == NULL && cblas_mx_cmplx != NULL)
-  {
-    cblas_ptr = cblas_mx_cmplx;
-  }
-  else if (cblas_mx != NULL && cblas_mx_cmplx == NULL)
-  {
-    cblas_ptr = cblas_mx;
-  }
+  bool shortcut = (sizeof(real) == sizeof(double)) ? true : false;
+
+  /* cast gsl_mx_ptr to correct type of matrix */
+  if (gsl_type == NUM_REAL || gsl_type == NUM_IMAG)
+    gsl_mx = (gsl_matrix *) gsl_mx_ptr;
+  else if (gsl_type == NUM_COMPLEX)
+    gsl_mx_cmplx = (gsl_matrix_complex *) gsl_mx_ptr;
   else
   {
-    ERROR_MSG("both cblas input matrices are NULL\n");
+    ERROR_MSG("Invalid GSL matrix type (%s)\n", strmtype(gsl_type));
+    ERROR_RETURN(1);
+  }
+
+  if (cblas_mx == NULL)
+  {
+    ERROR_MSG("CBLAS input matrix is NULL\n");
     ERROR_RETURN(-1);
   }
 
   if (gsl_type == NUM_COMPLEX && cblas_type == NUM_REAL)
   {
-    ERROR_MSG("invalid operation type %d->%d\n", cblas_type, gsl_type);
+    ERROR_MSG("invalid CBLAS to GSL operation type %s->%s\n",
+        strmtype(cblas_type), strmtype(gsl_type));
     ERROR_RETURN(1);
   }
 
@@ -262,13 +318,23 @@ int cblas2gsl(real *cblas_mx, real *cblas_mx_cmplx,
       if (gsl_mx != NULL) gsl_matrix_free(gsl_mx);
       gsl_mx = (gsl_matrix *) gsl_matrix_calloc(rows, cols);
 
-      for (i=0, cblas_ptrx = cblas_ptr ;
-           i <= rows*cols ;
-           i++, cblas_ptrx++ )
+      if (shortcut == true)
       {
-        i_row = ((i-1) % rows);
-        i_col = (i - i_row) / rows;
-        gsl_matrix_set(gsl_mx, i_row, i_col, (double)*cblas_ptrx);
+        memcpy((void*)gsl_mx->data, (const void*)cblas_mx,
+                sizeof(real)*rows*cols);
+      }
+      else
+      {
+        for (i=0; i < rows*cols ; i++)
+        {
+          gsl_mx->data[i] = (double)cblas_mx[i];
+          /*
+          // slower assignment method:
+          i_row = ((i-1) % rows);
+          i_col = (i - i_row) / rows;
+          gsl_matrix_set(gsl_mx, i_row, i_col, (double)*cblas_ptrx);
+          */
+        }
       }
       break;
     }
@@ -276,20 +342,28 @@ int cblas2gsl(real *cblas_mx, real *cblas_mx_cmplx,
     case NUM_COMPLEX:
     {
       if (gsl_mx_cmplx != NULL) gsl_matrix_complex_free(gsl_mx_cmplx);
-      gsl_mx_cmplx = (gsl_matrix *) gsl_matrix_complex_calloc(rows, cols);
+      gsl_mx_cmplx = (gsl_matrix_complex *) gsl_matrix_complex_calloc(rows, cols);
 
-      for (i=0, cblas_ptrx = cblas_mx, cblas_ptix = cblas_mx_cmplx ;
-           i <= rows*cols ;
-           i++, cblas_ptrx++, cblas_ptix++ )
+      for ( i=0; i < rows*cols; i++ )
       {
+        // faster assignment method - assumes data size is 2 x cols x rows
+        gsl_mx_cmplx->data[i] = cblas_mx[i];
+        gsl_mx_cmplx->data[i+1] = (double)cblas_mx[i+1];
+
+        /*
+        // slow assignment method
         i_row = ((i-1) % rows);
         i_col = (i - i_row) / rows;
         z.dat[0] = (double)*cblas_ptrx;
         z.dat[1] = (double)*cblas_ptix;
         gsl_matrix_complex_set(gsl_mx, i_row, i_col, z);
+        */
       }
       break;
     }
+    default:
+      ERROR_MSG("GSL output matrix type not supported (%s)\n", strmtype(gsl_type));
+      ERROR_RETURN(-1);
   }
   return(0);
 }
@@ -314,42 +388,50 @@ int cblas2gsl(real *cblas_mx, real *cblas_mx_cmplx,
  * \retval 1 if the operation type is invalid or both input matrices are
  * \c NULL and #EXIT_ON_ERROR is not defined.
  */
-int gsl2cblas(real *cblas_mx, real *cblas_mx_cmplx,
-               gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
-               int cblas_type)
+int gsl2cblas(const void *gsl_mx_ptr, mat_enum gsl_type, real *cblas_mx, mat_enum cblas_type)
 {
-  size_t i, incr;
-  size_t *gsl_px, *ptrx, *ptix, *gsl_ptr;
+  size_t i, j, incr;
   size_t nrows, ncols;
-  int gsl_type;
+
+  const gsl_matrix *gsl_mx = NULL;
+  const gsl_matrix_complex *gsl_mx_cmplx = NULL;
+
+  bool shortcut = (sizeof(real) == sizeof(double)) ? true : false;
+
+  /* cast gsl_mx_ptr to correct type of matrix */
+  if (gsl_type == NUM_REAL || gsl_type == NUM_IMAG)
+    gsl_mx = (const gsl_matrix *) gsl_mx_ptr;
+  else if (gsl_type == NUM_COMPLEX)
+    gsl_mx_cmplx = (const gsl_matrix_complex *) gsl_mx_ptr;
+  else
+  {
+    ERROR_MSG("Incorrect gsl matrix type (%s)\n", strmtype(gsl_type));
+    ERROR_RETURN(1);
+  }
+
+  /* set loop parameters */
+  if (gsl_mx != NULL)
+  {
+    nrows = gsl_mx->size1;
+    ncols = gsl_mx->size2;
+    incr = 1;
+  }
+  else if (gsl_mx_cmplx != NULL)
+  {
+    nrows = gsl_mx_cmplx->size1;
+    ncols = gsl_mx_cmplx->size2;
+    incr = 2;
+  }
+  else /* invalid operation */
+  {
+    ERROR_MSG("GSL input matrix is NULL\n");
+    ERROR_RETURN(1);
+  }
 
   switch(cblas_type)
   {
     case NUM_REAL:
     {
-      if (gsl_mx != NULL)
-      {
-        nrows = gsl_mx->size1;
-        ncols = gsl_mx->size2;
-        gsl_ptr = gsl_mx->data;
-        gsl_type = NUM_REAL;
-        incr = 1;
-      }
-      else if (gsl_mx_cmplx != NULL)
-      {
-        nrows = gsl_mx_cmplx->size1;
-        ncols = gsl_mx_cmplx->size2;
-        gsl_ptr = gsl_mx->data;
-        gsl_type = NUM_REAL;
-        incr = 2;
-      }
-      else /* invalid operation */
-      {
-        ERROR_MSG("both GSL matrices are NULL or "
-                  "invalid operation type %d->%d\n", gsl_type, cblas_type);
-        ERROR_RETURN(1);
-      }
-
       /* allocate memory */
       if (cblas_mx != NULL) free(cblas_mx);
       if ( (cblas_mx = calloc(nrows * ncols, sizeof(real))) == NULL )
@@ -359,57 +441,48 @@ int gsl2cblas(real *cblas_mx, real *cblas_mx_cmplx,
       }
 
       /* populate matrix data */
-      for ( i = 0 , gsl_px = gsl_ptr, ptrx = cblas_mx ;
-            i <= gsl_mx->size1 * gsl_mx->size2 ;
-            i++ , gsl_px+=incr, ptrx++ )
+      if (shortcut == true)
       {
-        *ptrx = *gsl_px;
+        memcpy((void*)cblas_mx, (const void*)gsl_mx->data, sizeof(real) * nrows * ncols);
       }
-
+      else
+      {
+        /* copy element by element */
+        for ( i=0, j=0; i < nrows * ncols; i++, j+=incr)
+          cblas_mx[i] = (real) gsl_mx->data[j];
+      }
       break;
     }
 
     case NUM_COMPLEX:
     {
-      if (gsl_mx_cmplx == NULL)
-      {
-        ERROR_MSG("GSL complex input matrix is NULL\n");
-        ERROR_RETURN(-1);
-      }
-
       /* allocate memory */
       if (cblas_mx != NULL) free(cblas_mx);
-      cblas_mx = (real *)calloc(gsl_mx_cmplx->size1 * gsl_mx_cmplx->size2,
-                                sizeof(real));
+      cblas_mx = (real *)calloc(nrows * ncols * 2, sizeof(real));
       if (cblas_mx == NULL )
       {
-        ERROR_MSG("unable to allocate memory for cblas real output matrix\n");
+        ERROR_MSG("unable to allocate memory for cblas complex output matrix\n");
         ERROR_RETURN(-2);
       }
 
-      if (cblas_mx_cmplx != NULL) free(cblas_mx_cmplx);
-      cblas_mx_cmplx = (real *) calloc(gsl_mx_cmplx->size1 * gsl_mx_cmplx->size2,
-                                       sizeof(real));
-      if (cblas_mx_cmplx == NULL)
+      if (shortcut == true)
+        memcpy((void*)cblas_mx, (const void*)gsl_mx_cmplx->data, sizeof(real) * nrows * ncols * 2);
+      else
       {
-        free(cblas_mx);
-
-        ERROR_MSG("unable to allocate memory for cblas complex output matrix\n");
-        ERROR_RETURN(-3);
-      }
-
-      /* populate matrix data */
-      for ( i = 0 , gsl_px = gsl_mx_cmplx->data,
-            ptrx = cblas_mx, ptix = cblas_mx_cmplx ;
-            i <= gsl_mx_cmplx->size1 * gsl_mx_cmplx->size2 ;
-            i++ , gsl_px+=2, ptrx++, ptix++ )
-      {
-        *ptrx = *gsl_px;
-        *ptix = *(gsl_px+1);
+        /* populate matrix data */
+        for ( i=0; i <= nrows * ncols; i+=2 )
+        {
+          cblas_mx[i] = (real)gsl_mx_cmplx->data[i];
+          cblas_mx[i+1] = (real)gsl_mx_cmplx->data[i+1];
+        }
       }
 
       break;
     }
+    default:
+      ERROR_MSG("CBLAS output matrix type not supported (%s)\n",
+        strmtype(cblas_type));
+      ERROR_RETURN(-1);
   }
   return(0);
 }

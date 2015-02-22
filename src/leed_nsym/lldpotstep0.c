@@ -92,8 +92,8 @@ mat leed_ld_potstep0(mat Rpm1_ab, mat Rpm_a,
     faux_r = 2 * eng_vac -
             SQUARE((beams+k-1)->k_r[1]) - SQUARE((beams+k-1)->k_r[2]);
     faux_i = 2 * eng_vac - SQUARE(beams->k_r[1]) - SQUARE(beams->k_r[2]);
-    faux_r = R_sqrt(faux_r / faux_i);
-    faux_r = R_sqrt(faux_r);
+    faux_r = cleed_real_sqrt(faux_r / faux_i);
+    faux_r = cleed_real_sqrt(faux_r);
     cri_mul(Maux->rel+k, Maux->iel+k, faux_r, 0., Maux->rel[k], Maux->iel[k]);
 
     cri_mul(Maux->rel+k, Maux->iel+k,

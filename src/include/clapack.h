@@ -1,8 +1,7 @@
 #ifndef CLAPACK_H
-
 #define CLAPACK_H
 
-#include "cblas_aux.h"
+#include "cleed_blas.h"
 
 #ifndef ATL_INT
    #define ATL_INT int

@@ -26,6 +26,13 @@
 #ifndef ATOM_H
 #define ATOM_H
 
+#if !__GNUC__
+#define __attribute__(x) /* empty */
+#define auto_atom
+#else
+#define auto_atom __attribute__((cleanup(atom_free)))
+#endif
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
@@ -33,7 +40,7 @@ extern "C" {
 /*! \typedef atom
  *  \brief basic atom struct.
  */
-typedef struct _atom {
+typedef struct atom {
   char *element;        /*!< Elemental symbol. */
   double x;             /*!< x Cartesian coordinate of atom. */
   double y;             /*!< y Cartesian coordinate of atom. */
@@ -41,8 +48,14 @@ typedef struct _atom {
   double rmin;          /*!< minimum radius of atom (muffin-tin radius) */
 } atom;
 
+static inline void atom_free(atom *a) { if (a != NULL) free(a); a = NULL; }
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
+#endif
+
+#ifdef __attribute__
+# undef __attribute__
 #endif
 
 #endif /* ATOM_H */

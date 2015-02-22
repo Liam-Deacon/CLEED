@@ -30,9 +30,9 @@ extern "C" {
  *********************************************************************/
 
 /*!FIXME: real is always double type? */
-#define REAL_IS_DOUBLE
+#define CLEED_REAL_IS_DOUBLE
 
-#include "real.h"
+#include "cleed_real.h"
 #include "gh_stddef.h"
 #include "mat.h"
 

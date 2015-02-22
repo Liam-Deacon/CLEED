@@ -1,5 +1,5 @@
 
-/* readvar.h contains the input variable names for readinp.c */
+/* mkiv_read_var.h contains the input variable names for mkiv_read_inp.c */
 
 #ifndef __READ_INP_H__
 #define __READ_INP_H__
@@ -25,4 +25,4 @@ const char INP[INP_MAX][20] = {
     "NDESIRE",
 };
 
-#endif /* __READINP_H__ */
+#endif /* __mkiv_read_inp_H__ */

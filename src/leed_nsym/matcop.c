@@ -38,7 +38,7 @@
 mat matcopy(mat M_dst, const mat M_src )
 {
 
-  long int size;
+  size_t size;
 
   /* Check input matrix */
   if (M_dst == M_src) return(M_src); /* nothing to be done */

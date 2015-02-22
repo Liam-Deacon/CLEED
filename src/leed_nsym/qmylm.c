@@ -32,6 +32,8 @@
 #include "mat.h"
 #include "qm.h"
 
+#define UNUSED -1
+
 static const size_t MEM_BLOCK = 256;  /* memory block for coef */
 
 static real *coef  = NULL;      /* coefficients in the power series of Ylm */
@@ -41,11 +43,9 @@ static real *i_pre = NULL;
 static real *r_prec = NULL;     /* prefactors used to calculate Yl-m c_ylm */
 static real *i_prec = NULL;
 
-static const int UNUSED = -1;
-
-static int l_max_coef = -1;
-static int l_max_r = -1;
-static int l_max_c = -1;
+static int l_max_coef = UNUSED;
+static int l_max_r = UNUSED;
+static int l_max_c = UNUSED;
 
 /************************************************************************
 
@@ -90,13 +90,13 @@ static int l_max_c = -1;
 mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
 {
   size_t iaux;
-  int off;
-  int l, m;                      /* quantum numbers l,m */
-  int lamb;                      /* power of x */
+  size_t off;
+  size_t l, m;                      /* quantum numbers l,m */
+  size_t lamb;                      /* power of x */
 
-  int index;                     /* used to run through coef */
+  size_t index;                     /* used to run through coef */
 
-  real r_pre_l, r_pre_m;         /* prefactors */
+  real r_pre_l, r_pre_m;            /* prefactors */
 
   real faux;
   real x_2, sum;
@@ -108,7 +108,7 @@ mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
   /* Calculate coefficients and allocate memory for prefactors r/i_pre
    * if not done yet or if l_max has changed since last time.
    */
-  if ( l_max > l_max_coef )
+  if ( (int)l_max > l_max_coef )
   {
 #if WARNING_LOG
     if(l_max_coef != UNUSED)
@@ -121,7 +121,7 @@ mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
     mk_ylm_coef(l_max);
   }
 
-  if ( l_max > l_max_r )
+  if ( (int)l_max > l_max_r )
   {
     if (r_pre == NULL) r_pre = (real *) calloc( (l_max+1) , sizeof(real) );
     else       r_pre = (real *) realloc( r_pre, (l_max+1) * sizeof(real) );
@@ -257,13 +257,13 @@ mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
  */
 mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
 {
-  int iaux, off;
-  int l, m;                      /* quantum numbers l,m */
-  int lamb;                      /* power of x */
+  size_t iaux, off;
+  size_t l, m;                   /* quantum numbers l,m */
+  size_t lamb;                   /* power of x */
 
-  int index;                     /* used to run through coef */
+  size_t index;                  /* used to run through coef */
 
-  real r_pre_l, i_pre_l;       /* prefactors */
+  real r_pre_l, i_pre_l;         /* prefactors */
   real r_pre_m, i_pre_m;
 
   real faux_i, faux_r;
@@ -278,7 +278,7 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
   /* Calculate coefficients and allocate memory for prefactors r/i_pre
    * if not done yet or if l_max has changed since last time.
    */
-  if ( l_max > l_max_coef )
+  if ( (int)l_max > l_max_coef )
   {
 #if WARNING_LOG
     if(l_max_coef != UNUSED)
@@ -291,7 +291,7 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
     mk_ylm_coef(l_max);
   }
  
-  if ( l_max > l_max_r)
+  if ( (int)l_max > l_max_r)
   {
     if (r_pre == NULL) r_pre = (real *) calloc( (l_max+1) , sizeof(real) );
     else       r_pre = (real *) realloc( r_pre, (l_max+1) * sizeof(real) );
@@ -300,7 +300,7 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
     else       i_pre = (real *) realloc( i_pre, (l_max+1) * sizeof(real) );
   }
 
-  if ( l_max > l_max_c)
+  if ( (int)l_max > l_max_c)
   {
     if (r_prec == NULL) r_prec = (real *) calloc( (l_max+1) , sizeof(real) );
     else       r_prec = (real *) realloc( r_prec, (l_max+1) * sizeof(real) );
@@ -397,13 +397,12 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
  */
 int mk_ylm_coef(size_t l_max)
 {
-  int i;
-  size_t iaux;
-  int index;                   /* index */
+  size_t i, iaux;
+  size_t index;                /* index */
   size_t i_mem;                /* number of memory blocks allocated */
 
   size_t l, m;
-  int lamb;
+  size_t lamb;
 
   double *fac;
 
@@ -479,7 +478,7 @@ int mk_ylm_coef(size_t l_max)
   CONTROL_MSG(CONTROL_ALL, "end of l,m loop\n");
 
   free(fac);
-  l_max_coef = l_max;
+  l_max_coef = (int)l_max;
 
   /* Write memory size to warning output */
   WARNING_MSG("coef[%d] (%d bytes) for l_max = %d\n",
@@ -487,3 +486,5 @@ int mk_ylm_coef(size_t l_max)
 
   return( l_max_coef );
 } /* end of function mk_ylm_coef */
+
+#undef UNUSED

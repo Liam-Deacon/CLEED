@@ -43,9 +43,9 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 
   FILE *log_stream;
 
-  cleed_vector *x = CLEED_VECTOR_ALLOC(n_dim);
-  cleed_vector *y = CLEED_VECTOR_ALLOC(mpar);
-  cleed_basic_matrix *p = CLEED_BASIC_MATRIX_ALLOC(mpar, n_dim);
+  cleed_vector *x = cleed_vector_alloc(n_dim);
+  cleed_vector *y = cleed_vector_alloc(mpar);
+  cleed_basic_matrix *p = cleed_basic_matrix_alloc(mpar, n_dim);
 
   /* SIMPLEX METHOD */
   if( (log_stream = fopen(log_file, "a")) == NULL)
@@ -64,7 +64,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
     /* redundant if calloc memory:
      * for(i_par = 0; i_par < n_dim; i_par ++)
      * {
-     *   CLEED_BASIC_MATRIX_SET(p, 0, i_par, mpar, n_dim, 0.);
+     *   cleed_basic_matrix_set(p, 0, i_par, mpar, n_dim, 0.);
      * }
     */
 
@@ -74,21 +74,21 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
       {
         if(i_par == (j_par+1))
         {
-          faux = CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim) + dpos;
-          CLEED_BASIC_MATRIX_SET(p, i_par, j_par, mpar, n_dim, faux);
-          CLEED_VECTOR_SET(x, j_par, faux);
+          faux = cleed_basic_matrix_get(p, 0, j_par, n_dim) + dpos;
+          cleed_basic_matrix_set(p, i_par, j_par, n_dim, faux);
+          cleed_vector_set(x, j_par, faux);
         }
         else
         {
-          faux = CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim);
-          CLEED_BASIC_MATRIX_SET(p, i_par, j_par, mpar, n_dim, faux);
-          CLEED_VECTOR_SET(x, j_par, faux);
+          faux = cleed_basic_matrix_get(p, 0, j_par, n_dim);
+          cleed_basic_matrix_set(p, i_par, j_par, n_dim, faux);
+          cleed_vector_set(x, j_par, faux);
         }
       } /* for j_par */
 
       CONTROL_MSG(CONTROL, "Calculate function for vertex(%d)\n", i_par);
 
-      CLEED_VECTOR_SET(y, i_par, SR_RF(x));
+      cleed_vector_set(y, i_par, SR_RF(x));
 
    } /* for i_par */
 
@@ -130,9 +130,9 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   fprintf(log_stream, "%3d:", 0);
   for (j_par = 0; j_par < n_dim; j_par++ )
   {
-    fprintf(log_stream, "%7.4f ", CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim));
+    fprintf(log_stream, "%7.4f ", cleed_basic_matrix_get(p, 0, j_par, n_dim));
   }
-  fprintf(log_stream, "%7.4f\n", CLEED_VECTOR_GET(y, 0));
+  fprintf(log_stream, "%7.4f\n", cleed_vector_get(y, 0));
 
   /* print other lines */
   for (i_par = 1; i_par < mpar; i_par++ )
@@ -140,30 +140,30 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
     fprintf(log_stream, "%3d ", i_par);
     for (j_par = 0; j_par < n_dim; j_par++ )
     {
-      faux = CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim);
+      faux = cleed_basic_matrix_get(p, 0, j_par, n_dim);
       fprintf(log_stream, "%7.4f ", faux);
-      faux += CLEED_BASIC_MATRIX_GET(p, i_par, j_par, mpar, n_dim);
-      CLEED_BASIC_MATRIX_SET(p, 0, j_par, mpar, n_dim, faux);
+      faux += cleed_basic_matrix_get(p, i_par, j_par, n_dim);
+      cleed_basic_matrix_set(p, 0, j_par, n_dim, faux);
     }
-    faux = CLEED_VECTOR_GET(y, i_par);
+    faux = cleed_vector_get(y, i_par);
     fprintf(log_stream, "%7.4f\n", faux);
-    faux += CLEED_VECTOR_GET(y, 0);
-    CLEED_VECTOR_SET(y, 0, faux);
+    faux += cleed_vector_get(y, 0);
+    cleed_vector_set(y, 0, faux);
   }
  
   fprintf(log_stream, "\navg:");
   for (j_par=0; j_par < n_dim; j_par++ )
   {
     fprintf(log_stream, "%7.4f ",
-        CLEED_BASIC_MATRIX_GET(p, 0, j_par, mpar, n_dim) / mpar);
+        cleed_basic_matrix_get(p, 0, j_par, n_dim) / mpar);
   }
-  fprintf(log_stream, "%7.4f\n", CLEED_VECTOR_GET(y, 0) / mpar);
+  fprintf(log_stream, "%7.4f\n", cleed_vector_get(y, 0) / mpar);
 
   fclose(log_stream);
 
   /* free memory */
-  CLEED_VECTOR_FREE(x);
-  CLEED_VECTOR_FREE(y);
-  CLEED_BASIC_MATRIX_FREE(p);
+  cleed_vector_free(x);
+  cleed_vector_free(y);
+  cleed_basic_matrix_free(p);
 
 } /* end of function sr_sx */

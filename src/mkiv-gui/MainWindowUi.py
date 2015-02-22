@@ -130,8 +130,8 @@ class Ui_MainWindow(object):
         icon12.addPixmap(QtGui.QPixmap(_fromUtf8(":/format-text-direction-ltr.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionMark_as_Reference.setIcon(icon12)
         self.actionMark_as_Reference.setObjectName(_fromUtf8("actionMark_as_Reference"))
-        self.actionMark_Reflexes = QtGui.QAction(MainWindow)
-        self.actionMark_Reflexes.setObjectName(_fromUtf8("actionMark_Reflexes"))
+        self.actionmkiv_mark_reflexes = QtGui.QAction(MainWindow)
+        self.actionmkiv_mark_reflexes.setObjectName(_fromUtf8("actionmkiv_mark_reflexes"))
         self.actionEdit_Configuration = QtGui.QAction(MainWindow)
         self.actionEdit_Configuration.setObjectName(_fromUtf8("actionEdit_Configuration"))
         self.menuFile.addAction(self.actionOpen)
@@ -148,7 +148,7 @@ class Ui_MainWindow(object):
         self.menuExtract.addSeparator()
         self.menuExtract.addAction(self.actionAdd_Mask)
         self.menuExtract.addAction(self.actionMark_as_Reference)
-        self.menuExtract.addAction(self.actionMark_Reflexes)
+        self.menuExtract.addAction(self.actionmkiv_mark_reflexes)
         self.menuExtract.addAction(self.actionEdit_Configuration)
         self.menuExtract.addSeparator()
         self.menuExtract.addAction(self.actionExtract)
@@ -202,7 +202,7 @@ class Ui_MainWindow(object):
         self.actionCopy_Raw_Image.setText(_translate("MainWindow", "Copy (&Raw)", None))
         self.actionMark_as_Reference.setText(_translate("MainWindow", "&Mark As Reference", None))
         self.actionMark_as_Reference.setShortcut(_translate("MainWindow", "Ctrl+1", None))
-        self.actionMark_Reflexes.setText(_translate("MainWindow", "Mark &Reflexes", None))
+        self.actionmkiv_mark_reflexes.setText(_translate("MainWindow", "Mark &Reflexes", None))
         self.actionEdit_Configuration.setText(_translate("MainWindow", "&Edit Configuration", None))
 
 import res_rc

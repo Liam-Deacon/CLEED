@@ -18,7 +18,7 @@
  * Provides an interface with the Cairo vector graphics library to produce LEED
  * patterns in a number of different output formats.
  *
- * \note To enable this interface, compile \c patt with \c _USE_CAIRO defined.
+ * \note To enable this interface, compile \c patt with \c USE_CAIRO defined.
  */
 
 #include "patt.h"

@@ -72,11 +72,11 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
   size_t iaux;
   size_t l1, l2, l3;
   int m1, m2, m3;
-  int l3_min, l3_max;
+  size_t l3_min, l3_max;
 
-  int i3;
-  int iev1, iev2;
-  int iod1, iod2;
+  size_t i3;
+  size_t iev1, iev2;
+  size_t iod1, iod2;
   int odd1;
 
   real faux_r, faux_i;
@@ -120,12 +120,12 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
   for(l1 = 0, iev1 = 1, iod1 = 1; l1 <= l_max; l1 ++)
   {
     /* First even (l1 + m1) */
-    for(m1 = -l1; m1 <= l1; m1 += 2, iev1 ++)  /* even l1 + m1 */
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 += 2, iev1 ++)  /* even l1 + m1 */
     {
       for(l2 = 0, iev2 = 1; /* (iev2 <= iev1) && */ (l2 <= l_max); l2 ++)
       {
         /* Only even (l2 + m2)  for even (l1 + m1) */
-        for(m2 = -l2; /* (iev2 <= iev1) && */ (m2 <= l2); m2 += 2, iev2 ++)
+        for(m2 = -(int)l2; /* (iev2 <= iev1) && */ (m2 <= (int)l2); m2 += 2, iev2 ++)
         {
           /* Loop over l3 (inner--most loop): calculate the elements of Gev
            *
@@ -135,18 +135,22 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
            */
           m3 = m1 - m2;
 
-          l3_min = MAX(abs(m3), abs(l2-l1));
+          l3_min = (size_t)MAX(abs(m3), abs((int)l2-(int)l1));
           l3_min += (l1 + l2 + l3_min) % 2;
           l3_max = l2+l1;
 
           sum_r = sum_i = 0.;
-          i3 = l3_min*(l3_min + 1) - m3 + 1;
 
-          sign = M1P( (l1 - l2 - l3_min)/2 - m2);
+          if (m3 < 0)
+            i3 = l3_min*(l3_min + 1) + (size_t)abs(m3) + 1;
+          else
+            i3 = l3_min*(l3_min + 1) - (size_t)m3 + 1;
+
+          sign = M1P( (int)(l1 - l2 - l3_min)/2 - m2);
 
           for(l3 = l3_min; l3 <= l3_max; l3 += 2 )
           {
-            faux_r = sign*cg(l3, m3, l1, m1, l2, -m2);
+            faux_r = sign*cg((int)l3, m3, (int)l1, m1, (int)l2, -m2);
             sum_r += Llm->rel[i3] * faux_r;
             sum_i += Llm->iel[i3] * faux_r;
 
@@ -173,12 +177,12 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
     } /* m1 */
 
     /* Now odd (l1 + m1) */
-    for(m1 = -l1+1; m1 < l1; m1 += 2, iod1 ++)  /* even l1 + m1 */
+    for(m1 = -(int)l1+1; m1 < (int)l1; m1 += 2, iod1 ++)  /* even l1 + m1 */
     {
       for(l2 = 0, iod2 = 1; /*(iod2 <= iod1) &&*/ (l2 <= l_max); l2 ++)
       {
         /* Only odd (l2 + m2)  for odd (l1 + m1) */
-        for(m2 = -l2+1; /*(iod2 <= iod1) &&*/ (m2 < l2); m2 += 2, iod2 ++)
+        for(m2 = -(int)l2+1; /*(iod2 <= iod1) &&*/ (m2 < (int)l2); m2 += 2, iod2 ++)
         {
           /* Loop over l3 (inner--most loop): calculate the elements of God
            * - l3_min: l3 >= |m3|, |l2-l1|.
@@ -187,18 +191,21 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
            */
           m3 = m1 - m2;
 
-          l3_min = MAX(abs(m3), abs(l2-l1));
+          l3_min = (size_t)MAX(abs(m3), abs((int)l2-(int)l1));
           l3_min += (l1 + l2 + l3_min) % 2;
           l3_max = l2+l1;
 
           sum_r = sum_i = 0.;
-          i3 = l3_min*(l3_min + 1) - m3 + 1;
+          if (m3 < 0)
+            i3 = l3_min*(l3_min + 1) + (size_t)abs(m3) + 1;
+          else
+            i3 = l3_min*(l3_min + 1) - (size_t)m3 + 1;
 
-          sign = M1P( (l1 - l2 - l3_min)/2 - m2);
+          sign = M1P( (int)(l1 - l2 - l3_min)/2 - m2);
 
           for(l3 = l3_min; l3 <= l3_max; l3 += 2 )
           {
-            faux_r = sign*cg(l3, m3, l1,m1,l2,-m2);
+            faux_r = sign*cg((int)l3, m3, (int)l1,m1, (int)l2,-m2);
 
             sum_r += Llm->rel[i3] * faux_r;
             sum_i += Llm->iel[i3] * faux_r;
@@ -254,18 +261,18 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
   for(l1 = 0, iev2 = 1, iod2 = 1, ptr_r = Tii->rel+1, ptr_i = Tii->iel+1;
       l1 <= l_max; l1 ++)
   {
-    for(m1 = -l1; m1 <= l1; m1 ++)
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 ++)
     {
-      odd1 = ODD(l1+m1);
+      odd1 = ODD((int)l1+m1);
       for(l2 = 0; l2 <= l_max; l2 ++)
       {
-        for(m2 = -l2; m2 <= l2; m2 ++, ptr_r ++, ptr_i ++)
+        for(m2 = -(int)l2; m2 <= (int)l2; m2 ++, ptr_r ++, ptr_i ++)
         {
-          if(ODD(l2+m2))
+          if(ODD((int)l2+m2))
           {
             if( odd1)
             {
-              cri_powi(ptr_r, ptr_i, l1-l2);
+              cri_powi(ptr_r, ptr_i, (int)l1-(int)l2);
               cri_mul(ptr_r, ptr_i,
                       *ptr_r, *ptr_i, God->rel[iod2], God->iel[iod2]);
               cri_mul(ptr_r, ptr_i,
@@ -277,7 +284,7 @@ mat leed_ms_tmat_ii(mat Tii, mat Llm, mat Tl, size_t l_max)
           {
             if(!odd1)
             {
-              cri_powi(ptr_r, ptr_i, l1-l2);
+              cri_powi(ptr_r, ptr_i, (int)l1-(int)l2);
               cri_mul(ptr_r, ptr_i,
                       *ptr_r, *ptr_i, Gev->rel[iev2], Gev->iel[iev2]);
               cri_mul(ptr_r, ptr_i,

@@ -58,7 +58,7 @@
  */
 int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
 {
-  int i, j;
+  size_t i, j, u_c, u_d;
   int i_c, i_d;
 
   size_t n_rot, n_mir;     /* number of rotational symmetries & mirror planes */
@@ -142,10 +142,10 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
             atom_list[i_atoms].pos[1]*BOHR,
             atom_list[i_atoms].pos[2]*BOHR,
             atom_list[i_atoms].pos[3]*BOHR,
-            R_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] -
+            cleed_real_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] -
                    atom_list[i_atoms].pos[3])*BOHR);
 
-    if( R_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] - atom_list[i_atoms].pos[3])
+    if( cleed_real_fabs(atom_list[i_atoms-1].pos[3] + vaux[3] - atom_list[i_atoms].pos[3])
         > MIN_DIST )
     {
       /*
@@ -211,7 +211,7 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
       vaux[3] = atom_list[i_atoms].pos[3];
       atom_list[i_atoms].pos[3] = 0.;
 
-    }  /* if R_fabs ... */
+    }  /* if cleed_real_fabs ... */
     /* Set up new atom position.
      * in case of composite layer keep track of the new origin.
      */
@@ -268,7 +268,7 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   /* TEST the DISTANCE between the last atom of unit cell and 
    * the first atom of the next unit cell 
    */
-  if( R_fabs( vec[4*i_layer + 3] ) < MIN_DIST )
+  if( cleed_real_fabs( vec[4*i_layer + 3] ) < MIN_DIST )
   {
     if(i_layer == 0)
     {
@@ -514,9 +514,9 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
     /* for bulk layers 1x1 periodicity is assumed */
     par->layers[j].rel_area = 1.;
 
-    for(i_c=1; i_c <= 3; i_c ++)
+    for(u_c=1; u_c <= 3; u_c ++)
     {
-      par->layers[j].vec_from_last[i_c] = - vec[4*i + i_c];
+      par->layers[j].vec_from_last[u_c] = - vec[4*i + u_c];
     }
 
     /* vec_to_next points to the next layer (j+1) except for the topmost
@@ -526,9 +526,9 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
     if (i > 0)
     {
       #ifdef NSYM
-      for(i_c=1; i_c <= 3; i_c ++)
+      for(u_c=1; u_c <= 3; i_c ++)
       {
-        par->layers[j].vec_to_next[i_c] = - vec[4*(i-1) + i_c];
+        par->layers[j].vec_to_next[u_c] = - vec[4*(i-1) + u_c];
       }
       #else
       par->layers[j].vec_to_next[1] = 0;  
@@ -539,14 +539,14 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
     else
     {   
       #ifdef NSYM
-      for(i_c=1; i_c <= 3; i_c ++)
+      for(u_c=1; u_c <= 3; u_c ++)
       {
-        par->layers[j].vec_to_next[i_c] = -orig[i_c];
+        par->layers[j].vec_to_next[u_c] = -orig[u_c];
       }
       #else
-      for(i_c=1; i_c <= 4; i_c ++)
+      for(u_c=1; u_c <= 4; u_c ++)
       {
-        par->layers[j].vec_to_next[i_c] =  - vec[4*(i-1) + i_c];
+        par->layers[j].vec_to_next[u_c] =  - vec[4*(i-1) + u_c];
       }
       #endif
     }
@@ -558,29 +558,29 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
     par->layers[j].atoms = (leed_atom *)
         malloc(no_of_atoms[i] * sizeof(leed_atom) );
 
-    for(i_d=0, i_atoms=0; i_atoms < n_atoms; i_atoms++)
+    for(u_d=0, i_atoms=0; i_atoms < n_atoms; i_atoms++)
     {
       if(atom_list[i_atoms].layer == i)
       {
-        par->layers[j].atoms[i_d].layer = j;
-        par->layers[j].atoms[i_d].type = atom_list[i_atoms].type;
-        par->layers[j].atoms[i_d].t_type = atom_list[i_atoms].t_type;
+        par->layers[j].atoms[u_d].layer = j;
+        par->layers[j].atoms[u_d].type = atom_list[i_atoms].type;
+        par->layers[j].atoms[u_d].t_type = atom_list[i_atoms].t_type;
 
-        par->layers[j].atoms[i_d].pos[1] = atom_list[i_atoms].pos[1];
-        par->layers[j].atoms[i_d].pos[2] = atom_list[i_atoms].pos[2];
-        par->layers[j].atoms[i_d].pos[3] = atom_list[i_atoms].pos[3];
+        par->layers[j].atoms[u_d].pos[1] = atom_list[i_atoms].pos[1];
+        par->layers[j].atoms[u_d].pos[2] = atom_list[i_atoms].pos[2];
+        par->layers[j].atoms[u_d].pos[3] = atom_list[i_atoms].pos[3];
 
-        par->layers[j].atoms[i_d].dwf = atom_list[i_atoms].dwf;
+        par->layers[j].atoms[u_d].dwf = atom_list[i_atoms].dwf;
 
-        i_d++;
+        u_d++;
       }
     } /* for i_atoms */
 
-    if(i_d != par->layers[j].n_atoms)
+    if(u_d != par->layers[j].n_atoms)
     {
       ERROR_MSG("the numbers of atoms in layer %d do not match\n", j);
       ERROR_RETURN(-1);
-    } /* if i_d */
+    } /* if u_d */
 
   } /* for i (loop over layers) */
 
@@ -594,37 +594,37 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   /* The useful control of all variables. */
   #if CONTROL
   fprintf(STDCTR, "ROT = %d  MIRRORPLANES %d \n", n_rot, n_mir);
-  for(i_c=0; i_c < i_layer; i_c++)
+  for(u_c=0; u_c < i_layer; u_c++)
   {
     fprintf(STDCTR, "\n*****************************************\n");
-    fprintf(STDCTR, "bulklayer%d:\n", i_c);
+    fprintf(STDCTR, "bulklayer%d:\n", u_c);
     fprintf(STDCTR, "=============\n");
     fprintf(STDCTR, "regshift (%.3f %.3f)\n",
-                    par->layers[i_c].reg_shift[1]*BOHR,
-                    par->layers[i_c].reg_shift[2]*BOHR);
+                    par->layers[u_c].reg_shift[1]*BOHR,
+                    par->layers[u_c].reg_shift[2]*BOHR);
     fprintf(STDCTR, "vec_from_last (%.3f %.3f %.3f)\n",
-                    par->layers[i_c].vec_from_last[1]*BOHR,
-                    par->layers[i_c].vec_from_last[2]*BOHR,
-                    par->layers[i_c].vec_from_last[3]*BOHR);
+                    par->layers[u_c].vec_from_last[1]*BOHR,
+                    par->layers[u_c].vec_from_last[2]*BOHR,
+                    par->layers[u_c].vec_from_last[3]*BOHR);
     fprintf(STDCTR, "vec_to_next (%.3f %.3f %.3f)\n",
-                    par->layers[i_c].vec_to_next[1]*BOHR,
-                    par->layers[i_c].vec_to_next[2]*BOHR,
-                    par->layers[i_c].vec_to_next[3]*BOHR);
-    fprintf(STDCTR, "periodic: %d \n", par->layers[i_c].periodic);
+                    par->layers[u_c].vec_to_next[1]*BOHR,
+                    par->layers[u_c].vec_to_next[2]*BOHR,
+                    par->layers[u_c].vec_to_next[3]*BOHR);
+    fprintf(STDCTR, "periodic: %d \n", par->layers[u_c].periodic);
     fprintf(STDCTR, "a_lat( %.3f %.3f %.3f %.3f)\n",
-                    par->layers[i_c].a_lat[1]*BOHR,
-                    par->layers[i_c].a_lat[2]*BOHR,
-                    par->layers[i_c].a_lat[3]*BOHR,
-                    par->layers[i_c].a_lat[4]*BOHR);
+                    par->layers[u_c].a_lat[1]*BOHR,
+                    par->layers[u_c].a_lat[2]*BOHR,
+                    par->layers[u_c].a_lat[3]*BOHR,
+                    par->layers[u_c].a_lat[4]*BOHR);
     fprintf(STDCTR, "atom_position: \n");
 
-    for(i=0; i < par->layers[i_c].n_atoms; i++)
+    for(i=0; i < par->layers[u_c].n_atoms; i++)
     {
       fprintf(STDCTR, "\t atom%d :(%.3f %.3f %.3f) type%d \n\n", i+1,
-                      par->layers[i_c].atoms[i].pos[1]*BOHR,
-                      par->layers[i_c].atoms[i].pos[2]*BOHR,
-                      par->layers[i_c].atoms[i].pos[3]*BOHR,
-                      par->layers[i_c].atoms[i].type);
+                      par->layers[u_c].atoms[i].pos[1]*BOHR,
+                      par->layers[u_c].atoms[i].pos[2]*BOHR,
+                      par->layers[u_c].atoms[i].pos[3]*BOHR,
+                      par->layers[u_c].atoms[i].type);
     }
     fprintf(STDCTR, "*****************************************\n");
   }
@@ -637,5 +637,5 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
 
   CONTROL_MSG(CONTROL, "return value = %d\n", i_layer);
 
-  return(i_layer);
+  return((int)i_layer);
 } /* end of function leed_inp_bul_layer */

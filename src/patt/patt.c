@@ -46,7 +46,7 @@
  *
  * \note A Cairo graphics backend has been developed which enables a variety
  * of additional output formats, including SVG, PDF and PNG. It can be enabled
- * by adding \c _USE_CAIRO to the compiler definitions and linking to the
+ * by adding \c USE_CAIRO to the compiler definitions and linking to the
  * libcairo library during compilation.
  */
 

@@ -52,7 +52,7 @@ static const char *PATH_SEPARATOR = "\\";
 static const char *PATH_SEPARATOR = "/";
 #endif
 
-static int i_phase = 0;      /* number of atom types */
+static size_t i_phase = 0;      /* number of atom types */
 
 /*!
  * Updates the number of phase shifts
@@ -95,8 +95,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
 
   leed_phase *phs_shifts;
 
-  int i;
-  size_t i_str, i_eng;
+  size_t i, i_str, i_eng;
 
   size_t neng, lmax, nl;       /* neng = No. of energies to be read
                                 * lmax = max. quantum number;
@@ -139,12 +138,12 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     for(i=0; i < i_phase; i++)
     {
       if( (!strcmp( (*p_phs_shifts + i)->input_file, filename) )         &&
-          ( R_fabs(dr[1] - (*p_phs_shifts + i)->dr[1]) < GEO_TOLERANCE ) &&
-          ( R_fabs(dr[2] - (*p_phs_shifts + i)->dr[2]) < GEO_TOLERANCE ) &&
-          ( R_fabs(dr[3] - (*p_phs_shifts + i)->dr[3]) < GEO_TOLERANCE ) &&
+          ( cleed_real_fabs(dr[1] - (*p_phs_shifts + i)->dr[1]) < GEO_TOLERANCE ) &&
+          ( cleed_real_fabs(dr[2] - (*p_phs_shifts + i)->dr[2]) < GEO_TOLERANCE ) &&
+          ( cleed_real_fabs(dr[3] - (*p_phs_shifts + i)->dr[3]) < GEO_TOLERANCE ) &&
           ( t_type == (*p_phs_shifts + i)->t_type ))
       {
-        return(i);
+        return((int)i);
         break;
       }
     }
@@ -304,5 +303,5 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   }
 #endif
 
-  return(i_phase-1);
+  return ((int)i_phase-1);
 } /* end of function leed_leed_inp_phase */

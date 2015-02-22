@@ -106,7 +106,7 @@ mat leed_par_temp_tl(mat tl_t, mat tl_0,
   Jl = c_bess(Jl, 0., -alpha_4e, l_max_t+l_max_0);
 
   /* multiply Bessel function with sqrt(4pi) * i^l * exp(-alpha_4e) */
-  faux_r = 3.54490770181103205461 * R_exp(-alpha_4e);
+  faux_r = 3.54490770181103205461 * cleed_real_exp(-alpha_4e);
   faux_i = 0.;
 
   for(l1= 1; l1 <= (l_max_t + l_max_0 + 1); l1++)
@@ -125,18 +125,18 @@ mat leed_par_temp_tl(mat tl_t, mat tl_0,
     {
       fac_l12 = fac_l2 / fac_l1;
 
-      l3_min = abs(l2-l1);
+      l3_min = (size_t)abs((int)l2-(int)l1);
       l3_max = l2+l1;
 
       /* bug fixed */
       for(l3 = l3_min, fac_l3 = l3_min*2. + 1.;
           l3 <= l3_max; l3 ++, fac_l3 += 2. )
       {
-        faux_r = cg(l3,0, l2,0, l1,0);
-        faux_r *= R_sqrt(fac_l3*fac_l12);
+        faux_r = cg((int)l3,0, (int)l2,0, (int)l1,0);
+        faux_r *= cleed_real_sqrt(fac_l3*fac_l12);
 
         CONTROL_MSG(CONTROL_X, "pref (%d %d %d) = %f (%f)\n",
-               l1, l2, l3, faux_r, R_sqrt(fac_l3*fac_l12));
+               l1, l2, l3, faux_r, cleed_real_sqrt(fac_l3*fac_l12));
 
         cri_mul(&faux_r, &faux_i,
                tl_aux->rel[l2+1], tl_aux->iel[l2+1],
@@ -147,7 +147,7 @@ mat leed_par_temp_tl(mat tl_t, mat tl_0,
       } /* l3 */
     } /* l2 */
 
-    kappa = R_sqrt(2* energy);
+    kappa = cleed_real_sqrt(2* energy);
     CONTROL_MSG(CONTROL, "%d: tl_0=(%7.4f, %7.4f)\ttl_t=(%7.4f, %7.4f)"
                 "\ttl_t/kappa=(%7.4f, %7.4f)\n", l1,
                 tl_aux->rel[l1+1], tl_aux->iel[l1+1],

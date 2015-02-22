@@ -65,21 +65,22 @@
 int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                leed_var *v_par, leed_layer *layer, leed_beam *beams)
 {
-  /*!FIXME: change statics to constants as in gh_stddef.h */
-  static int old_set = -9999;
-  static int old_n_beams = -9999;
+  /*!FIXME: change statics assignments to constants as in gh_stddef.h */
+  static size_t old_set = 0;
+  static size_t old_n_beams = 0;
+  static size_t old_l_max = 0;
+
   static int old_type = -9999;
-  static int old_l_max = -9999;
 
   static real old_eng = -9999.;
 
   static mat Llm = NULL, Tii = NULL;
   static mat Yin_p = NULL, Yin_m = NULL, Yout_p = NULL, Yout_m = NULL;
 
-  int n_beams, i_beams;
-  int l_max;
+  size_t n_beams, i_beams;
+  size_t l_max;
   int i_type, t_type;
-  int iaux, i_c;
+  size_t i_c;
 
   real pref_i, faux_r, faux_i;
   real *ptr_r, *ptr_i;
@@ -212,8 +213,10 @@ int leed_ms_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   *p_Rmp = matmul(*p_Rmp, Maux, Yin_p);
 
   /* Add unscattered wave (identity) to transmission matrices Tpp and Tmm */
-  iaux = (*p_Tpp)->rows * (*p_Tpp)->cols;
-  for(i_c = 1; i_c <= iaux; i_c += (*p_Tpp)->cols + 1)
+
+  for(i_c = 1;
+      i_c <= (*p_Tpp)->rows * (*p_Tpp)->cols;
+      i_c += (*p_Tpp)->cols + 1)
   {
     (*p_Tpp)->rel[i_c] += 1.;
     (*p_Tmm)->rel[i_c] += 1.;

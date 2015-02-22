@@ -22,10 +22,6 @@
 #ifndef PATT_DEF_H
 #define PATT_DEF_H
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-  extern "C" {
-#endif
-
 #include <limits.h>
 #include <stdbool.h>
 #include "matrix_2x2.h"
@@ -34,9 +30,10 @@
 #include "patt_colors.h"
 #include "pattern.h"
 #include "basis.h"
+#include "gh_stddef.h"
 
-#ifndef STRSZ
-  #define STRSZ 128   /*! maximum length of string */
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+namespace cleed {
 #endif
 
 /* formats */
@@ -79,57 +76,45 @@ typedef enum {
   PATT_UNKNOWN_ERROR      /*!< Indicates an unknown error */
 } patt_error;
 
-/*! \def PATT_PAGE_HEIGHT
- *  \brief Height of bounding box for drawing.
- */
-#define PATT_PAGE_HEIGHT 800.
 
-/*! \def PATT_PAGE_WIDTH
- *  \brief Width of bounding box for drawing.
- */
-#define PATT_PAGE_WIDTH 600.
+#ifdef __cplusplus
+static const double PATT_PAGE_HEIGHT = 800.; /*!< Height of bounding box for drawing. */
+static const double PATT_PAGE_WIDTH = 600.;  /*!< Width of bounding box for drawing. */
 
-/*! \def ARROW_ANGLE
- *  \brief Default angle for drawing arrow heads.
- */
-#define ARROW_ANGLE 0.5
+static const double ARROW_ANGLE = 0.5; /*!< Default angle for drawing arrow heads. */
 
-/*! \def OFF_H
- *  \brief Height offset for drawing.
- */
+static const double OFF_H = 400.;     /*!< Height offset for drawing. */
+static const double OFF_W = 300.;     /*!< Width offset for drawing. */
 
-#define OFF_H      400.
-/*! \def OFF_W
- *  \brief Width offset for drawing. 
- */
-#define OFF_W      300.
+static const double LINE_WIDTH = 2.;  /*!< Default line width for drawing. */
 
-/*! \def LINE_WIDTH
- *  \brief Default line width for drawing.
- */
-#define LINE_WIDTH 2.
+static const double MAX_RADIUS = 200.; /*!< Maximum radius for pattern
+                                        * (analogous to the Ewald sphere). */
+#else
+#define PATT_PAGE_HEIGHT 800. /*!< Height of bounding box for drawing. */
+#define PATT_PAGE_WIDTH 600.  /*!< Width of bounding box for drawing. */
 
-/*! \def MAX_RADIUS
- *  \brief Maximum radius for pattern (analogous to the Ewald sphere).
- */
-#define MAX_RADIUS 200.
+#define ARROW_ANGLE 0.5 /*!< Default angle for drawing arrow heads. */
 
-/*! \def MAX_INPUT_FILES
- *  \brief Number of possible input files to be simultaneously rendered
- *         in the drawing.
- */
-#define MAX_INPUT_FILES 6
+#define OFF_H 400.     /*!< Height offset for drawing. */
+#define OFF_W 300.     /*!< Width offset for drawing. */
 
-/*! \def MAX_DOMAINS
- *  \brief The maximum number of allowed super-structure domains
- *   per substrate pattern.
- */
-#define MAX_DOMAINS 128
+#define LINE_WIDTH 2.  /*!< Default line width for drawing. */
 
-#define GREY_GS    0.
+#define MAX_RADIUS 200. /*!< Maximum radius for pattern
+                         * (analogous to the Ewald sphere). */
+#endif
+
+enum { MAX_INPUT_FILES = 6 }; /*!< Number of possible input files to be
+                               * simultaneously rendered in the drawing. */
+
+enum { MAX_DOMAINS = 128 };   /*!< Maximum number of allowed super-structure
+                               *   domains per substrate pattern. */
+
+static const double GREY_GS = 0.;
 
 /* alter the following list for order of preference */
-#define NUM_SUBS 54
+enum { NUM_SUBS = 54 };
 
 /* map to postscript symbol font */
 extern const char substitutes[NUM_SUBS][2][STRSZ];
@@ -139,6 +124,10 @@ char line_buffer[STRSZ];
 /*******************************************************
 Pattern Structures
 *******************************************************/
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+  extern "C" {
+#endif
 
 /*! \struct patt_text
  *  \brief Struct for displaying text label.
@@ -250,7 +239,8 @@ typedef struct patt_drawing
 extern patt_drawing drawing_default;
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-}
+  } /* extern "C" */
+} /* namespace cleed */
 #endif
 
 #endif /* PATT_DEF_H */

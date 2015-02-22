@@ -21,6 +21,10 @@ Changes:
 #include "miller_index.h"
 #include "lattice.h"
 
+#ifdef __cplusplus
+namespace cleed {
+#endif
+
 /* additional program information */
 static const char LATT[] = "latt";
 static const char LATT_COPYRIGHT[] = "Copyright (C) 1994-2014 Georg Held\n" \
@@ -47,17 +51,10 @@ static const char LATT_PLAT[] = "Unknown";
 #endif
 
 /* define constants */
-#define INVALID_ARGUMENT_ERROR -1
+enum { INVALID_ARGUMENT_ERROR = -1 };
 
 /* preprocessor macros */
 
-#ifndef ARG_IS
-#define ARG_IS(x) (strcmp(argv[i_arg], x) == 0)
-#endif
-
-#ifndef ARG_ISH
-#define ARG_ISH(x,y) (strncmp(argv[i_arg], x, y) == 0)
-#endif
 
 #ifdef DEBUG
 
@@ -115,8 +112,7 @@ if (i_arg < argc)                                                           \
 }                                                                           \
 else                                                                        \
 {                                                                           \
-  fprintf(stderr, "*** error (latt): invalid argument for '%s'\n",          \
-          argv[i_arg-1]);                                                   \
+  ERROR_MSG("invalid argument for '%s'\n", argv[i_arg-1]);                                                   \
   exit(INVALID_ARGUMENT_ERROR);                                             \
 }
 

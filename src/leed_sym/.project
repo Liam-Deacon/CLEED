@@ -3,6 +3,7 @@
 	<name>leed_sym</name>
 	<comment></comment>
 	<projects>
+		<project>leed_nsym</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

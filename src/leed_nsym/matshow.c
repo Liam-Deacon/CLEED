@@ -82,8 +82,8 @@ void matshow(const mat M)
               fprintf(STDOUT, "%3d:    ", i_r);
               for (i_c = 1; i_c <= M->cols; i_c ++)
               {
-                if( (R_fabs(*rmatel(i_r, i_c, M)) < MIN_VALUE) &&
-                    (R_fabs(*imatel(i_r, i_c, M)) < MIN_VALUE) )
+                if( (cleed_real_fabs(*rmatel(i_r, i_c, M)) < MIN_VALUE) &&
+                    (cleed_real_fabs(*imatel(i_r, i_c, M)) < MIN_VALUE) )
                 {
                   fprintf(STDOUT, CFORM_ZERO);
                 }
@@ -103,6 +103,11 @@ void matshow(const mat M)
 
             break;
           } /* case CLEED_COMPLEX */
+
+          case(NUM_IMAG): case(NUM_MASK): default:
+            ERROR_MSG("Unsupported data type for matrix M (%s)\n", strmtype(M->num_type));
+            return;
+            break;
 
         }  /* switch num_type */
 
@@ -148,10 +153,18 @@ void matshow(const mat M)
             break;
           } /* case CLEED_COMPLEX */
 
+          case(NUM_IMAG): case(NUM_MASK): default:
+            ERROR_MSG("Unsupported data type for matrix M (%s)\n", strmtype(M->num_type));
+            return;
+            break;
         }  /* switch num_type */
 
         break;
       }  /* MAT_DIAG */
+
+      case (MAT_SCALAR): default:
+        ERROR_MSG("Unsupported type for matrix M\n");
+        return;
 
     }  /* switch mat_type */
 

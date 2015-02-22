@@ -35,8 +35,8 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
 
   FILE *log_stream;
 
-  cleed_vector *p = CLEED_VECTOR_ALLOC(n_dim);
-  cleed_basic_matrix *xi = CLEED_BASIC_MATRIX_ALLOC(n_dim, n_dim);
+  cleed_vector *p = cleed_vector_alloc(n_dim);
+  cleed_basic_matrix *xi = cleed_basic_matrix_alloc(n_dim, n_dim);
 
 /***********************************************************************
  * POWELL'S METHOD
@@ -61,7 +61,7 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
       for (j_par = 0; j_par < n_dim; j_par ++)
       {
         if(i_par == j_par)
-          CLEED_BASIC_MATRIX_SET(xi, i_par, j_par, n_dim, n_dim, 1.);
+          cleed_basic_matrix_set(xi, i_par, j_par, n_dim, 1.);
         /* else: memory already zeroed */
       }
     }
@@ -100,7 +100,7 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
   fprintf(log_stream, "=> Optimum parameter set:\n");
   for (j_par = 0; j_par < n_dim; j_par++ )
   {
-   fprintf(log_stream, "%.6f ", CLEED_VECTOR_GET(p, j_par));
+   fprintf(log_stream, "%.6f ", cleed_vector_get(p, j_par));
   }
   fprintf(log_stream, "\n");
 
@@ -110,7 +110,7 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
   fclose(log_stream);
 
   /* free memory */
-  CLEED_BASIC_MATRIX_FREE(xi);
-  CLEED_VECTOR_FREE(p);
+  cleed_basic_matrix_free(xi);
+  cleed_vector_free(p);
 
 }  /* end of function sr_po */

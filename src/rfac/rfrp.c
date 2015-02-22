@@ -61,17 +61,17 @@ real rfac_rp(const real *eng, const real *e_int, const real *t_int, real vi)
         ( e_step * 0.5 * (t_int[i_eng] + t_int[i_eng-1]) ));
 
     Y_the = (real)(L / ( 1. + L*L*vi*vi));
-    the_y_sum += SQUARE((double)Y_the)*e_step;
+    the_y_sum += SQUARE(Y_the)*e_step;
 
     /* experimental Y function */
     L = (real)((e_int[i_eng] - e_int[i_eng-1]) /
         ( e_step * 0.5 * (e_int[i_eng] + e_int[i_eng-1]) ));
 
     Y_exp = (real)(L / ( 1. + L*L*vi*vi));
-    exp_y_sum += SQUARE((double)Y_exp)*e_step;
+    exp_y_sum += SQUARE(Y_exp)*e_step;
 
     /* compute R-factor sum */
-    rfac_sum += SQUARE((double)Y_the - (double)Y_exp)*e_step;
+    rfac_sum += SQUARE(Y_the - Y_exp)*e_step;
   }
 
   #ifdef CONTROL

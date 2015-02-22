@@ -133,10 +133,10 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
   g1_x = b_par->a_1[1]; g1_y = b_par->a_1[2];
   g2_x = b_par->a_1[3]; g2_y = b_par->a_1[4];
 
-  faux_r = R_sin(v_par->theta) * R_sqrt(2*eng_max);
+  faux_r = cleed_real_sin(v_par->theta) * cleed_real_sqrt(2*eng_max);
   k_in[0] = faux_r;
-  k_in[1] = faux_r * R_cos(v_par->phi);
-  k_in[2] = faux_r * R_sin(v_par->phi);
+  k_in[1] = faux_r * cleed_real_cos(v_par->phi);
+  k_in[2] = faux_r * cleed_real_sin(v_par->phi);
 
   n_mir = b_par->n_mir;
   n_rot = b_par->n_rot;
@@ -153,9 +153,9 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
    */
 
   eng_max -= v_par->vr;
-  faux_r = R_log(v_par->epsilon) / b_par->dmin;
+  faux_r = cleed_real_log(v_par->epsilon) / b_par->dmin;
   k_max_2 = faux_r*faux_r + 2*eng_max;
-  k_max = R_sqrt(k_max_2);
+  k_max = cleed_real_sqrt(k_max_2);
   l_max = v_par->l_max;
 
   /* n1 is for allocation */
@@ -199,7 +199,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
    *  order beams in the array bm_off.
    **********************************************************************/
  
-  n_set = (int) R_nint(b_par->rel_area_sup);
+  n_set = (int) cleed_real_nint(b_par->rel_area_sup);
   bm_off = (leed_beam *)calloc(n_set, sizeof(leed_beam));
 
   bm_off[0].ind_1 = 0.;
@@ -224,7 +224,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
       k_y = n1*m12 + n2*m22;
       if( (k_x >= 0.) && (k_x + K_TOLERANCE < 1.) &&
           (k_y >= 0.) && (k_y + K_TOLERANCE < 1.) &&
-          (R_hypot(k_x, k_y) > K_TOLERANCE)          )
+          (cleed_real_hypot(k_x, k_y) > K_TOLERANCE)          )
       {
         bm_off[i_set].ind_1 = k_x;
         bm_off[i_set].ind_2 = k_y;
@@ -313,10 +313,10 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
              * the beam set is equivalent to itself. Mark this in n_eqb_b.
              */
             faux_r = k_x - bm_off[i_set].ind_1;
-            if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+            if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
             {
               faux_r = k_y - bm_off[i_set].ind_2;
-              if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+              if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
               {
                 bm_off[i_set].n_eqb_b ++;
                 CONTROL_MSG(CONTROL_X,
@@ -333,10 +333,10 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               if( bm_off[i_set].n_eqb_s != 0 && (bm_off+j_set)->n_eqb_s != 0)
               {
                 faux_r = k_x - (bm_off+j_set)->ind_1;
-                if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )    /* integer ? */
+                if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE )    /* integer ? */
                 {
                   faux_r = k_y - (bm_off+j_set)->ind_2;
-                  if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE )  /* integer ? */
+                  if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE )  /* integer ? */
                   {
                     bm_off[i_set].n_eqb_s ++;
                     (bm_off+j_set)->n_eqb_s = 0;
@@ -434,11 +434,11 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
      * - loop over beam sets and indices.
      */
 
-    a1 = R_hypot(g1_x, g1_y); /* a1 = length of g1 */
-    a2 = R_hypot(g2_x, g2_y); /* a2 = length of g2 */
+    a1 = cleed_real_hypot(g1_x, g1_y); /* a1 = length of g1 */
+    a2 = cleed_real_hypot(g2_x, g2_y); /* a2 = length of g2 */
 
-    faux_r = R_fabs((g1_x*g2_x + g1_y*g2_y)/a1); /* a2 * cos(a1,a2) */
-    faux_i = R_fabs((g1_x*g2_y - g1_y*g2_x)/a1); /* a2 * sin(a1,a2) */
+    faux_r = cleed_real_fabs((g1_x*g2_x + g1_y*g2_y)/a1); /* a2 * cos(a1,a2) */
+    faux_i = cleed_real_fabs((g1_x*g2_y - g1_y*g2_x)/a1); /* a2 * sin(a1,a2) */
 
     /*
      * n2_max = k_max / (sin(a1,a2) * a2) + k_in/a2
@@ -473,7 +473,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
           k_y = n1*g1_y + n2*g2_y + k_in[2] + bm_off[i_set].k_r[2];
 
           faux_r = SQUARE(k_x) + SQUARE(k_y);      /* length of vector */
-          faux_i = R_atan2(k_y, k_x);              /* angle of vector */
+          faux_i = cleed_real_atan2(k_y, k_x);              /* angle of vector */
 
           if(faux_r <= k_max_2)
           {
@@ -599,7 +599,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               {
                 a1_x = (b_par->layers + i_layers)->reg_shift[1];
                 a1_y = (b_par->layers + i_layers)->reg_shift[2];
-                pref2 = R_sqrt((real) bm_off[i_set].n_eqb_b );
+                pref2 = cleed_real_sqrt((real) bm_off[i_set].n_eqb_b );
 
                 faux_r =  a1_x * beams[i_beams].k_x_sym[0]
                         + a1_y * beams[i_beams].k_y_sym[0];
@@ -608,7 +608,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                 *(beams[i_beams].eout_b_r + i_layers) = pref2 * faux_r;
                 *(beams[i_beams].eout_b_i + i_layers) = pref2 * faux_i;
 
-                pref2 = 1./R_sqrt((real) bm_off[i_set].n_eqb_b );
+                pref2 = 1./cleed_real_sqrt((real) bm_off[i_set].n_eqb_b );
                 for(m = -l_max; m <= l_max; m ++, iaux ++)
                 {
                   if( bm_off[i_set].n_eqb_b == 1)
@@ -652,7 +652,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               {
                 a1_x = (o_par->layers + i_layers)->reg_shift[1];
                 a1_y = (o_par->layers + i_layers)->reg_shift[2];
-                pref2 = R_sqrt((real) bm_off[i_set].n_eqb_s);
+                pref2 = cleed_real_sqrt((real) bm_off[i_set].n_eqb_s);
 
                 faux_r =  a1_x * beams[i_beams].k_x_sym[0]
                         + a1_y * beams[i_beams].k_y_sym[0];
@@ -662,7 +662,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                 *(beams[i_beams].eout_s_i + i_layers) = pref2 * faux_i;
 
           
-                pref2 = 1./R_sqrt((real) bm_off[i_set].n_eqb_s );
+                pref2 = 1./cleed_real_sqrt((real) bm_off[i_set].n_eqb_s );
                 for(m = -l_max; m <= l_max; m ++, iaux ++)
                 {
                   if( bm_off[i_set].n_eqb_s == 1)
@@ -820,8 +820,8 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               k_x = bm_off[i_set].k_r[1];
               k_y = bm_off[i_set].k_r[2];
 
-              R_m[1] = R_cos(2* b_par->alpha[i]);
-              R_m[2] = R_sin(2* b_par->alpha[i]);
+              R_m[1] = cleed_real_cos(2* b_par->alpha[i]);
+              R_m[2] = cleed_real_sin(2* b_par->alpha[i]);
               R_m[3] = R_m[2];
               R_m[4] = - R_m[1];
 
@@ -857,7 +857,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                   "faux_r = %f k_x = %f ind_1(set %d) = %f\n",
                   faux_r, k_x, i_set, bm_off[i_set].ind_1);
 
-              if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+              if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
               {
                 faux_r = k_y - bm_off[i_set].ind_2;
 
@@ -865,7 +865,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                     "faux_r = %f k_y = %f ind_2(set %d) = %f\n",
                     faux_r, k_y, i_set, bm_off[i_set].ind_2);
 
-                if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+                if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
                 {
                   bm_off[i_set].n_eqb_b ++;
 
@@ -883,10 +883,10 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                 if( bm_off[i_set].n_eqb_s != 0 && (bm_off+j_set)->n_eqb_s != 0)
                 {
                   faux_r = k_x - (bm_off+j_set)->ind_1;
-                  if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+                  if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
                   {
                     faux_r = k_y - (bm_off+j_set)->ind_2;
-                    if( R_fabs(faux_r - R_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
+                    if( cleed_real_fabs(faux_r - cleed_real_nint(faux_r)) < K_TOLERANCE ) /* integer ? */
                     {
                       bm_off[i_set].n_eqb_s ++;
                       (bm_off+j_set)->n_eqb_s = 0;
@@ -981,11 +981,11 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
    * - determine boundaries for beam indices n1 and n2
    * - loop over beam sets and indices.
    */
-  a1 = R_hypot(g1_x, g1_y); /* a1 = length of g1 */
-  a2 = R_hypot(g2_x, g2_y); /* a2 = length of g2 */
+  a1 = cleed_real_hypot(g1_x, g1_y); /* a1 = length of g1 */
+  a2 = cleed_real_hypot(g2_x, g2_y); /* a2 = length of g2 */
 
-  faux_r = R_fabs((g1_x*g2_x + g1_y*g2_y)/a1); /* a2 * cos(a1,a2) */
-  faux_i = R_fabs((g1_x*g2_y - g1_y*g2_x)/a1); /* a2 * sin(a1,a2) */
+  faux_r = cleed_real_fabs((g1_x*g2_x + g1_y*g2_y)/a1); /* a2 * cos(a1,a2) */
+  faux_i = cleed_real_fabs((g1_x*g2_y - g1_y*g2_x)/a1); /* a2 * sin(a1,a2) */
 
   /*
    * n2_max = k_max / (sin(a1,a2) * a2) + k_in/a2
@@ -1021,7 +1021,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
           k_y = n1*g1_y + n2*g2_y + k_in[2] + bm_off[i_set].k_r[2];
 
           faux_r = SQUARE(k_x) + SQUARE(k_y);      /* length of vector */
-          faux_i = R_atan2(k_y, k_x);              /* angle of vector */
+          faux_i = cleed_real_atan2(k_y, k_x);              /* angle of vector */
           wedge = faux_i - b_par->alpha[0];
 
           if(wedge < 0)
@@ -1042,8 +1042,8 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
             {
               for(j=0; j< (beams + i)->n_eqb_s; j++)
               {
-                if( (R_fabs(k_x - (beams + i)->k_x_sym[j])< K_TOLERANCE) &&
-                    (R_fabs(k_y - (beams + i)->k_y_sym[j])< K_TOLERANCE) )
+                if( (cleed_real_fabs(k_x - (beams + i)->k_x_sym[j])< K_TOLERANCE) &&
+                    (cleed_real_fabs(k_y - (beams + i)->k_y_sym[j])< K_TOLERANCE) )
                 {
                   ctrol = 1;
                 }
@@ -1054,7 +1054,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
             {
               CONTROL_MSG(CONTROL_X, "(%5.2f %5.2f): %5.2f %5.2f\n",
                           n1 + bm_off[i_set].ind_1, n2 + bm_off[i_set].ind_2,
-                          faux_r, R_atan2(k_y, k_x) + PI);
+                          faux_r, cleed_real_atan2(k_y, k_x) + PI);
 
               for(i=0; i<12; i++)
               {
@@ -1069,7 +1069,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               beams[i_beams].k_x_sym[0] = k_x;
               beams[i_beams].k_y_sym[0] = k_y;
               beams[i_beams].k_p_sym[0] = 0.;
-              alpha[1] = R_atan2(k_y,k_x);
+              alpha[1] = cleed_real_atan2(k_y,k_x);
 
               k_x_mir[0] = k_x;
               k_y_mir[0] = k_y;
@@ -1083,8 +1083,8 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               {
                 for(i = 0 ; i < n_mir - j; i++)
                 {
-                  R_m[1] = R_cos(2* b_par->alpha[i]);
-                  R_m[2] = R_sin(2* b_par->alpha[i]);
+                  R_m[1] = cleed_real_cos(2* b_par->alpha[i]);
+                  R_m[2] = cleed_real_sin(2* b_par->alpha[i]);
                   R_m[3] = R_m[2];
                   R_m[4] = - R_m[1];
 
@@ -1097,8 +1097,8 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
 
                   for(i_e = 0 ; i_e < iaux ; i_e++)
                   {
-                    if(R_fabs(k_x_mir[iaux] - k_x_mir[i_e]) < K_TOLERANCE &&
-                       R_fabs(k_y_mir[iaux] - k_y_mir[i_e]) < K_TOLERANCE    )
+                    if(cleed_real_fabs(k_x_mir[iaux] - k_x_mir[i_e]) < K_TOLERANCE &&
+                       cleed_real_fabs(k_y_mir[iaux] - k_y_mir[i_e]) < K_TOLERANCE    )
                     {
                       ctrol--;
                     }
@@ -1106,21 +1106,21 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
          
                   if(iaux == ctrol)
                   {
-                    alpha[2] = R_atan2(k_y_mir[iaux],k_x_mir[iaux]);
+                    alpha[2] = cleed_real_atan2(k_y_mir[iaux],k_x_mir[iaux]);
                     k_p_mir[iaux]= alpha[2] - alpha[1];
                     if(k_p_mir[iaux] < 0)
                       k_p_mir[iaux] += 2*PI;
 
                     vaux[0] = k_x - k_x_mir[iaux];
                     vaux[1] = k_y - k_y_mir[iaux];
-                    integ[0] = R_fabs((vaux[1] * g1_x - vaux[0] * g1_y)/det);
-                    integ[1] = R_fabs((vaux[1] * g2_x - vaux[0] * g2_y)/(-det));
+                    integ[0] = cleed_real_fabs((vaux[1] * g1_x - vaux[0] * g1_y)/det);
+                    integ[1] = cleed_real_fabs((vaux[1] * g2_x - vaux[0] * g2_y)/(-det));
 
-                    vaux[0] = integ[0] - R_nint(integ[0]);
-                    vaux[1] = integ[1] - R_nint(integ[1]);
+                    vaux[0] = integ[0] - cleed_real_nint(integ[0]);
+                    vaux[1] = integ[1] - cleed_real_nint(integ[1]);
 
-                    if(R_fabs(vaux[0]) > K_TOLERANCE ||
-                       R_fabs(vaux[1]) > K_TOLERANCE  )
+                    if(cleed_real_fabs(vaux[0]) > K_TOLERANCE ||
+                       cleed_real_fabs(vaux[1]) > K_TOLERANCE  )
                     {
                       k_x_store[i_c] = k_x_mir[iaux];
                       k_y_store[i_c] = k_y_mir[iaux];
@@ -1221,7 +1221,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               {
                 a1_x = (b_par->layers + i_layers)->reg_shift[1];
                 a1_y = (b_par->layers + i_layers)->reg_shift[2];
-                pref2 = R_sqrt((real) beams[i_beams].n_eqb_b );
+                pref2 = cleed_real_sqrt((real) beams[i_beams].n_eqb_b );
 
                 faux_r =  a1_x * beams[i_beams].k_x_sym[0]
                         + a1_y * beams[i_beams].k_y_sym[0];
@@ -1230,7 +1230,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                 *(beams[i_beams].eout_b_r + i_layers) = pref2 * faux_r;
                 *(beams[i_beams].eout_b_i + i_layers) = pref2 * faux_i;
 
-                pref2 = 1./R_sqrt((real) beams[i_beams].n_eqb_b );
+                pref2 = 1./cleed_real_sqrt((real) beams[i_beams].n_eqb_b );
                 for(m = -l_max; m <= l_max; m ++, iaux ++)
                 {
                   if( beams[i_beams].n_eqb_b == 1)
@@ -1275,7 +1275,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               {
                 a1_x = (o_par->layers + i_layers)->reg_shift[1];
                 a1_y = (o_par->layers + i_layers)->reg_shift[2];
-                pref2 = R_sqrt((real) beams[i_beams].n_eqb_s);
+                pref2 = cleed_real_sqrt((real) beams[i_beams].n_eqb_s);
 
                 faux_r =  a1_x * beams[i_beams].k_x_sym[0]
                         + a1_y * beams[i_beams].k_y_sym[0];
@@ -1284,7 +1284,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                 *(beams[i_beams].eout_s_r + i_layers) = pref2 * faux_r;
                 *(beams[i_beams].eout_s_i + i_layers) = pref2 * faux_i;
 
-                pref2 = 1./R_sqrt((real) beams[i_beams].n_eqb_s );
+                pref2 = 1./cleed_real_sqrt((real) beams[i_beams].n_eqb_s );
                 for(m = -l_max; m <= l_max; m ++, iaux ++)
                 {
                   if( beams[i_beams].n_eqb_s == 1)

@@ -33,8 +33,8 @@ extern "C" {
 #include "gh_stddef.h"
 
 /*!FIXME: real is always float */
-#define REAL_IS_FLOAT    /* should be float for DEC alpha */
-#include "real.h"
+#define CLEED_REAL_IS_FLOAT    /* should be float for DEC alpha */
+#include "cleed_real.h"
 
 /*********************************************************************
  * Include type definitions and constant values and functions for RFAC

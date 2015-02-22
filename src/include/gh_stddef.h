@@ -25,13 +25,40 @@
 #ifndef STD_DEF_H
 #define STD_DEF_H
 
+#if __cplusplus
+#include <cmath>
+#else
+#include <math.h> /* use for C compatibility */
+#endif
+
+#include <float.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <limits.h>
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
+namespace cleed {
 #endif
 
 /*********************************************************************
- * define machine
+ * define machine and set compiler options
  *********************************************************************/
+
+/* set compiler specific options */
+#if (!__GNUC__)
+# define __attribute__(x) /* ignore GCC style attributes */
+#endif
+
+#if defined(_MSC_VER)
+# define DLL_PUBLIC __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
+#else
+# if __GNUC__
+#   define DLL_PUBLIC __attribute__ ((dllexport))
+# else
+#   define DLL_PUBLIC
+# endif
+#endif
 
 /* Alternatives:
 #define DEC
@@ -43,20 +70,15 @@ extern "C" {
 #define free(x) free((void *)(x))
 */
 
-#include <math.h>
-#include <float.h>
-#include <stdio.h>
-#include <limits.h>
-
 /*********************************************************************
  * output channels
  *********************************************************************/
 
-#define STDOUT stdout     /*!< alias for stdout file stream */
-#define STDERR stderr     /*!< alias for stderr file stream */
-#define STDWAR stderr     /*!< output redirection for warnings */
-#define STDCTR stdout     /*!< output redirection for normal messages */
-#define STDCPU stdout     /*!< output redirection for CPU messages */
+#define STDOUT stdout /*!< alias for stdout file stream */
+#define STDERR stderr /*!< alias for stderr file stream */
+#define STDWAR stderr /*!< output redirection for warnings */
+#define STDCTR stdout /*!< output redirection for normal messages */
+#define STDCPU stdout /*!< output redirection for CPU messages */
 
 /*********************************************************************
  * printing verbosity and debugging messages
@@ -66,10 +88,10 @@ extern "C" {
  * \define EXIT_ON_ERROR
  * \brief Exits program if error occurs.
  *
- * \define ERROR
+ * \define ERROR_LOG
  * \brief Error messages flag for debugging to #STDERR output.
  *
- * \define WARNING
+ * \define WARNING_LOG
  * \brief Warning messages flag for debugging to #STDWAR .
  *
  * \define CONTROL
@@ -85,17 +107,17 @@ extern "C" {
  
 #ifdef DEBUG
 # define EXIT_ON_ERROR  1 /*!< Exits program if error occurs. */
-# define ERROR          1 /*!< Enable error logging to stderr */
-# define WARNING        1 /*!< Enable warning logging to #STDWAR */
+# define ERROR_LOG      1 /*!< Enable error logging to stderr */
+# define WARNING_LOG    1 /*!< Enable warning logging to #STDWAR */
 #endif
 
 #if VERBOSE == 1
-# ifndef WARNING 1
-#   define WARNING 1
-# endif /* WARNING */
-# ifndef ERROR 1
-#   define ERROR 1
-# endif /* ERROR */
+# ifndef WARNING_LOG 1
+#   define WARNING_LOG 1
+# endif /* WARNING_LOG */
+# ifndef ERROR_LOG 1
+#   define ERROR_LOG 1
+# endif /* ERROR_LOG */
 #endif
 
 #ifndef CONTROL_ALL
@@ -146,7 +168,11 @@ extern "C" {
 # define ERROR_EXIT_RETURN(a,b)  return((b))
 #endif
 
-#if ERROR && __STDC_VERSION__ >= 199901L
+  /* remove annoying rest arguments warning with ISO C99 & GCC */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvariadic-macros"
+
+#if ERROR_LOG && __STDC_VERSION__ >= 199901L
 # ifdef _MSC_VER
 #   define ERROR_MSG(fmt, ...)                                                \
   do {fprintf(STDERR, "***error [%s:%d:%s()]: "                               \
@@ -160,7 +186,7 @@ extern "C" {
 # define ERROR_MSG(fmt, ...) {} /* dummy message: will warn of unused value */
 #endif
 
-#if WARNING && __STDC_VERSION__ >= 199901L
+#if WARNING_LOG && __STDC_VERSION__ >= 199901L
 # ifdef _MSC_VER
 #   define WARNING_MSG(fmt, ...)                                              \
   do {fprintf(STDWAR, "*warning [%s:%d:%s()]: "                               \
@@ -190,22 +216,22 @@ extern "C" {
 # define CONTROL_MSG(level, fmt, ...) {} /* dummy message */
 #endif
 
-
+#pragma GCC diagnostic pop /* restore rest aguments warning */
 
 /*********************************************************************
  * general mathematical definitions / constants
  *********************************************************************/
 
-#ifdef _XOPEN_SOURCE
-# define PI  M_PI
+#ifdef M_PI
+static const double PI = M_PI;
 #else
-# define PI  3.1415926535897932385
+static const double PI = 3.1415926535897932385;
 #endif
 
-static const double DEG_TO_RAD = 0.017453293; /*!< conversion degree to radian */
-static const double RAD_TO_DEG = 57.29578;    /*!< conversion radian to degree */
+static const double DEG_TO_RAD = 0.017453293;  /*!< conversion degree to radian */
+static const double RAD_TO_DEG = 57.29578;     /*!< conversion radian to degree */
 
-static const double M2_H = 0.2631894506957162;/*!< 2*m/h       [eV^-1   A^-2] */
+static const double M2_H = 0.2631894506957162; /*!< 2*m/h       [eV^-1   A^-2] */
 static const double SQRT_M2_H = 0.5130199320647456; /*!< sqrt(2*m/h) [eV^-0.5 A^-1] */
 
 /*********************************************************************
@@ -223,32 +249,186 @@ enum {
   STRSZ = 256  /*!< maximum length of strings */
 };
 
-static const size_t U_END_OF_LIST = (sizeof(size_t) - 1); /*!< list terminator (unsigned int) */
-static const int I_END_OF_LIST = -9999;       /*!< list terminator (integer)*/
-static const double F_END_OF_LIST = -9999.;   /*!< list terminator (float)  */
+enum {
+  NAMSZ = 128  /*!< maximum length of name */
+};
 
-#define IEND_OF_LIST   I_END_OF_LIST  /*!< alias for list terminator (integer)*/
-#define FEND_OF_LIST   F_END_OF_LIST  /*!< alias for list terminator (float)  */
+enum {
+  NO = 0,
+  YES = 1
+};
+
+enum { U_END_OF_LIST = (sizeof(size_t) - 1) }; /*!< list terminator (unsigned int) */
+enum { I_END_OF_LIST = -9999 };                /*!< list terminator (integer)*/
+static const double F_END_OF_LIST = -9999.;    /*!< list terminator (float)  */
+
+/*
+#define IEND_OF_LIST   I_END_OF_LIST  //!< alias for list terminator (integer)
+#define FEND_OF_LIST   F_END_OF_LIST  //!< alias for list terminator (float)
+*/
 
 /*********************************************************************
  * macros:
  *********************************************************************/
-#define MAX(a,b) /*!< returns maximum value */                                \
-({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
+#if defined(__GNUC__)
+# define MAX(a,b) /*!< returns maximum value */                                \
+__extension__ ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
 
-#define MIN(a,b) /*!< returns minimum value */                                \
-({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
+# define MIN(a,b) /*!< returns minimum value */                                \
+__extension__ ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
 
+#else /* use standard C */
 
-#define SQUARE(x) ((x)*(x))           /*!< returns the value squared*/
+# define MAX(a,b) ((a) > (b) ? (a) : (b))
+# define MIN(a,b) ((a) > (b) ? (a) : (b))
+#endif
 
-#define ODD(n)    ((n)%2)             /*!< evaluates whether integer is odd */
-#define M1P(n)    (((n)%2)?(-1.):(1.))
+#ifdef __cplusplus /* use function templates */
+
+template <typename T> inline T square(T x)
+{
+  return static_cast<T>(std::pow(x, 2));
+}
+
+template <typename T> inline T int_round(T x)
+{
+  return static_cast<int>(std::round(x));
+}
+
+template <typename T> inline T int_roundup(T x)
+{
+  return static_cast<int>(std::ceil(x+5*DBL_EPSILON));
+}
+
+template <typename T> inline bool is_odd(T n)
+{
+  return (n % 2);
+}
+
+#elif __STDC_VERSION__ >= 201112L
+
+__attribute__ ((pure))
+static inline long double squarel(long double x) { return ((x)*(x)); } /*!< returns the value squared*/
+__attribute__ ((pure))
+static inline double square(double x) { return ((x)*(x)); } /*!< returns the value squared*/
+__attribute__ ((pure))
+static inline float squaref(float x) { return ((x)*(x)); } /*!< returns the value squared*/
+__attribute__ ((pure))
+static inline int squarei(int x) { return ((x)*(x)); } /*!< returns the value squared*/
+__attribute__ ((pure))
+static inline size_t squareu(size_t x) { return ((x)*(x)); } /*!< returns the value squared*/
+
+__attribute__ ((pure))
+static inline bool is_odd(int n) {return (n % 2); }
+__attribute__ ((pure))
+static inline bool is_oddu(size_t n) {return (n % 2); }
+
+__attribute__ ((pure))
+static inline double m1p(double n) { return (((int)n % 2)?(-1.):(1.)); }
+__attribute__ ((pure))
+static inline double m1pf(float n) { return (((int)n % 2)?(-1.):(1.)); }
+__attribute__ ((pure))
+static inline double m1pi(int n) { return ((n % 2)?(-1.):(1.)); }
+__attribute__ ((pure))
+static inline double m1pu(size_t n) { return ((n % 2)?(-1.):(1.)); }
+
+__attribute__ ((pure))
+static inline int int_min(int x, int y) { return ( (x < y) ? x : y); }
+__attribute__ ((pure))
+static inline int int_max(int x, int y) { return ( (x > y) ? x : y); }
+__attribute__ ((pure))
+static inline size_t uint_min(size_t x, size_t y) { return ( (x < y) ? x : y); }
+__attribute__ ((pure))
+static inline size_t uint_max(size_t x, size_t y) { return ( (x > y) ? x : y); }
+__attribute__ ((pure))
+static inline int minf(float x, float y) { return ( (x < y) ? x : y); }
+__attribute__ ((pure))
+static inline int maxf(float x, float y) { return ( (x > y) ? x : y); }
+__attribute__ ((pure))
+static inline int min(double x, double y) { return ( (x < y) ? x : y); }
+__attribute__ ((pure))
+static inline int max(double x, double y) { return ( (x > y) ? x : y); }
+__attribute__ ((pure))
+static inline int irnd(double x) { return ((int)( (x) + .5 )); }
+__attribute__ ((pure))
+static inline int irndf(float x) { return ((int)( (x) + .5 )); }
+
+__attribute__ ((pure))
+static inline double irndup(double x) { return ((int)( (x) + 1.)); }
+__attribute__ ((pure))
+static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
+
+#define SQUARE(X) _Generic( (X),  \
+    long double: squarel,         \
+    default: square,              \
+    float: squaref,               \
+    int: sqaurei,                 \
+    size_t: squareu               \
+) (X)
+
+#define ODD(X) _Generic( (X),     \
+    default: is_odd,              \
+    size_t:  is_oddu              \
+) (X)
+
+#define M1P(X) _Generic( (X),     \
+    default: m1p,                 \
+    float:  m1pf,                 \
+    int:    m1pi,                 \
+    size_t: m1pu                  \
+) (X)
+
+#define min(X,Y) _Generic( (X),   \
+    default: min,                 \
+    float:  minf,                 \
+    int:    int_min,              \
+    size_t: uint_min              \
+) (X, Y)
+
+#define max(X,Y) _Generic( (X),   \
+    default: max,                 \
+    float:  maxf,                 \
+    int:    int_max,              \
+    size_t: uint_max              \
+) (X, Y)
+
+#define int_round(X) _Generic( (X),     \
+    default: irnd,                      \
+    float: irndf                        \
+) (X)
+
+#define int_roundup(X) _Generic( (X),   \
+    default: irndup,                    \
+    float: irndipf                      \
+) (X)
+
+#else /* do not use type-generic macros */
+
+#define square(x) ((x)*(x))
+#define is_odd(n) (((n) % 2))
+#define m1p(n) (((n) % 2)?(-1.):(1.))
+#define int_round(x) ((int)(round((x))))
+#define int_roundup(x) ((int)( ceil( (x) + 5*DBL_EPSILON )))
+
+/* aliases */
+#define SQUARE square
+#define ODD is_odd
+#define M1P m1p
+
+#ifndef min
+#define min MIN
+#endif
+
+#ifndef max
+#define max MAX
+#endif
+
+#endif
 
 #define IS_END_OF_LIST(var)
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-}
+} /* namespace cleed */
 #endif
 
 #endif /* GH_STDDEF_H */

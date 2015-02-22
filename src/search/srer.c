@@ -47,11 +47,11 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   real y_0;
 
   /* allocate memory and preset variables */
-  cleed_vector *x = CLEED_VECTOR_ALLOC(n_dim);
-  cleed_vector *x_0 = CLEED_VECTOR_ALLOC(n_dim);
-  cleed_vector *y = CLEED_VECTOR_ALLOC(n_dim);
-  cleed_vector *err = CLEED_VECTOR_ALLOC(n_dim);
-  cleed_vector *del = CLEED_VECTOR_ALLOC(n_dim);
+  cleed_vector *x = cleed_vector_alloc(n_dim);
+  cleed_vector *x_0 = cleed_vector_alloc(n_dim);
+  cleed_vector *y = cleed_vector_alloc(n_dim);
+  cleed_vector *err = cleed_vector_alloc(n_dim);
+  cleed_vector *del = cleed_vector_alloc(n_dim);
 
   real faux, pref, rtol, rr, dr, rfac, rdel=0.;
 
@@ -69,7 +69,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   fclose(log_stream);
 
   /*! changed first element of i_par loop from 1 to 0 */
-  for(i_par = 0; i_par < n_dim; i_par ++) CLEED_VECTOR_SET(x_0, i_par, 0.);
+  for(i_par = 0; i_par < n_dim; i_par ++) cleed_vector_set(x_0, i_par, 0.);
 
   y_0 = SR_RF(x_0);
 
@@ -102,7 +102,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   /* Calculate R factors for displacements */
   for (i_par = 0; i_par < n_dim; i_par ++)
   {
-    CLEED_VECTOR_SET(del, i_par, dpos);
+    cleed_vector_set(del, i_par, dpos);
     rdel = 1.;
 
     do
@@ -122,27 +122,27 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
       }
       else
       {
-        CLEED_VECTOR_SET(del, i_par,
-                         CLEED_VECTOR_GET(del, i_par) / R_sqrt(rdel));
+        cleed_vector_set(del, i_par,
+                         cleed_vector_get(del, i_par) / cleed_real_sqrt(rdel));
 
         for (j_par = 0; j_par < n_dim; j_par ++)
         {
           if(i_par == j_par)
           {
-            CLEED_VECTOR_SET(x, j_par, CLEED_VECTOR_GET(x_0, j_par) +
-                                       CLEED_VECTOR_GET(del, j_par));
+            cleed_vector_set(x, j_par, cleed_vector_get(x_0, j_par) +
+                                       cleed_vector_get(del, j_par));
           }
           else
           {
-            CLEED_VECTOR_SET(x, j_par, CLEED_VECTOR_GET(x_0, j_par));
+            cleed_vector_set(x, j_par, cleed_vector_get(x_0, j_par));
           }
         }
 
         CONTROL_MSG(CONTROL, "Calculate function for parameter (%d)\n", i_par);
 
         /* evaluate R-factor */
-        CLEED_VECTOR_SET(y, i_par, SR_RF(x));
-        rdel = R_fabs(CLEED_VECTOR_GET(y, i_par) - y_0) / pref;
+        cleed_vector_set(y, i_par, SR_RF(x));
+        rdel = cleed_real_fabs(cleed_vector_get(y, i_par) - y_0) / pref;
 
       }
 
@@ -152,10 +152,10 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   } /* for i_par */
 
   /* Calculate error bars and write to log file */
-  pref = CLEED_VECTOR_GET(y, 0) * rr;
+  pref = cleed_vector_get(y, 0) * rr;
   for (i_par = 0; i_par < n_dim; i_par ++)
   {
-    CLEED_VECTOR_SET(del, i_par, R_fabs(CLEED_VECTOR_GET(del, i_par)) );
+    cleed_vector_set(del, i_par, cleed_real_fabs(cleed_vector_get(del, i_par)) );
   }
 
   if( (log_stream = fopen(log_file, "a")) == NULL)
@@ -166,24 +166,24 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   fprintf(log_stream, "\n=> ERROR_LOG BARS:\n\n");
   for (i_par = 0; i_par < n_dim; i_par ++)
   {
-    dr = CLEED_VECTOR_GET(y, i_par) - y_0;
+    dr = cleed_vector_get(y, i_par) - y_0;
 
     if (dr < 0.)
     {
       WARNING_MSG("not at minimum: dr = %.4f\n", dr);
-      dr = R_fabs(dr);
+      dr = cleed_real_fabs(dr);
     }
 
     if( ! IS_EQUAL_REAL(dr, 0.))
     {
-      faux = R_sqrt(pref/dr) * CLEED_VECTOR_GET(del, i_par);
-      CLEED_VECTOR_SET(err, i_par, faux);
+      faux = cleed_real_sqrt(pref/dr) * cleed_vector_get(del, i_par);
+      cleed_vector_set(err, i_par, faux);
       fprintf(log_stream, "%2d: del R = %.4f; del par = %.4f\n",
               i_par, dr, faux);
     }
     else
     {
-      CLEED_VECTOR_SET(err, i_par, -1.);
+      cleed_vector_set(err, i_par, -1.);
       fprintf(log_stream, "%2d: del R = %.4f; del par ** undefined **\n",
               i_par, dr);
     }
@@ -193,10 +193,10 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   fclose(log_stream);
 
   /* free memory */
-  CLEED_VECTOR_FREE(y);
-  CLEED_VECTOR_FREE(x);
-  CLEED_VECTOR_FREE(x_0);
-  CLEED_VECTOR_FREE(del);
-  CLEED_VECTOR_FREE(err);
+  cleed_vector_free(y);
+  cleed_vector_free(x);
+  cleed_vector_free(x_0);
+  cleed_vector_free(del);
+  cleed_vector_free(err);
 
 } /* end of function sr_er */

@@ -25,12 +25,12 @@
 #ifndef RFAC_DEF_H
 #define RFAC_DEF_H
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 #include <stdbool.h>
-#include "real.h"
+#include "cleed_real.h"
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+namespace cleed {
+#endif
 
 /*********************************************************************
  * general definitions / constants
@@ -56,10 +56,11 @@ static const double IND_TOLERANCE = 0.02;    /* accuracy in comparing indices */
 static const double ZERO_TOLERANCE = 1.e-10;  /*!< intensities smaller than this
                                                * value are considered to be zero */
 
-static const int I_FAIL = -1;        /*!< integer return value if failed */
 static const real F_FAIL = -1.;      /*!< float return value if failed */
 
-static const int SM_LORENTZ = 1;     /*!< flag for Lorentzian smooth */
+enum { I_FAIL = -1 };                /*!< integer return value if failed */
+enum { SM_LORENTZ = 1 };             /*!< flag for Lorentzian smooth */
+
 #define ALL_CURVES   NULL      /*!< flag for rfac_cmpr: use all IV curves
                                 * for R-factor calculation */
 /*!
@@ -117,10 +118,27 @@ typedef enum {
   K_AXIS        /*!< Use an I(k) curve for R factor calculations */
 } rfac_axis;
 
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+} /* namespace cleed */
+
+using cleed::rfac_group_id;
+using cleed::rfac_error;
+using cleed::rfactor_type;
+using cleed::rfac_axis;
+
+using cleed::rfac_iv_data;
+using cleed::rfac_iv;
+using cleed::rfac_ivcur;
+
+#endif
 
 /*********************************************************************
  * structures and types
  *********************************************************************/
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
 
 /*!
  * \brief Contains I(V) data pair at a single energy.
@@ -231,7 +249,16 @@ typedef struct                /* Holds CLI arguments as program properties */
  *********************************************************************/
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-}
+} /* extern "C" */
+
+namespace cleed {
+  typedef ::rfac rfac;
+  typedef ::rfac_args rfac_args;
+  typedef ::rfac_iv rfac_iv;
+  typedef ::rfac_ivcur rfac_ivcur;
+  typedef ::rfac_iv_data rfac_iv_data;
+  typedef ::rfac_spot rfac_spot;
+} /* namespace cleed */
 #endif
 
 #endif /* RFAC_DEF_H */

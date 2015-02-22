@@ -106,14 +106,14 @@ int sr_rdver(const char *ver_file, cleed_vector *y, cleed_basic_matrix *p, int n
       while(linebuffer[i_str] == ' ') i_str ++;
 
       sscanf(linebuffer+i_str, fmt_buffer, &faux);
-      CLEED_VECTOR_SET(y, i_par, faux);
+      cleed_vector_set(y, i_par, faux);
 
       for(j_par = 0; j_par < (size_t)n_dim; j_par ++)
       {
         while(linebuffer[i_str] != ' ') i_str ++;
         while(linebuffer[i_str] == ' ') i_str ++;
         sscanf(linebuffer+i_str, fmt_buffer, &faux);
-        CLEED_BASIC_MATRIX_SET(p, i_par, j_par, m_par, (size_t)n_dim, faux);
+        cleed_basic_matrix_set(p, i_par, j_par, (size_t)n_dim, faux);
       }
 
       i_par ++;
@@ -133,10 +133,10 @@ int sr_rdver(const char *ver_file, cleed_vector *y, cleed_basic_matrix *p, int n
   fprintf(STDCTR, "(sr_rdver): vertex read from \"%s\":\n", ver_file);
   for (i_par = 0; i_par < m_par; i_par++)
   {
-    fprintf(STDCTR, "(%2d) %7.4f :", i_par, CLEED_VECTOR_GET(y, i_par));
+    fprintf(STDCTR, "(%2d) %7.4f :", i_par, cleed_vector_get(y, i_par));
     for(j_par=0; j_par < (size_t)n_dim; j_par++)
     {
-      fprintf(STDCTR, " %6.3f", CLEED_BASIC_MATRIX_GET(p, i_par, j_par, m_par, (size_t)n_dim));
+      fprintf(STDCTR, " %6.3f", cleed_basic_matrix_get(p, i_par, j_par, (size_t)n_dim));
     }
     fprintf(STDCTR, "\n");
   }

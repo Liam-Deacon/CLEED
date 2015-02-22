@@ -19,6 +19,7 @@
 #ifndef _MKIV_H_
 #define _MKIV_H_
 
+#include <stdint.h>
 #include <stdio.h>
 #include <math.h>
 #include <tiffio.h>

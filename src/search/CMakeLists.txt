@@ -84,6 +84,23 @@ ELSE()
     ADD_DEFINITIONS(-D_USE_GSL)
 ENDIF()
     
+# new method - greedy
+FILE ( GLOB searchlib_SRCS "*.c" )
+LIST ( REMOVE_ITEM searchlib_SRCS csearch.c )
+
+IF (NOT USE_GSL)
+  FILE ( GLOB search_gsl_SRCS "*gsl*.c" )
+  IF (search_gsl_SRCS)
+    LIST( REMOVE_ITEM searchlib_SRCS ${search_gsl_SRCS} )
+  ENDIF (search_gsl_SRCS)
+ENDIF (NOT USE_GSL)
+
+FILE ( GLOB search_test_SRCS "*test*.c")
+IF (search_test_SRCS)
+  LIST( REMOVE_ITEM searchlib_SRCS ${search_test_SRCS} )
+ENDIF (search_test_SRCS)
+    
+
 SET (csearch_SRCS csearch.c)
 
 ###############################################################################

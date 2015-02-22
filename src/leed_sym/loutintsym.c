@@ -60,7 +60,7 @@ real k_r;
 
  Int = matsqmod(Int, Amp);
 
- k_r = R_sqrt(2*par->eng_v);
+ k_r = cleed_real_sqrt(2*par->eng_v);
  
 /*********************************************************
    Print intensities for non-evanescent beams

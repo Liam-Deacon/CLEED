@@ -142,10 +142,10 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
                  real *a, real *d_ij, 
                  size_t l_max, real epsilon )
 {
-  size_t l;
+  size_t l, m_aux;
   int m;                       /* quantum numbers l,m */
-  int off;                       /* offset in the arrays Ylm and Llm */
-  int iaux;
+  size_t off;                  /* offset in the arrays Ylm and Llm */
+  size_t iaux;
 
   int n1, n1_min, n1_max;        /* counters for lattice vectors */
   int n2, n2_min, n2_max;
@@ -230,7 +230,7 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
           k_in[1]/BOHR, k_in[2]/BOHR);
   fprintf(STDCTR,
           "              eps = %7.5f, k_i = %7.4f A^-1, r_max = %7.3f A\n",
-          epsilon, k_i/BOHR, R_sqrt(r_max)*BOHR);
+          epsilon, k_i/BOHR, cleed_real_sqrt(r_max)*BOHR);
 #endif
    
   /* Summation over lattice points r = n1*a1 + n2*a2 +/- dij
@@ -247,13 +247,13 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
     fc = f2d * f2d - f2 * fd + f2 * r_max;
 
     faux_i =  fb * fb - fa * fc;
-    if (faux_i > 0.) faux_i = R_sqrt( fb * fb - fa * fc ) / fa;
+    if (faux_i > 0.) faux_i = cleed_real_sqrt( fb * fb - fa * fc ) / fa;
     else faux_i = 0.;                             /* faux_i always <= 0. */
 
     faux_r = -fb / fa;
 
-    n1_min = (int) R_nint(faux_r + faux_i);
-    n1_max = (int) R_nint(faux_r - faux_i);
+    n1_min = (int) cleed_real_nint(faux_r + faux_i);
+    n1_max = (int) cleed_real_nint(faux_r - faux_i);
 
     CONTROL_MSG(CONTROL, "faux: %f, %f n1_min = %d, n1_max = %d\n",
                     faux_r, faux_i, n1_min, n1_max);
@@ -270,10 +270,10 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
       fc = f1*n1*n1 + 2*f1d*n1 + fd - r_max;
 
       faux_r = -fb/f2;
-      faux_i = R_sqrt( fb*fb - f2*fc ) / f2;          /* is always > 0. */
+      faux_i = cleed_real_sqrt( fb*fb - f2*fc ) / f2;          /* is always > 0. */
 
-      n2_min = (int) R_nint(faux_r - faux_i);
-      n2_max = (int) R_nint(faux_r + faux_i);
+      n2_min = (int) cleed_real_nint(faux_r - faux_i);
+      n2_max = (int) cleed_real_nint(faux_r + faux_i);
 
       CONTROL_MSG(CONTROL, "n1 = %3d,\tn2_min = %3d,\tn2_max = %3d\n",
                       n1, n2_min, n2_max);
@@ -297,14 +297,14 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
 
         if ( (r_abs < r_max) && (r_abs > GEO_TOLERANCE ) )
         {
-          r_abs = R_sqrt(r_abs);
+          r_abs = cleed_real_sqrt(r_abs);
           Hl = c_hank1 ( Hl, k_r*r_abs, k_i*r_abs, l_max);
 
           /* Prepare arguments for Ylm:
            * cos(theta) = r_z/r_abs
            * phi = arctan(r_y/r_x)
            */
-          r_phi = R_atan2(r_y, r_x);
+          r_phi = cleed_real_atan2(r_y, r_x);
           Ylm = r_ylm(Ylm, r_z/r_abs, r_phi, l_max);
 
           /* Prepare prefactor exp(-ikP) */
@@ -333,18 +333,36 @@ int leed_ms_lsum_ij( mat *p_Llm_p, mat *p_Llm_m,
             cri_mul(&fauxm_r, &fauxm_i, faux_r, faux_i,
                     exp_ikp_r, -exp_ikp_i);              /* for Llm_m */
 
-            for(m = -l; m <= l; m ++)
+            for(m = -(int)l; m <= (int)l; m ++)
             {
               /* Hl * exp(-ikp) * Ylm  */
-              cri_mul(&faux_r, &faux_i, Ylm->rel[off+m], Ylm->iel[off+m],
-                      fauxp_r, fauxp_i);
-              Llm_p->rel[off + m] += faux_r*M1P(l+m);
-              Llm_p->iel[off + m] += faux_i*M1P(l+m);
+              if (m < 0)
+              {
+                m_aux = (size_t)abs(m);
+                cri_mul(&faux_r, &faux_i, Ylm->rel[off - m_aux],
+                        Ylm->iel[off - m_aux], fauxp_r, fauxp_i);
+                Llm_p->rel[off - m_aux] += faux_r*M1P((int)l+m);
+                Llm_p->iel[off - m_aux] += faux_i*M1P((int)l+m);
 
-              cri_mul(&faux_r, &faux_i, Ylm->rel[off+m], Ylm->iel[off+m],
-                      fauxm_r, fauxm_i);
-              Llm_m->rel[off + m] += faux_r*M1P(m);
-              Llm_m->iel[off + m] += faux_i*M1P(m);
+                cri_mul(&faux_r, &faux_i, Ylm->rel[off - m_aux],
+                        Ylm->iel[off - m_aux], fauxm_r, fauxm_i);
+                Llm_m->rel[off + m_aux] += faux_r*M1P(m);
+                Llm_m->iel[off + m_aux] += faux_i*M1P(m);
+              }
+              else
+              {
+                m_aux = (size_t)m;
+                cri_mul(&faux_r, &faux_i, Ylm->rel[off + m_aux],
+                        Ylm->iel[off + m_aux], fauxp_r, fauxp_i);
+                Llm_p->rel[off + m_aux] += faux_r*M1P((int)l+m);
+                Llm_p->iel[off + m_aux] += faux_i*M1P((int)l+m);
+
+                cri_mul(&faux_r, &faux_i, Ylm->rel[off + m_aux],
+                        Ylm->iel[off + m_aux], fauxm_r, fauxm_i);
+                Llm_m->rel[off + m_aux] += faux_r*M1P(m);
+                Llm_m->iel[off + m_aux] += faux_i*M1P(m);
+              }
+
             } /* m */
           } /* l */
         } /* if r < r_max */

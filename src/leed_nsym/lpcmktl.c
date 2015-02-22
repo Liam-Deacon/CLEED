@@ -111,8 +111,8 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
           ) * ( phs_shifts[i_set].energy[i_eng] - energy);
 
         iaux = 1 + l;
-        faux_r = R_cos(delta);
-        faux_i = R_sin(delta);
+        faux_r = cleed_real_cos(delta);
+        faux_i = cleed_real_sin(delta);
         cri_mul(p_tl[i_set]->rel+iaux, p_tl[i_set]->iel+iaux,
                 faux_r, faux_i, faux_i, 0.);
       }
@@ -149,8 +149,8 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
             ) * ( phs_shifts[i_set].energy[i_eng] - energy);
 
         iaux = 1 + l;
-        faux_r = R_cos(delta);
-        faux_i = R_sin(delta);
+        faux_r = cleed_real_cos(delta);
+        faux_i = cleed_real_sin(delta);
         cri_mul(p_tl[i_set]->rel+iaux, p_tl[i_set]->iel+iaux,
                 faux_r, faux_i, faux_i, 0.);
       }

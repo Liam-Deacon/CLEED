@@ -33,11 +33,15 @@
 #define SEARCH_DEF_H
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
+namespace cleed {
 #endif
 
 #include <stdbool.h>
-#include "real.h"
+#include <stddef.h>
+#include "cleed_real.h"
+#include "cleed_vector.h"
+#include "cleed_matrix.h"
+#include "gh_stddef.h"
 
 /*********************************************************************
  * definitions
@@ -60,36 +64,35 @@ extern "C" {
  * \brief Entry into R factor evaluation function.
  */
 #if USE_GSL /* set search functions to GNU Scientific Library */
-# define SR_SX     sr_sx_gsl
-# define SR_SA     sr_sa_gsl
-# define SR_PO     sr_po_gsl
-# define SR_GA     sr_ga_gsl
-# define SR_RDINP  sr_rdinp
-# define SR_EVALRF sr_evalrfac_gsl
+# define SR_SX_FACTORY     sr_sx_gsl
+# define SR_SA_FACTORY     sr_sa_gsl
+# define SR_PO_FACTORY     sr_po_gsl
+# define SR_GA_FACTORY     sr_ga_gsl
+# define SR_RDINP_FACTORY  sr_rdinp
+# define SR_EVALRF_FACTORY sr_evalrfac_gsl
 # define I_PAR_0   0         /*!< start index for parameters */
+#elif (USE_CBLAS || USE_MKL || USE_LAPACK)
+
 #else /* use old search functions (not open source) */
-# define SR_SX     sr_sx
-# define SR_SA     sr_sa
-# define SR_PO     sr_po
-# define SR_GA     sr_ga
-# define SR_RDINP  sr_rdinp
-# define SR_EVALRF sr_evalrf
+# define SR_SX_FACTORY     sr_sx
+# define SR_SA_FACTORY     sr_sa
+# define SR_PO_FACTORY     sr_po
+# define SR_GA_FACTORY     sr_ga
+# define SR_RDINP_FACTORY  sr_rdinp
+# define SR_EVALRF_FACTORY sr_evalrf
 # define I_PAR_0   1         /*!< start index for parameters */
 #endif
 
 static const real R_TOLERANCE = 5.0e-4;  /*!< Tolerance of R-Factors for termination */
+static const real BRENT_TOLERANCE = 2.0e-2; /*!< Tolerance criterion in brent()
+                                             * (used in linmin() ) */
 
 static const real DPOS = 0.10; /*!< initial displacement of parameters from
                                 * input geometry (used to set up the vertex
                                 * for sr_amoeba) */
 
-static const size_t MAX_ITER_AMOEBA = 2000; /*!< Maximum number of
-                                             *   iterations in sr_amoeba() */
-
-static const size_t MAX_ITER_POWELL = 100;  /*!< Maximum number of iterations
-                                             *   in sr_powell() */
-static const real BRENT_TOLERANCE = 2.0e-2; /*!< tolerance criterion in brent()
-                                             * (used in linmin() ) */
+enum { MAX_ITER_AMOEBA = 2000 };  /*!< Maximum number of iterations in sr_amoeba() */
+enum { MAX_ITER_POWELL = 100 };  /*!< Maximum number of iterations in sr_powell() */
 
 static const real FAC_THETA = 5.; /*!< Factor for displacement in \f$ \theta \f$ */
 static const real FAC_PHI = 50.;  /*!< Factor for displacement in \f$ \phi \f$ */
@@ -105,17 +108,6 @@ static const real RFAC_SHIFT_RANGE = 10.;  /*!< half of the search range for
  * Preprocessor Macros
  *********************************************************************/
 
-/*!
- * \def OPEN_ERROR(x
- * \brief Convenience function for output.
- */
-#ifdef EXIT_ON_ERROR
-# define OPEN_ERROR(x)  ERROR_MSG("could not open file \"%s\"\n", x);         \
-  exit(SR_FILE_IO_ERROR)
-#else
-# define OPEN_ERROR(x)  ERROR_MSG("could not open file \"%s\"\n", x)
-#endif
-
 /*********************************************************************
  * enums, structures and typedefs
  *********************************************************************/
@@ -125,7 +117,7 @@ static const real RFAC_SHIFT_RANGE = 10.;  /*!< half of the search range for
  * \brief enumeration for search methodology.
  */
 typedef enum {
-  SR_SIMPLEX=1,     /*!< Use downhill simplex or amoeba (sx) method */
+  SR_SIMPLEX=1,     /*!< Use down hill simplex or amoeba (sx) method */
   SR_POWELL,        /*!< Use Powell's method (po). */
   SR_SIM_ANNEALING, /*!< Use simulated annealing (sa) algorithm. */
   SR_GENETIC,       /*!< Use genetic algorithm (ga) method. */
@@ -161,6 +153,9 @@ typedef enum {
   SR_ALLOC_ERROR,             /*!< Indicates that memory could not be allocated */
 } search_error;
 
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
 
 /*!
  * \struct search_atom
@@ -216,7 +211,7 @@ typedef struct search
                        */
   /* angle search */
   bool sr_angle;      /*!< Flag for the angle search */
-  size_t i_par_theta; /*!< Number of search parameters for for \f$ \theta \f$
+  size_t i_par_theta; /*!< Number of search parameters for \f$ \theta \f$
                        * when using multiple data sets */
   size_t i_par_phi;   /*!< Number of search parameters for \f$ \phi \f$ when
                        * using multiple data sets */
@@ -242,7 +237,8 @@ typedef struct search
  *********************************************************************/
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-}
+} /* extern "C" */
+} /* namespace cleed */
 #endif
 
 #endif /* SEARCH_DEF_H */

@@ -29,8 +29,11 @@ extern "C" {
  *********************************************************************/
 #define LONG_INT_IS_LONG_LONG
 
-#define  REAL_IS_DOUBLE
-#include "real.h"
+#ifndef  CLEED_REAL_IS_DOUBLE
+# define CLEED_REAL_IS_DOUBLE
+#endif
+
+#include "cleed_real.h"
 #include "mat_def.h"
 #include "mat_func.h"
 

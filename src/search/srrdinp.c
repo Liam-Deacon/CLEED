@@ -462,7 +462,7 @@ int sr_rdinp(const char *inp_file)
         else if( ( !strncmp(whatnext, "dr3", 3) ) && (iaux >= 8) )
         {
           (sr_atoms+n_atoms)->dr =
-              R_sqrt( SQUARE(vaux[1]) + SQUARE(vaux[2]) + SQUARE(vaux[3]) );
+              cleed_real_sqrt( SQUARE(vaux[1]) + SQUARE(vaux[2]) + SQUARE(vaux[3]) );
         }
 
         /* Input of Debye temperature, atomic mass and temperature:
@@ -483,7 +483,7 @@ int sr_rdinp(const char *inp_file)
           }
 
           vaux[0] = leed_inp_debye_temp(vaux[1], vaux[2], temp);
-          (sr_atoms+n_atoms)->dr = R_sqrt(vaux[0]) * BOHR;
+          (sr_atoms+n_atoms)->dr = cleed_real_sqrt(vaux[0]) * BOHR;
          
           CONTROL_MSG(CONTROL, "temp = %.1f dr = %.3f\n",
                       temp, (sr_atoms+n_atoms)->dr);
@@ -884,12 +884,12 @@ int sr_rdinp(const char *inp_file)
    * Calculate b_lat if the first input type was used.
    * Determine max. x/y search range from b_lat.
    */
-  if( R_hypot(sr_search->b_lat[1], sr_search->b_lat[3]) < GEOM_TOLERANCE)
+  if( cleed_real_hypot(sr_search->b_lat[1], sr_search->b_lat[3]) < GEOM_TOLERANCE)
   {
     /* There was no input of superstructure lattice vectors
      * => use matrix to calculate them. b_t = m*a_t */
-    if( (R_hypot(a1[1], a1[2]) < GEOM_TOLERANCE) ||
-        (R_hypot(a2[1], a2[2]) < GEOM_TOLERANCE)  )
+    if( (cleed_real_hypot(a1[1], a1[2]) < GEOM_TOLERANCE) ||
+        (cleed_real_hypot(a2[1], a2[2]) < GEOM_TOLERANCE)  )
     {
       ERROR_MSG("Cannot determine lattice parameters\n");
       ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);

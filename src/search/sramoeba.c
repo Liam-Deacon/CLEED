@@ -37,7 +37,7 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
   size_t i, j, ilo, ihi, inhi;
   size_t mpts = ndim + 1;
   real ytry, ysave, sum, rtol;
-  cleed_vector *psum = CLEED_VECTOR_ALLOC(ndim);
+  cleed_vector *psum = cleed_vector_alloc(ndim);
   real amotry();
 
   char old_file[FILENAME_MAX];
@@ -50,30 +50,30 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
   for (i=0; i < ndim; i++)
   {
     for (sum=0.0, j=0; j < mpts; j++)
-      sum += CLEED_BASIC_MATRIX_GET(p, i, j, mpts, ndim);
-    CLEED_VECTOR_SET(psum, j, sum);
+      sum += cleed_basic_matrix_get(p, i, j, ndim);
+    cleed_vector_set(psum, j, sum);
   }
 
   for (;;)
   {
     ilo = 0;
-    ihi = CLEED_VECTOR_GET(y, 0) > CLEED_VECTOR_GET(y, 1) ?
-      (inhi = 1,0) : (inhi = 0,1);
+    ihi = cleed_vector_get(y, 0) > cleed_vector_get(y, 1) ?
+      (inhi = 1u,0u) : (inhi = 0u,1u);
     for (i=0; i < mpts; i++)
     {
-      if (CLEED_VECTOR_GET(y, i) < CLEED_VECTOR_GET(y, ilo)) ilo=i;
-      if (CLEED_VECTOR_GET(y, i) > CLEED_VECTOR_GET(y, ihi))
+      if (cleed_vector_get(y, i) < cleed_vector_get(y, ilo)) ilo=i;
+      if (cleed_vector_get(y, i) > cleed_vector_get(y, ihi))
       {
         inhi = ihi;
         ihi = i;
-      } else if (CLEED_VECTOR_GET(y, i) > CLEED_VECTOR_GET(y, inhi))
+      } else if (cleed_vector_get(y, i) > cleed_vector_get(y, inhi))
         if (i != ihi) inhi=i;
     }
     /* relative deviation:
-     * rtol=2.0*fabs(CLEED_VECTOR_GET(y, ihi)-y[ilo])/(fabs(CLEED_VECTOR_GET(y, ihi))+fabs(y[ilo]));
+     * rtol=2.0*fabs(cleed_vector_get(y, ihi)-y[ilo])/(fabs(cleed_vector_get(y, ihi))+fabs(y[ilo]));
      */
     /* absolute deviation: */
-    rtol = 2.0*fabs(CLEED_VECTOR_GET(y, ihi) - CLEED_VECTOR_GET(y, ilo));
+    rtol = 2.0*fabs(cleed_vector_get(y, ihi) - cleed_vector_get(y, ilo));
     if (rtol < ftol) break;
     if (*nfunk >= MAX_ITER_AMOEBA)
     {
@@ -81,11 +81,11 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
 		  exit(1);
     }
     ytry = amotry(p, y, psum, ndim, funk, ihi, nfunk, -ALPHA);
-    if (ytry <= y[ilo])
+    if (ytry <= cleed_vector_get(y, ilo))
       ytry = amotry(p, y, psum, ndim, funk, ihi, nfunk, GAMMA);
-    else if (ytry >= y[inhi])
+    else if (ytry >= cleed_vector_get(y, inhi))
     {
-      ysave = CLEED_VECTOR_GET(y, ihi);
+      ysave = cleed_vector_get(y, ihi);
       ytry = amotry(p, y, psum, ndim, funk, ihi, nfunk, BETA);
       if (ytry >= ysave)
       {
@@ -95,13 +95,12 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
           {
             for (j=0; j < ndim; j++)
             {
-              CLEED_VECTOR_SET(psum, j, 0.5*(
-                             CLEED_BASIC_MATRIX_GET(p, i, j, ndim+1, ndim) +
-                             CLEED_BASIC_MATRIX_GET(p, ilo, j, ndim+1, ndim)));
-              CLEED_BASIC_MATRIX_SET(p, i, j, ndim+1, ndim,
-                                          CLEED_VECTOR_GET(psum, j));
+              cleed_vector_set(psum, j, 0.5*(
+                             cleed_basic_matrix_get(p, i, j, ndim) +
+                             cleed_basic_matrix_get(p, ilo, j, ndim)));
+              cleed_basic_matrix_set(p, i, j, ndim, cleed_vector_get(psum, j));
             }
-            CLEED_VECTOR_SET(y, i, (*funk)(psum));
+            cleed_vector_set(y, i, (*funk)(psum));
           }
         }
         *nfunk += ndim;
@@ -110,8 +109,8 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
         for (i=0; i < ndim; i++)
         {
           for (sum=0.0, j=0; j < mpts; j++)
-            sum += CLEED_BASIC_MATRIX_GET(p, i, j, mpts, ndim);
-          CLEED_VECTOR_SET(psum, j, sum);
+            sum += cleed_basic_matrix_get(p, i, j, ndim);
+          cleed_vector_set(psum, j, sum);
         }
       }
     }
@@ -126,7 +125,7 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
     if (copy_file(old_file, new_file))
     {
       ERROR_MSG("failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
-      CLEED_VECTOR_FREE(psum);
+      cleed_vector_free(psum);
       exit(1);
     }
 
@@ -135,8 +134,9 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
     fprintf(ver_stream, "%u %u %s\n", ndim, mpts, sr_project);
     for (i=0; i < mpts; i++)
     {
-      fprintf(ver_stream, "%e ", CLEED_VECTOR_GET(y, i));
-      for(j=0; j< ndim; j++) fprintf(ver_stream, "%e ", p[i][j]);
+      fprintf(ver_stream, "%e ", cleed_vector_get(y, i));
+      for(j=0; j < ndim; j++)
+        fprintf(ver_stream, "%e ", cleed_basic_matrix_get(p, i, j, ndim));
       fprintf(ver_stream, "\n");
     }
 
@@ -147,7 +147,7 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
     fclose(ver_stream);
 
   }
-  free_vector(psum,1);
+  cleed_vector_free(psum);
 }  /* end of function sr_amoeba */
 
 real amotry(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum,
@@ -156,26 +156,26 @@ real amotry(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum,
 {
   size_t j;
   real fac1, fac2, ytry, faux;
-  cleed_vector *ptry = CLEED_VECTOR_ALLOC(ndim);
+  cleed_vector *ptry = cleed_vector_alloc(ndim);
 
   fac1 = (1.0 - fac)/ndim;
   fac2 = fac1 - fac;
   for (j=0; j < ndim; j++)
-    CLEED_VECTOR_SET(ptry, j, CLEED_VECTOR_GET(psum, j)*fac1 -
-      CLEED_BASIC_MATRIX_GET(p, ihi, j, ndim+1, ndim)*fac2);
+    cleed_vector_set(ptry, j, cleed_vector_get(psum, j)*fac1 -
+      cleed_basic_matrix_get(p, ihi, j, ndim)*fac2);
   ytry = (*funk)(ptry);
   ++(*nfunk);
-  if (ytry < CLEED_VECTOR_GET(y, ihi))
+  if (ytry < cleed_vector_get(y, ihi))
   {
-    CLEED_VECTOR_SET(y, ihi, ytry);
+    cleed_vector_set(y, ihi, ytry);
     for (j=0; j < ndim; j++)
     {
-      faux = CLEED_VECTOR_GET(psum, j);
-      CLEED_VECTOR_SET(psum, j, faux + CLEED_VECTOR_GET(ptry, j) -
-                       CLEED_BASIC_MATRIX_GET(p, ihi, j, ndim+1, ndim));
-      CLEED_BASIC_MATRIX_SET(p, ihi, j, ndim+1, ndim, CLEED_VECTOR_GET(ptry, j));
+      faux = cleed_vector_get(psum, j);
+      cleed_vector_set(psum, j, faux + cleed_vector_get(ptry, j) -
+                       cleed_basic_matrix_get(p, ihi, j, ndim));
+      cleed_basic_matrix_set(p, ihi, j, ndim, cleed_vector_get(ptry, j));
     }
   }
-  CLEED_VECTOR_FREE(ptry);
+  cleed_vector_free(ptry);
   return ytry;
 }  /* end of function amotry */

@@ -97,9 +97,9 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
  }
 
   /*Determine k_max (square of max k_par) from epsilon and dmin. */
-  faux_r = R_log(v_par->epsilon) / dmin;
+  faux_r = cleed_real_log(v_par->epsilon) / dmin;
   k_max_2 = faux_r*faux_r + 2*v_par->eng_r;
-  k_max = R_sqrt(k_max_2);
+  k_max = cleed_real_sqrt(k_max_2);
  
   CONTROL_MSG(CONTROL_X, "dmin  = %.2f, epsilon = %.2e\n",
               dmin * BOHR, v_par->epsilon);
@@ -130,7 +130,7 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
              beams_in + i_beams_in, sizeof(leed_beam));
 
       /* replace, k_par, k_r/i, k_r/ix/y */
-      (beams_out + i_beams_out)->k_par = R_sqrt(faux_r);
+      (beams_out + i_beams_out)->k_par = cleed_real_sqrt(faux_r);
 
       (beams_out + i_beams_out)->k_r[0] = k_r;
       (beams_out + i_beams_out)->k_i[0] = k_i;
@@ -156,7 +156,7 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
               &(beams_out + i_beams_out)->cth_i,
                (beams_out + i_beams_out)->k_r[3],
                (beams_out + i_beams_out)->k_i[3], k_r, k_i);
-      (beams_out + i_beams_out)->phi = R_atan2(k_y, k_x);
+      (beams_out + i_beams_out)->phi = cleed_real_atan2(k_y, k_x);
 
       /* 1/ A*kz */
       cri_div(&(beams_out + i_beams_out)->Akz_r,

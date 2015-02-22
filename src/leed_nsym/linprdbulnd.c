@@ -83,8 +83,9 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   char linebuffer[STRSZ];
   char phaseinp[STRSZ];
   char whatnext[STRSZ];
-  int i, j, iaux;               /* counter, dummy  variables */
-  int i_c, i_str;
+  size_t i, j;
+  int iaux;               /* counter, dummy  variables */
+  size_t i_c, i_str;
   size_t i_com = 0;             /* number of comments */
   size_t i_atoms = 0;           /* counter for number of atoms */
   size_t i_layer = 0;           /* counter for number of layers */
@@ -149,27 +150,15 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   /* Open and Read input file */
   if ((inp_stream = fopen(filename, "r")) == NULL)
   {
-    #ifdef ERROR_LOG
-    fprintf(STDERR, "*** error (leed_inp_read_bul): "
-        "could not open file \"%s\"\n", filename);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("could not open file \"%s\"\n", filename);
+    ERROR_RETURN(-1);
   }
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_inp_read_bul): Reading file \"%s\"\n", filename);
-  #endif
+  CONTROL_MSG(CONTROL, "Reading file \"%s\"\n", filename);
 
   while (fgets(linebuffer, STRSZ, inp_stream) != NULL)
   {
-    #ifdef CONTROL_X
-    fprintf(STDCTR, "%s", linebuffer);
-    #endif
+    CONTROL_MSG(CONTROL_X, "%s", linebuffer);
 
     /* find first non blank character */
     for (i_str = 0; *(linebuffer + i_str) == ' '; i_str++)
@@ -190,16 +179,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
                       &a1[1], &a1[2], &a1[3]) < 2)
             #endif
             {
-              #ifdef ERROR_LOG
-              fprintf(STDERR, "*** error (leed_inp_read_bul): "
-                    "need at least x/y coordinates of a1\n");
-              #endif
-
-              #ifdef EXIT_ON_ERROR
-              exit(1);
-              #else
-              return(-1);
-              #endif
+              ERROR_MSG("need at least x/y coordinates of a1\n");
+              ERROR_RETURN(-1);
             }
 
             a1[1] /= BOHR; a1[2] /= BOHR; a1[3] /= BOHR;
@@ -210,22 +191,14 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
           {
             #ifdef CLEED_REAL_IS_DOUBLE
             if (sscanf(linebuffer + i_str + 3, " %lf %lf %lf",
-                       a2[1], a2[2], a2[3]) < 2)
+                       &a2[1], &a2[2], &a2[3]) < 2)
             #else
             if(sscanf(linebuffer + i_str + 3, " %f %f %f",
-                      a2[1], a2[2], a2[3]) < 2)
+                      &a2[1], &a2[2], &a2[3]) < 2)
             #endif
             {
-              #ifdef ERROR_LOG
-              fprintf(STDERR, "*** error (leed_inp_read_bul): "
-                  "need at least x/y coordinates of a2\n");
-              #endif
-
-              #ifdef EXIT_ON_ERROR
-              exit(1);
-              #else
-              return(-1);
-              #endif
+              ERROR_MSG("need at least x/y coordinates of a2\n");
+              ERROR_RETURN(-1);
             }
 
             a2[1] /= BOHR; a2[2] /= BOHR; a2[3] /= BOHR;
@@ -262,16 +235,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
                     (bulk_par->b)+1, (bulk_par->b)+3 ) < 2)
             #endif
             {
-              #ifdef ERROR_LOG
-              fprintf(STDERR, "*** error (leed_inp_read_bul): "
-                  "need x/y coordinates of b1\n");
-              #endif
-
-              #ifdef EXIT_ON_ERROR
-              exit(1);
-              #else
-              return(-1);
-              #endif
+              ERROR_MSG("need x/y coordinates of b1\n");
+              ERROR_RETURN(-1);
             }
             bulk_par->b[1] /= BOHR;
             bulk_par->b[3] /= BOHR;
@@ -287,16 +252,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
                     (bulk_par->b)+2, (bulk_par->b)+4 ) < 2)
             #endif
             {
-              #ifdef ERROR_LOG
-              fprintf(STDERR, "*** error (leed_inp_read_bul): "
-                  "need x/y coordinates of b2\n");
-              #endif
-
-              #ifdef EXIT_ON_ERROR
-              exit(1);
-              #else
-              return(-1);
-              #endif
+              ERROR_MSG("need x/y coordinates of b2\n");
+              ERROR_RETURN(-1);
             }
             bulk_par->b[2] /= BOHR;
             bulk_par->b[4] /= BOHR;
@@ -365,12 +322,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
           if ((*(linebuffer + i_str + 1) != 'o')
               && (*(linebuffer + i_str + 1) != 'O'))
           {
-            #ifdef WARNING_LOG
-            fprintf(STDWAR, "* warning (leed_inp_read_bul): "
-                "could not interpret line \n\t%s\t(in file \"%s\")\n",
-                linebuffer, filename);
-            #endif
-            ;
+            WARNING_MSG("could not interpret line \n\t%s\t(in file \"%s\")\n",
+                        linebuffer, filename);
           }
           break;
         }
@@ -454,24 +407,21 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
             if (iaux >= 8) bulk_par->temp = vaux[3];
 
             vaux[0] = leed_inp_debye_temp(vaux[1], vaux[2], bulk_par->temp);
-            vaux[1] = vaux[2] = vaux[3] = R_sqrt(vaux[0]) / SQRT3;
+            vaux[1] = vaux[2] = vaux[3] = cleed_real_sqrt(vaux[0]) / SQRT3;
 
-            #ifdef CONTROL_X
-            fprintf(STDCTR, "(leed_inp_read_bul): temp = %.1f dr = %.3f\n",
-                bulk_par->temp, vaux[1] * SQRT3*BOHR );
-            #endif
+            CONTROL_MSG(CONTROL_X, "temp = %.1f dr = %.3f\n",
+                        bulk_par->temp, vaux[1] * SQRT3*BOHR );
           }
           else
           {
-            #ifdef WARNING_LOG
-            fprintf(STDWAR, "* warning (leed_inp_read_bul): "
-                "Could not interpret input: %s", whatnext);
-            for (i = 1; i <= iaux - 5; i++)
+#if WARNING_LOG
+            WARNING_MSG("Could not interpret input: %s", whatnext);
+            for (i = 1; i <= (size_t)abs(iaux) - 5; i++)
             {
               fprintf(STDWAR, " %.3f", vaux[i]);
             }
             fprintf(STDWAR, "\n");
-            #endif
+#endif
 
             for (i = 0; i <= 3; i++) vaux[i] = 0.;
           }
@@ -504,11 +454,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
             {
               bulk_par->vi = -bulk_par->vi;
 
-              #ifdef WARNING_LOG
-              fprintf(STDWAR, "* warning (leed_inp_read_bul):");
-              fprintf(STDWAR, "Vi must be positive, use the negative value "
-                  "of input %.1f\n", bulk_par->vi * HART);
-              #endif
+              WARNING_MSG("Vi must be positive, use the negative value "
+                          "of input %.1f\n", bulk_par->vi * HART);
             }
             break;
           }
@@ -529,11 +476,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
             {
               bulk_par->vr = -bulk_par->vr;
 
-              #ifdef WARNING_LOG
-              fprintf(STDWAR, "* warning (leed_inp_read_bul):");
-              fprintf(STDWAR, "Vr must be negative, use the negative value "
-                  "of input %.1f\n", bulk_par->vr * HART);
-              #endif
+              WARNING_MSG("Vr must be negative, use the negative value "
+                          "of input %.1f\n", bulk_par->vr * HART);
             }
             break;
           }
@@ -557,16 +501,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
                        (bulk_par->rot_axis)+2) < 3)
             #endif
             {
-              #ifdef ERROR_LOG
-              fprintf(STDERR, "*** error (leed_inp_read_bul): "
-                      "need x/y coordinates of rotaxis\n");
-              #endif
-
-              #ifdef EXIT_ON_ERROR
-              exit(1);
-              #else
-              return(-1);
-              #endif
+              ERROR_MSG("need x/y coordinates of rotaxis\n");
+              ERROR_RETURN(-1);
             }
             bulk_par->rot_axis[1] /= BOHR;
             bulk_par->rot_axis[2] /= BOHR;
@@ -593,16 +529,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
                       (bulk_par->m_plane)+j, (bulk_par->m_plane)+i) < 2)
             #endif
             {
-              #ifdef ERROR_LOG
-              fprintf(STDERR, "*** error (leed_inp_read_bul): "
-                      "need x/y coordinates of mirrorplane\n");
-              #endif
-
-              #ifdef EXIT_ON_ERROR
-              exit(1);
-              #else
-              return(-1);
-              #endif
+              ERROR_MSG("need x/y coordinates of mirrorplane\n");
+              ERROR_RETURN(-1);
             }
             bulk_par->m_plane[j] /= BOHR;
             bulk_par->m_plane[i] /= BOHR;
@@ -637,11 +565,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
       default:
       /* default: print warning for unrecognized key words */
       {
-        #ifdef WARNING_LOG
-        fprintf(STDWAR, "* warning (leed_inp_read_bul): could not interpret "
-            "line \n\t%s\t(in file \"%s\")\n", linebuffer, filename);
-        #endif
-
+        WARNING_MSG("could not interpret line \n\t%s\t(in file \"%s\")\n",
+                    linebuffer, filename);
         break;
       }
     } /* switch linebuffer */
@@ -655,16 +580,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
    */
   if (i_atoms < 1)
   {
-    #ifdef ERROR_LOG
-    fprintf(STDERR, "*** error (leed_inp_read_bul): "
-        "could not find any bulk atoms (i_atoms = %d)\n", i_atoms);
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("could not find any bulk atoms (i_atoms = %d)\n", i_atoms);
+    ERROR_RETURN(-1);
   }
 
   for(i=0; i < bulk_par->n_mir; i++)
@@ -709,17 +626,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   /* check if the z-components of a1 and a2 are 0. */
   if (!IS_EQUAL_REAL(a1[3], 0.0) || !IS_EQUAL_REAL(a2[3], 0.0))
   {
-    #ifdef ERROR_LOG
-    fprintf(STDERR, " *** error (leed_inp_read_bul):\n");
-    fprintf(STDERR, " Vectors a1 and a2 are not parallel to "
-        "the surface (xy plane)\n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("Vectors a1 and a2 are not parallel to the surface (xy plane)\n");
+    ERROR_RETURN(-1);
   }
 
   /* check the direction of a3 */
@@ -762,7 +670,7 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   bulk_par->a[4] = a2[2];
 
   faux = a1[1] * a2[2] - a1[2] * a2[1];
-  bulk_par->area = R_fabs(faux);
+  bulk_par->area = cleed_real_fabs(faux);
 
   faux = 2. * PI / faux;
   bulk_par->a_1[1] = faux * a2[2];
@@ -778,7 +686,7 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
    *
    * - Calculate inverse transposed of m_super = m_recip.
    */
-  if ( R_hypot(bulk_par->b[1], bulk_par->b[3]) < GEO_TOLERANCE)
+  if ( cleed_real_hypot(bulk_par->b[1], bulk_par->b[3]) < GEO_TOLERANCE)
   /* There was no input of superstructure lattice vectors
    * => use matrix to calculate them.
    */
@@ -826,25 +734,17 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   } /* b was defined */
 
   /* Check the matrix for non-integer elements */
-  if ((R_fabs(bulk_par->m_super[1] - R_nint(bulk_par->m_super[1]))
+  if ((cleed_real_fabs(bulk_par->m_super[1] - cleed_real_nint(bulk_par->m_super[1]))
         > GEO_TOLERANCE) || 
-      (R_fabs(bulk_par->m_super[2] - R_nint(bulk_par->m_super[2]))
+      (cleed_real_fabs(bulk_par->m_super[2] - cleed_real_nint(bulk_par->m_super[2]))
         > GEO_TOLERANCE) || 
-      (R_fabs(bulk_par->m_super[3] - R_nint(bulk_par->m_super[3]))
+      (cleed_real_fabs(bulk_par->m_super[3] - cleed_real_nint(bulk_par->m_super[3]))
         > GEO_TOLERANCE) || 
-      (R_fabs(bulk_par->m_super[4] - R_nint(bulk_par->m_super[4]))
+      (cleed_real_fabs(bulk_par->m_super[4] - cleed_real_nint(bulk_par->m_super[4]))
           > GEO_TOLERANCE))
   {
-    #ifdef ERROR_LOG
-    fprintf(STDERR, "*** error (leed_inp_read_bul): "
-        "superstructure is not commensurate \n");
-    #endif
-
-    #ifdef EXIT_ON_ERROR
-    exit(1);
-    #else
-    return(-1);
-    #endif
+    ERROR_MSG("superstructure is not commensurate \n");
+    ERROR_RETURN(-1);
   }
 
   /* Check the angle between b1 and b2 (2: must be < pi, i.e. b1*b2 > 0)
@@ -884,7 +784,7 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
    */
   faux = bulk_par->m_super[1] * bulk_par->m_super[4]
        - bulk_par->m_super[2] * bulk_par->m_super[3];
-  bulk_par->rel_area_sup = R_fabs(faux);
+  bulk_par->rel_area_sup = cleed_real_fabs(faux);
 
   /* m_recip = m* = (m_super)t^-1 */
   faux = 1. / faux;
@@ -1002,16 +902,17 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   }
   else
   {
-    i_layer = leed_inp_bul_layer(bulk_par, atoms_rd, a3);
+    iaux = leed_inp_bul_layer(bulk_par, atoms_rd, a3);
+    i_layer = (iaux >= 0) ? (size_t)iaux : 0;
   }
   
   free(atoms_rd);
 
-  bulk_par->dmin = R_fabs(bulk_par->layers[0].vec_from_last[3]);
+  bulk_par->dmin = cleed_real_fabs(bulk_par->layers[0].vec_from_last[3]);
   for (i = 0; i < bulk_par->n_layers - 1 /* origin is not relevant */; i++)
   {
     bulk_par->dmin = MIN(bulk_par->dmin,
-        R_fabs(bulk_par->layers[i].vec_to_next[3]));
+        cleed_real_fabs(bulk_par->layers[i].vec_to_next[3]));
   }
 
   /* Set the symmetry flags
@@ -1020,29 +921,29 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
    * second number shows rotation axis (2-fold,3-fold,4-fold)
    * third number shows mirror planes (1,2,3,4)
    */
-  vaux[1] = R_atan2(bulk_par->b[3],bulk_par->b[1]);
-  vaux[2] = R_atan2(bulk_par->b[4],bulk_par->b[2]);
-  faux = R_fabs(vaux[1] - vaux[2]);
+  vaux[1] = cleed_real_atan2(bulk_par->b[3],bulk_par->b[1]);
+  vaux[2] = cleed_real_atan2(bulk_par->b[4],bulk_par->b[2]);
+  faux = cleed_real_fabs(vaux[1] - vaux[2]);
 
   vaux[0] = bulk_par->b[1]*bulk_par->b[2] + bulk_par->b[3]*bulk_par->b[4];
-  vaux[1] = R_hypot(bulk_par->b[1],bulk_par->b[3]);
-  vaux[2] = R_hypot(bulk_par->b[2],bulk_par->b[4]);
+  vaux[1] = cleed_real_hypot(bulk_par->b[1],bulk_par->b[3]);
+  vaux[2] = cleed_real_hypot(bulk_par->b[2],bulk_par->b[4]);
 
   if(bulk_par->n_mir > 0 || bulk_par->n_rot > 1)
   {
-    if( (R_fabs(faux - PI/3) < GEO_TOLERANCE ||
-         R_fabs(faux - 2*PI/3) < GEO_TOLERANCE) &&
-        (R_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)                                      )
+    if( (cleed_real_fabs(faux - PI/3) < GEO_TOLERANCE ||
+         cleed_real_fabs(faux - 2*PI/3) < GEO_TOLERANCE) &&
+        (cleed_real_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)                                      )
     {
       bulk_par->symmetry = 300 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
     }
-    else if(R_fabs(vaux[0]) < GEO_TOLERANCE &&
-            R_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)
+    else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE &&
+            cleed_real_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)
     {
       bulk_par->symmetry = 400 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
     }
-    else if(R_fabs(vaux[0]) < GEO_TOLERANCE &&
-            R_fabs(vaux[1] - vaux[2]) > GEO_TOLERANCE)
+    else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE &&
+            cleed_real_fabs(vaux[1] - vaux[2]) > GEO_TOLERANCE)
     {
       bulk_par->symmetry = 200 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
     }
@@ -1198,14 +1099,8 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
      }
      default:
      {
-       fprintf(STDERR, "***error (leed_inp_read_bul): symmetry invalid\n");
-
-       #ifdef EXIT_ON_ERROR
-       exit(1);
-       #else
-       return(-1);
-       #endif
-
+       ERROR_MSG("symmetry invalid\n");
+       ERROR_RETURN(-1);
        break;
      }
 
@@ -1226,7 +1121,7 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
             p_phs_shifts[i_c]->input_file,
             p_phs_shifts[i_c]->n_eng,
             p_phs_shifts[i_c]->lmax,
-            R_sqrt(p_phs_shifts[i_c]->dr[0]) * BOHR);
+            cleed_real_sqrt(p_phs_shifts[i_c]->dr[0]) * BOHR);
   }
   printf("***********************(leed_inp_read_bul)***********************\n");
   #endif

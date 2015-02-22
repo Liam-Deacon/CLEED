@@ -15,11 +15,11 @@
 ;-----------------------------------------------------------------------------
 ; Some paths.
 ;-----------------------------------------------------------------------------
-!define BUILD_PATH "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/build"
-!define SOURCE_PATH "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED"
+!define BUILD_PATH "C:/Users/kss07698/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/build"
+!define SOURCE_PATH "C:/Users/kss07698/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED"
 !define NSIS_BUILD_PATH "${BUILD_PATH}/_CPack_Packages/win32/NSIS"
-!define NSI_PATH "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/data/win32"
-!addplugindir "C:/Users/Liam/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/data/win32/Contrib/NSIS/Plugins"
+!define NSI_PATH "C:/Users/kss07698/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/data/win32"
+!addplugindir "C:/Users/kss07698/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/data/win32/Contrib/NSIS/Plugins"
 ;-----------------------------------------------------------------------------
 ; Installer version
 ;-----------------------------------------------------------------------------

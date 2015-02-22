@@ -1,11 +1,11 @@
 
-/* readvar.h contains the input variable names for readvar.c */
+/* mkiv_read_var.h contains the input variable names for mkiv_read_var.c */
 
-#ifndef _readvar_h_
-#define _readvar_h_
+#ifndef _mkiv_read_var_h_
+#define _mkiv_read_var_h_
 
-#define		VAR_LEN		7	/* number of relevant characters */
-#define		VAR_MAX		23	/* number of variables */
+enum { VAR_LEN = 7 };	  /*!< number of relevant characters */
+enum { VAR_MAX = 23 };	/*!< number of variables */
 
 const char *VAR[VAR_MAX] = {	 
 				"COS_MIN",

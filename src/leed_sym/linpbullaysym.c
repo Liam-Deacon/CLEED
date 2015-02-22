@@ -154,10 +154,10 @@ int leed_inp_bul_layer_sym(leed_crystal *par, leed_atom * atom_list,
         atom_list[i_atoms].pos[1]*BOHR, atom_list[i_atoms].pos[2]*BOHR,
         atom_list[i_atoms].pos[3]*BOHR,
 
-        R_fabs(atom_list[(i_atoms - 1)].pos[3]+vaux[3]-atom_list[i_atoms].pos[3])*BOHR);
+        cleed_real_fabs(atom_list[(i_atoms - 1)].pos[3]+vaux[3]-atom_list[i_atoms].pos[3])*BOHR);
 #endif
 
-    if( R_fabs(atom_list[i_atoms-1].pos[3]+vaux[3] - atom_list[i_atoms].pos[3])
+    if( cleed_real_fabs(atom_list[i_atoms-1].pos[3]+vaux[3] - atom_list[i_atoms].pos[3])
         > MIN_DIST )
     {
       /*********************************************************************
@@ -202,7 +202,7 @@ int leed_inp_bul_layer_sym(leed_crystal *par, leed_atom * atom_list,
       vaux[3] = atom_list[i_atoms].pos[3];
       atom_list[i_atoms].pos[3] = 0.;
 
-    }  /* if R_fabs ... */
+    }  /* if cleed_real_fabs ... */
 
 
     /***********************************************************************
@@ -260,7 +260,7 @@ int leed_inp_bul_layer_sym(leed_crystal *par, leed_atom * atom_list,
  TEST the DISTANCE between the last atom of unit cell and
  the first atom of the next unit cell
    *************************************************************************/
-  if( R_fabs( *(vec + 4*i_layer + 3) ) < MIN_DIST )
+  if( cleed_real_fabs( *(vec + 4*i_layer + 3) ) < MIN_DIST )
   {
     if(i_layer == 0)
     {

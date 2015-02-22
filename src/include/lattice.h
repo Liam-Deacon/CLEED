@@ -27,37 +27,34 @@
 #include "miller_index.h"
 #include "basis.h"
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 /* includes */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+#include <cstddef>
+
+using std::size_t;
+
+namespace cleed {
+#endif
+
 /* define constants */
-#define  STRSZ 256        /*!< Maximum length of buffer line */
-#define  NAMSZ 128        /*!< Maximum length of atom name string */
+static const double TOLERANCE = (1E-2);
+static const double IMAGE_LEN = 30.;
 
-#define TOLERANCE (1E-2)
-#define IMAGE_LEN 30.
+static const size_t MAX_INP_ATOMS = 256; /*!< Maximum number of input atoms */
 
-#ifndef MAX_INP_ATOMS
-#define MAX_INP_ATOMS 256 /*!< Maximum number of input atoms */
-#endif
+static const size_t MAX_OUT_ATOMS = 4096; /*!< Maximum number of output atoms */
 
-#ifndef MAX_OUT_ATOMS
-#define MAX_OUT_ATOMS 4096 /*!< Maximum number of output atoms */
-#endif
-
-#define LAT_INP 100
+static const int LAT_INP = 100;
 
 /*! \enum lattice_error_code
  *  \brief return codes from functions operating on lattice struct
  */
-typedef enum lattice_error_code {
+typedef enum {
   LATTICE_FAILURE=-1,               /*!< indicates general failure */
   LATTICE_SUCCESS=0,                /*!< indicates general success */
   LATTICE_ATOM_INDEX_OUT_OF_RANGE,  /*!< indicates the atom index is out of
@@ -77,13 +74,17 @@ typedef enum lattice_error_code {
  *
  * \c enum for different types of lattice structures.
  */
-typedef enum latt_type {
+typedef enum {
   LAT_FCC=1,          /*!< Indicates Face Centred Cubic (FCC) packing */
   LAT_HCP,            /*!< Indicates Hexagonal Close Packed (HCP) packing */
   LAT_BCC,            /*!< Indicates Body Centred Cubic (BCC) packing */
   LAT_DIA,            /*!< Indicates Diamond structure */
   LAT_UNKNOWN         /*!< Indicates unknown structure */
 } latt_type;
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
 
 /*! \struct lattice
  *  \brief lattice struct.
@@ -119,7 +120,7 @@ extern FILE *ctr_stream;
 
 /* function prototypes */
 void latt_usage(FILE *output);
-void latt_parse_args(int argc, char *argv[], lattice *latt);
+int latt_parse_args(int argc, char *argv[], lattice *latt);
 void latt_info();
 
 void lattice_generate_atoms(lattice *latt);
@@ -166,26 +167,7 @@ miller_hkl *lattice_get_miller_hkl(const lattice *lat);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
-
-namespace cleed {
-
-/*!
- * A C++ wrapper class for \c struct #lattice and its associated functions,
- * providing a more OO interface.
- */
-class Lattice {
-
-  public:
-    Lattice();      /*!< Constructor */
-    ~Lattice();     /*!< Destructor */
-
-  protected:
-    lattice *lat;   /*!< Access to lower C level \c struct */
-}
-
-
 } /* namespace cleed */
-
 #endif /* ifdef */
                                         
 #endif /* LATTICE_H */

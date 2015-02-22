@@ -465,13 +465,13 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
          /* changed GH/29.09.00
              faux = bulk_par->temp/vaux[1];
              vaux[0] = PREF_DEBWAL / (vaux[2] * vaux[1]) *
-                       R_sqrt(0.0625 + faux*faux);
+                       cleed_real_sqrt(0.0625 + faux*faux);
              vaux[0] = 0.5 * PREF_DEBWAL / (vaux[2] * vaux[1]) *
-                       R_sqrt(0.0625 + faux*faux);
+                       cleed_real_sqrt(0.0625 + faux*faux);
 
          */
              vaux[0] = leed_inp_debye_temp(vaux[1] , vaux[2] , bulk_par->temp );
-             vaux[1] = vaux[2] = vaux[3] = R_sqrt(vaux[0])/SQRT3;
+             vaux[1] = vaux[2] = vaux[3] = cleed_real_sqrt(vaux[0])/SQRT3;
 
 #ifdef CONTROL_X
              fprintf(STDCTR, "(leed_inp_read_bul): temp = %.1f dr = %.3f\n", 
@@ -667,7 +667,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 ********************************************/
  for(i = 0 ;i < bulk_par->n_mir;i++)
  {
-   bulk_par->alpha[i] = R_atan2(bulk_par->m_plane[2*i+1],bulk_par->m_plane[2* i]);
+   bulk_par->alpha[i] = cleed_real_atan2(bulk_par->m_plane[2*i+1],bulk_par->m_plane[2* i]);
  }
 
  for(i = 0;i < bulk_par->n_mir;i++)
@@ -780,7 +780,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  bulk_par->a[3] = a1[2]; bulk_par->a[4] = a2[2];
 
  faux = a1[1]*a2[2] - a1[2]*a2[1];
- bulk_par->area = R_fabs(faux);
+ bulk_par->area = cleed_real_fabs(faux);
 
  faux = 2.* PI/faux;
  bulk_par->a_1[1] =  faux*a2[2]; bulk_par->a_1[2] = -faux*a2[1];
@@ -797,7 +797,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  - Calculate inverse transposed of m_super = m_recip.
 *************************************************************************/
 
- if( R_hypot(bulk_par->b[1], bulk_par->b[3]) < GEO_TOLERANCE)
+ if( cleed_real_hypot(bulk_par->b[1], bulk_par->b[3]) < GEO_TOLERANCE)
  /*
    There was no input of superstructure lattice vectors 
    => use matrix to calculate them.
@@ -851,10 +851,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 */
 
  if( 
-  (R_fabs(bulk_par->m_super[1]-R_nint(bulk_par->m_super[1])) > GEO_TOLERANCE) ||
-  (R_fabs(bulk_par->m_super[2]-R_nint(bulk_par->m_super[2])) > GEO_TOLERANCE) ||
-  (R_fabs(bulk_par->m_super[3]-R_nint(bulk_par->m_super[3])) > GEO_TOLERANCE) ||
-  (R_fabs(bulk_par->m_super[4]-R_nint(bulk_par->m_super[4])) > GEO_TOLERANCE) )
+  (cleed_real_fabs(bulk_par->m_super[1]-cleed_real_nint(bulk_par->m_super[1])) > GEO_TOLERANCE) ||
+  (cleed_real_fabs(bulk_par->m_super[2]-cleed_real_nint(bulk_par->m_super[2])) > GEO_TOLERANCE) ||
+  (cleed_real_fabs(bulk_par->m_super[3]-cleed_real_nint(bulk_par->m_super[3])) > GEO_TOLERANCE) ||
+  (cleed_real_fabs(bulk_par->m_super[4]-cleed_real_nint(bulk_par->m_super[4])) > GEO_TOLERANCE) )
  {
 #ifdef ERROR_LOG
   fprintf(STDERR, 
@@ -900,7 +900,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 */
  faux = bulk_par->m_super[1] * bulk_par->m_super[4] -
         bulk_par->m_super[2] * bulk_par->m_super[3] ;
- bulk_par->rel_area_sup = R_fabs(faux);
+ bulk_par->rel_area_sup = cleed_real_fabs(faux);
 
 /* m_recip = m* = (m_super)t^-1 */
  faux = 1./faux;
@@ -1032,15 +1032,15 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #endif
  }
  
- i_layer = i_layer; /* remove unused warning */
+ i_layer = i_layer*1; /* remove unused warning */
  
  free(atoms_rd);
 
- bulk_par->dmin = R_fabs(bulk_par->layers[0].vec_from_last[3]);
+ bulk_par->dmin = cleed_real_fabs(bulk_par->layers[0].vec_from_last[3]);
  for(i=0; i < bulk_par->n_layers - 1 /* origin is not relevant */; i++)
  {
    bulk_par->dmin = 
-            MIN(bulk_par->dmin, R_fabs(bulk_par->layers[i].vec_to_next[3]) );
+            MIN(bulk_par->dmin, cleed_real_fabs(bulk_par->layers[i].vec_to_next[3]) );
  }
 
 /************************************************************************
@@ -1050,30 +1050,30 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
   second number shows rotationaxe (2-fold,3-fold,4-fold)
   third number shows mirrorplanes (1,2,3,4)
 *************************************************************************/
- vaux[1] = R_atan2(bulk_par->b[3],bulk_par->b[1]); 
- vaux[2] = R_atan2(bulk_par->b[4],bulk_par->b[2]);
- faux = R_fabs(vaux[1] - vaux[2]);
+ vaux[1] = cleed_real_atan2(bulk_par->b[3],bulk_par->b[1]); 
+ vaux[2] = cleed_real_atan2(bulk_par->b[4],bulk_par->b[2]);
+ faux = cleed_real_fabs(vaux[1] - vaux[2]);
 
  vaux[0] = bulk_par->b[1]*bulk_par->b[2] + bulk_par->b[3]*bulk_par->b[4];
- vaux[1] = R_hypot(bulk_par->b[1],bulk_par->b[3]);
- vaux[2] = R_hypot(bulk_par->b[2],bulk_par->b[4]);
+ vaux[1] = cleed_real_hypot(bulk_par->b[1],bulk_par->b[3]);
+ vaux[2] = cleed_real_hypot(bulk_par->b[2],bulk_par->b[4]);
 
  if(bulk_par->n_mir > 0 || bulk_par->n_rot > 1)
  {
-  if((R_fabs(faux - PI/3) < GEO_TOLERANCE || R_fabs(faux - 2*PI/3) < GEO_TOLERANCE) &&
-     (R_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)                                      )
+  if((cleed_real_fabs(faux - PI/3) < GEO_TOLERANCE || cleed_real_fabs(faux - 2*PI/3) < GEO_TOLERANCE) &&
+     (cleed_real_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)                                      )
   {
      bulk_par->symmetry = 300 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
   }
 
-  else if(R_fabs(vaux[0]) < GEO_TOLERANCE && 
-     R_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)
+  else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE && 
+     cleed_real_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)
   {
     bulk_par->symmetry = 400 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
   }   
  
-  else if(R_fabs(vaux[0]) < GEO_TOLERANCE && 
-     R_fabs(vaux[1] - vaux[2]) > GEO_TOLERANCE)
+  else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE && 
+     cleed_real_fabs(vaux[1] - vaux[2]) > GEO_TOLERANCE)
   {
     bulk_par->symmetry = 200 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
   }

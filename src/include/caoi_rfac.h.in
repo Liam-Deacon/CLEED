@@ -50,8 +50,8 @@ extern "C" {
 include global values for multiple datasets
 *********************************************************************/
 size_t sa;
-int ctrinp(const char filectr[STRSIZE]);
-char proj_name[STRSIZE];
+int ctrinp(const char filectr[STRSZ]);
+char proj_name[STRSZ];
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

@@ -294,7 +294,7 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
 
         /* check equidistance */
         if( (i_eng > 1) &&
-           (R_fabs((2*list[i_eng-1].energy - 
+           (cleed_real_fabs((2*list[i_eng-1].energy - 
               list[i_eng].energy - list[i_eng-2].energy)) >  ENG_TOLERANCE ))
         {
           iv_cur->theory->equidist = false;
@@ -324,14 +324,14 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
    * Find beam with maximum contribution to average.
    * This beam will be used as spot ID.
    */
-  iv_cur->spot_id.f_val1 = R_fabs(beam[0].f_val1);
+  iv_cur->spot_id.f_val1 = cleed_real_fabs(beam[0].f_val1);
   iv_cur->spot_id.i_val1 = 0;
 
   for (i_beam=1; i_beam < n_beam; i_beam ++)
   {
-    if (R_fabs(beam[i_beam].f_val1) > iv_cur->spot_id.f_val1 )
+    if (cleed_real_fabs(beam[i_beam].f_val1) > iv_cur->spot_id.f_val1 )
     {
-      iv_cur->spot_id.f_val1 = R_fabs(beam[i_beam].f_val1);
+      iv_cur->spot_id.f_val1 = cleed_real_fabs(beam[i_beam].f_val1);
       iv_cur->spot_id.i_val1 = (int)i_beam;
     }
   }

@@ -36,7 +36,7 @@ real matabs(const mat M)
 {
   real mabs;
   real *ptr_r, *ptr_i, *ptr_end;
-  long int nn;
+  size_t nn;
   
   /* Check input matrix */
   
@@ -50,64 +50,93 @@ real matabs(const mat M)
   /* Calculate modulus for valid matrix types */
   mabs = 0.;
 
-  if ( (M->mat_type == MAT_NORMAL) || (M->mat_type == MAT_SQUARE) )
+  switch( M->mat_type )
   {
-    nn = M->cols * M->cols;
-    switch(M->num_type)
+    case(MAT_NORMAL): case(MAT_SQUARE):
     {
-      case(NUM_REAL):
+      nn = M->cols * M->cols;
+      switch(M->num_type)
       {
-        for (ptr_r = M->rel + 1, ptr_end = M->rel + nn;
-             ptr_r <= ptr_end; ptr_r ++)
+        case(NUM_REAL):
         {
-          mabs += R_fabs(*ptr_r);
-        }
-        break;
-      } /* case REAL */
+          for (ptr_r = M->rel + 1, ptr_end = M->rel + nn;
+              ptr_r <= ptr_end; ptr_r ++)
+          {
+            mabs += cleed_real_fabs(*ptr_r);
+          }
+          break;
+        } /* case REAL */
 
-      case(NUM_COMPLEX):
-      {
-        for (ptr_r = M->rel + 1, ptr_i = M->iel + 1, ptr_end = M->rel + nn;
-             ptr_r <= ptr_end; ptr_r ++, ptr_i ++)
+        case(NUM_COMPLEX):
         {
-          mabs += R_cabs(*ptr_r, *ptr_i);
-        }
-        break;
-      } /* case CLEED_COMPLEX */
-    } /* switch */
-  } /* matrix type is not diagonal */
-  else  if (M->mat_type == MAT_DIAG)
-  {
-    nn = M->cols;
-    switch(M->num_type)
+          for (ptr_r = M->rel + 1, ptr_i = M->iel + 1, ptr_end = M->rel + nn;
+              ptr_r <= ptr_end; ptr_r ++, ptr_i ++)
+          {
+            mabs += cleed_real_cabs(*ptr_r, *ptr_i);
+          }
+          break;
+        } /* case CLEED_COMPLEX */
+
+        case(NUM_IMAG): case(NUM_MASK): default:
+        {
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(-1.);
+          break;
+        } /* default case */
+
+      } /* switch (M->num_type) */
+
+      break;
+
+    } /* matrix type is not diagonal */
+
+    case(MAT_DIAG):
     {
-      case(NUM_REAL):
+      nn = M->cols;
+      switch(M->num_type)
       {
-        for (ptr_r = M->rel + 1, ptr_end = M->rel + nn;
-             ptr_r <= ptr_end; ptr_r ++)
+        case(NUM_REAL):
         {
-          mabs += R_fabs(*ptr_r);
-        }
-        break;
-      } /* case REAL */
+          for (ptr_r = M->rel + 1, ptr_end = M->rel + nn;
+              ptr_r <= ptr_end; ptr_r ++)
+          {
+            mabs += cleed_real_fabs(*ptr_r);
+          }
+          break;
+        } /* case REAL */
 
-      case(NUM_COMPLEX):
-      {
-        for (ptr_r = M->rel + 1, ptr_i = M->iel + 1, ptr_end = M->rel + nn;
-             ptr_r <= ptr_end; ptr_r ++, ptr_i ++)
+        case(NUM_COMPLEX):
         {
-          mabs += R_cabs(*ptr_r, *ptr_i);
-        }
-        break;
-      } /* case CLEED_COMPLEX */
-    } /* switch */
-  } /* diag. matrix */
-  else /* not a valid matrix type */
-  {
-    ERROR_MSG("%d not a valid matrix type\n",
-            M->mat_type);
-    ERROR_RETURN(-1.);
-  }
+          for (ptr_r = M->rel + 1, ptr_i = M->iel + 1, ptr_end = M->rel + nn;
+              ptr_r <= ptr_end; ptr_r ++, ptr_i ++)
+          {
+            mabs += cleed_real_cabs(*ptr_r, *ptr_i);
+          }
+          break;
+        } /* case CLEED_COMPLEX */
+
+        case(NUM_IMAG): case(NUM_MASK): default:
+        {
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(-1.);
+          break;
+        } /* default case */
+
+      } /* switch (M->num_type) */
+
+      break;
+
+    } /* MAT_DIAG */
+
+    default:/* not a valid matrix type */
+    {
+      ERROR_MSG("%d not a valid matrix type\n",
+          M->mat_type);
+      ERROR_RETURN(-1.);
+      break;
+    }
+
+  } /* switch (M->mat_type) */
 
   return(mabs);
 }  /* end of function matabs */

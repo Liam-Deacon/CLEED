@@ -87,7 +87,7 @@ int parse_args(int argc, char *argv[],
       (!strcmp(argv[i_arg], "--tailoff")))
    {
      i_arg++;
-     ARG_PARSE_DBL(*tailoff);
+     arg_parse_dbl(tailoff, argc, argv, i_arg);
    }
 
 /* Define mode */
@@ -134,7 +134,7 @@ int parse_args(int argc, char *argv[],
 	       break;
 
 	     default:
-		   *offset = (double)atof(argv[i_arg]);	   
+	       *offset = (double)atof(argv[i_arg]);
 	   }
 	 }
    }

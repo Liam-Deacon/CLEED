@@ -104,6 +104,9 @@ mat mattrans(mat Mt, const mat M)
         break;
       } /* NUM_COMPLEX */
 
+      case(NUM_IMAG) : case(NUM_MASK): default:
+        ERROR_MSG("Unsupported data type for matrix M (%s)\n", strmtype(M->num_type));
+        ERROR_RETURN(Mt);
     }  /* switch */
     matfree(Maux);
   } /* else */

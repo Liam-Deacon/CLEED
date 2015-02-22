@@ -41,14 +41,14 @@ void linmin(real *p, real *xi, size_t n, real *fret, real (*func)() )
 	real xx, xmin, fx, fb, fa, bx, ax, faux;
 
 	ncom = n;
-	pcom = CLEED_VECTOR_ALLOC(n);
-	xicom = CLEED_VECTOR_ALLOC(n);
+	pcom = cleed_vector_alloc(n);
+	xicom = cleed_vector_alloc(n);
 	nrfunc = func;
 
 	for (j=0; j<n; j++)
 	{
-		CLEED_VECTOR_SET(pcom, j, CLEED_VECTOR_GET(p, j));
-		CLEED_VECTOR_SET(xicom, j, CLEED_VECTOR_GET(xi, j));
+		cleed_vector_set(pcom, j, cleed_vector_get(p, j));
+		cleed_vector_set(xicom, j, cleed_vector_get(xi, j));
 	}
 
 	ax = 0.0;
@@ -59,27 +59,27 @@ void linmin(real *p, real *xi, size_t n, real *fret, real (*func)() )
 
 	for (j=0; j<n; j++)
 	{
-	  faux = CLEED_VECTOR_GET(xi, j);
-		CLEED_VECTOR_SET(xi, j, faux*xmin);
-		CLEED_VECTOR_SET(p, j, CLEED_VECTOR_GET(p, j) + faux);
+	  faux = cleed_vector_get(xi, j);
+		cleed_vector_set(xi, j, faux*xmin);
+		cleed_vector_set(p, j, cleed_vector_get(p, j) + faux);
 	}
 
-	CLEED_VECTOR_FREE(xicom);
-	CLEED_VECTOR_FREE(pcom);
+	cleed_vector_free(xicom);
+	cleed_vector_free(pcom);
 }
 
 real f1dim(real x)
 {
   size_t j;
   real f;
-  cleed_vector *xt = CLEED_VECTOR_ALLOC(ncom);
+  cleed_vector *xt = cleed_vector_alloc(ncom);
 
   for (j=0; j<ncom; j++)
-    CLEED_VECTOR_SET(xt, j,
-        CLEED_VECTOR_GET(pcom, j) + x*CLEED_VECTOR_GET(xicom, j));
+    cleed_vector_set(xt, j,
+        cleed_vector_get(pcom, j) + x*cleed_vector_get(xicom, j));
 
   f = (*nrfunc)(xt);
 
-  CLEED_VECTOR_FREE(xt);
+  cleed_vector_free(xt);
   return f;
 }

@@ -25,19 +25,13 @@
 #ifndef __gsl_aux_H__
 #define __gsl_aux_H__
 
-#ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
-extern C {
-#endif /* __cplusplus */
-
 /* includes */
 #include <gsl/gsl_matrix.h>
 #include "mat.h"
 
-/* defines */
-
-
-/* enums, structs and typedefs */
-
+#ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
+extern C {
+#endif /* __cplusplus */
 
 /* functions */
 int mat2gsl(gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx, int gsl_num, mat Mx);
@@ -60,15 +54,8 @@ void gsl2blas(real *cblas_mx, real *cblas_mx_cmplx,
               gsl_matrix *gsl_mx, gsl_matrix_complex *gsl_mx_cmplx,
               int cblas_type);
 
-
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
-namespace cleed {
-
-/* classes */
-
-} /* namespace cleed */
-
-}
+} /* extern "C" */
 #endif /* __cplusplus */
 
 #endif /* __gsl_aux_H__ */

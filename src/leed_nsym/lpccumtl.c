@@ -85,13 +85,13 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
   size_t l1, l2;
   size_t lm1, lm2;
   int m1, m2;
-  int iaux, i_el;
+  size_t iaux, i_el;
   size_t i_iter;
   size_t l_max_2 = (l_max_t+1)*(l_max_t+1);    /* matrix dimension */
 
   real relerr_r, relerr_i;
   real ux2 = ux*ux, uy2 = uy*uy, uz2 = uz*uz;
-  real kappa = R_sqrt(2. * energy);
+  real kappa = cleed_real_sqrt(2. * energy);
 
   real pref, conv_test;
 
@@ -124,11 +124,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
   if(l_max_0 > l_max_t)
   {
     l_max_0 = l_max_t;
-
-    #ifdef WARNING_LOG
-    fprintf(STDWAR, "* warning (leed_par_cumulative_tl): "
-            "input phase shifts are only used up to l_max = %u\n", l_max_0);
-    #endif
+    WARNING_MSG("input phase shifts are only used up to l_max = %d\n", l_max_0);
   }
   else if(l_max_0 < l_max_t)
   {
@@ -143,9 +139,9 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
 
   /* lm1, lm2, are counters in natural order */
   for(lm1 = 1, l1 = 0; l1 <= l_max_0; l1 ++)
-    for(m1 = -l1; m1 <= l1; m1 ++, lm1 ++)
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 ++, lm1 ++)
       for(lm2 = 1, l2 = 0; l2 <= l_max_0; l2 ++)
-        for(m2 = -l2; m2 <= l2; m2 ++, lm2 ++)
+        for(m2 = -(int)l2; m2 <= (int)l2; m2 ++, lm2 ++)
           if((l1 == l2) && (m1 == m2) )
           {
             *rmatel(lm1, lm2, T_n) = - tl_aux->rel[l1+1] / kappa;
@@ -309,11 +305,11 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
     {
       if( ! IS_EQUAL_REAL(T_acc->rel[i_el], 0.))
       {
-        relerr_r += R_fabs(T_n->rel[i_el] / T_acc->rel[i_el]);
+        relerr_r += cleed_real_fabs(T_n->rel[i_el] / T_acc->rel[i_el]);
       }
       if( ! IS_EQUAL_REAL(T_acc->iel[i_el], 0.))
       {
-        relerr_i += R_fabs(T_n->iel[i_el] / T_acc->iel[i_el]);
+        relerr_i += cleed_real_fabs(T_n->iel[i_el] / T_acc->iel[i_el]);
       }
     } /* for i_el */
 

@@ -165,7 +165,7 @@ real sr_evalrf(cleed_vector *par)
   rfac = 0.;
   for (i_par = 0; i_par < sr_search->n_par; i_par ++)
   {
-    rfac += 1 - cos(PI*(par[i_par] - 2.3)) +  R_fabs(par[i_par] - 2.3);
+    rfac += 1 - cos(PI*(par[i_par] - 2.3)) +  cleed_real_fabs(par[i_par] - 2.3);
   }
   rfac /= sr_search->n_par;
 

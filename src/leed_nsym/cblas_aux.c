@@ -22,8 +22,25 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "mat.h"
+
+/*!
+ * Returns an error message if \p info does not equal zero.
+ *
+ * \param routine Name of the routine for output.
+ * \param info The value to check - most likely as the return code from a
+ * function call.
+ */
+void info_check(const char *routine, const int info)
+{
+  if ( info != 0 )
+  {
+    ERROR_MSG("(%s) -> routine failed, info = %d\n", routine, info);
+    exit(1);
+  }
+}
 
 /*!
  * Converts a CLEED matrix \p Mx into a CBLAS matrix \p cblas_mx . \p cblas_num
@@ -38,7 +55,7 @@
  * \retval 0 if successful.
  * \retval 1 if the operation type is invalid and #EXIT_ON_ERROR is not defined.
  */
-int mat2cblas ( real *cblas_mx, int cblas_num, mat Mx )
+int mat2cblas ( real *cblas_mx, mat_enum cblas_num, mat Mx )
 {
 
   size_t i, incre;
@@ -111,12 +128,10 @@ int mat2cblas ( real *cblas_mx, int cblas_num, mat Mx )
  * \retval 0 if successful.
  * \retval 1 if the operation type is invalid and #EXIT_ON_ERROR is not defined.
  */
-int cblas2mat ( mat Mx, real *cblas_mx )
+int cblas2mat ( mat Mx, const real *cblas_mx )
 {
   /* silently assume cblas same type as Mx */
-  size_t i;
-  real *cblas_px;
-  real *ptrx, *ptix;
+  size_t i, j;
 
   if (cblas_mx == NULL)
   {
@@ -126,22 +141,18 @@ int cblas2mat ( mat Mx, real *cblas_mx )
 
   if (Mx->num_type == NUM_REAL)
   {
-    for ( i = 1 , cblas_px = cblas_mx , ptrx = Mx->rel+1 ;
-          i <= Mx->rows * Mx->cols ;
-          i++ , cblas_px++ , ptrx++ )
-    {
-      *ptrx = *cblas_px;
-    }
+    /* use faster memcpy method rather than element-wise assignment */
+    memcpy((void*)Mx->rel+1, (const void*)cblas_mx,
+            sizeof(real)*Mx->rows*Mx->cols);
+    //for ( i=1; i <= Mx->rows * Mx->cols; i++) Mx->rel[i] = cblas_mx[i-1];
 
   }
   else if (Mx->num_type == NUM_COMPLEX)
   {
-    for ( i = 1 , cblas_px = cblas_mx , ptrx = Mx->rel+1 , ptix = Mx->iel+1 ;
-          i <= Mx->rows * Mx->cols ;
-          i++ , cblas_px += 2 , ptrx++ , ptix++ )
+    for ( i=1, j=0; i <= Mx->rows * Mx->cols ; i++, j+=2)
     {
-      *ptrx = *cblas_px;
-      *ptix = *(cblas_px+1);
+      Mx->rel[i] = cblas_mx[j];
+      Mx->iel[i] = cblas_mx[j+1];
     }
 
   }
@@ -152,23 +163,6 @@ int cblas2mat ( mat Mx, real *cblas_mx )
   }
   return(0);
 }
-
-/*!
- * Returns an error message if \p info does not equal zero.
- *
- * \param routine Name of the routine for output.
- * \param info The value to check - most likely as the return code from a
- * function call.
- */
-void info_check(const char *routine, const int info)
-{
-  if ( info != 0 )
-  {
-    ERROR_MSG("(%s) -> routine failed, info = %d\n", routine, info);
-    exit(1);
-  }
-}
-
 
 /*!
  * Converts a CLEED matrix \p Mx into a FORTRAN BLAS matrix \p blas_mx . \p blas_num
@@ -186,7 +180,7 @@ void info_check(const char *routine, const int info)
  * \todo implement conversion taking into account complex types and the starting
  * indexing for the Fortran BLAS.
  */
-int mat2blas ( real *blas_mx, int blas_num, mat Mx )
+int mat2blas ( real *blas_mx, mat_enum blas_num, const mat Mx )
 {
 
   size_t i, j, incre;
@@ -228,23 +222,30 @@ int mat2blas ( real *blas_mx, int blas_num, mat Mx )
         blas_mx[ i * Mx->rows + j ] = Mx->rel[ j * Mx->rows + i ];
       }
 
-    for ( i = 1 , blas_px = blas_mx , ptrx = Mx->rel+1 ;
-          i <= Mx->rows * Mx->cols ;
-          i++ , blas_px += incre , ptrx++ )
+    if ( blas_num == NUM_COMPLEX )
     {
-      *blas_px = *ptrx;
-      if ( blas_num == NUM_COMPLEX ) *(blas_px+1) = 0;
+      for ( i = 1; i <= Mx->rows * Mx->cols; i+=incre)
+      {
+        blas_mx[i-1] = Mx->rel[i];
+        blas_mx[i] = 0.;
+      }
     }
-
+    else /* just assign real part */
+    {
+      /* use faster memcpy method rather than element-wise assignment */
+      memcpy((void*)blas_mx, (const void*)Mx->rel+1,
+                sizeof(real)*Mx->rows*Mx->cols);
+      //for ( i=1; i <= Mx->rows * Mx->cols; i+=incre ) blas_mx[i-1] = Mx->rel[i];
+    }
   }
   else if (Mx->num_type == NUM_COMPLEX)
   {
-    for ( i = 1 , blas_px = blas_mx , ptrx = Mx->rel+1 , ptix = Mx->iel+1 ;
+    for ( i = 1 , blas_px = blas_mx;
           i <= Mx->rows * Mx->cols ;
           i++ , blas_px += incre , ptrx++ , ptix++ )
     {
-      *blas_px = *ptrx;
-      *(blas_px+1) = *ptix;
+      blas_mx[i-1] = Mx->rel[i];
+      blas_mx[i] = Mx->iel[i];
     }
 
   }
@@ -272,8 +273,6 @@ int blas2mat ( mat Mx, real *blas_mx )
   /* silently assume blas same type as Mx */
   size_t i, j;
   size_t cols, rows;
-  real *blas_px;
-  real *ptrx, *ptix;
 
   if (blas_mx == NULL)
   {

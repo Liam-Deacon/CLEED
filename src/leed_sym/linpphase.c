@@ -1,29 +1,31 @@
-/**********************************************************************
-  GH/02.09.97
-  WB/26.02.98
-  LD/13.03.14
-  file contains function:
-
-  leed_update_phase
-   Update the number of phase shifts.
-  leed_leed_inp_phase
-   Read phase shifts from an input file and store them.
-  gen_phase
-   Create phase shift input files in iterative manner for newest model.
-Changes:
-
-  GH/04.07.94 - Creation
-  GH/19.01.95 - add eng_max and eng_min
-  GH/08.08.95 - update i_phase
-  GH/02.09.97 - Set input path by environment variable CLEED_PHASE
-                (makes PHASE_PATH obsolete)
-  WB/26.02.98 - Correct control output
-  LD/13.03.14 - Auto-generation of phase shifts using phsh.py
-               (Check for environment variable CSEARCH_PHSH and generate
-                iterative phase shifts, otherwise default to using original 
-                phase shift files)
-
+/*********************************************************************
+ *                        LINPPHASE.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *   GH/04.07.94 - Creation
+ *   GH/19.01.95 - add eng_max and eng_min
+ *   GH/08.08.95 - update i_phase
+ *   GH/02.09.97 - Set input path by environment variable CLEED_PHASE
+ *                 (makes PHASE_PATH obsolete)
+ *   WB/26.02.98 - Correct control output
+ *   LD/13.03.14 - Auto-generation of phase shifts using phsh.py
+ *                (Check for environment variable CSEARCH_PHSH and generate
+ *                 iterative phase shifts, otherwise default to using original
+ *                 phase shift files)
  *********************************************************************/
+
+/*! \file
+ *
+ * Implements leed_inp_phase() function for reading phase shift files into
+ * the \c leed program.
+ */
 
 #include <math.h>
 #include <malloc.h>
@@ -35,9 +37,25 @@ Changes:
 #include "leed.h"
 #include "leed_def.h"
 
-static int i_phase = 0;      /* number of atom types */
+#if defined(WIN32) || defined(_WIN32)
+static const char* PATH_SEPARATOR = "\\";
+#else
+static const char* PATH_SEPARATOR = "/";
+#endif
 
-int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
+static size_t i_phase = 0;      /*!< number of atom types */
+
+
+/*!
+ * Reads phase shifts from an input file and stores them for the \c leed program.
+ *
+ * \param[in] phaseinp Pointer to file name string containing the path to the
+ * phase shift file to be read. If it starts with '/' or
+ * \param[in] dr
+ * \param[in,out] p_phs_shifts
+ * \return The number of phase shifts read.
+ */
+int leed_inp_phase(const char *phaseinp, real *dr, leed_phase **p_phs_shifts )
 
 /*********************************************************************
 
@@ -70,10 +88,10 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
 
   leed_phase *phs_shifts;
 
-  int i;
-  int i_str, i_eng;
+  size_t i;
+  size_t i_str, i_eng;
 
-  int n_eng, lmax, nl;          /* n_eng = No. of energies to be read
+  size_t n_eng, lmax, nl;       /* n_eng = No. of energies to be read
                                  * lmax = max. quantum number;
                                  * nl = No. of phase shifts = lmax + 1 */
   real eng_scale;
@@ -94,10 +112,10 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
       ERROR_MSG("environment variable CLEED_PHASE not defined\n");
       exit(1);
     }
-    sprintf(filename, "%s/%s.phs",getenv("CLEED_PHASE"),phaseinp);
+    sprintf(filename, "%s/%s.phs", getenv("CLEED_PHASE"), phaseinp);
   }
   else
-    sprintf(filename, "%s",phaseinp);
+    sprintf(filename, "%s", phaseinp);
 
   if(i_phase > 0)
   {
@@ -106,15 +124,17 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
   corresponding phase shift number if the same combination has already 
   been read.
      */
-    for(i=0; i< i_phase; i++)
+    for(i=0; i < i_phase; i++)
+    {
       if( (!strcmp( (*p_phs_shifts + i)->input_file, filename) )        &&
-          ( R_fabs(dr[1] - (*p_phs_shifts + i)->dr[1]) < GEO_TOLERANCE ) &&
-          ( R_fabs(dr[2] - (*p_phs_shifts + i)->dr[2]) < GEO_TOLERANCE ) &&
-          ( R_fabs(dr[3] - (*p_phs_shifts + i)->dr[3]) < GEO_TOLERANCE )  )
+          ( cleed_real_fabs(dr[1] - (*p_phs_shifts + i)->dr[1]) < GEO_TOLERANCE ) &&
+          ( cleed_real_fabs(dr[2] - (*p_phs_shifts + i)->dr[2]) < GEO_TOLERANCE ) &&
+          ( cleed_real_fabs(dr[3] - (*p_phs_shifts + i)->dr[3]) < GEO_TOLERANCE )  )
       {
         return(i);
         break;
       }
+    }
     i_phase ++;
     *p_phs_shifts = (leed_phase *)realloc(
         *p_phs_shifts, (i_phase + 1) * sizeof(leed_phase) );
@@ -130,7 +150,7 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
   (*(p_phs_shifts) + i_phase)->lmax = I_END_OF_LIST;
 
 
-  phs_shifts = *(p_phs_shifts) + i_phase-1;
+  phs_shifts = &p_phs_shifts[i_phase-1];
 
   /* write dr to phs_shifts */
   for(i=0; i<=3; i++) phs_shifts->dr[i] = dr[i];
@@ -139,10 +159,7 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
   Open and Read input file for a new set of phase shifts
    ********************************************************************/
 
-#ifdef CONTROL
-  fprintf(STDCTR,"(leed_leed_inp_phase): Reading file \"%s\", i_phase = %d\n",
-      filename, i_phase-1);
-#endif
+  CONTROL_MSG(CONTROL, "reading file \"%s\", i_phase = %d\n", filename, i_phase-1);
 
   /*
   Open input file.
@@ -181,26 +198,20 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
   Define energy scale according to eng_type. The default is 
   input in Hartree units (27.18 eV)
    */
-  if( !strncmp(eng_type,"eV",2) || !strncmp(eng_type,"EV",2) )
+  if( !strncmp(eng_type, "eV", 2) || !strncmp(eng_type, "EV", 2) )
   {
     eng_scale = 1./HART;
-#ifdef CONTROL
-    fprintf(STDCTR,"(leed_leed_inp_phase): Energy input in eV\n");
-#endif
+    CONTROL_MSG(CONTROL, "Energy input in eV\n");
   }
-  else if( !strncmp(eng_type,"Ry",2) || !strncmp(eng_type,"RY",2) )
+  else if( !strncmp(eng_type, "Ry", 2) || !strncmp(eng_type, "RY", 2) )
   {
     eng_scale = 2./HART;
-#ifdef CONTROL
-    fprintf(STDCTR,"(leed_leed_inp_phase): Energy input in Rydberg (13.59 eV)\n");
-#endif
+    CONTROL_MSG(CONTROL, "Energy input in Rydberg (13.59 eV)\n");
   }
   else
   {
     eng_scale = 1.;
-#ifdef CONTROL
-    fprintf(STDCTR,"(leed_leed_inp_phase): Energy input in Hartree (27.18 eV)\n");
-#endif
+    CONTROL_MSG(CONTROL, "Energy input in Hartree (27.18 eV)\n");
   }
 
   /********************************************************************
@@ -258,9 +269,9 @@ int leed_leed_inp_phase( char * phaseinp, real * dr, leed_phase **p_phs_shifts )
 
   phs_shifts->n_eng = i_eng;
 
-#ifdef CONTROL
-  fprintf(STDCTR,"(leed_leed_inp_phase): Number of energies = %d, lmax = %d\n",
-      phs_shifts->n_eng, phs_shifts->lmax);
+#if CONTROL
+  CONTROL_MSG(CONTROL, "Number of energies = %d, lmax = %d\n",
+              phs_shifts->n_eng, phs_shifts->lmax);
   fprintf(STDCTR,"\n\t  E(H)");
   for(i=0; i<nl; i++) fprintf(STDCTR,"\t  l=%2d",i);
   fprintf(STDCTR,"\n\n");

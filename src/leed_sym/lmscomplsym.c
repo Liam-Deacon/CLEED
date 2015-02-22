@@ -313,7 +313,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    iaux = 0;
    for(j_atoms = 0; j_atoms < n_atoms; j_atoms ++)
    {
-     if( R_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] ) 
+     if( cleed_real_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] ) 
          < GEO_TOLERANCE )
      { iaux ++; }
    }    /* for j_atoms */
@@ -336,7 +336,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 */
  for(i_atoms = 0, j_atoms = 0; i_atoms < n_atoms; i_atoms ++)
  {
-   if( R_fabs( (atoms+i_atoms)->pos[3] - z_plane ) < GEO_TOLERANCE )
+   if( cleed_real_fabs( (atoms+i_atoms)->pos[3] - z_plane ) < GEO_TOLERANCE )
    {
   /* Exchange atom parameters if i_atoms != j_atoms */
      if( i_atoms != j_atoms )
@@ -354,7 +354,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
      }  /* if i_atoms ... */
 
      j_atoms ++;
-   }  /* if R_fabs ... */
+   }  /* if cleed_real_fabs ... */
  }  /* for i_atoms */
 
 #ifdef CONTROL_X

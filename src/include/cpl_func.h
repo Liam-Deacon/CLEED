@@ -22,25 +22,29 @@
 #ifndef CPL_FUNC_H
 #define CPL_FUNC_H
 
+#if !__GNUC__
+#define __attribute__(x) /* empty for compilers other than GCC */
+#endif
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
 /* multiplication (cribasfun.c) */
-void cri_mul(real *, real *, real, real, real, real);
+__attribute__((nonnull)) void cri_mul(real *, real *, real, real, real, real);
 
 /* division (cribasfun.c) */
-void cri_div(real *, real *, real, real, real, real);
+__attribute__((nonnull)) void cri_div(real *, real *, real, real, real, real);
 
 /* square root (cribasfun.c) */
-void cri_sqrt(real *, real *, real, real);
+__attribute__((nonnull)) void cri_sqrt(real *, real *, real, real);
 
 /* square exponent (cribasfun.c) */
-void cri_exp(real *, real *, real, real);
-void cri_expi(real *, real *, real, real);
+__attribute__((nonnull)) void cri_exp(real *, real *, real, real);
+__attribute__((nonnull)) void cri_expi(real *, real *, real, real);
 
 /* integer powers of i */
-void cri_powi(real *, real *, int);
+__attribute__((nonnull)) void cri_powi(real *, real *, int);
 
 /*********************************************************************
  * lower level functions
@@ -48,6 +52,10 @@ void cri_powi(real *, real *, int);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
+#endif
+
+#ifdef __attribute__
+#undef __attribute__
 #endif
 
 #endif /* CPL_FUNC_H */

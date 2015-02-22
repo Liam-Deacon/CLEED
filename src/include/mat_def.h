@@ -24,15 +24,15 @@
 #ifndef MAT_DEF_H
 #define MAT_DEF_H
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 /*********************************************************************
  * structures and types for matrices
  *********************************************************************/
 #include <stdio.h>
-#include "real.h" /* type definition for real */
+#include "cleed_real.h" /* type definition for real */
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+namespace cleed {
+#endif
 
 /*********************************************************************
  * values for:
@@ -40,20 +40,20 @@ extern "C" {
  *  - num_type
  *********************************************************************/
 
-#define MATRIX         0xaffe   /*!< magic number for matrix */
+enum { MATRIX = 0xaffe };   /*!< magic number for matrix */
 
 /*
  * matrix types:
  * Use only lower half of high bytes for mat_type, 
  * i.e. 0x0FFF >= MAT_* > 0x00FF (NUM_MASK)
  */
-#define MAT_MASK       0x0F00
-
-#define MAT_NORMAL     0x0100   /*!< M x N matrix */
-#define MAT_SQUARE     0x0200   /*!< M x M matrix */
-#define MAT_SCALAR     0x0300   /*!< 1 x 1 matrix */
-
-#define MAT_DIAG       0x0800   /*!< diagonal matrix (must be highest number) */
+typedef enum {
+  MAT_MASK = 0x0F00,
+  MAT_NORMAL = 0x0100,   /*!< M x N matrix */
+  MAT_SQUARE = 0x0200,   /*!< M x M matrix */
+  MAT_SCALAR = 0x0300,   /*!< 1 x 1 matrix */
+  MAT_DIAG = 0x0800      /*!< diagonal matrix (must be highest number) */
+} mat_type;
 
 /*
  * block types:
@@ -61,21 +61,23 @@ extern "C" {
  * i.e. 0xFFFF >= BLK_* > 0x0FFF (NUM_MASK)
  */
 
-#define BLK_MASK       0xF000
-
-#define BLK_SINGLE     0x1000   /*!< single matrix, i.e. not part of an array */
-#define BLK_ARRAY      0x4000   /*!< part of a matrix array */
-#define BLK_END        0x5000   /*!< terminator of a matrix array */
+typedef enum {
+  BLK_MASK = 0xF000,
+  BLK_SINGLE = 0x1000,    /*!< single matrix, i.e. not part of an array */
+  BLK_ARRAY = 0x4000,     /*!< part of a matrix array */
+  BLK_END = 0x5000        /*!< terminator of a matrix array */
+} mat_blk;
 
 /*
  * number types:
  * Use only low bytes for num_type, i.e. NUM_* <= 0xFF (NUM_MASK)
  */
-#define NUM_MASK    0xFF
-
-#define NUM_REAL    0x02
-#define NUM_IMAG    0x03
-#define NUM_COMPLEX 0x04
+typedef enum {
+  NUM_MASK = 0xFF,
+  NUM_REAL = 0x02,
+  NUM_IMAG = 0x03,
+  NUM_COMPLEX = 0x04
+} mat_enum;
 
 /*********************************************************************
  * Macros for matrix operations
@@ -96,6 +98,11 @@ extern "C" {
  */
 #define IMATEL(m,n,Mat) *((Mat)->iel + ((m)-1) * (Mat)->cols + (n))
 
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
+
 /*! \struct mat_str
  *  \brief type definition for mat
  *
@@ -106,21 +113,54 @@ struct mat_str      /*!< real or complex matrix */
 {
   int mag_no;        /*!< magic number */
   int blk_type;      /*!< type of matrix array (single, block) */
-  int mat_type;      /*!< type of matrix (square, real etc.) */
-  int num_type;      /*!< type of matrix elements */ 
+  mat_type mat_type; /*!< type of matrix (square, real etc.) */
+  mat_enum num_type; /*!< type of matrix elements */
   size_t rows;       /*!< 1st dimension of matrix (number of rows) */
   size_t cols;       /*!< 2nd dimension of matrix (number of columns) */
   real *rel;         /*!< pointer to real matrix elements */ 
   real *iel;         /*!< pointer to complex matrix elements */
 };
 
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+} /* extern "C" */
+#endif
+
 /*! \typedef mat
  *  \brief pointer to the upper matrix structure (used to refer to a matrix)
  */
 typedef struct mat_str* mat;
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+/*!
+ * Access real matrix element \$f (i,j) \$f of matrix Mat.
+ *
+ * \param i Row number
+ * \param j Column number
+ * \param Mat Pointer to CLEED matrix
+ *
+ * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
+ * \note \p Mat is stored in row-major order.
+ */
+static inline real *rmatel(size_t i, size_t j, mat Mat)
+{
+  return (Mat->rel + (i-1) * Mat->cols + j);
 }
+/*!
+ * Access imaginary matrix element \f$ (i,j) \f$ of matrix Mat.
+ *
+ * \param i Row number
+ * \param j Column number
+ * \param Mat Pointer to CLEED matrix
+ *
+ * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
+ * \note \p Mat is stored in row-major order.
+ */
+static inline real *imatel(size_t i, size_t j, mat Mat)
+{
+  return (Mat->iel + ((i-1) * Mat->cols + j));
+}
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+} /* namespace cleed */
 #endif
 
 #endif /* MAT_DEF_H */

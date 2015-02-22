@@ -33,8 +33,12 @@ extern "C" {
 
 #include "gh_stddef.h"
 
-#define REAL_IS_DOUBLE
-#include "real.h"
+#define CLEED_REAL_IS_DOUBLE
+
+#include "cleed_real.h"
+#include "cleed_vector.h"
+#include "cleed_matrix.h"
+
 #include "leed_def.h"
 
 

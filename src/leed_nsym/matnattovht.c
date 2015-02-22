@@ -33,9 +33,9 @@
  */
 void matnattovht(const mat Mbg, size_t l_max, size_t n_atoms)
 {
-  size_t l_max_2, l1;
+  size_t l_max_2, i1, l1, n1, off;
   size_t i_atoms;
-  int m1, off, i1, n1;
+  int m1;
 
   l_max_2 = (l_max + 1)*(l_max + 1);
 
@@ -44,48 +44,52 @@ void matnattovht(const mat Mbg, size_t l_max, size_t n_atoms)
   {
     for(l1 = 0; l1 <= l_max; l1 += 2)
     {
-      for(m1 = -l1; m1 <= l1; m1 += 2)
+      for(m1 = -(int)l1; m1 <= (int)l1; m1 += 2)
       {
-        i1 = off + l1 * (l1+1) + m1;
+        if (m1 < 0) i1 = off + l1 * (l1+1) - (size_t)abs(m1);
+        else        i1 = off + l1 * (l1+1) + (size_t)m1;
         n1++;
-        fprintf(STDOUT, "%3d:    ", n1);
 
+        fprintf(STDOUT, "%3d:    ", n1);
         matline(Mbg, i1, l_max, l_max_2, n_atoms);
       } /* m1 */
     } /* l1 */
 
     for(l1 = 1; l1 <= l_max; l1 += 2)
     {
-      for(m1 = -l1; m1 <= l1; m1 += 2)
+      for(m1 = -(int)l1; m1 <= (int)l1; m1 += 2)
       {
-        i1 = off + l1 * (l1+1) + m1;
+        if (m1 < 0) i1 = off + l1 * (l1+1) - (size_t)abs(m1);
+        else        i1 = off + l1 * (l1+1) + (size_t)m1;
         n1++;
-        fprintf(STDOUT, "%3d:    ", n1);
 
+        fprintf(STDOUT, "%3d:    ", n1);
         matline(Mbg, i1, l_max, l_max_2, n_atoms);
       } /* m1 */
     } /* l1 */
 
     for(l1 = 1; l1 <= l_max; l1 += 2)
     {
-      for(m1 = -l1+1; m1 <= l1; m1 += 2)
+      for(m1 = -(int)l1+1; m1 <= (int)l1; m1 += 2)
       {
-        i1 = off + l1 * (l1+1) + m1;
+        if (m1 < 0) i1 = off + l1 * (l1+1) - (size_t)abs(m1);
+        else        i1 = off + l1 * (l1+1) + (size_t)m1;
         n1++;
-        fprintf(STDOUT, "%3d:    ", n1);
 
+        fprintf(STDOUT, "%3d:    ", n1);
         matline(Mbg, i1, l_max, l_max_2, n_atoms);
       } /* m1 */
     } /* l1 */
 
     for(l1 = 2; l1 <= l_max; l1 += 2)
     {
-      for(m1 = -l1+1; m1 <= l1; m1 += 2)
+      for(m1 = -(int)l1+1; m1 <= (int)l1; m1 += 2)
       {
-        i1 = off + l1 * (l1+1) + m1;
+        if (m1 < 0) i1 = off + l1 * (l1+1) - (size_t)abs(m1);
+        else        i1 = off + l1 * (l1+1) + (size_t)m1;
         n1++;
-        fprintf(STDOUT, "%3d:    ", n1);
 
+        fprintf(STDOUT, "%3d:    ", n1);
         matline(Mbg, i1, l_max, l_max_2, n_atoms);
       } /* m1 */
     } /* l1 */
@@ -105,18 +109,20 @@ void matnattovht(const mat Mbg, size_t l_max, size_t n_atoms)
  * \param l_max_2 Maximum angular momentum quantum number.
  * \param n_atoms Number of atoms.
  */
-void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms)
+void matline(const mat Mbg, size_t i1, size_t l_max, size_t l_max_2, size_t n_atoms)
 {
-  int i2, n2, l2, m2, off2, i_atoms2;
+  size_t i2, n2, l2, off2, i_atoms2;
+  int m2;
 
   for (i_atoms2 = 0, n2 = 0, off2 = 1; i_atoms2 < n_atoms;
        i_atoms2 ++, off2 += l_max_2)
   {
     for(l2 = 0; l2 <= l_max; l2 += 2)
     {
-      for(m2 = -l2; m2 <= l2; m2 += 2)
+      for(m2 = (int)l2; m2 <= (int)l2; m2 += 2)
       {
-        i2 = off2 + l2 * (l2+1) + m2;
+        if (m2 < 0) i2 = off2 + l2 * (l2+1) - (size_t)abs(m2);
+        else        i2 = off2 + l2 * (l2+1) + (size_t)m2;
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",
@@ -129,9 +135,10 @@ void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms
 
     for(l2 = 1; l2 <= l_max; l2 += 2)
     {
-      for(m2 = -l2; m2 <= l2; m2 += 2)
+      for(m2 = -(int)l2; m2 <= (int)l2; m2 += 2)
       {
-        i2 = off2 + l2 * (l2+1) + m2;
+        if (m2 < 0) i2 = off2 + l2 * (l2+1) - (size_t)abs(m2);
+        else        i2 = off2 + l2 * (l2+1) + (size_t)m2;
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",
@@ -144,9 +151,10 @@ void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms
 
     for(l2 = 1; l2 <= l_max; l2 += 2)
     {
-      for(m2 = -l2+1; m2 <= l2; m2 += 2)
+      for(m2 = -(int)l2+1; m2 <= (int)l2; m2 += 2)
       {
-        i2 = off2 + l2 * (l2+1) + m2;
+        if (m2 < 0) i2 = off2 + l2 * (l2+1) - (size_t)abs(m2);
+        else        i2 = off2 + l2 * (l2+1) + (size_t)m2;
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",
@@ -159,9 +167,10 @@ void matline(const mat Mbg, int i1, size_t l_max, size_t l_max_2, size_t n_atoms
 
     for(l2 = 2; l2 <= l_max; l2 += 2)
     {
-      for(m2 = -l2+1; m2 <= l2; m2 += 2)
+      for(m2 = -(int)l2+1; m2 <= (int)l2; m2 += 2)
       {
-        i2 = off2 + l2 * (l2+1) + m2;
+        if (m2 < 0) i2 = off2 + l2 * (l2+1) - (size_t)abs(m2);
+        else        i2 = off2 + l2 * (l2+1) + (size_t)m2;
         n2 ++;
 
         fprintf(STDOUT, "(%6.3f,%6.3f)[%4.2f]",

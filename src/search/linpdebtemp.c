@@ -115,11 +115,11 @@ real leed_inp_debye_temp(real deb_temp, real mass, real temp)
   }
   else                     /* intermediate T */
   {
-    dr2 = 0.5 * PREF_DEBWAL / (mass * deb_temp) * R_sqrt(0.0625 + faux*faux);
+    dr2 = 0.5 * PREF_DEBWAL / (mass * deb_temp) * cleed_real_sqrt(0.0625 + faux*faux);
   }
 
   CONTROL_MSG(CONTROL, "dr2 = %.3f dr1 = %.3f \n",
-              dr2 * BOHR * BOHR, R_sqrt(dr2)*BOHR );
+              dr2 * BOHR * BOHR, cleed_real_sqrt(dr2)*BOHR );
 
   return(dr2);
 

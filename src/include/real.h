@@ -24,13 +24,13 @@
  * casting from \c double to \c float may occur.
 */
 
-#ifndef REAL_H
-#define REAL_H
+#ifndef CLEED_REAL_H
+#define CLEED_REAL_H
 
 /* define DOUBLE if neither FLOAT nor DOUBLE have been defined before. */
-#ifndef REAL_IS_DOUBLE
-#ifndef REAL_IS_FLOAT
-#define REAL_IS_DOUBLE 1
+#ifndef CLEED_REAL_IS_DOUBLE
+#ifndef CLEED_REAL_IS_FLOAT
+#define CLEED_REAL_IS_DOUBLE 1
 #endif
 #endif
 
@@ -50,15 +50,12 @@ extern "C" {
 /************************************************
  * REAL IS DOUBLE
  ************************************************/
-#ifdef REAL_IS_DOUBLE
+#ifdef CLEED_REAL_IS_DOUBLE
 #include <float.h>
 
-#ifndef TYPE_REAL
-#define TYPE_REAL double
 typedef double real;
-#endif
 
-#define REAL_FMT "l"
+static const char* CLEED_REAL_FMT = "l";
 
 /*
   Define macros for math operations of type double 
@@ -88,21 +85,18 @@ typedef double real;
 
 #define IS_EQUAL_REAL(x,y) (fabs(x-y) < DBL_EPSILON)
 
-#endif  /* REAL_IS_DOUBLE */
+#endif  /* CLEED_REAL_IS_DOUBLE */
 
 /************************************************
  * REAL IS FLOAT
  ************************************************/
 
-#ifdef REAL_IS_FLOAT
+#ifdef CLEED_REAL_IS_FLOAT
 #include <float.h>
 
-#define REAL_FMT
+static const char* CLEED_REAL_FMT = "";
 
-#ifndef TYPE_REAL
-#define TYPE_REAL
-typedef float  real;
-#endif
+typedef float real;
 
 /*
   Define macros for math operations of type float
@@ -132,34 +126,34 @@ typedef float  real;
 
 #else                              /* IBM and others (standard math library) */
 
-#define R_cos(x)   (float) cos  ((double)(x))
-#define R_cosd(x)  (float) cosd ((double)(x))
-#define R_sin(x)   (float) sin  ((double)(x))
-#define R_sind(x)  (float) sind ((double)(x))
-#define R_atan2(x,y)  (float)atan2((double)(x), (double)(y))
+inline float R_cos(double x) { return (float)cos(x); }
+inline float R_cosd(double x) { return (float)cosd(x); }
+inline float R_sin(double x)  { return (float)sin(x); }
+inline float R_sind(double x) { return (float)sind(x); }
+inline float R_atan2(double x, double y) { return (float)atan2(x, y); }
 
-#define R_cosh(x)  (float) cosh ((double)(x))
-#define R_sinh(x)  (float) sinh ((double)(x))
+inline float R_cosh(x) { return (float)cosh(x); }
+inline float R_sinh(x) { return (float)sinh(x); }
 
-#define R_exp(x)   (float) exp  ((double)(x))
-#define R_log(x)   (float) log  ((double)(x))
+inline float R_exp(x) { (float) exp(x); }
+inline float R_log(x) { (float) log(x); }
 
-#define R_fabs(x)  (float) fabs ((double)(x))
-#define R_sqrt(x)  (float) sqrt ((double)(x))
+inline float R_fabs(x)  (float) fabs ((double)(x))
+inline float R_sqrt(x)  (float) sqrt ((double)(x))
 
-#define R_cabs(x,y)   (float) hypot ((double)(x), (double)(y))
-#define R_hypot(x,y)  (float) hypot ((double)(x), (double)(y))
+inline float R_cabs(x,y)   (float) hypot ((double)(x), (double)(y))
+inline float R_hypot(x,y)  (float) hypot ((double)(x), (double)(y))
 
-#define R_nint(x)  (float) rint ((double)(x))
+inline float R_nint(x) { return (float)rint((double)(x));}
 
 #endif
 
 #define IS_EQUAL_REAL(x,y) (fabs(x-y) < FLT_EPSILON)
 
-#endif  /* REAL_IS_FLOAT */
+#endif  /* CLEED_REAL_IS_FLOAT */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
 
-#endif /* REAL_H */
+#endif /* CLEED_REAL_H */

@@ -81,15 +81,15 @@ int leed_par_update_nd(leed_var *v_par, leed_phase *phs_shifts, real energy)
     v_par->eng_i = v_par->vi_pre;
   else
   {
-    faux_r = R_log(v_par->eng_r / VI_START) * v_par->vi_exp;
-    v_par->eng_i = v_par->vi_pre * R_exp(faux_r);
+    faux_r = cleed_real_log(v_par->eng_r / VI_START) * v_par->vi_exp;
+    v_par->eng_i = v_par->vi_pre * cleed_real_exp(faux_r);
   }
 
   /* Determine k_in */
-  faux_r = R_sin(v_par->theta) * R_sqrt(2*v_par->eng_v);
+  faux_r = cleed_real_sin(v_par->theta) * cleed_real_sqrt(2*v_par->eng_v);
   v_par->k_in[0] = faux_r;
-  v_par->k_in[1] = faux_r * R_cos(v_par->phi);
-  v_par->k_in[2] = faux_r * R_sin(v_par->phi);
+  v_par->k_in[1] = faux_r * cleed_real_cos(v_par->phi);
+  v_par->k_in[2] = faux_r * cleed_real_sin(v_par->phi);
 
   CONTROL_MSG(CONTROL, "new energy: Evac = %.2f; (Er, Ei) = (%.2f, %.2f) eV\n"
              "             k_in = (%.3f, %.3f) A-1\n",

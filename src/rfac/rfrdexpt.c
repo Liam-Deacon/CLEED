@@ -112,7 +112,7 @@ rfac_iv_data *rfac_iv_read(const char *filename)
 
         /* check equidistance */
         if( (i > 1) &&
-            (R_fabs ( (2*iv->data[i-1].energy - iv->data[i].energy -
+            (cleed_real_fabs ( (2*iv->data[i-1].energy - iv->data[i].energy -
                        iv->data[i-2].energy)) >  ENG_TOLERANCE ) )
         {
           iv->equidist = 0;

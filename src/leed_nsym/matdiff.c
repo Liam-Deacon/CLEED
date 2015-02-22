@@ -35,7 +35,7 @@ real matdiff(const mat M1, const mat M2)
 {
   real diff;
   real *ptr_1, *ptr_2, *ptr_end;
-  long int nn;
+  size_t nn;
   
   /* Check input matrix */
   
@@ -66,7 +66,7 @@ real matdiff(const mat M1, const mat M2)
         for (ptr_1 = M1->rel + 1, ptr_2 = M2->rel + 1, ptr_end = M1->rel + nn;
              ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
         {
-          diff += R_fabs(*ptr_1 - *ptr_2);
+          diff += cleed_real_fabs(*ptr_1 - *ptr_2);
         }
         break;
       } /* case REAL */
@@ -77,17 +77,22 @@ real matdiff(const mat M1, const mat M2)
         for (ptr_1 = M1->rel + 1, ptr_2 = M2->rel + 1, ptr_end = M1->rel + nn;
              ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
         {
-          diff += R_fabs(*ptr_1 - *ptr_2);
+          diff += cleed_real_fabs(*ptr_1 - *ptr_2);
         }
 
         /* add difference of imaginary part */
         for (ptr_1 = M1->iel + 1, ptr_2 = M2->iel + 1, ptr_end = M1->iel + nn;
              ptr_1 <= ptr_end; ptr_1 ++, ptr_2 ++)
         {
-          diff += R_fabs(*ptr_1 - *ptr_2);
+          diff += cleed_real_fabs(*ptr_1 - *ptr_2);
         }
         break;
       } /* case CLEED_COMPLEX */
+
+      case(NUM_MASK) : case(NUM_IMAG) : default:
+        ERROR_MSG("Unknown M1 matrix type\n");
+        ERROR_RETURN(-1.);
+        break;
     } /* switch */
   } /* matrix type is not diagonal */
   else /* one matrix is diagonal */

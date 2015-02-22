@@ -85,8 +85,8 @@ static int l_max_y = -1;       /*!< maximum l for the above arrays */
  *
  * The solution of the quadratic equation for n2 is:
  *
- *     n2_min = -n1*f12/f2 - R_sqrt( n1^2*(f12^2 - f2f1)/f2^2 + r_max/f2 )
- *     n2_max = -n1*f12/f2 - R_sqrt( n1^2*(f12^2 - f2f1)/f2^2 + r_max/f2 )
+ *     n2_min = -n1*f12/f2 - cleed_real_sqrt( n1^2*(f12^2 - f2f1)/f2^2 + r_max/f2 )
+ *     n2_max = -n1*f12/f2 - cleed_real_sqrt( n1^2*(f12^2 - f2f1)/f2^2 + r_max/f2 )
  *
  * The boundaries for n1 are given by the condition that the argument of
  * the square root must be positive:
@@ -124,8 +124,9 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
 {
   size_t l;                      /* linear angular momentum quantum number */
   int m;                         /* magnetic quantum number */
-  int off;                       /* offset in the arrays Ylm and Llm */
-  int i, iaux;
+  size_t off;                    /* offset in the arrays Ylm and Llm */
+  size_t i;
+  size_t iaux;
 
   int n1, n1_max;                /* counters for lattice vectors */
   int n2, n2_min, n2_max;
@@ -174,7 +175,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
   for(l = 0, i = 1; l <= l_max; l ++)
   {
     faux_r = M1P(l)*4.*PI;
-    for(m = -l; m <= l; m++, i++)
+    for(m = -(int)l; m <= (int)l; m++, i++)
     {
       /* Ylm(0,0) is purely real => only multiply Ylm->rel */
       Ylm->rel[i] *= faux_r;
@@ -191,7 +192,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
     for(l = 0, i = 1; l <= l_max; l ++)
     {
       faux_r = M1P(l)*4.*PI;
-      for(m = -l; m <= l; m++, i++)
+      for(m = -(int)l; m <= (int)l; m++, i++)
       {
         /* Ylm(0,0) is purely real => only multiply Ylm->rel */
         Ylm->rel[i] *= faux_r;
@@ -232,15 +233,14 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
   fb = (f12*f12 - f1*f2 ) /(f2*f2);     /* prefactor of n1^2 */
   fc = r_max/ f2;                 /* constant under the root */
 
-#if CONTROL
-  fprintf(STDCTR, "(leed_ms_lsum_ii):  "
-          "a1  = (%.3f,%.3f) A, a2  =  (%.3f,%.3f) A\n",
-          a1_x*BOHR, a1_y*BOHR, a2_x*BOHR, a2_y*BOHR);
-  fprintf(STDCTR, "               k_in = (%7.3f,%7.3f) A^-1\n",
-          k_in[1]/BOHR, k_in[2]/BOHR);
-  fprintf(STDCTR, "               eps = %7.5f, k_i = %7.4f A^-1, "
-          "r_max = %7.3f A\n", epsilon, k_i/BOHR, R_sqrt(r_max)*BOHR);
-#endif
+  CONTROL_MSG(CONTROL,
+          "a1  = (%.3f,%.3f) A, a2  =  (%.3f,%.3f) A\n"
+          "               k_in = (%7.3f,%7.3f) A^-1\n"
+          "               eps = %7.5f, k_i = %7.4f A^-1, "
+          "r_max = %7.3f A\n",
+          a1_x*BOHR, a1_y*BOHR, a2_x*BOHR, a2_y*BOHR,
+          k_in[1]/BOHR, k_in[2]/BOHR,
+          epsilon, k_i/BOHR, cleed_real_sqrt(r_max)*BOHR);
 
   /* Two cases:
    * - k_in != 0,
@@ -249,7 +249,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
   
   /* First: k_in == 0.
    * (Alternatively:
-   * if (R_hypot(k_in[1], k_in[2]) < Tolerance) )
+   * if (cleed_real_hypot(k_in[1], k_in[2]) < Tolerance) )
    */
   if( IS_EQUAL_REAL(k_in[1], 0.) && IS_EQUAL_REAL(k_in[2], 0.) )
   {
@@ -257,13 +257,13 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
      * n1 >= 0: Only one half of the lattice. The other half is added within
      * the m - loop: phi(-r) = phi(r) + PI.
      */
-    n1_max = (int) R_sqrt(r_max * f2 / (f1*f2 - f12*f12) );
+    n1_max = (int) cleed_real_sqrt(r_max * f2 / (f1*f2 - f12*f12) );
 
     for ( n1 = 0, r0_x = 0., r0_y = 0.;
           n1 <= n1_max;
           r0_x += a1_x, r0_y += a1_y, n1 ++ )
     {
-      faux_r = R_sqrt( fb*n1*n1 + fc );
+      faux_r = cleed_real_sqrt( fb*n1*n1 + fc );
       n2_min = (int) (fa*n1 - faux_r);
       n2_max = (int) (fa*n1 + faux_r);
 
@@ -274,7 +274,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
         /* The origin is not included in the summation. */
         if ((n1 == 0) && (n2 == 0)) break;
 
-        r_abs = R_hypot(r_x, r_y);
+        r_abs = cleed_real_hypot(r_x, r_y);
         Hl = c_hank1 ( Hl, k_r*r_abs, k_i*r_abs, l_max);
 
         exp_phi_r =  r_x/r_abs;                        /*   cos(phi(r)) */
@@ -317,19 +317,19 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
           Llm->iel[off] += 2*Hl->iel[l+1];
 
           /* Now all other m's (+ m and - m in the same loop) */
-          for(m = 2; m <= l; m +=2 )
+          for(i = 2; i <= l; i +=2 )
           {
             /* + m: */
             cri_mul(&faux_r, &faux_i,
-                    expm_r[m], expm_i[m], Hl->rel[l+1], Hl->iel[l+1]);
-            Llm->rel[off + m] += 2*faux_r;
-            Llm->iel[off + m] += 2*faux_i;
+                    expm_r[i], expm_i[i], Hl->rel[l+1], Hl->iel[l+1]);
+            Llm->rel[off + i] += 2*faux_r;
+            Llm->iel[off + i] += 2*faux_i;
 
             /* - m: exp(-i(-m) phi) = exp(-im phi)* */
             cri_mul(&faux_r, &faux_i,
-                    expm_r[m], -expm_i[m], Hl->rel[l+1], Hl->iel[l+1]);
-            Llm->rel[off - m] += 2*faux_r;
-            Llm->iel[off - m] += 2*faux_i;
+                    expm_r[i], -expm_i[i], Hl->rel[l+1], Hl->iel[l+1]);
+            Llm->rel[off - i] += 2*faux_r;
+            Llm->iel[off - i] += 2*faux_i;
           } /* m */
         } /* l */
       } /* lattice vectors a2 */
@@ -344,13 +344,13 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
      * The other half is added within the m - loop: phi(-r) = phi(r) + PI.
      */
     Hl = NULL;
-    n1_max = (int) R_sqrt(r_max * f2 / (f1*f2 - f12*f12) );
+    n1_max = (int) cleed_real_sqrt(r_max * f2 / (f1*f2 - f12*f12) );
 
     for ( n1 = 0, r0_x = 0., r0_y = 0.;
           n1 <= n1_max;
           r0_x += a1_x, r0_y += a1_y, n1 ++ )
     {
-      faux_r = R_sqrt( fb*n1*n1 + fc );
+      faux_r = cleed_real_sqrt( fb*n1*n1 + fc );
       n2_min = (int) (fa*n1 - faux_r);
       n2_max = (int) (fa*n1 + faux_r);
 
@@ -361,7 +361,7 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
         /* The origin is not included in the summation. */
         if ((n1 == 0) && (n2 == 0)) break;
 
-        r_abs = R_hypot(r_x, r_y);
+        r_abs = cleed_real_hypot(r_x, r_y);
         Hl = c_hank1 ( Hl, k_r*r_abs, k_i*r_abs, l_max);
 
         exp_phi_r =  r_x/r_abs;                        /*   cos(phi(r)) */
@@ -409,33 +409,33 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
           if(ODD(l))
           {
             /* Loop over all odd m's (+ m and - m in the same loop) */
-            for(m = 1; m <= l; m += 2)
+            for(i = 1; i <= l; i += 2)
             {
-              /* + m: */
+              /* + i: */
               cri_mul(&faux_r, &faux_i,
-                      expm_r[m], expm_i[m], Hl->rel[l+1], Hl->iel[l+1]);
+                      expm_r[i], expm_i[i], Hl->rel[l+1], Hl->iel[l+1]);
               /* + r */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r, exp_ikr_i, faux_r, faux_i);
-              Llm->rel[off + m] += faux2_r;
-              Llm->iel[off + m] += faux2_i;
-              /* - r  '-' for odd m's */
+              Llm->rel[off + i] += faux2_r;
+              Llm->iel[off + i] += faux2_i;
+              /* - r  '-' for odd i's */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r,-exp_ikr_i,-faux_r,-faux_i);
-              Llm->rel[off + m] += faux2_r;
-              Llm->iel[off + m] += faux2_i;
+              Llm->rel[off + i] += faux2_r;
+              Llm->iel[off + i] += faux2_i;
 
-              /* - m: exp(-i(-m) phi) = exp(-im phi)* */
+              /* - i: exp(-i(-m) phi) = exp(-im phi)* */
               cri_mul(&faux_r, &faux_i,
-                      expm_r[m], -expm_i[m], Hl->rel[l+1], Hl->iel[l+1]);
+                      expm_r[i], -expm_i[i], Hl->rel[l+1], Hl->iel[l+1]);
 
               /* + r */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r, exp_ikr_i, faux_r, faux_i);
-              Llm->rel[off - m] += faux2_r;
-              Llm->iel[off - m] += faux2_i;
+              Llm->rel[off - i] += faux2_r;
+              Llm->iel[off - i] += faux2_i;
 
-              /* - r  '-' for odd m's */
+              /* - r  '-' for odd i's */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r,-exp_ikr_i,-faux_r,-faux_i);
-              Llm->rel[off - m] += faux2_r;
-              Llm->iel[off - m] += faux2_i;
+              Llm->rel[off - i] += faux2_r;
+              Llm->iel[off - i] += faux2_i;
             } /* m */
           } /* odd l's */
           else /* even l's */
@@ -459,35 +459,35 @@ mat leed_ms_lsum_ii(mat Llm, real k_r, real k_i, real *k_in, real *a,
             Llm->iel[off] += faux_i;
 
             /* Now all other even m's (+ m and - m in the same loop) */
-            for(m = 2; m <= l; m += 2)
+            for(i = 2; i <= l; i += 2)
             {
               /* + m: */
               cri_mul(&faux_r, &faux_i,
-                      expm_r[m], expm_i[m], Hl->rel[l+1], Hl->iel[l+1]);
+                      expm_r[i], expm_i[i], Hl->rel[l+1], Hl->iel[l+1]);
 
               /* + r */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r, exp_ikr_i, faux_r, faux_i);
-              Llm->rel[off + m] += faux2_r;
-              Llm->iel[off + m] += faux2_i;
+              Llm->rel[off + i] += faux2_r;
+              Llm->iel[off + i] += faux2_i;
 
               /* - r  '+' for even m's */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r,-exp_ikr_i, faux_r, faux_i);
-              Llm->rel[off + m] += faux2_r;
-              Llm->iel[off + m] += faux2_i;
+              Llm->rel[off + i] += faux2_r;
+              Llm->iel[off + i] += faux2_i;
 
               /* - m: exp(-i(-m) phi) = exp(-im phi)* */
               cri_mul(&faux_r, &faux_i,
-                      expm_r[m], -expm_i[m], Hl->rel[l+1], Hl->iel[l+1]);
+                      expm_r[i], -expm_i[i], Hl->rel[l+1], Hl->iel[l+1]);
 
               /* + r */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r, exp_ikr_i, faux_r, faux_i);
-              Llm->rel[off - m] += faux2_r;
-              Llm->iel[off - m] += faux2_i;
+              Llm->rel[off - i] += faux2_r;
+              Llm->iel[off - i] += faux2_i;
 
               /* - r  '+' for even m's */
               cri_mul(&faux2_r, &faux2_i, exp_ikr_r,-exp_ikr_i,faux_r,faux_i);
-              Llm->rel[off - m] += faux2_r;
-              Llm->iel[off - m] += faux2_i;
+              Llm->rel[off - i] += faux2_r;
+              Llm->iel[off - i] += faux2_i;
             } /* even l's */
           } /* m */
         } /* l */

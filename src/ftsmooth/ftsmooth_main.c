@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     strncpy(dbg_str, "all", STRSZ);
     strncpy(dbg_tag, "post-args", STRSZ);
  
-    debug(dbg_str, dbg_tag, argc, argv, in_stream, out_stream,
+    ftsmooth_debug(dbg_str, dbg_tag, argc, argv, in_stream, out_stream,
     	  &stdin_flag, &stdout_flag, &cutoff, &tailoff, &mode,
     	  &offset_flag, &offset, &range_flag, &i_r,
     	  lbound, ubound, &del_flag);

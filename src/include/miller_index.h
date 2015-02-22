@@ -40,7 +40,7 @@ typedef struct
 
 namespace cleed {
 
-class MillerIndex {
+class MillerIndex : public miller_hkl {
   public:
     MillerIndex();
     MillerIndex(double h, double k);
@@ -54,9 +54,7 @@ class MillerIndex {
     double getH();
     double getK();
     double getL();
-    
-  protected:
-    miller_hkl *miller;
+
 }; /* class MillerIndex */
 
 } /* namespace cleed */

@@ -54,6 +54,22 @@ SET (rfaclib_SRCS
     crfsplint.c 
 )
 
+FILE ( GLOB rfaclib_SRCS "*.c" )
+LIST ( REMOVE_ITEM rfaclib_SRCS crfac.c )
+
+IF (NOT USE_GSL)
+  FILE ( GLOB rfac_gsl_SRCS "*gsl*.c" )
+  IF (rfac_gsl_SRCS)
+    LIST( REMOVE_ITEM rfaclib_SRCS ${rfac_gsl_SRCS} )
+  ENDIF (rfac_gsl_SRCS)
+ENDIF (NOT USE_GSL)
+
+FILE ( GLOB rfac_test_SRCS "*test*.c")
+IF (rfac_test_SRCS)
+  LIST( REMOVE_ITEM rfaclib_SRCS ${rfac_test_SRCS} )
+ENDIF (rfac_test_SRCS)
+
+
 SET (crfac_SRCS crfac.c)
 
 ###############################################################################
@@ -94,9 +110,9 @@ ELSE (WIN32)
     
 ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES(rfac m)
-TARGET_LINK_LIBRARIES(rfacStatic m)
-TARGET_LINK_LIBRARIES(crfac rfac m)
+TARGET_LINK_LIBRARIES(rfac ${GSL_LIBRARY} m)
+TARGET_LINK_LIBRARIES(rfacStatic ${GSL_LIBRARY} m)
+TARGET_LINK_LIBRARIES(crfac rfac ${GSL_LIBRARY} m)
 
 IF (WIN32)
     INSTALL (TARGETS crfac rfac

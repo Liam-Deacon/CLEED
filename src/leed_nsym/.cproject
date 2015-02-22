@@ -4,18 +4,20 @@
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.mingw.base.839802680">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.839802680" moduleId="org.eclipse.cdt.core.settings" name="Debug.MinGW">
 				<macros>
+					<stringMacro name="USE_CBLAS" type="VALUE_TEXT" value="1"/>
+					<stringMacro name="USE_GSL" type="VALUE_TEXT" value="1"/>
 					<stringMacro name="WARNING" type="VALUE_TEXT" value="1"/>
-					<stringMacro name="CONTROL" type="VALUE_TEXT" value=""/>
 					<stringMacro name="DEBUG" type="VALUE_TEXT" value="1"/>
 					<stringMacro name="CONTROL_X" type="VALUE_TEXT" value=""/>
+					<stringMacro name="CONTROL" type="VALUE_TEXT" value=""/>
 				</macros>
 				<externalSettings/>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -46,6 +48,7 @@
 								<option id="gnu.c.compiler.option.optimization.level.1243932318" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.c.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.dialect.std.755801960" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.dialect.flags.1069417315" name="Other dialect flags" superClass="gnu.c.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=gnu99" valueType="string"/>
+								<option id="gnu.c.compiler.option.warnings.pedantic.error.1434437042" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.c.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1830354055" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.218471665" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">

@@ -59,13 +59,13 @@
 int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
            leed_var *v_par, real eng_max)
 {
-  int iaux;
   int n1,n2;
   int n1_max,n2_max;
   int offset;
 
-  int i_beams, i_set;
-  int n_set;
+  size_t iaux;
+  size_t i_beams, i_set;
+  size_t n_set;
 
   real faux_r, faux_i;
   real k_max, k_max_2;
@@ -92,11 +92,12 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
    */
 
   eng_max -= v_par->vr;
-  faux_r = R_log(v_par->epsilon) / c_par->dmin;
+  faux_r = cleed_real_log(v_par->epsilon) / c_par->dmin;
   k_max_2 = faux_r*faux_r + 2*eng_max;
-  k_max = R_sqrt(k_max_2);
+  k_max = cleed_real_sqrt(k_max_2);
 
-  iaux =  2 + (int)( 0.10132118 * c_par->rel_area_sup * c_par->area * k_max_2 );
+  iaux =  2 + (size_t)fabs( 0.10132118 * c_par->rel_area_sup *
+                                              c_par->area * k_max_2 );
 
   if (*p_beams == NULL)
   {
@@ -121,7 +122,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
               eng_max * HART, v_par->vr * HART);
   CONTROL_MSG(CONTROL_X, "dmin  = %.2f, epsilon = %.2e\n",
                  c_par->dmin * BOHR, v_par->epsilon);
-  CONTROL_MSG(CONTROL_X, "k_max = %.2f, max. No of beams = %2d\n", k_max, iaux);
+  CONTROL_MSG(CONTROL_X, "k_max = %.2f, max. No of beams = %2u\n", k_max, iaux);
 
   /*
    * Some often used values:
@@ -136,10 +137,10 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   g1_x = c_par->a_1[1]; g1_y = c_par->a_1[2];
   g2_x = c_par->a_1[3]; g2_y = c_par->a_1[4];
 
-  faux_r = R_sin(v_par->theta) * R_sqrt(2*eng_max);
+  faux_r = cleed_real_sin(v_par->theta) * cleed_real_sqrt(2*eng_max);
   k_in[0] = faux_r;
-  k_in[1] = faux_r * R_cos(v_par->phi);
-  k_in[2] = faux_r * R_sin(v_par->phi);
+  k_in[1] = faux_r * cleed_real_cos(v_par->phi);
+  k_in[2] = faux_r * cleed_real_sin(v_par->phi);
 
   CONTROL_MSG(CONTROL_X, "a1 = (%.2f, %.2f)\ta2 = (%.2f, %.2f)\n",
                           g1_x, g1_y, g2_x, g2_y);
@@ -153,7 +154,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
    *    order beams in the array bm_off.
    */
  
-  n_set = (int) R_nint(c_par->rel_area_sup);
+  n_set = (size_t) fabs(cleed_real_nint(c_par->rel_area_sup));
   bm_off = (leed_beam *)calloc(n_set, sizeof(leed_beam));
 
   (bm_off+0)->ind_1 = 0.;
@@ -164,16 +165,16 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   CONTROL_MSG(CONTROL_X, "set %d: %5.2f %5.2f (%5.2f %5.2f)\n", 0,
       (bm_off)->ind_1, (bm_off)->ind_2, (bm_off)->k_r[1], (bm_off)->k_r[2]);
 
-  for(n1 = -n_set, i_set = 1; n1 <= n_set; n1++)
+  for(n1 = -(int)n_set, i_set = 1; n1 <= (int)n_set; n1++)
   {
-    for(n2 = -n_set; (n2 <= n_set) && (i_set < n_set); n2++)
+    for(n2 = -(int)n_set; (n2 <= (int)n_set) && (i_set < n_set); n2++)
     {
       k_x = n1*m11 + n2*m21;
       k_y = n1*m12 + n2*m22;
 
       if( (k_x >= 0.) && (k_x + K_TOLERANCE < 1.) &&
           (k_y >= 0.) && (k_y + K_TOLERANCE < 1.) &&
-          (R_hypot(k_x, k_y) > K_TOLERANCE)          )
+          (cleed_real_hypot(k_x, k_y) > K_TOLERANCE)          )
       {
         (bm_off+i_set)->ind_1 = k_x;
         (bm_off+i_set)->ind_2 = k_y;
@@ -202,14 +203,14 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
    */
 
   /* a1 = length of g1 */
-  a1 = R_hypot(g1_x, g1_y);
+  a1 = cleed_real_hypot(g1_x, g1_y);
   /* a2 = length of g2 */
-  a2 = R_hypot(g2_x, g2_y);
+  a2 = cleed_real_hypot(g2_x, g2_y);
 
   /* a2 * cos(a1,a2) */
-  faux_r = R_fabs((g1_x*g2_x + g1_y*g2_y)/a1);
+  faux_r = cleed_real_fabs((g1_x*g2_x + g1_y*g2_y)/a1);
   /* a2 * sin(a1,a2) */
-  faux_i = R_fabs((g1_x*g2_y - g1_y*g2_x)/a1);
+  faux_i = cleed_real_fabs((g1_x*g2_y - g1_y*g2_x)/a1);
 
   /*
    * n2_max = k_max / (sin(a1,a2) * a2) + k_in/a2
@@ -228,7 +229,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   /* Loop over beam sets */
   for(i_set = 0, i_beams = 0, offset = 0;
       i_set < n_set;
-      i_set ++, offset = i_beams)
+      i_set ++, offset = (int)i_beams)
   {
     /*
      * Find the beams within the radius defined by k_max
@@ -274,12 +275,12 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
      * 1st pass: Sort the beams according to the parallel component
      * (i.e. smallest k_par first)
      */
-    CONTROL_MSG(CONTROL, "SORTING %2d beams in set %d:\n",
-                i_beams-offset, i_set);
+    CONTROL_MSG(CONTROL, "SORTING %2d beams in set %u:\n",
+                (int)i_beams-offset, i_set);
 
-    for(n1 = offset; n1 < i_beams; n1 ++)
+    for(n1 = offset; n1 < (int)i_beams; n1 ++)
     {
-      for(n2 = n1+1; n2 < i_beams; n2 ++)
+      for(n2 = n1+1; n2 < (int)i_beams; n2 ++)
       {
         if((beams + n2)->k_par < (beams + n1)->k_par )
         {
@@ -294,7 +295,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
      * 2nd pass: Sort the beams according to the 1st and 2nd index
      * (i.e. smallest indices first)
      */
-    for(n1 = offset; n1 < i_beams; n1 ++)
+    for(n1 = offset; n1 < (int)i_beams; n1 ++)
     {
       for(n2 = n1+1;
          fabs( (beams + n2)->k_par - (beams + n1)->k_par ) < K_TOLERANCE; 
@@ -318,7 +319,7 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
       CONTROL_MSG(CONTROL, "%2d: (%6.2f, %6.2f):\t",
               n1, (beams + n1)->ind_1, (beams + n1)->ind_2);
       CONTROL_MSG(CONTROL, "\td_par: %.2f\tk_r: (%5.2f, %5.2f, %5.2f)\n",
-              R_sqrt((beams + n1)->k_par),  (beams + n1)->k_r[1],
+              cleed_real_sqrt((beams + n1)->k_par),  (beams + n1)->k_r[1],
               (beams + n1)->k_r[2], (beams + n1)->k_r[3]);
     }  /* n1 */
 
@@ -327,5 +328,5 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   /* Set k_par of the last element of the list to the terminating value. */
   (beams + i_beams)->k_par = F_END_OF_LIST;
 
-  return(n_set);
+  return((int)n_set);
 }  /* end of function leed_beam_gen */

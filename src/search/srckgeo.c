@@ -77,7 +77,7 @@ real sr_ckgeo(const cleed_vector *par)
 
     for(i_par = 0; i_par < sr_search->n_par_geo; i_par ++)
     {
-      faux = CLEED_VECTOR_GET(par, i_par);
+      faux = cleed_vector_get(par, i_par);
       if(!sr_search->z_only)
       {
         x[i_atoms] += faux * sr_atoms[i_atoms].x_par[i_par];

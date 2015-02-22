@@ -46,7 +46,7 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
   size_t i_beams_now = 0, i_beams_all, i_out;
 
   mat Int = NULL;
-  real k_r = R_sqrt(2*par->eng_v);
+  real k_r = cleed_real_sqrt(2*par->eng_v);
 
   /* Calculate intensities as the square of the moduli of the amplitudes. */
   Int = matsqmod(Int, Amp);

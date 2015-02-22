@@ -110,6 +110,11 @@ mat matscal(mat Mr, const mat Mi, real num_r, real num_i )
 
       break;
     }  /* case CLEED_COMPLEX */
+
+    case(NUM_IMAG) : case(NUM_MASK): default:
+      ERROR_MSG("Unsupported Mr matrix data type (%s)\n", strmtype(Mr->num_type));
+      ERROR_RETURN(Mr);
+      break;
   }   /* switch */
 
   return(Mr);

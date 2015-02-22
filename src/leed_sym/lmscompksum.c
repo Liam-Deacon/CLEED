@@ -37,8 +37,8 @@ if(type == BULK)
      faux_r = (beam+k)->k_r[3]*atom->pos[3];
      faux_i = (beam+k)->k_i[3]*atom->pos[3];
      cri_expi(&exp_k3_r,&exp_k3_i,faux_r,faux_i);
-     exp_k3_r /= R_sqrt((real)((beam + k)->n_eqb_b));
-     exp_k3_i /= R_sqrt((real)((beam + k)->n_eqb_b));
+     exp_k3_r /= cleed_real_sqrt((real)((beam + k)->n_eqb_b));
+     exp_k3_i /= cleed_real_sqrt((real)((beam + k)->n_eqb_b));
 
      ptr_r = Maux->rel + 1 + k;
      ptr_i = Maux->iel + 1 + k;
@@ -152,8 +152,8 @@ if(type == BULK)
      faux_r = (beam+k)->k_r[3]*atom->pos[3];
      faux_i = (beam+k)->k_i[3]*atom->pos[3];
      cri_expi(&exp_k3_r,&exp_k3_i,faux_r,faux_i);
-     exp_k3_r /= R_sqrt((real)((beam + k)->n_eqb_s));
-     exp_k3_i /= R_sqrt((real)((beam + k)->n_eqb_s));
+     exp_k3_r /= cleed_real_sqrt((real)((beam + k)->n_eqb_s));
+     exp_k3_i /= cleed_real_sqrt((real)((beam + k)->n_eqb_s));
 
      ptr_r = Maux->rel + 1 + k;
      ptr_i = Maux->iel + 1 + k;
@@ -271,8 +271,8 @@ if(sign > 0)
      faux_r = -(beam+k)->k_r[3]*atom->pos[3];
      faux_i = -(beam+k)->k_i[3]*atom->pos[3];
      cri_expi(&exp_k3_r,&exp_k3_i,faux_r,faux_i);
-     exp_k3_r /= R_sqrt((real)((beam + k)->n_eqb_b));
-     exp_k3_i /= R_sqrt((real)((beam + k)->n_eqb_b));
+     exp_k3_r /= cleed_real_sqrt((real)((beam + k)->n_eqb_b));
+     exp_k3_i /= cleed_real_sqrt((real)((beam + k)->n_eqb_b));
 
      ptr_r = Maux->rel + 1 + k;
      ptr_i = Maux->iel + 1 + k; 
@@ -385,8 +385,8 @@ if(sign > 0)
      faux_r = -(beam+k)->k_r[3]*atom->pos[3];
      faux_i = -(beam+k)->k_i[3]*atom->pos[3];
      cri_expi(&exp_k3_r,&exp_k3_i,faux_r,faux_i);
-     exp_k3_r /= R_sqrt((real)((beam + k)->n_eqb_s));
-     exp_k3_i /= R_sqrt((real)((beam + k)->n_eqb_s));
+     exp_k3_r /= cleed_real_sqrt((real)((beam + k)->n_eqb_s));
+     exp_k3_i /= cleed_real_sqrt((real)((beam + k)->n_eqb_s));
 
      ptr_r = Maux->rel + 1 + k;
      ptr_i = Maux->iel + 1 + k;

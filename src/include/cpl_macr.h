@@ -25,7 +25,7 @@ extern "C" {
 
 #include <math.h>
 
-#define cri_abs R_cabs  /*!< ABS - absolute values **/
+#define cri_abs cleed_real_cabs  /*!< ABS - absolute values **/
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

@@ -39,9 +39,9 @@
  * \retval \c NULL if unable to allocate memory for matrix and #EXIT_ON_ERROR
  * is not defined.
  */
-mat matalloc(mat M, size_t rows, size_t cols, int num_type)
+mat matalloc(mat M, size_t rows, size_t cols, mat_enum num_type)
 {
-  int mat_type;
+  mat_type mat_type;
   size_t no_of_elts;
   real *ptr, *ptr_end;
 

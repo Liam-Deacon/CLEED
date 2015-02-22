@@ -46,70 +46,96 @@ mat matsqmod(mat Msq, const mat M)
   }
 
   /* Diagonal Matrix: */
-  if (M->mat_type == MAT_DIAG)
+  switch(M->mat_type)
   {
-    Maux = matalloc(NULL, M->rows, M->cols, NUM_REAL | MAT_DIAG);
-
-    switch(M->num_type)
+    case(MAT_DIAG):
     {
-      case(NUM_REAL):
+      Maux = matalloc(NULL, M->rows, M->cols, NUM_REAL | MAT_DIAG);
+
+      switch(M->num_type)
       {
-        for(ptr_r = M->rel+1, ptr_sq = Maux->rel+1,
-            ptr_end = M->rel + M->cols;
-            ptr_r <= ptr_end;
-            ptr_r ++, ptr_sq ++)
+        case(NUM_REAL):
         {
-          *ptr_sq = SQUARE(*ptr_r);
-        }
-        break;
-      } /* NUM_REAL */
+          for(ptr_r = M->rel+1, ptr_sq = Maux->rel+1,
+              ptr_end = M->rel + M->cols;
+              ptr_r <= ptr_end;
+              ptr_r ++, ptr_sq ++)
+          {
+            *ptr_sq = SQUARE(*ptr_r);
+          }
+          break;
+        } /* NUM_REAL */
 
-      case(NUM_COMPLEX):
-      {
-        for(ptr_r = M->rel+1, ptr_i = M->iel+1, ptr_sq = Maux->rel+1,
-            ptr_end = M->rel + M->cols;
-            ptr_r <= ptr_end;
-            ptr_r ++, ptr_i ++, ptr_sq ++)
+        case(NUM_COMPLEX):
         {
-          *ptr_sq = SQUARE(*ptr_r) + SQUARE(*ptr_i);
-        }
-        break;
-      } /* NUM_COMPLEX */
-    } /* switch */
-  } /* if diagonal */
+          for(ptr_r = M->rel+1, ptr_i = M->iel+1, ptr_sq = Maux->rel+1,
+              ptr_end = M->rel + M->cols;
+              ptr_r <= ptr_end;
+              ptr_r ++, ptr_i ++, ptr_sq ++)
+          {
+            *ptr_sq = SQUARE(*ptr_r) + SQUARE(*ptr_i);
+          }
+          break;
+        } /* NUM_COMPLEX */
 
-  /* Other matrix types: */
-  else
-  {
-    Maux = matalloc(NULL, M->rows, M->cols, NUM_REAL);
+        case(NUM_IMAG): case(NUM_MASK): default:
+        {
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(-1.);
+          break;
+        } /* default case */
 
-    switch(M->num_type)
+      } /* switch (M->num_type) */
+
+      break;
+
+    } /* if diagonal */
+
+    /* Other matrix types: */
+    default:
     {
-      case(NUM_REAL):
-      {
-        for(ptr_r = M->rel+1, ptr_sq = Maux->rel+1,
-            ptr_end = M->rel + M->cols*M->rows;
-            ptr_r <= ptr_end;
-            ptr_r ++, ptr_sq ++)
-        {
-          *ptr_sq = SQUARE(*ptr_r);
-        }
-        break;
-      } /* NUM_REAL */
+      Maux = matalloc(NULL, M->rows, M->cols, NUM_REAL);
 
-      case(NUM_COMPLEX):
+      switch(M->num_type)
       {
-        for(ptr_r = M->rel+1, ptr_i = M->iel+1, ptr_sq = Maux->rel+1,
-            ptr_end = M->rel + M->cols*M->rows;
-            ptr_r <= ptr_end;
-            ptr_r ++, ptr_i ++, ptr_sq ++)
+        case(NUM_REAL):
         {
-          *ptr_sq = SQUARE(*ptr_r) + SQUARE(*ptr_i);
-        }
-        break;
-      } /* NUM_COMPLEX */
-    } /* switch */
-  } /* else */
+          for(ptr_r = M->rel+1, ptr_sq = Maux->rel+1,
+              ptr_end = M->rel + M->cols*M->rows;
+              ptr_r <= ptr_end;
+              ptr_r ++, ptr_sq ++)
+          {
+            *ptr_sq = SQUARE(*ptr_r);
+          }
+          break;
+        } /* NUM_REAL */
+
+        case(NUM_COMPLEX):
+        {
+          for(ptr_r = M->rel+1, ptr_i = M->iel+1, ptr_sq = Maux->rel+1,
+              ptr_end = M->rel + M->cols*M->rows;
+              ptr_r <= ptr_end;
+              ptr_r ++, ptr_i ++, ptr_sq ++)
+          {
+            *ptr_sq = SQUARE(*ptr_r) + SQUARE(*ptr_i);
+          }
+          break;
+        } /* NUM_COMPLEX */
+
+        case(NUM_IMAG): case(NUM_MASK): default:
+        {
+          ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+          ERROR_RETURN(-1.);
+          break;
+        } /* default case */
+
+      } /* switch (M->num_type) */
+
+      break;
+
+    } /* default case */
+
+  } /* switch (M->mat_type) */
 
   /* Copy Maux to Msq and return */
   Msq = matcopy(Msq, Maux);

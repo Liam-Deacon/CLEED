@@ -14,7 +14,7 @@ class Bulk(object):
     def __init__(self, Unitcell, atoms=[], vr=-13.0, vi=4.0, 
                  ei=50., ef=100.1, es=4., theta=0., phi=0., ep=1.e-3, lm=7):
         '''contolList is an array of ControlItems'''
-        self.setControlItems(controlList)
+        self.mkiv_set_controlItems(controlList)
         self.setOpticalPotential(vr, vi)
         self.setEnergyRange(ei, ef, es)
 

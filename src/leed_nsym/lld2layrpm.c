@@ -62,8 +62,8 @@ mat leed_ld_2lay_rpm ( mat Rpm_ab, mat Rpm_a,
                 mat Tpp_b,  mat Tmm_b,  mat Rpm_b,  mat Rmp_b,
                 leed_beam *beams, real *vec_ab )
 {
-  int k;
-  int n_beams, nn_beams;             /* total number of beams */
+  size_t k;
+  size_t n_beams, nn_beams;             /* total number of beams */
 
   real faux_r, faux_i;
   real *ptr_r, *ptr_i, *ptr_end;

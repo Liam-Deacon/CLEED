@@ -27,9 +27,6 @@
 
 #include "leed.h"
 
-/************************************************************************
-
-
 /*!
  * Creates the multiple scattering Matrix [(1 - Tl*Giilm)^-1]*Tl for a
  * periodic plane of scatterers.
@@ -60,13 +57,15 @@
  */
 mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
 {
-  int iaux;
+
   size_t l1, l2, l3;
-  int m1 ,m2, m3;
+  int m1, m2, m3;
   size_t l3_min, l3_max;
 
-  int i3;
-  int ilm1, ilm2;
+  size_t i3;
+
+  size_t ilm1, ilm2;
+  size_t m1u, m2u;
 
   real faux_r, faux_i;
   real sum_r, sum_i;
@@ -74,6 +73,8 @@ mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
 
   mat Tlm;
   mat Gii;
+
+  size_t n = (l_max + 1)*(l_max + 1);
 
 /* Check matrix dimensions of Tlm_in and compatibilities with l_max.
  * - allocate Tii and Tlm.
@@ -85,8 +86,7 @@ mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
 
   /* Allocate Tii and Tlm.  */
   Tlm = NULL;
-  iaux = (l_max + 1)*(l_max + 1);
-  Tlm = matalloc( Tlm, iaux, iaux, NUM_COMPLEX);
+  Tlm = matalloc( Tlm, n, n, NUM_COMPLEX);
 
   if (matcheck (Tlm_in) == 1)
   {
@@ -113,13 +113,13 @@ mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
                     Tlm_in->rows, Tlm->rows);
         for(ilm1 = 1, ilm2 = 1 , l2 = 1; l2 <= Tlm->rows; l2 ++)
         {
-          for(m1 = 1, m2 = 1; m1 <= Tlm_in->cols; m1 ++, ilm1 ++)
+          for(m1u = 1, m2u = 1; m1u <= Tlm_in->cols; m1u ++, ilm1 ++)
           {
-            if ( m2 <= Tlm->cols)
+            if ( m2u <= Tlm->cols)
             {
               Tlm->rel[ilm2] = Tlm_in->rel[ilm1];
               Tlm->iel[ilm2] = Tlm_in->iel[ilm1];
-              m2 ++;
+              m2u ++;
               ilm2 ++;
             }
           } /* l2 */
@@ -155,16 +155,15 @@ mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
    *  however not implemented (see comments in m2 loops).
    */
   Gii = NULL;
-  iaux = (l_max + 1)*(l_max + 1);
-  Gii = matalloc( Gii, iaux, iaux, NUM_COMPLEX);
+  Gii = matalloc( Gii, n, n, NUM_COMPLEX);
 
   for(l1 = 0, ilm1 = 1; l1 <= l_max; l1 ++)
   {
-    for(m1 = -l1; m1 <= l1; m1 ++)
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 ++)
     {
       for(l2 = 0; l2 <= l_max; l2 ++)
       {
-        for(m2 = -l2; m2 <= l2; m2 ++, ilm1 ++)
+        for(m2 = -(int)l2; m2 <= (int)l2; m2 ++, ilm1 ++)
         {
           /* Loop over l3 (inner--most loop): calculate the elements of Gii
            * - l3_min: l3 >= |m3|, |l2-l1|.
@@ -175,20 +174,23 @@ mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
           /* m3 = m2 - m1; */
           m3 = m1 - m2;
 
-          l3_min = MAX(abs(m3), abs(l2-l1));
+          l3_min = (size_t)MAX(abs(m3), abs((int)l2-(int)l1));
           l3_min += (l1 + l2 + l3_min)%2;
           l3_max = l2+l1;
 
           sum_r = sum_i = 0.;
-          i3 = l3_min*(l3_min + 1) - m3 + 1;
+          if (m3 < 0)
+            i3 = l3_min*(l3_min + 1) + (size_t)abs(m3) + 1;
+          else
+            i3 = l3_min*(l3_min + 1) - (size_t)m3 + 1;
 
           /* sign = M1P( (l2 - l1 - l3_min)/2 - m2); */
-          sign = M1P( (l1 - l2 - l3_min)/2 - m2);
+          sign = M1P( (int)(l1 - l2 - l3_min)/2 - m2);
 
           for(l3 = l3_min; l3 <= l3_max; l3 += 2 )
           {
             /* faux_r = sign*gaunt(l1, m1, l3, m3, l2,m2); */
-            faux_r = sign*cg(l3, m3, l1,m1,l2,-m2);
+            faux_r = sign*cg((int)l3,m3, (int)l1,m1, (int)l2,-m2);
 
             sum_r += Llm->rel[i3] * faux_r;
             sum_i += Llm->iel[i3] * faux_r;
@@ -220,8 +222,9 @@ mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
   matfree(Gii);
 
   /* Add the identity matrix: (1 - Gii * Tlm ) and Store in Tii */
-  iaux = Tii->cols*Tii->rows;
-  for( ilm1 = 1; ilm1 <=iaux; ilm1 += Tii->rows + 1) Tii->rel[ilm1] += 1.;
+  n = Tii->cols*Tii->rows;
+  for( ilm1 = 1; ilm1 <= n; ilm1 += Tii->rows + 1)
+    Tii->rel[ilm1] += 1.;
 
   CONTROL_MSG(CONTROL, "(1 - Gii * Tlm ): \n");
 
@@ -241,13 +244,13 @@ mat leed_ms_tmat_nd_ii ( mat Tii, const mat Llm, mat Tlm_in, size_t l_max)
    */
   for(l1 = 0, ilm1 = 1; l1 <= l_max; l1 ++)
   {
-    for(m1 = -l1; m1 <= l1; m1 ++)
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 ++)
     {
       for(l2 = 0; l2 <= l_max; l2 ++)
       {
-        for(m2 = -l2; m2 <= l2; m2 ++, ilm1 ++)
+        for(m2 = -(int)l2; m2 <= (int)l2; m2 ++, ilm1 ++)
         {
-          cri_powi(&faux_r, &faux_i, l2-l1);
+          cri_powi(&faux_r, &faux_i, (int)l2-(int)l1);
           cri_mul(Tii->rel+ilm1, Tii->iel+ilm1, Tii->rel[ilm1], Tii->iel[ilm1],
                   faux_r, faux_i);
         } /* m2 */

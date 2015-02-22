@@ -199,7 +199,7 @@ char *new_path;
  for (i_par = 1; i_par <= sr_search->n_par; i_par ++)
  {  
    faux = gsl_vector_get(par, i_par-1);
-   rfac += 1 - cos(PI*(faux -2.3)) + R_fabs(faux - 2.3);
+   rfac += 1 - cos(PI*(faux -2.3)) + cleed_real_fabs(faux - 2.3);
  }
  rfac /= sr_search->n_par;
 

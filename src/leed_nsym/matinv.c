@@ -35,23 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "cleed_real.h"
-#include "mat.h"
-#include "mat_aux.h"
-#include "cblas_aux.h"
-
-#ifdef LAPACK_VENDOR
-# if LAPACK_VENDOR == CLAPACK /* Netlib's F2C interface for LAPACK */
-#   include <clapack.h>
-# elif LAPACK_VENDOR == LAPACKE /* C interface to LAPACK */
-#   include <lapacke.h>
-# elif LAPACK_VENDOR == ATLAS /* Automatically Tuned Linear Algebra Software */
-#   include <clapack.h>
-# endif
-#else
-# include "clapack.h" /* default is Netlib's CLAPACK interface */
-#endif
-
+#include "cleed_linalg.h"
 
 /*!
  * Inverts a matrix by LU decomposition (real and complex).
@@ -63,10 +47,9 @@
  */
 mat matinv(mat A_1, const mat A)
 {
-  int i, info;
+  cleed_permutation *ipiv = NULL;
 
-  int *ipiv;
-
+  int info = 0;
   size_t n = 0;
 
   mat Alu = NULL;
@@ -109,7 +92,7 @@ mat matinv(mat A_1, const mat A)
 
   if ( sizeof(real) != sizeof(float) && sizeof(real) != sizeof(double) )
   {
-    ERROR_MSG("unexpected sizeof(real)=%lu\n", sizeof(real));
+    ERROR_MSG("unexpected sizeof(real)=%u\n", sizeof(real));
     matfree(Alu);
     ERROR_RETURN(NULL);
   }
@@ -117,45 +100,45 @@ mat matinv(mat A_1, const mat A)
   /* NON-DIAGONAL MATRIX */
 
   /* Create lapack and result matrices */
-  ipiv = (int *)calloc( (n+1), sizeof(int));
+  ipiv = cleed_permutation_alloc(n);
 
   switch(A->num_type)
   {
     /* Real matrix (NUM_REAL) */
     case (NUM_REAL):
     {
-      cleed_matrix *a = CLEED_MATRIX_REAL_ALLOC(n, n);
+      cleed_matrix *a = cleed_matrix_alloc(n, n);
       CLEED_REAL_MAT2CBLAS(a, Alu);
 
       /* do LU decomposition and matrix inversion */
-      CLEED_REAL_LU_DECOMPOSITION(a, n, ipiv, info);
+      info = cleed_linalg_LU_decomp(a, &n, ipiv);
       if (info != 0)
       {
         ERROR_MSG("LU decomposition failed with code %i\n", info);
-        CLEED_MATRIX_REAL_FREE(a);
+        cleed_matrix_free(a);
         matfree(Alu);
-        free(ipiv);
+        cleed_permutation_free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* now perform the LU back-substitution */
-      cleed_matrix *a_1 = CLEED_MATRIX_REAL_ALLOC(n, n);
+      cleed_matrix *a_1 = cleed_matrix_alloc(n, n);
 
-      CLEED_MATRIX_REAL_INVERSION(a, n, ipiv, a_1, info);
+      info = cleed_linalg_invert(a, a_1, ipiv, &n);
       if (info != 0)
       {
         ERROR_MSG("real matrix inversion failed with code %i\n", info);
-        CLEED_MATRIX_REAL_FREE(a);
-        CLEED_MATRIX_REAL_FREE(a_1);
+        cleed_matrix_free(a);
+        cleed_matrix_free(a_1);
         matfree(Alu);
-        free(ipiv);
+        cleed_permutation_free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* Finalise */
       CLEED_REAL_CBLAS2MAT(A_1, a_1);
-      CLEED_MATRIX_REAL_FREE(a_1);
-      CLEED_MATRIX_REAL_FREE(a);
+      cleed_matrix_free(a_1);
+      cleed_matrix_free(a);
 
       break;
     }  /* REAL */
@@ -163,53 +146,57 @@ mat matinv(mat A_1, const mat A)
     /* Complex matrix (NUM_COMPLEX) */
     case (NUM_COMPLEX):
     {
-      cleed_matrix_complex *a = CLEED_MATRIX_COMPLEX_ALLOC(n, n);
-      CLEED_COMPLEX_MAT2CBLAS(a, Alu);
+      cleed_matrix_complex *a = cleed_matrix_complex_alloc(n, n);
+      CLEED_COMPLEX_MAT2CBLAS(Alu, a);
 
       /* do LU decomposition and matrix inversion */
-      CLEED_COMPLEX_LU_DECOMPOSITION(a, n, ipiv, info);
+      info = cleed_linalg_complex_LU_decomp(a, &n, ipiv);
       if (info != 0)
       {
         ERROR_MSG("LU decomposition failed with code %i\n", info);
-        CLEED_MATRIX_COMPLEX_FREE(a);
+        cleed_matrix_complex_free(a);
         matfree(Alu);
-        free(ipiv);
+        cleed_permutation_free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* now perform the LU back-substitution */
-      cleed_matrix_complex *a_1 = CLEED_MATRIX_COMPLEX_ALLOC(n, n);
+      cleed_matrix_complex *a_1 = cleed_matrix_complex_alloc(n, n);
 
-      CLEED_MATRIX_COMPLEX_INVERSION(a, n, ipiv, a_1, info);
-      if (info != 0)
+      if ( (info = cleed_linalg_complex_invert(a, a_1, ipiv, &n)) != 0 )
       {
         ERROR_MSG("complex matrix inversion failed with code %i\n", info);
-        CLEED_MATRIX_COMPLEX_FREE(a);
-        CLEED_MATRIX_COMPLEX_FREE(a_1);
+        cleed_matrix_complex_free(a);
+        cleed_matrix_complex_free(a_1);
         matfree(Alu);
-        free(ipiv);
+        cleed_permutation_free(ipiv);
         ERROR_RETURN(NULL);
       }
 
       /* Finalise */
       CLEED_COMPLEX_CBLAS2MAT(A_1, a_1);
-      CLEED_MATRIX_COMPLEX_FREE(a_1);
-      CLEED_MATRIX_COMPLEX_FREE(a);
+      cleed_matrix_complex_free(a_1);
+      cleed_matrix_complex_free(a);
       break;
     } /* CLEED_COMPLEX */
+
+
+    case(NUM_IMAG): case(NUM_MASK): default:
+      ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(A->num_type));
+      break;
 
   } /* switch(A->num_type) */
 
   /* produce pivot vector information */
 #if CONTROL
   CONTROL_MSG(CONTROL, "ipiv: ");
-  for (i=0; i<n; i++) fprintf(STDCTR, " %d", ipiv[i]);
+  cleed_permutation_fprintf(STDOUT, ipiv, n);
   fprintf(STDCTR, "\n");
 #endif
 
   /* clean up */
   matfree(Alu);
-  free(ipiv);
+  cleed_permutation_free(ipiv);
 
   return(A_1);
 }

@@ -84,6 +84,10 @@ int mattrace(mat tra, const mat M)
         }
         break;
       } /* case CLEED_COMPLEX */
+
+      case(NUM_IMAG): case(NUM_MASK): default:
+        ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
+        ERROR_RETURN(-1);
     }  /* switch */
   }   /* else */
 

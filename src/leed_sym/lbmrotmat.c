@@ -102,8 +102,8 @@ real ** R_n;
      {
        faux = 2.*PI / n_rot;
 
-       R_n[1][1] = R_n[1][4] = R_cos(faux);
-       R_n[1][2] = - ( R_n[1][3] = R_sin(faux) );
+       R_n[1][1] = R_n[1][4] = cleed_real_cos(faux);
+       R_n[1][2] = - ( R_n[1][3] = cleed_real_sin(faux) );
 
    /* 2*phi = -phi */
        R_n[2][1] = R_n[2][4] = R_n[1][1];
@@ -136,8 +136,8 @@ real ** R_n;
      {
        faux = 2.*PI / n_rot;
 
-       R_n[1][1] = R_n[1][4] = R_cos(faux);
-       R_n[1][2] = - ( R_n[1][3] = R_sin(faux) );
+       R_n[1][1] = R_n[1][4] = cleed_real_cos(faux);
+       R_n[1][2] = - ( R_n[1][3] = cleed_real_sin(faux) );
 
    /* 5*phi = -phi */
        R_n[5][1] = R_n[5][4] = R_n[1][1];
@@ -146,8 +146,8 @@ real ** R_n;
 
    /* 2*phi */
        faux = PI / n_rot;
-       R_n[2][1] = R_n[2][4] = R_cos(faux);
-       R_n[2][2] = - ( R_n[2][3] = R_sin(faux) );
+       R_n[2][1] = R_n[2][4] = cleed_real_cos(faux);
+       R_n[2][2] = - ( R_n[2][3] = cleed_real_sin(faux) );
 
    /* 4*phi = -2*phi */
        R_n[4][1] = R_n[4][4] = R_n[2][1];

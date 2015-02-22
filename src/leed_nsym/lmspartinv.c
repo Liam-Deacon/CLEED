@@ -83,7 +83,7 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
   size_t l1, l2;
   int m1, m2;
 
-  int iaux;
+  size_t iaux;
 
   int iev2;
   int iod2;
@@ -113,16 +113,16 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
   {
     for(l1 = 0; l1 <= l_max; l1 ++)
     {
-      for(m1 = -l1; m1 <= l1; m1 ++)
+      for(m1 = -(int)l1; m1 <= (int)l1; m1 ++)
       {
-        odd1 = ODD(l1+m1);
+        odd1 = ODD((int)l1+m1);
         for(i_atoms_2 = 0; i_atoms_2 < first_atoms; i_atoms_2 ++)
         {
           for(l2 = 0; l2 <= l_max; l2 ++)
           {
-            for(m2 = -l2; m2 <= l2; m2 ++, ptr_1 ++, ptr_2 ++)
+            for(m2 = -(int)l2; m2 <= (int)l2; m2 ++, ptr_1 ++, ptr_2 ++)
             {
-              if(ODD(l2+m2))
+              if(ODD((int)l2+m2))
               {
                 if(odd1 != 0)
                 {
@@ -157,16 +157,16 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
   {
     for(l1 = 0; l1 <= l_max; l1 ++)
     {
-      for(m1 = -l1; m1 <= l1; m1 ++)
+      for(m1 = -(int)l1; m1 <= (int)l1; m1 ++)
       {
-        odd1 = ODD(l1+m1);
+        odd1 = ODD((int)l1+m1);
         for(i_atoms_2 = 0; i_atoms_2 < first_atoms; i_atoms_2 ++)
         {
           for(l2 = 0; l2 <= l_max; l2 ++)
           {
-            for(m2 = -l2; m2 <= l2; m2 ++, ptr_1 ++, ptr_2 ++)
+            for(m2 = -(int)l2; m2 <= (int)l2; m2 ++, ptr_1 ++, ptr_2 ++)
             {
-              if(ODD(l2+m2))
+              if(ODD((int)l2+m2))
               {
                 if(odd1 != 0 )
                 {

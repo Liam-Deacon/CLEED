@@ -23,12 +23,15 @@ ADD_SUBDIRECTORY(debye)
 ADD_SUBDIRECTORY(ftsmooth)
 ADD_SUBDIRECTORY(latt)
 ADD_SUBDIRECTORY(leed_nsym)
-ADD_SUBDIRECTORY(leed_sym)
+#ADD_SUBDIRECTORY(leed_sym)
 ADD_SUBDIRECTORY(mkiv)
 ADD_SUBDIRECTORY(patt)
 ADD_SUBDIRECTORY(rfac)
 ADD_SUBDIRECTORY(search)
 ADD_SUBDIRECTORY(scripts)
+
+# c++ interface library
+ADD_SUBDIRECTORY(c++)
 
 # optional gui elements
 ADD_SUBDIRECTORY(latt-gui)

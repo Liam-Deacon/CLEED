@@ -110,6 +110,6 @@ class Search(object):
     def __init__(self, bulk_model, surface_model, control, model_name, 
                  parameters, bulk_filename=None, input_filename=None, 
                  control_filename=None, **kwargs):
-        self.setControlItems(control)
+        self.mkiv_set_controlItems(control)
         self.__dict__.update(kwargs)
         

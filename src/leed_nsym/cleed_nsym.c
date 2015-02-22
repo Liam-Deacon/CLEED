@@ -42,19 +42,8 @@
 #include <omp.h>        /* compile with '-fopenmp' */
 #endif
 
-#define CONTROL_FLOW
 
-#define CONTROL_IO
-
-#ifndef CONTROL 
-#define CONTROL
-#endif
-
-#define WARNING_LOG
-#define ERROR_LOG
-
-#define CTR_NORMAL       998
-#define CTR_EARLY_RETURN 999
+enum { CTR_NORMAL = 998, CTR_EARLY_RETURN = 999 };
 
 
 /*!
@@ -79,7 +68,7 @@ int main(int argc, char *argv[])
   mat Amp = NULL;
 
   int ctr_flag = CTR_NORMAL;
-  int i_c, i_arg;
+  int i_c, i_arg, iaux;
   size_t n_beams_now, n_beams_set;
   size_t i_set, offset;
   size_t i_layer;                    /* counter for crystallographic layers */
@@ -250,7 +239,10 @@ int main(int argc, char *argv[])
   leed_inp_read_bul_nd(&bulk, &phs_shifts, bul_file);
   leed_inp_leed_read_par(&v_par, &eng, bulk, bul_file);
   leed_read_overlayer_nd(&over, &phs_shifts, bulk, par_file);
-  n_set = leed_beam_gen(&beams_all, bulk, v_par, eng->final);
+
+  if ( (iaux = leed_beam_gen(&beams_all, bulk, v_par, eng->final)) > 0)
+    n_set = (size_t)iaux;
+  else n_set = 0;
    
   leed_inp_show_beam_op(bulk, over, phs_shifts);
 
@@ -313,7 +305,8 @@ int main(int argc, char *argv[])
   #endif
 
     leed_par_update_nd(v_par, phs_shifts, energy);
-    n_beams_now = leed_beam_get_selection(&beams_now, beams_all, v_par, bulk->dmin);
+    iaux = leed_beam_get_selection(&beams_now, beams_all, v_par, bulk->dmin);
+    n_beams_now = (iaux > 0) ? (size_t)iaux : 0;
 
     #ifdef CONTROL
     fprintf(STDCTR, "(CLEED_NSYM):\n\t => E = %.1f eV (%d beams used) <=\n\n",
@@ -329,7 +322,11 @@ int main(int argc, char *argv[])
     R_bulk = matalloc(R_bulk, n_beams_now, n_beams_now, NUM_COMPLEX);
     for(offset = 1, i_set = 0; i_set < n_set; i_set ++)
     {
-      n_beams_set = leed_beam_set(&beams_set, beams_now, i_set);
+      if ( (iaux = leed_beam_set(&beams_set, beams_now, i_set)) > 0)
+        n_beams_set = (size_t)iaux;
+      else
+        n_beams_set = 0;
+
 
       /* Loop over periodic bulk layers */
 

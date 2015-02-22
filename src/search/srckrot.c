@@ -163,8 +163,8 @@ size_t sr_ckrot(search_atom *atoms, search *search )
       {
         faux = 2.*PI / search->rot_deg;
 
-        R_1[1] = R_1[4] = R_cos(faux);
-        R_1[2] = - ( R_1[3] = R_sin(faux) );
+        R_1[1] = R_1[4] = cleed_real_cos(faux);
+        R_1[2] = - ( R_1[3] = cleed_real_sin(faux) );
 
         /* 2*phi = -phi */
         R_2[1] = R_2[4] = R_1[1];
@@ -206,8 +206,8 @@ size_t sr_ckrot(search_atom *atoms, search *search )
       {
         faux = 2.*PI / search->rot_deg;
 
-        R_1[1] = R_1[4] = R_cos(faux);
-        R_1[2] = - ( R_1[3] = R_sin(faux) );
+        R_1[1] = R_1[4] = cleed_real_cos(faux);
+        R_1[2] = - ( R_1[3] = cleed_real_sin(faux) );
 
         /* 5*phi = -phi */
         R_5[1] = R_5[4] = R_1[1];
@@ -216,8 +216,8 @@ size_t sr_ckrot(search_atom *atoms, search *search )
 
         /* 2*phi */
         faux = PI / search->rot_deg;
-        R_2[1] = R_2[4] = R_cos(faux);
-        R_2[2] = - ( R_2[3] = R_sin(faux) );
+        R_2[1] = R_2[4] = cleed_real_cos(faux);
+        R_2[2] = - ( R_2[3] = cleed_real_sin(faux) );
 
         /* 4*phi = -2*phi */
         R_4[1] = R_4[4] = R_2[1];
@@ -277,11 +277,11 @@ size_t sr_ckrot(search_atom *atoms, search *search )
           /* First check if atom i is mapped to itself by rotation
            * (j_atoms = i_atoms) */
           faux = B_1[1]*xi + B_1[2]*yi - (BR[1]*xi + BR[2]*yi + axis[1]);
-          faux -= R_nint(faux);
+          faux -= cleed_real_nint(faux);
           if( fabs(faux) < GEO_TOLERANCE)
           {
             faux = B_1[3]*xi + B_1[4]*yi - (BR[3]*xi + BR[4]*yi + axis[2]);
-            faux -= R_nint(faux);
+            faux -= cleed_real_nint(faux);
 
             if( fabs(faux) < GEO_TOLERANCE)
             {
@@ -307,7 +307,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
               fprintf(STDCTR, "\n\t\t\t %d %d %.3f, ", i_rot, j_atoms, faux);
 #             endif
 
-              faux -= R_nint(faux);
+              faux -= cleed_real_nint(faux);
               if( fabs(faux) < GEO_TOLERANCE)
               {
                 faux = B_1[3]*xj + B_1[4]*yj - (BR[3]*xi + BR[4]*yi + axis[2]);
@@ -316,7 +316,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
                 fprintf(STDCTR, " %.3f ",  faux);
 #               endif
 
-                faux -= R_nint(faux);
+                faux -= cleed_real_nint(faux);
                 if( fabs(faux) < GEO_TOLERANCE)
                 {
                   /* - Copy reference of atom i into j

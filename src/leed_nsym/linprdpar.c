@@ -318,8 +318,8 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
   {
     WARNING_MSG("l_max = %d <= 0\n", var_par->l_max);
 
-    faux = R_sqrt(2. * eng_par->final) * R_FOR_LMAX;
-    var_par->l_max = (int)(R_nint(faux));
+    faux = cleed_real_sqrt(2. * eng_par->final) * R_FOR_LMAX;
+    var_par->l_max = (size_t)cleed_real_nint(faux);
 
     WARNING_MSG("calculate value %d from Efin = %.1f eV and "
                 "assumed Rmax = %.1f A.\n", var_par->l_max,

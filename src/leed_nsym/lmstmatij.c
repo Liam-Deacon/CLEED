@@ -64,7 +64,7 @@ mat leed_ms_tmat_ij ( mat Gij, mat Llm, mat Tii, size_t l_max)
   int m1, m2, m3;
   size_t off_row, off_ij;
 
-  int i3;
+  size_t i3;
   size_t l3_min, l3_max;
 
   real faux_r;
@@ -112,12 +112,12 @@ mat leed_ms_tmat_ij ( mat Gij, mat Llm, mat Tii, size_t l_max)
    */
   for(l1 = 0, off_row = 0; l1 <= l_max; l1 ++)
   {
-    for(m1 = -l1; m1 <= l1; m1 ++, off_row ++ )
+    for(m1 = -(int)l1; m1 <= (int)l1; m1 ++, off_row ++ )
     {
       /* off_row = l1*(l1+1) - m1; */
       for(l2 = 0, off_ij = off_row * Gij->cols + 1; l2 <= l_max; l2 ++)
       {
-        for(m2 = -l2; m2 <= l2; m2 ++, off_ij ++ )
+        for(m2 = -(int)l2; m2 <= (int)l2; m2 ++, off_ij ++ )
         {
           /* Loop over l3 (inner-most loop): calculate the elements of Gij
            *
@@ -130,22 +130,37 @@ mat leed_ms_tmat_ij ( mat Gij, mat Llm, mat Tii, size_t l_max)
            */
           m3 = m2 - m1;
 
-          l3_min = MAX(abs(-m3), abs(l2-l1));
+          l3_min = MAX(abs(-m3), abs((int)l2-(int)l1));
           l3_min += (l1 + l2 + l3_min) % 2;
           l3_max = l2 + l1;
 
           sign = M1P(m2+1);
 
+          /* use appropriate signedness */
+          if (m1 < 0 && m2 < 0)
+            off_ij = (l1*(l1+1) + (size_t)abs(m1)) * Gij->cols +
+                      l2*(l2+1) + (size_t)abs(m2) + 1;
+          else if (m1 < 0)
+            off_ij = (l1*(l1+1) + (size_t)abs(m1)) * Gij->cols +
+                      l2*(l2+1) - (size_t)m2 + 1;
+          else if (m2 < 0)
+            off_ij = (l1*(l1+1) - (size_t)m1) * Gij->cols +
+                      l2*(l2+1) + (size_t)abs(m2) + 1;
+          else
+            off_ij = (l1*(l1+1) - (size_t)m1) * Gij->cols +
+                      l2*(l2+1) - (size_t)m2 + 1;
 
-          off_ij = (l1*(l1+1) - m1) * Gij->cols + l2*(l2+1) - m2 + 1;
           Gij->rel[off_ij] = Gij->iel[off_ij] = 0.;
 
-          i3 = l3_min*(l3_min + 1) - m3 + 1;
+          if (m3 < 0)
+            i3 = l3_min*(l3_min + 1) + (size_t)abs(m3) + 1;
+          else
+            i3 = l3_min*(l3_min + 1) - (size_t)m3 + 1;
 
           for(l3 = l3_min; l3 <= l3_max; l3 += 2 )
           {
 
-            faux_r = sign*cg(l3,+m3, l2,+m2, l1,-m1);
+            faux_r = sign*cg((int)l3,+m3, (int)l2,+m2, (int)l1,-m1);
 
             Gij->rel[off_ij] += Llm->rel[i3] * faux_r;
             Gij->iel[off_ij] += Llm->iel[i3] * faux_r;

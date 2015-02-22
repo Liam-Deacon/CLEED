@@ -56,7 +56,7 @@ real rfac_rb(const real *eng, const real *e_int, const real *t_int)
   the_sq_sum = 0.;
   rfac_sum = 0.;
 
-  for(i_eng = 0; ! IS_EQUAL_REAL(eng[i_eng], F_END_OF_LIST); i_eng ++)
+  for(i_eng = 0; ! IS_EQUAL_REAL(eng[i_eng], (real)F_END_OF_LIST); i_eng ++)
   {
     rfac_sum += e_int[i_eng] * t_int[i_eng];
 
@@ -64,7 +64,7 @@ real rfac_rb(const real *eng, const real *e_int, const real *t_int)
     the_sq_sum += SQUARE(t_int[i_eng]);
   }
 
-  rfac_sum /= R_sqrt(the_sq_sum * exp_sq_sum);
+  rfac_sum /= cleed_real_sqrt(the_sq_sum * exp_sq_sum);
 
   CONTROL_MSG(CONTROL, "rfac_sum: %f,", rfac_sum);
 

@@ -65,8 +65,8 @@ void leed_ld_2lay ( mat *p_Tpp_ab, mat *p_Tmm_ab, mat *p_Rpm_ab, mat *p_Rmp_ab,
               mat Tpp_b,  mat Tmm_b,  mat Rpm_b,  mat Rmp_b,
               leed_beam *beams, real *vec_ab )
 {
-  int k;
-  int n_beams, nn_beams;                   /* total number of beams */
+  size_t k;
+  size_t n_beams, nn_beams;                   /* total number of beams */
 
   real faux_r, faux_i;
   real *ptr_r, *ptr_i, *ptr_end;
@@ -92,17 +92,17 @@ void leed_ld_2lay ( mat *p_Tpp_ab, mat *p_Tmm_ab, mat *p_Rpm_ab, mat *p_Rmp_ab,
   for( k = 0; k < n_beams; k++)
   {
     CONTROL_MSG(CONTROL, "%2d: k_r = %6.3f %6.3f %6.3f, k_i = %6.3f;",
-           k, (beams+k)->k_r[1], (beams+k)->k_r[2], (beams+k)->k_r[3],
-           (beams+k)->k_i[3]);
+           k, beams[k].k_r[1], beams[k].k_r[2], beams[k].k_r[3],
+           beams[k].k_i[3]);
 
-    faux_r = (beams+k)->k_r[1] * vec_ab[1] +
-             (beams+k)->k_r[2] * vec_ab[2] +
-             (beams+k)->k_r[3] * vec_ab[3];
-    faux_i = (beams+k)->k_i[3] * vec_ab[3];
+    faux_r = beams[k].k_r[1] * vec_ab[1] +
+             beams[k].k_r[2] * vec_ab[2] +
+             beams[k].k_r[3] * vec_ab[3];
+    faux_i = beams[k].k_i[3] * vec_ab[3];
 
     cri_expi(Pp->rel+k+1, Pp->iel+k+1, faux_r, faux_i);
 
-    faux_r -= 2. * (beams+k)->k_r[3] * vec_ab[3];
+    faux_r -= 2. * beams[k].k_r[3] * vec_ab[3];
 
     cri_expi(Pm->rel+k+1, Pm->iel+k+1, -faux_r, faux_i);
 
