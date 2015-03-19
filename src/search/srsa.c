@@ -119,7 +119,7 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   {
     CONTROL_MSG(CONTROL, "temperature = %.4f\n", temp);
     nfunc = MAX_ITER_SA;
-    sr_amebsa(p, y, n_dim, x, &rmin, temp, sr_evalrf, &nfunc, temp);
+    SR_SIMANN_FUNC(p, y, n_dim, x, &rmin, temp, sr_evalrf, &nfunc, temp);
   }
 
 /***********************************************************************

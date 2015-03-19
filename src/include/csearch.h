@@ -46,7 +46,7 @@ extern "C" {
  * Include type definitions and constant values and functions for SEARCH
  *********************************************************************/
 
-#if !defined(USE_GSL) /* use numerical receipes */
+#if !defined(USE_GSL) /* use numerical recipes */
 # include "nrr.h"
 #else /* use the GNU Scientific Library (open source) */
 # include <gsl/gsl_vector.h>

@@ -22,7 +22,6 @@
 #include "csearch.h"
 #include "copy_file.h"
 
-extern char *sr_project;   /* project name */
 extern long sa_idum;       /* seed for ran1, defined and initialized in main */
 
 static real tt;            /* communicates with amotsa */
@@ -35,21 +34,14 @@ real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n
 
 void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
     cleed_vector *pb, cleed_vector *yb, cleed_real ftol,
-    cleed_real (*funk)(), size_t *iter, cleed_real temptr)
+    cleed_real (*funk)(), int *iter, cleed_real temptr)
 {
-  FILE *ver_stream;
-  char ver_file[STRSZ];
-
   size_t i, ilo, ihi;
   size_t j, m, n;
   size_t mpts = n_dim+1;
   real rtol, sum, swap;
   real yhi, ylo, ynhi, ysave, yt, ytry;
   cleed_vector *psum = cleed_vector_alloc(n_dim);
-
-  char old_file[FILENAME_MAX];
-  char new_file[FILENAME_MAX];
-  time_t result;
 
   tt = -temptr;
 
@@ -165,7 +157,7 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
           }
         } /* for i */
 
-        *iter -= n_dim;
+        *iter -= (int)n_dim;
 
         /* Recompute psum */
         for (n=0; n < n_dim; n++)
@@ -183,32 +175,7 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
     }
 
     /* Write y/p to backup file */
-
-    /* remove 'cp' system call dependence */
-    sprintf(old_file, "%s%s", sr_project, ".ver");
-    sprintf(new_file, "%s%s", sr_project, ".vbk");
-    if (copy_file(old_file, new_file) != 0)
-    {
-      ERROR_MSG("failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
-      exit(SR_FILE_IO_ERROR);
-    }
-
-    strcpy(ver_file, new_file);
-    ver_stream = fopen(ver_file, "w");
-    fprintf(ver_stream, "%d %d %s\n", n_dim, mpts, sr_project);
-    for (i=0; i < mpts; i++)
-    {
-      fprintf(ver_stream, "%e ", y[i]);
-      for(j=0; j < n_dim; j++)
-        fprintf(ver_stream, "%e ", cleed_basic_matrix_get(p, i, j, n_dim));
-      fprintf(ver_stream, "\n");
-    }
-
-    /* add date */
-    result = time(NULL);
-    fprintf(ver_stream, "%s\n", asctime(localtime(&result)));
-
-    fclose(ver_stream);
+    sr_mkver(y, p, n_dim);
 
   } /* end of BIG LOOP */
 

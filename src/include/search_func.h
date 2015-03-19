@@ -68,11 +68,46 @@ __attribute__((nonnull)) int sr_rdver(const char *ver_file,
                                       cleed_vector *y,
                                       cleed_basic_matrix *p,
                                       int n_dim);
+__attribute__((nonnull)) int sr_mkver(const cleed_vector *y,
+                                      const cleed_basic_matrix *p,
+                                      size_t n_dim);
 
-#if USE_CBLAS || USE_LAPACK || USE_MKL /* BLAS interface */
+//#if USE_CBLAS || USE_LAPACK || USE_MKL /* BLAS interface */
+//#error "BLAS/LAPACK version not implemented"
+#if (USE_CYTHON == 1 || USE_PYTHON == 1 || USE_SCIPY == 1) /* Cython|SciPy inteface */
+
+#include "cysearch_api.h"
+
+#define SR_RF sr_evalrf
+#define SR_ER sr_er
+#define SR_SX sr_sx
+#define SR_SA sr_sa
+#define SR_PO sr_po
+#define SR_GA sr_ga
+
+static inline SR_AMOEBA_FUNC(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
+                             cleed_real ftol, cleed_real (*funk)(), size_t *nfunk) {
+  import_cysearch();
+  cy_simplex(p, y, n_dim, ftol, nfunk);
+}
+
+static inline SR_SIMANN_FUNC(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
+                             cleed_vector *pb, cleed_vector *yb, cleed_real ftol,
+                             cleed_real (*funk)(), size_t *iter, cleed_real temptr) {
+  import_cysearch();
+  cy_simann(p, y, n_dim, pb, yb, ftol, iter, temptr);
+}
+
+static inline SR_POWELL_FUNC(cleed_vector *p, cleed_basic_matrix *y, size_t n_dim,
+                        cleed_real ftol, size_t *iter, cleed_real *fret,
+                        cleed_real (*func)()) {
+  import_cysearch();
+  cy_powell(p, y, n_dim, ftol, iter, fret);
+}
+#define SR_GENETIC_FUNC {ERROR_MSG("Genetic Algorithm not implemented\n"); exit(1);}
 
 #elif USE_GSL /* GNU Scientific Library Interface */
-
+#warning "GSL implementation not yet complete"
 /* sramoeba_gsl.c - downhill simplex */
 int sr_amoeba(cleed_basic_matrix *, cleed_vector *, real , size_t *);
 double sr_amoeba_eval(const gsl_vector *, void *);
@@ -97,6 +132,15 @@ void sr_linmin_gsl(gsl_vector *, gsl_vector *, real *, real (*)());
 #define SR_PO sr_po
 #define SR_GA sr_ga
 
+#define SR_AMOEBA_FUNC sr_simplex
+#define SR_SIMANN_FUNC sr_amebsa
+#define SR_POWELL_FUNC sr_powell
+#define SR_GENETIC_FUNC {ERROR_MSG("Genetic Algorithm not implemented\n"); exit(1);}
+
+/* new simplex version */
+void sr_simplex(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
+                cleed_real ftol, cleed_real (*funk)(), size_t *nfunk);
+
 /* sramoeba.c */
 __attribute__((nonnull))
 void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
@@ -111,7 +155,7 @@ real sr_amotry(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum,
 __attribute__((nonnull))
 void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
                cleed_vector *pb, cleed_vector *yb, cleed_real ftol,
-               cleed_real (*funk)(), size_t *iter, cleed_real temptr);
+               cleed_real (*funk)(), int *iter, cleed_real temptr);
 
 __attribute__((nonnull))
 real sr_amotsa(cleed_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n_dim,

@@ -111,7 +111,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
   fclose(log_stream);
 
-  sr_amoeba(p, y, n_dim, R_TOLERANCE, SR_RF, &nfunc);
+  SR_AMOEBA_FUNC(p, y, n_dim, R_TOLERANCE, SR_RF, &nfunc);
 
   /* Write final results to log file */
 

@@ -17,32 +17,21 @@
 #include <stdio.h>
 #include <strings.h>
 #include <stdlib.h>
-#include <time.h>
 
 #include "csearch.h"
-#include "copy_file.h"
 
 static const real ALPHA = 1.0;
 static const real BETA = 0.5;
 static const real GAMMA = 2.0;
 
-extern char *sr_project;
-
 void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
                cleed_real ftol, cleed_real (*funk)(), size_t *nfunk)
 {
-  FILE *ver_stream;
-  char ver_file[STRSZ];
-
   size_t i, j, ilo, ihi, inhi;
   size_t mpts = ndim + 1;
   real ytry, ysave, sum, rtol;
   cleed_vector *psum = cleed_vector_alloc(ndim);
   real amotry();
-
-  char old_file[FILENAME_MAX];
-  char new_file[FILENAME_MAX];
-  time_t result;
 
   *nfunk = 0;
 
@@ -57,8 +46,8 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
   for (;;)
   {
     ilo = 0;
-    ihi = cleed_vector_get(y, 0) > cleed_vector_get(y, 1) ?
-      (inhi = 1u,0u) : (inhi = 0u,1u);
+    ihi = (cleed_vector_get(y, 0) > cleed_vector_get(y, 1)) ?
+              (inhi = 1u,0u) : (inhi = 0u,1u);
     for (i=0; i < mpts; i++)
     {
       if (cleed_vector_get(y, i) < cleed_vector_get(y, ilo)) ilo=i;
@@ -77,7 +66,7 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
     if (rtol < ftol) break;
     if (*nfunk >= MAX_ITER_AMOEBA)
     {
-      ERROR_MSG("Too many interations in AMOEBA\n");
+      ERROR_MSG("Too many iterations in AMOEBA\n");
 		  exit(1);
     }
     ytry = amotry(p, y, psum, ndim, funk, ihi, nfunk, -ALPHA);
@@ -114,38 +103,13 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t ndim,
         }
       }
     }
-
-    /*****************************
-     * Write y/p to backup file
-     *****************************/
-
-    /* remove 'cp' system call dependence */
-    sprintf(old_file, "%s%s", sr_project, ".ver");
-    sprintf(new_file, "%s%s", sr_project, ".vbk");
-    if (copy_file(old_file, new_file))
+    /* backup vertices to disk */
+    if (sr_mkver(y, p, ndim))
     {
-      ERROR_MSG("failed to copy file \"%s\" -> \"%s\"", old_file, new_file);
+      /* free resources and exit if failed */
       cleed_vector_free(psum);
       exit(1);
     }
-
-    strcpy(ver_file, new_file);
-    ver_stream = fopen(ver_file,"w");
-    fprintf(ver_stream, "%u %u %s\n", ndim, mpts, sr_project);
-    for (i=0; i < mpts; i++)
-    {
-      fprintf(ver_stream, "%e ", cleed_vector_get(y, i));
-      for(j=0; j < ndim; j++)
-        fprintf(ver_stream, "%e ", cleed_basic_matrix_get(p, i, j, ndim));
-      fprintf(ver_stream, "\n");
-    }
-
-    /* add date */
-    result = time(NULL);
-    fprintf(ver_stream, "%s\n", asctime(localtime(&result)));
-
-    fclose(ver_stream);
-
   }
   cleed_vector_free(psum);
 }  /* end of function sr_amoeba */

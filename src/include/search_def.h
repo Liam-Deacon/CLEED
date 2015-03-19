@@ -138,7 +138,7 @@ typedef enum {
                                * search methods have been ported to use the
                                * GNU Scientific Library API.
                                */
-
+  SR_MAXIMUM_ITERATIONS,      /*!< Indicates maximum number of iterations reached */
   SR_INVALID_SEARCH_TYPE,     /*!< Indicates search method is invalid. */
   SR_INVALID_INPUT_FILE,      /*!< Indicates the input file format is invalid
                                * or file not specified. */

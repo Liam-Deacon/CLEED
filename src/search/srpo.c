@@ -83,7 +83,7 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
   /* close log file before entering the search */
   fclose(log_stream);
 
-  sr_powell(p, xi, n_dim, R_TOLERANCE, &nfunc, &rmin, SR_RF);
+  SR_POWELL_FUNC(p, xi, n_dim, R_TOLERANCE, &nfunc, &rmin, SR_RF);
 
 /***********************************************************************
  * Write final results to log file

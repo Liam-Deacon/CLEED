@@ -20,6 +20,7 @@
  */
 
 #include "search_ver.h"
+#include <stdio.h>
 
 /*!
  * Output program syntax for command line arguments.
@@ -57,7 +58,7 @@ void search_usage(FILE *output) {
  */
 void search_info()
 {
-    printf("%s - version %s (%s)\n", SEARCH, SEARCH_VERSION, PROG_PLAT);
+    printf("%s - version %s (%s)\n", SEARCH, SEARCH_VERSION, SEARCH_PLAT);
     printf("\n%s\n", SEARCH_SHORTDESC);
     printf("\n%s\n%s\n", SEARCH_COPYRIGHT, SEARCH_LICENSE);
     printf("\nContact either Georg Held (g.held@reading.ac.uk) " 
