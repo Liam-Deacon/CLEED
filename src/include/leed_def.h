@@ -43,6 +43,8 @@
 #include "cleed_real.h"
 #include "mat_def.h"
 
+#include <limits.h>
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 namespace cleed {
 #endif
@@ -63,6 +65,11 @@ static const double KB = 3.16682941e-6;  /*!< Boltzmann constant in Hartree/K */
  * - tolerance
  * - threshold values etc.
  *********************************************************************/
+
+typedef enum {
+  CTR_NORMAL = 998,
+  CTR_EARLY_RETURN = 999
+} leed_ctr;
 
 /* Defaults */
 
@@ -294,7 +301,7 @@ typedef struct leed_phase  /*! Holds parameters for a single phase shift */
   real *pshift;        /*!< array of phase shift values */
  
   real dr[4];
-  char input_file[FILENAME_MAX];    /*!< name of input file */
+  char input_file[PATH_MAX];    /*!< name of input file */
 } leed_phase;
 
 /*! \typedef leed_beam
@@ -384,6 +391,39 @@ typedef struct leed_energy /*! Contains all parameters that change during
   real final;        /*!< final energy */
   real step;         /*!< energy step */
 } leed_energy;
+
+
+/*!
+ * Structure for holding command line arguments from LEED program
+ */
+typedef struct leed_args
+{
+  int ctr_flag;             /*!< Flag for determining program control flow */
+  char bul_file[PATH_MAX];  /*!< Path to leed bulk input file */
+  char par_file[PATH_MAX];  /*!< Path to leed parameter input file */
+  char res_file[PATH_MAX];  /*!< Path to leed results file */
+  char pro_name[PATH_MAX];  /*!< Path to leed project file */
+  FILE *pro_stream;         /*!< File pointer to project stream */
+  FILE *res_stream;         /*!< File pointer to results stream */
+} leed_args;
+
+
+/*!
+ * Structure for providing the model information needed for the energy loop
+ */
+typedef struct leed_model
+{
+    leed_args *args;        /*!< Control parameters */
+    leed_beam *beams_all;   /*!< All diffracted beams */
+    leed_beam *beams_out;   /*!< All outward beams */
+    leed_crystal *bulk;     /*!< Bulk parameters */
+    leed_crystal *over;     /*!< Overlayer parameters */
+    leed_energy *energy;    /*!< Energy control parameters */
+    leed_phase *phs_shifts; /*!< Phase shifts */
+    leed_var *v_par;        /*!< LEED variables */
+    size_t n_set;           /*!< Total number of beam sets */
+} leed_model;
+
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */

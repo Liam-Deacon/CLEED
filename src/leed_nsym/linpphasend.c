@@ -121,8 +121,13 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
       ERROR_MSG("environment variable CLEED_PHASE not defined\n");
       ERROR_RETURN(-1);
     }
-    sprintf(filename, "%s%s%s.phs", getenv("CLEED_PHASE"),
+    if ((inp_stream = fopen(phaseinp, "r")) == NULL) {
+      sprintf(filename, "%s%s%s.phs", getenv("CLEED_PHASE"),
             PATH_SEPARATOR, phaseinp);
+    } else {
+      strcpy(filename, phaseinp);
+      fclose(inp_stream);
+    }
   }
   else sprintf(filename, "%s", phaseinp);
 

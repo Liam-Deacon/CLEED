@@ -40,15 +40,7 @@
 #include "leed.h"
 #include "leed_def.h"
 
-#ifndef GEO_TOLERANCE          /* should be defined in "leed_def.h" */
-#define GEO_TOLERANCE 0.0001
-#endif
-
-#ifndef DEF_TEMP               /* should be defined in "leed_def.h" */
-#define DEF_TEMP 300.
-#endif
-
-#define SQRT3    1.73205080756887729352       /*!< \f$ \sqrt{3} \f$ */
+static const double SQRT3 = 1.73205080756887729352; /*!< \f$ \sqrt{3} \f$ */
 
 /*!
  * Reads all the bulk parameters that do not change during a search.
