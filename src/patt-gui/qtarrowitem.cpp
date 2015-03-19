@@ -16,9 +16,9 @@ QtArrowItem::QtArrowItem(
   const bool head,
   QGraphicsItem *parent,
   QGraphicsScene *scene)
-  : QGraphicsLineItem(x1,y1,x2,y2,parent,scene),
-    m_head(head),
-    m_tail(tail)
+//  : QGraphicsLineItem(x1,y1,x2,y2,parent,scene),
+//    m_head(head),
+//    m_tail(tail)
 {
   this->setFlag(QGraphicsItem::ItemIsMovable);
   this->setFlag(QGraphicsItem::ItemIsSelectable);

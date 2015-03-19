@@ -17,13 +17,16 @@
 #include <QClipboard>
 #include <QDebug>
 #include <QDesktopServices>
+#if QT_VERSION >= 0x050000
+# include <QStandardPaths>
+#endif
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMenu>
 #include <QSettings>
 #if QT_VERSION >= 0x040300
-	#include <QtSvg/QSvgGenerator>
- #endif
+# include <QtSvg/QSvgGenerator>
+#endif
 #include <QUrl>
 
 #include <QGraphicsItem>
@@ -65,7 +68,11 @@ MainWindow::~MainWindow()
 
 int MainWindow::actionOpen()
 {
-    QString defaultDir = QDesktopServices::storageLocation(QDesktopServices::HomeLocation);
+#if QT_VERSION >= 0x050000
+    QString defaultDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).at(0);
+#else
+    QString defaultDir = QDesktopServices::storeageLocation(QDesktopServices::HomeLocation);
+#endif
     QString defaultFilter = tr("Pattern (*.patt)");
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                     defaultDir,
@@ -166,7 +173,11 @@ int MainWindow::actionSave()
     QString fileName = QFileDialog::getSaveFileName(
             this,
             "Save As...",
-            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+#if QT_VERSION >= 0x050000
+            QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).at(0);
+#else
+            QDesktopServices::storeageLocation(QDesktopServices::PicturesLocation);
+#endif
             tr("Windows Bitmap (*.bmp);;") +
             tr("JPEG (*.jpg);;") +
             tr("Portable Document Format (*.pdf);;") +
@@ -1020,9 +1031,9 @@ void MainWindow::calculatePattern(LatticeStructure &structure)
 
 
 
-    qreal rt2 = sqrt(2);
+    //qreal rt2 = sqrt(2);
     //qreal width = spotSize/rt2; //square
-    qreal width = spotSize * (sqrt(3)/2); //triangle
+    //qreal width = spotSize * (sqrt(3)/2); //triangle
 
     QGraphicsItemGroup *indices =  new QGraphicsItemGroup;
     indices->setFlag(QGraphicsItem::ItemIsSelectable);
@@ -1033,8 +1044,8 @@ void MainWindow::calculatePattern(LatticeStructure &structure)
 
 
     qreal pSize = spotSize;
-    qreal pWidth = pSize / sqrt(2);
-    qreal delta = pSize * (0.5 * sqrt(3));
+    //qreal pWidth = pSize / sqrt(2);
+    //qreal delta = pSize * (0.5 * sqrt(3));
     qreal quad = pSize * 0.5;
 
     QPainterPath path;
