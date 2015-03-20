@@ -10,7 +10,9 @@ with the R-Factor program crfac. Optimisation of the input parameters is perform
 
 A (still rather incomplete) documentation of the program package can be found 
 in 'doc/CLEED_Manual.pdf', but it is probably best to send an email, with all 
-input files, to <g.held@reading.ac.uk> when you encounter any problems...
+input files, to  <g.held@reading.ac.uk> for general LEED queries when you encounter 
+any problems or alternatively email <liam.deacon@diamond.ac.uk> regarding 
+problems/bugs in the programs.
 
 Installation
 ------------
@@ -131,6 +133,4 @@ of iterations (currently 2000), it can be restarted by:
 
     nohup csearch -i <inp_file> -v <ver_file> 1> <out_file> 2> <err_file> &
 
-GOOD LUCK
-
-*-- Georg Held --*
+Good Luck!
