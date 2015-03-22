@@ -38,9 +38,10 @@ void rfac_iv_spline(rfac_iv *iv)
   size_t i;
   int k;
   real p, qn, sig, un;
-  real *buf;
 
-  buf = (real *) malloc(iv->n_eng * sizeof(real));
+  if (iv == NULL) return; /* nothing to do */
+
+  real buf[iv->n_eng+1];
 
   iv->data[0].deriv2 = buf[0] = 0.0;
 
@@ -62,12 +63,10 @@ void rfac_iv_spline(rfac_iv *iv)
 
   iv->data[iv->n_eng-1].deriv2 = (real)((un - qn*buf[iv->n_eng-2] ) /
                          ( qn*iv->data[iv->n_eng-2].deriv2 + 1.0));
-  for (k=(int)(iv->n_eng-2); k>=0; k--)
+  for (k=(int)(iv->n_eng)-2; k >= 0; k--)
   {
     iv->data[k].deriv2 = iv->data[k].deriv2 * iv->data[k+1].deriv2 + buf[k];
   }
-
-  free(buf);
 
   iv->spline = true; /* update spline flag */
 

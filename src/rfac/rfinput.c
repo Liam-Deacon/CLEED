@@ -20,6 +20,7 @@
  *  \brief Implementation file for rfac_ivcur_read() function.
  */
 
+#include <errno.h>
 #include <math.h>
 #include <strings.h>
 #include <stdio.h>
@@ -69,14 +70,14 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
   size_t n_cur, i_cur = 0;
   long offs = 0L;
 
-  rfac_ivcur *cur_list;       /* list of IV curves */
-  char *ctr_buffer;           /* buffer for control file */
-  char *the_buffer;           /* buffer for theoretical input file */
-  char line_buffer[STRSZ];    /* buffer for a single command line */
-  char exp_file[FILENAME_MAX];/* name of experimental input file */
-  char index_list[STRSZ];     /* command line for averaging theoretical
-			                         * indices */
-  char fmt_buffer[STRSZ];     /* buffer for format specifier */
+  rfac_ivcur *cur_list = NULL;       /* list of IV curves */
+  char *ctr_buffer = NULL;           /* buffer for control file */
+  char *the_buffer = NULL;           /* buffer for theoretical input file */
+  char line_buffer[STRSZ];           /* buffer for a single command line */
+  char exp_file[FILENAME_MAX];       /* name of experimental input file */
+  char index_list[STRSZ];            /* command line for averaging theoretical
+			                                * indices */
+  char fmt_buffer[STRSZ];            /* buffer for format specifier */
 
 /*********************************************************************
  * Copy theoretical input file to the_buffer
@@ -97,11 +98,11 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
 
   ctr_buffer = file2buffer(control_file);
 
-  n_cur = rfac_nclines(ctr_buffer) ;
+  n_cur = rfac_nclines(ctr_buffer);
 
   CONTROL_MSG(CONTROL_X, "n_cur = %d\n", n_cur);
 
-  cur_list = (rfac_ivcur*) calloc(n_cur, sizeof(rfac_ivcur));
+  cur_list = (rfac_ivcur*) calloc(n_cur+1, sizeof(rfac_ivcur));
 
   /* set real format specifier */
   sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
@@ -110,9 +111,6 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
  * Scan through control file.
  * read IV curves.
  *********************************************************************/
-
-  cur_list[i_cur].experimental->data = NULL;
-  cur_list[i_cur].theory->data = NULL;
 
   while ((len = bgets(ctr_buffer, offs, STRSZ, line_buffer)) > -1)
   {
@@ -140,8 +138,8 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
           exp_file[j] = '\0';
          
           /* Read experimental IV curve from file and store to exp_list. */
-          cur_list[i_cur].experimental->data = rfac_iv_read(exp_file);
-         
+          cur_list[i_cur].experimental = rfac_iv_read(exp_file);
+
         } /* if "ef=" */
 
         /* ti: index list (read theoretical data from file) */
@@ -158,14 +156,14 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
          if (the_buffer == NULL)
          {
            ERROR_MSG("No theoretical input file present \"%s\"\n", index_list);
-           exit(1);
+           exit(ENOFILE);
          }
          else
          {
-           cur_list[i_cur].theory->data = rfac_iv_data_read_cleed(
-                        cur_list+i_cur, /* IV curve structure */
-                        the_buffer,      /* theoretical input */
-                        index_list);     /* control list for beam average */
+           cur_list[i_cur].theory = rfac_iv_read_cleed(
+                        &cur_list[i_cur], /* IV curve structure */
+                        the_buffer,       /* theoretical input */
+                        index_list);      /* control list for beam average */
            /*
             * If the energy of appearance is not specified, use first energy
             * in the theoretical file.
@@ -211,13 +209,11 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
       */
 
      CONTROL_MSG(CONTROL,
-            "%d: ti: %s, ef: %s, e0: %.1f id: %d, wt: %.1f, \n",
-            i_cur, index_list, exp_file,
+            "%d of %d: ti: %s, ef: %s, e0: %.1f id: %d, wt: %.1f, \n",
+            i_cur+1, n_cur, index_list, exp_file,
             cur_list[i_cur].eng_0, cur_list[i_cur].group_id,
             cur_list[i_cur].weight);
      i_cur++;
-     free(cur_list[i_cur].experimental);
-     free(cur_list[i_cur].theory);
 
    } /* if != '#' (no comment) */
 
@@ -226,8 +222,10 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
 
   } /* while: scan through control file */
 
-  cur_list[i_cur-1].group_id = END_OF_GROUP_ID;
+  n_cur = i_cur-1;
+  cur_list[n_cur].group_id = END_OF_GROUP_ID;
 
+  rfac_ivcur_print(cur_list);
   /* free previously allocated memory and return.*/
   free(the_buffer);
   free(ctr_buffer);

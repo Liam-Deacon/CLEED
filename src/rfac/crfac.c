@@ -23,9 +23,33 @@
 #include <malloc.h>
 #include <strings.h>
 
-#include "gh_stddef.h"
-#include "rfac_def.h"
 #include "rfac.h"
+
+static inline const char* get_rfactor_name(rfactor_type type) {
+  switch (type)
+  {
+    case RP_FACTOR: {return "Rp"; break;}
+    case R1_FACTOR: {return "R1"; break;}
+    case R2_FACTOR: {return "R2"; break;}
+    case RB_FACTOR: {return "Rb1"; break;}
+    default: break;
+  }
+  return "Unknown RFactor type";
+}
+
+
+static void print_rfactor(rfactor_type type, real r_min, real rr,
+                          real s_min, real e_range) {
+  const char *rf = get_rfactor_name(type);
+#if CONTROL
+  fprintf(STDCTR, "%s = ", rf);
+  fprintf(STDCTR, "%.6f, RR = %.6f (shift = %4.1f, eng. overlap = %.1f)\n",
+          r_min, rr, s_min, e_range);
+#endif
+  fprintf(STDOUT, "%.6f %.6f %.2f %.2f\t\t#  ", r_min, rr, s_min, e_range);
+  fprintf(STDCTR, "%s  RR  shift  range\n", rf);
+}
+
 
 #if LIBRARY_BUILD == 1
 int rfac_main(int argc, char *argv[])   /* compile as library function */
@@ -36,15 +60,12 @@ int main(int argc, char *argv[])        /* compile as standalone program */
  * Program calculates different R factors.
  **********************************************************************/
 {
-
-  int i_list;
-
   real r_min, s_min, e_range;
   real rr;
 
   /* main structures */
-  rfac_args *args;             /* program parameters from argument list */
-  rfac_ivcur *iv_cur;          /* input data */
+  rfac_args *args = NULL;       /* program parameters from argument list */
+  rfac_ivcur *iv_cur = NULL;   /* input data */
 
   char rfversion[STRSZ];       /* current program version */
 
@@ -65,70 +86,12 @@ int main(int argc, char *argv[])        /* compile as standalone program */
  * Smooth (and sort) IV curves
  * Prepare cubic spline
  **********************************************************************/
+  rfac_ivcur_process(iv_cur, args->vi);
 
-  for(i_list = 0; iv_cur[i_list].group_id != END_OF_GROUP_ID; i_list ++)
-  {
-    /* smooth both experimental and theoretical curves */
-    rfac_iv_lorentz_smooth(iv_cur[i_list].experimental, args->vi / 2);
-    rfac_iv_lorentz_smooth(iv_cur[i_list].theory, args->vi / 2);
-
-    /* prepare cubic spline */
-    rfac_iv_spline((&iv_cur[i_list])->experimental);
-    rfac_iv_spline((&iv_cur[i_list])->theory);
-
-  }  /* for i_list */
- 
   r_min = rfac_rmin(iv_cur, args, &r_min, &s_min, &e_range);
   rr = cleed_real_sqrt(args->vi * 8. / e_range);
 
-#if CONTROL
-  switch (args->r_type)
-  {
-    case RP_FACTOR:
-      fprintf(STDCTR, "Rp = ");
-      break;
-
-    case R1_FACTOR:
-      fprintf(STDCTR, "R1 = ");
-      break;
-
-    case R2_FACTOR:
-      fprintf(STDCTR, "R2 = ");
-      break;
-
-    case RB_FACTOR:
-      fprintf(STDCTR, "Rb1 = ");
-      break;
-
-    default:
-      break;
-  }
-  fprintf(STDCTR, "%.6f, RR = %.6f (shift = %4.1f, eng. overlap = %.1f)\n",
-          r_min, rr, s_min, e_range);
-#endif
-
-  fprintf(STDOUT, "%.6f %.6f %.2f %.2f\t\t#  ", r_min, rr, s_min, e_range);
-  switch (args->r_type)
-  {
-    case RP_FACTOR:
-      fprintf(STDCTR, "Rp  RR  shift  range\n");
-      break;
-
-    case R1_FACTOR:
-      fprintf(STDCTR, "R1  RR  shift  range\n");
-      break;
-
-    case R2_FACTOR:
-      fprintf(STDCTR, "R2  RR  shift  range\n");
-      break;
-
-    case RB_FACTOR:
-      fprintf(STDCTR, "Rb1 RR  shift  range\n");
-      break;
-
-    default:
-      break;
-  }
+  print_rfactor(args->r_type, r_min, rr, s_min, e_range);
 
   free(args);
 

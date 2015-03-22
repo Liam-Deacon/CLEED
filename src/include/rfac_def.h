@@ -80,8 +80,8 @@ typedef enum
 {
   END_OF_GROUP_ID = -1,
   AVERAGE_GROUP_ID = 0,  /*!< default group ID */
-  NO_GROUP_ID,
-  DEFAULT_GROUP_ID        /*!< group ID for average over all curves */
+  NO_GROUP_ID = 1,
+  DEFAULT_GROUP_ID = 2   /*!< group ID for average over all curves */
 } rfac_group_id;
 
 /*!

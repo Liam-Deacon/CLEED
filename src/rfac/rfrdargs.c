@@ -187,8 +187,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         if (++i < argc) strncpy(args->out_file, argv[i], FILENAME_MAX);
         else
         {
-          fprintf(stderr, " *** error (rfac_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
       } /* case o */
@@ -219,8 +218,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         }
         else
         {
-          fprintf(stderr, " *** error (rfac_rdargs): "
-                  "missing argument for \"%s\"\n", argv[i-1]);
+          ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
           exit(RFAC_INVALID_ARGUMENT);
         }
       } /* case r */

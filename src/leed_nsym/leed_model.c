@@ -24,7 +24,7 @@
 #include <leed.h>
 
 leed_model *leed_model_init(leed_args *args) {
-  leed_model *model = (leed_model*) calloc(sizeof(leed_model), 1);
+  leed_model *model = (leed_model*) calloc(1, sizeof(leed_model));
 
   int iaux = 0;
   size_t n_set;

@@ -17,11 +17,11 @@
  * \brief Low level routines associated with #rfac_iv and #rfac_iv_data
  */
 
-#include "rfac.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "rfac.h"
 /*!
  * \brief intialize #rfac_iv object.
  *
@@ -30,7 +30,7 @@
  */
 rfac_iv *rfac_iv_init()
 {
-  rfac_iv *_iv = (rfac_iv *) malloc(sizeof(rfac_iv));
+  rfac_iv *_iv = (rfac_iv *) calloc(1, sizeof(rfac_iv));
 
   if (_iv == NULL) return NULL;
 
@@ -77,7 +77,7 @@ rfac_iv *rfac_iv_alloc(size_t n_eng)
 
 rfac_args *rfac_args_init()
 {
-  rfac_args *args = (rfac_args*) malloc(sizeof(rfac_args));
+  rfac_args *args = (rfac_args*) calloc(1, sizeof(rfac_args));
 
   if (args == NULL) return NULL;
 

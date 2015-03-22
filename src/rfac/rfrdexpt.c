@@ -39,7 +39,7 @@
  *
  * \retval \c NULL if failed.
  */
-rfac_iv_data *rfac_iv_read(const char *filename)
+rfac_iv *rfac_iv_read(const char *filename)
 {
 
   size_t i;
@@ -60,9 +60,7 @@ rfac_iv_data *rfac_iv_read(const char *filename)
 
   sprintf(fmt_buffer, "%%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_rdexpt): opening \"%s\"\n", filename);
-  #endif
+  CONTROL_MSG(CONTROL, "opening \"%s\"\n", filename);
 
   if( (buffer = file2buffer(filename)) == NULL)
   {
@@ -100,7 +98,6 @@ rfac_iv_data *rfac_iv_read(const char *filename)
 
       if(sscanf(line_buffer, fmt_buffer, &iv->data[i].energy, &iv->data[i].intens) == 2)
       {
-
         /* search for max. intensity */
         if(iv->data[i].intens > max_int) max_int = iv->data[i].intens;
 
@@ -131,6 +128,7 @@ rfac_iv_data *rfac_iv_read(const char *filename)
   if (i==0)
   {
     WARNING_MSG("No input read from file \"%s\"\n", filename);
+    i++;
   }
   else
   {
@@ -167,5 +165,5 @@ rfac_iv_data *rfac_iv_read(const char *filename)
   */
   free(buffer);
 
-  return(iv->data);
+  return(iv);
 }

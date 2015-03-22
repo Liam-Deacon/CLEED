@@ -82,15 +82,17 @@ NONNULL() RETURNS_NONNULL
 rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file);
 
 NONNULL() RETURNS_NONNULL
-rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *, char *, char *);
+rfac_iv *rfac_iv_read_cleed(rfac_ivcur *, char *, char *);
 
 /* read input of IV data */
 NONNULL() RETURNS_NONNULL
-rfac_iv_data *rfac_iv_read(const char *filename);
+rfac_iv *rfac_iv_read(const char *filename);
 
 /*********************************************************************
  * sort, spline, smooth
  *********************************************************************/
+int rfac_ivcur_process(rfac_ivcur *iv_cur, real vi);
+
 NONNULL()
 int rfac_lorentz(rfac_ivcur *, real, const char *); /* smooth IV curves */
 
@@ -163,6 +165,8 @@ void rfac_ivcur_free_all(rfac_ivcur*);
 
 NONNULL(1)
 int rfac_iv_to_arrays(const rfac_iv *, double *, double *, size_t *);
+
+void rfac_ivcur_print(const rfac_ivcur *ivs);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

@@ -21,6 +21,7 @@
  *  using rfac_iv_data_read_cleed() function.
  */
 
+#include <errno.h>
 #include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -59,12 +60,12 @@ static const size_t LENGTH_OF_NUMBER = 15 ;  /* characters per intensity in inpu
  * \param index_list command line for interpreter rfac_intindl() . Syntax:
  * (<index1>,<index2>) {*<scale> +/- (<index1>,<index2>)*<scale>}
  *
- * \return pointer to the IV curve (#rfac_iv_data). The list is
+ * \return pointer to the IV curve (#rfac_iv). The list is
  * terminated by a pair of negative values.
  *
  * \retval \c NULL if failed.
  */
-rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
+rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     char *buffer, char *index_list)
 {
 
@@ -81,11 +82,12 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
   real max_int,                    /* list of max. intensity */ 
        int_sum;                    /* sum of all intensities */
 
-  char *line_buffer;
+  char *line_buffer = NULL;
   char fmt_buffer[STRSZ];
 
-  rfac_iv_data *list;
-  rfac_spot *beam;
+  rfac_iv *iv = rfac_iv_init();
+  rfac_iv_data *list = NULL;
+  rfac_spot *beam = NULL;
 
   /********************************************************************
    * Read non-data input:
@@ -95,8 +97,14 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
    * - read indices.
    ********************************************************************/
 
+  if (iv == NULL)
+  {
+    ERROR_MSG("failed to allocate theoretical iv\n");
+    exit(ENOMEM);
+  }
+
   /* Allocate STRSZ bytes for line_buffer to read non-data input */
-  line_buffer = (char *)malloc( STRSZ * sizeof(char) + 1 );
+  line_buffer = (char *)calloc(STRSZ+1, sizeof(char));
 
   /* Reset n_beam, e_eng */
   n_beam = 0;
@@ -119,12 +127,12 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
     if(strncmp(line_buffer+1, "bn", 2) == 0)
     {
       sscanf(line_buffer+3, "%u", &n_beam);
-      beam = (rfac_spot *) malloc( (n_beam+1)*sizeof(rfac_spot)*13);
+      beam = (rfac_spot *) calloc( n_beam+1, sizeof(rfac_spot));
      
       if( beam == NULL )
       {
         ERROR_MSG("allocation error (beam)\n");
-        exit(RFAC_ALLOCATION_ERROR);
+        exit(ENOMEM);
       }
       
     } /* bn */
@@ -135,7 +143,7 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
       if( beam == NULL)
       {
         ERROR_MSG("attempt to read beam indices into unallocated list\n");
-        exit(RFAC_ALLOCATION_ERROR);
+        exit(ENOMEM);
       }
 
       sscanf(line_buffer+3, "%u", &i_beam);
@@ -154,7 +162,7 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
       else
       {
         ERROR_MSG("beam index exceeds limit (%d/%d)\n", i_beam, n_beam);
-        exit(RFAC_ALLOCATION_ERROR);
+        exit(ENOMEM);
       }
       
     } /* bi */
@@ -182,7 +190,7 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
   {
     ERROR_MSG("numbers of beams do not match (read: %d/n_beam: %d)\n",
               i_read, n_beam);
-    exit(RFAC_INVALID_NUMBER_OF_BEAMS);
+    exit(EINVAL);
   }
 
   /* Changed 12.10.00: if( (lines = rfac_nclines(buffer+offs) ) != n_eng) */
@@ -190,7 +198,7 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
   {
     ERROR_MSG("numbers of energies do not match (lines: %d/n_eng: %d)\n",
               lines, n_eng);
-    exit(RFAC_INVALID_NUMBER_OF_ENERGIES);
+    exit(EINVAL);
   }
 
   rfac_intindl(index_list, beam, n_beam);
@@ -200,12 +208,12 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
    * number of IV curves = number of data sets per energy (n_geo = 1)
    * length of one IV curve = n_eng
    */
-  list = (rfac_iv_data *) malloc((n_eng+1)*sizeof(rfac_iv_data)*13);
+  list = (rfac_iv_data *) calloc((n_eng+1), sizeof(rfac_iv_data));
   
   if( list == NULL)
   {
     ERROR_MSG("allocation error (list) \n");
-    exit(RFAC_ALLOCATION_ERROR);
+    exit(ENOMEM);
   }
 
   /********************************************************************
@@ -215,19 +223,19 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
   /* Allocate enough memory for line_buffer */
   free(line_buffer);
   buffer_len = n_beam * LENGTH_OF_NUMBER;
-  line_buffer = (char *)malloc(buffer_len * sizeof(char)*13);
+  line_buffer = (char *)calloc(buffer_len, sizeof(char));
 
   CONTROL_MSG(CONTROL, "start reading intensities.\n");
-  CONTROL_MSG(CONTROL, "%d bytes for line_buffer.\n", n_beam * 15);
+  CONTROL_MSG(CONTROL, "%d bytes for line_buffer.\n", n_beam*LENGTH_OF_NUMBER);
 
   /* preset some values */
-  iv_cur->theory->sort = true;              /* reset sort flag */
-  iv_cur->theory->equidist = true;          /* reset equidistance flag */
+  iv->sort = true;              /* reset sort flag */
+  iv->equidist = true;          /* reset equidistance flag */
 
   max_int = 0.;
   int_sum = 0.;
   i_eng = 0;
-  
+
   for ( offs = data_offs ;
       ((len = bgets(buffer, offs, (long)buffer_len, line_buffer)) > -1) &&
       (i_eng < n_eng);  
@@ -272,9 +280,8 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
       list[i_eng].intens = 0.;
       for (i=0; i < n_beam; i ++)
       {
-        list[i_eng].intens += 
-            beam[i].f_val1 *        /* scaling factor */
-            beam[i].f_val2 ;        /* intensity */
+        list[i_eng].intens +=  beam[i].f_val1 *        /* scaling factor */
+                               beam[i].f_val2 ;        /* intensity */
       }
 
       CONTROL_MSG(CONTROL, "eng: %f int: %f\n", list[i_eng].energy,
@@ -290,14 +297,14 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
       {
         /* check if list is sorted */
         if( (i_eng > 0) && (list[i_eng].energy < list[i_eng-1].energy) )
-         iv_cur->theory->sort = false;
+         iv->sort = false;
 
         /* check equidistance */
         if( (i_eng > 1) &&
            (cleed_real_fabs((2*list[i_eng-1].energy - 
               list[i_eng].energy - list[i_eng-2].energy)) >  ENG_TOLERANCE ))
         {
-          iv_cur->theory->equidist = false;
+          iv->equidist = false;
 
           WARNING_MSG("theoretical input is not equidistant (Eng:%.1f)\n",
                       list[i_eng-1].energy);
@@ -315,10 +322,11 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
               i_eng, list[0].energy, list[i_eng-1].energy);
 
   /* Write all available information to structure iv_cur */
-  iv_cur->theory->n_eng = i_eng;
-  iv_cur->theory->first_eng = list[0].energy;
-  iv_cur->theory->last_eng = list[i_eng-1].energy;
-  iv_cur->theory->max_int = max_int;
+  iv->data = list;
+  iv->n_eng = i_eng;
+  iv->first_eng = list[0].energy;
+  iv->last_eng = list[i_eng-1].energy;
+  iv->max_int = max_int;
  
   /*
    * Find beam with maximum contribution to average.
@@ -349,5 +357,7 @@ rfac_iv_data *rfac_iv_data_read_cleed(rfac_ivcur *iv_cur,
 
   free(line_buffer);
 
-  return(list);
+
+
+  return(iv);
 }  /* end of function cr_rdcleed */

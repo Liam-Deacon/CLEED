@@ -58,12 +58,13 @@
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.793701248" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
 								<option id="gnu.c.link.option.ldflags.241839601" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-pg" valueType="string"/>
 								<option id="gnu.c.link.option.debugging.gprof.584937246" name="Generate gprof information (-pg)" superClass="gnu.c.link.option.debugging.gprof" value="true" valueType="boolean"/>
-								<option id="gnu.c.link.option.shared.175919647" name="Shared (-shared)" superClass="gnu.c.link.option.shared" value="true" valueType="boolean"/>
+								<option id="gnu.c.link.option.shared.175919647" name="Shared (-shared)" superClass="gnu.c.link.option.shared" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.199062409" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 								<outputType id="cdt.managedbuild.tool.gnu.c.linker.mingw.so.output.base.1967663142" outputPrefix="" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.so.output.base"/>
+								<outputType id="cdt.managedbuild.tool.gnu.c.linker.output.601556213" outputPrefix="c" superClass="cdt.managedbuild.tool.gnu.c.linker.output"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.147348880" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
 								<option defaultValue="true" id="gnu.cpp.link.option.shared.987074130" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" valueType="boolean"/>
@@ -128,7 +129,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CLEED/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rfac}&quot;"/>
 								</option>
-								<option id="gnu.c.compiler.option.misc.other.1720736561" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0  -Wno-variadic-macros" valueType="string"/>
+								<option id="gnu.c.compiler.option.misc.other.1720736561" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0  -Wno-variadic-macros" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.135730353" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.358418813" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
@@ -158,13 +159,13 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/rfac"/>
-		</configuration>
 		<configuration configurationName="Debug.MinGW">
 			<resource resourceType="PROJECT" workspacePath="/rfac"/>
 		</configuration>
 		<configuration configurationName="Debug.lib.MinGW"/>
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/rfac"/>
+		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">

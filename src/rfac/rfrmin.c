@@ -30,6 +30,65 @@
 
 #define SHIFT_DE
 
+
+static size_t rfac_ivcur_get_n_leng(const rfac_ivcur *iv_cur, real s_step) {
+  real faux = 0.;
+  size_t n_leng = 0;
+  for(size_t n_list=0; iv_cur[n_list].group_id != END_OF_GROUP_ID; n_list++)
+  {
+    #ifdef SHIFT_DE
+    faux = ((iv_cur+n_list)->experimental->data +
+            (iv_cur+n_list)->experimental->n_eng-1)->energy  -
+          ((iv_cur+n_list)->experimental->data)->energy;
+    n_leng = MAX(n_leng, (size_t)abs((int)(faux/s_step) ));
+    faux = ((iv_cur+n_list)->theory->data +
+            (iv_cur+n_list)->theory->n_eng -1)->energy  -
+          ((iv_cur+n_list)->theory->data)->energy;
+    n_leng = MAX(n_leng, (size_t)abs((int)(faux/s_step) ));
+    #else
+    n_leng = MAX(n_leng, (iv_cur+n_list)->experimental->n_eng);
+    n_leng = MAX(n_leng, (iv_cur+n_list)->theory->n_eng);
+    #endif
+  }
+  return n_leng;
+}
+
+static real rfac_ivcur_get_overlap(const rfac_ivcur *iv_cur) {
+  real faux = 0.;
+#ifdef SHIFT_DE
+  for(size_t n_list=0; iv_cur[n_list].group_id != END_OF_GROUP_ID; n_list++)
+  {
+    faux = ((iv_cur+n_list)->theory->data +
+            (iv_cur+n_list)->theory->n_eng-1)->energy  -
+          ((iv_cur+n_list)->theory->data)->energy;
+  }
+#endif
+  return faux;
+}
+
+static inline real calculate_rfactor(real eng, real *exp_int, real *theory_int,
+    real vi, rfactor_type r_type) {
+  real faux = 0.;
+  switch(r_type) {
+    case(RP_FACTOR):
+      return rfac_rp(eng, exp_int, theory_int, vi);
+      break;
+    case(R1_FACTOR):
+      return rfac_r1(eng, exp_int, theory_int);
+      break;
+    case(R2_FACTOR):
+      return rfac_r2(eng, exp_int, theory_int);
+      break;
+    case(RB_FACTOR):
+      return rfac_rb(eng, exp_int, theory_int);
+      break;
+    default:
+      ERROR_MSG("invalid R factor selection %d\n", r_type);
+      exit(1);
+  }
+  return faux;
+}
+
 /*!
  * Calculate R factor and find minimum with respect to shift.
  *
@@ -53,53 +112,25 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
 {
 
   size_t i_list, n_list;
-  size_t i_leng, n_leng;
+  size_t i_leng = 0;
+  size_t n_leng = rfac_ivcur_get_n_leng(iv_cur, args->s_step);
 
-  real faux;
-  real shift;
-  real e_range, norm, rfac;
+  real faux = rfac_ivcur_get_overlap(iv_cur);
+  real shift = 0.;
+  real e_range, norm, rfac = 0.;
 
-  real *eng, *e_int, *t_int;
+  real eng[n_leng], e_int[n_leng], t_int[n_leng];
 
   char linebuffer[STRSZ];
   char r_name[STRSZ];
   FILE *out_stream;
 
 /********************************************************************
- * Find number of IV curves
- * Allocate storage space for cr_mklist.
+ * Scan through shift and find minimum R factor
  ********************************************************************/
-
-  rfac = 0.;
-  n_leng = 0;
-
-  for(n_list = 0; iv_cur[n_list].group_id != END_OF_GROUP_ID; n_list ++)
-  {
-    #ifdef SHIFT_DE
-    faux = ((iv_cur+n_list)->experimental->data +
-            (iv_cur+n_list)->experimental->n_eng-1)->energy  -
-          ((iv_cur+n_list)->experimental->data)->energy;
-    n_leng = MAX(n_leng, (size_t)abs((int)(faux/args->s_step) ));
-    faux = ((iv_cur+n_list)->theory->data +
-            (iv_cur+n_list)->theory->n_eng -1)->energy  -
-          ((iv_cur+n_list)->theory->data)->energy;
-    n_leng = MAX(n_leng, (size_t)abs((int)(faux/args->s_step) ));
-    #else
-    n_leng = MAX(n_leng, (iv_cur+n_list)->exp_leng);
-    n_leng = MAX(n_leng, (iv_cur+n_list)->the_leng);
-    #endif
-  }
 
   CONTROL_MSG(CONTROL, "start of function, n_list = %d, n_leng = %d\n",
               n_list, n_leng);
-
-  eng   = (real *)malloc( n_leng * sizeof(real)*13);
-  e_int = (real *)malloc( n_leng * sizeof(real)*13);
-  t_int = (real *)malloc( n_leng * sizeof(real)*13);
-
-/********************************************************************
- * Scan through shift and find minimum R factor
- ********************************************************************/
 
   *p_r_min = 100.;
 
@@ -112,6 +143,7 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
     for(i_list = 0; i_list < n_list; i_list ++)
     {
 
+      rfactor_make_list(eng, e_int, t_int, s_step, shift, );
      #ifdef SHIFT_DE
      n_leng = rfac_mklide(eng, e_int, t_int, args->s_step, shift,
               (iv_cur+i_list)->experimental->data,
@@ -130,20 +162,7 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
      {
        e_range += faux = (eng[n_leng-1] - eng[0]);
        norm += faux *= (iv_cur+i_list)->weight;
-
-       if(args->r_type == RP_FACTOR)
-         faux *= rfac_rp(eng, e_int, t_int, args->vi);
-       else if (args->r_type == R1_FACTOR)
-         faux *= rfac_r1(eng, e_int, t_int);
-       else if (args->r_type == R2_FACTOR)
-         faux *= rfac_r2(eng, e_int, t_int);
-       else if (args->r_type == RB_FACTOR)
-         faux *= rfac_rb(eng, e_int, t_int);
-       else 
-       {
-         ERROR_MSG("invalid R factor selection %d\n", args->r_type);
-         exit(1);
-       }
+       faux = calculate_rfactor(eng, e_int, t_int, args->vi);
        rfac += faux;
      }
      else
@@ -152,7 +171,7 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
 
    }  /* for i_list */
 
-   if(IS_EQUAL_REAL(norm, 0.))
+   if (IS_EQUAL_REAL(norm, 0.))
    {
      ERROR_MSG("no overlap for shift %.1f eV\n", shift);
      exit(1);
