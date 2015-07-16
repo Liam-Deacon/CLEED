@@ -41,7 +41,7 @@
 #include <time.h>
 #include <math.h>
 
-#include "csearch.h"
+#include "search.h"
 #include "copy_file.h"
 
 #define SYS_ERROR_TO_LOG(x)   log_stream = fopen(log_file, "a"); \

@@ -68,25 +68,27 @@ size_t rfac_mklide(real *eng, real *e_int, real *t_int,
   real energy;
   real e_max = 0., t_max = 0.;
 
-  #ifdef WRITE
+#if WRITE
   FILE *str_e_int, *str_t_int;
-  #endif
+#endif
 
   /* Find first expt. energy (i_elo) within the theor. energy range */
   for( i_elo = 0;
       (i_elo < exp_leng) &&
-      ( (exp_list+i_elo)->energy < (the_list->energy - shift) );
+      (exp_list[i_elo].energy < (the_list[i_elo].energy - shift));
       i_elo ++)
   { ; }
+  fprintf(stderr, "%i \n ", i_elo);
+  exit(0);
 
   /* Return zero if no overlap */
   if(i_elo == exp_leng) return(0);
 
   /* Write lists eng, e_int/2 */
-  for(energy = (exp_list+i_elo)->energy, n_eng = 0;
-     (energy <= (exp_list+exp_leng-1)->energy) && 
-     (energy < ((the_list+the_leng-1)->energy - shift) );
-     energy += de, n_eng ++)
+  for(energy = exp_list[i_elo].energy, n_eng = 0;
+     (energy <= exp_list[exp_leng-1].energy) &&
+     (energy < (the_list[the_leng-1].energy - shift) );
+     energy += de, n_eng++)
   {
     eng[n_eng]  = energy;
     e_int[n_eng] = rfac_splint(eng[n_eng],         exp_list, exp_leng);
@@ -96,15 +98,11 @@ size_t rfac_mklide(real *eng, real *e_int, real *t_int,
   }
 
   /* terminate lists */
-  eng[n_eng]   = (real) F_END_OF_LIST;
-  e_int[n_eng] = (real) F_END_OF_LIST;
-  t_int[n_eng] = (real) F_END_OF_LIST;
+  eng[n_eng] = e_int[n_eng] = t_int[n_eng] = (real) F_END_OF_LIST;
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(cr_mklist): (exp) n_eng: %d\n", n_eng);
-  #endif
+  CONTROL_MSG(CONTROL, "(exp) n_eng: %d\n", n_eng);
  
-  #ifdef WRITE
+#if WRITE
   str_e_int = fopen("rfmklist.exp", "w");
   str_t_int = fopen("rfmklist.the", "w");
 
@@ -113,7 +111,7 @@ size_t rfac_mklide(real *eng, real *e_int, real *t_int,
     fprintf(str_e_int, "%f %e\n", eng[i_eng], e_int[i_eng]/e_max);
     fprintf(str_t_int," %f %e\n", eng[i_eng], t_int[i_eng]/t_max);
   }
-  #endif
+#endif
 
   return(n_eng);
 }  /* end of function rfac_mklist */

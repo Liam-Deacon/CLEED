@@ -20,7 +20,7 @@
 
 #include <math.h>
 
-#include "csearch.h"
+#include "search.h"
 
 /*!
  *  Find minimum by using Powell's method (Num. Rec. chap. 10.5).

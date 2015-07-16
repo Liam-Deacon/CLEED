@@ -25,11 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef USE_GSL
-#include <gsl/gsl_vector.h>
-#endif
-
-#include "csearch.h"
+#include "search.h"
 
 extern search_atom *sr_atoms;
 extern search *sr_search;
@@ -46,11 +42,7 @@ char line_buffer[STRSZ];
  * \return #search_error
  * \retval #SR_SUCCESS if successful.
  */
-#ifdef USE_GSL
-int sr_mkinp_mir(const char *filename, const gsl_vector *par, size_t iter)
-#else
-int sr_mkinp_mir(const char *filename, const real *par, size_t iter)
-#endif
+int sr_mkinp_mir(const char *filename, const cleed_vector *par, size_t iter)
 {
   size_t i_atoms, i_par;
   size_t i_str;

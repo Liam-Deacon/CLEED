@@ -20,7 +20,7 @@
 #include <time.h>
 
 #include "copy_file.h"
-#include "csearch.h"
+#include "search.h"
 
 extern char *sr_project;
 
@@ -33,7 +33,7 @@ extern char *sr_project;
  * \return C code representing function success.
  * \retval \c 0 if successful.
  */
-int sr_mkver(const cleed_vector *y, const cleed_basic_matrix *p, size_t n_dim)
+int sr_mkver(const cleed_vector *y, const cleed_basic_matrix *p, const size_t n_dim)
 {
   size_t i, j;
   FILE *ver_stream;

@@ -39,7 +39,7 @@ LD/01.07.2014 - Update for compatibility with the GNU Scientific Library
 #include <stdlib.h>
 #include <gsl/gsl_vector.h>
 
-#include "csearch.h"
+#include "search.h"
 #include "copy_file.h"
 
 #define CONTROL

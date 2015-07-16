@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "csearch.h"
+#include "search.h"
 
 static const double GEOM_TOLERANCE = 0.0001;
 enum { BUFSZ = 1024 };                   /*!< max. length of input line */

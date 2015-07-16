@@ -39,7 +39,7 @@
  *
  * \return pointer to the buffer.
 ********************************************************************/
-char *file2buffer(const char *filename)
+char *file2buffer(const char * const filename)
 {
   char *buffer;
   char uncomp_filename[FILENAME_MAX];

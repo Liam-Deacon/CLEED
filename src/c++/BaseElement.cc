@@ -33,7 +33,7 @@ BaseElement::BaseElement(std::size_t num) {
 
 }
 
-BaseElement::BaseElement(const std::string name) {
+BaseElement::BaseElement(const std::string &name) {
 
 }
 
@@ -59,9 +59,7 @@ inline std::string BaseElement::getElementSymbol() const {
 }
 
 inline void BaseElement::setAtomicNumber(std::size_t Z) {
-  if (Z < 118) {
-    this->atomicNumber = Z;
-  }
+  this->atomicNumber = (Z < 118) ? Z : 1;
 }
 
 inline void BaseElement::setElementName(const std::string &name) {

@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "csearch.h"
+#include "search.h"
 #include "copy_file.h"
 
 extern long sa_idum;       /* seed for ran1, defined and initialized in main */

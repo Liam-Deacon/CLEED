@@ -106,7 +106,7 @@ void patt_usage(FILE *output)
 /*!
  * Prints program version information for \c patt
  */
-void patt_info()
+void patt_info(void)
 {
     printf("%s - version %s (%s)\n", PATT, PATT_VERSION, PATT_PLAT);
     printf("\n%s\n", PATT_SHORTDESC);

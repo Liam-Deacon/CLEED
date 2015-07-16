@@ -207,7 +207,6 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
       * END OF LINE:
       *   increment i_cur and reset lists;
       */
-
      CONTROL_MSG(CONTROL,
             "%d of %d: ti: %s, ef: %s, e0: %.1f id: %d, wt: %.1f, \n",
             i_cur+1, n_cur, index_list, exp_file,
@@ -225,7 +224,8 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
   n_cur = i_cur-1;
   cur_list[n_cur].group_id = END_OF_GROUP_ID;
 
-  rfac_ivcur_print(cur_list);
+  rfac_ivcur_print(cur_list); //!FIXME
+
   /* free previously allocated memory and return.*/
   free(the_buffer);
   free(ctr_buffer);

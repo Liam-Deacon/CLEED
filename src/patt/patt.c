@@ -58,7 +58,6 @@
 #include <unistd.h>
 
 #include "patt.h"
-#include "patt_def.h"
 
 /*!
  * main() entry into \c patt program.
@@ -70,7 +69,7 @@
  */
 int main(int argc, char *argv[])
 {
-  patt_drawing *drawing = &drawing_default;
+  patt_drawing *drawing = &drawing_default; //calloc(1, sizeof(patt_drawing)+1);
 
   patt_args(argc, argv, drawing);
 

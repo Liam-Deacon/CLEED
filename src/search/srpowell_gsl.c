@@ -31,7 +31,7 @@ GH/19.09.95 - Criterion of termination is absolute deviation in vertex
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_multiroots.h>
 
-#include "csearch.h"
+#include "search.h"
 
 int powell (const gsl_vector *x, void *params, gsl_vector *f)
 {

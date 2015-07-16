@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "csearch.h"
+#include "search.h"
 
 /*!
  * Creates log file and saves initial parameters for search.

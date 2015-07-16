@@ -145,7 +145,7 @@ inline void coord_set_z(coord *pos, double new_z)
 }
 
 /*!
- * Setter function for assigning (@p x, \p y, \p z) coordinate \p pos
+ * Setter function for assigning (\p x, \p y, \p z) coordinate \p pos
  *
  * \param[in,out] pos Pointer to #coord object to change.
  * \param x value of x-axis position.

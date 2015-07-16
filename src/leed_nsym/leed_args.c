@@ -77,7 +77,7 @@ FILE *leed_check_result_file(const char* res_file) {
  *
  * \return Pointer to new \c leed_args
  */
-leed_args *leed_args_init() {
+leed_args *leed_args_init(void) {
   leed_args *args = (leed_args*) calloc(1, sizeof(leed_args));
 
   if (args == NULL) {

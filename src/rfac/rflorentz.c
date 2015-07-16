@@ -88,7 +88,7 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
     }
 
     /* Find energy range for integral */
-    faux = vi * sqrt(1./EPSILON - 1.);
+    faux = vi * (real)sqrt(1./EPSILON - 1.);
     n_range = (size_t)(faux / e_step);
 
     CONTROL_MSG(CONTROL, "e_step: %.1f n_range: %d\n", e_step, n_range);

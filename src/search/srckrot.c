@@ -30,7 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "csearch.h"
+#include "search.h"
 
 /*!
  * Check for rotation symmetry

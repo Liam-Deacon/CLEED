@@ -136,7 +136,7 @@ void rfac_help(FILE *output)
  * \brief Print information about the rfac program.
  *
  */
-void rfac_info()
+void rfac_info(void)
 {
     printf("%s - version %s (%s)\n", RFAC, RFAC_VERSION, RFAC_PLAT);
     printf("%s\n", RFAC_SHORTDESC);

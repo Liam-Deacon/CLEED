@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "csearch.h"
+#include "search.h"
 
 extern search_atom *sr_atoms;
 extern search *sr_search;

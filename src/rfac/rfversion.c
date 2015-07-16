@@ -67,12 +67,11 @@
  * Copy the current version ID into the string \p version.
  * The function returns its argument.
  *
- * \param[out] *version string to copy version ID into.
+ * \param[out] Pointer to version string to copy version ID into.
  *
  * \return pointer to \p version string.
  */
-char *rfac_version(char *version)
+const char *rfac_version(void)
 {
-  strcpy(version, RF_VERSION);
-  return (version);
+  return (RF_VERSION);
 }

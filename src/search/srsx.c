@@ -22,7 +22,7 @@
 #include <strings.h>
 #include <math.h>
 #include <stdlib.h>
-#include "csearch.h"
+#include "search.h"
 #include "gh_stddef.h"
 
 /*!

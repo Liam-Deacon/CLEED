@@ -25,6 +25,9 @@
 #include "lattice.h"
 #include "gh_stddef.h"
 
+FILE *inf_stream;
+FILE *ctr_stream;
+
 /*!
  * Prints member values of #lattice instance \p lat
  *

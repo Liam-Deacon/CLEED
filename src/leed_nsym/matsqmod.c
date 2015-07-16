@@ -18,8 +18,8 @@
  */
 
 #include <stdio.h>
-#include "mat.h"
 #include <stdlib.h>
+#include "mat.h"
 
 #define DIA_COMPLEX -999 + NUM_COMPLEX
 #define DIA_REAL    -999 + NUM_REAL
@@ -81,7 +81,7 @@ mat matsqmod(mat Msq, const mat M)
         case(NUM_IMAG): case(NUM_MASK): default:
         {
           ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
-          ERROR_RETURN(-1.);
+          ERROR_RETURN(NULL);
           break;
         } /* default case */
 
@@ -125,7 +125,7 @@ mat matsqmod(mat Msq, const mat M)
         case(NUM_IMAG): case(NUM_MASK): default:
         {
           ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
-          ERROR_RETURN(-1.);
+          ERROR_RETURN(NULL);
           break;
         } /* default case */
 

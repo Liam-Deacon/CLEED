@@ -18,7 +18,7 @@
 #include <strings.h>
 #include <math.h>
 #include <stdlib.h>
-#include "csearch.h"
+#include "search.h"
 
 static const double START_TEMP = 3.5L;
 static const double EPSILON = 0.25L;

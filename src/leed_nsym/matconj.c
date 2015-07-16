@@ -76,7 +76,7 @@ mat matconj(mat Mt, const mat M)
 
         case(NUM_IMAG) : case(NUM_MASK): default:
           ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
-          ERROR_RETURN(Mr);
+          ERROR_RETURN(Mt);
           break;
 
       }  /* switch (M->num_type) */
@@ -136,7 +136,7 @@ mat matconj(mat Mt, const mat M)
 
         case(NUM_IMAG) : case(NUM_MASK): default:
           ERROR_MSG("Unsupported matrix data type (%s)\n", strmtype(M->num_type));
-          ERROR_RETURN(Mr);
+          ERROR_RETURN(Mt);
           break;
 
       }  /* switch (M->num_type) */

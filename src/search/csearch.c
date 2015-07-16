@@ -31,7 +31,7 @@
 #include <strings.h>
 #include <string.h>
 #include <math.h>
-#include "csearch.h"
+#include "search.h"
 
 void search_parse_args(int argc, char *argv[], real *delta,
                        search_method *search_type, char *inp_file,

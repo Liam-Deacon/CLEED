@@ -143,6 +143,7 @@ int patt_draw_ps(const patt_drawing *drawing)
     }
 
     /* clean up */
+    fclose(out_stream);
     spots_free(gs_spots);
     pattern_free(pat);
     free(f);
@@ -492,18 +493,17 @@ void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
 {
   size_t i_dom = drawing->i_dom;
   size_t spot = drawing->i_spot;
-  int ii;
-  char *color = NULL;
-  float *a1 = NULL;
-  float *a2 = NULL;
-  float spot_radius;
+  int ii = 0;
+  char color[STRSZ] = "black";
+  double a1[3] = {0.,0.,0.};
+  double a2[3] = {0.,0.,0.};
+  double spot_radius = RADIUS_GS;
   char dummystr[10][STRSZ];
   char *vectors_str = NULL;
 
   int compare[2];
   char dom_str[STRSZ];
   char v_type;
-
   strcpy(dom_str, "\0");
   compare[0] = 0;
   compare[1] = 1;

@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 #include <strings.h>
-#include <cairo.h>
 #include <math.h>
 #include "spots.h"
 #include "patt.h"
@@ -38,15 +37,15 @@
 int patt_draw(const patt_drawing *drawing)
 {
 
-  #ifdef USE_CAIRO /* use Cairo graphics backend */
-    return(patt_draw_cairo(drawing));
-  #else /* old postscript backend */
-    if ((drawing->format == PATT_PS_OLD) ||
-        (drawing->format == PATT_UNKNOWN_FORMAT))
-    {
-      return(patt_draw_ps(out_stream, drawing));
-    }
-  #endif
+#if USE_CAIRO /* use Cairo graphics backend */
+  return(patt_draw_cairo(drawing));
+#else /* old postscript backend */
+  if ((drawing->format == PATT_PS_OLD) ||
+      (drawing->format == PATT_UNKNOWN_FORMAT))
+  {
+    return(patt_draw_ps(drawing));
+  }
+#endif
 
   return(PATT_FORMAT_ERROR);  /* format not supported by backend */
 }

@@ -18,6 +18,9 @@
 #include "rfac.h"
 
 void rfac_iv_print(const rfac_iv *iv) {
+#if DEBUG
+  if (iv == NULL) return;
+#endif
   fprintf(stderr,
       ".data@%p .n_eng=%3d .smooth=%d .sort=%d .spline=%d .equidist=%d",
       iv->data, iv->n_eng, iv->smooth, iv->sort, iv->spline, iv->equidist);
@@ -28,15 +31,20 @@ void rfac_iv_print(const rfac_iv *iv) {
  * \param ivs Pointer to start of rfac_ivcur list
  */
 inline void rfac_ivcur_print(const rfac_ivcur *ivs) {
+#if DEBUG
+  if (ivs == NULL) return;
+#endif
   fprintf(stderr, "sizeof iv_cur = %u\n", sizeof(rfac_ivcur));
   for (size_t i=0; ivs[i].group_id != END_OF_GROUP_ID; i++)
   {
-    fprintf(stderr, "rfac_ivcur [%i]@%p\n", i, ivs+i);
+    fprintf(stderr, "rfac_ivcur [%i]@%p\n", i, &ivs[i]);
     fprintf(stderr, "  .experimental@%p\n    ", ivs[i].experimental);
     rfac_iv_print(ivs[i].experimental);
     fprintf(stderr, "\n");
     fprintf(stderr, "  .theory@%p\n    ", ivs[i].theory);
     rfac_iv_print(ivs[i].theory);
+    fprintf(stderr, "\n");
+    fprintf(stderr, "  .group_id=%d\n", ivs[i].group_id);
     fprintf(stderr, "\n");
   }
   fprintf(stderr, "\n");
@@ -54,8 +62,13 @@ inline void rfac_ivcur_print(const rfac_ivcur *ivs) {
  * @return
  */
 int rfac_ivcur_process(rfac_ivcur *iv_cur, real vi) {
-  for(size_t i_list=0; iv_cur[i_list].group_id != END_OF_GROUP_ID; i_list++)
+  for(size_t i_list=0;
+#if DEBUG
+      iv_cur != NULL &&
+#endif
+          iv_cur[i_list].group_id != END_OF_GROUP_ID; i_list++)
   {
+    printf("i=%d\n", i_list);
     /* smooth both experimental and theoretical curves */
     rfac_iv_lorentz_smooth(iv_cur[i_list].experimental, vi / 2);
     rfac_iv_lorentz_smooth(iv_cur[i_list].theory, vi / 2);
@@ -63,7 +76,6 @@ int rfac_ivcur_process(rfac_ivcur *iv_cur, real vi) {
     /* prepare cubic spline */
     rfac_iv_spline((&iv_cur[i_list])->experimental);
     rfac_iv_spline((&iv_cur[i_list])->theory);
-
   }  /* for i_list */
   return 0;
 }

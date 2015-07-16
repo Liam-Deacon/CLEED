@@ -56,7 +56,7 @@ void search_usage(FILE *output) {
 /*!
  * Provides version information for \c csearch .
  */
-void search_info()
+void search_info(void)
 {
     printf("%s - version %s (%s)\n", SEARCH, SEARCH_VERSION, SEARCH_PLAT);
     printf("\n%s\n", SEARCH_SHORTDESC);

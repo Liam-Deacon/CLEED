@@ -408,7 +408,7 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
        if (i_arg+1 < argc)
        {
 
-         #ifdef USE_CAIRO
+         #if USE_CAIRO
          
          drawing->format = PATT_UNKNOWN_FORMAT;
 

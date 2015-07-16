@@ -23,11 +23,7 @@
 using namespace cleed;
 
 
-Atom::Atom() {
-  setXPosition(0.);
-  setYPosition(0.);
-  setZPosition(0.);
-}
+Atom::Atom() : x(0.), y(0.), z(0.) {}
 
 Atom::Atom(double x, double y, double z) {
   setXPosition(x);

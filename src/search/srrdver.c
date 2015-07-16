@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#include "csearch.h"
+#include "search.h"
 
 /*!
  * Read vertex for simplex algorithm from backup file.

@@ -33,7 +33,7 @@
  *
  * \return number of lines.
  */
-size_t rfac_lines(const char *buffer)
+size_t rfac_lines(const char * const buffer)
 {
  size_t lines, i;
 
@@ -56,7 +56,7 @@ size_t rfac_lines(const char *buffer)
  *
  * \return number of lines without comments.
  */
-size_t rfac_nclines(const char *buffer)
+size_t rfac_nclines(const char * const buffer)
 {
  size_t lines, comm, i;
 
@@ -84,7 +84,7 @@ size_t rfac_nclines(const char *buffer)
  *
  * \return number of comment lines.
  */
-size_t rfac_clines(const char *buffer)
+size_t rfac_clines(const char * const buffer)
 {
  size_t comm, i;
 

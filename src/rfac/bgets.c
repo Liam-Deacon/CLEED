@@ -33,7 +33,7 @@
  * \return length of string (including '\0')
  * \retval -1 invalid string
 */
-int bgets(const char *buffer, long offset, long max, char *string)
+int bgets(const char * const buffer, long offset, long max, char *string)
 {
  int j;
  long i;

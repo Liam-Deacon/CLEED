@@ -21,11 +21,12 @@
  * LD/29.04.2014 - Moved preprocessor information into header "latt.h"
  *********************************************************************/
 
+#include "gh_stddef.h"
 #include "latt.h"
 #include "miller_index.h"
 
-FILE *ctr_stream;    /* control output stream */
-FILE *inf_stream;    /* additional output information stream */
+extern FILE *ctr_stream;    /* control output stream */
+extern FILE *inf_stream;    /* additional output information stream */
 
 /*!
  * Main entry point for \c latt program.
@@ -38,11 +39,7 @@ FILE *inf_stream;    /* additional output information stream */
  *  + '-Wl,-elatt_main' and '-Dlatt_main=main' for \c gcc
  *  + '/ENTRY latt_main' for \c msvc (Visual studio users)
  */
-#if BUILD_LIBRARY != 1
 int main(int argc, char *argv[])        /* compile as main function */
-#else
-int latt_main(int argc, char *argv[])   /* compile as library function */
-#endif
 {
 
   char line_buffer[STRSZ];

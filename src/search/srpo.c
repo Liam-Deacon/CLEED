@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "csearch.h"
+#include "search.h"
 
 /*!
  * Perform a search according to POWELL'S METHOD.

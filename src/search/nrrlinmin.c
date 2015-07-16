@@ -24,7 +24,7 @@ GH/19.09.95 - BRENT_TOLERANCE defined in "search_def.h" (to 2.e-2
               from 2.0e-4)
 
 ***********************************************************************/
-#include "csearch.h"
+#include "search.h"
 
 /* 
    static variables communicating with 

@@ -50,5 +50,9 @@ patt_drawing drawing_default = {
         
 matrix_2x2 matrix_2x2_default = {0., 0., 0., 0.};
 
-pattern pattern_default = {.a1={0., 0.}, .a2={0., 0.}, .n_domains=0, .radius=1.};
+pattern pattern_default = {
+    .a1={0., 0., 0.},
+    .a2={0., 0., 0.},
+    .n_domains=0,
+    .radius=1.};
 

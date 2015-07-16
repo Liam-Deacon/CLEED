@@ -38,7 +38,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_siman.h>
 
-#include "csearch.h"
+#include "search.h"
 
 #define START_TEMP     3.5
 #define EPSILON        0.25
