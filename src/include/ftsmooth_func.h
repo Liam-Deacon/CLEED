@@ -35,7 +35,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
 
 void ftsmooth_usage(FILE *output);
 
-void ftsmooth_info();
+void ftsmooth_info(void);
 
 /* ftsmooth data manipulation functions */
 size_t fts_read_data(FILE *, FILE *, double *, double *);

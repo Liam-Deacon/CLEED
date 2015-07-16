@@ -130,35 +130,6 @@ struct mat_str      /*!< real or complex matrix */
  */
 typedef struct mat_str* mat;
 
-/*!
- * Access real matrix element \$f (i,j) \$f of matrix Mat.
- *
- * \param i Row number
- * \param j Column number
- * \param Mat Pointer to CLEED matrix
- *
- * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
- * \note \p Mat is stored in row-major order.
- */
-static inline real *rmatel(size_t i, size_t j, mat Mat)
-{
-  return (Mat->rel + (i-1) * Mat->cols + j);
-}
-/*!
- * Access imaginary matrix element \f$ (i,j) \f$ of matrix Mat.
- *
- * \param i Row number
- * \param j Column number
- * \param Mat Pointer to CLEED matrix
- *
- * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
- * \note \p Mat is stored in row-major order.
- */
-static inline real *imatel(size_t i, size_t j, mat Mat)
-{
-  return (Mat->iel + ((i-1) * Mat->cols + j));
-}
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* namespace cleed */
 #endif

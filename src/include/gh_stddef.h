@@ -341,13 +341,13 @@ static inline size_t uint_min(size_t x, size_t y) { return ( (x < y) ? x : y); }
 __attribute__ ((pure))
 static inline size_t uint_max(size_t x, size_t y) { return ( (x > y) ? x : y); }
 __attribute__ ((pure))
-static inline int minf(float x, float y) { return ( (x < y) ? x : y); }
+static inline float minf(float x, float y) { return ( (x < y) ? x : y); }
 __attribute__ ((pure))
-static inline int maxf(float x, float y) { return ( (x > y) ? x : y); }
+static inline float maxf(float x, float y) { return ( (x > y) ? x : y); }
 __attribute__ ((pure))
-static inline int min(double x, double y) { return ( (x < y) ? x : y); }
+static inline double mind(double x, double y) { return ( (x < y) ? x : y); }
 __attribute__ ((pure))
-static inline int max(double x, double y) { return ( (x > y) ? x : y); }
+static inline double maxd(double x, double y) { return ( (x > y) ? x : y); }
 __attribute__ ((pure))
 static inline int irnd(double x) { return ((int)( (x) + .5 )); }
 __attribute__ ((pure))
@@ -362,7 +362,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
     long double: squarel,         \
     default: square,              \
     float: squaref,               \
-    int: sqaurei,                 \
+    int: squarei,                 \
     size_t: squareu               \
 ) (X)
 
@@ -378,19 +378,23 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
     size_t: m1pu                  \
 ) (X)
 
+#ifndef min
 #define min(X,Y) _Generic( (X),   \
-    default: min,                 \
+    default: mind,                \
     float:  minf,                 \
     int:    int_min,              \
     size_t: uint_min              \
 ) (X, Y)
+#endif
 
-#define max(X,Y) _Generic( (X),   \
-    default: max,                 \
-    float:  maxf,                 \
-    int:    int_max,              \
-    size_t: uint_max              \
-) (X, Y)
+#ifndef max
+#define max(X,Y) _Generic( (X),     \
+      default: maxd,                \
+      float:  maxf,                 \
+      int:    int_max,              \
+      size_t: uint_max              \
+  ) (X, Y)
+#endif
 
 #define int_round(X) _Generic( (X),     \
     default: irnd,                      \
@@ -399,7 +403,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
 
 #define int_roundup(X) _Generic( (X),   \
     default: irndup,                    \
-    float: irndipf                      \
+    float: irndupf                      \
 ) (X)
 
 #else /* do not use type-generic macros */

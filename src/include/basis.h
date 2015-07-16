@@ -65,7 +65,7 @@ __attribute__((nonnull, returns_nonnull))
     double **normal_get_rotation_matrix(const coord *normal);
 
 /* basic basis functions */
-__attribute__((returns_nonnull)) basis *basis_init();
+__attribute__((returns_nonnull)) basis *basis_init(void);
 __attribute__((nonnull)) void basis_free(basis *basis);
 __attribute__((nonnull)) void basis_copy(basis *dst, const basis *src);
 __attribute__((nonnull, returns_nonnull))

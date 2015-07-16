@@ -27,7 +27,9 @@ extern "C" {
 #include "patt_def.h"
 #include <stdbool.h>
 
-#ifdef USE_CAIRO
+int patt_main(int, char **); /* prototype for python entry into main */
+
+#if USE_CAIRO
 #include <cairo.h>
 #endif
 
@@ -133,12 +135,11 @@ void patt_draw_ps_vector_funcs(FILE *file_ptr);
 __attribute__((nonnull, returns_nonnull))
 patt_color_rgb *patt_get_named_color(const char *color);
 
-void patt_info();
+void patt_info(void);
 void patt_usage(FILE *output);
 
 
-
-#ifdef USE_CAIRO
+#if USE_CAIRO
 __attribute__((nonnull))
 int patt_draw_cairo(const patt_drawing *drawing);
 
@@ -164,7 +165,6 @@ void patt_draw_cairo_text(cairo_t *cr, const patt_text *text,
                           cairo_font_slant_t slant, cairo_font_weight_t weight);
 
 #endif
-
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

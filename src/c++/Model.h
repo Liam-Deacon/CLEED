@@ -18,6 +18,8 @@
 #ifndef __Model_h__
 #define __Model_h__
 
+#include "Core/Atom.h"
+
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
 using namespace std;

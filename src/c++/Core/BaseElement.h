@@ -32,7 +32,7 @@ class BaseElement {
 public:
   BaseElement();
   BaseElement(std::size_t num);
-  BaseElement(const std::string name);
+  BaseElement(const std::string &name);
   BaseElement(const char symbol[]);
   virtual ~BaseElement();
 

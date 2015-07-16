@@ -121,7 +121,7 @@ extern FILE *ctr_stream;
 /* function prototypes */
 void latt_usage(FILE *output);
 int latt_parse_args(int argc, char *argv[], lattice *latt);
-void latt_info();
+void latt_info(void);
 
 void lattice_generate_atoms(lattice *latt);
 lattice *lattice_read_input(const char *filename);
@@ -164,6 +164,10 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2, coord *a3, coord *nor,
                    coord *bas, char *bas_name, size_t *n_bas);
          
 miller_hkl *lattice_get_miller_hkl(const lattice *lat);
+
+
+/* main entry prototype */
+int latt_main(int, char **);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */

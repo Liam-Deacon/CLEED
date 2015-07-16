@@ -29,6 +29,7 @@ extern "C" {
 
 #include <stdio.h>
 #include "cleed_real.h"
+#include "mat_def.h"
 
 /* modulus of a matrix */
 __attribute__((nonnull)) real matabs(const mat);
@@ -56,7 +57,7 @@ __attribute__((nonnull, returns_nonnull)) mat matconj(mat, const mat);
 __attribute__((nonnull, returns_nonnull)) mat matcopy(mat M_dst, const mat M_src);
 
 /* difference between matrices */
-__attribute__((nonnull, returns_nonnull)) real matdiff(const mat, const mat);
+__attribute__((nonnull)) real matdiff(const mat, const mat);
 
 /* Extract a submatrix from a larger one */
 __attribute__((nonnull, returns_nonnull))
@@ -160,6 +161,35 @@ static inline const char *strmtype(mat_enum matrix_type) {
     case(NUM_MASK): return ("mask\0"); break;
   }
   return ("invalid\0");
+}
+
+/*!
+ * Access real matrix element \$f (i,j) \$f of matrix Mat.
+ *
+ * \param i Row number
+ * \param j Column number
+ * \param Mat Pointer to CLEED matrix
+ *
+ * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
+ * \note \p Mat is stored in row-major order.
+ */
+static inline real *rmatel(size_t i, size_t j, mat Mat)
+{
+  return (Mat->rel + (i-1) * Mat->cols + j);
+}
+/*!
+ * Access imaginary matrix element \f$ (i,j) \f$ of matrix Mat.
+ *
+ * \param i Row number
+ * \param j Column number
+ * \param Mat Pointer to CLEED matrix
+ *
+ * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
+ * \note \p Mat is stored in row-major order.
+ */
+static inline real *imatel(size_t i, size_t j, mat Mat)
+{
+  return (Mat->iel + ((i-1) * Mat->cols + j));
 }
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */

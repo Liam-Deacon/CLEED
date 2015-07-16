@@ -44,7 +44,7 @@ typedef int cleed_permutation;
 
 typedef gsl_permuation cleed_permutation;
 
-__attribute__ ((alloc_size(1)))
+__attribute__((alloc_size(1)))
 static inline cleed_permutation *cleed_permutation_alloc(size_t n)
 {
   return gsl_permutation_alloc(n);
@@ -70,7 +70,7 @@ typedef size_t cleed_permutation;
 
 #if (! GSL_ONLY)
 
-__attribute__ ((alloc_size (1)))
+__attribute__((alloc_size (1)))
 static inline cleed_permutation *cleed_permutation_alloc(size_t n)
 {
   return (cleed_permutation *)calloc( (n+1), sizeof(cleed_permutation));

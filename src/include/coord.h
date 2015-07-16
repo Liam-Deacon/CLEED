@@ -39,7 +39,7 @@ typedef struct {
   double z;       /*!< z-axis position */
 } coord;          /*!< Structure for x,y,z coordinates */
 
-__attribute__((returns_nonnull)) coord *coord_init();
+__attribute__((returns_nonnull)) coord *coord_init(void);
 __attribute__((nonnull)) void coord_free(coord *pos);
 __attribute__((nonnull)) double coord_get_x(const coord *pos);
 __attribute__((nonnull)) double coord_get_y(const coord *pos);

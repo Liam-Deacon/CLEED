@@ -23,7 +23,7 @@
 #define PATT_DEF_H
 
 #include <limits.h>
-#include <stdbool.h>
+#include <stdio.h>
 #include "matrix_2x2.h"
 #include "spots.h"
 #include "coord.h"

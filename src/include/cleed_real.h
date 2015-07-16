@@ -32,6 +32,10 @@
 #define CLEED_REAL_IS_DOUBLE 1
 #endif
 
+#if !defined(_USE_MATH_DEFINES) && defined(__cplusplus)
+#define _USE_MATH_DEFINES
+#endif
+
 #include <math.h>
 #include <stdbool.h>
 
@@ -52,6 +56,8 @@
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 
+using std::M_PI;
+
 using std::atan2;
 
 using std::cos;
@@ -59,7 +65,7 @@ using std::cosf;
 using std::cosh;
 
 using std::sin;
-using std::sif;
+using std::sinf;
 using std::sinh;
 
 using std::exp;

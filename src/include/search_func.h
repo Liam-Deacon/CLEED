@@ -61,7 +61,7 @@ __attribute__((nonnull)) real sr_ckgeo(const cleed_vector *);
 __attribute__((nonnull)) size_t sr_ckrot(search_atom *, search *);
 __attribute__((nonnull)) real sr_evalrf(cleed_vector *);
 __attribute__((nonnull)) int sr_mkinp(const char *, const cleed_vector *, size_t);
-__attribute__((nonnull)) int sr_mkinp_mir(const char *, const real *, size_t);
+__attribute__((nonnull)) int sr_mkinp_mir(const char *, const cleed_vector *, size_t);
 __attribute__((nonnull)) void sr_mklog(const char *);
 __attribute__((nonnull)) int sr_rdinp(const char *);
 __attribute__((nonnull)) int sr_rdver(const char *ver_file,
@@ -70,7 +70,7 @@ __attribute__((nonnull)) int sr_rdver(const char *ver_file,
                                       int n_dim);
 __attribute__((nonnull)) int sr_mkver(const cleed_vector *y,
                                       const cleed_basic_matrix *p,
-                                      size_t n_dim);
+                                      const size_t n_dim);
 
 //#if USE_CBLAS || USE_LAPACK || USE_MKL /* BLAS interface */
 //#error "BLAS/LAPACK version not implemented"
@@ -147,7 +147,7 @@ void sr_amoeba(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
                cleed_real ftol, cleed_real (*funk)(), size_t *nfunk);
 
 __attribute__((nonnull))
-real sr_amotry(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum,
+cleed_real sr_amotry(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum,
                size_t n_dim, cleed_real (*funk)(), size_t ihi,
                size_t *nfunk, cleed_real fac);
 
@@ -158,9 +158,10 @@ void sr_amebsa(cleed_basic_matrix *p, cleed_vector *y, size_t n_dim,
                cleed_real (*funk)(), int *iter, cleed_real temptr);
 
 __attribute__((nonnull))
-real sr_amotsa(cleed_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n_dim,
-               cleed_vector *pb, cleed_real *yb, cleed_real (*funk)(),
-               size_t ihi, cleed_real *yhi, cleed_real fac);
+cleed_real sr_amotsa(cleed_matrix *p, cleed_vector *y, cleed_vector *psum,
+               size_t n_dim, cleed_vector *pb, cleed_real *yb,
+               cleed_real (*funk)(), size_t ihi, cleed_real *yhi,
+               cleed_real fac);
 
 /* srpowell.c */
 __attribute__((nonnull))
@@ -175,7 +176,9 @@ real leed_inp_debye_temp(real , real , real);
 
 /* help */
 void search_usage(FILE *);
-void search_info();
+void search_info(void);
+
+int search_main(int, char **); /* for python entry into main */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */

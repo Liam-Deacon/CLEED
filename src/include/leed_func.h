@@ -86,7 +86,7 @@ int leed_check_mirror_sym(leed_crystal *);
 
 int leed_energy_loop();
 
-leed_args *leed_args_init();
+leed_args *leed_args_init(void);
 leed_args *leed_args_parse(int argc, char *argv[]);
 void leed_args_free(leed_args *args);
 
@@ -218,6 +218,7 @@ mat leed_ms_comp_k_sum(mat, leed_beam *, leed_atom *, int, int, int);
 /*********************************************************************
  * lower level functions
  *********************************************************************/
+int leed_main(int, char **); /* for python entry into main */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

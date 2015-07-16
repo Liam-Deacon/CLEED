@@ -35,28 +35,30 @@ extern "C" {
  *********************************************************************/
 
 NONNULL()
-int bgets(const char *, long, long, char *);  /*!< get string from buffer */
+int bgets(const char * const, long, long, char *);  /*!< get string from buffer */
 
 NONNULL() RETURNS_NONNULL
-char *file2buffer(const char *);              /*!< copy file to buffer */
+char *file2buffer(const char * const);              /*!< copy file to buffer */
 
 NONNULL() RETURNS_NONNULL
 rfac_args *rfac_rdargs(int, char **);           /*!< read argument list */
 
 NONNULL()
-size_t rfac_lines(const char *);               /*!< count lines */
+size_t rfac_lines(const char * const);               /*!< count lines */
 
 NONNULL()
-size_t rfac_clines(const char *);              /*!< count comment lines */
+size_t rfac_clines(const char * const);              /*!< count comment lines */
 
 NONNULL()
-size_t rfac_nclines(const char *);             /*!< count data lines */
+size_t rfac_nclines(const char * const);             /*!< count data lines */
 
 NONNULL() RETURNS_NONNULL
-char *rfac_version(char *);                    /*!< current program version */
+const char *rfac_version(void);                     /*!< current program version */
 
-void rfac_help(FILE *);                        /*!< help function */
-void rfac_info();                              /*!< version information, etc. */
+void rfac_help(FILE *);                             /*!< help function */
+void rfac_info(void);                               /*!< version information, etc. */
+
+const char* get_rfactor_name(rfactor_type type);
 
 /* line interpreter */
 NONNULL()
@@ -112,12 +114,12 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi);
  *********************************************************************/
 NONNULL()
 size_t rfac_mklide(real *, real *, real *, real , real,
-                 rfac_iv_data *, size_t, rfac_iv_data *, size_t);
+                   rfac_iv_data *, size_t, rfac_iv_data *, size_t);
 
 /* prepare comparison */
 NONNULL()
 size_t rfac_mklist(real *, real *, real *, real,
-                 rfac_iv_data *, size_t, rfac_iv_data *, size_t);
+                   rfac_iv_data *, size_t, rfac_iv_data *, size_t);
 
 /* R1 factor */
 NONNULL()
@@ -139,14 +141,19 @@ real rfac_rp(const real *, const real *, const real *, real);
 NONNULL()
 real rfac_rmin(rfac_ivcur *, rfac_args *, real *, real *, real *);
 
+void rfactor_print(rfactor_type type, real r_min, real rr,
+                   real s_min, real e_range);
+
+const char *rfactor_name(rfactor_type type);
+
 /*********************************************************************
  * low-level routines
  *********************************************************************/
 RETURNS_NONNULL
-rfac_args *rfac_args_init();
+rfac_args *rfac_args_init(void);
 
 RETURNS_NONNULL
-rfac_iv *rfac_iv_init();
+rfac_iv *rfac_iv_init(void);
 
 RETURNS_NONNULL ALLOC_SIZE(1)
 rfac_iv *rfac_iv_alloc(size_t);
@@ -156,6 +163,8 @@ void rfac_iv_free(rfac_iv*);
 
 NONNULL()
 void rfac_iv_copy(rfac_iv *dest, const rfac_iv *src);
+
+real rfac_iv_get_energy_range(const rfac_iv *iv);
 
 NONNULL()
 void rfac_ivcur_free(rfac_ivcur*);
@@ -167,6 +176,10 @@ NONNULL(1)
 int rfac_iv_to_arrays(const rfac_iv *, double *, double *, size_t *);
 
 void rfac_ivcur_print(const rfac_ivcur *ivs);
+
+size_t rfac_ivcur_get_number_of_datasets(const rfac_ivcur *iv_cur);
+
+int rfac_main(int, char **);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

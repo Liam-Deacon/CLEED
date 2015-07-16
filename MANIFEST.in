@@ -1,0 +1,7 @@
+include *.txt *.py *.rst
+recursive-exclude . CMakeLists.txt
+recursive-include ../doc *
+recursive-include ../examples *
+recursive-include include *.h *.pyd *.hpp *i
+recursive-include src/c++ *.h *.pyd *.hpp *i
+recursive-include build *.dll
