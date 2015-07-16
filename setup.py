@@ -275,7 +275,7 @@ build_libs = {
             'search': {'src_dir': join('src', 'search'),
                        'sources': search_srcs,
                        'exe_sources': [join('src', 'search', 'csearch.c')],
-                       'ext_sources': src_glob('src', 'search', '*csearch.pyx'),
+                       'ext_sources': src_glob('src', 'search', '*c_search.pyx'),
                        'scripts': [join('src', 'search', 'csearch.py')],
                        'shared_objects': [] # intentionally blank
                        },
@@ -551,7 +551,7 @@ if 'build_extras' in sys.argv and 'install' in sys.argv:
 #=================================
 extensions = [] 
 python_scripts = []
-for lib_name in ['rfac', 'patt', 'mkiv', 'latt', 'leed', 'ftsmooth', 'search']:
+for lib_name in build_libs:
     sources = (build_libs[lib_name]['sources'] +
                build_libs[lib_name]['exe_sources'] + 
                build_libs[lib_name]['ext_sources'])
