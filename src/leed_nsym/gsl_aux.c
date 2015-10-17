@@ -1,7 +1,7 @@
 /*********************************************************************
  *                             GSL_AUX.C
  *
- *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -13,7 +13,7 @@
 **********************************************************************/
 
 /*! \file
- *  \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  \author Liam Deacon <liam.m.deacon@gmail.com>
  *
  * Contains mat2gsl(), gsl2mat() and gsl2blas() and blas2gsl() functions
  * for converting matrices between native, GSL and CBLAS style matrices.

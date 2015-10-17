@@ -5,7 +5,7 @@
 # Author: Liam Deacon                                                        #
 ##############################################################################
 AC_PREREQ([2.69])
-AC_INIT([CLEED], [2014-04-26_Development], [liam.deacon@diamond.ac.uk])
+AC_INIT([CLEED], [2014-04-26_Development], [liam.m.deacon@gmail.com])
 AC_CONFIG_SRCDIR([INCLUDE/caoi_leed.h])
 AC_CONFIG_AUX_DIR([config])
 

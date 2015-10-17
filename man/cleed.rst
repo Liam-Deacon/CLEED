@@ -1,5 +1,5 @@
 .. Process this file with 'groff -man -Tascii cleed.1'
-.. man page author: Liam Deacon (liam.deacon@diamond.ac.uk)
+.. man page author: Liam Deacon (liam.m.deacon@gmail.com)
 .. cleed 1 "MARCH 2014" CLEED User Manuals
 .. ===================================================================
 
@@ -238,7 +238,7 @@ Contact
 =======
 Please email questions, bug fixes or any suggestions to either Georg 
 Held, Jacopo Ardini <j.ardini@pgr.reading.ac.uk> or Liam Deacon 
-<liam.deacon@diamond.ac.uk>.
+<liam.m.deacon@gmail.com>.
 
 
 Caveats

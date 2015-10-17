@@ -4,7 +4,7 @@
 ##############################################################################
 # Author: Liam Deacon                                                        #
 #                                                                            #
-# Contact: liam.deacon@diamond.ac.uk                                         #
+# Contact: liam.m.deacon@gmail.com                                           #
 #                                                                            #
 # Created on 9 May 2014                                                      #
 #                                                                            #
@@ -56,7 +56,7 @@ __all__ = []
 __version__ = 0.1
 __date__ = '2014-05-09'
 __updated__ = '2014-05-09'
-__contact__ = 'liam.deacon@diamond.ac.uk'
+__contact__ = 'liam.m.deacon@gmail.com'
 
 VERBOSE = 0
 DEBUG = 0

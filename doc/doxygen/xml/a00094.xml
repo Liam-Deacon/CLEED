@@ -549,7 +549,7 @@
 <para>Contains all the function prototypes for the search program. </para>    </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Georg Held <ulink url="mailto:g.held@reading.ac.uk">g.held@reading.ac.uk</ulink> </para></simplesect>
-<simplesect kind="author"><para>Liam Deacon <ulink url="mailto:liam.deacon@diamond.ac.uk">liam.deacon@diamond.ac.uk</ulink></para></simplesect>
+<simplesect kind="author"><para>Liam Deacon <ulink url="mailto:liam.m.deacon@gmail.com">liam.m.deacon@gmail.com</ulink></para></simplesect>
 There are two code interfaces for the search routines. The original interface uses calls to routines taken from the copyrighted &quot;Numerical Recipes in C&quot;, therefore for the open source version of the code there is a new interface to the GNU Scientific Library - this is a major re-write of parts of the SEARCH code and should therefore be considered as highly experimental.</para><para><simplesect kind="warning"><para>The open source version of the search program, enabled when compiling with <computeroutput>_USE_GSL</computeroutput> defined, is highly experimental and needs significant testing. </para></simplesect>
 </para>    </detaileddescription>
     <programlisting>
@@ -557,7 +557,7 @@ There are two code interfaces for the search routines. The original interface us
 <codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SEARCH_FUNC.H</highlight></codeline>
 <codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
 <codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>1994-2014<sp/>Georg<sp/>Held<sp/>&lt;g.held@reading.ac.uk&gt;</highlight></codeline>
-<codeline lineno="5"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.m.deacon@gmail.com&gt;</highlight></codeline>
 <codeline lineno="6"><highlight class="comment"><sp/>*</highlight></codeline>
 <codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
 <codeline lineno="8"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>

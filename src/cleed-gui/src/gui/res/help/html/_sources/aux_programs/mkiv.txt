@@ -461,7 +461,7 @@ is incompatible with the :ref:`open source <license>` philosophy of CLEED and
 therefore efforts have been made to use the TIFF format instead (which currently 
 only supports 8 or 16 bit images) but undoubtedly there will be a number of bugs to address. As such, you can help 
 the development of :code:`mkiv` by 
-`reporting them <mailto:liam.deacon@diamond.ac.uk?Subject=mkiv%20bug>`_.
+`reporting them <mailto:liam.m.deacon@gmail.com?Subject=mkiv%20bug>`_.
 
 In light of the cumbersome nature of the command line version, work is currently 
 in progress to develop a modern GUI version using Python and Qt to allow easier use 

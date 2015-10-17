@@ -3,7 +3,7 @@
 ##############################################################################
 # Author: Liam Deacon                                                        #
 #                                                                            #
-# Contact: liam.deacon@diamond.ac.uk                                         #
+# Contact: liam.m.deacon@gmail.com                                           #
 #                                                                            #
 # Copyright: Copyright (C) 2013-2015 Liam Deacon                             #
 #                                                                            #
@@ -599,7 +599,7 @@ dist = setup(name='cleed',
              packages=['cleed'],
              version=__version__,
              author='Liam Deacon, Georg Held and collaborators',
-             author_email='liam.deacon@diamond.ac.uk',
+             author_email='liam.m.deacon@gmail.com',
              license='GPLv3+ License',
              url='https://pypi.python.org/pypi/cleed',
              description='LEED-IV calculation and analysis',

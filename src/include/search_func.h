@@ -2,7 +2,7 @@
  *                       SEARCH_FUNC.H
  *
  *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
- *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -20,7 +20,7 @@
  * \file
  * \brief Contains all the function prototypes for the search program.
  * \author Georg Held <g.held@reading.ac.uk>
- * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \author Liam Deacon <liam.m.deacon@gmail.com>
  *
  * There are two code interfaces for the search routines. The original
  * interface uses calls to routines taken from the copyrighted

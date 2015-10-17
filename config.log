@@ -194,7 +194,7 @@ OBJEXT=''
 OPENCL_DIR=''
 OPENCL_LT=''
 PACKAGE=''
-PACKAGE_BUGREPORT='liam.deacon@diamond.ac.uk'
+PACKAGE_BUGREPORT='liam.m.deacon@gmail.com'
 PACKAGE_NAME='CLEED'
 PACKAGE_STRING='CLEED 2014-04-26 Development'
 PACKAGE_TARNAME='cleed'
@@ -270,7 +270,7 @@ target_vendor=''
 #define PACKAGE_TARNAME "cleed"
 #define PACKAGE_VERSION "2014-04-26 Development"
 #define PACKAGE_STRING "CLEED 2014-04-26 Development"
-#define PACKAGE_BUGREPORT "liam.deacon@diamond.ac.uk"
+#define PACKAGE_BUGREPORT "liam.m.deacon@gmail.com"
 #define PACKAGE_URL ""
 
 configure: exit 1

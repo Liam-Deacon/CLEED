@@ -95,7 +95,7 @@
       </memberdef>
       <memberdef kind="define" id="a00095_1a25eb046cae525f9557a6e21ae5d5a810" prot="public" static="no">
         <name>SEARCH_MAINTAINER</name>
-        <initializer>&quot;Liam Deacon &lt;liam.deacon@diamond.ac.uk&gt;&quot;</initializer>
+        <initializer>&quot;Liam Deacon &lt;liam.m.deacon@gmail.com&gt;&quot;</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -157,7 +157,7 @@
 <codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SEARCH_LICENSE<sp/>&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SEARCH_VERSION<sp/>&quot;..<sp/>Development&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SEARCH_AUTHOR<sp/>&quot;Georg<sp/>Held<sp/>(g.held@reading.ac.uk)&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SEARCH_MAINTAINER<sp/>&quot;Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;&quot;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SEARCH_MAINTAINER<sp/>&quot;Liam<sp/>Deacon<sp/>&lt;liam.m.deacon@gmail.com&gt;&quot;<sp/></highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SEARCH_SHORTDESC<sp/>&quot;Search<sp/>program<sp/>to<sp/>find<sp/>R-Factor<sp/>minimum&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="28"><highlight class="normal"></highlight></codeline>
 <codeline lineno="29"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>platform<sp/>information<sp/>*/</highlight><highlight class="normal"></highlight></codeline>

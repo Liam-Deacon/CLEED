@@ -2,7 +2,7 @@
  *                           CAOI_LEED.H
  *
  *  Copyright 2008-2014 Zhasmina Zheleeva
- *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -30,7 +30,7 @@ extern "C" {
 #define PROG_LICENSE "GNU General Public License v3"
 #define PROG_VERSION ".. - Development"
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
-#define PROG_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 
+#define PROG_MAINTAINER "Liam Deacon <liam.m.deacon@gmail.com>" 
 #define PROG_SHORTDESC "Angle of Incidence (AOI) LEED wrapper program"
 
 /* platform information */

@@ -450,14 +450,14 @@
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Georg Held <ulink url="mailto:g.held@reading.ac.uk">g.held@reading.ac.uk</ulink> </para></simplesect>
-<simplesect kind="author"><para>Liam Deacon <ulink url="mailto:liam.deacon@diamond.ac.uk">liam.deacon@diamond.ac.uk</ulink></para></simplesect>
+<simplesect kind="author"><para>Liam Deacon <ulink url="mailto:liam.m.deacon@gmail.com">liam.m.deacon@gmail.com</ulink></para></simplesect>
 This include file defines all the additional data structures, type declarations and constant values needed for the search program. </para>    </detaileddescription>
     <programlisting>
 <codeline lineno="1"><highlight class="comment">/*********************************************************************</highlight></codeline>
 <codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SEARCH_DEF.H</highlight></codeline>
 <codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
 <codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>1994-2014<sp/>Georg<sp/>Held<sp/>&lt;g.held@reading.ac.uk&gt;</highlight></codeline>
-<codeline lineno="5"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.m.deacon@gmail.com&gt;</highlight></codeline>
 <codeline lineno="6"><highlight class="comment"><sp/>*</highlight></codeline>
 <codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
 <codeline lineno="8"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>

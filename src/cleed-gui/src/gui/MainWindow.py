@@ -2,7 +2,7 @@
 
 @author: Liam Deacon
 
-@contact: liam.deacon@diamond.ac.uk
+@contact: liam.m.deacon@gmail.com
 
 @copyright: 2014 Liam Deacon
 
@@ -53,7 +53,7 @@ __APP_COPYRIGHT__ = '\xa9' + '2013 {0}'.format(__APP_AUTHOR__)
 __APP_DESCRIPTION__ = ('CLEED - Interactive Visualiser (IV) \n '
                         '- a GUI front end to the CLEED package')
 __APP_DISTRIBUTION__ = 'cleed-gui'
-__APP_EMAIL__ = 'liam.deacon@diamond.ac.uk'
+__APP_EMAIL__ = 'liam.m.deacon@gmail.com'
 __APP_LICENSE__ = 'GNU General Public License 3.0'
 __APP_NAME__ = 'CLEED-IV'
 __APP_VERSION__ = '0.1.0-dev'

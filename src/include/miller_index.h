@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           MILLER_INDEX.H
  *
- *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -14,7 +14,7 @@
 
 /*!
  * \file
- * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \author Liam Deacon <liam.m.deacon@gmail.com>
  * \brief Header file for miller_index_t (C) & MillerIndex (C++)
  */
 

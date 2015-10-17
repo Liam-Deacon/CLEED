@@ -385,7 +385,7 @@
     <briefdescription>
 <para>Master include file for the CLEED project. </para>    </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Liam Deacon <ulink url="mailto:liam.deacon@diamond.ac.uk">liam.deacon@diamond.ac.uk</ulink> </para></simplesect>
+<para><simplesect kind="author"><para>Liam Deacon <ulink url="mailto:liam.m.deacon@gmail.com">liam.m.deacon@gmail.com</ulink> </para></simplesect>
 </para>    </detaileddescription>
     <programlisting>
 <codeline lineno="1"></codeline>

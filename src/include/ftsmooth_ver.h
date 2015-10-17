@@ -2,7 +2,7 @@
  *                            FTSMOOTH_VER.H
  *
  *  Copyright 1995-2014 Georg Held <g.held@reading.ac.uk>
- *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -25,7 +25,7 @@ static const char FTSMOOTH_PROG_COPYRIGHT[] = "Copyright (C) 2008-2014 Georg Hel
 static const char FTSMOOTH_PROG_LICENSE[] = "GNU General Public License v3";
 static const char FTSMOOTH_PROG_VERSION[] = "2014.07.04 Development";
 static const char FTSMOOTH_PROG_AUTHOR[] = "Georg Held (g.held@reading.ac.uk)";
-static const char FTSMOOTH_PROG_MAINTAINER[] = "Liam Deacon <liam.deacon@diamond.ac.uk>";
+static const char FTSMOOTH_PROG_MAINTAINER[] = "Liam Deacon <liam.m.deacon@gmail.com>";
 static const char FTSMOOTH_PROG_SHORTDESC[] = "Manipulate IV curves";
 
 /* platform information */

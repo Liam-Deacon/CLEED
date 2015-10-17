@@ -96,7 +96,7 @@
       </memberdef>
       <memberdef kind="define" id="a00051_1a49f95d28775171e45b93f0383ac50763" prot="public" static="no">
         <name>PROG_MAINTAINER</name>
-        <initializer>&quot;Liam Deacon &lt;liam.deacon@diamond.ac.uk&gt;&quot;</initializer>
+        <initializer>&quot;Liam Deacon &lt;liam.m.deacon@gmail.com&gt;&quot;</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -175,7 +175,7 @@
 <codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CAOI_LEED.H</highlight></codeline>
 <codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
 <codeline lineno="4"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2008-2014<sp/>Zhasmina<sp/>Zheleeva</highlight></codeline>
-<codeline lineno="5"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/><sp/>Copyright<sp/>2014<sp/>Liam<sp/>Deacon<sp/>&lt;liam.m.deacon@gmail.com&gt;</highlight></codeline>
 <codeline lineno="6"><highlight class="comment"><sp/>*</highlight></codeline>
 <codeline lineno="7"><highlight class="comment"><sp/>*<sp/><sp/>Licensed<sp/>under<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>3.0<sp/>or<sp/>later.</highlight></codeline>
 <codeline lineno="8"><highlight class="comment"><sp/>*<sp/><sp/>Some<sp/>rights<sp/>reserved.<sp/>See<sp/>COPYING,<sp/>AUTHORS.</highlight></codeline>
@@ -217,7 +217,7 @@
 <codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_LICENSE<sp/>&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_VERSION<sp/>&quot;..<sp/>-<sp/>Development&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_AUTHOR<sp/>&quot;Georg<sp/>Held<sp/>(g.held@reading.ac.uk)&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_MAINTAINER<sp/>&quot;Liam<sp/>Deacon<sp/>&lt;liam.deacon@diamond.ac.uk&gt;&quot;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_MAINTAINER<sp/>&quot;Liam<sp/>Deacon<sp/>&lt;liam.m.deacon@gmail.com&gt;&quot;<sp/></highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_SHORTDESC<sp/>&quot;Angle<sp/>of<sp/>Incidence<sp/>(AOI)<sp/>LEED<sp/>wrapper<sp/>program&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="49"><highlight class="normal"></highlight></codeline>
 <codeline lineno="50"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>platform<sp/>information<sp/>*/</highlight><highlight class="normal"></highlight></codeline>

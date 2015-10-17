@@ -1,6 +1,6 @@
 #############################################################################
 # Makefile for building: cleed_nsym                                         #
-# Author: Liam Deacon (Email: liam.deacon@diamond.ac.uk)                    #
+# Author: Liam Deacon (Email: liam.m.deacon@gmail.com)                    #
 # Project: CLEED                                                            #
 # Date: 2014-04-01                                                          #
 # Notes:                                                                    #

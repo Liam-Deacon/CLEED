@@ -12,7 +12,7 @@ crfac. Optimisation of the input parameters is performed by csearch.
 A (still rather incomplete) documentation of the program package can be found 
 in 'doc/CLEED_Manual.pdf', but it is probably best to send an email, with all 
 input files, to  <g.held@reading.ac.uk> for general LEED queries when you 
-encounter any problems or alternatively email <liam.deacon@diamond.ac.uk> 
+encounter any problems or alternatively email <liam.m.deacon@gmail.com> 
 regarding problems/bugs in the programs.
 
 Installation

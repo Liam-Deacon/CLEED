@@ -1059,7 +1059,7 @@ static char __pyx_k_138[] = " ";
 static char __pyx_k_139[] = ": ";
 static char __pyx_k_140[] = "  for help use --help";
 static char __pyx_k_141[] = "2014-05-09";
-static char __pyx_k_142[] = "liam.deacon@diamond.ac.uk";
+static char __pyx_k_142[] = "liam.m.deacon@gmail.com";
 static char __pyx_k_145[] = "ConfigParserWithComments.__init__";
 static char __pyx_k_148[] = "ConfigParserWithComments.add_comment";
 static char __pyx_k_151[] = "ConfigParserWithComments.write";
@@ -11214,7 +11214,7 @@ PyMODINIT_FUNC PyInit_set_env(void)
  * __version__ = 0.1
  * __date__ = '2014-05-09'             # <<<<<<<<<<<<<<
  * __updated__ = '2014-05-09'
- * __contact__ = 'liam.deacon@diamond.ac.uk'
+ * __contact__ = 'liam.m.deacon@gmail.com'
  */
   if (PyDict_SetItem(__pyx_d, __pyx_n_s____date__, ((PyObject *)__pyx_kp_u_141)) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
@@ -11222,7 +11222,7 @@ PyMODINIT_FUNC PyInit_set_env(void)
  * __version__ = 0.1
  * __date__ = '2014-05-09'
  * __updated__ = '2014-05-09'             # <<<<<<<<<<<<<<
- * __contact__ = 'liam.deacon@diamond.ac.uk'
+ * __contact__ = 'liam.m.deacon@gmail.com'
  * 
  */
   if (PyDict_SetItem(__pyx_d, __pyx_n_s____updated__, ((PyObject *)__pyx_kp_u_141)) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -11230,14 +11230,14 @@ PyMODINIT_FUNC PyInit_set_env(void)
   /* "set_env.pyx":59
  * __date__ = '2014-05-09'
  * __updated__ = '2014-05-09'
- * __contact__ = 'liam.deacon@diamond.ac.uk'             # <<<<<<<<<<<<<<
+ * __contact__ = 'liam.m.deacon@gmail.com'             # <<<<<<<<<<<<<<
  * 
  * VERBOSE = 0
  */
   if (PyDict_SetItem(__pyx_d, __pyx_n_s____contact__, ((PyObject *)__pyx_kp_u_142)) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "set_env.pyx":61
- * __contact__ = 'liam.deacon@diamond.ac.uk'
+ * __contact__ = 'liam.m.deacon@gmail.com'
  * 
  * VERBOSE = 0             # <<<<<<<<<<<<<<
  * DEBUG = 0

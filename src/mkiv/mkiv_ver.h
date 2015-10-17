@@ -14,7 +14,7 @@ Changes:
 #define MKIV_COPYRIGHT "Copyright unknown"
 #define MKIV_LICENSE "GNU General Public License v3"
 #define MKIV_VERSION "2014.07.04 Development"
-#define MKIV_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 
+#define MKIV_MAINTAINER "Liam Deacon <liam.m.deacon@gmail.com>" 
 #define MKIV_SHORTDESC "Extract IV curves from a series of LEED images"
 #if defined(WIN32) || defined(_WIN32) \
                    || defined(__WIN32) || defined(__WIN32__)

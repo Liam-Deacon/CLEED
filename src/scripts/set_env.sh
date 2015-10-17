@@ -3,7 +3,7 @@
 ##############################################################################
 # Author: Liam Deacon                                                        #
 #                                                                            #
-# Contact: liam.deacon@diamond.ac.uk                                         #
+# Contact: liam.m.deacon@gmail.com                                           #
 #                                                                            #
 # Created on 9 May 2014                                                      #
 #                                                                            #
@@ -51,7 +51,7 @@ variables="CLEED_HOME CLEED_PHASE"
 __version__=0.1
 __date__='2014-05-09'
 __updated__='2014-05-09'
-__contact__='liam.deacon@diamond.ac.uk'
+__contact__='liam.m.deacon@gmail.com'
 
 program_name="set_env.sh"
 program_version="- $__versions__"

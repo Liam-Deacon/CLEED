@@ -2,7 +2,7 @@
  *                       CAOI_RFAC_HELP.C
  *
  *  Copyright 2008-2014 Zhasmina Zheleeva
- *  Copyright 2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.

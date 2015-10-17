@@ -10,4 +10,4 @@ The primary author of the CLEED project is Georg Held <g.held@reading.ac.uk>, ho
 - Wolfgang Braun (symmetry code & CLEED manual)
 
 
-If you wish to contribute to this project then please contact either Georg Held <g.held@reading.ac.uk>, Liam Deacon <liam.deacon@diamond.ac.uk> or Jacopo Ardini <j.ardini@pgr.reading.ac.uk>.
+If you wish to contribute to this project then please contact either Georg Held <g.held@reading.ac.uk>, Liam Deacon <liam.m.deacon@gmail.com> or Jacopo Ardini <j.ardini@pgr.reading.ac.uk>.

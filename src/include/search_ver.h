@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           SEARCH_VER.H
  *
- *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -24,7 +24,7 @@ static const char SEARCH_COPYRIGHT[] = "Copyright (c) 1994-2014 Georg Held";
 static const char SEARCH_LICENSE[] = "GNU General Public License v3";
 static const char SEARCH_VERSION[] = ".. Development";
 static const char SEARCH_AUTHOR[] = "Georg Held (g.held@reading.ac.uk)";
-static const char SEARCH_MAINTAINER[] = "Liam Deacon <liam.deacon@diamond.ac.uk>"; 
+static const char SEARCH_MAINTAINER[] = "Liam Deacon <liam.m.deacon@gmail.com>"; 
 static const char SEARCH_SHORTDESC[] = "Search program to find R-Factor minimum";
 
 /* platform information */

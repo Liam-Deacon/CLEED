@@ -182,7 +182,7 @@
       </memberdef>
       <memberdef kind="define" id="a00083_1a49f95d28775171e45b93f0383ac50763" prot="public" static="no">
         <name>PROG_MAINTAINER</name>
-        <initializer>&quot;Liam Deacon (liam.deacon@diamond.ac.uk)&quot;</initializer>
+        <initializer>&quot;Liam Deacon (liam.m.deacon@gmail.com)&quot;</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -240,7 +240,7 @@
 <codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_LICENSE<sp/>&quot;GNU<sp/>General<sp/>Public<sp/>License<sp/>v3.0&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_VERSION<sp/>&quot;2014.04.27<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_AUTHOR<sp/>&quot;Georg<sp/>Held<sp/>(g.held@reading.ac.uk)&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_MAINTAINER<sp/>&quot;Liam<sp/>Deacon<sp/>(liam.deacon@diamond.ac.uk)&quot;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_MAINTAINER<sp/>&quot;Liam<sp/>Deacon<sp/>(liam.m.deacon@gmail.com)&quot;<sp/></highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>PROG_SHORTDESC<sp/>&quot;Generate<sp/>LEED<sp/>patterns&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight></codeline>
 <codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>platform<sp/>information<sp/>*/</highlight><highlight class="normal"></highlight></codeline>

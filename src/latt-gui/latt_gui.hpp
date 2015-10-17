@@ -5,7 +5,7 @@
 #define __APPNAME__ "LatticeGUI"
 #define __APPVERSION__ "2014.07.04"
 #define __APPAUTHOR__ "Liam Deacon"
-#define __APPEMAIL__ "Liam Deacon <liam.deacon@diamond.ac.uk>"
+#define __APPEMAIL__ "Liam Deacon <liam.m.deacon@gmail.com>"
 #define __APPDESCRIPTION__ "A GUI front-end to latt"
 #define __APPNOTES__ "Latt is maintained by Georg Held\nEmail: g.held@reading.ac.uk"
 #define __CONTRIBUTORS__ ""

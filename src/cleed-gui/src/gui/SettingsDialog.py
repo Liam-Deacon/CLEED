@@ -3,7 +3,7 @@ Created on 31 Jan 2014
 
 @author: Liam Deacon
 
-@contact: liam.deacon@diamond.ac.uk
+@contact: liam.m.deacon@gmail.com
 
 @copyright: Copyright 2014 Liam Deacon
 

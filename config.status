@@ -421,7 +421,7 @@ $config_files
 Configuration headers:
 $config_headers
 
-Report bugs to <liam.deacon@diamond.ac.uk>."
+Report bugs to <liam.m.deacon@gmail.com>."
 
 ac_cs_config="'CC=gcc' 'CFLAGS=-Wall -O2 -mtune=native' 'CXX=g++'"
 ac_cs_version="\
@@ -658,7 +658,7 @@ S["program_transform_name"]="s,x,x,"
 S["prefix"]="/usr/local"
 S["exec_prefix"]="${prefix}"
 S["PACKAGE_URL"]=""
-S["PACKAGE_BUGREPORT"]="liam.deacon@diamond.ac.uk"
+S["PACKAGE_BUGREPORT"]="liam.m.deacon@gmail.com"
 S["PACKAGE_STRING"]="CLEED 2014-04-26 Development"
 S["PACKAGE_VERSION"]="2014-04-26 Development"
 S["PACKAGE_TARNAME"]="cleed"
@@ -710,7 +710,7 @@ D["PACKAGE_NAME"]=" \"CLEED\""
 D["PACKAGE_TARNAME"]=" \"cleed\""
 D["PACKAGE_VERSION"]=" \"2014-04-26 Development\""
 D["PACKAGE_STRING"]=" \"CLEED 2014-04-26 Development\""
-D["PACKAGE_BUGREPORT"]=" \"liam.deacon@diamond.ac.uk\""
+D["PACKAGE_BUGREPORT"]=" \"liam.m.deacon@gmail.com\""
 D["PACKAGE_URL"]=" \"\""
 D["STDC_HEADERS"]=" 1"
 D["HAVE_SYS_TYPES_H"]=" 1"

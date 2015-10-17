@@ -1,7 +1,7 @@
 /*********************************************************************
  *                      CLEED.h
  *
- *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -13,7 +13,7 @@
 /**
  * \file
  * \brief Master include file for the CLEED project.
- * \author Liam Deacon <liam.deacon@diamond.ac.uk>
+ * \author Liam Deacon <liam.m.deacon@gmail.com>
  *
  * Contains the main documentation for the CLEED project.
  *
@@ -267,7 +267,7 @@
  * <g.held@reading.ac.uk>, however contributions & development has also been
  * undertaken by:
  *
- * - Liam Deacon <liam.deacon@diamond.ac.uk> : Windows port with Explorer
+ * - Liam Deacon <liam.m.deacon@gmail.com> : Windows port with Explorer
  * integration, CMake packaging, phaseshifts scripting, man pages,
  * Doxygen/Sphinx documentation)
  * - Zhasmina Zheleeva : angle of incidence code used in \c caoi_leed and \c
@@ -277,7 +277,7 @@
  * development.
  *
  * If you wish to contribute to this project then please contact either
- * Georg Held <g.held@reading.ac.uk>, Liam Deacon <liam.deacon@diamond.ac.uk>
+ * Georg Held <g.held@reading.ac.uk>, Liam Deacon <liam.m.deacon@gmail.com>
  * or Jacopo Ardini <j.ardini@pgr.reading.ac.uk>.
  *
  **/

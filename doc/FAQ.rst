@@ -11,7 +11,7 @@ Frequently Asked Questions
   Alternatively, the brave amongst you will find and fix the problem 
   yourselves - in which case we would be very grateful if you either 
   commit your changes to the github repository or 
-  `email <liam.deacon@diamond.ac.uk>`_ the developers with your bug fix!
+  `email <liam.m.deacon@gmail.com>`_ the developers with your bug fix!
   
 2. *Why does* :ref:`csearch` *stop without calculating the LEED-IV curves?*
   This could be any number of reasons, but the underlying cause should be

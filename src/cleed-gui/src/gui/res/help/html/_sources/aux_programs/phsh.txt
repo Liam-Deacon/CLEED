@@ -112,4 +112,4 @@ Licensed under the MIT license (see LICENSE file included in the
 `phaseshifts <https://pypi.python.org/pypi/phaseshifts>`_ package for details)
 
 Please send your feedback, including bugs notifications
-and fixes, to: liam.deacon@diamond.ac.uk
+and fixes, to: liam.m.deacon@gmail.com

@@ -2,7 +2,7 @@
  *                        mkiv_read_var.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
- *  Copyright 2013-2014 Liam Deacon <liam.deacon@diamond.ac.uk>
+ *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.

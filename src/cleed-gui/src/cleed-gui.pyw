@@ -4,7 +4,7 @@
 ##############################################################################
 # Author: Liam Deacon                                                        #
 #                                                                            #
-# Contact: liam.deacon@diamond.ac.uk                                         #
+# Contact: liam.m.deacon@gmail.com                                           #
 #                                                                            #
 #  cleed-gui - a PyQt frontend to CLEED                                      #
 #  Copyright (C) 2013-2014  Liam Deacon                                      #
