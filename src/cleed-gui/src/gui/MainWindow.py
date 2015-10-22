@@ -4,7 +4,7 @@
 
 @contact: liam.m.deacon@gmail.com
 
-@copyright: 2014 Liam Deacon
+@copyright: 2014-2015 Liam Deacon
 
 @license: GNU General Public License 3.0
 
@@ -49,7 +49,7 @@ from ImportDialog import ImportDialog
 
 # Define globals
 __APP_AUTHOR__ = 'Liam Deacon'
-__APP_COPYRIGHT__ = '\xa9' + '2013 {0}'.format(__APP_AUTHOR__)
+__APP_COPYRIGHT__ = '\xa9' + '2013-2015 {0}'.format(__APP_AUTHOR__)
 __APP_DESCRIPTION__ = ('CLEED - Interactive Visualiser (IV) \n '
                         '- a GUI front end to the CLEED package')
 __APP_DISTRIBUTION__ = 'cleed-gui'
@@ -153,8 +153,11 @@ class MainWindow(QMainWindow):
         self.logger.setLevel(logging.DEBUG)
         
         # create file handler which logs all messages
-        fh = logging.FileHandler(os.path.join(os.environ['TEMP'], __APP_NAME__ 
-                + str('.log')))  # temp directory is emptied on system reboot
+        tmpdir = 'TMPDIR' if sys.platform.startswith('linux') else 'TEMP'
+        fh = logging.FileHandler(os.path.join(os.environ.get(tmpdir, 
+                                              os.path.expanduser('~/.')), 
+                                 __APP_NAME__  + str('.log'))
+                        )  # temp directory is emptied on system reboot
         formatter = logging.Formatter(
                         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                          "%Y-%m-%d %H:%M:%S")
