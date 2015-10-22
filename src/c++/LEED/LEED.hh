@@ -15,8 +15,8 @@
  * C++ wrapper class for leed structure.
  */
 
-#ifndef __LEED_h__
-#define __LEED_h__
+#ifndef __LEED_HH__
+#define __LEED_HH__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
@@ -37,4 +37,4 @@ class LEED {
 
 #endif /* __cplusplus */
 
-#endif /* __LEED_h__ */
+#endif /* __LEED_HH__ */

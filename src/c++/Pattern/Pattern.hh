@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __Pattern_H__
-#define __Pattern_H__
+#ifndef __PATTERN_HH__
+#define __PATTERN_HH__
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
@@ -71,4 +71,4 @@ class Pattern {
 
 #endif /* __cplusplus__ */
 
-#endif /* __Pattern_H__ */
+#endif /* __PATTERN_HH__ */

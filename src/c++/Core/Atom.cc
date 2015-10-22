@@ -18,7 +18,7 @@
  * \date 21 Jan 2015
  */
 
-#include "Core/Atom.h"
+#include <Core/Atom.hh>
 
 using namespace cleed;
 

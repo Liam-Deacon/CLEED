@@ -21,8 +21,8 @@
  */
 
 
-#ifndef RFACTOR_H
-#define RFACTOR_H
+#ifndef __RFACTOR_HH__
+#define __RFACTOR_HH__
 
 #ifdef __cplusplus
 
@@ -34,7 +34,7 @@
 #include "rfac_func.h"
 
 #include "IVCurvePair.h"
-#include "Rfactor/RFactorArgs.h"
+#include <RFactor/RFactorArgs.hh>
 
 /* use std items in local namespace */
 using std::vector;
@@ -94,4 +94,4 @@ class RFactor {
 
 #endif /* __cplusplus */
 
-#endif /* RFACTOR_H */
+#endif /* __RFACTOR_HH__ */

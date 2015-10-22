@@ -19,9 +19,9 @@
  * Implements SearchAtom class.
  */
 
+#include <Search/SearchAtom.hh>
 #include <cstring>
 #include <cstdlib>
-#include "Search/SearchAtom.h"
 #include "gh_stddef.h"
 
 using namespace cleed;

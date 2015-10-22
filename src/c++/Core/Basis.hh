@@ -20,12 +20,12 @@
  */
 
 
-#ifndef __Basis_H__
-#define __Basis_H__
+#ifndef __BASIS_HH__
+#define __BASIS_HH__
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
-#include "Core/Coordinate.h"
+#include <Core/Coordinate.hh>
 #include "basis.h"
 
 namespace cleed {
@@ -66,4 +66,4 @@ class Basis : public basis {
 } /* namespace cleed */
 #endif /* __cplusplus */
 
-#endif /* __Basis_H__ */
+#endif /* __BASIS_HH__ */

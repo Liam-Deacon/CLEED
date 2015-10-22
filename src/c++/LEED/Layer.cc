@@ -15,7 +15,7 @@
  * Implements Layer class for manipulating models of LEED layers.
  */
 
-#include "LEED/Layer.h"
+#include <LEED/Layer.hh>
 #include <iterator>
 #include <cstdlib>
 #include <stdexcept>

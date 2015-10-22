@@ -118,38 +118,42 @@ __attribute__((nonnull, returns_nonnull)) mat matrdlm(mat, int, const char *);
  *********************************************************************/
 /* LU decomposition in file ludcmp.c */
 __attribute__((nonnull))
-int ludcmp(real *, int *, size_t);
+int ludcmp(cleed_real *, int *, size_t);
 
 /* LU decomposition (real) in file matrlu.c */
 __attribute__((nonnull))
-int r_ludcmp(real *, size_t *, size_t);
+int r_ludcmp(cleed_real *, size_t *, size_t);
 
 __attribute__((nonnull))
-int r_luinv(real *, const real *, size_t *, size_t);
+int r_luinv(cleed_real *, const cleed_real *, size_t *, size_t);
 
 __attribute__((nonnull, returns_nonnull))
-real *r_lubksb(const real *, const size_t *, real *, size_t);
+real *r_lubksb(const cleed_real *, const size_t *, cleed_real *, size_t);
 
 /* LU decomposition (complex) in file matclu.c */
 __attribute__((nonnull))
-int c_ludcmp(real *, real *, size_t *, size_t);
+int c_ludcmp(cleed_real *, cleed_real *, size_t *, size_t);
 
 __attribute__((nonnull))
-int c_luinv(real *, real *, real *, real *, size_t *, size_t);
+int c_luinv(cleed_real *, cleed_real *, cleed_real *,
+			cleed_real *, size_t *, size_t);
 
 __attribute__((nonnull))
-int c_lubksb(real *, real *, size_t *, real *, real *, size_t);
+int c_lubksb(cleed_real *, cleed_real *, size_t *,
+			 cleed_real *, cleed_real *, size_t);
 
 /* matrix multiplication for square mat. in file matrm.c */
 __attribute__((nonnull, returns_nonnull))
-real *r_sqmul(real *, real *, real *, size_t);
+real *r_sqmul(cleed_real *, cleed_real *, cleed_real *, size_t);
 
 /* convert row major ordering FORTRAN <-> C */
 __attribute__((nonnull(1)))
-int row2col_order(const real *row_major, real *col_major, size_t rows, size_t cols);
+int row2col_order(const cleed_real *row_major,
+				cleed_real *col_major, size_t rows, size_t cols);
 
 __attribute__((nonnull(1)))
-int col2row_order(const real *col_major, real *row_major, size_t rows, size_t cols);
+int col2row_order(const cleed_real *col_major,
+				cleed_real *row_major, size_t rows, size_t cols);
 
 /* utility functions */
 static inline const char *strmtype(mat_enum matrix_type) {
@@ -173,7 +177,7 @@ static inline const char *strmtype(mat_enum matrix_type) {
  * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
  * \note \p Mat is stored in row-major order.
  */
-static inline real *rmatel(size_t i, size_t j, mat Mat)
+static inline cleed_real *rmatel(size_t i, size_t j, mat Mat)
 {
   return (Mat->rel + (i-1) * Mat->cols + j);
 }
@@ -187,7 +191,7 @@ static inline real *rmatel(size_t i, size_t j, mat Mat)
  * \note \p m and \p n must be positive integers, \p Mat must be of type #mat.
  * \note \p Mat is stored in row-major order.
  */
-static inline real *imatel(size_t i, size_t j, mat Mat)
+static inline cleed_real *imatel(size_t i, size_t j, mat Mat)
 {
   return (Mat->iel + ((i-1) * Mat->cols + j));
 }

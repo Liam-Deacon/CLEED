@@ -15,8 +15,8 @@
  * Provides a base class for atom-derived classes.
  */
 
-#ifndef __Atom_h__
-#define __Atom_h__
+#ifndef __ATOM_HH__
+#define __ATOM_HH__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
@@ -24,7 +24,7 @@
 #include <cstddef>
 #include <string>
 
-#include "BaseElement.h"
+#include <Core/BaseElement.hh>
 
 using namespace std;
 
@@ -58,4 +58,4 @@ namespace cleed {
 
 #endif /* __cplusplus */
 
-#endif /* __Atom_h__ */
+#endif /* __ATOM_HH__ */

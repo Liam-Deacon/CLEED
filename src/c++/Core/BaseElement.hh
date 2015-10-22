@@ -15,8 +15,8 @@
  * Header for a basic element class.
  */
 
-#ifndef __BaseElement_h__
-#define __BaseElement_h__
+#ifndef __BASEELEMENT_HH__
+#define __BASEELEMENT_HH__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */ 
 
@@ -56,4 +56,4 @@ private:
 
 #endif /* __cplusplus */
 
-#endif /* __BaseElement_h__ */
+#endif /* __BASEELEMENT_HH__ */

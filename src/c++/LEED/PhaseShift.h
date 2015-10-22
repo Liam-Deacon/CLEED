@@ -15,8 +15,8 @@
  * Object Orientated wrapper class for leed_phase structure.
  */
 
-#ifndef __PhaseShift_h__
-#define __PhaseShift_h__
+#ifndef __PHASESHIFT_HH__
+#define __PHASESHIFT_HH__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
@@ -66,4 +66,4 @@ class PhaseShift : public leed_phase {
 
 # endif
 
-#endif /* __PhaseShift_h__ */
+#endif /* __PHASESHIFT_HH__ */

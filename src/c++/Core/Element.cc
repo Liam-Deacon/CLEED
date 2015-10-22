@@ -15,7 +15,7 @@
  * 
  */
 
-#include <Element.h>
+#include <Core/Element.hh>
 
 using namespace cleed;
 
@@ -25,7 +25,7 @@ const std::map<int, char> Element::PERIODS = {
 
 const std::vector<char> Element::BLOCKS = {'s', 'g', 'f', 'd', 'p'};
 
-const std::map<int, std::tuple<std::string, std::string>> GROUPS = {
+const std::map<int, std::tuple<std::string, std::string>> Element::GROUPS = {
         {1, std::make_tuple("IA", "Alkali metals")},
         {2, std::make_tuple("IIA", "Alkaline earths")},
         {3, std::make_tuple("IIIB", "")},
@@ -59,14 +59,32 @@ const std::map<int, std::string> Element::SERIES = {
         {10, "Actinides"}
 };
 
-static const std::map<int, char> PERIODS;
-static const std::vector<char> BLOCKS;
-static const std::map<int, std::string> SERIES;
-static const std::map<int, std::tuple<std::string, std::string>> GROUPS;
-static const std::map<int, std::string> DESCRIPTIONS;
+static const std::map<int, char> Element::PERIODS = {
 
-Element::Element(int Z, const std::string &symbol, const std::string &name);
-virtual Element::~Element();
+};
+
+static const std::vector<char> Element::BLOCKS = {
+
+};
+
+static const std::map<int, std::string> Element::SERIES = {
+
+};
+
+static const std::map<int, std::tuple<std::string, std::string>> Element::GROUPS = {
+};
+
+static const std::map<int, std::string> Element::DESCRIPTIONS = {
+
+};
+
+Element::Element(int Z, const std::string &symbol, const std::string &name) {
+
+}
+
+Element::~Element() {
+
+}
 
 inline int Element::getGroup() const {
   return group;

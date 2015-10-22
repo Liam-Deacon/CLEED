@@ -19,10 +19,10 @@
  * Implements Crystal class for manipulating low-level #leed_crystal structure.
  */
 
+#include <LEED/Crystal.hh>
 #include <cstring>
 #include <cstddef>
 #include <cstdlib>
-#include "LEED/Crystal.h"
 
 using namespace cleed;
 using std::size_t;
@@ -158,7 +158,7 @@ inline size_t Crystal::getNumberOfTypes() const {
 std::vector<string> Crystal::getComments() const {
   vector<string> comments;
   for (int i=0; this->comments[i] != nullptr ||
-       this->comments[i] != "\0"; i++) {
+       *this->comments[i] != "\0"; i++) {
     comments.push_back(string(this->comments[i]));
   }
   return comments;

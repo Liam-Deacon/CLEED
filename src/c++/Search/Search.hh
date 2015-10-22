@@ -28,8 +28,8 @@
 
 #include "search_def.h"
 #include "search_func.h"
-#include "LEED/LEED.h"
-#include "RFactor/RFactor.h"
+#include <LEED/LEED.hh>
+#include <RFactor/RFactor.hh>
 
 namespace cleed {
 
@@ -114,7 +114,7 @@ class Search {
     void setRFactor(const RFactor &rfac);
 
     void setTheoryFilePath(const std::string &theory_filepath);
-    void mkiv_set_controlFilePath(const std::string &control_filepath);
+    void setControlFilePath(const std::string &control_filepath);
 
     /** Functions **/
     virtual void startSearch();

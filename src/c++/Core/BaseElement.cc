@@ -19,7 +19,7 @@
  * Implements BaseElement class for describing basic chemical elements.
  */
 
-#include "Core/BaseElement.h"
+#include <Core/BaseElement.hh>
 #include <cstring>
 
 using namespace cleed;

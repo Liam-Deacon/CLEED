@@ -55,8 +55,9 @@
  */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+#include <cmath>
 
-using std::M_PI;
+#define _USE_MATH_DEFINES
 
 using std::atan2;
 

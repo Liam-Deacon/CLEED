@@ -15,16 +15,16 @@
  * 
  */
 
-#ifndef __Element_h__
-#define __Element_h__
+#ifndef __ELEMENT_HH__
+#define __ELEMENT_HH__
 
-#ifdef __cplusplus /* use C linkage if this is a C++ compiler */ 
+#ifdef __cplusplus
 
-#include "Core/BasicElement.h"
 #include <map>
 #include <string>
 #include <tuple>
 #include <vector>
+#include "Core/BasicElement.hh"
 
 namespace cleed {
 
@@ -104,4 +104,4 @@ class Element : public BasicElement {
 
 #endif /* __cplusplus */
 
-#endif /* __Element_h__ */
+#endif /* __ELEMENT_HH__ */

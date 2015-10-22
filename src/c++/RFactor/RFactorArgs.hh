@@ -19,8 +19,8 @@
  */
 
 
-#ifndef __RFactorArgs_H__
-#define __RFactorArgs_H__
+#ifndef __RFACTORARGS_HH__
+#define __RFACTORARGS_HH__
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
@@ -72,7 +72,7 @@ class RFactorArgs : public rfac_args {
     bool getAllGroups() const;
 
     /* setters */
-    void mkiv_set_controlFile(const string &ctrFile);
+    void setControlFile(const string &ctrFile);
     void setTheoryFile(const string &theoryFile);
     void setOutputFile(const string &outputFile);
     void setIVOutputFile(const string &ivOutputFile);
@@ -92,4 +92,4 @@ class RFactorArgs : public rfac_args {
 
 #endif /* __cplusplus */
 
-#endif /* __RFactorArgs_H__ */
+#endif /* __RFACTORARGS_HH__ */

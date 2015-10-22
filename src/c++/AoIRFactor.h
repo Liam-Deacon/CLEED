@@ -25,7 +25,7 @@
 
 #ifdef __cplusplus
 
-#include "RFactor.h"
+#include <RFactor/RFactor.hh>
 
 namespace cleed {
 //!TODO

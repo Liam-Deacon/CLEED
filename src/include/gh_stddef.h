@@ -38,6 +38,8 @@
 #include <limits.h>
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+using namespace std;
+
 namespace cleed {
 #endif
 

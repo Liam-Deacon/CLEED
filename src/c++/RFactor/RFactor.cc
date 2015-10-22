@@ -18,9 +18,9 @@
  * \date 9 Dec 2014
  */
 
+#include <RFactor/RFactor.hh>
 #include <algorithm>
 #include <iterator>
-#include "RFactor/RFactor.h"
 
 using namespace cleed;
 using std::size_t;

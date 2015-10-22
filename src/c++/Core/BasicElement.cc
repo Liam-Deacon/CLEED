@@ -15,7 +15,7 @@
  * Implementation file for base element class.
  */
 
-#include "Core/BasicElement.h"
+#include "Core/BasicElement.hh"
 
 using namespace cleed;
 
@@ -446,7 +446,7 @@ inline const std::string &BasicElement::getSymbol() const {
   return const_cast<std::string&>(symbol);
 }
 
-inline BasicElement &BasicElement::setAtomicNumber(int Z) {
+inline BasicElement &BasicElement::setAtomicNumber(size_t Z) {
   return (Z > 0 && Z < ELEMENTS.size()) ? &ELEMENTS(Z) :
     throw invalidElementException("Atomic number Z is not valid");
 }

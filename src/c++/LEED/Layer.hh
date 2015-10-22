@@ -15,15 +15,15 @@
  * Provides object-orientated wrapper class for leed_layer.
  */
 
-#ifndef __Layer_h__
-#define __Layer_h__
+#ifndef __LAYER_HH__
+#define __LAYER_HH__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
 #include <cstddef>
 #include <vector>
 #include "leed_def.h"
-#include "LEED/LEEDAtom.h"
+#include <LEED/LEEDAtom.hh>
 
 using namespace std;
 
@@ -67,4 +67,4 @@ class Layer : public leed_layer {
 
 #endif /* __cplusplus */
 
-#endif /* __Layer_h__ */
+#endif /* __LAYER_HH__ */

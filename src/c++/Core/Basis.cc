@@ -19,7 +19,7 @@
  * and associated member functions.
  */
 
-#include "basis.h"
+#include <Core/Basis.hh>
 
 using namespace cleed;
 

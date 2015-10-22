@@ -30,7 +30,7 @@
 #include <cstddef>
 #include <string>
 
-#include "Core/Atom.h"
+#include <Core/Atom.hh>
 #include "search_def.h"
 
 namespace cleed {

@@ -15,10 +15,10 @@
  * Provides a base class for CLEED atomic models.
  */
 
-#ifndef __Model_h__
-#define __Model_h__
+#ifndef __MODEL_HH__
+#define __MODEL_HH__
 
-#include "Core/Atom.h"
+#include <Core/Atom.hh>
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
@@ -41,4 +41,4 @@ class Model {
 
 #endif /* __cplusplus */
 
-#endif /* __Model_h__ */
+#endif /* __MODEL_HH__ */

@@ -21,7 +21,7 @@
 #include <iterator>
 #include <vector>
 
-#include "LEED/PhaseShift.h"
+#include "LEED/PhaseShift.hh"
 
 using namespace std;
 using namespace cleed;

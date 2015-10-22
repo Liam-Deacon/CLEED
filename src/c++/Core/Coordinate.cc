@@ -17,7 +17,7 @@
  * wrapping to the C #coord struct and its associated methods.
  */
 
-#include "coord.h"
+#include "Coordinate.hh"
 
 using namespace cleed;
 

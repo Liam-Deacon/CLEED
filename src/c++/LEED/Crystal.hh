@@ -15,8 +15,8 @@
  * Defines an object orientated wrapper class for leed_crystal structure.
  */
 
-#ifndef __Crystal_h__
-#define __Crystal_h__
+#ifndef __CRYSTAL_HH__
+#define __CRYSTAL_HH__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
@@ -110,4 +110,4 @@ class Crystal : public leed_crystal {
 
 #endif /* __cplusplus */
 
-#endif /* __Crystal_h__ */
+#endif /* __CRYSTAL_HH__ */

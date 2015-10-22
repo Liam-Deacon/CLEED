@@ -18,10 +18,10 @@
  * \date 17 Dec 2014
  */
 
+#include <RFactor/RFactorArgs.hh>
 #include <cstring>
 #include <cstdlib>
 #include <iostream>
-#include "RFactor/RFactorArgs.h"
 
 using namespace cleed;
 

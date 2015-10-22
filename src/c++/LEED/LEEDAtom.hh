@@ -18,13 +18,13 @@
  */
 
 
-#ifndef __LEEDAtom_H__
-#define __LEEDAtom_H__
+#ifndef __LEEDATOM_HH__
+#define __LEEDATOM_HH__
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
-#include "Core/Atom.h"
-#include "LEED/Layer.h"
+#include <Core/Atom.hh>
+#include <LEED/Layer.hh>
 #include "leed_def.h"
 
 namespace cleed {
@@ -64,4 +64,4 @@ namespace cleed {
 
 #endif /* __cplusplus */
 
-#endif /* __LEEDAtom_H__ */
+#endif /* __LEEDATOM_HH__ */

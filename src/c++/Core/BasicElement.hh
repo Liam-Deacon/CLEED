@@ -15,10 +15,10 @@
  * Provides a base chemical element class.
  */
 
-#ifndef __BasicElement_h__
-#define __BasicElement_h__
+#ifndef __BASICELEMENT_HH__
+#define __BASICELEMENT_HH__
 
-#ifdef __cplusplus /* use C linkage if this is a C++ compiler */
+#ifdef __cplusplus
 
 #include <string>
 #include <map>
@@ -153,7 +153,8 @@ class BasicElement {
       DARMSTADTIUM=110,
       ROENTGENIUM=111,
       COPERNICIUM=112
-    } atomicNumber_t;
+    } atomicNumber;
+
     static const std::map<std::string, int> NAMES;
     static const std::map<std::string, int> SYMBOLS;
     virtual static const std::map<std::string, BasicElement> ELEMENTS;
@@ -165,9 +166,9 @@ class BasicElement {
 
     virtual bool operator!();
     virtual BasicElement &operator=();
-    virtual BasicElement &operator=(atomicNumber_t Z);
-    virtual BasicElement &operator-(atomicNumber_t Z);
-    virtual BasicElement &operator+(atomicNumber_t Z);
+    virtual BasicElement &operator=(int Z);
+    virtual BasicElement &operator-(int Z);
+    virtual BasicElement &operator+(int Z);
     virtual bool operator==(const BasicElement &other);
     virtual bool operator==(const std::string &element);
     virtual bool operator!=(const BasicElement &other);
@@ -181,12 +182,12 @@ class BasicElement {
     const std::string &getName() const;
     const std::string &getSymbol() const;
 
-    BasicElement &setAtomicNumber(atomicNumber_t Z);
+    BasicElement &setAtomicNumber(size_t Z);
     BasicElement &setName(const std::string &name);
     BasicElement &setSymbol(const std::string &symbol);
 
   private:
-    atomicNumber_t atomicNumber;
+    atomicNumber Z;
     std::string name;
     std::string symbol;
 };
@@ -196,4 +197,4 @@ class BasicElement {
 
 #endif /* __cplusplus */
 
-#endif /* __BasicElement_h__ */
+#endif /* __BASICELEMENT_HH__ */

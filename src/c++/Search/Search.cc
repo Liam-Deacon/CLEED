@@ -19,7 +19,7 @@
  * Provides an object-orientated interface to the search program.
  */
 
-#include "Search/Search.h"
+#include <Search/Search.hh>
 #include <cstring>
 #include <string>
 #include <vector>

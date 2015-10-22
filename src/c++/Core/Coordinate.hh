@@ -21,10 +21,10 @@
  */
 
 
-#ifndef __Coordinate_H__
-#define __Coordinate_H__
+#ifndef __COORDINATE_HH__
+#define __COORDINATE_HH__
 
-#ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
+#ifdef __cplusplus
 #include "coord.h"
 
 namespace cleed {
@@ -60,4 +60,4 @@ namespace cleed {
 
 #endif /* __cplusplus */
 
-#endif /* __Coordinate_H__ */
+#endif /* __COORDINATE_HH__ */
