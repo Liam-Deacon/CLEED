@@ -68,7 +68,7 @@ int parse_args(int argc, char *argv[],
 char line_buffer[STRSZ];
 
 /* macros */
-static inline void arg_parse_dbl(double *x, int argc, const char *argv[], int i_arg)
+static inline void arg_parse_dbl(double *x, int argc, char *argv[], int i_arg)
 {
   if (i_arg < argc)
   {
