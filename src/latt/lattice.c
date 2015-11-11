@@ -19,14 +19,15 @@
  */
 
 #include <stdio.h>
+#include <stddef.h>
 #include <limits.h>
 #include <float.h>
 #include <math.h>
 #include "lattice.h"
 #include "gh_stddef.h"
 
-FILE *inf_stream;
-FILE *ctr_stream;
+FILE *inf_stream = NULL;
+FILE *ctr_stream = NULL;
 
 /*!
  * Prints member values of #lattice instance \p lat
@@ -56,8 +57,8 @@ void lattice_debug(const lattice *lat)
  */
 void lattice_printf(FILE *output, const lattice *lat)
 {
-  size_t i_atom;
-  char padding[2];
+  size_t i_atom = 0;
+  char padding[2]= "";
   
   /* first line: number of atoms */
   fprintf(output, "%d\n", lat->n_atoms);
@@ -111,9 +112,6 @@ lattice *lattice_alloc(size_t n_atoms)
   lattice *lat = (lattice*) malloc(sizeof(lattice));
   if (lat == NULL) return NULL;
   lat->atoms = (atom*) malloc(sizeof(atom) * (n_atoms+1));
-  lat->input_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
-  lat->output_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
-  lat->script = (char*) malloc(sizeof(char) * STRSZ * STRSZ);
   if (lat->atoms == NULL)
   {
     free(lat);
@@ -206,15 +204,9 @@ int lattice_realloc(lattice *lat, size_t size)
 void lattice_free(lattice *lat)
 {
   /* clean up linked lists */
-  free(lat->input_filename);
-  free(lat->output_filename);
-  free(lat->script);
   lattice_free_atom_list(lat);
   free(lat->atoms);
   lat->atoms = NULL;
-  lat->input_filename = NULL;
-  lat->output_filename = NULL;
-  lat->script = NULL;
 
   /* clean up lattice struct */
   free(lat);
@@ -324,13 +316,8 @@ int lattice_set_atom_list(lattice *lat, const atom *atoms, size_t n_atoms)
  */
 int lattice_set_input_filename(lattice *lat, const char *filename)
 {
-  if (lat == NULL) return(LATTICE_ALLOC_FAILURE);
-  if (lat->input_filename == NULL)
-  {
-    lat->input_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
-    if (lat->input_filename == NULL) return (LATTICE_STRING_ALLOC_FAILURE);
-  }
-  if (filename != NULL) strcpy(lat->input_filename, filename);
+  strncpy(lat->input_filename, filename, sizeof(lat->input_filename)-1);
+  lat->input_filename[sizeof(lat->input_filename)-1] = '\0';
   return (LATTICE_SUCCESS);
 }
 
@@ -342,19 +329,11 @@ int lattice_set_input_filename(lattice *lat, const char *filename)
  * \param script source script to copy from.
  * \return C style return code indicating function success.
  * \retval #LATTICE_SUCCESS on successful completion.
- * \retval #LATTICE_ALLOC_FAILURE if \p lat is \c NULL .
- * \retval #LATTICE_STRING_ALLOC_FAILURE if @lattice::script points to
- * \c NULL after operation and indicates memory could not be (re)allocated.
  */
 int lattice_set_script(lattice *lat, const char *script)
 {
-  if (lat == NULL) return(LATTICE_ALLOC_FAILURE);
-  if (lat->script == NULL)
-  {
-    lat->script = (char*) malloc(sizeof(char) * STRSZ * STRSZ);
-    if (lat->script == NULL) return (LATTICE_STRING_ALLOC_FAILURE);
-  }
-  if (script != NULL) strcpy(lat->script, script);
+  strncpy(lat->script, script, sizeof(lat->script)-1);
+  lat->script[sizeof(lat->script)-1] = '\0';
   return (LATTICE_SUCCESS);
 }
 
@@ -365,20 +344,11 @@ int lattice_set_script(lattice *lat, const char *script)
  * \param filename Source filename string to copy from.
  * \return C style return code indicating function success.
  * \retval #LATTICE_SUCCESS on successful completion.
- * \retval #LATTICE_ALLOC_FAILURE if \p lat is \c NULL .
- * \retval #LATTICE_STRING_ALLOC_FAILURE if @lattice::output_filename of
- * \p lat is \c NULL after operation, indicating that memory could not be
- * (re)allocated.
  */
 int lattice_set_output_filename(lattice *lat, const char *filename)
 {
-  if (lat == NULL) return(LATTICE_ALLOC_FAILURE);
-  if (lat->output_filename == NULL)
-  {
-    lat->output_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
-    if (lat->output_filename == NULL) return (LATTICE_STRING_ALLOC_FAILURE);
-  }
-  if (filename != NULL) strcpy(lat->output_filename, filename);
+  strncpy(lat->output_filename, filename, sizeof(lat->output_filename)-1);
+  lat->output_filename[sizeof(lat->output_filename)-1] = '\0';
   return (LATTICE_SUCCESS);
 }
 

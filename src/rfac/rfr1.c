@@ -74,7 +74,7 @@ real rfac_r1(const real *eng, const real *e_int, const real *t_int)
   norm_sum = 0.;
   for(i_eng = 0; i_eng < n_eng; i_eng ++)
   {
-    rfac_sum   += cleed_real_fabs( t_int[i_eng] - norm_te * e_int[i_eng] );
+    rfac_sum += cleed_real_fabs( t_int[i_eng] - norm_te * e_int[i_eng] );
     norm_sum += cleed_real_fabs( t_int[i_eng] - the_sum );
   }
 

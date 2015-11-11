@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <limits.h>
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 #include <cstddef>
@@ -107,9 +108,9 @@ typedef struct lattice {
   double vec_h;         /*!< h Miller index. */
   double vec_k;         /*!< k Miller index. */
   double vec_l;         /*!< l Miller index. */
-  char *input_filename; /*!< The filename or path to read in input */
-  char *output_filename;/*!< The filename or path to output the generated lattice to */
-  char *script;         /*!< Do jmol script to write to xyz output */
+  char input_filename[FILENAME_MAX];  /*!< The filename or path to read in input */
+  char output_filename[FILENAME_MAX]; /*!< The filename or path to output the generated lattice to */
+  char script[2^16];           /*!< Do jmol script to write to xyz output */
   atom *atoms;          /*!< Array of atoms. */
   size_t n_atoms;       /*!< The total number of atoms in the lattice model */
   size_t allocated_atoms; /*!< The total number of atoms allocated in memory */

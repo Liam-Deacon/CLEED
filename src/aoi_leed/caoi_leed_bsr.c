@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "caoi_leed.h"
 
@@ -42,11 +43,11 @@ void bsrinp(char *filebsr, size_t number)
 
   float ip, it;
 
-  char linebuffer[STRSZ];
-  char helpstring[STRSZ];
+  char linebuffer[STRSZ] = "";
+  char helpstring[STRSZ] = "";
 
-  FILE *readstream;
-  FILE *writestream;
+  FILE *readstream = NULL;
+  FILE *writestream = NULL;
 
   CONTROL_MSG(CONTROL, "sa: %u\n", number);
   ERROR_MSG("%s\n", filebsr);
@@ -58,8 +59,8 @@ void bsrinp(char *filebsr, size_t number)
 
   if ((readstream = fopen (filebsr, "r")) == NULL)
   {
-    ERROR_MSG("can not open file %s\n", filebsr);
-    exit(1);
+    ERROR_MSG("can not open file '%s'\n", filebsr);
+    exit(EIO);
   }
 
 
@@ -81,8 +82,8 @@ void bsrinp(char *filebsr, size_t number)
 
     if ((writestream = fopen(linebuffer, "w")) == NULL)
     {
-      ERROR_MSG("can not open file %s\n", linebuffer);
-      exit(1);
+      ERROR_MSG("can not open file '%s'\n", linebuffer);
+      exit(EIO);
     }
 
     while (fgets(helpstring, STRSZ, readstream))

@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <strings.h>
 #include <limits.h>
+#include <errno.h>
 
 #include "latt.h"
 #include "atom.h"
@@ -67,7 +68,7 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
     
     if(*argv[i_arg] != '-')
     {
-      fprintf(stderr, "SYNTAX ERROR_LOG:\n\n");
+      ERROR_MSG("syntax error:\n\n");
       latt_usage(stderr);
       exit(INVALID_ARGUMENT_ERROR);
     }
@@ -76,9 +77,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* a lattice constant a */
       if ( !strncmp(argv[i_arg], "-a", 2) )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->a_latt = (float)atof(argv[i_arg]);
         }
         else
@@ -91,9 +91,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* b lattice constant b */
       if ( !strncmp(argv[i_arg], "-b", 2) )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->b_latt = (float)atof(argv[i_arg]);
         }
         else
@@ -106,9 +105,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* c: lattice constant c */
       if ( !strncmp(argv[i_arg], "-c", 2) )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->c_latt = (float)atof(argv[i_arg]);
         }
         else
@@ -122,9 +120,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       if ( ( !strncmp(argv[i_arg], "-d", 2) ) ||
            ( !strcmp(argv[i_arg], "--max-displacement") ) )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->max_disp_z = (float)atof(argv[i_arg]);
         }
         else
@@ -137,9 +134,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* nlayers */
       if ( !strcmp(argv[i_arg], "--max-layers") )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->max_layers = (size_t)atoi(argv[i_arg]);
         }
         else
@@ -152,9 +148,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* ncells */
       if ( !strcmp(argv[i_arg], "--max-cells") )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->max_cells = (size_t)atoi(argv[i_arg]);
         }
         else
@@ -167,9 +162,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* natoms */
       if ( !strcmp(argv[i_arg], "--max-atoms") )
 	    {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->max_atoms = (size_t)atoi(argv[i_arg]);
         }
         else
@@ -184,7 +178,7 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       {
         i_arg++;
       
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
           latt->vec_h = (float)atof(argv[i_arg]);
         }
@@ -203,32 +197,23 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       }
    
       /* i: open input file (read complicated basis) */
-      if (( !strncmp(argv[i_arg], "-i", 2)) || (!strcmp(argv[i_arg], "--input")) )
+      if (( !strncmp(argv[i_arg], "-i", 2)) ||
+            (!strcmp(argv[i_arg], "--input")) )
       {
-        i_arg++;
-     
-        if (i_arg >= argc) 
+        if (++i_arg >= argc)
         {
           ERROR_MSG("missing input file argument for '-i'\n");
           exit(INVALID_ARGUMENT_ERROR);
         }
-     
-        if (latt->input_filename == NULL)
-        {
-          latt->input_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
-        }
-     
-        strncpy(latt->input_filename, argv[i_arg], FILENAME_MAX);
-        strcat(latt->input_filename, "\0");
+        lattice_set_input_filename(latt, argv[i_arg]);
         latt->latt_type = LAT_INP;
       }
 
       /* k */
       if ( !strcmp(argv[i_arg], "-k") )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->vec_k = (float)atof(argv[i_arg]);
         }
         else
@@ -241,9 +226,8 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* l */
       if ( !strcmp(argv[i_arg], "-l") )
       {
-        if (i_arg < argc)
+        if (++i_arg < argc)
         {
-          i_arg++;
           latt->vec_l = (float)atof(argv[i_arg]);
         }
         else
@@ -256,8 +240,7 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* n: name of atoms */
       if(!strcmp(argv[i_arg], "-n") || !strcmp(argv[i_arg], "--atom"))
       {
-        i_arg++;
-        if (i_arg < argc) 
+        if (++i_arg < argc)
         {
           if (latt->atoms[0].element == NULL)
             latt->atoms[0].element = (char*) calloc(NAMSZ, sizeof(char));
@@ -273,8 +256,7 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* s  script index for line 2 of output file */
       if (!strcmp(argv[i_arg], "-s") || !strcmp(argv[i_arg], "--script"))
       {
-        i_arg++;
-        if (i_arg < argc) strcpy(latt->script, argv[i_arg]);
+        if (++i_arg < argc) strcpy(latt->script, argv[i_arg]);
         i_arg++;
       }
 
@@ -288,7 +270,7 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
         else if ( !strncmp(argv[i_arg], "di", 2) ) {latt->latt_type = LAT_DIA;}
         else 
         {
-          ERROR_MSG("%s is an invalid argument\n", argv[i_arg]);
+          ERROR_MSG("%s is an invalid lattice type argument\n", argv[i_arg]);
         }
       }
 
@@ -302,14 +284,12 @@ int latt_parse_args(int argc, char *argv[], lattice *latt)
       /* Open output files (output and info) */
       if ( (!strncmp(argv[i_arg], "-o", 2)) || !strcmp(argv[i_arg], "--output"))
       {
-        i_arg++;
-        if (i_arg >= argc) break;
-        if (latt->output_filename == NULL)
+        if (++i_arg >= argc)
         {
-          latt->output_filename = (char*) malloc(sizeof(char) * FILENAME_MAX);
+          ERROR_MSG("output filename not given\n");
+          exit(EINVAL);
         }
-        strcpy(latt->output_filename, argv[i_arg]);
-        strcat(latt->output_filename, "\0");
+        lattice_set_output_filename(latt, argv[i_arg]);
       }
    
     } /* else */

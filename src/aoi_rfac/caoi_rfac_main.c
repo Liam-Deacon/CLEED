@@ -14,6 +14,8 @@ Changes:
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <errno.h>
+
 #include "caoi_rfac.h"
 #include "gh_stddef.h"
 
@@ -24,18 +26,23 @@ int main(int argc, char *argv[])
 {
   size_t i;
   int i_arg;
+
   size_t length = 0;
-  int iaux;
-  char linebuffer[STRSZ];
-  char string[STRSZ];
-  FILE *fp;
-  FILE *fpp;
-  char res_file[FILENAME_MAX];                 /* input/output files */
-  char ctr_file[FILENAME_MAX];
-  char rfac_type[STRSZ];
-  float m_rfac_shift_range;
-  float p_rfac_shift_range;
-  float rfac_shift_step;
+  int iaux = 0;
+
+  FILE *fp = NULL;
+  FILE *fpp = NULL;
+
+  char linebuffer[STRSZ] = "";
+  char fname_string[FILENAME_MAX] = "";
+  char res_file[FILENAME_MAX] = "";                 /* input/output files */
+  char ctr_file[FILENAME_MAX] = "";
+  char rfac_type[STRSZ] = "rp";
+
+  float m_rfac_shift_range = -10.;
+  float p_rfac_shift_range = 10.;
+  float rfac_shift_step = 0.5;
+
   float rfac;
   float faux, shift;
   float enrange;
@@ -45,16 +52,6 @@ int main(int argc, char *argv[])
   float sum;
   float sterror;
   float sum1;
-
-
-  /* set default values */
-  m_rfac_shift_range = -10.;
-  p_rfac_shift_range =  10.;
-  rfac_shift_step = 0.5;
-  strncpy(rfac_type, "rp", STRSZ);
-  strncpy(res_file, "---", FILENAME_MAX);
-  strncpy(ctr_file, "---", FILENAME_MAX);
-  iaux = 0;
 
   /* Decode arguments:
    *
@@ -67,7 +64,7 @@ int main(int argc, char *argv[])
 	  	ERROR_MSG("syntax error\n");
 	  	caoi_rfac_usage(STDERR);
 #endif
-      exit(1);
+      exit(EINVAL);
   }
   
   for (i_arg = 1; i_arg < argc; i_arg++)
@@ -78,15 +75,19 @@ int main(int argc, char *argv[])
       ERROR_MSG("syntax error:\n");
     	caoi_rfac_usage(STDERR);
 #endif
-      exit(1);
+      exit(EINVAL);
     }
     else
     {
-
       /* Read parameter input file */
       if(strncmp(argv[i_arg], "-t", 2) == 0 ||
          strcmp(argv[i_arg], "--theory") == 0 )
       {
+        if (i_arg+1 >= argc)
+        {
+          ERROR_MSG("no theory filename given\n");
+          exit(EINVAL);
+        }
         i_arg++;
         strncpy(res_file, argv[i_arg], FILENAME_MAX);
       } /* -t */
@@ -95,6 +96,11 @@ int main(int argc, char *argv[])
       if(strncmp(argv[i_arg], "-c", 2) == 0 ||
          strcmp(argv[i_arg], "--control") == 0 )
       {
+        if (i_arg+1 >= argc)
+        {
+          ERROR_MSG("no control filename given\n");
+          exit(EINVAL);
+        }
         i_arg++;
         strncpy(ctr_file, argv[i_arg], FILENAME_MAX);
       } /* -i */
@@ -103,18 +109,31 @@ int main(int argc, char *argv[])
       if(strncmp(argv[i_arg], "-r", 2) == 0 ||
          strcmp(argv[i_arg], "--rfactor") == 0 )
       {
+        if (i_arg+1 >= argc)
+        {
+          ERROR_MSG("no rfactor argument given\n");
+          exit(EINVAL);
+        }
         i_arg++;
         strncpy(rfac_type, argv[i_arg], STRSZ);
       } /* -r */
-
 
       /* Read initial shift, final shift, step of a shift*/
       if(strncmp(argv[i_arg], "-s", 2) == 0 ||
          strcmp(argv[i_arg], "--shift") == 0 )
       {
+        if (i_arg+1 >= argc)
+        {
+          ERROR_MSG("no argument given\n");
+          exit(EINVAL);
+        }
         i_arg++;
-        sscanf(argv[i_arg], "%f,%f,%f", &m_rfac_shift_range,
-        		   &p_rfac_shift_range, &rfac_shift_step);
+        if (sscanf(argv[i_arg], "%f,%f,%f", &m_rfac_shift_range,
+        		   &p_rfac_shift_range, &rfac_shift_step) < 3)
+        {
+          WARNING_MSG("not enough arguments given for -s option"
+                      "(using defaults)\n");
+        }
 	
       } /* -s */
       
@@ -143,36 +162,49 @@ int main(int argc, char *argv[])
    * - check existence of ctr_file.
    * - check existence of res_file.
    */
-  if(strncmp(res_file, "---", 3) == 0)
+  if(strlen(res_file) == 0)
   {
-    ERROR_MSG("no .res file (option -t) specified\n");
-    exit(1);
+    ERROR_MSG("no LEED theory result file (option -t) specified\n");
+    exit(EINVAL);
   }
 
-  if(strncmp(ctr_file, "---", 3) == 0)
+  if(strlen(ctr_file) == 0)
   {
-    ERROR_MSG("no .ctr file (option -t) specified\n");
-    exit(1);
+    ERROR_MSG("no control file (option -c) specified\n");
+    exit(EINVAL);
   }
-
 
   /* Read sa value from the .bul file */
   if (strlen(ctr_file) > 3)
   {
     length = strlen(ctr_file) - 4;     /* assume 3 char file extension */
   }
-  strncpy(proj_name, ctr_file, length);
-  strncpy(string, ctr_file, length);
-  sprintf(string+length, ".bul");
 
+  strncpy(proj_name, ctr_file,
+            (length < sizeof(proj_name)-1) ?
+                length : sizeof(proj_name)-1);
+  proj_name[sizeof(proj_name)-1] = '\0';
 
-  if ((fp = fopen(string, "r")) == NULL)
+  strncpy(fname_string, ctr_file,
+            (length < sizeof(fname_string)-1) ?
+                length : sizeof(fname_string)-1);
+
+  if (strlen(fname_string) + 4 >= sizeof(fname_string)-1 ||
+      strlen(fname_string) + 4 > FILENAME_MAX ||
+      length > sizeof(fname_string)-1)
   {
-    ERROR_MSG("could not open output file \"%s\"\n", string);
-    exit(1);
+    ERROR_MSG("string length too long\n");
+    exit(ENAMETOOLONG);
+  }
+  sprintf(fname_string+length, ".bul");
+
+  if ((fp = fopen(fname_string, "r")) == NULL)
+  {
+    ERROR_MSG("could not open output file \"%s\"\n", fname_string);
+    exit(EIO);
   }
 
-  while (fgets(linebuffer, STRSZ, fp))
+  while (fgets(linebuffer, STRSZ, fp) != NULL)
   {
     if (!strncasecmp(linebuffer, "sa:", 3))
     {
@@ -183,28 +215,27 @@ int main(int argc, char *argv[])
   fclose(fp);
 
   /* Makes .ctr file for each angle */
-  strncpy(string, ctr_file, length);
-  sprintf(string+length, ".ctr");
-  ctrinp(string);
+  strncpy(fname_string, ctr_file, length);
+  sprintf(fname_string+length, ".ctr");
+  ctrinp(fname_string);
 
   /* Call rfac progam sa times */
   for (i=0; i<sa; i++)
   {
-
-    strncpy(string, proj_name, STRSZ);
-    sprintf(string+length, "ia_%d",i+1);
+    strncpy(fname_string, proj_name, STRSZ);
+    sprintf(fname_string+length, "ia_%d",i+1);
 
     sprintf(linebuffer,
-         "\"%s\" -t \"%s.res\" -c \"%s.ctr\" -r \"%s\" -s %.2f,%.2f,%.2f > \"%s.dum\"",
+         "\"%s\" -t \"%s.res\" -c \"%s.ctr"
+         "\" -r \"%s\" -s %.2f,%.2f,%.2f > \"%s.dum\"",
          getenv("CAOI_RFAC"),
-         string,                  /* project name for the. file */
-         string,                  /* project name for control file */
-         rfac_type,                 /*type of R factor*/
+         fname_string,                /* project name for the. file */
+         fname_string,                /* project name for control file */
+         rfac_type,                   /*type of R factor*/
          m_rfac_shift_range,          /*initial shift*/
-         p_rfac_shift_range,            /*final shift*/
+         p_rfac_shift_range,          /*final shift*/
          rfac_shift_step,             /*step of a shift*/
-         string);                 /* project name for output file */
-
+         fname_string);               /* project name for output file */
 
     if (system (linebuffer) != 0)
     {
@@ -221,13 +252,13 @@ int main(int argc, char *argv[])
 
   for (i=0; i<sa; i++)
   {
-    strncpy(string, proj_name, STRSZ);
-    sprintf(string+length, "ia_%u.dum", i+1);
+    strncpy(fname_string, proj_name, STRSZ);
+    sprintf(fname_string+length, "ia_%u.dum", i+1);
 
-    if ((fpp = fopen(string, "r")) == NULL)
+    if ((fpp = fopen(fname_string, "r")) == NULL)
     {
-      ERROR_MSG("could not open output file \"%s\"\n", string);
-      exit(1);
+      ERROR_MSG("could not open output file \"%s\"\n", fname_string);
+      exit(EIO);
     }
 
     while (fgets(linebuffer, STRSZ, fpp)!= NULL)

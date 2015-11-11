@@ -380,7 +380,7 @@ basis *basis_rotate_parallel_to_x_axis_rhs(const basis *_basis, double **R)
   R[0][1] = _basis->a[0].y / faux_x;
 
   R[1][0] = -R[0][1];
-  R[1][1] = R[0][0];
+  R[1][1] =  R[0][0];
   
   /* rotate lattice vectors b1, b2, b3 such that b1 || x-axis */
   rot_basis->a[0].x = R[0][0] * _basis->a[0].x + R[0][1] * _basis->a[0].y;

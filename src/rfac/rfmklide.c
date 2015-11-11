@@ -20,6 +20,7 @@
  * Implementation file for the cr_mklinde() function.
  */
 
+#include <stdio.h>
 #include <math.h>
 #include "rfac.h"
 

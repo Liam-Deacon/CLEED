@@ -20,7 +20,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
+#include <errno.h>
 
 #include "caoi_leed.h"
 
@@ -29,28 +31,26 @@ extern void caoi_leed_usage(FILE *);
 
 int main (int argc, char *argv[])
 {
-  int i_arg;
-  size_t length;
-  size_t i_ang;
+  int i_arg = 0;
+  size_t length = 0;
+  size_t i_ang = 0;
 
-  char bsr_file[FILENAME_MAX];
-  char par_file[FILENAME_MAX];
-  char res_file[FILENAME_MAX];
+  char bsr_file[FILENAME_MAX] = "";
+  char par_file[FILENAME_MAX] = "";
+  char res_file[FILENAME_MAX] = "leed.res";
 
-  char linebuffer[STRSZ];
-  char helpstring[STRSZ];
-  char line_buffer[STRSZ];
+  char linebuffer[STRSZ] = "";
+  char helpstring[STRSZ] = "";
+  char line_buffer[STRSZ] = "";
 
-  FILE *inp_stream;
-  FILE *write_stream;
-  FILE *read_stream;
+  FILE *inp_stream = NULL;
+  FILE *write_stream = NULL;
+  FILE *read_stream = NULL;
+
+  bool sa_parsed = false;
 
   /* Preset program parameters */
   sa = 999;
-
-  strncpy(bsr_file, "---", FILENAME_MAX);
-  strncpy(par_file, "---", FILENAME_MAX);
-  strncpy(res_file, "leed.res", FILENAME_MAX);
 
   /* Decode arguments:
    * -b project name for modified bulk file
@@ -60,7 +60,7 @@ int main (int argc, char *argv[])
   if (argc < 2)
   {
     caoi_leed_usage(STDERR);
-    exit(1);
+    exit(EINVAL);
   }
 
   for (i_arg = 1; i_arg < argc; i_arg++)
@@ -70,7 +70,7 @@ int main (int argc, char *argv[])
       ERROR_MSG("\tsyntax error:\n%s",
           "\tusage: \n\tcaoi_leed -b <bsr_file>"
     			"-i <par_file> -v <vertex_file> -o <res_file>\n");
-      exit(1);
+      exit(EINVAL);
     }
     else
     {
@@ -94,22 +94,48 @@ int main (int argc, char *argv[])
       /* Read modified bulk file */
       if(strncmp(argv[i_arg], "-b", 2) == 0)
       {
-        i_arg++;
-        strncpy(bsr_file, argv[i_arg], FILENAME_MAX);
+        if (i_arg+1 < argc)
+        {
+          i_arg++;
+          strncpy(bsr_file, argv[i_arg], FILENAME_MAX);
+          bsr_file[FILENAME_MAX] = '\0';
+        }
+        else
+        {
+          ERROR_MSG("no filename given for option '-b'\n");
+          exit(EINVAL);
+        }
       }
 
       /* Read parameter input file */
       if(strncmp(argv[i_arg], "-i", 2) == 0)
       {
-        i_arg++;
-        strncpy(par_file, argv[i_arg], FILENAME_MAX);
+        if (i_arg+1 < argc)
+        {
+          i_arg++;
+          strncpy(par_file, argv[i_arg], FILENAME_MAX);
+          par_file[FILENAME_MAX] = '\0';
+        }
+        else {
+          ERROR_MSG("no filename given for option '-i'\n");
+          exit(EINVAL);
+        }
       }
 
       /* Read vertex file */
       if(strncmp(argv[i_arg], "-o", 2) == 0)
       {
-        i_arg++;
-        strncpy(res_file, argv[i_arg], FILENAME_MAX);
+        if (i_arg+1 < argc)
+        {
+          i_arg++;
+          strncpy(res_file, argv[i_arg], FILENAME_MAX);
+          res_file[FILENAME_MAX] = '\0';
+        }
+        else
+        {
+          ERROR_MSG("no filename given for option '-b'\n");
+          exit(EINVAL);
+        }
       }
 
     } /* else */
@@ -119,13 +145,13 @@ int main (int argc, char *argv[])
    * - check existence of par_file.
    * - if bsr_file is not specified use par_file instead.
    */
-  if(strncmp(par_file, "---", 3) == 0)
+  if(strlen(par_file) == 0)
   {
     ERROR_MSG("no parameter file (option -i) specified\n");
-    exit(1);
+    exit(EINVAL);
   }
 
-  if(strncmp(bsr_file, "---", 3) == 0)
+  if(strlen(bsr_file) == 0)
   {
     strncpy(bsr_file, par_file, FILENAME_MAX);
   }
@@ -135,24 +161,24 @@ int main (int argc, char *argv[])
   strncpy(linebuffer, par_file, length);
   sprintf(linebuffer+length, ".bsr");
 
-  if ((inp_stream = fopen(linebuffer,"r")) == NULL)
+  if ((inp_stream = fopen(linebuffer, "r")) == NULL)
   {
     ERROR_MSG("could not open output file \"%s\"\n", linebuffer);
-    exit(1);
+    exit(EIO);
   }
 
-  while (fgets(linebuffer, STRSZ, inp_stream))
+  while (fgets(linebuffer, STRSZ, inp_stream) != NULL)
   {
     if (!strncasecmp(linebuffer, "sa:", 3))
     {
-      sscanf(linebuffer+3, "%u", &sa);
+      sa_parsed = (sscanf(linebuffer+3, "%u", &sa) < 1) || sa_parsed;
     }
   }
 
-  if (sa == 999)
+  if (!sa_parsed)
   {
     ERROR_MSG("could not read sa: from the .bsr file\n");
-    exit(1);
+    exit(EIO);
   }
 
   fclose(inp_stream);
@@ -185,13 +211,12 @@ int main (int argc, char *argv[])
        );
 
     /* get result from system call */
-    if (system(helpstring)) 
+    if (system(helpstring) != 0)
     { 
-      fprintf(STDERR,
-        "***(caoi_leed_main): system call: %s failed\n", helpstring);
+      ERROR_MSG("system call: %s failed\n", helpstring);
     }
 
-   } /*for i_ang*/
+  } /*for i_ang*/
 
   /* Make proj_name.res = proj_nameia_1.res + proj_nameia_2.res + ... */
   strncpy(linebuffer, par_file, length);
@@ -200,7 +225,7 @@ int main (int argc, char *argv[])
   if ((write_stream = fopen(linebuffer,"w")) == NULL)
   {
     ERROR_MSG("could not open output file \"%s\"\n", linebuffer);
-    exit(1);
+    exit(EIO);
   }
 
   for (i_ang = 0; i_ang < sa; i_ang ++)
@@ -210,12 +235,12 @@ int main (int argc, char *argv[])
     if ((read_stream = fopen(helpstring,"r")) == NULL)
     {
       ERROR_MSG("could not open output file \"%s\"\n", helpstring);
-      exit(1);
+      exit(EIO);
     }
 
     fprintf(write_stream, "Copy of %s\n", helpstring);
 
-    while (fgets(line_buffer , STRSZ, read_stream))
+    while (fgets(line_buffer, STRSZ, read_stream))
     {
       fprintf(write_stream, "%s", line_buffer);
     }

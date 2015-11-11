@@ -73,11 +73,11 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
   rfac_ivcur *cur_list = NULL;       /* list of IV curves */
   char *ctr_buffer = NULL;           /* buffer for control file */
   char *the_buffer = NULL;           /* buffer for theoretical input file */
-  char line_buffer[STRSZ];           /* buffer for a single command line */
-  char exp_file[FILENAME_MAX];       /* name of experimental input file */
-  char index_list[STRSZ];            /* command line for averaging theoretical
+  char line_buffer[STRSZ] = "";      /* buffer for a single command line */
+  char exp_file[FILENAME_MAX]= "";   /* name of experimental input file */
+  char index_list[STRSZ] = "";       /* command line for averaging theoretical
 			                                * indices */
-  char fmt_buffer[STRSZ];            /* buffer for format specifier */
+  char fmt_buffer[STRSZ] = "";       /* buffer for format specifier */
 
 /*********************************************************************
  * Copy theoretical input file to the_buffer

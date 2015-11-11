@@ -33,6 +33,8 @@
 #define auto_atom __attribute__((cleanup(atom_free)))
 #endif
 
+#include <stdlib.h>
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif

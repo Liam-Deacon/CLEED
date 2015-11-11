@@ -18,6 +18,8 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <stddef.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <malloc.h>
 

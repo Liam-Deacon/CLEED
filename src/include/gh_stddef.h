@@ -33,9 +33,15 @@
 
 #include <float.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <limits.h>
+
+#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L
+#define true 1
+#define false 0
+#else
+#include <stdbool.h>
+#endif
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 using namespace std;

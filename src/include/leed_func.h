@@ -98,6 +98,7 @@ void leed_beam_free(leed_beam *beams);
 void leed_crystal_free(leed_crystal *crystal);
 void leed_phase_free(leed_phase *phs_shifts);
 void leed_var_free(leed_var *var);
+void leed_layer_free(leed_layer *layer);
 
 /*********************************************************************
  * beams (bm) and parameter control (pc) and output (out)

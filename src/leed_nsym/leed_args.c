@@ -35,15 +35,15 @@
  *
  *  If bul_file is not specified, use par_file instead.
  */
-int leed_check_input_files(const char *par_file, char *bul_file) {
+int leed_check_input_files(const char *par_file, char *bul_file, size_t path_max) {
 
-  if(strncmp(par_file, "---", 3) == 0) {
+  if(strncmp(par_file, "---", 3) == 0 || strlen(par_file) == 0) {
     ERROR_MSG("no parameter input file (option -i) specified\n");
-    exit(1);
+    exit(EINVAL);
   }
 
-  if(strncmp(bul_file, "---", 3) == 0) {
-    strncpy(bul_file, par_file, PATH_MAX);
+  if(strncmp(bul_file, "---", 3) == 0 || strlen(bul_file) == 0) {
+    strncpy(bul_file, par_file, path_max);
   }
 
   return 0;
@@ -58,7 +58,7 @@ int leed_check_input_files(const char *par_file, char *bul_file) {
 FILE *leed_check_result_file(const char* res_file) {
   FILE *res_stream = NULL;
 
-  if(strncmp(res_file, "leed.res", 8) == 0) {
+  if(strncmp(res_file, "leed.res", 8) == 0 || strlen(res_file) == 0) {
     WARNING_MSG("no output file (option -o) specified\n"
                 "\toutput will be written to file \"%s\"\n", res_file);
 
@@ -129,7 +129,7 @@ leed_args *leed_args_parse(int argc, char *argv[])
       #ifdef ERROR_LOG
       leed_usage(stderr);
       #endif
-      exit(1);
+      exit(EINVAL);
     }
     else
     {
@@ -153,22 +153,31 @@ leed_args *leed_args_parse(int argc, char *argv[])
       /* Read parameter input file */
       if(strncmp(argv[i_arg], "-b", 2) == 0)
       {
-        i_arg++;
-        strncpy(args->bul_file, argv[i_arg], PATH_MAX);
+        if (++i_arg >= argc) {
+          ERROR_MSG("no bulk input file specified\n");
+          exit(EINVAL);
+        }
+        strncpy(args->bul_file, argv[i_arg], sizeof(args->bul_file)-1);
       } /* -b */
 
       /* Read parameter input file */
       if(strncmp(argv[i_arg], "-i", 2) == 0)
       {
-        i_arg++;
-        strncpy(args->par_file, argv[i_arg], PATH_MAX);
+        if (++i_arg >= argc) {
+          ERROR_MSG("no parameter input file specified\n");
+          exit(EINVAL);
+        }
+        strncpy(args->par_file, argv[i_arg], sizeof(args->par_file)-1);
       } /* -i */
 
       /* Read and open results file */
       if(strncmp(argv[i_arg], "-o", 2) == 0)
       {
-        i_arg++;
-        strncpy(args->res_file, argv[i_arg], PATH_MAX);
+        if (++i_arg >= argc) {
+          ERROR_MSG("no output name specified\n");
+          exit(EINVAL);
+        }
+        strncpy(args->res_file, argv[i_arg], sizeof(args->res_file)-1);
         if ((args->res_stream = fopen(args->res_file, "w")) == NULL)
         {
           ERROR_MSG("could not open output file \"%s\"\n", args->res_file);
@@ -184,8 +193,11 @@ leed_args *leed_args_parse(int argc, char *argv[])
       /* Read project name for reading matrices */
       if(strncmp(argv[i_arg], "-r", 2) == 0)
       {
-        i_arg++;
-        strncpy(args->pro_name, argv[i_arg], PATH_MAX);
+        if (++i_arg >= argc) {
+          ERROR_MSG("no project name specified for reading using '-r'\n");
+          exit(EINVAL);
+        }
+        strncpy(args->pro_name, argv[i_arg], sizeof(args->pro_name)-1);
         if ((args->pro_stream = fopen(args->pro_name, "r")) == NULL)
         {
           ERROR_MSG("can not open project file \"%s\" for reading\n",
@@ -197,10 +209,12 @@ leed_args *leed_args_parse(int argc, char *argv[])
       /* Read project name for writing matrices */
       if(strncmp(argv[i_arg], "-w", 2) == 0)
       {
-        i_arg++;
-        strncpy(args->pro_name, argv[i_arg], PATH_MAX);
-        if ((args->pro_stream = fopen(args->pro_name,"w")) == NULL)
-        {
+        if (++i_arg >= argc) {
+          ERROR_MSG("no project name specified for writing using '-w'\n");
+          exit(EINVAL);
+        }
+        strncpy(args->pro_name, argv[i_arg], sizeof(args->pro_name)-1);
+        if ((args->pro_stream = fopen(args->pro_name, "w")) == NULL) {
           ERROR_MSG("could not open project file \"%s\" for writing\n",
                     args->pro_name);
           exit(ENOFILE);
@@ -211,7 +225,8 @@ leed_args *leed_args_parse(int argc, char *argv[])
   }  /* for i_arg */
 
   /* perform sanity checks */
-  leed_check_input_files(args->par_file, args->bul_file);
+  leed_check_input_files(args->par_file,
+                             args->bul_file, sizeof(args->bul_file)-1);
   args->res_stream = leed_check_result_file(args->res_file);
 
   return args;

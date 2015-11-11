@@ -20,6 +20,7 @@
 
 #include "leed.h"
 #include <stdlib.h>
+#include <stddef.h>
 
 void leed_layer_free(leed_layer *layer) {
   if (layer->atoms != NULL) {

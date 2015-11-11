@@ -19,9 +19,11 @@
  */
 
 #include <math.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <strings.h>
 #include <malloc.h>
 
@@ -115,7 +117,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
   if( argc == 1)
   {
     rfac_help(stderr);
-    exit(1);
+    exit(EINVAL);
   }
   for( i=1; i < argc; i++)
   {
@@ -141,13 +143,13 @@ rfac_args *rfac_rdargs(int argc, char **argv)
             ERROR_MSG("in argument list "
                     " \"%s\" requires \"ave\" or \"all\" as argument.\n", 
                     argv[i-1]);
-            exit(RFAC_INVALID_ARGUMENT);
+            exit(EINVAL);
           }
         }
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
     
       } /* case a */
@@ -159,11 +161,15 @@ rfac_args *rfac_rdargs(int argc, char **argv)
                 data input.
         */
     
-        if (++i < argc) strncpy(args->ctr_file, argv[i], FILENAME_MAX);
+        if (++i < argc)
+        {
+          strncpy(args->ctr_file, argv[i], sizeof(args->ctr_file)-1);
+          args->ctr_file[sizeof(args->ctr_file)-1] = '\0';
+        }
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
       } /* case c */
 
@@ -173,7 +179,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
             call help function
         */
         rfac_help(stdout);
-        exit(RFAC_SUCCESS);
+        exit(0);
       } /* case h */
 
       else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output"))
@@ -184,11 +190,15 @@ rfac_args *rfac_rdargs(int argc, char **argv)
                  valid arguments: "stdout", "single", <file name>.
                  default: "stdout".
         */
-        if (++i < argc) strncpy(args->out_file, argv[i], FILENAME_MAX);
+        if (++i < argc)
+        {
+          strncpy(args->out_file, argv[i], sizeof(args->out_file)-1);
+          args->out_file[sizeof(args->out_file)-1] = '\0';
+        }
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
       } /* case o */
 
@@ -213,13 +223,13 @@ rfac_args *rfac_rdargs(int argc, char **argv)
           else
           {
             ERROR_MSG("R-factor \"%s\" not known\n", argv[i]);
-            exit(RFAC_INVALID_ARGUMENT);
+            exit(EINVAL);
           }
         }
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
       } /* case r */
 
@@ -259,14 +269,14 @@ rfac_args *rfac_rdargs(int argc, char **argv)
             default:
             {
               ERROR_MSG("\n\"%s\"needs at 1 >= i <=3 arguments\n", argv[i-1]);
-              exit(RFAC_INVALID_ARGUMENT);
+              exit(EINVAL);
             }
           } /* switch j */
         }  /* if i++ < argc */
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
       } /* case s */
 
@@ -276,11 +286,15 @@ rfac_args *rfac_rdargs(int argc, char **argv)
           -t <filename>: specify theoretical input file
         */
      
-        if (++i < argc) strncpy(args->the_file, argv[i], FILENAME_MAX);
+        if (++i < argc)
+        {
+          strncpy(args->the_file, argv[i], sizeof(args->the_file)-1);
+          args->the_file[sizeof(args->the_file)-1] = '\0';
+        }
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
       } /* case t */
 
@@ -300,7 +314,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
       } /* case v */
 
@@ -311,12 +325,13 @@ rfac_args *rfac_rdargs(int argc, char **argv)
         */
         if (++i < argc)
         {
-          strncpy(args->iv_file, argv[i], FILENAME_MAX);
+          strncpy(args->iv_file, argv[i], sizeof(args->iv_file)-1);
+          args->iv_file[sizeof(args->iv_file)-1] = '\0';
         }
         else
         {
           ERROR_MSG("missing argument for \"%s\"\n", argv[i-1]);
-          exit(RFAC_INVALID_ARGUMENT);
+          exit(EINVAL);
         }
       } /* case w */
 
@@ -329,7 +344,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       {
         ERROR_MSG("\"%s\" not known.\n", argv[i]);
         rfac_help(stderr);
-        exit(RFAC_INVALID_ARGUMENT);
+        exit(EINVAL);
       }
     
     }   /* if argv[...] == '-') */
@@ -337,14 +352,14 @@ rfac_args *rfac_rdargs(int argc, char **argv)
     {
       ERROR_MSG("\"%s\"\n", argv[i]);
       rfac_help(stderr);
-      exit(RFAC_INVALID_ARGUMENT);
+      exit(EINVAL);
     }
   }    /* for i */
 
-  if (args->ctr_file == NULL)
+  if (strlen(args->ctr_file) == 0)
   {
     ERROR_MSG("No control file specified\n     use option -c to specify\n");
-    exit(RFAC_INVALID_ARGUMENT);
+    exit(EINVAL);
   }
 
   return (args);

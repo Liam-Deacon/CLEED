@@ -15,15 +15,22 @@
  * \date 20 Mar 2015
  */
 
+#include <stddef.h>
+#include <stdio.h>
+
 #include "rfac.h"
 
 void rfac_iv_print(const rfac_iv *iv) {
-#if DEBUG
-  if (iv == NULL) return;
-#endif
-  fprintf(stderr,
+  if (iv == NULL)
+  {
+    fprintf(stderr, "NULL\n");
+  }
+  else
+  {
+    fprintf(stderr,
       ".data@%p .n_eng=%3d .smooth=%d .sort=%d .spline=%d .equidist=%d",
       iv->data, iv->n_eng, iv->smooth, iv->sort, iv->spline, iv->equidist);
+  }
 }
 
 /*!
@@ -31,9 +38,12 @@ void rfac_iv_print(const rfac_iv *iv) {
  * \param ivs Pointer to start of rfac_ivcur list
  */
 inline void rfac_ivcur_print(const rfac_ivcur *ivs) {
-#if DEBUG
-  if (ivs == NULL) return;
-#endif
+  if (ivs == NULL)
+  {
+    fprintf(stderr, "NULL\n");
+    return;
+  }
+
   fprintf(stderr, "sizeof iv_cur = %u\n", sizeof(rfac_ivcur));
   for (size_t i=0; ivs[i].group_id != END_OF_GROUP_ID; i++)
   {

@@ -65,5 +65,5 @@ int main(int argc, char **argv)
 
   free(args);
 
-  return(RFAC_SUCCESS);
+  return(0);
 } /* end of main */

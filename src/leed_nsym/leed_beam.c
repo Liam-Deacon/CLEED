@@ -20,6 +20,7 @@
 
 #include "leed.h"
 #include <stdlib.h>
+#include <stddef.h>
 
 void leed_beam_free(leed_beam *beams) {
   if (beams->eout_b_r != NULL) {

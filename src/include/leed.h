@@ -30,7 +30,7 @@ extern "C" {
  *********************************************************************/
 
 /*!FIXME: real is always double type? */
-#define CLEED_REAL_IS_DOUBLE
+#define CLEED_REAL_IS_DOUBLE 1
 
 #include "cleed_real.h"
 #include "gh_stddef.h"

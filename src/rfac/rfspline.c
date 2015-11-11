@@ -17,7 +17,9 @@
  * Implementation file for rfac_iv_spline() function.
  */
 
-#include <malloc.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include <stdbool.h>
 #include "rfac.h"
 
 /*!

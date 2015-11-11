@@ -20,6 +20,7 @@
 
 #include "leed.h"
 #include <stdlib.h>
+#include <stddef.h>
 
 void leed_crystal_free(leed_crystal *crystal) {
   if (crystal->alpha != NULL) {

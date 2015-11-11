@@ -43,6 +43,7 @@ extern "C" {
 # include <gsl/gsl_blas.h>
 #else
 # warning "No BLAS package selected - using native routines."
+#define USE_NATIVE 1
 #endif
 
 #if ( USE_CBLAS ) || ( USE_MKL ) /* CBLAS */

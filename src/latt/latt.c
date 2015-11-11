@@ -21,6 +21,9 @@
  * LD/29.04.2014 - Moved preprocessor information into header "latt.h"
  *********************************************************************/
 
+#include <stdio.h>
+#include <stddef.h>
+
 #include "gh_stddef.h"
 #include "latt.h"
 #include "miller_index.h"
@@ -42,7 +45,7 @@ extern FILE *inf_stream;    /* additional output information stream */
 int main(int argc, char *argv[])        /* compile as main function */
 {
 
-  char line_buffer[STRSZ];
+  char line_buffer[STRSZ] = "";
   
   int n1, n2, n3;
   
@@ -120,19 +123,19 @@ int main(int argc, char *argv[])        /* compile as main function */
     switch(lat->latt_type)
     {
       case LAT_FCC: 
-        sprintf(line_buffer, " lattice: FCC ");
+        snprintf(line_buffer, " lattice: FCC ", sizeof(line_buffer)-1);
         break;
       case LAT_HCP: 
-        sprintf(line_buffer, " lattice: HCP ");
+        snprintf(line_buffer, " lattice: HCP ", sizeof(line_buffer)-1);
         break;
       case LAT_BCC:
-        sprintf(line_buffer, " lattice: BCC ");
+        snprintf(line_buffer, " lattice: BCC ", sizeof(line_buffer)-1);
         break;
       case LAT_DIA: 
-        sprintf(line_buffer, " lattice: DIA ");
+        snprintf(line_buffer, " lattice: DIA ", sizeof(line_buffer)-1);
         break;
       default:
-        sprintf(line_buffer, " lattice: *** ");
+        snprintf(line_buffer, " lattice: *** ", sizeof(line_buffer)-1);
     }
     
     fprintf(inf_stream, " %s a_latt = %7.3f, c_latt = %7.3f\n", 

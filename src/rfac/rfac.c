@@ -19,6 +19,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "rfac.h"
@@ -266,5 +267,5 @@ int rfac_iv_to_arrays(const rfac_iv *iv, double *x, double *fx, size_t *n)
 
   *n = iv->n_eng;
 
-  return (RFAC_SUCCESS);
+  return (0);
 }

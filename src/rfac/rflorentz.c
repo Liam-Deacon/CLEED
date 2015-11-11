@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <malloc.h>
 
 #include "rfac.h"          /* specific definitions etc. */
@@ -69,6 +70,12 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
   {
     ERROR_MSG("Vi is too small\n");
     return(RFAC_VI_TOO_SMALL);
+  }
+
+  /* Check iv ptr */
+  if (iv == NULL)
+  {
+    return(RFAC_ALLOCATION_ERROR);
   }
 
   /* Sort IV curve if not yet done */
@@ -140,5 +147,5 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
     return(RFAC_IV_NOT_EQUIDISTANT);
   }
 
-  return (RFAC_SUCCESS);
+  return (0);
 }

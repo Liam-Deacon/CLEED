@@ -18,6 +18,7 @@
  *  \brief Implementation file for file2buffer() function.
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -41,18 +42,16 @@
 ********************************************************************/
 char *file2buffer(const char * const filename)
 {
-  char *buffer;
-  char uncomp_filename[FILENAME_MAX];
-  char line_buffer[256];
-  char uncomp;                     /* flag, if file was uncompressed */
+  char *buffer = NULL;
+  char uncomp_filename[FILENAME_MAX] = "";
+  char line_buffer[256] = "";
+  char uncomp = 0;                     /* flag, if file was uncompressed */
 
-  size_t len;
-  long int nbytes, ntest;
+  size_t len = strlen(filename);
+  long int nbytes = 0L, ntest;
 
-  FILE *in_stream;
+  FILE *in_stream = NULL;
 
-  uncomp = 0;
-  len = strlen(filename);
   /*
    * - open file;
    * - try uncompressing, if not successful otherwise
@@ -64,7 +63,6 @@ char *file2buffer(const char * const filename)
     {
       ERROR_MSG("could not open \"%s\"\n", filename);
       fclose(in_stream);
-      /*   exit(1); */
 
       /* try uncompressing */
       printf(" *** trying to uncompress \"%s.Z\"\n", filename);
@@ -104,10 +102,8 @@ char *file2buffer(const char * const filename)
     sprintf(line_buffer, "uncompress \"%s.Z\"", filename);
     if (system(line_buffer))
     {
-
       ERROR_MSG("uncompressing was unsuccessful!\n");
       ERROR_RETURN(NULL);
-
     } /* if system.. */
     else
     {
@@ -143,14 +139,15 @@ char *file2buffer(const char * const filename)
     ERROR_MSG("unable to allocate memory for \"%s\"\n"
               "                  (filesize: %ld)\n", filename, nbytes+1);
     fclose(in_stream);
-    exit(1);
+    exit(ENOMEM);
   }
 
 /************************************************************ 
  * Read file to buffer
  ************************************************************/
 
-  if ( (ntest = (long int)fread(buffer, 1, (size_t)nbytes, in_stream) ) == nbytes)
+  if ( (ntest = (long int)fread(buffer, 1,
+                                (size_t)nbytes, in_stream) ) == nbytes)
   {
     buffer[nbytes] = '\0';
     buffer[nbytes+1] = '\0';

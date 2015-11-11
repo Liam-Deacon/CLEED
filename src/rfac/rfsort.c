@@ -21,6 +21,8 @@
  */
 
 #include <stdio.h>
+#include <stddef.h>
+#include <stdbool.h>
 #include <math.h>
 
 #include "rfac.h"          /* specific definitions etc. */
@@ -43,6 +45,12 @@ int rfac_iv_sort(rfac_iv *iv)
 {
   size_t i, j;
   real f_aux;
+
+  /* sanity check */
+  if (iv == NULL)
+  {
+    return (RFAC_ALLOCATION_ERROR);
+  }
 
   /* sort data according to energy values */
   for (i = 0; i< iv->n_eng-1; i++)
@@ -70,18 +78,16 @@ int rfac_iv_sort(rfac_iv *iv)
   for (i = 1, iv->equidist = 1; i< iv->n_eng-1; i++)
   {
     if (cleed_real_fabs ((2*iv->data[i].energy -
-        iv->data[i+1].energy - iv->data[i-1].energy) )
-      >  ENG_TOLERANCE )
+        iv->data[i+1].energy - iv->data[i-1].energy) ) >  ENG_TOLERANCE )
     {
       iv->equidist = false;
     }
   }
 
   iv->first_eng = iv->data[0].energy;
-  iv->last_eng =
-      iv->data[iv->n_eng - 1].energy;
+  iv->last_eng = iv->data[iv->n_eng - 1].energy;
   iv->sort = true;
 
-  return (RFAC_SUCCESS);
+  return (0);
 }
 

@@ -20,6 +20,7 @@
  * Prepare R factor calculations.
  */
 
+#include <stdio.h>
 #include <math.h>
 #include "rfac.h"
 

@@ -1,5 +1,5 @@
 /*********************************************************************
- * <FILENAME>
+ *                      srpowell_gsl.c
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
@@ -26,6 +26,8 @@ GH/19.09.95 - Criterion of termination is absolute deviation in vertex
               rather than relative deviation.
 
 ***********************************************************************/
+#if USE_GSL
+
 #include <math.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
@@ -124,5 +126,7 @@ RETURN VALUES:
     
     return (status);
 } /* end of function sr_powell_gsl */
+
+#endif /* USE_GSL */
 
 /**********************************************************************/
