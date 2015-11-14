@@ -33,7 +33,7 @@
 #include "rfac_def.h"
 #include "rfac_func.h"
 
-#include "IVCurvePair.h"
+#include <IVCurvePair.hh>
 #include <RFactor/RFactorArgs.hh>
 
 /* use std items in local namespace */
