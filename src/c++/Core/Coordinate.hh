@@ -25,6 +25,7 @@
 #define __COORDINATE_HH__
 
 #ifdef __cplusplus
+#include <iostream>
 #include "coord.h"
 
 namespace cleed {
@@ -37,13 +38,15 @@ namespace cleed {
       Coordinate(const coord *position);
       ~Coordinate();
 
+      friend std::ostream& operator<<(std::ostream& out, const Coordinate& pos);
+
       // setters
-      void setX(double x);
-      void setY(double y);
-      void setZ(double z);
-      void setCoordinate(double x, double y, double z);
-      void setCoordinate(const Coordinate &position);
-      void setCoordinate(const coord *position);
+      Coordinate& setX(double x);
+      Coordinate& setY(double y);
+      Coordinate& setZ(double z);
+      Coordinate& setCoordinate(double x, double y, double z);
+      Coordinate& setCoordinate(const Coordinate &position);
+      Coordinate& setCoordinate(const coord *position);
 
       // getters
       double getMagnitude();

@@ -8,35 +8,38 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- * Changes:
- *   LD/15.01.2015 - creation
  *********************************************************************/
 
 /*!
- * \file IVCurvePair.cc
+ * \file
  * \author Liam Deacon
  *
- * Implements IVCUrvePair class.
+ * Implements IVCurvePair class.
  */
 
-#include "IVCurvePair.h"
+#include <IVCurvePair.hh>
 
 using namespace cleed;
 
 IVCurvePair::IVCurvePair(const IVCurvePair &other) {
+  this->iv_pair = new rfac_ivcur;
   std::copy(other.iv_pair, other.iv_pair + sizeof(rfac_ivcur), this->iv_pair);
 }
 
 IVCurvePair::IVCurvePair(const rfac_ivcur *ivcur_ptr) {
-
+  this->iv_pair = new rfac_ivcur;
+  if (ivcur_ptr != nullptr)
+    std::copy(ivcur_ptr, ivcur_ptr + sizeof(rfac_ivcur), this->iv_pair);
 }
 
 IVCurvePair::IVCurvePair(const IVCurve &theory, const IVCurve &experimental) {
-
+  this->iv_pair = new rfac_ivcur;
+  this->setExperimentalIVCurve(experimental);
+  this->setTheoryIVCurve(theory);
 }
 
 IVCurvePair::~IVCurvePair() {
-
+  delete this->iv_pair;
 }
 
 // operator overloads
@@ -77,21 +80,29 @@ const rfac_ivcur *IVCurvePair::getIVPairPtr() const {
 
 // setters
 void IVCurvePair::calculateOverlap() {
-
+  //!TODO
 }
 
-void IVCurvePair::setWeighting(double weight) {
+IVCurvePair& IVCurvePair::setWeighting(double weight) {
   this->iv_pair->weight = weight;
+  return *this;
 }
 
-void IVCurvePair::setSpotID(const rfac_spot *spot) {
-
+IVCurvePair& IVCurvePair::setSpotID(const rfac_spot *spot) {
+  this->iv_pair->spot_id = spot;
+  return *this;
 }
 
-void IVCurvePair::setTheoryIVCurve(const IVCurve &theory) {
-  //!TODO: this->iv_pair->theory = theory.get_rfac_iv_ptr();
+IVCurvePair& IVCurvePair::setTheoryIVCurve(const IVCurve &theory) {
+  //!TODO:
+  rfac_iv iv = theory.get_rfac_iv_ptr();
+  std::copy(iv, iv + sizeof(rfac_iv), this->iv_pair->theory);
+  return *this;
 }
 
-void IVCurvePair::setExperimentalIVCurve(const IVCurve &experimental) {
-  //!TODO: this->iv_pair->experimental = experimental.get_rfac_iv_ptr();
+IVCurvePair& IVCurvePair::setExperimentalIVCurve(const IVCurve &experimental) {
+  //!TODO:
+  rfac_iv iv = experimental.get_rfac_iv_ptr();
+  std::copy(iv, iv + sizeof(rfac_iv), this->iv_pair->experimental);
+  return *this;
 }

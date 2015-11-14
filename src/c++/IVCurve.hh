@@ -1,7 +1,7 @@
 /*********************************************************************
- *													IVCurve.h
+ *													IVCurve.hh
  *
- *  Copyright (C) 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
+ *  Copyright (C) 2013-2015 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later. 
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -13,7 +13,7 @@
  *********************************************************************/
 
 /*!
- * \file IVCurve.h
+ * \file
  * \author Liam Deacon
  * \date 15 Dec 2014
  *
@@ -26,9 +26,10 @@
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
+#include <algorithm>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 #include "rfac_def.h"
 #include "rfac_func.h"
@@ -60,21 +61,25 @@ namespace cleed {
       IVCurve(const IVCurve &ivCurve);
       ~IVCurve();
 
+      /* operators */
       IVCurve& operator=(const IVCurve &other);
       bool operator==(const IVCurve &other) const;
       bool operator!=(const IVCurve &other) const;
 
+      friend std::istream& operator>>(std::istream& in, IVCurve& iv);
+      friend std::ostream& operator<<(std::ostream& out, const IVCurve& iv);
+
       /* setters */
-      void setIVData(const rfac_iv_data &iv_data, size_t n);
-      void setIVData(vector<real> x, vector<real> y, vector<real> deriv2);
+      IVCurve &setIVData(const rfac_iv_data &iv_data, size_t n);
+      IVCurve &setIVData(vector<real> x, vector<real> y, vector<real> deriv2);
 
-      void sort();
-      void smooth(double vi=4.0);
-      void spline();
+      IVCurve &sort();
+      IVCurve &smooth(double vi=4.0);
+      IVCurve &spline();
 
-      void setInitialEnergy(double e_0);
-      void setLastEnergy(double e_n);
-      void setMaximumIntensity(double maxI);
+      IVCurve &setInitialEnergy(double e_0);
+      IVCurve &setLastEnergy(double e_n);
+      IVCurve &setMaximumIntensity(double maxI);
 
       void writeIVData(const string &ivFilePath);
 

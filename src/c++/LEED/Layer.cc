@@ -104,35 +104,53 @@ std::vector<Atom> Layer::getAtomList() {
 }
 
 /* setters */
-inline void Layer::setPeriodic(bool periodic) {
+inline Layer& Layer::setPeriodic(bool periodic) {
   this->periodic = periodic;
+  return *this;
 }
 
-inline void Layer::setLayerNumbers(std::size_t number) {
+inline Layer& Layer::setLayerNumbers(std::size_t number) {
   this->no_of_layer = number;
+  return *this;
 }
 
-inline void Layer::setLayerType(leed_structure type) {
+inline Layer& Layer::setLayerType(leed_structure type) {
   this->bulk_over = type;
+  return *this;
 }
 
-inline void Layer::setA1(real a1x, real a1y) {
+inline Layer& Layer::setA1(real a1x, real a1y) {
   this->a_lat[1] = a1x;
   this->a_lat[3] = a1y;
+  return *this;
 }
 
-inline void Layer::setA2(real a2x, real a2y) {
+inline Layer& Layer::setA2(real a2x, real a2y) {
   this->a_lat[2] = a2x;
   this->a_lat[4] = a2y;
+  return *this;
 }
 
-inline void Layer::setRelativeArea(real area) {
+inline Layer& Layer::setRelativeArea(real area) {
   this->rel_area = area;
+  return *this;
 }
 
-void Layer::setAtoms(std::vector<Atom> atomList) {
+Layer& Layer::setAtoms(std::vector<Atom> atomList) {
   std::size_t n = atomList.size();
-  if (n == 0) return; // no data
+  if (n > 0) {
+    // allocate new atom array and copy data
+    if (this->atoms != nullptr) {
+      std::free(this->atoms);
+    }
+    this->atoms = static_cast<leed_atom*>(std::calloc(n, sizeof(leed_atom)));
+    std::copy(atoms, atoms + (n*sizeof(leed_atom)), this->atoms);
+  }
+  return *this;
+}
+
+Layer& Layer::setAtoms(const leed_atom *atoms, std::size_t n) {
+  if (n == 0 || atoms == nullptr) return *this; // no data
 
   // allocate new atom array and copy data
   if (this->atoms != nullptr) {
@@ -140,20 +158,11 @@ void Layer::setAtoms(std::vector<Atom> atomList) {
   }
   this->atoms = static_cast<leed_atom*>(std::calloc(n, sizeof(leed_atom)));
   std::copy(atoms, atoms + (n*sizeof(leed_atom)), this->atoms);
+
+  return *this;
 }
 
-void Layer::setAtoms(const leed_atom *atoms, std::size_t n) {
-  if (n == 0 || atoms == nullptr) return; // no data
-
-  // allocate new atom array and copy data
-  if (this->atoms != nullptr) {
-    std::free(this->atoms);
-  }
-  this->atoms = static_cast<leed_atom*>(std::calloc(n, sizeof(leed_atom)));
-  std::copy(atoms, atoms + (n*sizeof(leed_atom)), this->atoms);
-}
-
-void Layer::setAtom(leed_atom *atom, int index) {
+Layer& Layer::setAtom(leed_atom *atom, int index) {
   std::size_t n_atoms = this->getNumberOfAtoms();
 
   // check for out of bounds
@@ -167,10 +176,12 @@ void Layer::setAtom(leed_atom *atom, int index) {
   } else {
     std::copy(atom, atom + sizeof(leed_atom), &this->atoms[index]);
   }
+  return *this;
 }
 
-void Layer::setAtom(LEEDAtom &atom, int index) {
+Layer& Layer::setAtom(LEEDAtom &atom, int index) {
   //! potentially dangerous cast:
   this->setAtom(reinterpret_cast<leed_atom*>(&atom), index);
+  return *this;
 }
 

@@ -20,9 +20,11 @@
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
-#include <vector>
-#include <string>
+#include <iostream>
 #include <cstddef>
+#include <string>
+#include <vector>
+
 #include "leed_def.h"
 
 using std::size_t;
@@ -44,6 +46,7 @@ class Crystal : public leed_crystal {
     bool operator!=(const Crystal &other) const;
     bool operator==(const leed_crystal *other) const;
     bool operator!=(const leed_crystal *other) const;
+    friend std::ostream& operator<<(std::ostream& out, const Crystal& xstal);
 
     /* getters */
     double getRealOpticalPotential() const;

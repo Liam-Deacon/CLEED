@@ -21,6 +21,7 @@
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
 #include <cstddef>
+#include <iostream>
 #include <vector>
 #include "leed_def.h"
 #include <LEED/LEEDAtom.hh>
@@ -34,6 +35,9 @@ class Layer : public leed_layer {
     Layer();
     Layer(const leed_layer *layer);
     ~Layer();
+
+    /* operators */
+    friend std::ostream& operator<<(std::ostream& out, const Layer& layer);
 
     /* getters */
     bool isPeriodic();
@@ -50,16 +54,16 @@ class Layer : public leed_layer {
     std::vector<Atom> getAtomList();
 
     /* setters */
-    void setPeriodic(bool periodic);
-    void setLayerNumbers(std::size_t number);
-    void setLayerType(leed_structure type);
-    void setA1(real a1x, real a1y);
-    void setA2(real a2x, real a2y);
-    void setRelativeArea(real area);
-    void setAtoms(std::vector<Atom> atomList);
-    void setAtoms(const leed_atom *atoms, std::size_t n);
-    void setAtom(leed_atom *atom, int index);
-    void setAtom(LEEDAtom &atom, int index);
+    Layer& setPeriodic(bool periodic);
+    Layer& setLayerNumbers(std::size_t number);
+    Layer& setLayerType(leed_structure type);
+    Layer& setA1(real a1x, real a1y);
+    Layer& setA2(real a2x, real a2y);
+    Layer& setRelativeArea(real area);
+    Layer& setAtoms(std::vector<Atom> atomList);
+    Layer& setAtoms(const leed_atom *atoms, std::size_t n);
+    Layer& setAtom(leed_atom *atom, int index);
+    Layer& setAtom(LEEDAtom &atom, int index);
 
 };
 

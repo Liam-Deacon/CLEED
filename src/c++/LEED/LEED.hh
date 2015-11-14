@@ -1,5 +1,5 @@
 /*********************************************************************
- *                      LEED.h
+ *                      LEED.hh
  *
  *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *

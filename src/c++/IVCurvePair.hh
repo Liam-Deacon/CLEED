@@ -1,5 +1,5 @@
 /*********************************************************************
- *													IVCurvePair.h
+ *													IVCurvePair.hh
  *
  *  Copyright (C) 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
@@ -8,23 +8,24 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
- * Changes:
- *   LD/15 Dec 2014 - creation
  *********************************************************************/
 
 /*!
- * \file IVCurvePair.h
+ * \file
  * \author Liam Deacon
- * \date 15 Dec 2014
+ *
+ * Provides IVCurvePair class for combining theoretical and
+ * experimental IV curves.
  */
 
 
-#ifndef __IVCurvePair_H__
-#define __IVCurvePair_H__
+#ifndef __IVCurvePair_HH__
+#define __IVCurvePair_HH__
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
-#include "IVCurve.h"
+#include <iostream>
+#include <IVCurve.hh>
 
 using ::rfac_ivcur;
 
@@ -43,6 +44,7 @@ namespace cleed {
       /* operator overloads */
       //IVCurvePair operator=(const IVCurvePair &other);
       //IVCurvePair operator=(const rfac_ivcur *ivcur_ptr);
+      friend std::ostream& operator<<(std::ostream& out, const IVCurvePair& ivs);
 
       /* getters */
       double getWeighting() const;
@@ -54,10 +56,10 @@ namespace cleed {
 
       /* setters */
       void calculateOverlap();
-      void setWeighting(double weight);
-      void setSpotID(const rfac_spot *spot);
-      void setTheoryIVCurve(const IVCurve &theory);
-      void setExperimentalIVCurve(const IVCurve &experimental);
+      IVCurvePair& setWeighting(double weight);
+      IVCurvePair& setSpotID(const rfac_spot *spot);
+      IVCurvePair& setTheoryIVCurve(const IVCurve &theory);
+      IVCurvePair& setExperimentalIVCurve(const IVCurve &experimental);
 
     private:
       rfac_ivcur *iv_pair;

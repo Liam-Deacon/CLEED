@@ -23,6 +23,7 @@
 #include <vector>
 #include <cstddef>
 #include <string>
+#include <iostream>
 
 #include <Core/BaseElement.hh>
 
@@ -37,16 +38,18 @@ namespace cleed {
       Atom(std::vector<double> pos);
       virtual ~Atom();
 
+      friend std::ostream& operator<<(std::ostream& out, const Atom& atom);
+
       /* pure virtual functions */
       virtual double getXPosition() const = 0;
       virtual double getYPosition() const = 0;
       virtual double getZPosition() const = 0;
       virtual std::vector<double> getPosition() const = 0;
 
-      virtual void setXPosition(double x_pos) = 0;
-      virtual void setYPosition(double y_pos) = 0;
-      virtual void setZPosition(double z_pos) = 0;
-      virtual void setPosition(std::vector<double> pos) = 0;
+      virtual Atom& setXPosition(double x_pos) = 0;
+      virtual Atom& setYPosition(double y_pos) = 0;
+      virtual Atom& setZPosition(double z_pos) = 0;
+      virtual Atom& setPosition(std::vector<double> pos) = 0;
 
     private:
       double x;

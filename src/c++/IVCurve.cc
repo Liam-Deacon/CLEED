@@ -20,7 +20,7 @@
  * Implements IVCurve class for manipulating IV curves in the R Factor program.
  */
 
-#include "IVCurve.h"
+#include <IVCurve.hh>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -66,9 +66,9 @@ bool IVCurve::operator==(const IVCurve &other) const {
 }
 
 /* setters */
-void IVCurve::setIVData(const rfac_iv_data &iv_data, size_t n) {
+IVCurve& IVCurve::setIVData(const rfac_iv_data &iv_data, size_t n) {
   if ( &iv_data == nullptr)
-    return;
+    return *this;
 
   delete [] this->iv_ptr->data;
 
@@ -76,10 +76,10 @@ void IVCurve::setIVData(const rfac_iv_data &iv_data, size_t n) {
   this->iv_ptr->n_eng = n;
 
   std::copy(&iv_data, &iv_data + n*sizeof(rfac_iv_data), this->iv_ptr->data);
-
+  return *this;
 }
 
-void IVCurve::setIVData(vector<real> x, vector<real> y, vector<real> deriv2) {
+IVCurve& IVCurve::setIVData(vector<real> x, vector<real> y, vector<real> deriv2) {
   std::size_t n = ( x.size() < y.size() ) ? x.size() : y.size();
 
   rfac_iv_data *data = new rfac_iv_data[n];
@@ -102,30 +102,37 @@ void IVCurve::setIVData(vector<real> x, vector<real> y, vector<real> deriv2) {
     delete[] this->iv_ptr->data;
 
   this->iv_ptr->data = data;
+  return *this;
 }
 
-inline void IVCurve::sort() {
+inline IVCurve& IVCurve::sort() {
   rfac_iv_sort(this->iv_ptr);
+  return *this;
 }
 
-inline void IVCurve::smooth(double vi) {
+inline IVCurve& IVCurve::smooth(double vi) {
   rfac_iv_lorentz_smooth(this->iv_ptr, vi/2.);
+  return *this;
 }
 
-inline void IVCurve::spline() {
+inline IVCurve& IVCurve::spline() {
   rfac_iv_spline(this->iv_ptr);
+  return *this;
 }
 
-inline void IVCurve::setInitialEnergy(double e_0) {
+inline IVCurve& IVCurve::setInitialEnergy(double e_0) {
   this->iv_ptr->first_eng = e_0;
+  return *this;
 }
 
-inline void IVCurve::setLastEnergy(double e_n) {
+inline IVCurve& IVCurve::setLastEnergy(double e_n) {
   this->iv_ptr->last_eng = e_n;
+  return *this;
 }
 
-inline void IVCurve::setMaximumIntensity(double maxI) {
+inline IVCurve& IVCurve::setMaximumIntensity(double maxI) {
   this->iv_ptr->max_int = maxI;
+  return *this;
 }
 
 void IVCurve::writeIVData(const string &ivFilePath) {

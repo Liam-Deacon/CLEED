@@ -23,6 +23,7 @@
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
+#include <iostream>
 #include <Core/Atom.hh>
 #include <LEED/Layer.hh>
 #include "leed_def.h"
@@ -34,7 +35,13 @@ namespace cleed {
     public:
       LEEDAtom();
       LEEDAtom(const LEEDAtom &other);
-      ~LEEDAtom();
+      virtual ~LEEDAtom();
+
+      /* operators */
+      LEEDAtom& operator=(const LEEDAtom &other);
+      bool operator==(const LEEDAtom &other) const;
+      bool operator!=(const LEEDAtom &other) const;
+      friend std::ostream& operator<<(std::ostream& out, const LEEDAtom& atom);
 
       /* getters */
       std::size_t getLayerNumber();
@@ -48,15 +55,15 @@ namespace cleed {
       virtual std::vector<double> getPosition() const;
 
       /* setters */
-      void setLayerNumber(std::size_t number);
-      void setMatrixType(leed_matrix_diag type);
-      void setStructureType(leed_structure structure);
-      void setDebyeWallerFactor(real dwf);
+      LEEDAtom& setLayerNumber(std::size_t number);
+      LEEDAtom& setMatrixType(leed_matrix_diag type);
+      LEEDAtom& setStructureType(leed_structure structure);
+      LEEDAtom& setDebyeWallerFactor(real dwf);
 
-      virtual void setXPosition(double x_pos);
-      virtual void setYPosition(double y_pos);
-      virtual void setZPosition(double z_pos);
-      virtual void setPosition(std::vector<double> pos);
+      virtual LEEDAtom& setXPosition(double x_pos);
+      virtual LEEDAtom& setYPosition(double y_pos);
+      virtual LEEDAtom& setZPosition(double z_pos);
+      virtual LEEDAtom& setPosition(std::vector<double> pos);
 
   };
 

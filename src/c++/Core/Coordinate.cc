@@ -17,6 +17,7 @@
  * wrapping to the C #coord struct and its associated methods.
  */
 
+#include <string>
 #include "Coordinate.hh"
 
 using namespace cleed;
@@ -47,34 +48,40 @@ Coordinate::~Coordinate()
 }
     
 /* setters */
-inline void Coordinate::setX(double x)
+inline Coordinate& Coordinate::setX(double x)
 {
   ::coord_set_x(this->pos, x);
+  return *this;
 }
 
-inline void Coordinate::setY(double y)
+inline Coordinate& Coordinate::setY(double y)
 {
   ::coord_set_y(this->pos, y);
+  return *this;
 }
 
-inline void Coordinate::setZ(double z)
+inline Coordinate& Coordinate::setZ(double z)
 {
   ::coord_set_z(this->pos, z);
+  return *this;
 }
 
-inline void Coordinate::setCoordinate(double x, double y, double z)
+inline Coordinate& Coordinate::setCoordinate(double x, double y, double z)
 {
   ::coord_set(this->pos, x, y, z);
+  return *this;
 }
 
-inline void Coordinate::setCoordinate(const Coordinate &position)
+inline Coordinate& Coordinate::setCoordinate(const Coordinate &position)
 {
   this->pos = position.pos;
+  return *this;
 }
 
-inline void Coordinate::setCoordinate(const coord *position)
+inline Coordinate& Coordinate::setCoordinate(const coord *position)
 {
   pos = (coord*) position;
+  return *this;
 }
     
 /* getters */
@@ -107,4 +114,11 @@ inline const coord *Coordinate::get_coord()
 inline void Coordinate::print(FILE *f)
 {
   ::coord_printf(f, this->pos);
+}
+
+std::ostream& Coordinate::operator<<(std::ostream &out, const Coordinate &pos)
+{
+  const std::string &delim = std::string(", ");
+  out << this->getX() << delim << this->getY() << delim << this->getZ();
+  return out;
 }

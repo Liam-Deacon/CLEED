@@ -59,20 +59,24 @@ std::vector<double> Atom::getPosition() const {
   return pos;
 }
 
-inline void Atom::setXPosition(double x_pos) {
+inline Atom& Atom::setXPosition(double x_pos) {
   this->x = x_pos;
+  return *this;
 }
 
-void Atom::setYPosition(double y_pos) {
+inline Atom& Atom::setYPosition(double y_pos) {
   this->y = y_pos;
+  return *this;
 }
 
-void Atom::setZPosition(double z_pos) {
+inline Atom& Atom::setZPosition(double z_pos) {
   this->z = z_pos;
+  return *this;
 }
 
-void Atom::setPosition(std::vector<double> pos) {
+Atom& Atom::setPosition(std::vector<double> pos) {
   setXPosition(pos.at(0));
   setYPosition(pos.at(1));
   setZPosition(pos.at(2));
+  return *this;
 }

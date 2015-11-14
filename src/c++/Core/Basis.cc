@@ -39,72 +39,84 @@ Basis::~Basis()
   ::basis_free(this->basis_ptr);
 }
 
-inline void Basis::setA1(const Coordinate &a1)
+inline Basis& Basis::setA1(const Coordinate &a1)
 {
-  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 0), const_cast<coord*>(a1.pos) );
+  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 0), const_cast<coord*>(a1.pos));
+  return *this;
 }
 
-inline void Basis::setA2(const Coordinate &a2)
+inline Basis& Basis::setA2(const Coordinate &a2)
 {
-  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 1), const_cast<coord*>(a2.pos) );
+  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 1), const_cast<coord*>(a2.pos));
+  return *this;
 }
 
-inline void Basis::setA3(const Coordinate &a3)
+inline Basis& Basis::setA3(const Coordinate &a3)
 {
-  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 2), const_cast<coord*>(a3.pos) );
+  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 2), const_cast<coord*>(a3.pos));
+  return *this;
 }
 
-inline void Basis::setA1(double a1_x, double a1_y, double a1_z)
+inline Basis& Basis::setA1(double a1_x, double a1_y, double a1_z)
 {
   ::coord_set(BASIS_VECTOR_PTR(this->basis_ptr, 0), a1_x, a1_y, a1_z);
+  return *this;
 }
 
-inline void Basis::setA2(double a2_x, double a2_y, double a2_z)
+inline Basis& Basis::setA2(double a2_x, double a2_y, double a2_z)
 {
   ::coord_set(BASIS_VECTOR_PTR(this->basis_ptr, 1), a2_x, a2_y, a2_z);
+  return *this;
 }
 
-inline void Basis::setA3(double a3_x, double a3_y, double a3_z)
+inline Basis& Basis::setA3(double a3_x, double a3_y, double a3_z)
 {
   ::coord_set(BASIS_VECTOR_PTR(this->basis_ptr, 2), a3_x, a3_y, a3_z);
 }
 
-void Basis::setBasis(const Coordinate &a1, const Coordinate &a2, const Coordinate &a3)
+Basis& Basis::setBasis(
+    const Coordinate &a1,
+    const Coordinate &a2,
+    const Coordinate &a3)
 {
-  this->setA1(a1);
-  this->setA2(a2);
-  this->setA3(a3);
+  this->setA1(a1).setA2(a2).setA3(a3);
+  return *this;
 }
 
-void Basis::setBasis(const Basis &basis)
+Basis& Basis::setBasis(const Basis &basis)
 {
   this->basis_ptr = basis.basis_ptr;
+  return *this;
 }
 
-void Basis::setBasis(const Basis *basis)
+Basis& Basis::setBasis(const Basis *basis)
 {
   this->basis_ptr = basis->basis_ptr;
+  return *this;
 }
 
 /* getters */
-const Coordinate Basis::getA1()
+const Coordinate Basis::getA1() const
 {
-  const Coordinate xyz(this->basis_ptr->a[0].x, this->basis_ptr->a[0].y,
+  const Coordinate xyz(this->basis_ptr->a[0].x,
+                       this->basis_ptr->a[0].y,
                        this->basis_ptr->a[0].z);
   return xyz;
 }
 
-const Coordinate Basis::getA2()
+const Coordinate Basis::getA2() const
 {
-  Coordinate xyz(this->basis_ptr->a[1].x, this->basis_ptr->a[1].y,
-                       this->basis_ptr->a[1].z);
+  Coordinate xyz(this->basis_ptr->a[1].x,
+                 this->basis_ptr->a[1].y,
+                 this->basis_ptr->a[1].z);
   return xyz;
 }
 
-const Coordinate Basis::getA3()
+const Coordinate Basis::getA3() const
 {
-  Coordinate xyz(this->basis_ptr->a[2].x, this->basis_ptr->a[2].y,
-                       this->basis_ptr->a[2].z);
+  Coordinate xyz(this->basis_ptr->a[2].x,
+                 this->basis_ptr->a[2].y,
+                 this->basis_ptr->a[2].z);
   return xyz;
 }
 

@@ -35,7 +35,9 @@ class PhaseShift : public leed_phase {
     PhaseShift(const std::string &inputFile);
     ~PhaseShift();
 
+    /* operators */
     PhaseShift &operator+(const PhaseShift& phsh);
+    friend std::ostream& operator<<(std::ostream& out, const PhaseShift& phsh);
 
     /* getters */
     int getLmax() const;
@@ -48,16 +50,16 @@ class PhaseShift : public leed_phase {
     std::size_t getNumberOfEnergies() const;
 
     /* setters */
-    void setLmax(int lmax);
-    void setMatrixType(leed_matrix_diag Type);
-    void setMaxEnergy(real Emax);
-    void setMinEnergy(real Emin);
-    void setInputFile(const std::string &filepath);
-    void setInputFile(const char *filepath);
-    void setData(const real *energies_ptr, const real *phaseshifts_ptr, std::size_t n);
-    void setData(const std::vector<real> energies, const std::vector<real> phaseshifts);
-    void setDeltaR(std::vector<real> dr);
-    void setDeltaR(real dr[4]);
+    PhaseShift& setLmax(int lmax);
+    PhaseShift& setMatrixType(leed_matrix_diag Type);
+    PhaseShift& setMaxEnergy(real Emax);
+    PhaseShift& setMinEnergy(real Emin);
+    PhaseShift& setInputFile(const std::string &filepath);
+    PhaseShift& setInputFile(const char *filepath);
+    PhaseShift& setData(const real *energies_ptr, const real *phaseshifts_ptr, std::size_t n);
+    PhaseShift& setData(const std::vector<real> energies, const std::vector<real> phaseshifts);
+    PhaseShift& setDeltaR(std::vector<real> dr);
+    PhaseShift& setDeltaR(real dr[4]);
 
     void setDataFromFile();
 };

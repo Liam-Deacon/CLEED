@@ -41,19 +41,19 @@ class Basis : public basis {
     ~Basis();
 
     /* setters */
-    void setA1(const Coordinate &a1);
-    void setA1(double a1_x, double a1_y, double a1_z);
-    void setA2(const Coordinate &a3);
-    void setA2(double a2_x, double a2_y, double a2_z);
-    void setA3(const Coordinate &a3);
-    void setA3(double a3_x, double a3_y, double a3_z);
-    void setBasis(const Coordinate &a1, const Coordinate &a2, const Coordinate &a3);
-    void setBasis(const Basis &basis);
+    Basis& setA1(const Coordinate &a1);
+    Basis& setA1(double a1_x, double a1_y, double a1_z);
+    Basis& setA2(const Coordinate &a3);
+    Basis& setA2(double a2_x, double a2_y, double a2_z);
+    Basis& setA3(const Coordinate &a3);
+    Basis& setA3(double a3_x, double a3_y, double a3_z);
+    Basis& setBasis(const Coordinate &a1, const Coordinate &a2, const Coordinate &a3);
+    Basis& setBasis(const Basis &basis);
 
     /* getters */
-    const Coordinate getA1();
-    const Coordinate getA2();
-    const Coordinate getA3();
+    const Coordinate getA1() const;
+    const Coordinate getA2() const;
+    const Coordinate getA3() const;
 
     /* other methods */
     double **calculateRotationMatrix();

@@ -1,5 +1,5 @@
 /*********************************************************************
- *                      BulkModel.h
+ *                      BulkModel.hh
  *
  *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
@@ -15,12 +15,12 @@
  * Provides a CLEED bulk model class.
  */
 
-#ifndef __BulkModel_h__
-#define __BulkModel_h__
+#ifndef __BulkModel_hh__
+#define __BulkModel_hh__
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
-#include "Model.h"
+#include <Model.hh>
 using namespace std;
 
 namespace cleed {
@@ -40,4 +40,4 @@ class BulkModel : Model {
 
 #endif /* __cplusplus */
 
-#endif /* __BulkModel_h__ */
+#endif /* __BulkModel_hh__ */
