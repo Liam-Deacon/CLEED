@@ -31,7 +31,7 @@ ADD_SUBDIRECTORY(search)
 ADD_SUBDIRECTORY(scripts)
 
 # c++ interface library
-ADD_SUBDIRECTORY(c++)
+ADD_SUBDIRECTORY(cleed++)
 
 # optional gui elements
 ADD_SUBDIRECTORY(latt-gui)
