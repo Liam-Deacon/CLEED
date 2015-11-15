@@ -94,9 +94,6 @@ leed_args *leed_args_init(void) {
   args->pro_stream = NULL;
   args->res_stream = NULL;
 
-  FILE *pro_stream = NULL;
-  FILE *res_stream = NULL;          /* results stream */
-
   return args;
 }
 

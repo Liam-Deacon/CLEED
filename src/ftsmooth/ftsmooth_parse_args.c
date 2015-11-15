@@ -15,6 +15,8 @@ Changes:
 
 #include <stdio.h>
 #include <limits.h>
+#include <errno.h>
+#include <float.h>
 
 #include "ftsmooth.h"
 
@@ -34,7 +36,7 @@ int parse_args(int argc, char *argv[],
  if (argc == 0)
  {
    ftsmooth_usage(stderr);
-   exit(1);
+   exit(EINVAL);
  }
  
  for (i_arg = 1; i_arg < argc; i_arg++)
@@ -43,7 +45,7 @@ int parse_args(int argc, char *argv[],
   {
    fprintf(stderr,"\n\tsyntax error\n");
    ftsmooth_usage(stdout);
-   exit(1);
+   exit(EINVAL);
   }
   else
   {
@@ -51,11 +53,15 @@ int parse_args(int argc, char *argv[],
       (!strcmp(argv[i_arg], "--input")))
    {
 /* Open input file */
-    i_arg++;
+    if (++i_arg >= argc)
+    {
+      ERROR_MSG("no input file specified\n");
+      exit(EINVAL);
+    }
     if ((in_stream = fopen(argv[i_arg],"r")) == NULL)
     {
      ERROR_MSG("failed to open '%s'\n", argv[i_arg]);
-     exit(1);
+     exit(EIO);
     }
 	*stdin_flag = 0;
    }
@@ -63,12 +69,16 @@ int parse_args(int argc, char *argv[],
    if((!strncmp(argv[i_arg], "-o", 2)) ||
       (!strcmp(argv[i_arg], "--output"))) 
    {
-    i_arg++;
+    if (++i_arg >= argc)
+    {
+      ERROR_MSG("no input file specified\n");
+      exit(EINVAL);
+    }
     fclose(out_stream); /* !will always close stdout! */
     if ((out_stream = fopen(argv[i_arg], "w")) == NULL)
     {
      ERROR_MSG("failed to open '%s'\n", argv[i_arg]);
-     exit(1);
+     exit(EIO);
     }
 	*stdout_flag = 0;
    }
@@ -77,16 +87,24 @@ int parse_args(int argc, char *argv[],
    if((!strncmp(argv[i_arg], "-c", 2)) ||
 	  (!strcmp(argv[i_arg], "--cutoff")))
    {
-     i_arg++;
+     if (++i_arg >= argc)
+     {
+       ERROR_MSG("no cutoff value specified\n");
+       exit(EINVAL);
+     }
      *cutoff = (double)atof(argv[i_arg]);
      if (*cutoff > 1.)
-     *cutoff = 1.;
+       *cutoff = 1.;
    }
 /* Define tailoff */
    if((!strncmp(argv[i_arg], "-t", 2)) ||
       (!strcmp(argv[i_arg], "--tailoff")))
    {
-     i_arg++;
+     if (++i_arg >= argc)
+     {
+       ERROR_MSG("no tailoff value specified\n");
+       exit(EINVAL);
+     }
      arg_parse_dbl(tailoff, argc, argv, i_arg);
    }
 
@@ -94,11 +112,10 @@ int parse_args(int argc, char *argv[],
    if((!strncmp(argv[i_arg], "-m", 2)) || 
       (!strcmp(argv[i_arg], "--mode")))
    {
-     i_arg++;
-     if (i_arg >= argc) 
+     if (++i_arg >= argc)
      {
        ERROR_MSG("no mode defined\n");
-       exit(1);
+       exit(EINVAL);
      }
      *mode = *argv[i_arg];
      switch (*mode)
@@ -107,7 +124,7 @@ int parse_args(int argc, char *argv[],
         break;
       default:
         ERROR_MSG("Wrong mode option: \"%c\"\n", *mode);
-        exit(1);
+        exit(EINVAL);
      }
    }
 
@@ -116,9 +133,8 @@ int parse_args(int argc, char *argv[],
 	  (!strcmp(argv[i_arg], "--offset")))
    {
      *offset_flag = 1;
-	 if (i_arg+1 < argc)
+	 if (++i_arg < argc)
 	 {
-	   i_arg++;
 	   switch (*argv[i_arg])
 	   {
 	     case '*': case 'z':
@@ -143,14 +159,18 @@ int parse_args(int argc, char *argv[],
 	  (!strcmp(argv[i_arg], "--range")))
    {
      *range_flag = 1; 
-	 
-	 /* initialise ranges */
-	 *i_r = 1;
 
-	 if (i_arg+1 < argc)
-	 {
-	   i_arg++;	   
-	   decode_ranges(lbound, ubound, &*i_r, argv[i_arg]);  
+     /* initialise ranges */
+     *i_r = 1;
+
+     if (++i_arg < argc)
+     {
+       decode_ranges(lbound, ubound, &*i_r, argv[i_arg]);
+     }
+     else
+     {
+       ERROR_MSG("no range values given\n");
+       exit(EINVAL);
      }
    }
 /* Define delete */
@@ -196,22 +216,32 @@ Encoding as follows:
         any value <= 624.9
 */
 {
-  int pos;
-  int islowerbound;
+  int pos = 0;
+  int islowerbound = 1; /* first entry is lower bound */
   
-  char *str;
-  char ichar[1];
+  char str[strlen(argv)+1];
+  char ichar[1] = "\0";
+  
+  if (ubound == NULL)
+  {
+    ubound = (double *)calloc(sizeof(double), 1);
+  }
 
-  str = (char *) malloc(sizeof(char)*(strlen(argv)+1));
-  ichar[0] = '\0';
-  
-  pos = 0; 
-  islowerbound = 1; /* first entry is lower bound */
-  
+  if (lbound == NULL)
+  {
+    lbound = (double *)calloc(sizeof(double), 1);
+  }
+
+  if (i_r == NULL)
+  {
+    i_r = (size_t *)calloc(sizeof(size_t), 1);
+    *i_r = 0;
+  }
+
   ubound[0] = DBL_MAX;
   lbound[0] = DBL_MIN;
   
-  while (argv[pos] != '\0') /* might be dangerous as will iterate until NULL */
+  while (argv[pos] != '\0') /* might be dangerous as will iterate until nul */
   {   
     switch (argv[pos])
 	  {
@@ -238,9 +268,10 @@ Encoding as follows:
         printf("%s\n", str);
         }
 
-        ubound = (double *) realloc(ubound, (*i_r+1)*sizeof(double));
-        lbound = (double *) realloc(lbound, (*i_r+1)*sizeof(double));
-        *i_r = (*i_r)+1;
+        *i_r += 1;
+        ubound = (double *) realloc(ubound, (*i_r)*sizeof(double));
+        lbound = (double *) realloc(lbound, (*i_r)*sizeof(double));
+
         islowerbound = (islowerbound+1) % 2;
         strcpy(str, "\0");
         break;
