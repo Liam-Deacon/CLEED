@@ -60,6 +60,8 @@ void rfac_info(void);                               /*!< version information, et
 
 const char* get_rfactor_name(rfactor_type type);
 
+int rfac_create_control_file_duplicates(const char *control_filename, size_t n);
+
 /* line interpreter */
 NONNULL()
 void rfac_intindl(char *, rfac_spot *, size_t);
