@@ -35,14 +35,13 @@ extern "C" {
 __attribute__((nonnull)) real matabs(const mat);
 
 /* allocate matrix memory  in file matalloc.c */
-__attribute__((nonnull, returns_nonull))
 mat matalloc(mat, size_t, size_t, mat_enum);
 
 /* allocate array of matrices in file matarralloc.c */
-__attribute__((nonnull)) mat matarralloc(mat, size_t);
+mat matarralloc(mat, size_t);
 
 /* free array of matrices in file matarrfree. c*/
-__attribute__((nonnull)) int matarrfree(mat);
+int matarrfree(mat);
 
 /* check validity of pointer */
 int matcheck(const mat);

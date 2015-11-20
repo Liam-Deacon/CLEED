@@ -100,11 +100,11 @@
 int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                   leed_var *v_par, leed_layer *layer, leed_beam *beams)
 {
-  int iaux;
+  size_t iaux;
   size_t off_row, off_col;
 
   size_t l_max, l_max_2;
-  int i_type, n_type;
+  size_t i_type, n_type;
   size_t n_atoms, i_atoms, j_atoms;
   size_t n_beams, k, l;
   size_t n_plane;
@@ -190,7 +190,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   n_atoms = layer->n_atoms;
   atoms = (leed_atom *) calloc(n_atoms+1, sizeof(leed_atom) );
 
-  n_type = (atoms+0)->type;;
+  n_type = (atoms+0)->type;
   z_min = z_max = (atoms+0)->pos[3];
   l_max = 1;
 
@@ -312,7 +312,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
    * - Calculate the single Bravais lattice scattering matrix for each atom
    *   type and multiply with factor -1/2k0.
    */
-  p_Tii = (mat *) malloc(n_type * sizeof(mat));
+  p_Tii = (mat *) calloc(n_type, sizeof(mat));
   if( p_Tii  == NULL )
   {
     ERROR_MSG("Allocation error for p_Tii\n");

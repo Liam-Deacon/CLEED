@@ -58,7 +58,7 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
    * - call mkcg_coeff to ensure all C.G. coefficients are available.
    * - allocate p_tl.
    */
-  for(n_set = 0; phs_shifts[n_set].lmax != I_END_OF_LIST; n_set ++)
+  for(n_set = 0; phs_shifts[n_set].lmax != LMAX_TOO_LARGE; n_set ++)
   { ; }
 
   CONTROL_MSG(CONTROL, "energy = %.2f H, n_set = %d, l_max = %d\n",

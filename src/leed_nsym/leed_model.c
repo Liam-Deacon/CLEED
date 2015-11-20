@@ -20,14 +20,16 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include <stddef.h>
+#include <stdio.h>
 
-#include <leed.h>
+#include "leed.h"
 
 leed_model *leed_model_init(leed_args *args) {
   leed_model *model = (leed_model*) calloc(1, sizeof(leed_model));
 
   int iaux = 0;
-  size_t n_set;
+  size_t n_set = 0;
 
   if(model == NULL) {
     ERROR_MSG("could not allocate memory for leed_model\n");
@@ -49,7 +51,7 @@ leed_model *leed_model_init(leed_args *args) {
    *============================================================*/
   leed_inp_read_bul_nd(&bulk, &phs_shifts, args->bul_file);
   leed_inp_leed_read_par(&v_par, &energy, bulk, args->bul_file);
-  leed_read_overlayer_nd(&over, phs_shifts, bulk, args->par_file);
+  leed_read_overlayer_nd(&over, &phs_shifts, bulk, args->par_file);
 
   if ( (iaux = leed_beam_gen(&beams_all, bulk, v_par, energy->final)) > 0)
     model->n_set = (size_t)iaux;

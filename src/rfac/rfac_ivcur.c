@@ -29,7 +29,7 @@ void rfac_iv_print(const rfac_iv *iv) {
   {
     fprintf(stderr,
       ".data@%p .n_eng=%3d .smooth=%d .sort=%d .spline=%d .equidist=%d",
-      iv->data, iv->n_eng, iv->smooth, iv->sort, iv->spline, iv->equidist);
+      (void*)iv->data, iv->n_eng, iv->smooth, iv->sort, iv->spline, iv->equidist);
   }
 }
 
@@ -47,11 +47,11 @@ inline void rfac_ivcur_print(const rfac_ivcur *ivs) {
   fprintf(stderr, "sizeof iv_cur = %u\n", sizeof(rfac_ivcur));
   for (size_t i=0; ivs[i].group_id != END_OF_GROUP_ID; i++)
   {
-    fprintf(stderr, "rfac_ivcur [%i]@%p\n", i, &ivs[i]);
-    fprintf(stderr, "  .experimental@%p\n    ", ivs[i].experimental);
+    fprintf(stderr, "rfac_ivcur [%i]@%p\n", i, (void*)&ivs[i]);
+    fprintf(stderr, "  .experimental@%p\n    ", (void*)ivs[i].experimental);
     rfac_iv_print(ivs[i].experimental);
     fprintf(stderr, "\n");
-    fprintf(stderr, "  .theory@%p\n    ", ivs[i].theory);
+    fprintf(stderr, "  .theory@%p\n    ", (void*)ivs[i].theory);
     rfac_iv_print(ivs[i].theory);
     fprintf(stderr, "\n");
     fprintf(stderr, "  .group_id=%d\n", ivs[i].group_id);

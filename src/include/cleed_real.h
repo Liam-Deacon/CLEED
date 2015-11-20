@@ -55,29 +55,33 @@
  */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+#define _USE_MATH_DEFINES
 #include <cmath>
 
-#define _USE_MATH_DEFINES
+#if __cplusplus >= 201103L
+#include <tgmath.h>
+
+using std::hypot;
+using std::rint;
+#else
+using ::hypot;
+using ::rint;
+#endif
 
 using std::atan2;
 
+using ::cosf;
 using std::cos;
-using std::cosf;
 using std::cosh;
 
+using ::sinf;
 using std::sin;
-using std::sinf;
 using std::sinh;
 
 using std::exp;
 using std::log;
 
 using std::sqrt;
-
-using std::hypot;
-
-using std::rint;
-
 using std::fabs;
 
 namespace cleed {

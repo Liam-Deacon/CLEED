@@ -19,10 +19,12 @@
  */
 
 #include "leed.h"
+
 #include <stdlib.h>
+#include <stddef.h>
 
 void leed_var_free(leed_var *var) {
-  matfree(var->p_tl);
+  matarrfree(var->p_tl);
   free(var);
   var = NULL;
 }

@@ -56,7 +56,7 @@ mat matarralloc(mat M, size_t length)
         i_mat ++)
     {;}
     if ( (i_mat == length)  &&  ( (M+i_mat)->mag_no == MATRIX) &&
-         ((M+i_mat)->blk_type  == BLK_END))
+         ((M+i_mat)->blk_type == BLK_END))
     {
       /* return M, if matching */
       return(M);
@@ -80,7 +80,7 @@ mat matarralloc(mat M, size_t length)
    */
   CONTROL_MSG(CONTROL, "create new matrix array of length %d\n", length);
 
-  M = (mat)malloc( (length+1) * sizeof(struct mat_str));
+  M = (mat)calloc((length+1), sizeof(struct mat_str));
 
   /* Set magic numbers and blk_type for the array elements (and reset r/iel) */
   for(i_mat = 0; i_mat < length; i_mat ++)

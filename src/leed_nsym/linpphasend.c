@@ -163,7 +163,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   }
 
   /* Terminate list of phase shifts */
-  (*(p_phs_shifts) + i_phase)->lmax = I_END_OF_LIST;
+  (*(p_phs_shifts) + i_phase)->lmax = LMAX_TOO_LARGE;
 
   phs_shifts = *(p_phs_shifts) + i_phase-1;
 

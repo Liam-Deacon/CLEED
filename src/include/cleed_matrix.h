@@ -433,7 +433,7 @@ typedef struct mat_str cleed_matrix_complex;
 # define CLEED_REAL_CBLAS2MAT(cblas_mx,Mx)     matcopy(Mx, cblas_mx)
 # define CLEED_COMPLEX_CBLAS2MAT(cblas_mx,Mx)  matcopy(Mx, cblas_mx)
 
-__attribute__((returns_nonnull, alloc_size(1,2)))
+__attribute__((alloc_size(1,2)))
 static inline cleed_matrix *cleed_matrix_alloc(size_t rows, size_t cols)
 {
   return (matalloc(NULL, rows, cols, NUM_REAL));
@@ -452,18 +452,25 @@ static inline void cleed_matrix_free(cleed_matrix *a)
 }
 
 __attribute__((nonnull))
-static inline cleed_real cleed_matrix_get(const cleed_matrix *m, size_t i, size_t j)
+static inline cleed_real cleed_matrix_get(
+    const cleed_matrix *m,
+    size_t i,
+    size_t j)
 {
   return (RMATEL(i,j,m));
 }
 
 __attribute__((nonnull))
-static inline void cleed_matrix_set(cleed_matrix *m, size_t i, size_t j, cleed_real x)
+static inline void cleed_matrix_set(
+    cleed_matrix *m,
+    size_t i,
+    size_t j,
+    cleed_real x)
 {
   m->rel[(i-1) * m->cols + j] = x;
 }
 
-__attribute__((returns_nonnull, alloc_size(1,2)))
+__attribute__((alloc_size(1,2)))
 static inline cleed_matrix_complex *cleed_matrix_complex_alloc(size_t rows, size_t cols)
 {
   return (matalloc(NULL, rows, cols, NUM_COMPLEX));

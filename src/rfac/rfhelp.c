@@ -34,13 +34,15 @@
  */
 char *file_content(const char* filename)
 {
-    FILE* file;
-    long int size;
-    char* content;
+    FILE* file = NULL;
+    long int size = 0;
+    char* content = NULL;
     
-    file = fopen(filename, "r");
-    
-    if(file == NULL) return NULL;
+    if((file = fopen(filename, "r")) == NULL)
+    {
+      perror(filename);
+      return NULL;
+    }
 
     fseek(file, 0, SEEK_END);
     

@@ -126,9 +126,7 @@ using cleed::rfac_error;
 using cleed::rfactor_type;
 using cleed::rfac_axis;
 
-using cleed::rfac_iv_data;
-using cleed::rfac_iv;
-using cleed::rfac_ivcur;
+using cleed::real;
 
 #endif
 

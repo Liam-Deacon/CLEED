@@ -13,6 +13,7 @@ along with the MPIR Library; see the file COPYING.LIB. If not, write
 to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
+#ifdef __WIN32__
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -69,3 +70,4 @@ int getrusage(int who, rusage *usage)
     CloseHandle(proc_hand);
     return err;
 }
+#endif

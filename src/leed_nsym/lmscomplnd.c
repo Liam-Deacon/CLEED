@@ -837,7 +837,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   free(atoms);
 
-  for(iaux = 0; iaux < n_type; iaux++)
+  for(iaux = 0; iaux < (size_t)n_type; iaux++)
   {
     if(p_Tii[iaux] != NULL) matfree( p_Tii[iaux] );
   }

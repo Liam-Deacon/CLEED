@@ -73,6 +73,8 @@ typedef enum {
 
 /* Defaults */
 
+static const size_t LMAX_TOO_LARGE = (size_t)-1;
+
 /*!
  * Default path name for phase shift input relative to HOME directory
  */
@@ -292,8 +294,8 @@ typedef struct leed_crystal /*! Holds all crystallographic parameters */
  *  \brief Contains all phase shift parameters. */
 typedef struct leed_phase  /*! Holds parameters for a single phase shift */
 {
-  int lmax;           /*!< maximum angular momentum quantum number */
-  size_t n_eng;       /*!< number of energies in phase shift file */
+  size_t lmax;         /*!< maximum angular momentum quantum number */
+  size_t n_eng;        /*!< number of energies in phase shift file */
   leed_matrix_diag t_type; /*!< type of scattering matrix: T_DIAG or T_NOND */
   real eng_max;        /*!< maximum energy */
   real eng_min;        /*!< minimum energy */

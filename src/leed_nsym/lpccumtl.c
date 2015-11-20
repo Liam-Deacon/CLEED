@@ -177,7 +177,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
    * - allocate T_n etc.
    *  - set T_n etc to their start values.
    */
-  if( (n_call == 0) || (last_l != l_max_t) )
+  if( (n_call == 0) || (last_l != (int)l_max_t) )
   {
     CONTROL_MSG(CONTROL, "calculate Mx, etc. for l_max = %d\n", l_max_t);
 
@@ -339,7 +339,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
    * - free matrices
    */
   n_call ++;
-  last_l = l_max_t;
+  last_l = (int)l_max_t;
 
   matfree(tl_aux);
   matfree(T_n);

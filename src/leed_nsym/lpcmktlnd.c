@@ -62,7 +62,7 @@ mat *leed_par_mktl_nd(mat *p_tl, const leed_phase *phs_shifts,
    *  - allocate p_tl.
    */
   /*!FIXME: lmax is unsigned, but I_END_OF_LIST is signed */
-  for(n_set = 0; phs_shifts[n_set].lmax != I_END_OF_LIST; n_set ++)
+  for(n_set = 0; phs_shifts[n_set].lmax != LMAX_TOO_LARGE; n_set ++)
   { ; }
 
   CONTROL_MSG(CONTROL, "energy = %.2f H, n_set = %u, l_max = %u\n",

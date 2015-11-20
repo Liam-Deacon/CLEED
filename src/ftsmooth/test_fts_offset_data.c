@@ -18,14 +18,15 @@
 #include "minunit.h"
 #include "ftsmooth.h"
 
+#define N_ARR 5
+
 char *test_fts_offset_data() {
 
   /* setup test */
-  int n = 5;
   double offset = 10;
   fts_offset op = OFFSET_X_TO_VALUE;
-  double x[n] = {0, 1, 2, 3, -4};
-  double y[n] = {0, 1, 4, 9, 16};
+  double x[N_ARR] = {0, 1, 2, 3, -4};
+  double y[N_ARR] = {0, 1, 4, 9, 16};
 
   int retval = fts_offset_data(x, y, n, offset, op);
 
