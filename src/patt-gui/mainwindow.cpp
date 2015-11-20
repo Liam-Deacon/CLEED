@@ -174,9 +174,9 @@ int MainWindow::actionSave()
             this,
             "Save As...",
 #if QT_VERSION >= 0x050000
-            QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).at(0);
+            QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first(),
 #else
-            QDesktopServices::storeageLocation(QDesktopServices::PicturesLocation);
+            QDesktopServices::storeageLocation(QDesktopServices::PicturesLocation),
 #endif
             tr("Windows Bitmap (*.bmp);;") +
             tr("JPEG (*.jpg);;") +
