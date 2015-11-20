@@ -8,7 +8,8 @@ INCLUDEPATH += include
 LIBS += -lm
 
 win32 {
-  DEST = "Program Files"
+  DEST = "Program Files/CLEED/"
+  LIBS *= -lpthread
 }
 
 unix {

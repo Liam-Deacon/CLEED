@@ -6,10 +6,14 @@
 # run 'qmake -project && make rfac' to build 
 # ---------------------------------------------
 
-RFAC_SRCS = *.c
-RFAC_SRCS -= rfac_main.c c_rfac.c
+include(rfac.pri)
 
-SOURCES = $$RFAC_SRCS 
-SOURCES += rfac_main.c
+RFAC_SRCS -= crfac.c c_rfac.c
+
+SOURCES = $$RFAC_SRCS
+SOURCES += crfac.c
 
 TARGET = crfac
+
+DISTFILES += \
+    rfac.pri

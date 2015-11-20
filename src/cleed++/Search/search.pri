@@ -1,7 +1,10 @@
 # ---------------------------------------------
 # libcleed++ search qmake project include file
 # ---------------------------------------------
-
+INCLUDEPATH *= ../include
 HEADERS += *.hpp *.hh *.h
-SOURCES += *.cpp *.cc
-
+SOURCES += *.cc
+CPP_SOURCES = *.cpp
+if (!isEmpty(CPP_SOURCES)) {
+  SOURCES += $$CPP_SOURCES
+}

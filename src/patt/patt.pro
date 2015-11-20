@@ -12,8 +12,7 @@ PATT_SRCS -= c_patt.c
 cairo: DEFINES += USE_CAIRO
 
 !cairo {
-  CAIRO_SRCS ~= *cairo*.c
-  PATT_SRCS -= $$CAIRO_SRCS
+  PATT_SRCS -= *cairo*.c
 }
 
 SOURCES = $$PATT_SRCS 

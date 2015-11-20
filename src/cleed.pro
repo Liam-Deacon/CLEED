@@ -10,10 +10,11 @@ include(cleed.pri)
 
 TEMPLATE = subdirs
 
-SUBDIRS = c++ \
+SUBDIRS = cleed++ \
           ftsmooth \
           latt \
           mkiv \
           patt \
+          patt-gui \
           rfac \
           search

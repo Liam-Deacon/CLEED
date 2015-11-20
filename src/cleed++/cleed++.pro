@@ -6,18 +6,24 @@
 # run 'qmake -project && make' to build 
 # ---------------------------------------------
 
-include(Core/core.pri)
-include(LEED/leed.pri)
-include(RFactor/rfactor.pri)
-include(Search/search.pri)
+include(../rfac/rfac.pri)
+#include(Core/core.pri)
+#include(LEED/leed.pri)
+#include(RFactor/rfactor.pri)
+#include(Search/search.pri)
 
 TEMPLATE = lib
 
-CONFIG = dll staticlib
+CONFIG = dll #staticlib
 
 QT = # empty
 
+INCLUDEPATH *= ../include
 
-HEADERS += *.hpp *.hh *.h
-SOURCES += *.cpp *.cc
+HEADERS += IVCurve.hh \
+           IVCurvePair.hh
 
+SOURCES += IVCurve.cc \
+           IVCurvePair.cc
+
+SOURCES *= $$RFAC_SRCS
