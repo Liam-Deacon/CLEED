@@ -28,7 +28,7 @@ IVCurvePair::IVCurvePair(const IVCurvePair &other) {
 
 IVCurvePair::IVCurvePair(const rfac_ivcur *ivcur_ptr) {
   this->iv_pair = new rfac_ivcur;
-  if (ivcur_ptr != nullptr)
+  if (ivcur_ptr)
     std::copy(ivcur_ptr, ivcur_ptr + sizeof(rfac_ivcur), this->iv_pair);
 }
 
@@ -89,20 +89,25 @@ IVCurvePair& IVCurvePair::setWeighting(double weight) {
 }
 
 IVCurvePair& IVCurvePair::setSpotID(const rfac_spot *spot) {
-  this->iv_pair->spot_id = spot;
+  this->iv_pair->spot_id.f_val1 = spot->f_val1;
+  this->iv_pair->spot_id.f_val2 = spot->f_val2;
+  this->iv_pair->spot_id.index1 = spot->index1;
+  this->iv_pair->spot_id.index2 = spot->index2;
+  this->iv_pair->spot_id.i_val1 = spot->i_val1;
+  this->iv_pair->spot_id.i_val2 = spot->i_val2;
   return *this;
 }
 
 IVCurvePair& IVCurvePair::setTheoryIVCurve(const IVCurve &theory) {
   //!TODO:
-  rfac_iv iv = theory.get_rfac_iv_ptr();
+  const rfac_iv *iv = theory.get_rfac_iv_ptr();
   std::copy(iv, iv + sizeof(rfac_iv), this->iv_pair->theory);
   return *this;
 }
 
 IVCurvePair& IVCurvePair::setExperimentalIVCurve(const IVCurve &experimental) {
   //!TODO:
-  rfac_iv iv = experimental.get_rfac_iv_ptr();
+  const rfac_iv *iv = experimental.get_rfac_iv_ptr();
   std::copy(iv, iv + sizeof(rfac_iv), this->iv_pair->experimental);
   return *this;
 }

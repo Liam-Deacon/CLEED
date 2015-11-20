@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __IVCurve_H__
-#define __IVCurve_H__
+#ifndef __IVCurve_HH__
+#define __IVCurve_HH__
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
@@ -35,6 +35,7 @@
 #include "rfac_func.h"
 
 using ::rfac_iv;
+using ::rfac_iv_alloc;
 using ::rfac_iv_data;
 using ::rfac_iv_copy;
 using ::rfac_iv_free;
@@ -96,7 +97,7 @@ namespace cleed {
       double getLastEnergy() const;
       double getMaximumIntensity() const;
 
-      const rfac_iv *get_rfac_iv_ptr();
+      const rfac_iv *get_rfac_iv_ptr() const;
 
       void readIVData(const string &ivFilePath);
 
@@ -109,4 +110,4 @@ namespace cleed {
 
 #endif /* __cplusplus */
 
-#endif /* __IVCurve_H__ */
+#endif /* __IVCurve_HH__ */

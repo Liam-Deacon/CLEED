@@ -38,7 +38,8 @@ IVCurve::IVCurve(const rfac_iv &iv) {
 
 IVCurve::IVCurve(const string &ivFilePath) {
   this->iv_ptr = new rfac_iv;
-  this->iv_ptr->data = rfac_iv_read(ivFilePath.c_str());
+  rfac_iv *iv = rfac_iv_read(ivFilePath.c_str());
+  rfac_iv_copy(this->iv_ptr, iv);
 }
 
 IVCurve::IVCurve(const IVCurve &ivCurve) {
@@ -67,7 +68,7 @@ bool IVCurve::operator==(const IVCurve &other) const {
 
 /* setters */
 IVCurve& IVCurve::setIVData(const rfac_iv_data &iv_data, size_t n) {
-  if ( &iv_data == nullptr)
+  if (! &iv_data)
     return *this;
 
   delete [] this->iv_ptr->data;
@@ -98,7 +99,7 @@ IVCurve& IVCurve::setIVData(vector<real> x, vector<real> y, vector<real> deriv2)
       data[i].deriv2 = 0.;
   }
 
-  if (this->iv_ptr->data != nullptr)
+  if (this->iv_ptr->data)
     delete[] this->iv_ptr->data;
 
   this->iv_ptr->data = data;
@@ -218,13 +219,13 @@ inline double IVCurve::getMaximumIntensity() const {
   return this->iv_ptr->max_int;
 }
 
-inline const rfac_iv *IVCurve::get_rfac_iv_ptr() {
+inline const rfac_iv *IVCurve::get_rfac_iv_ptr() const {
   return const_cast<rfac_iv*>(this->iv_ptr);
 }
 
 inline void IVCurve::readIVData(const string &ivFilePath) {
-  if (this->iv_ptr->data != nullptr)
-    delete[] this->iv_ptr->data;
+  if (this->iv_ptr)
+    rfac_iv_free(this->iv_ptr);
 
-  this->iv_ptr->data = rfac_iv_read(ivFilePath.c_str());
+  this->iv_ptr = rfac_iv_read(ivFilePath.c_str());
 }
