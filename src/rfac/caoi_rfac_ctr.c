@@ -33,7 +33,7 @@ int rfac_create_control_file_duplicates(
     size_t n_ctr)
 {
   char fname_ctr[FILENAME_MAX] = "";
-  char fname_workstr[FILENAME_MAX] = ""
+  char fname_workstr[FILENAME_MAX] = "";
   char string_ctr[STRSZ] = "";
   char workstr[STRSZ] = "";
 
