@@ -60,7 +60,9 @@ void rfac_info(void);                               /*!< version information, et
 
 const char* get_rfactor_name(rfactor_type type);
 
-int rfac_create_control_file_duplicates(const char *control_filename, size_t n);
+int rfac_create_control_file_duplicates(const char *, size_t);
+
+size_t rfac_get_number_of_angles(const char *control_filename)
 
 /* line interpreter */
 NONNULL()
@@ -143,7 +145,7 @@ real rfac_rp(const real *, const real *, const real *, real);
 NONNULL()
 real rfac_rmin(rfac_ivcur *, rfac_args *, real *, real *, real *);
 
-void rfactor_print(rfactor_type type, real r_min, real rr,
+void rfactor_print(FILE *stream, rfactor_type type, real r_min, real rr,
                    real s_min, real e_range);
 
 const char *rfactor_name(rfactor_type type);

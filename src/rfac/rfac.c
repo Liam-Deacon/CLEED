@@ -43,17 +43,22 @@ inline const char *rfactor_name(rfactor_type type) {
   return "Unknown RFactor type";
 }
 
-inline void rfactor_print(rfactor_type type, real r_min, real rr,
-    real s_min, real e_range)
+inline void rfactor_print(
+    FILE *stream,
+    rfactor_type type,
+    real r_min,
+    real rr,
+    real s_min,
+    real e_range)
 {
   const char *rf = rfactor_name(type);
 #if CONTROL
-  fprintf(STDCTR, "%s = ", rf);
-  fprintf(STDCTR, "%.6f, RR = %.6f (shift = %4.1f, eng. overlap = %.1f)\n",
+  fprintf(stream, "%s = ", rf);
+  fprintf(stream, "%.6f, RR = %.6f (shift = %4.1f, eng. overlap = %.1f)\n",
           r_min, rr, s_min, e_range);
 #endif
-  fprintf(STDOUT, "%.6f %.6f %.2f %.2f\t\t#  ", r_min, rr, s_min, e_range);
-  fprintf(STDCTR, "%s  RR  shift  range\n", rf);
+  fprintf(stream, "%.6f %.6f %.2f %.2f\t\t#  ", r_min, rr, s_min, e_range);
+  fprintf(stream, "%s  RR  shift  range\n", rf);
 }
 
 /*!
