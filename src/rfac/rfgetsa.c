@@ -64,7 +64,8 @@ size_t rfac_get_number_of_angles(const char *control_filename)
 
   if ((fp = fopen(fname_string, "r")) == NULL)
   {
-    ERROR_MSG("could not open output file \"%s\"\n", fname_string);
+    ERROR_MSG("");
+    perror(fname_string);
     exit(EIO);
   }
 

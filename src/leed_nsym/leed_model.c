@@ -25,6 +25,11 @@
 
 #include "leed.h"
 
+/*!
+ * Initialises a \c leed_model instance by reading input files given by \p args
+ *
+ * \return \c leed_model
+ */
 leed_model *leed_model_init(leed_args *args) {
   leed_model *model = (leed_model*) calloc(1, sizeof(leed_model));
 
@@ -78,7 +83,12 @@ leed_model *leed_model_init(leed_args *args) {
 }
 
 
+/*!
+ * Free system resources for \c leed_model
+ */
 void leed_model_free(leed_model *model) {
+  if (model == NULL) return;
+
   for (int i_beam=0; &model->beams_all[i_beam] != NULL; i_beam++) {
     leed_beam_free(&model->beams_all[i_beam]);
   }

@@ -100,6 +100,8 @@ void leed_phase_free(leed_phase *phs_shifts);
 void leed_var_free(leed_var *var);
 void leed_layer_free(leed_layer *layer);
 
+int leed_bsrinp(const char *filebsr, size_t number);
+
 /*********************************************************************
  * beams (bm) and parameter control (pc) and output (out)
  *********************************************************************/

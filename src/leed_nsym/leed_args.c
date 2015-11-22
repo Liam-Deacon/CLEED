@@ -30,6 +30,7 @@
 #include "leed_help.h"
 #include "leed_def.h"
 #include "leed.h"
+#include "leed_aoi.h"
 
 /*! Checks for existence of par_file.
  *
@@ -93,12 +94,23 @@ leed_args *leed_args_init(void) {
   strcpy(args->pro_name, "leed.pro");
   args->pro_stream = NULL;
   args->res_stream = NULL;
+  args->sa = 0;
 
   return args;
 }
 
 void leed_args_free(leed_args *args)
 {
+  if (args == NULL) return;
+
+  if (args->pro_stream != NULL) {
+    fclose(args->pro_stream);
+    args->pro_stream = NULL;
+  }
+  if (args->res_stream != NULL) {
+      fclose(args->res_stream);
+      args->res_stream = NULL;
+    }
   if (args != NULL) {
     free(args);
   }
@@ -225,6 +237,8 @@ leed_args *leed_args_parse(int argc, char *argv[])
   leed_check_input_files(args->par_file,
                              args->bul_file, sizeof(args->bul_file)-1);
   args->res_stream = leed_check_result_file(args->res_file);
+
+  args->sa = leed_get_number_of_angles(args->bul_file);
 
   return args;
 }

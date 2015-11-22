@@ -97,7 +97,7 @@ void leed_model_calculate_energies(leed_model *model) {
 
   leed_crystal *bulk = model->bulk;           /* stores bulk crystal parameters */
   leed_crystal *over = model->over;           /* stores overlayer crystal parameters */
-  leed_phase *phs_shifts =model->phs_shifts;  /* stores phase shift information */
+  leed_phase *phs_shifts = model->phs_shifts; /* stores phase shift information */
   leed_beam *beams_all = model->beams_all;    /* all diffracted beams */
   leed_beam *beams_out = model->beams_out;    /* all outward beams */
   leed_var *v_par = model->v_par;
