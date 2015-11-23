@@ -1,3 +1,11 @@
 [submodule "doc"]
 	path = doc
 	url = Liam_Deacon@bitbucket.org:cleed/documentation.git
+
+[submodule "cleed-gui"]
+	path = src/cleed-gui
+	url = Liam_Deacon@bitbucket.org:cleed/cleed-gui.git
+	
+[submodule "phaseshifts"]
+	path = src/phaseshifts
+	url = Liam_Deacon@bitbucket.org:Liam_Deacon/phaseshifts.git
