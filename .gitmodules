@@ -6,6 +6,6 @@
 	path = src/cleed-gui
 	url = Liam_Deacon@bitbucket.org:cleed/cleed-gui.git
 	
-[submodule "phaseshifts"]
+[submodule "src/phaseshifts"]
 	path = src/phaseshifts
-	url = Liam_Deacon@bitbucket.org:Liam_Deacon/phaseshifts.git
+	url = https://bitbucket.org/Liam_Deacon/phaseshifts
