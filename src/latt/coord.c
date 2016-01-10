@@ -20,6 +20,11 @@
 #include <stdlib.h>
 #include <math.h>
 
+#if _MSC_VER
+#define inline /* empty as MSVC linker doesn't seem to support inline */
+#endif /* _MSC_VER */
+
+
 /*!
  * Initializes #coord instance with a position (0, 0, 0).
  *
