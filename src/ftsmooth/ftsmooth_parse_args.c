@@ -204,7 +204,7 @@ int parse_args(int argc, char *argv[],
 *********************************************************************/
 /* subroutine to decode argv range argument into seperate ranges
 returns the dimension of the lower and upper bound matricies*/
-int decode_ranges(double *lbound, double *ubound, size_t *i_r, char *argv)
+int decode_ranges(double *lbound, double *ubound, size_t *i_r, const char *argv)
 /* 
 Encoding as follows: 
   
@@ -218,8 +218,8 @@ Encoding as follows:
 {
   int pos = 0;
   int islowerbound = 1; /* first entry is lower bound */
-  
-  char str[strlen(argv)+1];
+
+  char *str = (char*)calloc(sizeof(char), strlen(argv)+1);
   char ichar[1] = "\0";
   
   if (ubound == NULL)
@@ -296,5 +296,7 @@ Encoding as follows:
   
   if(!islowerbound) ubound[*i_r-1] = DBL_MAX;
   
+  free(str);
+
   return(0);
 }

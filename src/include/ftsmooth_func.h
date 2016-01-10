@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #include "gh_stddef.h"
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
@@ -48,7 +48,7 @@ size_t fts_rm_neg_data(double *, double *, size_t);
 
 int fts_print_data(FILE *, double *, double *, size_t);
 
-int decode_ranges(double *lbound, double *ubound, size_t *i_r, char *argv);
+int decode_ranges(double *lbound, double *ubound, size_t *i_r, const char *argv);
 
 void ftsmooth_debug(char *debug_str, char *tag, int argc, char *argv[],
     FILE *in_stream, FILE *out_stream,
