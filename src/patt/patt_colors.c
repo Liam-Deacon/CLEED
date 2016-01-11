@@ -15,9 +15,15 @@
  *  Provides color constants and functions for the \c patt program.
  */
 
+#if _MSC_VER
+#define strcasecmp _stricmp
+#include <string.h>
+#else
+#include <strings.h>
+#endif
+
 #include "patt.h"
 #include "patt_colors.h"
-#include "strings.h"
 #include <stdbool.h>
 #include <malloc.h>
 
@@ -289,9 +295,9 @@ const char *patt_color_get_name(const patt_color_rgb *color)
 const char *patt_color_get_ps_string(const patt_color_rgb *color)
 {
   char *str = (char*) malloc(sizeof(char)* 1024);
-
-  sprintf(str, "%.6e %.6e %.6e setrgbcolor",
-          color->red, color->blue, color->green);
+  if (str)
+    sprintf(str, "%.6e %.6e %.6e setrgbcolor",
+            color->red, color->blue, color->green);
 
   return(str);
 }

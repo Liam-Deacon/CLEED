@@ -27,11 +27,15 @@
  */
 char *fget_nocomm(char *buffer, FILE *in_stream, FILE *out_stream)
 {
+	if (buffer == NULL) {
+		ERROR_MSG("buffer is NULL\n");
+		return NULL;
+	}
   while( (fgets(buffer, STRSZ, in_stream) != NULL) && (*buffer == '#') )
   {
    printf ("%s", buffer);
    fprintf(out_stream, "%s %s","%", buffer);
   }
-  if (buffer == NULL) fprintf(stderr, "***error (fget_nocomm): input error");
+  if (buffer == NULL) ERROR_MSG("input error\n");
  return(buffer);
 }

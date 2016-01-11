@@ -33,6 +33,8 @@ enum {
 
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+#include <string>
+#include <list>
   extern "C" {
 #endif
 
@@ -215,13 +217,13 @@ class Spot {
      *  \sa setK()
      *  \param k Value of Miller index k.
      */ 
-    void setK(double h);
+    void setK(double k);
 
     /*! \brief Miller index l setter function. 
      *  \sa setK()
      *  \param k Value of Miller index .
      */ 
-    void setK(double h);
+    void setL(double l);
     
     /*! \brief Setter function for position of Spot. 
      *  \sa setPoint()
@@ -242,7 +244,13 @@ class Spot {
      *  \return Value of Miller k index.
      */ 
     const double getK();
-    
+
+	/*! \brief Getter function for Miller l index of of Spot.
+	*  \sa getL()
+	*  \return Value of Miller l index.
+	*/
+	const double getL();
+
     /*! \brief Getter function for x position of Spot. 
      *  \sa getPointX()
      *  \return Value of x position.
@@ -277,11 +285,11 @@ class Spots {
     void setStrokeWidth(double width);
     void setStrokeStyle(int style);
     void setFontSize(double size);
-    void setFontName(string name);
+    void setFontName(std::string name);
     void setRadius(double radius);
     void setVisible(bool visible);
     void setIndexing(bool indexing);
-    void setSpotList(list<Spot> spots);
+    void setSpotList(std::list<Spot> spots);
     
     /* getters */
     const bool isFilled();
@@ -292,9 +300,9 @@ class Spots {
     const double getStrokeWidth();
     const int getStrokeStyle();
     const double getFontSize();
-    const string getFontName();
+    const std::string getFontName();
     const double getRadius();
-    const list<Spot> getSpotList();    
+    const std::list<Spot> getSpotList();    
     
   protected:
     spots spots;

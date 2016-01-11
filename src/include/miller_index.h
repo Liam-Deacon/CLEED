@@ -40,7 +40,7 @@ typedef struct
 
 namespace cleed {
 
-class MillerIndex : public miller_hkl {
+class MillerIndex : private miller_hkl {
   public:
     MillerIndex();
     MillerIndex(double h, double k);

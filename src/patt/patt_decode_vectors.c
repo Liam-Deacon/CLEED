@@ -15,7 +15,7 @@
  */
 
 #include "patt.h"
-#include <strings.h>
+#include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -37,7 +37,7 @@
 int decode_vectors(int spotype, bool *do_vectors,
                    char *argv, size_t str_length)
 {
-  size_t pos, jj, val[2], imax;
+  size_t pos, jj, val[2], imax=0;
   char str[2][STRSZ];
   char ichar[2];
   

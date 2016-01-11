@@ -18,12 +18,16 @@
  * File contains functions for handling #pattern objects.
  */
 
+#if _MSC_VER
+#define inline /* apparently MSVC cannot inline c functions in source files */
+#endif
+
 #include "pattern.h"
 #include "patt.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <strings.h>
+#include <string.h>
 #include <math.h>
 
 /*!
@@ -95,13 +99,12 @@ pattern *pattern_init(size_t n_domains)
  */
 void pattern_free(pattern *pat)
 {
-  if (pat->title != NULL)
-  {
-    free(pat->title);
+  if (pat != NULL) {
+    if (pat->title != NULL) free(pat->title);
+    if (pat->M_SS != NULL) free(pat->M_SS);
+    free(pat);
+    pat = NULL;
   }
-  if (pat->M_SS != NULL) free(pat->M_SS);
-  free(pat);
-  pat = NULL;
 }
 
 /*!
@@ -159,10 +162,9 @@ int pattern_set_max_domains(pattern *pat, size_t n_domains)
   if (n_domains > pat->n_domains) /* grow the number of elements */
   {
     matrix_2x2 *temp = pat->M_SS;
-    (matrix_2x2*) realloc(pat->M_SS, n_domains*sizeof(matrix_2x2));
     
     /* check if realloc successful */
-    if (pat->M_SS != NULL)
+    if ((matrix_2x2*)realloc(pat->M_SS, n_domains*sizeof(matrix_2x2)) != NULL)
       pat->n_domains = n_domains;
     else
     {
@@ -261,8 +263,8 @@ pattern *pattern_read(FILE *file)
   double N11=0., N12=0., N21=0., N22=0.;    /* Rotation  matrix */
   double m11, m12, m21, m22;
   
-  char *line_buffer = (char*) malloc(STRSZ*sizeof(char));
-  char *comments = (char*) malloc(STRSZ*sizeof(char));
+  char *line_buffer = (char*) calloc(STRSZ, sizeof(char));
+  char *comments = (char*) calloc(STRSZ, sizeof(char));
 
 /* check input file is open for reading */
   if (file == NULL) return NULL;  /* cannot read file */
@@ -287,8 +289,9 @@ pattern *pattern_read(FILE *file)
         if (strlen(comments) == 0) {
           strcpy(comments, line_buffer);
         } else {
-          (char *) realloc(comments, strlen(comments)+STRSZ);
-          strcat(comments, line_buffer);
+          if ((char *)realloc(comments, strlen(comments) + STRSZ)) {
+            strcat(comments, line_buffer);
+          }
         }
         break;
         
@@ -303,12 +306,14 @@ pattern *pattern_read(FILE *file)
   if (is_stdin) printf("Enter vector a1 (x y): ");
     
   fget_nocomm(line_buffer, file, stdout);
-  sscanf(line_buffer, "%lf %lf", &a1.x, &a1.y);
+  if ((err = sscanf(line_buffer, "%lf %lf", &a1.x, &a1.y)) < 2)
+    WARNING_MSG("could not read vector a1 (read %i items)\n", err);
   
   if (is_stdin) printf("Enter vector a2 (x y): ");
     
   fget_nocomm(line_buffer, file, stdout);
-  sscanf(line_buffer, "%lf %lf", &a2.x, &a2.y);
+  if ((err = sscanf(line_buffer, "%lf %lf", &a2.x, &a2.y)) < 2)
+    WARNING_MSG("could not read vector a2 (read %i items)\n", err);
   
   /* 
   calculate max length in k-space (radius is the max. k-distance in
@@ -318,7 +323,8 @@ pattern *pattern_read(FILE *file)
   if (is_stdin) printf("Enter radius: ");
     
   fget_nocomm(line_buffer, file, stdout);
-  sscanf(line_buffer, "%lf", &radius);
+  if (sscanf(line_buffer, "%lf", &radius) < 1)
+    WARNING_MSG("could not read radius\n");
   
   /* SS SPOTS */
 
@@ -326,14 +332,15 @@ pattern *pattern_read(FILE *file)
   if (is_stdin) printf("Enter no. domains: ");
     
   fget_nocomm(line_buffer, file, stdout);
-  sscanf(line_buffer, "%u", &n_dom);
+  if (sscanf(line_buffer, "%u", &n_dom))
+    WARNING_MSG("could not read number of domains\n");
 
   /* allocate memory for pattern */
   pat = pattern_init(n_dom);
   err = pattern_set_max_domains(pat, n_dom); 
   if (err)
   {
-    printf("error: %i\n", err);
+    ERROR_MSG("could not set max domains to %u (%i)\n", n_dom, err);
     exit(err);
   }
 
@@ -357,7 +364,8 @@ pattern *pattern_read(FILE *file)
     {
       case 'R':
       {
-        sscanf(line_buffer+1, "%lf", &phi);
+        if (sscanf(line_buffer + 1, "%lf", &phi) == 0) 
+          WARNING_MSG("could not read rotation value\n");
         phi *= 0.0174532925;
         det  =  a1.x*a2.y - a1.y*a2.x;
         aux2 = (a1.x*a2.x + a1.y*a2.y) / det;
@@ -415,9 +423,13 @@ pattern *pattern_read(FILE *file)
 
       default:
       {
-        sscanf(line_buffer, "%lf %lf", &M11, &M12);
+        if ((err = sscanf(line_buffer, "%lf %lf", &M11, &M12)) < 2)
+          WARNING_MSG("could not read first row of superstructure matrix "
+                      "(read %i items)\n", err);
         fget_nocomm(line_buffer, file, stdout);
-        sscanf(line_buffer, "%lf %lf", &M21, &M22);
+        if ((err = sscanf(line_buffer, "%lf %lf", &M21, &M22)) < 2)
+          WARNING_MSG("could not read second row of superstructure matrix "
+                      "(read %i items)\n", err);
 
         m11 = M11; 
         m12 = M12; 
@@ -682,9 +694,9 @@ spots *pattern_calculate_superstructure_spots(const pattern *pat, size_t domain)
   commensurate = pattern_domain_is_commensurate(pat, domain);
 
   /* determinant of matrix */
-  det  = m11*m22 - m12*m21;
+  det  = (float)(m11*m22 - m12*m21);
   aux1 = 1/det;
-  det = fabs(det);
+  det = (float)fabs(det);
 
   /* calculate SS vectors */
   b1[0] = aux1 *(m22*a1[0] - m21*a2[0]);

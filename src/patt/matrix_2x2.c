@@ -86,11 +86,7 @@ void matrix_2x2_set_element(matrix_2x2 *mat, size_t col,
 
 matrix_2x2 *matrix_2x2_init()
 {
-  matrix_2x2 *mat = (matrix_2x2*) malloc(sizeof(matrix_2x2));
-  mat->M11 = 0.;
-  mat->M12 = 0.;
-  mat->M21 = 0.;
-  mat->M22 = 0.;
+  matrix_2x2 *mat = (matrix_2x2*) calloc(1, sizeof(matrix_2x2));
   return mat;
 }
 
@@ -98,10 +94,12 @@ matrix_2x2 *matrix_2x2_init_all(double m11, double m12,
     double m21, double m22)
 {
   matrix_2x2 *mat = (matrix_2x2*) malloc(sizeof(matrix_2x2));
-  mat->M11 = m11;
-  mat->M12 = m12;
-  mat->M21 = m21;
-  mat->M22 = m22;
+  if (mat) {
+	mat->M11 = m11;
+	mat->M12 = m12;
+	mat->M21 = m21;
+	mat->M22 = m22;
+  }
   return mat;
 }
 

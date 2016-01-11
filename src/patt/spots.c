@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <strings.h>
+#include <string.h>
 #include <math.h>
 
 /*!
@@ -186,7 +186,7 @@ void spots_set_stroke_style(spots *spots, int stroke_style)
 
 void spots_set_font_size(spots *spots, double font_size)
 {
-  spots->font_size = abs(font_size);
+  spots->font_size = fabs(font_size);
 }
 
 void spots_set_font_name(spots *spots, char *font_name)
@@ -196,7 +196,7 @@ void spots_set_font_name(spots *spots, char *font_name)
 
 void spots_set_radius(spots *spots, double radius)
 {
-  spots->radius = abs(radius);
+  spots->radius = fabs(radius);
 }
 
 void spots_set_visible(spots *spots, bool visible)
@@ -242,7 +242,10 @@ double spots_get_font_size(const spots *spots)
 const char* spots_get_font_name(const spots *spots)
 {
   char *name = (char*)malloc(sizeof(char) * strlen(spots->font_name));
-  strcpy(name, spots->font_name);
+  if (name)
+    strcpy(name, spots->font_name);
+  else
+    ERROR_MSG("could not allocate memory for font name\n");
   return ((const char*)name);
 }
 

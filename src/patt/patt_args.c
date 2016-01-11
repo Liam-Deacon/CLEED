@@ -18,9 +18,16 @@
  * Parses command line arguments for the \c patt program.
  */
 
+#if _MSC_VER
+#define _USE_MATH_DEFINES 1
+#define strcasecmp _stricmp
+#include <string.h>
+#else
+#include <strings.h>
+#endif /* _MSC_VER */
+
 #include <stdbool.h>
 #include <stdio.h>
-#include <strings.h>
 #include <ctype.h>
 #include <math.h>
 #include "patt.h"
@@ -334,7 +341,7 @@ int patt_args(int argc, char *argv[], patt_drawing *drawing)
           {
             for (jj=0; jj<MAX_DOMAINS; jj++)
             {
-              decode_vectors(SPOT_GS, drawing->show_ss_indices[jj],
+              decode_vectors(SPOT_SS, drawing->show_ss_indices[jj],
                              argv[i_arg], strlen(argv[i_arg]));
             }
           }

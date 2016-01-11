@@ -119,6 +119,45 @@ spots *pattern_calculate_superstructure_spots(const pattern *pat,
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
+
+class Pattern
+{
+public:
+	Pattern();
+	Pattern(const pattern *pat);
+	Pattern(const std::string &filename);
+	Pattern(FILE *fp);
+	~Pattern();
+
+	/* setters */
+	inline void setTitle(std::string title) {
+		pattern_set_title(&pat, title.c_str());
+	}
+
+	void setBasisVectorA1(double x, double y);
+	void setBasisVectorA2(double x, double y);
+
+	inline void setRadius(double radius) { pattern_set_radius(&pat, radius); } 
+	inline int setNumberOfDomains(std::size_t ndom) {
+		return pattern_set_max_domains(&pat, ndom);
+	}
+
+
+	/* getters */
+	inline const string getTitle() {
+		const std::string str(pattern_get_title(&pat));
+	}
+
+	inline std::size_t getNumberOfDomains() {
+		return pattern_get_n_domains(&pat);
+	}
+
+	std::vector<std::vector<double>> getSuperStructureMatrices();
+
+private:
+	pattern pat;
+};
+
 } /* namespace cleed */
 #endif /* __cplusplus */
 

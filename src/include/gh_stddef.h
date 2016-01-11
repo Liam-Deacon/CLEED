@@ -177,8 +177,10 @@ namespace cleed {
 #endif
 
   /* remove annoying rest arguments warning with ISO C99 & GCC */
+#if __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvariadic-macros"
+#endif /* GCC */
 
 #if ERROR_LOG && __STDC_VERSION__ >= 199901L
 # ifdef _MSC_VER
@@ -224,7 +226,9 @@ namespace cleed {
 # define CONTROL_MSG(level, fmt, ...) {} /* dummy message */
 #endif
 
+#if __GNUC__
 #pragma GCC diagnostic pop /* restore rest aguments warning */
+#endif /* __GNUC__ */
 
 /*********************************************************************
  * general mathematical definitions / constants

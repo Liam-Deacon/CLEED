@@ -50,13 +50,17 @@
  * libcairo library during compilation.
  */
 
+#if _MSC_VER
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <ctype.h>
 #include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-
 #include "patt.h"
 
 /*!
@@ -89,7 +93,7 @@ int main(int argc, char *argv[])
 
 int patt_session(const patt_drawing *drawing)
 {
-  char buf[BUFSIZ];
+  char buf[BUFSIZ] = "";
 
   printf("%s [%s] - %s\n", PATT, PATT_VERSION, PATT_SHORTDESC);
   printf("%s\n", PATT_COPYRIGHT);
@@ -97,7 +101,7 @@ int patt_session(const patt_drawing *drawing)
          PATT_LICENSE);
   printf("\nType 'help' to get started...\n\n");
 
-  while(gets(buf))
+  while(fgets(buf, BUFSIZ, stdin))
   {
     if (strncmp("quit", buf, 1) == 0) exit(PATT_SUCCESS);
 

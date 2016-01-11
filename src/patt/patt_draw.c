@@ -20,7 +20,7 @@
  */
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <math.h>
 #include "spots.h"
 #include "patt.h"

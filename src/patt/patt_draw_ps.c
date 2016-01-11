@@ -19,7 +19,7 @@
 #include "patt.h"
 #include "patt_ver.h"
 #include <math.h>
-#include <strings.h>
+#include <string.h>
 
 /*!
  * Draws the LEED pattern using the old postscript backend.
@@ -36,9 +36,10 @@ int patt_draw_ps(const patt_drawing *drawing)
   pattern *pat = NULL;
   FILE *f = NULL;
   FILE *out_stream = NULL;
-  char title[strlen(drawing->title.label)+10];
-  char copyright[strlen(PATT_COPYRIGHT)+20];
-  char program[strlen(PATT_VERSION)+strlen(PATT)+20];
+  char *title = (char*)calloc(strlen(drawing->title.label)+10, sizeof(char));
+  char *copyright = (char*)calloc(strlen(PATT_COPYRIGHT)+20, sizeof(char));
+  char *program = (char*)calloc(strlen(PATT_VERSION)+strlen(PATT)+20, 
+								sizeof(char));
 
   sprintf(title, "%%Title: %s", drawing->title.label);
   sprintf(copyright, "%%Copyright: %s", PATT_COPYRIGHT);
@@ -70,11 +71,15 @@ int patt_draw_ps(const patt_drawing *drawing)
       if ((f = fopen(drawing->input_files[i_file], "r")) != NULL)
       {
         pat = pattern_read(f);
+		if (!pat) {
+			ERROR_MSG("unable to read pattern from '%s' (skipped)\n",
+				input_files[i_file]);
+			continue;
+		}
       }
       else
       {
-        fprintf(stderr, "***error (patt_draw_cairo): "
-                "cannot open '%s'\n", drawing->input_files[i_file]);
+        ERROR_MSG("cannot open '%s'\n", drawing->input_files[i_file]);
         exit(PATT_READ_ERROR);
       }
     }
@@ -115,7 +120,7 @@ int patt_draw_ps(const patt_drawing *drawing)
     }
 
     /* draw superstructure spots */
-    for (i_domain = 0; i_domain < pat->n_domains; i_domain++)
+    for (i_domain = 0; i_domain < (pat != NULL ? pat->n_domains : 0); i_domain++)
     {
       spots *ss_spots = pattern_calculate_superstructure_spots(pat, i_domain);
 
@@ -146,11 +151,26 @@ int patt_draw_ps(const patt_drawing *drawing)
     fclose(out_stream);
     spots_free(gs_spots);
     pattern_free(pat);
-    free(f);
+	  if (f) { 
+	    free(f); 
+      f = NULL;
+	  };
 
   } /* for i_file */
 
   /* clean up */
+  if (title) {
+    free(title);
+    title = NULL;
+  }
+  if (copyright) {
+    free(copyright);
+    copyright = NULL;
+  }
+  if (program) {
+    free(program);
+    program = NULL;
+  }
 
   return(PATT_SUCCESS);
 }
@@ -352,7 +372,7 @@ void patt_draw_ps_screen(FILE *file_ptr, const patt_screen *screen)
 void patt_draw_ps_spot(FILE *file_ptr, spot *spot, double spot_size,
                       patt_shape shape, const patt_color_rgb *color, bool fill)
 {
-  int delta = 0;
+  double delta = 0;
   double x = spot->x;
   double y = spot->y;
 
@@ -493,6 +513,7 @@ void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
 {
   size_t i_dom = drawing->i_dom;
   size_t spot = drawing->i_spot;
+  size_t len = 1;
   int ii = 0;
   char color[STRSZ] = "black";
   double a1[3] = {0.,0.,0.};
@@ -563,7 +584,9 @@ void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
     sprintf(dummystr[2], "\n%c1_%i%s %c2_%i%s",
             v_type, ii, dom_str, v_type, ii, dom_str);
 
-    strcat(vectors_str, dummystr[2]);
+    len += strlen(dummystr[2]);
+    if ((char*)realloc(vectors_str, sizeof(char)*len) != NULL)
+      strcat(vectors_str, dummystr[2]);
 
   }
 
