@@ -26,8 +26,12 @@
 
 #include <malloc.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <sys/types.h>
+#if _MSC_VER
+#include <io.h>
+#else
+#include <unistd.h>
+#endif 
 
 #if defined(WIN32) || defined(_WIN32) || \
 defined(__WIN32__) || defined(__MINGW__) || defined(_WIN64) 
@@ -59,31 +63,29 @@ defined(__WIN32__) || defined(__MINGW__) || defined(_WIN64)
  * \param[in] message Message written to \p outp together with cpu information.
  * \return cpu time elasped since last call (in seconds).
  */
-double leed_cpu_time(FILE * outp, const char * message) 
+double leed_cpu_time(FILE *outp, const char *message) 
 {
-  double new_secs;
+  double new_secs = 0.;
   static double old_secs = 0.;
-  static struct rusage *r_usage = NULL;  /* stucture defined in sys/resource.h
+  static struct rusage r_usage = { 0 };  /* stucture defined in sys/resource.h
                                             and sys/time.h (timeval) */
-  static char *hostname;
+  static char hostname[STRSZ] = "localhost";
 
-  if (r_usage == NULL)
-  {
-    r_usage = (struct rusage *) malloc (sizeof(struct rusage));
-    hostname = (char *) malloc (STRSZ * sizeof(char));
+  if (strcmp(hostname, "localhost") == 0)
     gethostname(hostname, STRSZ);
+
+  if (getrusage(RUSAGE_SELF, &r_usage) == 0)
+  {
+    new_secs = (double)r_usage.ru_utime.tv_sec +
+               (double)r_usage.ru_utime.tv_usec * 1.e-6;
   }
-
-  getrusage ( RUSAGE_SELF, r_usage );
-
-  new_secs = (double)r_usage->ru_utime.tv_sec +
-             (double)r_usage->ru_utime.tv_usec * 1.e-6;
 
   if(outp != NULL)
   {
     fprintf(outp, "%s\t", message);
     fprintf(outp, "(leed_cpu_time) total time on %s: %10.6f s, "
-            "diff: %10.6f s\n", hostname, new_secs, new_secs-old_secs);
+            "diff: %10.6f s\n", (hostname != NULL) ? hostname : "localhost", 
+            new_secs, new_secs-old_secs);
   }
   old_secs = new_secs;
 
