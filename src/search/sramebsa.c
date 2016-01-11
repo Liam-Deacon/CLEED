@@ -15,8 +15,9 @@
 
 #include <math.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <time.h>
 
 #include "search.h"
@@ -195,6 +196,11 @@ real amotsa(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum, size_t n
   ptry = cleed_vector_alloc(n_dim);
   fac1 = (1.0 - fac)/n_dim;
   fac2 = fac1 - fac;
+
+  if (ptry == NULL) {
+    ERROR_MSG("could not allocate memory for 'ptry'\n");
+    exit(ENOMEM);
+  }
 
   for (j=0; j < n_dim; j++)
     cleed_vector_set(ptry, j, cleed_vector_get(psum, j)*fac1 -

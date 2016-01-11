@@ -32,7 +32,7 @@ GH/30.12.04 - calculate original and mirrored geometry at the same time and aver
 
 ***********************************************************************/
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>

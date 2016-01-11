@@ -15,7 +15,7 @@
  ***********************************************************************/
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <math.h>
 #include <stdlib.h>
 #include "search.h"

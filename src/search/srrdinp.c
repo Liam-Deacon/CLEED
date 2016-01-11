@@ -33,9 +33,13 @@
 #include <malloc.h>
 #include <math.h>
 #include <stdio.h>
-#include <strings.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#if _MSC_VER
+#define strncasecmp(x,y,z) _strnicmp((x),(y),(z))
+#else
+#include <strings.h>
+#endif
 
 #include "search.h"
 
@@ -288,13 +292,15 @@ int sr_rdinp(const char *inp_file)
     else if( !strncasecmp(buf+i_str, "m1:", 3) )
     {
       sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
-      sscanf(buf+i_str+3, fmt_buffer, m_super+1, m_super+2);
+      if ((iaux = sscanf(buf + i_str + 3, fmt_buffer, m_super + 1, m_super + 2)) < 2)
+        WARNING_MSG("could not read m1 (%i values read)\n", iaux);
     } /* m1 */
 
     else if( !strncasecmp(buf+i_str, "m2:", 3) )
     {
       sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
-      sscanf(buf+i_str+3, fmt_buffer, m_super+3, m_super+4);
+      if ((iaux = sscanf(buf + i_str + 3, fmt_buffer, m_super + 3, m_super + 4)) < 2)
+        WARNING_MSG("could not read m2 (%i values read)\n", iaux);
     } /* m2 */
 
     /* Added for the angle search (SRP, GH/02.04.03) */
@@ -402,13 +408,15 @@ int sr_rdinp(const char *inp_file)
     else if( !strncasecmp(buf+i_str, "m1:", 3) )
     {
       sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
-      sscanf(buf+i_str+3, fmt_buffer, m_super+1, m_super+2);
+      if (sscanf(buf+i_str+3, fmt_buffer, m_super+1, m_super+2) < 2)
+        WARNING_MSG("could not read m1 (%i values read)\n", iaux);
     } /* m1 */
 
     else if( !strncasecmp(buf+i_str, "m2:", 3) )
     {
       sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
-      sscanf(buf+i_str+3, fmt_buffer, m_super+3, m_super+4);
+      if (iaux = sscanf(buf+i_str+3, fmt_buffer, m_super+3, m_super+4) < 2) 
+        WARNING_MSG("could not read m2 (%i values read\n", iaux);
     } /* m2 */
 
     /*
@@ -700,7 +708,11 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "spn:", 4) )
     {
-      sscanf(buf+i_str+4, " %d", &n_par );
+      if (sscanf(buf + i_str + 4, " %d", &n_par) < 1) {
+        ERROR_MSG("'%s'", buf + i_str);
+        ERROR_MSG("failed to read in 'spn' value\n");
+        exit(SR_INVALID_INPUT_FILE);
+      }
       sr_search->n_par = n_par;
       sr_search->z_only = 0;
 
@@ -730,7 +742,11 @@ int sr_rdinp(const char *inp_file)
         if( (buf[i_str] == '-') && (n_atoms > 0) ) i_atoms = n_atoms - 1;
         else if( (buf[i_str] >= '0') && (buf[i_str] <= '9') )
         {
-          sscanf(buf+i_str, "%d", &i_atoms );
+          if (sscanf(buf + i_str, "%d", &i_atoms) < 1) {
+            ERROR_MSG("'%s'", buf);
+            ERROR_MSG("failed to read number of atom 'i_atom'\n");
+            exit(SR_INVALID_INPUT_FILE);
+          }
         }
         else
         {
@@ -762,7 +778,10 @@ int sr_rdinp(const char *inp_file)
         for( i_par = 1; (i_par <= n_par) && (i_str < iaux) ; i_par ++)
         {
 
-          sscanf(buf+i_str, fmt_buffer, paux + i_par);
+          if (sscanf(buf + i_str, fmt_buffer, paux + i_par) == 0) {
+            ERROR_MSG("failed to read in value for 'paux[%i]'\n", i_par);
+            exit(SR_INVALID_INPUT_FILE);
+          }
 
           while( (i_str < iaux) && (buf[i_str] != ' ') ) i_str ++;
           while( (i_str < iaux) && (buf[i_str] == ' ') ) i_str ++;

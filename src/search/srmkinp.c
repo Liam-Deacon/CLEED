@@ -17,6 +17,11 @@
 
 #include <stdio.h>
 #include <string.h>
+#if _MSC_VER
+#define strncasecmp(x,y,z) _strnicmp((x),(y),(z))
+#else
+#include <strings.h>
+#endif
 
 #include "search.h"
 

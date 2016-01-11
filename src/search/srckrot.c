@@ -348,7 +348,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
  * Check assignment of atoms
  *************************************************************************/
 
-  for(i_atoms = 0, n_par = 0; i_atoms != n_atoms; i_atoms ++)
+  for(i_atoms = 0, n_par = 0; i_atoms < n_atoms; i_atoms ++)
   {
     if( (atoms + i_atoms)->ref == i_atoms )
     {
@@ -368,7 +368,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
   }  /* for i_atoms */
 
 
-  for(i_atoms = 0; i_atoms != n_atoms; i_atoms ++)
+  for(i_atoms = 0; i_atoms < n_atoms && (atoms+i_atoms != NULL); i_atoms ++)
   {
     if(!search->z_only)
     {
@@ -384,7 +384,7 @@ size_t sr_ckrot(search_atom *atoms, search *search )
  * Identify search parameters
  *************************************************************************/
 
-  for(i_atoms = 0, i_par = 1; i_atoms != n_atoms; i_atoms ++)
+  for(i_atoms = 0, i_par = 1; i_atoms < n_atoms; i_atoms ++)
   {
     if( (atoms + i_atoms)->ref == i_atoms )
     {

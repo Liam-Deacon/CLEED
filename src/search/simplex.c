@@ -19,6 +19,8 @@
  */
 
 #include <stdbool.h>
+#include <errno.h>
+#include <stdlib.h>
 #include "cleed_vector.h"
 #include "cleed_matrix.h"
 #include "search.h"
@@ -137,6 +139,11 @@ int update_simplex(cleed_vector *point, size_t dim, cleed_real *fmax,
   cleed_vector *next = cleed_vector_alloc(dim);
   cleed_real fx;
 
+  if (next == NULL) {
+    ERROR_MSG("could not allocate memory to 'next' \n");
+    exit(ENOMEM);
+  }
+
   for (i = 0; i < dim; i++) {
     cleed_vector_set(next, i,
         cleed_vector_get(midpoint, i) + scale*cleed_vector_get(line, i));
@@ -190,6 +197,26 @@ cleed_real amoeba(cleed_basic_matrix *simplex, cleed_vector *point,
 
   *nfunc = 0;
 
+  /* some pre-checks for sanity */
+  if (fx == NULL)
+  {
+    ERROR_MSG("could not allocate memory for 'fx'\n");
+    exit(ENOMEM);
+  }
+
+  if (midpoint == NULL)
+  {
+    ERROR_MSG("could not allocate memory for 'midpoint'\n");
+    exit(ENOMEM);
+  }
+
+  if (line == NULL)
+  {
+    ERROR_MSG("could not allocate memory for 'line'\n");
+    exit(ENOMEM);
+  }
+
+  /* function body */
   evaluate_simplex(simplex, dim, fx, func);
 
   while (*nfunc < iter_max)

@@ -25,8 +25,9 @@
  */
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <time.h>
 #include <math.h>
 
@@ -65,9 +66,14 @@ real sr_ckgeo(const cleed_vector *par)
   for(n_atoms = 0; (sr_atoms + n_atoms)->type != I_END_OF_LIST; n_atoms ++)
   { ; }
 
-  x = (real *)malloc( n_atoms * sizeof(real) );
-  y = (real *)malloc( n_atoms * sizeof(real) );
-  z = (real *)malloc( n_atoms * sizeof(real) );
+  x = (real *)calloc( n_atoms, sizeof(real) );
+  y = (real *)calloc( n_atoms, sizeof(real) );
+  z = (real *)calloc( n_atoms, sizeof(real) );
+  
+  if (x == NULL || y == NULL || z == NULL) {
+    ERROR_MSG("could not allocate memory for 'x', 'y' & 'z'\n");
+    exit(ENOMEM);
+  }
 
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {

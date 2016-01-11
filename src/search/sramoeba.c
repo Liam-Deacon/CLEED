@@ -15,7 +15,7 @@
 
 #include <math.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include "search.h"
@@ -121,6 +121,11 @@ real amotry(cleed_basic_matrix *p, cleed_vector *y, cleed_vector *psum,
   size_t j;
   real fac1, fac2, ytry, faux;
   cleed_vector *ptry = cleed_vector_alloc(ndim);
+
+  if (ptry == NULL) {
+    ERROR_MSG("could not allocate memory for 'ptry'\n");
+    exit(ENOMEM);
+  }
 
   fac1 = (1.0 - fac)/ndim;
   fac2 = fac1 - fac;

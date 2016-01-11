@@ -88,6 +88,13 @@ namespace cleed {
 #define STDCTR stdout /*!< output redirection for normal messages */
 #define STDCPU stdout /*!< output redirection for CPU messages */
 
+#ifdef _WIN32
+#define NULL_FILENAME "NUL"
+#else
+static inline char *const nullfilename = "/dev/null";
+#define NULL_FILENAME nullfilename
+#endif
+
 /*********************************************************************
  * printing verbosity and debugging messages
  *********************************************************************/

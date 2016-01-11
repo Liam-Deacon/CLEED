@@ -29,7 +29,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 #include "search.h"
 
@@ -79,7 +79,11 @@ int sr_rdver(const char *ver_file, cleed_vector *y, cleed_basic_matrix *p, int n
   sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
 
   while ( *fgets(linebuffer, STRSZ, ver_stream) == '#');
-  sscanf(linebuffer, "%u %u", &i_par, &m_par);
+  if (sscanf(linebuffer, "%u %u", &i_par, &m_par) < 2) {
+    ERROR_MSG("'%s'", linebuffer);
+    ERROR_MSG("could not read value for 'i_par' & 'm_par'\n");
+    exit(SR_INVALID_VERTEX_FILE);
+  }
 
   if( n_dim < 0)
   {
@@ -105,14 +109,22 @@ int sr_rdver(const char *ver_file, cleed_vector *y, cleed_basic_matrix *p, int n
       i_str = 0;
       while(linebuffer[i_str] == ' ') i_str ++;
 
-      sscanf(linebuffer+i_str, fmt_buffer, &faux);
+      if (sscanf(linebuffer + i_str, fmt_buffer, &faux) < 1) {
+        ERROR_MSG("'%s'\n", linebuffer + i_str);
+        ERROR_MSG("could not read value from input\n");
+        exit(SR_INVALID_VERTEX_FILE);
+      }
       cleed_vector_set(y, i_par, faux);
 
       for(j_par = 0; j_par < (size_t)n_dim; j_par ++)
       {
         while(linebuffer[i_str] != ' ') i_str ++;
         while(linebuffer[i_str] == ' ') i_str ++;
-        sscanf(linebuffer+i_str, fmt_buffer, &faux);
+        if (sscanf(linebuffer + i_str, fmt_buffer, &faux) < 1) {
+          ERROR_MSG("'%s'", linebuffer + i_str);
+          ERROR_MSG("could not read value from input\n");
+          exit(SR_INVALID_VERTEX_FILE);
+        }
         cleed_basic_matrix_set(p, i_par, j_par, (size_t)n_dim, faux);
       }
 

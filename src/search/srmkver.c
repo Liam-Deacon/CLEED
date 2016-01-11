@@ -11,12 +11,12 @@
  *********************************************************************/
 
 /*!
- * \file srsxbkup.c
+ * \file 
  * \author Liam Deacon
  * \date 17 Mar 2015
  */
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <time.h>
 
 #include "copy_file.h"

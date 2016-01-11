@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="copy_file.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="csearch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linpdebtemp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nrrbrent.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nrrlinmin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nrrmnbrak.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ran1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="simplex.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sramebsa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sramoeba.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srckgeo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srckrot.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srevalrf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srevalrf_mir.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srga.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srhelp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srmkinp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srmkinp_mir.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srmklog.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srmkver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srpo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srpowell.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srrdinp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srrdver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srsa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="srsx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\windows\csearch.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -25,6 +25,7 @@ GH/19.09.95 - BRENT_TOLERANCE defined in "search_def.h" (to 2.e-2
 
 ***********************************************************************/
 #include "search.h"
+#include <errno.h>
 
 /* 
    static variables communicating with 
@@ -44,6 +45,16 @@ void linmin(real *p, real *xi, size_t n, real *fret, real (*func)() )
 	pcom = cleed_vector_alloc(n);
 	xicom = cleed_vector_alloc(n);
 	nrfunc = func;
+
+  if (pcom == NULL) {
+    ERROR_MSG("could not allocate memory for pcom\n");
+    exit(ENOMEM);
+  }
+
+  if (xicom == NULL) {
+    ERROR_MSG("could not allocate memory for xicom\n");
+    exit(ENOMEM);
+  }
 
 	for (j=0; j<n; j++)
 	{
@@ -73,6 +84,17 @@ real f1dim(real x)
   size_t j;
   real f;
   cleed_vector *xt = cleed_vector_alloc(ncom);
+
+  if (xt == NULL) {
+    ERROR_MSG("could not allocate memory for xt\n");
+    exit(ENOMEM);
+  }
+
+  if (pcom == NULL || xicom == NULL)
+  {
+    ERROR_MSG("pcom and xicom must be allocated before use in this function\n");
+    exit(EFAULT);
+  }
 
   for (j=0; j<ncom; j++)
     cleed_vector_set(xt, j,

@@ -21,7 +21,7 @@
  */
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -161,9 +161,12 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
     ERROR_MSG("Could not append to log file '%s'\n", log_file);
+  }  
+  else
+  {
+    fprintf(log_stream, "\n=> ERROR_LOG BARS:\n\n");
   }
 
-  fprintf(log_stream, "\n=> ERROR_LOG BARS:\n\n");
   for (i_par = 0; i_par < n_dim; i_par ++)
   {
     dr = cleed_vector_get(y, i_par) - y_0;

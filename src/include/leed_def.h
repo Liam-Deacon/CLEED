@@ -303,7 +303,7 @@ typedef struct leed_phase  /*! Holds parameters for a single phase shift */
   real *pshift;        /*!< array of phase shift values */
  
   real dr[4];
-  char input_file[PATH_MAX];    /*!< name of input file */
+  char input_file[FILENAME_MAX];    /*!< name of input file */
 } leed_phase;
 
 /*! \typedef leed_beam
@@ -401,10 +401,10 @@ typedef struct leed_energy /*! Contains all parameters that change during
 typedef struct leed_args
 {
   int ctr_flag;             /*!< Flag for determining program control flow */
-  char bul_file[PATH_MAX];  /*!< Path to leed bulk input file */
-  char par_file[PATH_MAX];  /*!< Path to leed parameter input file */
-  char res_file[PATH_MAX];  /*!< Path to leed results file */
-  char pro_name[PATH_MAX];  /*!< Path to leed project file */
+  char bul_file[FILENAME_MAX];  /*!< Path to leed bulk input file */
+  char par_file[FILENAME_MAX];  /*!< Path to leed parameter input file */
+  char res_file[FILENAME_MAX];  /*!< Path to leed results file */
+  char pro_name[FILENAME_MAX];  /*!< Path to leed project file */
   FILE *pro_stream;         /*!< File pointer to project stream */
   FILE *res_stream;         /*!< File pointer to results stream */
 } leed_args;

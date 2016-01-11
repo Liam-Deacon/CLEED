@@ -32,7 +32,7 @@
 #define CLEED_REAL_IS_DOUBLE 1
 #endif
 
-#if !defined(_USE_MATH_DEFINES) && defined(__cplusplus)
+#if !defined(_USE_MATH_DEFINES) && (defined(__cplusplus) || defined(_MSC_VER))
 #define _USE_MATH_DEFINES
 #endif
 

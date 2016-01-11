@@ -33,7 +33,9 @@ extern "C" {
 
 #include "gh_stddef.h"
 
+#if !defined(CLEED_REAL_IS_DOUBLE) || defined (CLEED_REAL_IS_FLOAT)
 #define CLEED_REAL_IS_DOUBLE
+#endif
 
 #include "cleed_real.h"
 #include "cleed_vector.h"

@@ -28,7 +28,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
 #include <string.h>
 #include <math.h>
 #include "search.h"
@@ -95,7 +94,7 @@ void search_parse_args(int argc, char *argv[], real *delta,
           i_arg++;
           if (i_arg < argc)
           {
-            strncpy(inp_file, argv[i_arg], FILENAME_MAX);
+            strncpy(inp_file, argv[i_arg], FILENAME_MAX-1);
           }
           else
           {
@@ -110,7 +109,7 @@ void search_parse_args(int argc, char *argv[], real *delta,
           i_arg++;
           if (i_arg < argc)
           {
-            strncpy(bak_file, argv[i_arg], FILENAME_MAX);
+            strncpy(bak_file, argv[i_arg], FILENAME_MAX-1);
           }
           else
           {
@@ -178,7 +177,7 @@ void search_parse_args(int argc, char *argv[], real *delta,
    * - check existence of inp_file.
    *********************************************************************/
 
-    if(strncmp(inp_file, "---", 3) == 0)
+    if(inp_file == NULL || strncmp(inp_file, "---", 3) == 0)
     {
       ERROR_MSG("no parameter input file (option -i) specified\n");
       exit(SR_INVALID_INPUT_FILE);
