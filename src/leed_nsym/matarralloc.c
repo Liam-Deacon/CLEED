@@ -80,7 +80,7 @@ mat matarralloc(mat M, size_t length)
    */
   CONTROL_MSG(CONTROL, "create new matrix array of length %d\n", length);
 
-  M = (mat)calloc((length+1), sizeof(struct mat_str));
+  CLEED_ALLOC_CHECK(M = (mat)calloc((length+1), sizeof(struct mat_str)));
 
   /* Set magic numbers and blk_type for the array elements (and reset r/iel) */
   for(i_mat = 0; i_mat < length; i_mat ++)

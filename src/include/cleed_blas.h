@@ -42,7 +42,13 @@ extern "C" {
 #elif USE_GSL
 # include <gsl/gsl_blas.h>
 #else
-# warning "No BLAS package selected - using native routines."
+#define NO_BLAS_STR "No BLAS package selected - using native routines."
+#if __GNUC__
+#warning NO_BLAS_STR
+#elif _MSC_VER
+#pragma message ("warning: " NO_BLAS_STR)
+#endif
+#undef NO_BLAS_STR
 #define USE_NATIVE 1
 #endif
 

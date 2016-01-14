@@ -407,6 +407,7 @@ typedef struct leed_args
   char pro_name[FILENAME_MAX];  /*!< Path to leed project file */
   FILE *pro_stream;         /*!< File pointer to project stream */
   FILE *res_stream;         /*!< File pointer to results stream */
+  size_t sa;                /*!< Number of surface angles of incidence */
 } leed_args;
 
 

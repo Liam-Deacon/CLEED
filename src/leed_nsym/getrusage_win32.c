@@ -13,7 +13,7 @@ along with the MPIR Library; see the file COPYING.LIB. If not, write
 to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -24,8 +24,9 @@ Boston, MA 02110-1301, USA.
 #include "getrusage_win32.h"
 
 typedef union file_t
-{ FILETIME ft;
-    long long lt;
+{ 
+  FILETIME ft;
+  long long lt;
 } file_t;
 
 int getrusage(int who, rusage *usage)

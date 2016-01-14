@@ -28,6 +28,10 @@
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <assert.h>
 
 #include "mat.h"
 #include "qm.h"
@@ -123,11 +127,15 @@ mat r_ylm( mat Ylm, real x, real phi, size_t l_max )
 
   if ( (int)l_max > l_max_r )
   {
-    if (r_pre == NULL) r_pre = (real *) calloc( (l_max+1) , sizeof(real) );
-    else       r_pre = (real *) realloc( r_pre, (l_max+1) * sizeof(real) );
+    if (r_pre == NULL) 
+      CLEED_ALLOC_CHECK(r_pre = (real *) calloc( (l_max+1) , sizeof(real) ));
+    else               
+      CLEED_REALLOC( r_pre, (l_max+1) * sizeof(real) );
 
-    if (i_pre == NULL) i_pre = (real *) calloc( (l_max+1) , sizeof(real) );
-    else       i_pre = (real *) realloc( i_pre, (l_max+1) * sizeof(real) );
+    if (i_pre == NULL) 
+      CLEED_ALLOC_CHECK(i_pre = (real *) calloc( (l_max+1) , sizeof(real) ));
+    else               
+      CLEED_REALLOC( i_pre, (l_max+1) * sizeof(real) );
   }
 
   /* Some often used values */
@@ -293,21 +301,34 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
  
   if ( (int)l_max > l_max_r)
   {
-    if (r_pre == NULL) r_pre = (real *) calloc( (l_max+1) , sizeof(real) );
-    else       r_pre = (real *) realloc( r_pre, (l_max+1) * sizeof(real) );
+    if (r_pre == NULL) 
+      CLEED_ALLOC_CHECK(
+        r_pre = (real *) calloc( (l_max+1) , sizeof(real) ));
+    else       
+      CLEED_REALLOC( r_pre, (l_max+1) * sizeof(real) );
 
-    if (i_pre == NULL) i_pre = (real *) calloc( (l_max+1) , sizeof(real) );
-    else       i_pre = (real *) realloc( i_pre, (l_max+1) * sizeof(real) );
+    if (i_pre == NULL) 
+      CLEED_ALLOC_CHECK(i_pre = (real *) calloc( (l_max+1) , sizeof(real)) );
+    else       
+      CLEED_REALLOC( i_pre, (l_max+1) * sizeof(real) );
   }
 
   if ( (int)l_max > l_max_c)
   {
-    if (r_prec == NULL) r_prec = (real *) calloc( (l_max+1) , sizeof(real) );
-    else       r_prec = (real *) realloc( r_prec, (l_max+1) * sizeof(real) );
+    if (r_prec == NULL) 
+      CLEED_ALLOC_CHECK(r_prec = (real *) calloc( (l_max+1) , sizeof(real)) );
+    else       
+      CLEED_REALLOC(r_prec, (l_max + 1) * sizeof(real));
 
-    if (i_prec == NULL) i_prec = (real *) calloc( (l_max+1) , sizeof(real) );
-    else       i_prec = (real *) realloc( i_prec, (l_max+1) * sizeof(real) );
+    if (i_prec == NULL) 
+      CLEED_ALLOC_CHECK(i_prec = (real *) calloc( (l_max+1), sizeof(real)) );
+    else
+      CLEED_REALLOC(i_prec, (l_max + 1) * sizeof(real));
   }
+
+  /* sanity checks */
+  assert(r_prec != NULL);
+  assert(i_prec != NULL); 
 
   /* Some often used values */
   cri_mul(&z2_r, &z2_i, z_r, z_i, z_r, z_i);              /* z*z */
@@ -397,22 +418,26 @@ mat c_ylm( mat Ylm, real z_r, real z_i, real phi, size_t l_max )
  */
 int mk_ylm_coef(size_t l_max)
 {
-  size_t i, iaux;
+  size_t i; 
   size_t index;                /* index */
   size_t i_mem;                /* number of memory blocks allocated */
 
   size_t l, m;
   size_t lamb;
 
-  double *fac;
+  size_t iaux = 2 * l_max + 1;
+
+  double *fac = NULL;
+  
+  CLEED_ALLOC_CHECK(fac = (double*)malloc(iaux * sizeof(double)));
 
   real pre_0, pre_ll, pre_lm;  /* prefactors */
   real sgn;                    /* sign of the coefficients */
  
+  /* sanity checks */
+  assert(fac != NULL);
+
   /* Produce a list of factorials */
-  iaux = 2*l_max + 1;
-  fac = (double *) malloc( iaux * sizeof(double) );
- 
   for (fac[0] = 1. , i = 1; i < iaux; i ++ )
   {
     fac[i] = fac[i-1] * i;
@@ -424,12 +449,14 @@ int mk_ylm_coef(size_t l_max)
   i_mem = 1;
   if (coef == NULL)
   {
-    coef = (real *) calloc(i_mem * MEM_BLOCK , sizeof(real) );
+    CLEED_ALLOC_CHECK(coef = (real *) calloc(i_mem * MEM_BLOCK , sizeof(real) ));
   }
   else
   {
-    coef = (real *) realloc(coef, i_mem * MEM_BLOCK * sizeof(real) );
+    CLEED_REALLOC(coef, i_mem * MEM_BLOCK * sizeof(real) );
   }
+
+  assert(coef != NULL);
 
   /* loop over l
    * pre_0 is used as sqrt(pi/4) / 2^l
@@ -456,9 +483,10 @@ int mk_ylm_coef(size_t l_max)
       if( index > i_mem * MEM_BLOCK - l - iaux)
       {
         i_mem ++;
-        coef = (real *)realloc( coef, i_mem * MEM_BLOCK * sizeof(real) );
+        CLEED_REALLOC( coef, i_mem * MEM_BLOCK * sizeof(real) );
 
         CONTROL_MSG(CONTROL_ALL, "reallocate coef: %d\n", i_mem);
+        assert(coef != NULL);
       }
 
       for(lamb = l; lamb >= iaux; lamb--, index++ )

@@ -24,7 +24,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "stddef.h"
 #include "leed.h"
@@ -60,8 +60,8 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
   real orig[4];            /* keeps trac of the position relative to the
                               origin of the coordinate system */
 
-  real *vec;               /* intermediate storage for inter layer vectors */
-  size_t *no_of_atoms;     /* intermediate storage for number of atoms in layer */
+  real *vec = NULL;           /* intermediate storage for inter layer vectors */
+  size_t *no_of_atoms = NULL; /* intermediate storage for number of atoms in layer */
 
   real faux;
   real vaux[4];
@@ -77,8 +77,8 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
 
   /* Allocate memory for intermediate storage vectors vec and no_of_atoms:
    * max. number of layers = number of atoms */
-  vec = (real *) malloc( (3*(n_atoms+1) + 1) * sizeof(real) );
-  no_of_atoms = (size_t *) malloc(n_atoms * sizeof(size_t) );
+  CLEED_ALLOC_CHECK(vec = (real *) calloc( (3*(n_atoms+1) + 1), sizeof(real) ));
+  CLEED_ALLOC_CHECK(no_of_atoms = (size_t *) calloc(n_atoms, sizeof(size_t) ));
  
   /* i_layer indicates the layer which an atom belongs to; it will eventually
    * be the total number of layers.
@@ -316,8 +316,8 @@ int leed_inp_overlayer(leed_crystal *par, leed_atom *atom_list)
     CONTROL_MSG(CONTROL_X, "par->layers[%d].n_atoms = %d\n", i,
                             par->layers[i].n_atoms);
 
-    par->layers[i].atoms = (leed_atom*)
-        malloc(no_of_atoms[i] * sizeof(leed_atom));
+    CLEED_ALLOC_CHECK(par->layers[i].atoms = (leed_atom*)
+        calloc(no_of_atoms[i], sizeof(leed_atom)));
 
     for( i_d = 0, i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
     {

@@ -29,7 +29,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
 #include <string.h>
 
 #include "stddef.h"
@@ -64,6 +63,7 @@
  * \return Conventional C return code indicating function success.
  * \retval 0 Success.
  * \retval -1 if an error occurred and #EXIT_ON_ERROR is not defined.
+ * \warning Exits with error code if memory cannot be (re)allocated or copied.
  * \see leed_inp_phase_nd() and leed_inp_overlayer()
  */
 int leed_read_overlayer_nd(leed_crystal **p_over_par,
@@ -71,40 +71,48 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
                           leed_crystal *bulk_par,
                           const char *filename)
 {
-  FILE *inp_stream;
+  FILE *inp_stream = NULL;
 
   /* input buffers */
   char linebuffer[STRSZ];
   char phaseinp[STRSZ];
-  char whatnext[STRSZ];
+  char whatnext[STRSZ] = "";
 
-  int iret, iaux;                /* counter, dummy  variables */
+  int iret, iaux;                   /* counter, dummy  variables */
   size_t i, j, i_str;
   size_t i_com;
   size_t i_atoms;
   size_t i_layer;
 
-  real faux;                    /* dummy variable */
-  real vaux[4];                 /* dummy vector */
+  real faux;                        /* dummy variable */
+  real vaux[4];                     /* dummy vector */
 
-  leed_crystal *over_par;   /* use *over_par instead of the pointer
-                               p_over_par */
+  leed_crystal *over_par = NULL;    /* use *over_par instead of the pointer
+                                       p_over_par */
 
-  leed_atom atom_aux;     /* used for sorting atoms */
-  leed_atom *atoms_rd;    /* this vector of structure atom_str is
-                             used to read and treat the input atomic
-                             properties and will be copied into over_par
-                             afterwards */
+  leed_atom atom_aux;               /* used for sorting atoms */
+  leed_atom *atoms_rd = NULL;       /* this vector of structure atom_str is
+                                       used to read and treat the input atomic
+                                       properties and will be copied into 
+                                       over_par afterwards */
 
   /* If p_over_par is NULL: allocate memory
    * Copy contents of bulk_par into p_over_par.
    */
-  over_par = NULL;             /* initialise */
   if (*p_over_par == NULL)
   {
-    over_par = *p_over_par =  (leed_crystal *)malloc( sizeof(leed_crystal) );
-    memcpy(over_par, bulk_par, sizeof(leed_crystal) );
+    over_par = *p_over_par = (leed_crystal *)calloc(1, sizeof(leed_crystal));
+    CLEED_ALLOC_CHECK(over_par);
+    if (memcpy(over_par, bulk_par, sizeof(leed_crystal)) == NULL)
+    {
+      ERROR_MSG("failed to copy %u blocks of memory "
+                "from 'bulk_par' (%p) to 'over_par' (%p)\n", 
+                sizeof(leed_crystal), (void*)bulk_par, (void*)over_par);
+      exit(-1);
+    }
   }
+  else
+    over_par = *p_over_par;
 
   /* Preset parameters
    * - allocate atoms_rd (1 unit)
@@ -114,10 +122,10 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
    */
   over_par->layers = NULL;
 
-  atoms_rd = (leed_atom *)malloc(2 * sizeof(leed_atom));
+  CLEED_ALLOC_CHECK(atoms_rd = (leed_atom *)calloc(2, sizeof(leed_atom)));
   i_atoms = 0;
 
-  over_par->comments = (char **)malloc( sizeof(char *) );
+  CLEED_ALLOC_CHECK(over_par->comments = (char **)calloc(1, sizeof(char *) ));
   *(over_par->comments) = NULL;
   i_com = 0;
 
@@ -129,7 +137,8 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
   /* START INPUT: Open and Read input file */
   if( (inp_stream = fopen(filename, "r")) == NULL)
   {
-    ERROR_MSG("could not open file \"%s\"\n", filename);
+    ERROR_MSG("could not open file \"%s\ (%s)\n", 
+      filename, strerror(errno));
     ERROR_RETURN(-1);
   }
 
@@ -145,11 +154,9 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
     {
       case ('c'): case ('C'): /* input of comments to be stored */
       {
-        over_par->comments = (char **) realloc(
-                           over_par->comments, (i_com+2) * sizeof(char *) ); 
-
-        *(over_par->comments + i_com) = (char *)calloc(
-            strlen(filename) + strlen(linebuffer) + 2 - i_str, sizeof(char));
+        CLEED_REALLOC(over_par->comments, (i_com+2) * sizeof(char *) ); 
+        CLEED_ALLOC_CHECK(*(over_par->comments + i_com) = (char *)calloc(
+            strlen(filename) + strlen(linebuffer) + 2 - i_str, sizeof(char)));
         *(over_par->comments + i_com+1) = NULL;
 
         sprintf(*(over_par->comments + i_com), "(%s): %s",
@@ -166,9 +173,8 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
         if( (*(linebuffer+i_str+1) != 'o') && (*(linebuffer+i_str+1) != 'O') )
         break;
 
-        atoms_rd = ( leed_atom *) realloc(
-                   atoms_rd, (i_atoms+2) * sizeof(leed_atom) );
-
+        CLEED_REALLOC(atoms_rd, (i_atoms+2) * sizeof(leed_atom) );
+        
         #ifdef CLEED_REAL_IS_DOUBLE
         iaux = sscanf(linebuffer+i_str+3 ," %s %lf %lf %lf %s %lf %lf %lf",
         #else
@@ -179,6 +185,8 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
               atoms_rd[i_atoms].pos+2, 
               atoms_rd[i_atoms].pos+3,
               whatnext, vaux+1, vaux+2, vaux+3);
+        if (iaux < 8) 
+          WARNING_MSG("only read %u items from '%s'\n", iaux, linebuffer);
 
         for(i=1; i<=3; i++) atoms_rd[i_atoms].pos[i] /= BOHR;
        
@@ -280,9 +288,9 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
         break;
 
         #ifdef CLEED_REAL_IS_DOUBLE
-        sscanf(linebuffer+i_str+3, " %lf", &(over_par->vr));
+        CLEED_SSCANF(linebuffer + i_str + 3, " %lf", &(over_par->vr));
         #else
-        sscanf(linebuffer+i_str+3 ," %f", &(over_par->vr));
+        CLEED_SSCANF(linebuffer + i_str + 3, " %f", &(over_par->vr));
         #endif
         (over_par->vr) /= HART;
 
@@ -345,17 +353,16 @@ int leed_read_overlayer_nd(leed_crystal **p_over_par,
 
       if( vaux[1] < 0.) iaux = (int) vaux[1] - 1;
       else              iaux = (int) vaux[1];
-      {
-        atoms_rd[i].pos[1] -= iaux*bulk_par->b[1];
-        atoms_rd[i].pos[2] -= iaux*bulk_par->b[3];
-      }
+
+	    atoms_rd[i].pos[1] -= iaux*bulk_par->b[1];
+      atoms_rd[i].pos[2] -= iaux*bulk_par->b[3];
 
       if( vaux[2] < 0.) iaux = (int) vaux[2] - 1;
       else              iaux = (int) vaux[2];
-      {
-        atoms_rd[i].pos[1] -= iaux*bulk_par->b[2];
-        atoms_rd[i].pos[2] -= iaux*bulk_par->b[4];
-      }
+
+      atoms_rd[i].pos[1] -= iaux*bulk_par->b[2];
+      atoms_rd[i].pos[2] -= iaux*bulk_par->b[4];
+      
     } /* for i */
 
     /* Sort the atoms specified through atoms_rd.pos according to their z

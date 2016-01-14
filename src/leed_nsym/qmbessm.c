@@ -28,6 +28,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "mat.h"
 #include "qm.h"
 
@@ -99,7 +100,7 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
   real z_2_r, z_2_i, pref_r, pref_i;
   real sin_r, sin_i, cos_r, cos_i;
 
-  real *F_r, *F_i;
+  real *F_r = NULL, *F_i = NULL;
 
   if (l_max < 1) l_max = 1;   /* we need at least that much storage */
 
@@ -231,8 +232,12 @@ mat c_bess ( mat Jl, real z_r, real z_i, size_t l_max )
   if(l_int < l_max)
   {
     l_start = l_max + (size_t) cleed_real_sqrt(ACC*l_max);
-    F_r = (real *)malloc( (l_start+2) * sizeof(real) );
-    F_i = (real *)malloc( (l_start+2) * sizeof(real) );
+    F_r = (real *)calloc( (l_start+2), sizeof(real) );
+    F_i = (real *)calloc( (l_start+2), sizeof(real) );
+
+    /* sanity checks */
+    assert(F_r != NULL);
+    assert(F_i != NULL);
 
     F_r[l_start+1] = 0.; F_i[l_start+1] = 0.;
     F_r[l_start]   = 1.; F_i[l_start]   = 0.;

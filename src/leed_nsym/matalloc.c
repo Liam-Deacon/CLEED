@@ -142,7 +142,7 @@ mat matalloc(mat M, size_t rows, size_t cols, mat_enum num_type)
   {
     CONTROL_MSG(CONTROL_X, "create new matrix structure\n");
 
-    M = ( mat )malloc(sizeof(struct mat_str));
+    CLEED_ALLOC_CHECK(M = ( mat )malloc(sizeof(struct mat_str)));
     M->blk_type = BLK_SINGLE;
   }
   else  /* M != NULL */

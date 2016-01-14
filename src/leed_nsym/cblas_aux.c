@@ -142,7 +142,7 @@ int cblas2mat ( mat Mx, const real *cblas_mx )
   if (Mx->num_type == NUM_REAL)
   {
     /* use faster memcpy method rather than element-wise assignment */
-    memcpy((void*)Mx->rel+1, (const void*)cblas_mx,
+    memcpy(Mx->rel+1, cblas_mx,
             sizeof(real)*Mx->rows*Mx->cols);
     //for ( i=1; i <= Mx->rows * Mx->cols; i++) Mx->rel[i] = cblas_mx[i-1];
 
@@ -185,7 +185,6 @@ int mat2blas ( real *blas_mx, mat_enum blas_num, const mat Mx )
 
   size_t i, j, incre;
   real *blas_px;
-  real *ptrx, *ptix;
 
   if (Mx == NULL)
   {
@@ -233,7 +232,7 @@ int mat2blas ( real *blas_mx, mat_enum blas_num, const mat Mx )
     else /* just assign real part */
     {
       /* use faster memcpy method rather than element-wise assignment */
-      memcpy((void*)blas_mx, (const void*)Mx->rel+1,
+      memcpy(blas_mx, Mx->rel+1,
                 sizeof(real)*Mx->rows*Mx->cols);
       //for ( i=1; i <= Mx->rows * Mx->cols; i+=incre ) blas_mx[i-1] = Mx->rel[i];
     }
@@ -242,7 +241,7 @@ int mat2blas ( real *blas_mx, mat_enum blas_num, const mat Mx )
   {
     for ( i = 1 , blas_px = blas_mx;
           i <= Mx->rows * Mx->cols ;
-          i++ , blas_px += incre , ptrx++ , ptix++ )
+          i++ , blas_px += incre)
     {
       blas_mx[i-1] = Mx->rel[i];
       blas_mx[i] = Mx->iel[i];

@@ -1,0 +1,332 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cblas_aux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cleed_nsym.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cribasfun.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="err_code.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="float_equal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="getrusage_win32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gsl_aux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lbmgen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lbmselect.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lbmset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_args.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_beam.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_bsrinp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_crystal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_energy_loop.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_layer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_model.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_phase.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="leed_var.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lhelp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linpbullayer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linpdebtemp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linpmatlm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linpovllayer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linpphasend.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linprdbulnd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linprdovlnd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linprdpar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linpshowbop.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lld2lay.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lld2layrpm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lld2n.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lldpotstep.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lldpotstep0.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmsbravlnd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmscompl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmscomplnd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmslsumii.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmslsumij.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmspartinv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmstmatii.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmstmatij.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmstmatndii.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmsymat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmsymatset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lmsypy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="loutbmlist.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="louthead.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="loutint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lpccumtl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lpcmkms.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lpcmktl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lpcmktlnd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lpctemtl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lpcupdatend.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matabs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matalloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matarralloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matarrfree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mataux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matcheck.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matclu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matcol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matconj.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matcop.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matdiff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matext.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matfree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matins.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matinv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matmul.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matnattovht.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matrlu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matrm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matrow.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matscal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matshow.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matshowabs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matshowpar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matsqmod.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mattrace.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mattrans.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matwrite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="prgcheck.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qmbessm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qmcgc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qmhank.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qmylm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="err_code.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="getrusage_win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CLEED.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_blas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_complex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_linalg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_permutation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_real.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cleed_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gh_stddef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\windows\cleed_nsym.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

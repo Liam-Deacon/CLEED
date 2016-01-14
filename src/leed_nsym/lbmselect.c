@@ -23,7 +23,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
 #include <string.h>
 
 #include "leed.h"
@@ -51,6 +50,8 @@
  *
  * \return i_beams_out; the number of beams in the list pointed to by @p p_beams
  * \retval -1 if failed (not implemented)
+ *
+ * \warning The function will exit with code \c ENOMEM if memory cannot be (re)allocated.
  */
 int leed_beam_get_selection(leed_beam **p_beams_out,
                             leed_beam * beams_in,
@@ -82,14 +83,23 @@ int leed_beam_get_selection(leed_beam **p_beams_out,
   }
   else
   {
-    *p_beams_out =
+    leed_beam *tmp_p_beams_out =     
         (leed_beam *) realloc(*p_beams_out, iaux*sizeof(leed_beam));
+    if (tmp_p_beams_out)
+      *p_beams_out = tmp_p_beams_out;
+    else
+    {
+      ERROR_MSG("unable to reallocate %u blocks for '*p_beams_out'"
+                " at address %p\n", iaux*sizeof(leed_beam), 
+                (void *)*p_beams_out);
+      exit(ENOMEM);
+    }
   }
  
   if(*p_beams_out == NULL)
   {
-    ERROR_MSG("allocation error.\n");
-    ERROR_EXIT_RETURN(LEED_ALLOCATION_ERROR, LEED_ALLOCATION_ERROR);
+    ERROR_MSG("'p_beams_out' allocation error.\n");
+    exit(ENOMEM);
   }
  else
  {

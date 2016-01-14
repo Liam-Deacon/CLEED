@@ -32,7 +32,7 @@ extern "C" {
 
 size_t leed_get_number_of_angles(const char *filebsr);
 int leed_merge_result_files(const char *par_file, size_t sa);
-leed_args leed_args_init_aoi(leed_args *src_args, size_t i_ang);
+leed_args *leed_args_init_aoi(leed_args *src_args, size_t i_ang);
 
 #ifdef __cplusplus
 } /* extern C */

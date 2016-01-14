@@ -22,7 +22,7 @@
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "leed.h"
 
@@ -66,7 +66,7 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
 
   if(p_tl == NULL)
   {
-    p_tl = (mat *)malloc(n_set * sizeof(mat));
+    CLEED_ALLOC_CHECK(p_tl = (mat *)malloc(n_set * sizeof(mat)));
     for(i_set = 0; i_set < n_set; i_set ++) p_tl[i_set] = NULL;
   }
  

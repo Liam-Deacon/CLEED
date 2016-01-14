@@ -22,6 +22,7 @@
 #include <malloc.h>
 #include "mat.h"
 #include <stdlib.h>
+#include <errno.h>
 
 /*!
  * Reads matrix from a file.
@@ -50,6 +51,13 @@ mat matread(mat M, FILE *file)
       free(M->rel); M->rel = NULL;
       free(M->iel); M->iel = NULL;
     }
+  }
+
+  /* sanity check */
+  if (M == NULL)
+  {
+    ERROR_MSG("could not allocate memory for 'M'\n");
+    exit(ENOMEM);
   }
 
   /* First read matrix header */

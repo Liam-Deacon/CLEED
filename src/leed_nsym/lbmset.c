@@ -21,7 +21,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
 #include <string.h>
 #include "leed.h"
 
@@ -71,8 +70,19 @@ int leed_beam_set(leed_beam ** p_beams_out, leed_beam * beams_in, size_t set)
   }
   else
   {
-    beams_out = *p_beams_out = (leed_beam *)
+    leed_beam *tmp_p_beams_out = (leed_beam *)
          realloc(*p_beams_out, n_beams_out*sizeof(leed_beam));
+    if (tmp_p_beams_out == NULL)
+    {
+      ERROR_MSG("could not reallocate %u blocks for '*p_beams_out'"
+                " at address %p\n", n_beams_out*sizeof(leed_beam), 
+                (void*) *p_beams_out);
+      exit(ENOMEM);
+    }
+    else
+    {
+      beams_out = *p_beams_out = tmp_p_beams_out;
+    }
   }
   if(beams_out == NULL)
   {

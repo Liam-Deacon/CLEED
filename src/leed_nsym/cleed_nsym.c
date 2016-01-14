@@ -25,6 +25,7 @@
 
 #include "leed.h"
 #include "leed_aoi.h"
+#include <string.h>
 
 /*!
  * Perform a LEED calculation for anisotropic vibrations (general case)

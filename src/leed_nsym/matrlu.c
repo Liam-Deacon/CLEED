@@ -23,6 +23,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <malloc.h>
+#include <errno.h>
 
 #include "mat.h"
 
@@ -54,10 +55,14 @@ int r_ludcmp(real *a, size_t *indx, size_t n)
   size_t i_max=1;
 
   real big, dum, sum;
-  real *vv;                     /* vv stores the implicit scaling of each row */
+  real *vv = NULL;              /* vv stores the implicit scaling of each row */
   real *ptr1, *ptr2, *ptr_end;  /* used as counters in the innermost loops */
 
-  vv = (real *)malloc( (n+1) * sizeof(real) );
+  if ((vv = (real *)calloc((n + 1), sizeof(real))) == NULL)
+  {
+    ERROR_MSG("could not allocate memory for 'vv'\n");
+    exit(ENOMEM);
+  }
 
   /* get implicit scaling information */
   for (i_r = 1; i_r <= n; i_r ++ )  /* loop over rows */

@@ -65,7 +65,7 @@ FILE *leed_check_result_file(const char* res_file) {
 
     if ((res_stream = fopen(res_file, "w")) == NULL) {
       ERROR_MSG("could not open output file \"%s\"\n", res_file);
-      exit(ENOFILE);
+      exit(ENOENT);
     }
 
   }
@@ -190,7 +190,7 @@ leed_args *leed_args_parse(int argc, char *argv[])
         if ((args->res_stream = fopen(args->res_file, "w")) == NULL)
         {
           ERROR_MSG("could not open output file \"%s\"\n", args->res_file);
-          exit(ENOFILE);
+          exit(ENOENT);
         }
       }  /* -o */
 
@@ -211,7 +211,7 @@ leed_args *leed_args_parse(int argc, char *argv[])
         {
           ERROR_MSG("can not open project file \"%s\" for reading\n",
                     args->pro_name);
-          exit(ENOFILE);
+          exit(ENOENT);
         }
       } /* -r */
 
@@ -226,7 +226,7 @@ leed_args *leed_args_parse(int argc, char *argv[])
         if ((args->pro_stream = fopen(args->pro_name, "w")) == NULL) {
           ERROR_MSG("could not open project file \"%s\" for writing\n",
                     args->pro_name);
-          exit(ENOFILE);
+          exit(ENOENT);
         }
       } /* -w */
 

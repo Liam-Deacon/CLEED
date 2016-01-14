@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <strings.h>
+#include <string.h>
 #include <malloc.h>
 
 #include "gh_stddef.h"
@@ -61,7 +61,7 @@ char *file2buffer(const char * const filename)
   {
     if ((in_stream = fopen(filename, "r") ) == NULL)
     {
-      ERROR_MSG("could not open \"%s\"\n", filename);
+      ERROR_MSG("could not open \"%s\" (%s)\n", filename, strerror(errno));
       fclose(in_stream);
 
       /* try uncompressing */
@@ -77,7 +77,8 @@ char *file2buffer(const char * const filename)
       {
         if ((in_stream = fopen (filename, "r") ) == NULL)
         {
-          ERROR_MSG("could not open \"%s\"\n", filename);
+          ERROR_MSG("could not open \"%s\" (%s)\n", 
+                    filename, strerror(errno));
           fclose(in_stream);
           ERROR_RETURN(NULL);
         }
@@ -107,9 +108,10 @@ char *file2buffer(const char * const filename)
     } /* if system.. */
     else
     {
-      if ((in_stream = fopen (filename, "r") ) == NULL)
+      if ((in_stream = fopen(filename, "r") ) == NULL)
       {
-        ERROR_MSG("could not open \"%s\"\n", line_buffer);
+        ERROR_MSG("could not open \"%s\" (%s)\n", 
+                  filename, strerror(errno));
         fclose(in_stream);
         ERROR_RETURN(NULL);
       }
@@ -133,14 +135,8 @@ char *file2buffer(const char * const filename)
 
   CONTROL_MSG(CONTROL, "\"%s\" has %ld bytes \n", filename, nbytes);
 
-  buffer = (char *)malloc((size_t)nbytes*13 + 2);
-  if (buffer == NULL)
-  {
-    ERROR_MSG("unable to allocate memory for \"%s\"\n"
-              "                  (filesize: %ld)\n", filename, nbytes+1);
-    fclose(in_stream);
-    exit(ENOMEM);
-  }
+  CLEED_ALLOC_CHECK(buffer = (char *)
+    calloc((size_t)nbytes*13 + 2, sizeof(char)));
 
 /************************************************************ 
  * Read file to buffer

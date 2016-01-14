@@ -28,6 +28,7 @@
 #include "cleed_matrix.h"
 #include "cleed_permutation.h"
 #include "cleed_blas.h"
+#include "attributes.h"
 
 #if USE_GSL
 # include <gsl/gsl_linalg.h>
@@ -44,7 +45,13 @@
 #else
 # include "clapack.h" /* default is Netlib's CLAPACK interface */
 # if (!USE_GSL)
-#   warning "No linear algebra back-end selected (either LAPACK or GSL) - using native routines."
+#define NO_LINALG_STR "No linear algebra back-end selected (either LAPACK or GSL) - using native routines."
+#if __GNUC__
+#warning NO_LINALG_STR
+#elif _MSC_VER
+#pragma message ("warning: " NO_LINALG_STR)
+#endif
+#undef NO_LINALG_STR
 # endif
 #endif
 

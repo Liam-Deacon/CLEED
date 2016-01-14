@@ -211,9 +211,9 @@ mat leed_ms_ymmat(mat, int, leed_beam *, int);
 mat leed_ms_ymat_r(mat, int, leed_beam *, int);
 
 /* Transformations of Ylm (lmsypy.c) */
-mat leed_ms_yp_ym(mat, mat);
-mat leed_ms_yp_yxp(mat, mat);
-mat leed_ms_yp_yxm(mat, mat);
+mat leed_ms_yp_ym(mat, const mat);
+mat leed_ms_yp_yxp(mat, const mat);
+mat leed_ms_yp_yxm(mat, const mat);
 
 /* Summation over all beams for composite layer in case of symmetry */
 mat leed_ms_comp_k_sum(mat, leed_beam *, leed_atom *, int, int, int);

@@ -25,6 +25,12 @@
 #include "leed.h"
 #include "leed_aoi.h"
 
+#if _MSC_VER
+#define strncasecmp(x,y,z) _strnicmp((x),(y),(z)) 
+#else                
+#include <strings.h>
+#endif
+
 /*!
  * Returns the number of angle inputs as given by 'sa:' command string in
  * the CLEED input file.
@@ -66,6 +72,7 @@ size_t leed_get_number_of_angles(const char *filebsr)
 
   strncpy(fname_string, filebsr,
           (length < sizeof(fname_string)-1) ? length : sizeof(fname_string)-1);
+  fname_string[FILENAME_MAX - 1] = '\0';
 
   if (strlen(fname_string) + 4 >= sizeof(fname_string)-1 ||
       strlen(fname_string) + 4 > FILENAME_MAX ||
@@ -89,7 +96,7 @@ size_t leed_get_number_of_angles(const char *filebsr)
     {
       if (sscanf(linebuffer+3, " %u", &sa) < 1)
       {
-        ERROR_MSG("could not read value from '%s'", linebuffer);
+        WARNING_MSG("could not read value from '%s'(sa=%u)\n", linebuffer, sa);
       }
     }
   }  /*while*/
@@ -102,13 +109,30 @@ size_t leed_get_number_of_angles(const char *filebsr)
 
 /*!
  * Creates an aoi version of the input filename for a given angle.
+ *
+ * \param aoi_filename New filename for given angle of incidence.
+ * Memory will be allocated if \c NULL is passed into the function.
+ * \param[in] src_filename Original filename
+ * \param[in] i_ang Angles of incidence to append to \p src_filename
+ *
+ * \warning \p src_filename must not be \c NULL otherwise no
+ * changes will be made to \p aoi_filename
  */
-static leed_create_aoi_filename(char *aoi_filename,
+void leed_create_aoi_filename(char *aoi_filename,
     const char *src_filename, size_t i_ang)
 {
-  char *ext = src_filename ? strrchr(src_filename) : NULL;
+  if (src_filename == NULL) return;
+  char *ext = src_filename ? strrchr(src_filename, '.') : NULL;
   size_t length = ext ? (ext - src_filename) : strlen(src_filename);
+  if (aoi_filename == NULL) {
+    if ((aoi_filename = (char*)calloc(length + 1, sizeof(char))) == NULL)
+    {
+      ERROR_MSG("could not allocate memory for new filename\n");
+      exit(ENOMEM);
+    }
+  }
   strncpy(aoi_filename, src_filename, length);
+  aoi_filename[length] = '\0';
   strcat(aoi_filename, leed_aoi_extension);
   if (ext)
     strcat(aoi_filename, ext);
@@ -124,13 +148,28 @@ int leed_merge_result_files(const char *par_file, size_t sa) {
   FILE *read_stream = NULL;
   char res_filename[FILENAME_MAX] = "";
   char tmp_filename[FILENAME_MAX] = "";
-  char *ext = strrchar(par_file, '.');
+  char *ext = (par_file != NULL) ? strrchr(par_file, '.') : NULL;
+  char linebuffer[STRSZ] = "";
+
+  if (par_file == NULL)
+  {
+    ERROR_MSG("parameter input file cannot be NULL\n");
+    exit(EINVAL);
+  }
 
   if (ext)
     length = ext - par_file;
 
+  if (length >= FILENAME_MAX)
+  {
+    WARNING_MSG("parameter filename '%s' is too long - "
+                "truncated to %i characters", par_file, FILENAME_MAX);
+    length = FILENAME_MAX - strlen(".res") - 1;
+  }
+
   /* Make proj_name.res = proj_nameia_1.res + proj_nameia_2.res + ... */
   strncpy(res_filename, par_file, length);
+  res_filename[length] = '\0';
   sprintf(res_filename + length, ".res");
 
   if ((write_stream = fopen(res_filename, "w")) == NULL)
@@ -143,6 +182,7 @@ int leed_merge_result_files(const char *par_file, size_t sa) {
   for (i_ang = 0; i_ang < sa; i_ang ++)
   {
     strncpy(tmp_filename, par_file, length);
+    tmp_filename[length] = '\0';
     sprintf(tmp_filename + length, "ia_%u.res", i_ang + 1);
     if ((read_stream = fopen(tmp_filename, "r")) == NULL)
     {
@@ -152,9 +192,9 @@ int leed_merge_result_files(const char *par_file, size_t sa) {
 
     fprintf(write_stream, "Copy of %s\n", tmp_filename);
 
-    while (fgets(line_buffer, STRSZ, read_stream))
+    while (fgets(linebuffer, STRSZ, read_stream))
     {
-      fprintf(write_stream, "%s", line_buffer);
+      fprintf(write_stream, "%s", linebuffer);
     }
 
     fclose(read_stream);
@@ -167,7 +207,7 @@ int leed_merge_result_files(const char *par_file, size_t sa) {
   return 0;
 }
 
-leed_args leed_args_init_aoi(leed_args *src_args, size_t i_ang) {
+leed_args *leed_args_init_aoi(leed_args *src_args, size_t i_ang) {
   leed_args *aoi_args = leed_args_init();
 
   if (aoi_args) {
@@ -196,6 +236,7 @@ int leed_bsrinp(const char *filebsr, size_t number)
   size_t i_ang;
   size_t num;
   size_t length = (filebsr == NULL) ? 0 : strlen(filebsr);
+  int err = 0;
 
   float ip, it;
 
@@ -228,6 +269,7 @@ int leed_bsrinp(const char *filebsr, size_t number)
   {
     rewind(readstream);
     strncpy(bsr_filename, filebsr, length);
+    bsr_filename[FILENAME_MAX - 1] = '\0';
     fprintf(STDERR, "i_ang: %u\n%s\n", i_ang, bsr_filename);
     sprintf(linebuffer + length, "%s%u.bsr", leed_aoi_extension, i_ang + 1);
     fprintf(STDERR, "%s\n", bsr_filename);
@@ -248,7 +290,11 @@ int leed_bsrinp(const char *filebsr, size_t number)
  
         if (num == (i_ang + 1))
         {
-          sscanf(linebuffer + 4, " %u %f %f", &num, &ip, &it);
+          if (err = sscanf(linebuffer + 4, " %u %f %f", &num, &ip, &it) < 3) 
+          {
+            ERROR_MSG("could not read all values from line '%s' (%i read)\n", 
+              linebuffer, err);
+          }
           fprintf(writestream, "ip: %.2f\nit: %.2f\n", ip, it);
         }
       }

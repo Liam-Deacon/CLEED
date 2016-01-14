@@ -24,7 +24,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "leed.h"
 #include "leed_def.h"
@@ -163,27 +163,27 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('f'): /* final energy */
           {
-            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
+            CLEED_SSCANF(linebuffer + i_str + 3, fmt_buffer, &faux);
             eng_par->final = faux/HART;
             break;
           }
 
           case('i'): /* initial energy */
           {
-            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
+            CLEED_SSCANF(linebuffer+i_str+3, fmt_buffer, &faux);
             eng_par->initial = faux/HART;
             break;
           }
 
           case('p'): /* epsilon */
           {
-            sscanf(linebuffer+i_str+3, fmt_buffer, &(var_par->epsilon) );
+            CLEED_SSCANF(linebuffer+i_str+3, fmt_buffer, &(var_par->epsilon) );
             break;
           }
 
           case('s'): /* energy step */
           {
-            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
+            CLEED_SSCANF(linebuffer+i_str+3, fmt_buffer, &faux);
             eng_par->step = faux/HART;
             break;
           }
@@ -199,14 +199,14 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('t'): /* theta */
           {
-            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
+            CLEED_SSCANF(linebuffer+i_str+3, fmt_buffer, &faux);
             var_par->theta = DEG_TO_RAD * faux;
             break;
           }
 
           case('p'): /* phi */
           {
-            sscanf(linebuffer+i_str+3, fmt_buffer, &faux);
+            CLEED_SSCANF(linebuffer+i_str+3, fmt_buffer, &faux);
             var_par->phi = DEG_TO_RAD * faux;
             break;
           }
@@ -223,7 +223,7 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('m'):
           {
-            sscanf(linebuffer+i_str+3, "%d", &(var_par->l_max) );
+            CLEED_SSCANF(linebuffer+i_str+3, "%d", &(var_par->l_max) );
             break;
           }
         }
@@ -237,7 +237,7 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
         {
           case('e'):
           {
-            sscanf(linebuffer+i_str+3, fmt_buffer, &(var_par->vi_exp));
+            CLEED_SSCANF(linebuffer+i_str+3, fmt_buffer, &(var_par->vi_exp));
             break;
           }
            

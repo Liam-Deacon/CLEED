@@ -20,6 +20,7 @@
 #include <math.h>   
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "mat.h"
 
@@ -74,6 +75,11 @@ mat matscal(mat Mr, const mat Mi, real num_r, real num_i )
         register real *ptrr, *ptri;
 
         Mr->iel = (real*)calloc( Mr->cols*Mr->rows * 1, sizeof(real));
+        if (Mr->iel == NULL)
+        {
+          ERROR_MSG("could not allocate memory for imaginary elements\n");
+          exit(ENOMEM);
+        }
         Mr->num_type = NUM_COMPLEX;
 
         for( ptrr = Mr->rel + 1, ptri = Mr->iel + 1,

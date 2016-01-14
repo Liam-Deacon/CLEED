@@ -26,7 +26,7 @@
 #include "attributes.h"
 #include "rfac_def.h"
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+#if __cplusplus  /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
@@ -186,7 +186,7 @@ size_t rfac_ivcur_get_number_of_datasets(const rfac_ivcur *iv_cur);
 int rfac_main(int, char **);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-}
+} /* extern "C" */
 #endif
 
 #endif /* RFAC_FUNC_H */

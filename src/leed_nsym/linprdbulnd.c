@@ -34,7 +34,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
 #include <string.h>
 
 #include "leed.h"
@@ -64,19 +63,23 @@ static const double SQRT3 = 1.73205080756887729352; /*!< \f$ \sqrt{3} \f$ */
  * \return Error code indicating function success.
  * \retval 0 if successful.
  * \retval -1 if failed and #EXIT_ON_ERROR not defined.
+ *
+ * \warning Function will exit program with code \c errno upon
+ * memory (re)allocation failure.
+ * 
  * \see leed_inp_phase_nd() and leed_inp_bul_layer()
  */
 int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
                          const char *filename)
 {
-  FILE *inp_stream;
+  FILE *inp_stream = NULL;
 
   /* input buffers */
-  char linebuffer[STRSZ];
-  char phaseinp[STRSZ];
-  char whatnext[STRSZ];
+  char linebuffer[STRSZ] = "";
+  char phaseinp[STRSZ] = "";
+  char whatnext[STRSZ] = "";
   size_t i, j;
-  int iaux;               /* counter, dummy  variables */
+  int iaux;                     /* used as a counter or for dummy variables */
   size_t i_c, i_str;
   size_t i_com = 0;             /* number of comments */
   size_t i_atoms = 0;           /* counter for number of atoms */
@@ -87,19 +90,20 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   real a1[4], a2[4], a3[4];     /* vectors: 1=x, 2=y, 3=z, 0 is not used */
   real vaux[4];                 /* dummy vector */
 
-  leed_crystal *bulk_par;       /* use instead of pointer p_bulk_par */
+  leed_crystal *bulk_par = NULL;/* use instead of pointer p_bulk_par */
 
-  leed_atom atom_aux;     /* used for sorting atoms */
-  leed_atom *atoms_rd;    /* this vector of structure atom_str is
-                             used to read and treat the input atomic
-                             properties and will be copied into bulk_par
-                             afterwards */
+  leed_atom atom_aux;           /* used for sorting atoms */
+  leed_atom *atoms_rd = NULL;   /* this vector of structure atom_str is
+                                   used to read and treat the input atomic
+                                   properties and will be copied into bulk_par
+                                   afterwards */
 
-  /* If bulk_par or phs_shifts is NULL: allocate memory and copy back to */
-  bulk_par = NULL; /* initialise */
+  /* If bulk_par or phs_shifts is NULL: allocate memory and copy back */
+  bulk_par = *p_bulk_par; /* initialise */
   if (*p_bulk_par == NULL)
   {
-    bulk_par = *p_bulk_par = (leed_crystal *) malloc(sizeof(leed_crystal));
+    bulk_par = *p_bulk_par = (leed_crystal *) calloc(1, sizeof(leed_crystal));
+    CLEED_ALLOC_CHECK(bulk_par);
   }
 
   /* Preset parameters
@@ -116,10 +120,10 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
   for (i_c = 0; i_c < 4; i_c++) a1[i_c] = a2[i_c] = a3[i_c] = 0.;
 
   /* set initial bulk parameters */
-  bulk_par->m_plane = (real *) malloc(sizeof(real));
-  bulk_par->alpha = (real *) malloc( sizeof(real));
+  CLEED_ALLOC_CHECK(bulk_par->m_plane = (real *) calloc(1, sizeof(real)));
+  CLEED_ALLOC_CHECK(bulk_par->alpha   = (real *) calloc(1, sizeof(real)));
 
-  bulk_par->comments = (char **) malloc(sizeof(char *));
+  CLEED_ALLOC_CHECK(bulk_par->comments = (char **) calloc(1, sizeof(char *)));
   *(bulk_par->comments) = NULL;
 
   bulk_par->m_trans[1] = bulk_par->m_trans[4] = 1.;
@@ -199,13 +203,18 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
 
           case ('3'): /* a3 */
           {
+            if (
             #ifdef CLEED_REAL_IS_DOUBLE
-            sscanf(linebuffer + i_str + 3, " %lf %lf %lf",
-                   &a3[1], &a3[2], &a3[3]);
+              sscanf(linebuffer + i_str + 3, " %lf %lf %lf",
+                   &a3[1], &a3[2], &a3[3])
             #else
-            sscanf(linebuffer + i_str + 3, " %f %f %f", &a3[1], &a3[2], &a3[3]);
+              sscanf(linebuffer + i_str + 3, " %f %f %f", &a3[1], &a3[2], &a3[3])
             #endif
-
+              < 3) 
+            {
+              ERROR_MSG("could not read vector a3\n");
+              ERROR_RETURN(-1);
+            }
             a3[1] /= BOHR; a3[2] /= BOHR; a3[3] /= BOHR;
             break;
           } /* a3 */
@@ -257,13 +266,23 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
 
       case ('c'): case ('C'): /* input of comments to be stored */
       {
-        bulk_par->comments = (char **) realloc(bulk_par->comments,
-            (i_com + 2) * sizeof(char *));
+        char **tmp_comments =  
+          (char **) realloc(bulk_par->comments, (i_com+2) * sizeof(char *));
 
+        if (tmp_comments == NULL)
+        {
+          ERROR_MSG("could not allocate memory for comments\n");
+          exit(ENOMEM);
+        }
+        else
+        {
+          bulk_par->comments = tmp_comments;
+        }
         *(bulk_par->comments + i_com) = (char *) calloc(
             strlen(filename) + strlen(linebuffer) + 2 - i_str, sizeof(char));
         *(bulk_par->comments + i_com + 1) = NULL;
 
+        CLEED_ALLOC_CHECK(bulk_par->comments[i_com]);
         sprintf(*(bulk_par->comments + i_com), "(%s): %s",
                 filename, linebuffer + i_str + 2);
 
@@ -278,24 +297,36 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
         {
           case ('1'): /* m11 and m21 superstructure matrix elements */
           {
+            if (
             #ifdef CLEED_REAL_IS_DOUBLE
-            sscanf(linebuffer + i_str + 3, " %lf %lf",
-                   bulk_par->m_recip + 1, bulk_par->m_recip + 2);
+              sscanf(linebuffer + i_str + 3, " %lf %lf",
+                     bulk_par->m_recip + 1, bulk_par->m_recip + 2)
             #else
-            sscanf(linebuffer+i_str+3, " %f %f",
-                bulk_par->m_recip+1, bulk_par->m_recip+2);
+              sscanf(linebuffer+i_str+3, " %f %f",
+                    bulk_par->m_recip+1, bulk_par->m_recip+2)
             #endif
+              < 2) 
+            {
+              ERROR_MSG("could not read first row of superstructure matrix\n");
+              ERROR_RETURN(-1);
+            }
             break;
           }
           case ('2'): /* m21 and m22 superstructure matrix elements */
           {
+            if (
             #ifdef CLEED_REAL_IS_DOUBLE
-            sscanf(linebuffer + i_str + 3, " %lf %lf",
-                   bulk_par->m_recip + 3, bulk_par->m_recip + 4);
+              sscanf(linebuffer + i_str + 3, " %lf %lf",
+                   bulk_par->m_recip + 3, bulk_par->m_recip + 4)
             #else
-            sscanf(linebuffer + i_str + 3, " %f %f",
-                bulk_par->m_recip+3, bulk_par->m_recip+4);
+              sscanf(linebuffer + i_str + 3, " %f %f",
+                bulk_par->m_recip+3, bulk_par->m_recip+4)
             #endif
+              < 2)
+            {
+              ERROR_MSG("could not read second row of superstructure matrix\n");
+              ERROR_RETURN(-1);
+            }
             break;
           }
         }
@@ -319,9 +350,19 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
           }
           break;
         }
-
-        atoms_rd = (leed_atom *) realloc(atoms_rd,
+        leed_atom *tmp_atoms_rd = (leed_atom *) realloc(atoms_rd,
                                     (i_atoms + 2) * sizeof(leed_atom));
+        if (tmp_atoms_rd != NULL)
+        {
+          atoms_rd = tmp_atoms_rd;
+        }
+        else
+        {
+          ERROR_MSG("could not reallocate %u blocks of memory to 'atoms_rd'"
+                    " at address %p (%s)\n", (i_atoms + 2) * sizeof(leed_atom),
+                    (void *)atoms_rd, strerror(errno));
+          exit(errno);
+        }
 
         #ifdef CLEED_REAL_IS_DOUBLE
         iaux = sscanf(linebuffer + i_str + 3, " %s %lf %lf %lf %s %lf %lf %lf",
@@ -435,11 +476,17 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
         {
           case ('i'): case ('I'):
           {
+            if (
             #ifdef CLEED_REAL_IS_DOUBLE
-            sscanf(linebuffer + i_str + 3, " %lf", &(bulk_par->vi));
+              sscanf(linebuffer + i_str + 3, " %lf", &(bulk_par->vi))
             #else
-            sscanf(linebuffer + i_str + 3, " %f", &(bulk_par->vi));
+              sscanf(linebuffer + i_str + 3, " %f", &(bulk_par->vi))
             #endif
+                  < 1)
+            {
+              WARNING_MSG("could not read in 'vi' optical potential value "
+                          "(using vi=%g)\n", bulk_par->vi);
+            }
             (bulk_par->vi) /= HART;
             /* make sure, vi is > 0. */
             if (bulk_par->vi < 0.)
@@ -454,12 +501,17 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
 
           case ('r'): case ('R'):
           {
+            if (
             #ifdef CLEED_REAL_IS_DOUBLE
-            sscanf(linebuffer + i_str + 3, " %lf", &(bulk_par->vr));
+              sscanf(linebuffer + i_str + 3, " %lf", &(bulk_par->vr))
             #else
-            sscanf(linebuffer + i_str + 3, " %f", &(bulk_par->vr));
+              sscanf(linebuffer + i_str + 3, " %f", &(bulk_par->vr))
             #endif
-
+                  < 1)
+            {
+              WARNING_MSG("could not read in 'vr' optical potential value "
+                "(using vr=%g)\n", bulk_par->vr);
+            }
             (bulk_par->vr) /= HART;
 
 
@@ -505,11 +557,35 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
           {
             /* allocate */
             i_plane++;
-            bulk_par->m_plane = (real *)realloc(bulk_par->m_plane,
-                                                (2*i_plane + 1) * sizeof(real));
-            bulk_par->alpha = (real *)realloc(bulk_par->alpha,
+            real *tmp_m_plane = (real *)
+              realloc(bulk_par->m_plane, (2*i_plane + 1) * sizeof(real));
+            if (tmp_m_plane != NULL)
+            {
+              bulk_par->m_plane = tmp_m_plane;
+            }
+            else
+            {
+              ERROR_MSG("failed to reallocate %u blocks of memory for "
+                        "'bulk_par->m_plane' at address %p (%s)\n",
+                        (2 * i_plane + 1) * sizeof(real), 
+                        (void*)bulk_par->m_plane, strerror(errno));
+              exit(errno);
+            }
+
+            real *tmp_alpha = (real *)realloc(bulk_par->alpha,
                                               (i_plane + 1) * sizeof(real));
- 
+            if (tmp_alpha != NULL)
+            {
+              bulk_par->alpha = tmp_alpha;
+            }
+            else 
+            {
+              ERROR_MSG("failed to reallocate %u blocks of memory for "
+                        "'bulk_par->alpha' at address %p (%s)\n",
+                        (i_plane + 1) * sizeof(real),
+                        (void*)bulk_par->alpha, strerror(errno));
+              exit(errno);
+            }
             i = 2 *i_plane -1;
             j = 2 *i_plane -2;
 

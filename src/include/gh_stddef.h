@@ -119,11 +119,15 @@ static inline char *const nullfilename = "/dev/null";
  * \brief Exits with integer code 1 if #EXIT_ON_ERROR is defined, otherwise
  * the function will return with the given error code.
  */
- 
+
 #ifdef DEBUG
 # define EXIT_ON_ERROR  1 /*!< Exits program if error occurs. */
 # define ERROR_LOG      1 /*!< Enable error logging to stderr */
 # define WARNING_LOG    1 /*!< Enable warning logging to #STDWAR */
+#endif
+
+#ifndef EXIT_ON_ERROR 
+#define EXIT_ON_ERROR 0
 #endif
 
 #if VERBOSE == 1
@@ -175,13 +179,26 @@ static inline char *const nullfilename = "/dev/null";
 # define CONTROL_LEVEL -1
 #endif
 
-#ifdef EXIT_ON_ERROR
+#if EXIT_ON_ERROR >= 1
 # define ERROR_RETURN(i) exit(1)
 # define ERROR_EXIT_RETURN(a,b)  exit((a))
+# define ASSERT_MSG(expr, ...) \
+  do { ERROR_MSG(__VA_ARGS__); assert((expr)); } while(0)
+# 
 #else
 # define ERROR_RETURN(i) return((i))
 # define ERROR_EXIT_RETURN(a,b)  return((b))
+# define ASSERT_MSG(expr, ...) WARNING_MSG(__VA_ARGS__)
 #endif
+
+#if EXIT_ON_ERROR < 0
+# define CLEED_RETURN(i) return((-1))
+#elif EXIT_ON_ERROR > 0
+# define CLEED_RETURN(i) exit((i))
+#else
+# define CLEED_RETURN(i)
+#endif
+
 
   /* remove annoying rest arguments warning with ISO C99 & GCC */
 #if __GNUC__
@@ -247,10 +264,19 @@ static const double PI = M_PI;
 static const double PI = 3.1415926535897932385;
 #endif
 
+#ifndef NAN 
+#define NAN (0./0.)
+#endif
+
+#if __STDC_VERSION__ < 199901L
+#define isnan(x) ((x) != (x))
+#define isinf(x) (!isnan((x)) && isnan((x) - (x)))
+#endif
+
 static const double DEG_TO_RAD = 0.017453293;  /*!< conversion degree to radian */
 static const double RAD_TO_DEG = 57.29578;     /*!< conversion radian to degree */
 
-static const double M2_H = 0.2631894506957162; /*!< 2*m/h       [eV^-1   A^-2] */
+static const double M2_H = 0.2631894506957162;      /*!< 2*m/h       [eV^-1   A^-2] */
 static const double SQRT_M2_H = 0.5130199320647456; /*!< sqrt(2*m/h) [eV^-0.5 A^-1] */
 
 /*********************************************************************
@@ -279,7 +305,7 @@ enum {
 
 enum { U_END_OF_LIST = (sizeof(size_t) - 1) }; /*!< list terminator (unsigned int) */
 enum { I_END_OF_LIST = -9999 };                /*!< list terminator (integer)*/
-static const double F_END_OF_LIST = -9999.;    /*!< list terminator (float)  */
+static const double F_END_OF_LIST = NAN;       /*!< list terminator (float)  */
 
 /*
 #define IEND_OF_LIST   I_END_OF_LIST  //!< alias for list terminator (integer)
@@ -303,6 +329,10 @@ __extension__ ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a 
 #endif
 
 #ifdef __cplusplus /* use function templates */
+
+#include <algorithm>
+using std::min;
+using std::max;
 
 template <typename T> inline T square(T x)
 {
@@ -449,6 +479,120 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
 #endif
 
 #define IS_END_OF_LIST(var)
+#define F_IS_END_OF_LIST(var) isnan((var))
+
+/*********************************************************************
+* helper macros:
+*********************************************************************/
+
+/*! 
+ * \define CLEED_ALLOC 
+ * \brief wrapper logic around realloc function to avoid memory leaks.
+ * \note exits program if \c errno is raised because memory cannot 
+ *  be allocated.
+ */
+#define CLEED_REALLOC(ptr, new_size)                              \
+  do                                                              \
+  {                                                               \
+    void *tmp_ptr = realloc(ptr, new_size);                       \
+    if (tmp_ptr != NULL)                                          \
+      ptr = tmp_ptr;                                              \
+    else                                                          \
+    {                                                             \
+      ERROR_MSG("could not reallocate %u blocks of memory "       \
+                "for '" #ptr "' at address %p (%s)\n",            \
+                new_size, (void*)ptr, strerror(errno));           \
+      exit(errno);                                                \
+    }                                                             \
+  } while (0); 
+
+/*!
+ * \define CLEED_ALLOC
+ * \brief Performs memory allocation in \c expr and checks for \c NULL
+ * \note The program will exit with code given by \c errno on failure.
+ * The exit is justified as the main reason for memory allocation 
+ * failures will be because the system has ran out of resources and 
+ * therefore it is questionable whether there is any benefit in 
+ * continuing to run the program.
+ */
+#define CLEED_ALLOC_CHECK(expr)                                   \
+  do                                                              \
+  {                                                               \
+    if ((expr) == NULL)                                           \
+    {                                                             \
+      ERROR_MSG("failed to allocate memory for '"                 \
+                #expr "'(%s)\n", strerror(errno));                \
+      exit(errno);                                                \
+    }                                                             \
+  } while(0)                                                      
+
+/*! 
+ * \define __NARGS
+ * \brief Helper for \c N_ARGS macro
+ *
+ * \define NARGS
+ * \brief Counts number of arguments of variadic arguments \c __VA_ARGS__
+ * \warning This macro has a 20 argument limit. 
+ *
+ */
+#define __NARGS(_1, _2, _3, _4, _5,_6, _7, _8, _9, _10, _11, _12, _13, \
+  _14, _15, _16, _17, _18, _19, _20,VAL, ...) VAL
+
+/*
+*/
+
+#ifdef _MSC_VER /* Microsoft compilers */
+
+#define EXPAND(x) x
+#define NARGS_1(...) EXPAND(__NARGS(__VA_ARGS__, 20, 19, 18, 17, 16,   \
+  15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
+
+#define AUGMENTER(...) unused, __VA_ARGS__
+#define NARGS(...) (NARGS_1(AUGMENTER(__VA_ARGS__))-1) /* -1 for MSVC */
+
+#else /* Others */
+
+inline void *cleed_realloc(void* ptr, size_t new_size)
+{
+  void *tmp_ptr = realloc(ptr, new_size);
+  if (tmp_ptr != NULL)
+    ptr = tmp_ptr;
+  else
+  {
+    ERROR_MSG("could not reallocate %u blocks of memory for "
+      "pointer at address %p (%s)\n", new_size, ptr, strerror(errno));
+    exit(errno);
+  }
+  return ptr;
+}
+
+#define NARGS(...) (sizeof(#__VA_ARGS__) == sizeof("") ? 0 :            \
+  __NARGS(__VA_ARGS__, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10,      \
+          9, 8, 7, 6, 5, 4, 3, 2, 1))
+
+#endif
+
+/*!
+ * \define CLEED_SSCANF
+ * \brief Safely scans values for \c fmt format-specifier and exits if fails
+ */
+#define CLEED_SSCANF(buf, fmt, ...)                                         \
+do {                                                                        \
+  int sscanf_tmp;                                                           \
+  int n_va_args = NARGS(__VA_ARGS__);                                       \
+  if ((sscanf_tmp = sscanf((buf), fmt, ##__VA_ARGS__)) < n_va_args) {       \
+    if (EXIT_ON_ERROR > 0) {                                                \
+      ERROR_MSG("read %i value%s from buffer '%s', "                        \
+            "but format sscanf specifier '%s' expects %i\n",                \
+            sscanf_tmp, (n_va_args != 1) ? "s" : "", buf, fmt, n_va_args);  \
+    } else {                                                                \
+      WARNING_MSG("read %i value%s from buffer '%s', "                      \
+          "but format sscanf specifier '%s' expects %i\n",                  \
+          sscanf_tmp, (n_va_args != 1) ? "s" : "", buf, fmt, n_va_args);    \
+    }                                                                       \
+    CLEED_RETURN(EIO);                                                      \
+  }                                                                         \
+} while (0)
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* namespace cleed */

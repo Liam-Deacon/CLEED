@@ -32,7 +32,7 @@
 #include <omp.h>
 #endif
 
-static const unsigned long int IFAC = 1e6;
+static const unsigned long int IFAC = 1000000UL;
 
 /*!
  * Checks if \c OMP_NUM_THREADS environment variable is set if compiled with

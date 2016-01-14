@@ -28,15 +28,15 @@
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
-#include <strings.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <errno.h>
 
 #include "leed.h"
 #include "leed_def.h"
 
-#ifdef __STRICT_ANSI__
+#ifdef __STRICT_ANSI__ 
 char *strdup(const char *str) /* strdup is not standard C (its POSIX) */
 {
     int n = strlen(str) + 1;
@@ -86,14 +86,14 @@ size_t leed_update_phase(size_t n)
 int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
                       leed_phase **p_phs_shifts )
 {
-  FILE *inp_stream;
+  FILE *inp_stream = NULL;
 
   char filename[STRSZ];
   char linebuffer[STRSZ];
-  char eng_type[STRSZ];
-  char fmt_buffer[STRSZ];
+  char eng_type[STRSZ] = "";
+  char fmt_buffer[STRSZ] = "%e";
 
-  leed_phase *phs_shifts;
+  leed_phase *phs_shifts = NULL;
 
   size_t i, i_str, i_eng;
 
@@ -153,13 +153,13 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
       }
     }
     i_phase ++;
-    *p_phs_shifts = (leed_phase *)
-            realloc(*p_phs_shifts, (i_phase + 1) * sizeof(leed_phase) );
+    CLEED_REALLOC(*p_phs_shifts, (i_phase + 1) * sizeof(leed_phase) );
   }
   else
   {
     i_phase ++;
-    *p_phs_shifts = (leed_phase *) malloc( 2 * sizeof(leed_phase) );
+    CLEED_ALLOC_CHECK(
+      *p_phs_shifts = (leed_phase *) malloc( 2 * sizeof(leed_phase) ));
   }
 
   /* Terminate list of phase shifts */
@@ -180,8 +180,9 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
    */
   if( (inp_stream = fopen(filename, "r")) == NULL)
   {
-    ERROR_MSG("could not open file \"%s\"\n", filename);
-    ERROR_RETURN(-1);
+    ERROR_MSG("could not open file \"%s\" (%s)\n", 
+      filename, strerror(errno));
+    ERROR_EXIT_RETURN(errno, -1);
   }
 
   strcpy(phs_shifts->input_file, filename);
@@ -196,12 +197,12 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   if ( linebuffer == NULL)     /* EOF found */
   {
     ERROR_MSG("unexpected EOF found while reading file \"%s\"\n", filename);
-    exit(1);
+    exit(EIO);
   }
-  else if( sscanf(linebuffer, "%d %d %s", &neng, &lmax, eng_type) < 2)
+  else if( sscanf(linebuffer, "%d %d %s", &neng, &lmax, eng_type) < 3)
   {
     ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
-    ERROR_RETURN(-1);
+    ERROR_EXIT_RETURN(EIO, -1);
   }
 
   /* Define energy scale according to eng_type. The default is
@@ -244,7 +245,11 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
        i_eng ++)
   {
 
-    sscanf(linebuffer, fmt_buffer, phs_shifts->energy+i_eng);
+    if (sscanf(linebuffer, fmt_buffer, phs_shifts->energy + i_eng) < 1)
+    {
+      ERROR_MSG("could not read energy value #%u from '%s'\n",
+        i_eng, linebuffer);
+    }
     phs_shifts->energy[i_eng] *= eng_scale;
    
     if (i_eng == 0)
@@ -260,8 +265,12 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     {
       for( i_str = 0, i = 0; i<nl; i++)
       {
-        sscanf(linebuffer + i_str, fmt_buffer,
-               phs_shifts->pshift + i_eng*nl + i);
+        if (sscanf(linebuffer + i_str, fmt_buffer,
+               phs_shifts->pshift + i_eng*nl + i) < 1)
+        {
+          ERROR_MSG("phaseshift could not be read on line '%s'\n", linebuffer);
+          exit(EIO);
+        }
         while((linebuffer[i_str] == ' ') || (linebuffer[i_str] == '-')) i_str++;
         while((linebuffer[i_str] != ' ') && (linebuffer[i_str] != '-')) i_str++;
       }

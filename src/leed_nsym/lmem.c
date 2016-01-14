@@ -9,7 +9,7 @@ int leed_crystal_bulk_init(leed_crystal *bulk)
   {
     if ((bulk = (leed_crystal*) malloc(sizeof(leed_crystal))) == NULL)
     {
-      assert(bulk == NULL);
+      assert(bulk != NULL);
     }
   }
   

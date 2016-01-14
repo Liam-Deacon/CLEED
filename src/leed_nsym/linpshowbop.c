@@ -19,7 +19,7 @@
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "leed.h"
 

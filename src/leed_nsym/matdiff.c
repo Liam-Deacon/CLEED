@@ -56,7 +56,7 @@ real matdiff(const mat M1, const mat M2)
   diff = 0.;
 
   if ( ( (M1->mat_type == MAT_NORMAL) || (M1->mat_type == MAT_SQUARE) ) &&
-       ( (M1->mat_type == MAT_NORMAL) || (M1->mat_type == MAT_SQUARE) ) )
+       ( (M2->mat_type == MAT_NORMAL) || (M2->mat_type == MAT_SQUARE) ) )
   {
     nn = M1->cols * M1->cols;
     switch(M1->num_type)

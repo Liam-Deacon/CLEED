@@ -30,7 +30,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 #include "leed.h"
 
@@ -70,9 +70,9 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   real orig[4];            /* keeps track of the position relative to the
                             * origin of the coordinate system */
 
-  real *vec;               /* intermediate storage for inter layer vectors */
-  real *shift;             /* intermediate storage for registry-shifts */
-  size_t *no_of_atoms;     /* intermediate storage for number of atoms in layer */
+  real *vec = NULL;               /* intermediate storage for inter layer vectors */
+  real *shift = NULL;             /* intermediate storage for registry-shifts */
+  size_t *no_of_atoms = NULL;     /* intermediate storage for number of atoms in layer */
 
   real faux;
   real vaux[4];           /* stores the z-position of topmost atom in layer */
@@ -94,9 +94,9 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   /* Allocate memory for intermediate storage vectors vec and no_of_atoms:
    * max. number of layers = number of atoms
    */
-  vec = (real *) calloc( (4*(n_atoms+1) + 1), sizeof(real) );
-  shift = (real *) calloc( (2*(n_atoms) + 1), sizeof(real) );
-  no_of_atoms = (size_t *) calloc(n_atoms, sizeof(size_t) );
+  CLEED_ALLOC_CHECK(vec = (real *) calloc( (4*(n_atoms+1) + 1), sizeof(real) ));
+  CLEED_ALLOC_CHECK(shift = (real *) calloc( (2*(n_atoms) + 1), sizeof(real) ));
+  CLEED_ALLOC_CHECK(no_of_atoms = (size_t *) calloc(n_atoms, sizeof(size_t) ));
 
   i_layer = 0;                  /* Layer in which an atom belongs to, will
                                  * eventually be total number of layers */
@@ -289,8 +289,7 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
        */
       for (j=0; atom_list[j].layer == 0; j++);
       {
-        atom_list = (leed_atom *) realloc(
-                 atom_list, (n_atoms+j+2) * sizeof(leed_atom) );
+        CLEED_REALLOC(atom_list, (n_atoms+j+2)*sizeof(leed_atom));
       }
 
       #ifndef NSYM
@@ -472,7 +471,8 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
    */
 
   /* Allocate */
-  par->layers = (leed_layer *) malloc( (i_layer+1) * sizeof(leed_layer) );
+  CLEED_ALLOC_CHECK(par->layers = (leed_layer *)
+        calloc((i_layer + 1), sizeof(leed_layer)));
 
   for(i=0 ; i < i_layer ; i++)
   {
@@ -555,8 +555,8 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
      * and copy the appropriate entries from list atom_list into
      * par->layers[j].atoms
      */
-    par->layers[j].atoms = (leed_atom *)
-        malloc(no_of_atoms[i] * sizeof(leed_atom) );
+    CLEED_ALLOC_CHECK(par->layers[j].atoms = (leed_atom *)
+        calloc(no_of_atoms[i], sizeof(leed_atom) ));
 
     for(u_d=0, i_atoms=0; i_atoms < n_atoms; i_atoms++)
     {

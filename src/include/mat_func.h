@@ -74,7 +74,7 @@ __attribute__((nonnull, returns_nonnull)) mat matinv(mat, const mat);
 mat matinv_old(mat, mat);
 
 /* matrix multiplication in file matmul.c */
-__attribute__((nonnull, returns_nonnull)) mat matmul(mat, mat, mat);
+__attribute__((nonnull, returns_nonnull)) mat matmul(mat, const mat, const mat);
 
 /* convert order */
 __attribute__((nonnull)) void matnattovht(const mat, size_t, size_t);

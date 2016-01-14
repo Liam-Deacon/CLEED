@@ -25,7 +25,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
 #include <string.h>
 
 #include "leed.h"
@@ -55,6 +54,9 @@
  * \param eng_max maximum energy for the energy loop in Hartees.
  * \return the number of beam sets in the list pointed to by \p p_beams
  * \retval -1 if failed
+ *
+ * \warning The function will exit with code \c ENOMEM if memory cannot be
+ * (re)allocated.
  */
 int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
            leed_var *v_par, real eng_max)
@@ -105,13 +107,22 @@ int leed_beam_gen(leed_beam **p_beams, leed_crystal *c_par,
   }
   else
   {
-    *p_beams = (leed_beam *)realloc(*p_beams, iaux*sizeof(leed_beam));
+    leed_beam *tmp_p_beams = 
+      (leed_beam *)realloc(*p_beams, iaux*sizeof(leed_beam));
+    if (tmp_p_beams != NULL)
+      *p_beams = tmp_p_beams;
+    else
+    {
+      ERROR_MSG("could not reallocate %u blocks for '*p_beams'"
+                " at address %p\n", iaux*sizeof(leed_beam), (void*)*p_beams);
+      exit(ENOMEM);
+    }
   }
 
   if(*p_beams == NULL)
   {
-    ERROR_MSG("allocation error.\n");
-    exit(1);
+    ERROR_MSG("unable to allocate memory for '*p_beams'\n");
+    exit(ENOMEM);
   }
   else
   {

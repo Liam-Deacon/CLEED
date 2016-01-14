@@ -24,7 +24,7 @@
 #include <stddef.h>
 
 void leed_var_free(leed_var *var) {
-  matarrfree(var->p_tl);
+  if(var->p_tl) matarrfree(var->p_tl);
   free(var);
   var = NULL;
 }

@@ -62,7 +62,7 @@ mat leed_ms_yp_yxp ( mat Yxmat, const mat Ymat)
   size_t offl, offm;                /* offsets in the arrays Ymat and Yxmat */
   size_t size;
 
-  real *buffer;
+  real *buffer = NULL; /* needs to be initialised to NULL - see below */
 
   real *ptr, *ptr_end;
 
@@ -79,7 +79,7 @@ mat leed_ms_yp_yxp ( mat Yxmat, const mat Ymat)
   Yxmat = mattrans( Yxmat, Ymat);
 
   size = Yxmat->cols * sizeof(real);
-  buffer = (real*)malloc(size);
+  CLEED_REALLOC(buffer, size); /* ISO C90 states realloc(NULL, size) == malloc(size) */
 
   l_max = (size_t)(cleed_real_sqrt((real) Yxmat->rows ) + 0.1) - 1;
 
@@ -164,9 +164,9 @@ mat leed_ms_yp_yxm ( mat Yxmat, const mat Ymat)
   size_t offl, offm;                /* offsets in the arrays Ymat and Yxmat */
   size_t size;
 
-  real *buffer;
+  real *buffer = NULL;
 
-  real *ptr, *ptr_end;
+  real *ptr = NULL, *ptr_end = NULL;
 
   /* Check arguments: */
 
@@ -180,7 +180,7 @@ mat leed_ms_yp_yxm ( mat Yxmat, const mat Ymat)
   Yxmat = mattrans( Yxmat, Ymat);
 
   size = Yxmat->cols * sizeof(real);
-  buffer = (real*)malloc(size);
+  CLEED_ALLOC_CHECK(buffer = (real*)malloc(size));
 
   l_max = (size_t)(cleed_real_sqrt((real) Yxmat->rows ) + 0.1) - 1;
 
@@ -257,7 +257,7 @@ mat leed_ms_yp_ym ( mat Ymmat, const mat Ypmat)
   size_t l_max;
   size_t offl;                      /* offsets in the arrays Ymmat and Ypmat */
 
-  real *ptr, *ptr_end;
+  real *ptr = NULL, *ptr_end = NULL;
 
   /* Check arguments: */
 

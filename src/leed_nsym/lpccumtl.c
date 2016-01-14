@@ -31,7 +31,7 @@ GH/11.07.03 - bug fix in output of T_mat for T=0: multiply with (-kappa)
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include "leed.h"
