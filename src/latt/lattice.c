@@ -246,9 +246,10 @@ int lattice_set_atom(lattice *lat, const atom *atom, size_t index)
     return (LATTICE_ATOM_INDEX_OUT_OF_RANGE);
   }
  
-  lat->atoms[index].element = (char *) malloc(sizeof(char) * 
+  lat->atoms[index].element = (char *) calloc(sizeof(char), 
                                                   strlen(atom->element));
-  strcpy(lat->atoms[index].element, atom->element); 
+  if (lat->atoms[index].element)
+	strcpy(lat->atoms[index].element, atom->element); 
   lat->atoms[index].x = atom->x;
   lat->atoms[index].y = atom->y;
   lat->atoms[index].z = atom->z;
@@ -292,8 +293,8 @@ int lattice_set_atom_list(lattice *lat, const atom *atoms, size_t n_atoms)
     {
       if (lat->atoms[i_atom].element == NULL)
       {
-        lat->atoms[i_atom].element = (char *) malloc(sizeof(char) * 
-                                            strlen(atoms[i_atom].element));
+        CLEED_ALLOC_CHECK(lat->atoms[i_atom].element = 
+				(char *) calloc(sizeof(char), strlen(atoms[i_atom].element)));
       }
       strcpy(lat->atoms[i_atom].element, atoms[i_atom].element);
     }
@@ -514,20 +515,19 @@ atom *lattice_get_atom(const lattice *lat, size_t index)
 {
   atom *an_atom = NULL;
 
-  if (lat == NULL) return(NULL);
+  if (lat == NULL || index >= lat->n_atoms) return(NULL);
 
-  if ((an_atom = (atom*) malloc(sizeof(atom))) == NULL) return(NULL);
-
-  if (index >= lat->n_atoms) return(NULL);
+  if ((an_atom = atom_alloc()) == NULL) return(NULL);
   
   an_atom->x = lat->atoms[index].x;
   an_atom->x = lat->atoms[index].y;
   an_atom->x = lat->atoms[index].z;
-  if (strlen(lat->atoms[index].element) > 0)
+  if (lat->atoms[index].element && strlen(lat->atoms[index].element) > 0)
   {
-    an_atom->element = (char*) malloc(sizeof(char) *
+    an_atom->element = (char*) calloc(sizeof(char),
                                 strlen(lat->atoms[index].element));
-    strcpy(an_atom->element, lat->atoms[index].element);
+	if (an_atom->element)
+		strcpy(an_atom->element, lat->atoms[index].element);
   }
   
   return(an_atom);
@@ -555,25 +555,31 @@ extern const atom *lattice_get_atom_list(const lattice *lat)
  */
 void lattice_atom_index_swap(lattice *lat, size_t i, size_t j)
 {
-  atom *temp_atom = (atom*) malloc(sizeof(atom));
-  temp_atom->element = (char*) malloc(sizeof(char) * NAMSZ);  
+  char element[NAMSZ] = "";
+  atom temp_atom;
+  temp_atom.element = element;
   
   if (i > lat->n_atoms || j > lat->n_atoms) return;
   
-  temp_atom->x = lat->atoms[j].x;
-  temp_atom->y = lat->atoms[j].y;
-  temp_atom->z = lat->atoms[j].z;
-  strncpy(temp_atom->element, lat->atoms[j].element, NAMSZ);
-  
+  temp_atom.x = lat->atoms[j].x;
+  temp_atom.y = lat->atoms[j].y;
+  temp_atom.z = lat->atoms[j].z;
+  strncpy(temp_atom.element, lat->atoms[j].element, NAMSZ - 1);
+  temp_atom.element[NAMSZ - 1] = '\0';
+
   lat->atoms[j].x = lat->atoms[i].x;
   lat->atoms[j].y = lat->atoms[i].y;
   lat->atoms[j].z = lat->atoms[i].z;
-  strncpy(lat->atoms[j].element, lat->atoms[i].element, NAMSZ);
-  
-  lat->atoms[i].x = temp_atom->x;
-  lat->atoms[i].y = temp_atom->y;
-  lat->atoms[i].z = temp_atom->z;
-  strncpy( lat->atoms[i].element, temp_atom->element, NAMSZ );
+  strncpy(lat->atoms[j].element, lat->atoms[i].element, NAMSZ - 1);
+  lat->atoms[j].element[NAMSZ - 1] = '\0';
+
+  lat->atoms[i].x = temp_atom.x;
+  lat->atoms[i].y = temp_atom.y;
+  lat->atoms[i].z = temp_atom.z;
+  strncpy( lat->atoms[i].element, temp_atom.element, NAMSZ - 1);
+  lat->atoms[i].element[NAMSZ - 1] = '\0';
+
+
 }
 
 /*!
@@ -684,8 +690,8 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2, coord *a3,
     /* LAT_HCP: hexagonal close-packed structure */
 
     *n_bas = 2;
-    realloc((coord*) bas, sizeof(coord) * (*n_bas));
-    realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
+    CLEED_REALLOC(bas, sizeof(coord) * (*n_bas));
+    CLEED_REALLOC(bas_name, *n_bas * NAMSZ * sizeof(char));
     
     strncpy(bas_name, lat->atoms[0].element, NAMSZ);
     strncpy(bas_name + NAMSZ, lat->atoms[0].element, NAMSZ);
@@ -735,8 +741,8 @@ void lattice_setup(lattice *lat, coord *a1, coord *a2, coord *a3,
     /* LAT_DIA: diamond structure */
 
     *n_bas = 2;
-    realloc((coord*) bas, sizeof(coord) * (*n_bas));
-    realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
+    CLEED_REALLOC(bas, sizeof(coord) * (*n_bas));
+    CLEED_REALLOC(bas_name, *n_bas * NAMSZ * sizeof(char));
     
     strncpy (bas_name, lat->atoms[0].element, NAMSZ);
     strncpy (bas_name + NAMSZ, lat->atoms[0].element, NAMSZ);
@@ -883,8 +889,8 @@ int lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
   
   *n_bas = MAX_INP_ATOMS;
   
-  realloc((coord*) bas, sizeof(coord) * (*n_bas));
-  realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
+  CLEED_REALLOC(bas, sizeof(coord) * (*n_bas));
+  CLEED_REALLOC(bas_name, *n_bas * NAMSZ * sizeof(char));
   
   R[0][0] = R[1][1] = 1.;
   R[0][1] = R[1][0] = 0.;
@@ -900,29 +906,29 @@ int lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
     /* read lattice vectors and superstructure matrix */
     if( strncmp(line_buffer, "a1:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%lf %lf %lf", &a1->x, &a1->y, &a1->z);
+      CLEED_SSCANF(line_buffer+3, "%lf %lf %lf", &a1->x, &a1->y, &a1->z);
     }
     if( strncmp(line_buffer, "a2:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%lf %lf %lf", &a2->x, &a2->y, &a2->z);
+	  CLEED_SSCANF(line_buffer+3, "%lf %lf %lf", &a2->x, &a2->y, &a2->z);
     }
     if( strncmp(line_buffer, "a3:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%lf %lf %lf", &a3->x, &a3->y, &a3->z);
+	  CLEED_SSCANF(line_buffer+3, "%lf %lf %lf", &a3->x, &a3->y, &a3->z);
     }
     if( strncmp(line_buffer, "m1:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%lf %lf", &R[0][0], &R[0][1]);
+	  CLEED_SSCANF(line_buffer+3, "%lf %lf", &R[0][0], &R[0][1]);
     }
     if( strncmp(line_buffer, "m2:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%lf %lf", &R[1][0], &R[1][1]);
-     }
+	  CLEED_SSCANF(line_buffer+3, "%lf %lf", &R[1][0], &R[1][1]);
+    }
 
     /* read basis vectors */
     if( strncmp(line_buffer, "pb:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%s %lf %lf %lf", bas_name+(i_bas * NAMSZ),
+      CLEED_SSCANF(line_buffer+3, "%s %lf %lf %lf", bas_name+(i_bas * NAMSZ),
     		  &bas[i_bas].x, &bas[i_bas].y, &bas[i_bas].z);
       i_bas ++;
     }
@@ -930,7 +936,7 @@ int lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
     if( strncmp(line_buffer, "po:", 3) == 0  )
     {
       if (lat->max_layers == 0) lat->max_layers = 1;
-      sscanf(line_buffer+3, "%s %lf %lf %lf", bas_name+(i_bas * NAMSZ),
+      CLEED_SSCANF(line_buffer+3, "%s %lf %lf %lf", bas_name+(i_bas * NAMSZ),
              &bas[i_bas].x, &bas[i_bas].y, &bas[i_bas].z);
       i_bas ++;
     }
@@ -938,17 +944,17 @@ int lattice_read(lattice *lat, coord *a1, coord *a2, coord *a3,
     /* image dimensions */
     if( strncmp(line_buffer, "il:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%lf", &lat->image_len);
+      CLEED_SSCANF(line_buffer+3, "%lf", &lat->image_len);
     }
 
     if( strncmp(line_buffer, "nl:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%u", &lat->max_layers);
+      CLEED_SSCANF(line_buffer+3, "%u", &lat->max_layers);
     }
 
     if( strncmp(line_buffer, "uc:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%u", &lat->max_cells);
+      CLEED_SSCANF(line_buffer+3, "%u", &lat->max_cells);
     }
      
     if( strncmp(line_buffer, "q", 1) == 0 || line_buffer == NULL) break;

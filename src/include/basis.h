@@ -31,6 +31,15 @@
 #define auto_basis __attribute__((cleanup(basis_free)))
 #endif
 
+ /*!
+ * Returns the number of #basis objects allocated to the array \p basis_array
+ *
+ * \param basis_array of #basis objects.
+ * \return number of #basis objects allocated in memory.
+ * \bug This will not return the correct value if \p basis_array is a pointer.
+ */
+#define basis_get_allocated_size(basis_array) (sizeof((basis_array))/sizeof(basis))
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
@@ -78,7 +87,6 @@ __attribute__((nonnull, returns_nonnull)) coord *basis_get_a2(const basis *basis
 __attribute__((nonnull, returns_nonnull)) coord *basis_get_a3(const basis *basis);
 __attribute__((nonnull, returns_nonnull))
     coord *basis_get_normal(const basis *basis, const miller_hkl *hkl);
-__attribute__((nonnull)) size_t basis_get_allocated_size(const basis *basis);
 
 __attribute__((nonnull)) void basis_set_a1(basis *basis, const coord *a1);
 __attribute__((nonnull)) void basis_set_a2(basis *basis, const coord *a2);
