@@ -36,24 +36,23 @@
 size_t fts_rm_neg_data(double *x, double *fx, size_t n_x)
 {
   size_t ix, it, n_t, N;
-  double *trim_x, *trim_fx;
+  double *trim_x = NULL;
+  double *trim_fx = NULL;
   
   n_t = n_x;
 
   /* first pass to get number of values after trimming */
   for (ix=0; ix < n_x; ix++)
-	{
     if (fx[ix] < 0.) n_t--;
-	}
   
   /* stop if no trimming required */
   if(n_x == n_t) return(n_x);
   
-  /* allocate new matrices */
-  trim_x  = (double *) malloc (n_t * sizeof(double) );
-  trim_fx = (double *) malloc (n_t * sizeof(double) );
+  /* allocate new arrays */
+  CLEED_ALLOC_CHECK(trim_x  = (double *) calloc (n_t, sizeof(double) ));
+  CLEED_ALLOC_CHECK(trim_fx = (double *) calloc (n_t, sizeof(double) ));
   
-  /* second pass to add values to trimmed matrices */
+  /* second pass to add values to trimmed arrays */
   it = 0;
   for (ix=0; ix<n_x; ix++)
   {
@@ -82,9 +81,13 @@ size_t fts_rm_neg_data(double *x, double *fx, size_t n_x)
     exit(-1);
   }
   
-  x  = (double *) realloc(trim_x, (N * sizeof(double)));
-  fx = (double *) realloc(trim_fx,(N * sizeof(double)));  
+  CLEED_REALLOC(x,  (N * sizeof(double)));
+  CLEED_REALLOC(fx, (N * sizeof(double)));  
   
+  /* copy data from trimmed arrays */
+  memcpy(x,  trim_x,  (it - 1) * sizeof(double));
+  memcpy(fx, trim_fx, (it - 1) * sizeof(double));
+
   /* clean up */
   free(trim_x);
   free(trim_fx);

@@ -31,19 +31,19 @@ int main(int argc, char *argv[])
   size_t i_x, n_x;
   size_t i_r;
 
-  double *x, *fx;
+  double *x = NULL;
+  double *fx = NULL;
 
   double cutoff, tailoff;
-  double offset;
+  double offset = 0.;
 
-  double *ubound, *lbound;
+  double *ubound = NULL;
+  double *lbound = NULL;
 
-  FILE *in_stream;
-  FILE *out_stream;
+  FILE *in_stream = stdin;
+  FILE *out_stream = stdout;
 
   /* Preset arguments */
-  out_stream = stdout;
-  in_stream = stdin;
   mode = 'n';
   cutoff = 0.5;
   tailoff = 10.;
@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
   range_flag = offset_flag = del_flag = 0;
 
   /* initialise arrays to STRSZ dimensional doubles */
-  ubound = (double *) malloc (STRSZ * sizeof(double) );
-  lbound = (double *) malloc (STRSZ * sizeof(double) );
+  CLEED_ALLOC_CHECK(ubound = (double *) malloc (STRSZ * sizeof(double) ));
+  CLEED_ALLOC_CHECK(lbound = (double *) malloc (STRSZ * sizeof(double) ));
  
   /*
     Check command line and decode arguments
@@ -90,8 +90,8 @@ int main(int argc, char *argv[])
  	 initialize x and fx
   */
 
-  x =  (double *) malloc (1 * sizeof(double) );
-  fx = (double *) malloc (1 * sizeof(double) );
+  CLEED_ALLOC_CHECK(x =  (double *) calloc (1, sizeof(double) ));
+  CLEED_ALLOC_CHECK(fx = (double *) calloc (1, sizeof(double) ));
 
   /* READ INPUT DATA */
   n_x = fts_read_data(in_stream, out_stream, x, fx);
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
   if(!stdout_flag)
   {
-    printf("#> End of input (%d data pairs read)\n", n_x);
+    printf("#> End of input (%u data pairs read)\n", n_x);
     printf("#> first x/f(x): %.3e / %.3e\n#> last  x/f(x): %.3e / %.3e \n",
            x[0], fx[0], x[n_x-1], fx[n_x-1]);
   }
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     n_x = fts_rm_neg_data(x, fx, n_x);
     if(!stdout_flag)
     {
-      printf("#> Removed %i negative entries from data\n",i_x-n_x);
+      printf("#> Removed %u negative entries from data\n",i_x-n_x);
     } /* !stdout_flag */
   }
    
@@ -139,11 +139,11 @@ int main(int argc, char *argv[])
     n_x = fts_trim_data(x, fx, n_x, lbound, ubound, i_r);
     if(!stdout_flag)
     {
-      printf("#> Trimmed %i entries from data\n",i_x-n_x);
-  	  printf("#> %i trimming ranges:\n",i_r);
+      printf("#> Trimmed %u entries from data\n",i_x-n_x);
+  	  printf("#> %u trimming ranges:\n",i_r);
       for(i_arg=0; i_arg<i_r; i_arg++)
       {
-        printf("#> \t%i: %e to %e\n", i_arg, lbound[i_arg], ubound[i_arg]);
+        printf("#> \t%u: %e to %e\n", i_arg, lbound[i_arg], ubound[i_arg]);
       }
     }
   }
@@ -156,17 +156,14 @@ int main(int argc, char *argv[])
  
   if(!stdout_flag)
   {
-    printf("#> End of output (%d data pairs written)\n", n_x);
+    printf("#> End of output (%u data pairs written)\n", n_x);
   }
  
   /* clean up */
-  free(x);
-  free(fx);
-  if(range_flag)
-  {
-    free(ubound);
-    free(lbound);
-  }
+  if (x) free(x);
+  if (fx) free(fx);
+  if (ubound) free(ubound);
+  if (lbound) free(lbound);
  
   return(0);
 }

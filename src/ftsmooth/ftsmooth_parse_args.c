@@ -219,22 +219,25 @@ Encoding as follows:
   int pos = 0;
   int islowerbound = 1; /* first entry is lower bound */
 
-  char *str = (char*)calloc(sizeof(char), strlen(argv)+1);
+  char *str = NULL;
   char ichar[1] = "\0";
   
+  /* check for NULLs and allocate memory if needed */
+  CLEED_ALLOC_CHECK(str = (char*)calloc(sizeof(char), strlen(argv) + 1));
+
   if (ubound == NULL)
   {
-    ubound = (double *)calloc(sizeof(double), 1);
+    CLEED_ALLOC_CHECK(ubound = (double *)calloc(sizeof(double), 1));
   }
 
   if (lbound == NULL)
   {
-    lbound = (double *)calloc(sizeof(double), 1);
+    CLEED_ALLOC_CHECK(lbound = (double *)calloc(sizeof(double), 1));
   }
 
   if (i_r == NULL)
   {
-    i_r = (size_t *)calloc(sizeof(size_t), 1);
+    CLEED_ALLOC_CHECK(i_r = (size_t *)calloc(sizeof(size_t), 1));
     *i_r = 0;
   }
 
@@ -269,8 +272,8 @@ Encoding as follows:
         }
 
         *i_r += 1;
-        ubound = (double *) realloc(ubound, (*i_r)*sizeof(double));
-        lbound = (double *) realloc(lbound, (*i_r)*sizeof(double));
+        CLEED_REALLOC(ubound, (*i_r)*sizeof(double));
+        CLEED_REALLOC(lbound, (*i_r)*sizeof(double));
 
         islowerbound = (islowerbound+1) % 2;
         strcpy(str, "\0");
@@ -296,7 +299,7 @@ Encoding as follows:
   
   if(!islowerbound) ubound[*i_r-1] = DBL_MAX;
   
-  free(str);
+  if (str) free(str);
 
   return(0);
 }
