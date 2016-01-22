@@ -61,9 +61,9 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
                               * dividing the sum by this number leads to
                               * normalisation */
 
-  real intbuf[iv->n_eng+1]; /* this array is used to store original
+  real *intbuf = NULL;      /* this array is used to store original
                              * intensity values */
-  real prefac[iv->n_eng+1];
+  real *prefac = NULL;
 
   /* First check if vi is nonzero */
   if (vi < ENG_TOLERANCE)
@@ -83,6 +83,10 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
     rfac_iv_sort(iv);
   }
 
+  /* setup arrays */
+  CLEED_ALLOC_CHECK(intbuf = (real *)calloc(iv->n_eng + 1, sizeof(real)));
+  CLEED_ALLOC_CHECK(prefac = (real *)calloc(iv->n_eng + 1, sizeof(real)));
+
   /* smooth IV curve */
   if (iv->equidist)
   {
@@ -91,6 +95,8 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
     if (e_step < ENG_TOLERANCE)
     {
       ERROR_MSG("e_step is too small\n");
+      if (intbuf) free(intbuf);
+      if (prefac) free(prefac);
       return(RFAC_ESTEP_TOO_SMALL);
     }
 
@@ -144,8 +150,13 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
   else
   {
     ERROR_MSG("IV curve is not equidistant\n");
+    if (intbuf) free(intbuf);
+    if (prefac) free(prefac);
     return(RFAC_IV_NOT_EQUIDISTANT);
   }
+
+  if (intbuf) free(intbuf);
+  if (prefac) free(prefac);
 
   return (0);
 }

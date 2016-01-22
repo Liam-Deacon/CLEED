@@ -24,10 +24,11 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <strings.h>
+#include <string.h>
 #include <malloc.h>
 
 #include "rfac.h"
+#include "cleed_util.h"
 
 /*!
  * Read argument list from command line and set the adequate parameters

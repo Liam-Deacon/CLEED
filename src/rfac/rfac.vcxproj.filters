@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bgets.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="caoi_rfac_ctr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="crfac.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="file2buffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfac.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfac_ivcur.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfgetsa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfhelp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfinput.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfintindl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rflines.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rflorentz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfmklide.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfmklist.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfr1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfr2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfrb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfrdargs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfrdcleed.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfrdexpt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfrmin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfrp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfsort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfspline.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfsplint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rfversion.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\windows\crfac.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\gh_stddef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rfac.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rfac_def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rfac_func.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rfac_ver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

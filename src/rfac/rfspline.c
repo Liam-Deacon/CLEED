@@ -43,7 +43,9 @@ void rfac_iv_spline(rfac_iv *iv)
 
   if (iv == NULL) return; /* nothing to do */
 
-  real buf[iv->n_eng+1];
+  real *buf = NULL;
+  
+  CLEED_ALLOC_CHECK(buf = calloc(iv->n_eng + 1, sizeof(real)));
 
   iv->data[0].deriv2 = buf[0] = 0.0;
 
@@ -71,5 +73,7 @@ void rfac_iv_spline(rfac_iv *iv)
   }
 
   iv->spline = true; /* update spline flag */
+
+  free(buf);
 
 }  /* end of function cr_spline */

@@ -19,6 +19,7 @@
 
 #include "rfac.h"
 #include "leed_aoi.h"
+#include "cleed_util.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -67,13 +68,13 @@ int rfac_create_control_file_duplicates(
     strncpy(fname_ctr, control_filename, sizeof(fname_ctr)-1);
     fname_ctr[sizeof(fname_ctr)-1] = '\0';
 
-    snprintf(fname_workstr, sizeof(fname_workstr)-1, "ia_%u.ctr", i_ctr);
+    CLEED_SNPRINTF(fname_workstr, sizeof(fname_workstr)-1, "ia_%u.ctr", i_ctr);
     if (length_ctr + strlen(fname_workstr) >= sizeof(fname_ctr))
     {
       ERROR_MSG("control filename too long\n");
       exit(ENAMETOOLONG);
     }
-    snprintf(fname_ctr+length_ctr,
+    CLEED_SNPRINTF(fname_ctr+length_ctr,
              sizeof(fname_ctr)-length_ctr,
              "ia_%u.ctr", i_ctr + 1);
 
@@ -87,11 +88,11 @@ int rfac_create_control_file_duplicates(
     {
       if (!strncasecmp(string_ctr, "ia:", 3))
       {
-        sscanf(string_ctr + 3, " %u ", &num);
+        CLEED_SSCANF(string_ctr + 3, " %u ", &num);
 
         if ((i_ctr + 1) == num)
         {
-          sscanf(string_ctr + 3, " %u %s", &num, workstr);
+          CLEED_SSCANF(string_ctr + 3, " %u %s", &num, workstr);
           fprintf(fpf, "%s\n", workstr);
         }
       }

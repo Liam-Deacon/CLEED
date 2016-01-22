@@ -22,7 +22,7 @@
 
 #include <errno.h>
 #include <math.h>
-#include <strings.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -155,8 +155,9 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
   
          if (the_buffer == NULL)
          {
-           ERROR_MSG("No theoretical input file present \"%s\"\n", index_list);
-           exit(ENOFILE);
+           ERROR_MSG("No theoretical input file present \"%s\" (%s)\n", 
+                     index_list, strerror(errno));
+           exit(errno);
          }
          else
          {
@@ -181,14 +182,14 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
        if ( !strncmp("id=", line_buffer+i, 3) )
        {
          i+=3;
-         sscanf(line_buffer+i, "%d", &(cur_list[i_cur].group_id));
+         CLEED_SSCANF(line_buffer+i, "%d", &(cur_list[i_cur].group_id));
        } /* if "id=" */
 
        /* wt: relative weight in R-factor average */
        if ( !strncmp("wt=", line_buffer+i, 3) )
        {
          i+=3;
-         sscanf(line_buffer+i, fmt_buffer, &(cur_list[i_cur].weight));
+         CLEED_SSCANF(line_buffer+i, fmt_buffer, &(cur_list[i_cur].weight));
        } /* if "id=" */
 
 
@@ -196,7 +197,7 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
        if ( !strncmp("e0=", line_buffer+i, 3) )
        {
          i+=3;
-         sscanf(line_buffer+i, fmt_buffer, &(cur_list[i_cur].eng_0));
+         CLEED_SSCANF(line_buffer+i, fmt_buffer, &(cur_list[i_cur].eng_0));
        } /* if "e0=" */
 
 

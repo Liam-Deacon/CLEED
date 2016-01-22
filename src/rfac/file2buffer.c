@@ -112,7 +112,7 @@ char *file2buffer(const char * const filename)
       {
         ERROR_MSG("could not open \"%s\" (%s)\n", 
                   filename, strerror(errno));
-        fclose(in_stream);
+        if(in_stream) fclose(in_stream);
         ERROR_RETURN(NULL);
       }
 

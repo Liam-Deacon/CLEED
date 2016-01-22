@@ -51,6 +51,7 @@ inline void rfactor_print(
     real s_min,
     real e_range)
 {
+  if (!stream) return;
   const char *rf = rfactor_name(type);
 #if CONTROL
   fprintf(stream, "%s = ", rf);
@@ -249,12 +250,12 @@ int rfac_iv_to_arrays(const rfac_iv *iv, double *x, double *fx, size_t *n)
   size_t i;
 
   /* allocate memory */
-  if (x != NULL) x = (double *) realloc(x, iv->n_eng);
+  if (x != NULL) CLEED_REALLOC(x, iv->n_eng * sizeof(double));
   else x = (double *) malloc(iv->n_eng * sizeof(double));
 
   if (x == NULL) return (RFAC_ALLOCATION_ERROR);
 
-  if (fx != NULL) fx = (double *) realloc(fx, iv->n_eng);
+  if (fx != NULL) CLEED_REALLOC(fx, iv->n_eng * sizeof(double));
   else fx = (double *) malloc(iv->n_eng * sizeof(double));
 
   if (fx == NULL)

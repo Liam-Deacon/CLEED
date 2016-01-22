@@ -16,8 +16,9 @@
  */
 
 #include "rfac.h"
-#include <string.h>
+#include "cleed_util.h"
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 #include <limits.h>
 
@@ -52,6 +53,7 @@ size_t rfac_get_number_of_angles(const char *control_filename)
 
   strncpy(fname_string, control_filename,
           (length < sizeof(fname_string)-1) ? length : sizeof(fname_string)-1);
+  fname_string[FILENAME_MAX - 1] = '\0';
 
   if (strlen(fname_string) + 4 >= sizeof(fname_string)-1 ||
       strlen(fname_string) + 4 > FILENAME_MAX ||

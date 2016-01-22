@@ -21,7 +21,7 @@
 
 #include <math.h>
 #include <malloc.h>
-#include <strings.h>
+#include <string.h>
 #include <stdio.h>
 
 #include "rfac.h"
@@ -85,18 +85,18 @@ int main(int argc, char **argv)
      */
     for (size_t i=0; i < sa; i++)
     {
-      snprintf(args->ctr_file,
-               sizeof(args->ctr_file)-1,
-               "%s_%u.ctr",
-               project_name,
-               strrchr(args->ctr_file, '.') - args->ctr_file);
+      CLEED_SNPRINTF(args->ctr_file,
+                     sizeof(args->ctr_file)-1,
+                     "%s_%u.ctr",
+                     project_name,
+                     strrchr(args->ctr_file, '.') - args->ctr_file);
 
       rfac_ivcur_process(iv_cur, args->vi);
 
       r_min = rfac_rmin(iv_cur, args, &r_min, &s_min, &e_range);
       rr = cleed_real_sqrt(args->vi * 8. / e_range);
 
-      fprintf(STDERR, "\nR%u = %f\n", i+1, rfac);
+      fprintf(STDERR, "\nR%u = %f\n", i+1, r_min);
       rfactor_print(STDERR, args->r_type, r_min, rr, s_min, e_range);
 
       average_shift += shift;

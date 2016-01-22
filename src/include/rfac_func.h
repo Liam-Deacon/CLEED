@@ -62,7 +62,7 @@ const char* get_rfactor_name(rfactor_type type);
 
 int rfac_create_control_file_duplicates(const char *, size_t);
 
-size_t rfac_get_number_of_angles(const char *control_filename)
+size_t rfac_get_number_of_angles(const char *control_filename);
 
 /* line interpreter */
 NONNULL()

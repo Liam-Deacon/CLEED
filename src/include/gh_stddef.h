@@ -59,7 +59,10 @@ namespace cleed {
 #endif
 
 #if defined(_MSC_VER)
-# define DLL_PUBLIC __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
+# define DLL_PUBLIC __declspec(dllexport) /* Note: actually gcc seems to also supports this syntax */
+# ifndef __cplusplus
+#   define inline   /* MSVC doesn't seem to allow linking of inline functions in C */
+# endif
 #else
 # if __GNUC__
 #   define DLL_PUBLIC __attribute__((dllexport))
@@ -269,8 +272,12 @@ static const double PI = 3.1415926535897932385;
 #endif
 
 #if __STDC_VERSION__ < 199901L
+#ifndef isnan
 #define isnan(x) ((x) != (x))
+#endif
+#ifndef isinf
 #define isinf(x) (!isnan((x)) && isnan((x) - (x)))
+#endif
 #endif
 
 static const double DEG_TO_RAD = 0.017453293;  /*!< conversion degree to radian */
@@ -504,7 +511,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
                 new_size, (void*)ptr, strerror(errno));           \
       exit(errno);                                                \
     }                                                             \
-  } while (0); 
+  } while (0)
 
 /*!
  * \define CLEED_ALLOC
@@ -591,6 +598,20 @@ do {                                                                        \
           sscanf_tmp, (n_va_args != 1) ? "s" : "", buf, fmt, n_va_args);    \
     }                                                                       \
     CLEED_RETURN(EIO);                                                      \
+  }                                                                         \
+} while (0)
+
+#define CLEED_SNPRINTF(str, len, fmt, ...)                                  \
+do {                                                                        \
+  int snprintf_retval = snprintf((str), (len), (fmt), __VA_ARGS__);         \
+  if (snprintf_retval < 0)                                                  \
+  {                                                                         \
+      ERROR_MSG("output error encountered writing string '" #str            \
+                "'with format: '" #fmt "'\n");                              \
+  } else if(snprintf_retval < (len)) {                                      \
+      WARNING_MSG("written string '" #str                                   \
+                  "' is truncated by %i characters\n",                      \
+                  (len) - snprintf_retval);                                 \
   }                                                                         \
 } while (0)
 

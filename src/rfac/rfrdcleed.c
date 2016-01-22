@@ -105,13 +105,11 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
   }
 
   /* Allocate STRSZ bytes for line_buffer to read non-data input */
-  line_buffer = (char *)calloc(STRSZ+1, sizeof(char));
+  CLEED_ALLOC_CHECK(line_buffer = (char *)calloc(STRSZ+1, sizeof(char)));
 
   /* Reset n_beam, e_eng */
   n_beam = 0;
   n_eng = 0;
-  beam = NULL;
-  list = NULL;
 
   i_read = 0;
 
@@ -127,14 +125,9 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     /* Read number of beams and allocate memory for list beam */
     if(strncmp(line_buffer+1, "bn", 2) == 0)
     {
-      sscanf(line_buffer+3, "%u", &n_beam);
-      beam = (rfac_spot *) calloc( n_beam+1, sizeof(rfac_spot));
-     
-      if( beam == NULL )
-      {
-        ERROR_MSG("allocation error (beam)\n");
-        exit(ENOMEM);
-      }
+      CLEED_SSCANF(line_buffer+3, "%u", &n_beam);
+      CLEED_ALLOC_CHECK(beam = (rfac_spot *) 
+                                  calloc(n_beam+1, sizeof(rfac_spot)));
       
     } /* bn */
 
@@ -147,14 +140,14 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
         exit(ENOMEM);
       }
 
-      sscanf(line_buffer+3, "%u", &i_beam);
+      CLEED_SSCANF(line_buffer+3, "%u", &i_beam);
       if(i_beam < n_beam)
       {
         sprintf(fmt_buffer, "%%d %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
-        sscanf(line_buffer+3, fmt_buffer,
-               &iaux,                        /* not used */
-               &beam[i_beam].index1,         /* beam indices */
-               &beam[i_beam].index2 );
+        CLEED_SSCANF(line_buffer+3, fmt_buffer,
+                     &iaux,                        /* not used */
+                     &beam[i_beam].index1,         /* beam indices */
+                     &beam[i_beam].index2 );
         i_read ++;
 
         CONTROL_MSG(CONTROL, "\t%d:\t(%5.2f,%5.2f)\n",
@@ -171,7 +164,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     /* Read number of energies */
     if(strncmp(line_buffer+1, "en", 2) == 0)
     {
-      sscanf(line_buffer+3, "%u", &n_eng);
+      CLEED_SSCANF(line_buffer+3, "%u", &n_eng);
     } /* en */
 
     /* Read next line */
@@ -209,22 +202,19 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
    * number of IV curves = number of data sets per energy (n_geo = 1)
    * length of one IV curve = n_eng
    */
-  list = (rfac_iv_data *) calloc((n_eng+1), sizeof(rfac_iv_data));
-  
-  if( list == NULL)
-  {
-    ERROR_MSG("allocation error (list) \n");
-    exit(ENOMEM);
-  }
+  CLEED_ALLOC_CHECK(list = (rfac_iv_data *) 
+                              calloc((n_eng+1), sizeof(rfac_iv_data)));
 
   /********************************************************************
    * Write energy intensity pairs to list
    ********************************************************************/
 
   /* Allocate enough memory for line_buffer */
-  free(line_buffer);
   buffer_len = n_beam * LENGTH_OF_NUMBER;
-  line_buffer = (char *)calloc(buffer_len, sizeof(char));
+  if (line_buffer)
+    CLEED_REALLOC(line_buffer, buffer_len * sizeof(char));
+  else
+    CLEED_ALLOC_CHECK(line_buffer = (char *)calloc(buffer_len, sizeof(char)));
 
   CONTROL_MSG(CONTROL, "start reading intensities.\n");
   CONTROL_MSG(CONTROL, "%d bytes for line_buffer.\n", n_beam*LENGTH_OF_NUMBER);
@@ -249,7 +239,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
       /* Read energy first, then intensities. */
       i_str = 0;
       sprintf(fmt_buffer, "%%%sf", CLEED_REAL_FMT);
-      sscanf(line_buffer+i_str, fmt_buffer, &(list[i_eng].energy) );
+      CLEED_SSCANF(line_buffer+i_str, fmt_buffer, &(list[i_eng].energy) );
       
       /* go to end of line ? */
       while(line_buffer[i_str] == ' ') i_str++;
@@ -333,32 +323,37 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
    * Find beam with maximum contribution to average.
    * This beam will be used as spot ID.
    */
-  iv_cur->spot_id.f_val1 = cleed_real_fabs(beam[0].f_val1);
-  iv_cur->spot_id.i_val1 = 0;
-
-  for (i_beam=1; i_beam < n_beam; i_beam ++)
+  if (beam)
   {
-    if (cleed_real_fabs(beam[i_beam].f_val1) > iv_cur->spot_id.f_val1 )
-    {
-      iv_cur->spot_id.f_val1 = cleed_real_fabs(beam[i_beam].f_val1);
-      iv_cur->spot_id.i_val1 = (int)i_beam;
-    }
-  }
- 
-  iv_cur->spot_id.index1 = beam[iv_cur->spot_id.i_val1].index1;
-  iv_cur->spot_id.index2 = beam[iv_cur->spot_id.i_val1].index2;
-  free(beam);
+    iv_cur->spot_id.f_val1 = cleed_real_fabs(beam[0].f_val1);
+    iv_cur->spot_id.i_val1 = 0;
 
-  CONTROL_MSG(CONTROL, "spot_id: (%5.2f,%5.2f)\n",
-          iv_cur->spot_id.index1, iv_cur->spot_id.index2);
+    for (i_beam = 1; i_beam < n_beam; i_beam++)
+    {
+      if (cleed_real_fabs(beam[i_beam].f_val1) > iv_cur->spot_id.f_val1)
+      {
+        iv_cur->spot_id.f_val1 = cleed_real_fabs(beam[i_beam].f_val1);
+        iv_cur->spot_id.i_val1 = (int)i_beam;
+      }
+    }
+
+    iv_cur->spot_id.index1 = beam[iv_cur->spot_id.i_val1].index1;
+    iv_cur->spot_id.index2 = beam[iv_cur->spot_id.i_val1].index2;
+    free(beam);
+
+    CONTROL_MSG(CONTROL, "spot_id: (%5.2f,%5.2f)\n",
+      iv_cur->spot_id.index1, iv_cur->spot_id.index2);
+  }
+  else 
+  {
+    WARNING_MSG("beam was not allocated so could not determine spot_id\n");
+  }
   
   /* set last energy and intensities to termination value */
   list[i_eng].energy = (real) F_END_OF_LIST;
   list[i_eng].intens = (real) F_END_OF_LIST;
 
   free(line_buffer);
-
-
 
   return(iv);
 }  /* end of function cr_rdcleed */

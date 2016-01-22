@@ -21,7 +21,6 @@
  */
 
 #include <stdio.h>
-#include <strings.h>    /* for strlen */
 #include <string.h>
 #include <math.h>
 
@@ -76,10 +75,10 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
     if(command_line[i] == '(')
     {
       i++;
-      sscanf(command_line+i, fmt_buffer, &test1);
+      CLEED_SSCANF(command_line+i, fmt_buffer, &test1);
       while (command_line[i] != ',') i++;
       i++;
-      sscanf(command_line+i, fmt_buffer, &test2);
+      CLEED_SSCANF(command_line+i, fmt_buffer, &test2);
       while (command_line[i] != ')') i++;
       i++;
     }
@@ -96,9 +95,9 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
       i++;
       if(scale < 0. )
       {
-        sscanf(command_line+i, fmt_buffer, &scale);
+        CLEED_SSCANF(command_line+i, fmt_buffer, &scale);
       }
-      else sscanf(command_line+i, fmt_buffer, &scale);
+      else CLEED_SSCANF(command_line+i, fmt_buffer, &scale);
 
       /* skip over possible signs of scaling factor */
       while ( (command_line[i] < '0') || (command_line[i] > '9') ) i++;

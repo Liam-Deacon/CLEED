@@ -75,12 +75,8 @@ rfac_iv *rfac_iv_read(const char *filename)
   CONTROL_MSG(CONTROL_X, "lines = %d\n", lines);
 
   if (iv->data != NULL) free(iv->data);
-  iv->data = (rfac_iv_data *) malloc((lines+1)* sizeof(rfac_iv_data));
-  if( iv->data == NULL )
-  {
-    ERROR_MSG("allocation error (list) \n");
-    exit(RFAC_ALLOCATION_ERROR);
-  }
+  CLEED_ALLOC_CHECK(iv->data = (rfac_iv_data *) 
+                      calloc((lines+1), sizeof(rfac_iv_data)));
 
   CONTROL_MSG(CONTROL_X, "after malloc\n");
 
@@ -147,6 +143,11 @@ rfac_iv *rfac_iv_read(const char *filename)
     CONTROL_MSG(CONTROL, "expt. IV curve is not equidistant\n");
   }
 
+  if (!iv) 
+    goto error;
+  if (!iv->data)
+    goto error;
+
   /* write available information to structure iv_cur. */
   iv->first_eng = iv->data[0].energy;
   iv->last_eng = iv->data[i-1].energy;
@@ -168,4 +169,11 @@ rfac_iv *rfac_iv_read(const char *filename)
   free(buffer);
 
   return(iv);
+
+  /* execute error clean up code */
+error:
+  free(buffer);
+  rfac_iv_free(iv);
+  return NULL;
+
 }

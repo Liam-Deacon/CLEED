@@ -51,7 +51,7 @@ char *file_content(const char* filename)
 
     if (size > 0)
     {
-      content = calloc((size_t)size + 1, 1);
+      CLEED_ALLOC_CHECK(content = calloc((size_t)size + 1, sizeof(char)));
       fread(content, 1, (size_t)size, file);
     }
     fclose(file);

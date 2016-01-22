@@ -208,12 +208,13 @@ void rfac_iv_write(const char *iv_file,
     real energy_range, real total_energy_range, real norm)
 {
   FILE *out_stream = NULL;
-  char r_name[STRSZ];
-  char data_type[STRSZ];
+  char r_name[STRSZ] = "";
+  char data_type[STRSZ] = "";
 
   if ((out_stream = fopen(iv_file, "w")) == NULL)
   {
-    ERROR_MSG("cannot write to IV file '%s'\n", iv_file);
+    ERROR_MSG("cannot write to IV file '%s' (%s)\n", 
+      iv_file, strerror(errno));
     exit(EIO);
   }
 
@@ -261,10 +262,18 @@ void rfac_ivcur_write(const char *iv_file_prefix,
     const rfac_ivcur *iv_cur, size_t n_leng, real r_min, real shift, real de,
     real total_energy_range, rfactor_type r_type, real vi)
 {
-  char filename[PATH_MAX], buffer[PATH_MAX];
+  char filename[FILENAME_MAX] = "";
+  char buffer[FILENAME_MAX] = "";
   real norm, e_range, r_fac;
   size_t n_curves = rfac_ivcur_get_number_of_datasets(iv_cur);
-  real eng[n_leng], t_int[n_leng], e_int[n_leng];
+  
+  real *eng = NULL;
+  real *t_int = NULL;
+  real *e_int = NULL;
+
+  CLEED_ALLOC_CHECK(eng = calloc(n_leng, sizeof(real)));
+  CLEED_ALLOC_CHECK(t_int = calloc(n_leng, sizeof(real)));
+  CLEED_ALLOC_CHECK(e_int = calloc(n_leng, sizeof(real)));
 
   if(iv_file_prefix != NULL && strlen(iv_file_prefix) > 0)
   {
@@ -316,10 +325,23 @@ void rfac_ivcur_write(const char *iv_file_prefix,
     }  /* for i_curve */
 
   }  /* if */
-
+  
+  free(eng);
+  free(t_int);
+  free(e_int);
 }
 
+/*!
+ * Utility function for printing energies and theoretical/experimental 
+ * intensities
+ *
+ * \param[in] eng pointer to list of energies
+ * \param[in] t_int pointer to list of theoretical intensities
+ * \param[in[ e_int pointer to list of experimental intensities
+ */
 void rfac_iv_print_list(const real *eng, const real *t_int, const real *e_int) {
+  if (!eng || !t_int || !e_int) return; /* input contains NULL(s) */
+
   for (size_t i=0; eng[i] != F_END_OF_LIST; i++) {
     fprintf(stderr, "%d %f %f %f\n", i, eng[i], t_int[i], e_int[i]);
   }
@@ -353,7 +375,13 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
   real faux = 0.; //rfac_ivcur_get_overlap(iv_cur);
   real shift = 0., e_range = 0., norm = 0., rfac = 0.;
 
-  real eng[n_leng], e_int[n_leng], t_int[n_leng];
+  real *eng = NULL;
+  real *e_int = NULL;
+  real *t_int = NULL;
+  
+  CLEED_ALLOC_CHECK(eng = (real *) calloc(n_leng, sizeof(real)));
+  CLEED_ALLOC_CHECK(e_int = (real *) calloc(n_leng, sizeof(real)));
+  CLEED_ALLOC_CHECK(t_int = (real *) calloc(n_leng, sizeof(real)));
 
   CONTROL_MSG(CONTROL, "start of function, n_list = %d, n_leng = %d\n",
               n_list, n_leng);
@@ -418,6 +446,11 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
   /* Write IV curves with best agreement to files */
   rfac_ivcur_write(args->iv_file, iv_cur, n_leng, *r_min_ptr, shift,
                    *e_range_ptr, e_range, args->r_type, args->vi);
+
+  /* clean up */
+  free(eng);
+  free(t_int);
+  free(e_int);
 
   return (*r_min_ptr);
 }  /* end of function rfac_rmin */
