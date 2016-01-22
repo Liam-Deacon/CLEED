@@ -131,18 +131,6 @@ void basis_copy(basis *dst, const basis *src)
 }
 
 /*!
- * Returns the number of #basis objects allocated to the array \p _basis
- *
- * \param _basis array of #basis objects.
- * \return number of #basis objects allocated in memory.
- * \bug This may not return the correct value.
- */
-size_t basis_get_allocated_size(const basis *_basis)
-{
-	return (sizeof(_basis)/sizeof(basis));
-}
-
-/*!
  * Updates \p a1 \p a2 and \p a3 to the vector values found in \p basis
  *
  * \param[in] basis Object containing basis vectors to copy from.

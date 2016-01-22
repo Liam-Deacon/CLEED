@@ -20,6 +20,7 @@
  */
 
 #include "ftsmooth.h"
+#include <errno.h>
 
 /*!
  * Reads input data stream and assigns
@@ -42,15 +43,15 @@ size_t fts_read_data(FILE *in_stream, FILE *out_stream, double *x, double *fx)
     if (line_buffer[0] == '#') fprintf(out_stream, "%s", line_buffer);
     else 
     {
-      sscanf(line_buffer, "%le %le", x+i_x, fx+i_x);
+      CLEED_SSCANF(line_buffer, "%le %le", x+i_x, fx+i_x);
 
       i_x ++;
       if(i_x >= N)
       {
         /* efficiently realloc N*2 amount of memory */
         N *= 2;
-        x  = (double *) realloc(x, N*sizeof(double) );
-        fx = (double *) realloc(fx, N*sizeof(double) );
+        CLEED_REALLOC(x,  N*sizeof(double) );
+        CLEED_REALLOC(fx, N*sizeof(double) );
       } /* if (i_x >= N) */
 
     }

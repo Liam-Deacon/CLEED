@@ -585,8 +585,8 @@ void patt_draw_ps_vectors(FILE *file_ptr, const patt_drawing *drawing)
             v_type, ii, dom_str, v_type, ii, dom_str);
 
     len += strlen(dummystr[2]);
-    if ((char*)realloc(vectors_str, sizeof(char)*len) != NULL)
-      strcat(vectors_str, dummystr[2]);
+	CLEED_REALLOC(vectors_str, sizeof(char)*len);
+    strcat(vectors_str, dummystr[2]);
 
   }
 

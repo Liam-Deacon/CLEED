@@ -25,6 +25,14 @@
 #include <stdio.h>
 #include <stddef.h>
 
+ /*!
+ * Returns the amount of size allocated to the #coord object \p pos in memory.
+ *
+ * \param[in] pos Array of #coord structure.
+ * \return The maximum number of #coord objects with allocated memory to \p pos.
+ */
+#define coord_get_allocated_size(pos) (sizeof((pos)) / sizeof(coord))
+
 #if !__GNUC__
 #define __attribute__(x) /* empty - disables GNU attribute extension */
 #endif
@@ -45,7 +53,6 @@ __attribute__((nonnull)) double coord_get_x(const coord *pos);
 __attribute__((nonnull)) double coord_get_y(const coord *pos);
 __attribute__((nonnull)) double coord_get_z(const coord *pos);
 __attribute__((nonnull)) double coord_get_magnitude(const coord *pos);
-__attribute__((nonnull)) size_t coord_get_allocated_size(const coord *pos);
 __attribute__((nonnull)) void coord_set_x(coord *pos, double x);
 __attribute__((nonnull)) void coord_set_y(coord *pos, double y);
 __attribute__((nonnull)) void coord_set_z(coord *pos, double z);

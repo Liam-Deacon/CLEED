@@ -125,6 +125,11 @@
   <ItemGroup>
     <ResourceCompile Include="res\windows\latt.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\basis.h" />
+    <ClInclude Include="..\include\coord.h" />
+    <ClInclude Include="..\include\lattice.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

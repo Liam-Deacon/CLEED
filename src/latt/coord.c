@@ -49,17 +49,6 @@ inline void coord_free(coord *pos)
 }
 
 /*!
- * Returns the amount of size allocated to the #coord object \p pos in memory.
- *
- * \param[in] pos Pointer to #coord structure.
- * \return The maximum number of #coord objects with allocated memory to \p pos.
- */
-size_t coord_get_allocated_size(const coord *pos)
-{
-  return (sizeof(pos)/sizeof(pos[0]));
-}
-
-/*!
  * Copies #coord data from \p src into \p dst
  *
  * \param dst destination for coordinate data.

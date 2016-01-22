@@ -13,6 +13,7 @@ Changes:
 
 #include "ftsmooth.h"
 #include "gh_stddef.h"
+#include <errno.h>
 
 /****************************************************************
 *					Fourier Transformation						*
@@ -26,7 +27,9 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   size_t i_k, n_k;
   size_t N;
 
-  double *k, *fk_s, *fk_c; 
+  double *k = NULL;
+  double *fk_s = NULL;
+  double *fk_c = NULL;
 
   double norm1;
   double x_0;
@@ -48,7 +51,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   if (x_step <= 0.) 
   {
     ERROR_MSG("x step < or = 0.: %.3e\n", x_step);
-    exit(1);
+    exit(EINVAL);
   }
 
 /* 
@@ -90,9 +93,9 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   N = (n_k-(n_k % STRSZ))*2; /* use blocks of 128^i */
   if(N <= 0) N = STRSZ;
 
-  k = (double *) malloc (N * sizeof(double) );
-  fk_s = (double *) malloc (N * sizeof(double) );
-  fk_c = (double *) malloc (N * sizeof(double) );
+  CLEED_ALLOC_CHECK(k = (double *) calloc (N, sizeof(double) ));
+  CLEED_ALLOC_CHECK(fk_s = (double *) calloc (N, sizeof(double) ));
+  CLEED_ALLOC_CHECK(fk_c = (double *) calloc (N, sizeof(double) ));
 
 /* Fourier Transformation */
   #ifdef USE_OPENMP
@@ -125,7 +128,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
     } /* for x_now */
 
     if ((i_k == 0) && (!stdout_flag)) 
-      printf("#> %d (2 x %d) interpolated function values are used \n", 
+      printf("#> %u (2 x %u) interpolated function values are used \n", 
         2*i_x, i_x);
 
 /* 
@@ -148,7 +151,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
  }  /* for i_k */
 
   if(!stdout_flag)
-    printf("#> last point in FT (%d): k = %.3f weight = %.3f\n", 
+    printf("#> last point in FT (%u): k = %.3f weight = %.3f\n", 
          i_k-1, k[i_k-1],faux);
 
 /* 
@@ -201,9 +204,9 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   /* last data point =  no smooth */
 
   /* clean up */
-  free(k); 
-  free(fk_s);
-  free(fk_c);
+  if (k) free(k); 
+  if (fk_s) free(fk_s);
+  if (fk_c) free(fk_c);
   
   return(0);
 }

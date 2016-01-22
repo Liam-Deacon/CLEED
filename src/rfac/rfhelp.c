@@ -87,7 +87,7 @@ void rfac_help(FILE *output)
     fprintf(output, "\n      specify which group ID's appear in output.");
     fprintf(output, "\n	  arguments: \"all\", \"average\".");
     fprintf(output, "\n	  default: \"average\".");
-    fprintf(output, "\n	  note only first two letters are significant.");
+    fprintf(output, "\n	  note that only the first two letters are significant.");
     fprintf(output, "\n");
     fprintf(output, "\n  --control");
     fprintf(output, "\n  -c <filename> ");

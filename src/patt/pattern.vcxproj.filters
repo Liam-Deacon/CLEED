@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="matrix_2x2++.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pattern++.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="matrix_2x2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
