@@ -121,11 +121,9 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="matrix_2x2++.cc" />
     <ClCompile Include="matrix_2x2.c" />
     <ClCompile Include="nice_frac.c" />
     <ClCompile Include="patt.c" />
-    <ClCompile Include="pattern++.cc" />
     <ClCompile Include="pattern.c" />
     <ClCompile Include="patt_args.c" />
     <ClCompile Include="patt_colors.c" />
