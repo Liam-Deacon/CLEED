@@ -18,6 +18,7 @@
  * functions.
  */
 
+#include <string.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <limits.h>

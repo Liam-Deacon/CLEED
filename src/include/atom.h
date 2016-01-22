@@ -34,6 +34,7 @@
 #endif
 
 #include <stdlib.h>
+#include "gh_stddef.h"
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
