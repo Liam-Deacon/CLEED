@@ -112,7 +112,7 @@ char whatnext[STRSZ];
 int sr_rdinp(const char *inp_file)
 {
 
-  FILE *inp_stream;
+  FILE *inp_stream = NULL;
 
   int iaux;                     /* counter, dummy  variables */
   int i_c, i_str, i_dummy;
@@ -123,12 +123,12 @@ int sr_rdinp(const char *inp_file)
 
   real temp;
 
-  real a1[4], a2[4];
-  real m_super[5];
+  real a1[5], a2[5];
+  real m_super[6];
 
   real faux;                   /* dummy variable */
   real vaux[4];                /* dummy vector */
-  real *paux;                  /* dummy pointer */
+  real *paux = NULL;           /* dummy pointer */
 
   struct type_str
   {
@@ -136,9 +136,9 @@ int sr_rdinp(const char *inp_file)
     real r_min;                /* minimum radius (used in geometry assessment) */
   };
 
-  struct type_str *types;      /* this vector of structure type_str is
-                                  used to read and treat the input atomic
-                                  properties */
+  struct type_str *types = NULL;  /* this vector of structure type_str is
+                                     used to read and treat the input atomic
+                                     properties */
 
   char fmt_buffer[STRSZ];
 
@@ -162,39 +162,20 @@ int sr_rdinp(const char *inp_file)
    * - allocate atoms (1 unit) and type (2 units)
    */
 
-  sr_atoms = (search_atom *) malloc(sizeof(search_atom));
-  if( sr_atoms == NULL)
-  {
-    ERROR_MSG("allocation error (sr_atoms)\n");
-    ERROR_EXIT_RETURN(SR_ALLOC_ERROR, -1);
-  }
+  CLEED_ALLOC_CHECK(sr_atoms = (search_atom *)calloc(1, sizeof(search_atom)));
   n_atoms = 0;
 
-  types = (struct type_str *) malloc( sizeof(struct type_str) );
-  if( types == NULL)
-  {
-    ERROR_MSG("allocation error (types)\n");
-    ERROR_EXIT_RETURN(SR_ALLOC_ERROR, -1);
-  }
+  CLEED_ALLOC_CHECK(types = (struct type_str *)
+                              calloc(2, sizeof(struct type_str) ));
   types->r_min = F_END_OF_LIST;
   n_types = 0;
 
-  sr_search = (search *) malloc(sizeof(search));
-  if( sr_search == NULL)
-  {
-    ERROR_MSG("allocation error (sr_search)\n");
-    ERROR_EXIT_RETURN(SR_ALLOC_ERROR, -1);
-  }
-
-  for(iaux = 0; iaux <= 5; iaux ++) sr_search->b_lat[iaux] = 0.;
-
-  sr_search->sr_angle = 0; /* added for the angle search */
-  sr_search->z_only = 0;
+  /* 
+   * calloc causes z_only, b_lat[], sr_angle, rot_axis[], mir_point[] and 
+   * mir_dir[] to all be zero 
+   */
+  CLEED_ALLOC_CHECK(sr_search = (search *) calloc(1, sizeof(search)));
   sr_search->rot_deg = 1;
-  sr_search->rot_axis[1] = sr_search->rot_axis[2] = 0.;
-
-  sr_search->mir_point[1] = sr_search->mir_point[2] = 0.;
-  sr_search->mir_dir[1] = sr_search->mir_dir[2] = 0.;
 
   strncpy(sr_search->rfac_type, RFAC_TYP, 16);
   sr_search->rfac_range = RFAC_SHIFT_RANGE;
@@ -425,8 +406,7 @@ int sr_rdinp(const char *inp_file)
      */
     else if( !strncasecmp(buf+i_str, "po:", 3) )
     {
-      sr_atoms = (search_atom *) realloc(
-                 sr_atoms, (n_atoms+2) * sizeof(search_atom) );
+      CLEED_REALLOC(sr_atoms, (n_atoms+2) * sizeof(search_atom));
 
       /* preset xyz_par with NULL ref and n_ref with I_END_OF_LIST */
       (sr_atoms+n_atoms)->x_par = NULL;
@@ -523,8 +503,7 @@ int sr_rdinp(const char *inp_file)
       /* Include current atom name in type list if it was not in the old list */
       if(i_types == n_types)
       {
-        types = ( struct type_str *) realloc(
-               types, (n_types+1) * sizeof(struct type_str) );
+        CLEED_REALLOC(types, (n_types+1) * sizeof(struct type_str) );
 
         strcpy( (types+i_types)->name, sr_atoms[n_atoms].name);
         (types+i_types)->r_min = F_END_OF_LIST;
@@ -610,8 +589,7 @@ int sr_rdinp(const char *inp_file)
       /* Include current type name in types if it was not in the old list */
       if(i_types == n_types)
       {
-        types = ( struct type_str *) realloc(
-                 types, (n_types+1) * sizeof(struct type_str) );
+        CLEED_REALLOC(types, (n_types+1) * sizeof(struct type_str) );
         strcpy( (types+i_types)->name, atom_name);
         (types+i_types)->r_min = faux;
         n_types ++;

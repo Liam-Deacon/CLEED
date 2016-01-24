@@ -41,7 +41,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   size_t mpar = n_dim + 1;
   cleed_real faux;
 
-  FILE *log_stream;
+  FILE *log_stream = NULL;
 
   cleed_vector *x = cleed_vector_alloc(n_dim);
   cleed_vector *y = cleed_vector_alloc(mpar);
@@ -50,7 +50,9 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   /* SIMPLEX METHOD */
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
-    ERROR_MSG("Could not open log file '%s' for reading\n", log_file);
+    ERROR_MSG("Could not open log file '%s' for reading (%s)\n", 
+              log_file, strerror(errno));
+    log_stream = fopen(NULL_FILENAME, "w");
   }
 
   fprintf(log_stream, "=> SIMPLEX SEARCH:\n\n");
@@ -59,7 +61,6 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   if(strncmp(bak_file, "---", 3) == 0)
   {
     fprintf(log_stream, "=> Set up vertex:\n");
-    fclose(log_stream);
 
     /* redundant if calloc memory:
      * for(i_par = 0; i_par < n_dim; i_par ++)
@@ -97,30 +98,19 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   {
     fprintf(log_stream, "=> Read vertex from \"%s\":\n", bak_file);
     sr_rdver(bak_file, y, p, (int)n_dim);
-    fclose(log_stream);
   }
 
   /* Enter amoeba */
 
   CONTROL_MSG(CONTROL, "Enter amoeba\n");
 
-  if( (log_stream = fopen(log_file, "a")) == NULL)
-  {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
-  }
   fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
-  fclose(log_stream);
 
   SR_AMOEBA_FUNC(p, y, n_dim, R_TOLERANCE, SR_RF, &nfunc);
 
   /* Write final results to log file */
 
   CONTROL_MSG(CONTROL, "%d function evaluations in sr_amoeba\n", nfunc);
-
-  if( (log_stream = fopen(log_file, "a")) == NULL)
-  {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
-  }
 
   fprintf(log_stream, "\n=> No. of function evaluations in sr_amoeba: %3d\n",
           nfunc);

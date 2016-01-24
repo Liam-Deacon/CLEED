@@ -55,44 +55,57 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
 
   real faux, pref, rtol, rr, dr, rfac, rdel=0.;
 
-  FILE *io_stream, *log_stream;
+  FILE *io_stream = NULL;
+  FILE *log_stream = NULL;
 
   /* write title to log file */
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
+    ERROR_MSG("Could not append to log file '%s' (%s)\n", 
+              log_file, strerror(errno));
+    log_stream = fopen(NULL_FILENAME, "w");
   }
-  fprintf(log_stream, "=> DETERMINE ERROR_LOG BARS:\n\n");
+  else
+  {
+    fprintf(log_stream, "=> DETERMINE ERROR_LOG BARS:\n\n");
 
-  /* Calculate R factor for minimum. */
-  fprintf(log_stream, "=> displace parameters from minimum:\n");
-  fclose(log_stream);
+    /* Calculate R factor for minimum. */
+    fprintf(log_stream, "=> displace parameters from minimum:\n");
+  }
 
-  /*! changed first element of i_par loop from 1 to 0 */
+  /* note: changed first element of i_par loop from 1 to 0 */
   for(i_par = 0; i_par < n_dim; i_par ++) cleed_vector_set(x_0, i_par, 0.);
 
   y_0 = SR_RF(x_0);
 
   /* Read R factor value and RR factor for minimum */
   sprintf(line_buffer, "%s.dum", sr_project);
-  io_stream = fopen(line_buffer, "r");
-
-  sprintf(fmt_buffer, "%%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
-  while( fgets(line_buffer, STRSZ, io_stream) != NULL)
+  if ((io_stream = fopen(line_buffer, "r")) == NULL)
   {
-    if( (iaux = sscanf(line_buffer, fmt_buffer, &rfac, &rr) ) == 2) break;
+    ERROR_MSG("could not open '%s.dum' to read R-factor and RR value (%s)",
+              sr_project, strerror(errno));
+    exit(EIO);
   }
-
-  /* Stop with error message if reading error */
-  if( iaux != 2)
+  else
   {
-    log_stream = fopen(log_file, "a");
-    ERROR_MSG("cannot read output from log file '%s'\n", getenv("CSEARCH_RFAC"));
-    fclose(log_stream);
-    exit(SR_ENVIRONMENT_VARIABLE_ERROR);
-  }
+    sprintf(fmt_buffer, "%%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
+    while (fgets(line_buffer, STRSZ, io_stream) != NULL)
+    {
+      if ((iaux = sscanf(line_buffer, fmt_buffer, &rfac, &rr)) == 2) break;
+    }
 
-  fclose (io_stream);
+    /* Stop with error message if reading error */
+    if (log_stream && iaux != 2)
+    {
+      ERROR_MSG("cannot read output from log file '%s' (%s)\n", 
+                getenv("CSEARCH_RFAC"), strerror(errno));
+      fclose(log_stream);
+      fclose(io_stream);
+      exit(SR_ENVIRONMENT_VARIABLE_ERROR);
+    }
+
+    fclose(io_stream);
+  }
 
   pref = y_0 * rr;
   rtol = R_TOLERANCE / rr;
@@ -158,14 +171,7 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
     cleed_vector_set(del, i_par, cleed_real_fabs(cleed_vector_get(del, i_par)) );
   }
 
-  if( (log_stream = fopen(log_file, "a")) == NULL)
-  {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
-  }  
-  else
-  {
-    fprintf(log_stream, "\n=> ERROR_LOG BARS:\n\n");
-  }
+  if (log_stream) fprintf(log_stream, "\n=> ERROR_LOG BARS:\n\n");
 
   for (i_par = 0; i_par < n_dim; i_par ++)
   {
@@ -181,19 +187,21 @@ void sr_er(size_t n_dim, real dpos, const char *log_file)
     {
       faux = cleed_real_sqrt(pref/dr) * cleed_vector_get(del, i_par);
       cleed_vector_set(err, i_par, faux);
-      fprintf(log_stream, "%2d: del R = %.4f; del par = %.4f\n",
+      if (log_stream) 
+        fprintf(log_stream, "%2d: del R = %.4f; del par = %.4f\n",
               i_par, dr, faux);
     }
     else
     {
       cleed_vector_set(err, i_par, -1.);
-      fprintf(log_stream, "%2d: del R = %.4f; del par ** undefined **\n",
+      if (log_stream) 
+        fprintf(log_stream, "%2d: del R = %.4f; del par ** undefined **\n",
               i_par, dr);
     }
 
   } /* for i_par */
 
-  fclose(log_stream);
+  if (log_stream) fclose(log_stream);
 
   /* free memory */
   cleed_vector_free(y);

@@ -53,6 +53,11 @@ void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
 
 	*fret = (*func)(p);
 
+  /* do alloc sanity checks */
+  CLEED_ALLOC_CHECK(pt);
+  CLEED_ALLOC_CHECK(ptt);
+  CLEED_ALLOC_CHECK(xit);
+
 	/* Save the initial point */
 	for (j=0; j < n; j++) cleed_vector_set(pt, j, cleed_vector_get(p,j));
 

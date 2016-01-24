@@ -69,23 +69,24 @@ real sr_evalrfac_mir(real *par)
   static int n_eval  = 0;
   static int n_calc  = 0;
 
-  int iaux;
+  int iaux = 0;
   size_t i_par;
   real faux;
-  real rgeo, rfac;
+  real rgeo, rfac = -1.;
 
-  struct tm *l_time;
+  struct tm *l_time = NULL;
   time_t t_time;
 
-  char fmt_buffer[STRSZ];
-  char line_buffer[STRSZ];
-  char log_file[STRSZ];
-  char par_file[STRSZ];
+  char fmt_buffer[STRSZ] = "";
+  char line_buffer[STRSZ] = "";
+  char log_file[STRSZ] = "";
+  char par_file[STRSZ] = "";
 
-  FILE *io_stream, *log_stream;
+  FILE *io_stream = NULL;
+  FILE *log_stream = NULL;
 
-  char *old_path;
-  char *new_path;
+  char *old_path = NULL;
+  char *new_path = NULL;
 
   /* Set initial values */
   n_eval ++;
@@ -244,10 +245,12 @@ real sr_evalrfac_mir(real *par)
   /* Stop with error message if reading error */
   if( iaux != 3)
   {
-    log_stream = fopen(log_file, "a");
-    fprintf(log_stream, "***error (%s): failed to read output from '%s'\n",
-            __func__, getenv("CSEARCH_RFAC"));
-    fclose(log_stream);
+    if ((log_stream = fopen(log_file, "a")) != NULL)
+    {
+      fprintf(log_stream, "***error (%s): failed to read output from '%s'\n",
+        __func__, getenv("CSEARCH_RFAC"));
+      fclose(log_stream);
+    }
     exit(1);
   }
 
@@ -262,8 +265,10 @@ real sr_evalrfac_mir(real *par)
   {
  
     /* remove dependence on 'cp' system call */
-    old_path = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
-    new_path = (char *) malloc(sizeof(char) * (strlen(sr_project)+5));
+    CLEED_ALLOC_CHECK(old_path = (char *) 
+            calloc(strlen(sr_project)+5, sizeof(char)));
+    CLEED_ALLOC_CHECK(new_path = (char *) 
+            calloc(strlen(sr_project)+5, sizeof(char)));
    
     strcpy(old_path, sr_project);
     strcpy(new_path, sr_project);
@@ -310,8 +315,8 @@ real sr_evalrfac_mir(real *par)
   fclose(log_stream);
 
   /* Clean up and return R factor */
-  free(old_path);
-  free(new_path);
+  if (old_path) free(old_path);
+  if (new_path) free(new_path);
 
   return (rfac + rgeo);
 }

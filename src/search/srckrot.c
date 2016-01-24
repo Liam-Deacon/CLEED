@@ -100,7 +100,9 @@ size_t sr_ckrot(search_atom *atoms, search *search )
 
   real R_1[5], R_2[5], R_3[5], R_4[5], R_5[5];
   real B_1[5], BR[5];
-  real *R_n[7];                    /* max degree of rot. symmetry is 6 */
+  real *R_n[7] = { NULL, NULL, NULL, 
+                   NULL, NULL, NULL, 
+                   NULL };            /* max degree of rot. symmetry is 6 */
 
   real axis[3];
   real xi, yi, xj, yj;
@@ -372,10 +374,13 @@ size_t sr_ckrot(search_atom *atoms, search *search )
   {
     if(!search->z_only)
     {
-      (atoms+i_atoms)->x_par = (real *)calloc( (n_par+1), sizeof(real) );
-      (atoms+i_atoms)->y_par = (real *)calloc( (n_par+1), sizeof(real) );
+      CLEED_ALLOC_CHECK((atoms+i_atoms)->x_par = 
+                          (real *)calloc( (n_par+1), sizeof(real) ));
+      CLEED_ALLOC_CHECK((atoms+i_atoms)->y_par = 
+                          (real *)calloc( (n_par+1), sizeof(real) ));
     }
-    (atoms+i_atoms)->z_par = (real *)calloc( (n_par+1), sizeof(real) );
+    CLEED_ALLOC_CHECK((atoms+i_atoms)->z_par = 
+                          (real *)calloc( (n_par+1), sizeof(real) ));
   }
 
   CONTROL_MSG(CONTROL_X, "No of parameters in search: %d\n", n_par);

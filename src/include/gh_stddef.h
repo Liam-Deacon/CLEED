@@ -491,7 +491,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
 /*********************************************************************
 * helper macros:
 *********************************************************************/
-
+#ifndef CLEED_LEAN_AND_MEAN
 /*! 
  * \define CLEED_ALLOC 
  * \brief wrapper logic around realloc function to avoid memory leaks.
@@ -522,6 +522,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
  * therefore it is questionable whether there is any benefit in 
  * continuing to run the program.
  */
+
 #define CLEED_ALLOC_CHECK(expr)                                   \
   do                                                              \
   {                                                               \
@@ -531,7 +532,16 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
                 #expr "'(%s)\n", strerror(errno));                \
       exit(errno);                                                \
     }                                                             \
-  } while(0)                                                      
+  } while(0)       
+
+#else /* do not use memory allocation safety checks */
+
+#define CLEED_ALLOC_CHECK(expr) do {expr;} while(0)
+#define CLEED_REALLOC(ptr, size)                                  \
+  do {(ptr) = realloc((ptr), (size));} while(0)
+
+#endif
+
 
 /*! 
  * \define __NARGS
@@ -583,6 +593,7 @@ inline void *cleed_realloc(void* ptr, size_t new_size)
  * \define CLEED_SSCANF
  * \brief Safely scans values for \c fmt format-specifier and exits if fails
  */
+#ifndef CLEED_LEAN_AND_MEAN
 #define CLEED_SSCANF(buf, fmt, ...)                                         \
 do {                                                                        \
   int sscanf_tmp;                                                           \
@@ -614,6 +625,11 @@ do {                                                                        \
                   (len) - snprintf_retval);                                 \
   }                                                                         \
 } while (0)
+
+#else /* do not check return values - faster, but will ignore errors */
+#define CLEED_SSCANF(buf, fmt, ...) sscanf((buf), (fmt), __VA_ARGS__)
+#define CLEED_SNPRINTF(str, len, fmt, ...) snprintf((str), (len), (fmt), __VA_ARGS__)
+#endif
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* namespace cleed */

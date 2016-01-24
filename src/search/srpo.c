@@ -33,7 +33,7 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
 
   real rmin;
 
-  FILE *log_stream;
+  FILE *log_stream = NULL;
 
   cleed_vector *p = cleed_vector_alloc(n_dim);
   cleed_basic_matrix *xi = cleed_basic_matrix_alloc(n_dim, n_dim);
@@ -44,17 +44,20 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
 
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
+    ERROR_MSG("Could not append to log file '%s' (%s)\n", 
+              log_file, strerror(errno));
+    log_stream = fopen(NULL_FILENAME, "w");
   }
-  fprintf(log_stream, "=> POWELL'S METHOD\n\n");
+  else
+    fprintf(log_stream, "=> POWELL'S METHOD\n\n");
 
 /***********************************************************************
  * Set up initial direction set
  ***********************************************************************/
   if(strncmp(bak_file, "---", 3) == 0)
   {
-    fprintf(log_stream, "=> Set up initial direction set:\n");
-    fclose(log_stream);
+    if (log_stream)
+      fprintf(log_stream, "=> Set up initial direction set:\n");
 
     for (i_par = 0; i_par < n_dim; i_par ++)
     {
@@ -78,10 +81,13 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
 
   CONTROL_MSG(CONTROL, "Enter sr_powell #%i\n", i_par);
 
-  fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
+  if (log_stream)
+  {
+    fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
 
-  /* close log file before entering the search */
-  fclose(log_stream);
+    /* close log file before entering the search */
+    fclose(log_stream);
+  }
 
   SR_POWELL_FUNC(p, xi, n_dim, R_TOLERANCE, &nfunc, &rmin, SR_RF);
 
@@ -93,21 +99,24 @@ void sr_po(size_t n_dim, const char *bak_file, const char *log_file)
 
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
+    ERROR_MSG("Could not append to log file '%s' (%s)\n", 
+              log_file, strerror(errno));
   }
-
-  fprintf(log_stream, "\n=> No. of iterations in sr_powell: %3d\n", nfunc);
-  fprintf(log_stream, "=> Optimum parameter set:\n");
-  for (j_par = 0; j_par < n_dim; j_par++ )
+  else
   {
-   fprintf(log_stream, "%.6f ", cleed_vector_get(p, j_par));
+    fprintf(log_stream, "\n=> No. of iterations in sr_powell: %3d\n", nfunc);
+    fprintf(log_stream, "=> Optimum parameter set:\n");
+    for (j_par = 0; j_par < n_dim; j_par++)
+    {
+      fprintf(log_stream, "%.6f ", cleed_vector_get(p, j_par));
+    }
+    fprintf(log_stream, "\n");
+
+    fprintf(log_stream, "=> Optimum function value:\n");
+    fprintf(log_stream, "rmin = %.6f\n", rmin);
+
+    fclose(log_stream);
   }
-  fprintf(log_stream, "\n");
-
-  fprintf(log_stream, "=> Optimum function value:\n");
-  fprintf(log_stream, "rmin = %.6f\n", rmin);
-
-  fclose(log_stream);
 
   /* free memory */
   cleed_basic_matrix_free(xi);

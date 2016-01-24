@@ -47,16 +47,17 @@ int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
   real x, y, z;
   real theta, phi; /* Added for the angle search (SRP 31.03.03) */
 
-  FILE *iv_par;
-  FILE *iv_bul_in;
-  FILE *iv_bul_out;
+  FILE *iv_par = NULL;
+  FILE *iv_bul_in = NULL;
+  FILE *iv_bul_out = NULL;
 
 
   /* Open IV parameter file */
   iv_par = fopen(filename, "w");
 
   /* Open IV bulk file for read and write */
-  strncpy(line_buffer, filename, STRSZ);
+  strncpy(line_buffer, filename, STRSZ - 1);
+  line_buffer[STRSZ - 1] = '\0';
   i_str = strlen(line_buffer) - 3;
 
   sprintf(line_buffer+i_str, "bul");
@@ -142,7 +143,8 @@ int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
   fclose(iv_bul_in);
   fclose(iv_bul_out);
 
-  strncpy(line_buffer, filename, STRSZ);
+  strncpy(line_buffer, filename, STRSZ - 1);
+  line_buffer[STRSZ - 1] = '\0';
   i_str = strlen(line_buffer) -4;
   line_buffer[i_str] = '\0';
 

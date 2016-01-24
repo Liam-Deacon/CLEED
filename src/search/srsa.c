@@ -18,6 +18,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#include <errno.h>
 #include "search.h"
 
 static const double START_TEMP = 3.5L;
@@ -36,7 +37,7 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 
   size_t i_par, j_par;
   size_t m_par = n_dim + 1;
-  size_t nfunc;
+  size_t nfunc = 0;
 
   real temp, rmin;
 
@@ -44,7 +45,7 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   cleed_vector *y = cleed_vector_alloc(n_dim);
   cleed_basic_matrix *p = cleed_basic_matrix_alloc(m_par, n_dim);
 
-  FILE *log_stream;
+  FILE *log_stream = NULL;
 
 /***********************************************************************
  * SIMULATED ANNEALING (SIMPLEX METHOD)
@@ -52,7 +53,9 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
-    ERROR_MSG("Could not open log file '%s'\n", log_file);
+    ERROR_MSG("Could not open log file '%s' (%s)\n", 
+              log_file, strerror(errno));
+    log_stream = fopen(NULL_FILENAME, "w");
   }
   fprintf(log_stream, "=> SIMULATED ANNEALING:\n\n");
 
@@ -63,7 +66,6 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   if(strncmp(bak_file, "---", 3) == 0)
   {
     fprintf(log_stream,"=> Set up vertex:\n");
-    fclose(log_stream);
 
     for(i_par = 0; i_par < n_dim; i_par ++)
     {
@@ -98,7 +100,6 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   {
     fprintf(log_stream, "=> Read vertex from \"%s\":\n", bak_file);
     sr_rdver(bak_file, y, p, (int)n_dim);
-    fclose(log_stream);
   }
 
 /***********************************************************************
@@ -107,12 +108,9 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 
   CONTROL_MSG(CONTROL, "Enter temperature loop\n");
 
-  if( (log_stream = fopen(log_file, "a")) == NULL)
-  {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
-  }
-  fprintf(log_stream, "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
-  fclose(log_stream);
+  fprintf(log_stream, 
+      "=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
+
 
   rmin = 100.;
   for(temp = START_TEMP; temp > R_TOLERANCE; temp *= (1. - EPSILON) )
@@ -127,11 +125,6 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
  ***********************************************************************/
 
   CONTROL_MSG(CONTROL, "%d function evaluations in sr_amebsa\n", nfunc);
-
-  if( (log_stream = fopen(log_file, "a")) == NULL)
-  {
-    ERROR_MSG("Could not append to log file '%s'\n", log_file);
-  }
 
   fprintf(log_stream, "\n=> No. of iterations in sr_powell: %3d\n", nfunc);
   fprintf(log_stream, "=> Optimum parameter set and function value:\n");

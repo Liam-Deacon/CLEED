@@ -76,6 +76,7 @@ int sr_mkinp_mir(const char *filename, const cleed_vector *par, size_t iter)
   }
 
   strncpy(inp_file, filename, FILENAME_MAX);
+  inp_file[FILENAME_MAX - 1] = '\0';
   i_str = strlen(inp_file)-3;
 
   sprintf(line_buffer+i_str, "bul");

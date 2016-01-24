@@ -52,7 +52,7 @@ void search_parse_args(int argc, char *argv[], real *delta,
    *  -s <search_type> - (optional) default is "simplex"
    *********************************************************************/
 
-    sr_project = (char *) malloc(FILENAME_MAX * sizeof(char) );
+    CLEED_ALLOC_CHECK(sr_project = (char *)calloc(FILENAME_MAX, sizeof(char)));
     strncpy(sr_project, "search", FILENAME_MAX);
 
     /* exit if no arguments */
