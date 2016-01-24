@@ -34,15 +34,18 @@
 #include <sys/dir.h>
 #endif
 
-#include <sys/file.h>
-#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifndef _MSC_VER
+#include <sys/file.h>
+#include <sys/time.h>
+#include <strings.h>
+#endif
 
 #include <setjmp.h>
 #include <signal.h>
 #include <stdio.h>
-#include <strings.h>
 #include <ctype.h>
 #include <math.h>
 

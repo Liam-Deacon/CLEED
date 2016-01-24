@@ -15,6 +15,8 @@
 
 #include "mkiv.h"
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 
 #define BLACK 0x0000
 
@@ -59,7 +61,8 @@ int mkiv_draw_grid(mkiv_image *image, int write, const char *fname)
   {
     if (mkiv_output_tif(image, fname))
     {
-      ERROR_MSG("writing image '%s' failed!\n", fname);
+      ERROR_MSG("writing image '%s' failed (%s)\n", 
+                fname, strerror(errno));
       ERROR_RETURN(-1);
     }
   }

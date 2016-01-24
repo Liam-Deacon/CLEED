@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bsmooth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calca.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calcbase.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calcoi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calcspotpos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="convmat2tif.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="convtif2mat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="drawbound.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="drawell.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="drawgrid.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="file_functs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="filename.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fimax4.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="getint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="img2tif.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="markref.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mem4spots.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mkiv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mkiv_args.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mkiv_help.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mkmask.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="outtif.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="plotind.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="quicksort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="readinp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="readtif.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="readvar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="refinp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="setcontrol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sign.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="writetif.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="mkiv_ver.h.in">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="file_functs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inputs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iv.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mkiv.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mkiv_classes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mkiv_def.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mkiv_funcs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mkiv_ver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pwd.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="signs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="t4.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tif_fax3.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tiff.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tiffcomp.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tiffconf.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tiffio.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tiffiop.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="variables.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\windows\mkiv.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\windows\mkiv.res">
+      <Filter>Resource Files</Filter>
+    </Resource>
+  </ItemGroup>
+</Project>

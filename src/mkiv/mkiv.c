@@ -28,7 +28,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #include <ctype.h>
 #include <time.h>
 #include <inttypes.h>
@@ -151,12 +151,15 @@ int main(int argc, char *argv[])
   n_show = n_show_2 = 1;
 
   /* Allocate memory for mat/tif_image and mat/tif_mask */
-  mat_image = (mkiv_image *)malloc(sizeof(mkiv_image));
-  mat_mask  = (mkiv_image *)malloc(sizeof(mkiv_image));
+  CLEED_ALLOC_CHECK(mat_image = (mkiv_image *)calloc(1, sizeof(mkiv_image)));
+  CLEED_ALLOC_CHECK(mat_mask  = (mkiv_image *)calloc(1, sizeof(mkiv_image)));
+  
   mat_image->imagedata = mat_mask->imagedata = NULL;
 
-  tif_image = (mkiv_tif_values *)malloc(sizeof( mkiv_tif_values ));
-  tif_mask  = (mkiv_tif_values *)malloc(sizeof( mkiv_tif_values ));
+  CLEED_ALLOC_CHECK(tif_image = (mkiv_tif_values *)
+                                  calloc(1, sizeof( mkiv_tif_values )));
+  CLEED_ALLOC_CHECK(tif_mask  = (mkiv_tif_values *)
+                                  calloc(1, sizeof( mkiv_tif_values )));
   tif_image->buf = tif_mask->buf = NULL;
 
   /* Read mask, if existing, else use r_outer,r_inner for masking */
@@ -585,7 +588,7 @@ int main(int argc, char *argv[])
   fclose(cur_stream);
 
   /* copy args->ivdat_path to fname.ivdat */
-  char fname_ivdat[strlen(fname)];
+  char fname_ivdat[FILENAME_MAX];
   strcpy(fname_ivdat, fname);
   strcat(fname_ivdat, ".ivdat");
   if (!strcmp(args->ivdat_path, fname_ivdat))
@@ -594,7 +597,7 @@ int main(int argc, char *argv[])
   }
 
   /* copy args->param_path to fname.param */
-  char fname_param[strlen(fname) + 7];
+  char fname_param[FILENAME_MAX];
   strcpy(fname_param, fname);
   strcat(fname_param, ".param");
   if (strcmp(args->param_path, fname_param) == 0)

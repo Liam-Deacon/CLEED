@@ -25,6 +25,7 @@
 
 #include "mkiv.h"
 #include <stdlib.h>
+#include <string.h>
 
 /*!
  * Draws a mask for the boundaries of the LEED screen.

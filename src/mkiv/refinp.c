@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
+#include <errno.h>
  
 /*!
  * Reads the indices and positions of (at least 3) reflexes from standard input.
@@ -40,11 +42,11 @@
 int mkiv_ref_inp(size_t *naux, mkiv_reflex *aux, int verb, const char *pos_file)
 {
   size_t i;
-  FILE *in_out;
+  FILE *in_out = NULL;
   char file_path[FILENAME_MAX] = "mkiv.pos";
   char line_buffer[STRSZ];
 
-  if (pos_file == NULL) strcpy(file_path, pos_file);
+  if (pos_file != NULL) strcpy(file_path, pos_file);
 
   fprintf(stdout, "Enter number of spots for determination of basis (max. 5):\n");
   fprintf(stdout, "\t<num>:\tinput through terminal\n");

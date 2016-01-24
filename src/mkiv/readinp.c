@@ -18,11 +18,12 @@
  */
 
 #include <ctype.h>
-#include <strings.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "mkiv.h"
 #include "inputs.h"
+#include "cleed_util.h"
 
 void mkiv_input_free(mkiv_input *inp)
 {
@@ -80,16 +81,17 @@ mkiv_input *mkiv_input_read(mkiv_args *args)
   size_t nn_dom = 0;
   double fac, interim;
   char buf[STRSZ], var[STRSZ];
-  FILE *fp;
+  FILE *fp = NULL;
 
   /* Open statement */
   if (args->inp_path == NULL) strcpy(args->inp_path, "mkiv.inp");
   if ( (fp = fopen(args->inp_path, "r")) == NULL)
   {
-    ERROR_MSG("failed to open '%s'\n", args->inp_path);
+    ERROR_MSG("failed to open '%s' (%s)\n", 
+              args->inp_path, strerror(errno));
     ERROR_RETURN(-1);
   }
-  else printf("\nreading input from \"%s\":\n", args->inp_path);
+  else printf("\nreading input from '%s':\n", args->inp_path);
      
   /* Read data */
   while ( fgets(buf, STRSZ, fp) != NULL && *buf!='.' )
