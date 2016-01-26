@@ -5,9 +5,10 @@
 # Author: Liam Deacon                                                        #
 ##############################################################################
 AC_PREREQ([2.69])
-AC_INIT([CLEED], [2014-04-26_Development], [liam.m.deacon@gmail.com])
+AC_INIT([CLEED], [2016-01-25_Development], [liam.m.deacon@gmail.com])
 AC_CONFIG_SRCDIR([INCLUDE/caoi_leed.h])
 AC_CONFIG_AUX_DIR([config])
+AC_COPYRIGHT(Copyright 2015-2016 Liam Deacon)
 
 #=============================================================================
 # Set Language to C, check system & check if build is sane
@@ -142,6 +143,9 @@ AC_CHECK_FUNCS([
 #=============================================================================
 # Checks for header files.
 #=============================================================================
+AC_HEADER_STDC
+AC_HEADER_TIME
+AC_CHECK_HEADER_STDBOOL
 AC_CHECK_HEADERS([
     limits.h 
     malloc.h 
