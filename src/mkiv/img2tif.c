@@ -22,7 +22,8 @@
 
 #include <math.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
+#include "cleed_util.h"
 
 #ifdef USE_MAGICK
 # include <wand/magick_wand.h>
@@ -46,8 +47,8 @@ int img2tif(const char *img_filename, char *tif_filename)
   size_t n = strlen(img_filename);
 
   /* Check that the file is not a TIFF file */
-  if (strncasecmp(*(img_filename+n-4), ".tif", 4) == 0 ||
-      strncasecmp(*(img_filename+n-5), ".tiff", 5) == 0)
+  if (strncasecmp(&img_filename[n-4], ".tif", 4) == 0 ||
+      strncasecmp(&img_filename[n-5], ".tiff", 5) == 0)
   {
     return(0); /* file is already a TIFF file */
   }

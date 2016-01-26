@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #ifndef WHITE
 #define WHITE 0xFFFF
@@ -133,7 +134,8 @@ int mkiv_draw_bounds(mkiv_image *image, mkiv_image *imask, mkiv_position *center
   {
     if (mkiv_output_tif(image, file_path))
     {
-      ERROR_MSG("failed to write to '%s'!", file_path);
+      ERROR_MSG("failed to write to '%s' (%s)", 
+                file_path, strerror(errno));
       ERROR_RETURN(-1);
     }
   }

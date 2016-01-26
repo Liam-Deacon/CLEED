@@ -22,9 +22,10 @@
  */
 
 #include <time.h>
-#include <strings.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include <ctype.h>
 #include <sys/stat.h>
@@ -49,8 +50,8 @@ typedef struct stat plat_stat;    /*!< platform specific stat struct */
 const char *timestamp()
 {
   time_t rawtime;
-  struct tm *timeinfo;
-  char *buffer = (char*)malloc(80*sizeof(char));
+  struct tm *timeinfo = NULL;
+  char *buffer = (char*)calloc(80, sizeof(char));
 
   time (&rawtime);
   timeinfo = localtime (&rawtime);
@@ -86,18 +87,21 @@ int file_exists(const char *filename)
  */
 int file_copy(const char *src_path, const char *dst_path)
 {
-  FILE *p,*q;
+  FILE *p = NULL;
+  FILE *q = NULL;
   char ch;
 
   if( (p = fopen(src_path, "r")) == NULL)
   {
-    ERROR_MSG("cannot open: %s\n", src_path);
+    ERROR_MSG("cannot open: '%s' (%s)\n", 
+              src_path, strerror(s));
     return(-1);
   }
 
   if( (q = fopen(dst_path, "w")) == NULL)
   {
-    ERROR_MSG("cannot open: %s\n", dst_path);
+    ERROR_MSG("cannot open: '%s' (%s)\n", 
+              dst_path, strerror(errno));
     return(-1);
   }
   while( (ch = getc(p)) != EOF) putc(ch,q);

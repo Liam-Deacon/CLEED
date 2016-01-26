@@ -258,11 +258,11 @@ typedef struct {
 } mkiv_params;
 
 typedef struct {
-
+  int dummy;
 } mkiv_integration;
 
 typedef struct {
-
+  int dummy;
 } mkiv_screen;
 
 typedef struct {
