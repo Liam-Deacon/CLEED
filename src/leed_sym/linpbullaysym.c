@@ -1,33 +1,8 @@
 /*********************************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   WB/06.10.00 
   file contains function:
   (copy from inpbullayer.c additional test symmetry and create the 
                            registry shifts)
-
-
-
-
-
   leed_inp_bul_layer_sym
 
 Changes:

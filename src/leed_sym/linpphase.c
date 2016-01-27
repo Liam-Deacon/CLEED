@@ -56,29 +56,6 @@ static size_t i_phase = 0;      /*!< number of atom types */
  * \return The number of phase shifts read.
  */
 int leed_inp_phase(const char *phaseinp, real *dr, leed_phase **p_phs_shifts )
-
-/*********************************************************************
-
-  Read phase shifts from an input file and store them.
-
- INPUT:
-
-  char * phaseinp (input)  Either full path name of phase shift file 
-         if starting with "/" or tag for type of atom (will be expanded
-         into a full filename by using CLEED_PHASE and extension ".phs").
-
-  real * dr (input) displacement vector for thermic vibrations
-
-  leed_phase **p_phs_shifts (output) phase shifts.
-
- DESIGN:
-
-  The phase shifts in the input file must be for increasing energies.
-  The storage scheme is:
-
-
-
- *********************************************************************/
 {
   FILE *inp_stream;
 

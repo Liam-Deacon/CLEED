@@ -1,18 +1,18 @@
 /*********************************************************************
-  WB/16.09.98
-  file contains function:
-
-  leed_check_rotation_sym
-  leed_check_mirror_sym
-
-Changes:
-*********************************************************************/
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ *********************************************************************/
 
 /*! \file
  *
- * Implements leed_check_rotation_sym() function to check that the rotational
- * symmetry of the LEED model is valid.
+ * Implements functions to check the rotational and mirror symmetry
+ * of a LEED model.
  */
+
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -20,10 +20,7 @@ Changes:
 #include "leed.h"
 #include "leed_def.h"
 
-#ifndef EPSILON
-#define EPSILON 0.001
-#endif
-
+static const double EPSILON = 0.001L; /*!< comparison threshold for floating point values */
 
 /*!
  * Checks rotational symmetry.
@@ -41,10 +38,10 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
   real a1x, a1y, a2x, a2y; /* 2-dim lattice shifttors: 1=x, 2=y 0 is not used */
   real det;                /* Determinante */
 
-  real **R_n;              /* Rot.-matrix */
-  real *vecrot;
-  real *integ;             /* in case of rot.sym., it must be an integer */
-  real *position;          /* intermediate storage for rotated atom positions */
+  real **R_n = NULL;       /* Rot.-matrix */
+  real *vecrot = NULL;
+  real *integ = NULL;      /* in case of rot.sym., it must be an integer */
+  real *position = NULL;   /* intermediate storage for rotated atom positions */
 
   real faux;
   real vaux[2];
@@ -71,25 +68,23 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
     n_size = 2*p_cryst->n_layers + 4;
   }
  
-  #ifdef CONTROL
   if(p_cryst->layers[0].bulk_over == OVER)
   {
-    fprintf(STDCTR, "(leed_check_rotation_sym): test the overlayers\n");
+    CONTROL_MSG(CONTROL, "testing the overlayers\n");
   }
   else if(p_cryst->layers[0].bulk_over == BULK)
   {
-    fprintf(STDCTR, "(leed_check_rotation_sym): test the bulk layers\n");
+    CONTROL_MSG(CONTROL, "testing the bulk layers\n");
   }
   else
   {
-    fprintf(STDCTR, "(leed_check_rotation_sym): can not test rotational "
+    CONTROL_MSG(CONTROL, "can not test rotational "
         "symmetry, because the nature of the layer is unknown!\n");
   }
-  #endif
 
   /* Allocate memory */
-  vecrot = (real *) malloc(n_size * sizeof(real));
-  integ = (real *) malloc(n_size * sizeof(real));
+  CLEED_ALLOC_CHECK(vecrot = (real *) calloc(n_size, sizeof(real)));
+  CLEED_ALLOC_CHECK(integ = (real *) calloc(n_size, sizeof(real)));
   n_rot = p_cryst->n_rot;
 
   /* calculate rotation matrix */
@@ -119,9 +114,9 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
       for(i=0;i < p_cryst->n_layers; i++)
       {
         vecrot[2*i+4] = p_cryst->layers[i].reg_shift[1] * R_n[i_rot][1] +
-                          p_cryst->layers[i].reg_shift[2] * R_n[i_rot][2];
+                        p_cryst->layers[i].reg_shift[2] * R_n[i_rot][2];
         vecrot[2*i+5] = p_cryst->layers[i].reg_shift[1] * R_n[i_rot][3] +
-                          p_cryst->layers[i].reg_shift[2] * R_n[i_rot][4];
+                        p_cryst->layers[i].reg_shift[2] * R_n[i_rot][4];
       }
 
       /* build the difference */
@@ -153,27 +148,25 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
         {
           ctrol = 1;
 
-          #ifdef CONTROL
           if(i < 4)
           {
-            fprintf(STDCTR, "(leed_check_rotation_sym): "
+            CONTROL_MSG(CONTROL,
                 "lattice vector has no rotational symmetry, difn = %e\n", faux);
           }
           else
           {
             if((i % 2) != 0)
             {
-              fprintf(STDCTR, "(leed_check_rotation_sym): layer%d has no "
+              CONTROL_MSG(CONTROL, "layer%d has no "
                   "rotational symmetry, difn = %e\n", ((i-5)/2), faux);
             }
             else
             {
-              fprintf(STDCTR,"(leed_check_rotation_sym): layer%d has no "
+              CONTROL_MSG(CONTROL, "layer%d has no "
                   "rotational symmetry, difn = %e\n", ((i-4)/2), faux);
             } /* if i % 2 */
 
           } /* end else */
-          #endif
    
         } /* if cleed_real_fabs ...*/
 
@@ -206,7 +199,7 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
   n_size = 3 * n_size + 1;
 
   /* allocate */
-  position = (real *) malloc(n_size * sizeof(real));
+  CLEED_ALLOC_CHECK(position = (real *) calloc(n_size, sizeof(real)));
 
   for(i=0; i < p_cryst->n_layers; i++)
   {
@@ -243,7 +236,8 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
 
                 vaux[0] = integ[0] - cleed_real_nint(integ[0]);
                 vaux[1] = integ[1] - cleed_real_nint(integ[1]);
-                if(cleed_real_fabs(vaux[0]) > EPSILON || cleed_real_fabs(vaux[1]) > EPSILON)
+                if(cleed_real_fabs(vaux[0]) > EPSILON ||
+                    cleed_real_fabs(vaux[1]) > EPSILON)
                 {
                   ctrol++ ;
                 } /* if cleed_real_fabs */
@@ -252,7 +246,8 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
 
             } /* for i_d */
 
-            if(ctrol < p_cryst->layers[i].n_atoms) ctrol = 0;
+            if(ctrol < p_cryst->layers[i].n_atoms)
+              ctrol = 0;
             else
             {
               fprintf(STDCTR, "no rotational symmetry for atom%d in layer%d\n",
@@ -272,17 +267,15 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
   leed_beam_rotation_matrix_free(R_n);
 
   /* reset p_cryst->n_rot when all o.k. */
-  if(ctrol == 0) p_cryst->n_rot = n_rot;
-  else p_cryst->n_rot = 1;
+  if(ctrol == 0)
+    p_cryst->n_rot = n_rot;
+  else
+    p_cryst->n_rot = 1;
 
   /* WARNING_LOG if no rotational symmetry */
   if(p_cryst->n_rot == 1)
   {
-    ;
-    #ifdef WARNING_LOG
-    fprintf(STDWAR, "*warning (leed_check_rotation_sym): "
-        "No rotational symmetry\n");
-    #endif
+    WARNING_MSG("No rotational symmetry\n");
   }
 
   /* free memory */
@@ -312,9 +305,9 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   real det;                /* Determinante */
 
   real R_m[5];             /* mirror -matrix*/
-  real *vecrot;
-  real *integ;             /* in case of rot.sym., it must be an integer */
-  real *position;          /* intermediate storage for reflectd atom positions */
+  real *vecrot = NULL;
+  real *integ = NULL;      /* in case of rot.sym., it must be an integer */
+  real *position = NULL;   /* intermediate storage for reflectd atom positions */
 
   real faux;
   real vaux[2];
@@ -346,22 +339,22 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   #ifdef CONTROL
   if((p_cryst->layers + 0)->bulk_over == OVER)
   {
-    fprintf(STDCTR, "(leed_check_mirror_sym): testing the overlayers\n");
+    CONTROL_MSG(CONTROL, "testing the overlayers\n");
   }
   else if((p_cryst->layers + 0)->bulk_over == BULK)
   {
-    fprintf(STDCTR, "(leed_check_mirror_sym): testing the bulk\n");
+    CONTROL_MSG(CONTROL, "testing the bulk\n");
   }
   else
   {
-    fprintf(STDCTR, "(leed_check_mirror_sym): can not test mirror symmetry, "
+    CONTROL_MSG(CONTROL, "can not test mirror symmetry, "
         "because the nature of the layer is unknown!\n");
   }
   #endif
 
   /* Allocate */
-  vecrot = (real *) malloc(n_size * sizeof(real));
-  integ = (real *) malloc(n_size * sizeof(real));
+  CLEED_ALLOC_CHECK(vecrot = (real *) calloc(n_size, sizeof(real)));
+  CLEED_ALLOC_CHECK(integ = (real *) calloc(n_size, sizeof(real)));
   n_mir = p_cryst->n_mir;
   ctrol = 0;
 
@@ -390,9 +383,9 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
       for(i=0; i < p_cryst->n_layers; i++)
       {
         vecrot[2*i+4] = p_cryst->layers[i].reg_shift[1] * R_m[1] +
-                          p_cryst->layers[i].reg_shift[2] * R_m[2];
+                        p_cryst->layers[i].reg_shift[2] * R_m[2];
         vecrot[2*i+5] = p_cryst->layers[i].reg_shift[1] * R_m[3] +
-                          p_cryst->layers[i].reg_shift[2] * R_m[4];
+                        p_cryst->layers[i].reg_shift[2] * R_m[4];
       }
 
       /* calculate the difference */
@@ -424,10 +417,9 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
         {
           ctrol = 1;
 
-          #ifdef CONTROL
           if(i < 4)
           {
-            fprintf(STDCTR, "(leed_check_mirror_sym): "
+            CONTROL_MSG(CONTROL,
                     "no mirror symmetry for lattice vector in case of "
                     "mirror plane #%d alpha%f , difn = %e\n",
                     i_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
@@ -436,18 +428,17 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
           {
             if((i % 2) != 0)
             {
-              fprintf(STDCTR, "(leed_check_mirror_sym): layer%d has no mirror "
+              CONTROL_MSG(CONTROL, "layer%d has no mirror "
                   "symmetry for mirror plane #%d alpha%f , difn = %e\n",
                   ((i-5)/2), n_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
             }
             else
             {
-              fprintf(STDCTR, "(leed_check_mirror_sym): layer%d has no mirror "
+              CONTROL_MSG(CONTROL, "layer%d has no mirror "
                   "symmetry for mirror plane #%d alpha%f , difn = %e\n",
                   ((i-4)/2), n_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
             }
           }/* end else */
-          #endif
 
         }/* if cleed_real_fabs ...*/
 
@@ -480,7 +471,7 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   n_size = 3 * n_size + 1;
 
   /* allocate memory */
-  position = (real *) malloc(n_size * sizeof(real));
+  CLEED_ALLOC_CHECK(position = (real *) calloc(n_size, sizeof(real)));
 
   for(i=0; i < p_cryst->n_layers; i++)
   {
@@ -517,7 +508,8 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
 
                 vaux[0] = integ[0] - cleed_real_nint(integ[0]);
                 vaux[1] = integ[1] - cleed_real_nint(integ[1]);
-                if(cleed_real_fabs(vaux[0]) > EPSILON || cleed_real_fabs(vaux[1]) > EPSILON)
+                if(cleed_real_fabs(vaux[0]) > EPSILON ||
+                    cleed_real_fabs(vaux[1]) > EPSILON)
                 {
                   ctrol++ ;
                 }
@@ -528,7 +520,7 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
             if(ctrol < p_cryst->layers[i].n_atoms) ctrol = 0;
             else
             {
-              fprintf(STDCTR, "(leed_check_mirror_sym): no mirror symmetry in "
+              CONTROL_MSG(CONTROL, "no mirror symmetry in "
                   "mirror plane #%d(alpha %f) for atom%d in layer%d\n",
                   i_mir, p_cryst->alpha[i_mir], i_c, i);
             }
@@ -550,9 +542,7 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   /* WARNING_LOG if no rotational symmetry */
   if(p_cryst->n_mir == 0)
   {
-    #ifdef WARNING_LOG
-    fprintf(STDWAR, "*warning (leed_check_mirror_sym): no mirror symmetry\n");
-    #endif
+    WARNING_MSG("no mirror symmetry\n");
   }
 
   /* free memory */

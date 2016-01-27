@@ -1,18 +1,17 @@
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "gh_stddef.h"
 #include "leed.h"
 
 #define VERSION 1.0
 
-char line_buffer[STRSZ];
-/*========================================================================*/
+static char line_buffer[STRSZ] = "";
 
 int ftheta(int argc, char *argv[])
 {
 
-  mat Ylm;
+  mat Ylm = NULL;
 
   int i_str, i_arg;
   int l, l_max;
@@ -25,20 +24,16 @@ int ftheta(int argc, char *argv[])
   real norm;
   real faux_r, faux_i;
 
-  char * in_file;
+  char *in_file = NULL;
 
-  FILE *in_stream;
-  FILE *out_stream;
+  FILE *in_stream = stdin;
+  FILE *out_stream = stdout;
 
-  /* Preset out_stream, l_max */
-  in_stream = stdin;
-  out_stream = stdout;
+  /* Preset values */
   l_max = 5;
   energy = 100. / HART;
 
-  /*
- Check command line and decode arguments
-   */
+  /* Check command line and decode arguments */
   for (i_arg = 1; i_arg < argc; i_arg++)
   {
     if(*argv[i_arg] != '-')

@@ -1,5 +1,5 @@
 /**********************************************************************
- *                      lwritepar.c
+ *                      LWRITEPAR.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
@@ -12,6 +12,12 @@
  *   GH/08.08.95 - Creation (copy from leed_read_overlayer).
  *********************************************************************/
 
+/*!
+ * \file
+ *
+ * Writes program parameters to file.
+ */
+
 #include <math.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -21,38 +27,25 @@
 #include "cleed_real.h"
 #include "gh_stddef.h"
 
-/*********************************************************************
-  Write all program parameters to a file.
-
-  INPUT:
-
-   leed_crystal *bulk_par - (input) bulk parameters.
-   leed_phase   *phs_shifts - (input) phase shifts.
-   leed_var   *par - (input) other parameters necessary to control
-              the program.
-   leed_energy   *eng - (input) energy parameters.
-   leed_beam  *beams - (input) all output beams used at the highest 
-              energy.
-   FILE* file - (input) pointer to output file.
-
-  DESIGN:
-
-   Write parameters in the above order to the file specified.
-
-  FUNCTION CALLS:
-
-  RETURN VALUES:
-
-    tot_size = number of bytes that have been written if ok.
-    -1 if failed (and EXIT_ON_ERROR is not defined)
-
-*********************************************************************/
+/*!
+ * Writes all program parameters to a file.
+ *
+ * \param[in] bulk_par bulk crystal parameters.
+ * \param[in] phs_shifts phase shifts.
+ * \param[in] par other parameters necessary to control the program.
+ * \param[in] eng energy parameters.
+ * \param[in] beams all output beams used at the highest energy.
+ * \param[inout] file pointer to output file stream.
+ *
+ * \return number of bytes that have been written if okay.
+ * \retval -1 if failed (and \c EXIT_ON_ERROR is not defined).
+ */
 int leed_write_par(leed_crystal *bulk_par,
-              leed_phase   *phs_shifts,
-              leed_var   *par,
-              leed_energy   *eng,
-              leed_beam  *beams,
-              FILE* file)
+              leed_phase *phs_shifts,
+              leed_var *par,
+              leed_energy *eng,
+              leed_beam *beams,
+              FILE *file)
 {
   size_t i;                /* counter, dummy  variables */
   size_t n_phs;
@@ -62,7 +55,7 @@ int leed_write_par(leed_crystal *bulk_par,
   tot_size = 0;
 
   /********************************************************************
-  Write bulk parameters to file
+   Write bulk parameters to file
    - parameters (bulk_par, cryst_str)
    - layers (bulk_par->layers, layer_str)
    - atoms (bulk_par->layers[i]->atoms, atom_str)
@@ -101,7 +94,7 @@ int leed_write_par(leed_crystal *bulk_par,
   }
 
   /********************************************************************
-  Write phs_shifts to file
+   Write phs_shifts to file
    - number of sets of phase shifts (n_phs, int)
    - parameters (phs_shifts, phs_str)
    - energies (energy, real)
@@ -171,7 +164,7 @@ int leed_write_par(leed_crystal *bulk_par,
   }
 
   /************************************************************************
-  Write other parameters to file.
+   Write other parameters to file.
    - parameters (par, var_str)
    *************************************************************************/
 
@@ -184,7 +177,7 @@ int leed_write_par(leed_crystal *bulk_par,
   tot_size += sizeof(leed_var) * 1;
 
   /************************************************************************
-  Write energy parameters to file.
+   Write energy parameters to file.
    - parameters (eng, eng_str)
    *************************************************************************/
 
@@ -197,12 +190,13 @@ int leed_write_par(leed_crystal *bulk_par,
   tot_size += sizeof(leed_energy) * 1;
 
   /************************************************************************
-  Write beam list to file.
+   Write beam list to file.
    - beam list (beams, beam_str)
    *************************************************************************/
 
   /* Find number of beams.  */
-  for(number = 0; ! IS_EQUAL_REAL((beams + number)->k_par, F_END_OF_LIST); number ++)
+  for(number = 0;
+        !IS_EQUAL_REAL((beams + number)->k_par, F_END_OF_LIST); number ++)
   { ; }
   number ++;
 
@@ -225,10 +219,7 @@ int leed_write_par(leed_crystal *bulk_par,
   CONTROL_MSG(CONTROL, "%d bytes written\n", tot_size);
 
 
-  /************************************************************************
-  Write total number of bytes to file for control reasons
-   *************************************************************************/
-
+  /* Write total number of bytes to file for control reasons */
   if( fwrite(&tot_size, sizeof(int), 1, file) != 1 )
   {
     ERROR_MSG("output error while writing control number\n");
