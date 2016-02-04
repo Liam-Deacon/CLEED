@@ -44,10 +44,34 @@
 #define CPUTIME
 
 #ifdef CPUTIME
-#define CTIME(x) leed_cpu_time(STDCPU,x)
+static char cpu_msg[STRSZ] = "";
+#define CTIME(x) do {snprintf(cpu_msg, STRSZ-1, "%s: %s", __func__, (x)); \
+  cpu_msg[STRSZ-1]="\-0"; leed_cpu_time(STDCPU, cpu_msg);} while(0)
 #else
 #define CTIME(x) 
 #endif
+
+/*!
+ * Multiplies \p M with cols of \p R and rows with \p L
+ */
+__attribute__((nonnull))
+static inline void leed_ms_matmul_Rx_Lx_helper(mat M, const mat R, const mat L)
+{
+  real ptr_r, ptr_i, ptr_end;
+  size_t k, l;
+  for(k = 1; k <= M->rows; k++)         /* loop over row No's (1st index) */
+  {
+    for(ptr_r = M->rel + (k-1)*M->cols + 1,
+        ptr_i = M->iel + (k-1)*M->cols + 1,
+        ptr_end = ptr_r + M->cols, l = 1;
+        ptr_r < ptr_end;
+        ptr_r ++, ptr_i ++, l ++)         /* loop over col No's (2nd index) */
+    {
+      cri_mul(ptr_r, ptr_i, *(L->rel+k), *(L->iel+k), *ptr_r, *ptr_i);
+      cri_mul(ptr_r, ptr_i, *(R->rel+l), *(R->iel+l), *ptr_r, *ptr_i);
+    }
+  }
+}
 
 /*!
  * Calculates the scattering matrix for a composite layer using the combined
@@ -120,14 +144,14 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   real d_ij[4];
   real faux_r, faux_i;
-  real pref_i;
+  real pref_i;										/* pref_i is used as common prefactor */
 
   real z_max, z_min;              /* z coordinates of the outer-most atoms */
   real z_plane;                   /* z coordinate ofo the most populated plane */
 
   real *ptr_r, *ptr_i, *ptr_end;
   
-  leed_atom * atoms;        /* atomic positions and scattering properties */
+  leed_atom *atoms;         			/* atomic positions and scattering properties */
   
   mat Ylm;                        /* spherical harmonics (for exit beams) */
   mat Llm_ij, Llm_ji;             /* interlayer lattice sums */
@@ -152,7 +176,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   R_p = NULL;
   R_m = NULL;
 
-  CTIME("(leed_ms_compl_nd): start of function\t\t");
+  CTIME("start of function\t\t");
 
   /* Check the validity of input matrices p_T/R
    * iaux is used as error flag */
@@ -208,9 +232,9 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
    * find maximum l necessary for all atom types
    */
   n_atoms = layer->n_atoms;
-  atoms = (leed_atom *) calloc(n_atoms+1, sizeof(leed_atom) );
+  CLEED_ALLOC_CHECK(atoms = (leed_atom *) calloc(n_atoms+1, sizeof(leed_atom)));
 
-  n_type = atoms[0].type;;
+  n_type = atoms[0].type;
   z_min = z_max = atoms[0].pos[3];
   l_max = 1;
 
@@ -252,7 +276,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   CONTROL_MSG(CONTROL, "z_min = %f  z_max =%f lmax = %d\n", z_min, z_max, l_max);
 
-  (atoms+n_atoms)->type = I_END_OF_LIST;   /* terminate list atoms */
+  atoms[n_atoms].type = I_END_OF_LIST;   /* terminate list atoms */
   n_type ++;                               /* n_type = number of types */
 
   /* this would reset l_max to its maximum value */
@@ -267,7 +291,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   /* (ii)a
    * Find plane containing most atoms
    */
-  z_plane = (atoms+0)->pos[3];
+  z_plane = atoms[0].pos[3];
   n_plane = 1;
 
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
@@ -286,12 +310,10 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
       z_plane = atoms[i_atoms].pos[3];
     }
 
-    #if CONTROL
-    fprintf(STDCTR, "\t(%d) pos: (%5.2f,%5.2f,%5.2f) A type: %d\n",
+    CONTROL_MSG(CONTROL, "\t(%d) pos: (%5.2f,%5.2f,%5.2f) A type: %d\n",
             i_atoms, atoms[i_atoms].pos[1]*BOHR,
             atoms[i_atoms].pos[2]*BOHR, atoms[i_atoms].pos[3]*BOHR,
             atoms[i_atoms].type);
-    #endif
   }    /* for i_atoms */
 
   CONTROL_MSG(CONTROL, "z_plane: %.4f, n_plane: %d\n", z_plane*BOHR, n_plane);
@@ -307,14 +329,14 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
       if( i_atoms != j_atoms )
       {
         iaux = atoms[i_atoms].type;
-        atoms[i_atoms].type = (atoms+j_atoms)->type;
-        (atoms+j_atoms)->type = iaux;
+        atoms[i_atoms].type = atoms[j_atoms].type;
+        atoms[j_atoms].type = iaux;
   
         for(iaux = 1; iaux <= 3; iaux ++)
         {
           faux_r = atoms[i_atoms].pos[iaux];
-          atoms[i_atoms].pos[iaux]  = (atoms+j_atoms)->pos[iaux];
-          (atoms+j_atoms)->pos[iaux]  = faux_r;
+          atoms[i_atoms].pos[iaux] = atoms[j_atoms].pos[iaux];
+          atoms[j_atoms].pos[iaux] = faux_r;
         }
       }  /* if i_atoms ... */
 
@@ -339,19 +361,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
    * - Calculate the single Bravais lattice scattering matrix for each atom
    *   type and multiply with factor -1/2k0.
    */
-  p_Tii = (mat *) malloc((size_t)n_type * sizeof(mat));
-  if( p_Tii  == NULL )
-  {
-    ERROR_MSG("Allocation error for p_Tii\n");
-    ERROR_EXIT_RETURN(1, -1);
-  }
-  else
-  {
-    for(i_type = 0; i_type < n_type; i_type ++)
-    {
-      p_Tii[i_type] = NULL;
-    }
-  }
+  CLEED_ALLOC_CHECK(p_Tii = (mat *) calloc((size_t)n_type, sizeof(mat)));
 
   CONTROL_MSG(CONTROL_X, "Calculate Bravais lattice sum\n");
 
@@ -370,18 +380,9 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     /* t_type = T_NOND;*/
     if( p_Tii [i_type] == NULL )
     {
-      #if CONTROL
       CONTROL_MSG(CONTROL, "before leed_ms_tmat_ii (%d): "
-              "i_type = %d", i_atoms, i_type);
-      if(t_type == T_DIAG)
-      {
-        fprintf(STDCTR, " t_type = %d (T_DIAG)\n", t_type);
-      }
-      else if(t_type == T_NOND)
-      {
-        fprintf(STDCTR, " t_type = %d (T_NOND)\n", t_type);
-      }
-      #endif
+              "i_type = %d t_type = %d (%s)\n", i_atoms, i_type, t_type,
+              t_type == T_DIAG ? "T_DIAG" : "T_NOND");
 
       if(t_type == T_DIAG)
       {
@@ -434,9 +435,9 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
       if( ! IS_EQUAL_REAL(RMATEL(i_atoms+1, j_atoms+1, Mark), 1.))
       {
         /* d_ij = vector rj - ri */
-        d_ij[1] = (atoms+j_atoms)->pos[1] - atoms[i_atoms].pos[1];
-        d_ij[2] = (atoms+j_atoms)->pos[2] - atoms[i_atoms].pos[2];
-        d_ij[3] = (atoms+j_atoms)->pos[3] - atoms[i_atoms].pos[3];
+        d_ij[1] = atoms[j_atoms].pos[1] - atoms[i_atoms].pos[1];
+        d_ij[2] = atoms[j_atoms].pos[2] - atoms[i_atoms].pos[2];
+        d_ij[3] = atoms[j_atoms].pos[3] - atoms[i_atoms].pos[3];
 
         CONTROL_MSG(CONTROL, "d(%d->%d) = (%5.2f, %5.2f, %5.2f) A\n",
                 i_atoms, j_atoms, d_ij[1]*BOHR, d_ij[2]*BOHR, d_ij[3]*BOHR);
@@ -445,9 +446,8 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                   v_par->k_in, layer->a_lat, d_ij, 2 * l_max, v_par->epsilon );
 
         #ifdef CONTROL_LSUM
-        fprintf(STDCTR, "(leed_ms_compl_nd): Lij\n");
         Maux = mattrans(Maux, Llm_ij);
-        matshow(Maux);
+        fprintf(STDCTR, "%s: Lij\n%s", __func__, matshow(Maux));
         #endif
 
         /* Copy matrix Tjj * Gji to position (j,i) = (off_col,off_row)
@@ -505,7 +505,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   matnattovht(Mbg, l_max, n_atoms);
   #endif
 
-  CTIME("(leed_ms_compl_nd): before giant matrix inversion");
+  CTIME("before giant matrix inversion");
 
   Mbg = ms_partinv(Mbg, Mbg, n_plane, l_max);
 
@@ -515,7 +515,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   */
 
   CONTROL_MSG(CONTROL, " ... completed\n");
-  CTIME("(leed_ms_compl_nd): after giant matrix inversion");
+  CTIME("after giant matrix inversion");
 
   /* Prepare matrices for conversion into plane waves:
    *
@@ -535,8 +535,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   /* prefactor including relative area of unit cell */
   pref_i = -16.*PI*PI / layer->rel_area;
 
-  CONTROL_MSG(CONTROL, "relative u.c. area: %.3f\n",
-          layer->rel_area);
+  CONTROL_MSG(CONTROL, "relative u.c. area: %.3f\n", layer->rel_area);
 
   /* calculate spherical harmonics Ylm */
   Ylm = leed_ms_ymat(Ylm, l_max, beams, n_beams);
@@ -579,8 +578,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     #ifdef CONTROL_XXX
     if(i_atoms == 0)
     {
-      fprintf(STDCTR,"(leed_ms_compl_nd):R_p (atom%d)\n",i_atoms);
-      matshow(Maux);
+      fprintf(STDCTR, "%s: R_p (atom%d)\n%s", __func__, i_atoms, matshow(Maux);
     }
     #endif
 
@@ -637,9 +635,8 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     #ifdef CONTROL_XXX
     if(i_atoms == 0)
     {
-      fprintf(STDCTR, "(leed_ms_compl_nd):R_p (atom%d)\n", i_atoms);
-      matshow(Maux);
-      matshowabs(Maux);
+      fprintf(STDCTR, "%s: R_p (atom%d)\n%s%s", __func__, i_atoms,
+              matshow(Maux), matshowabs(Maux));
     }
     #endif
 
@@ -673,7 +670,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   }
 
-  CTIME("(leed_ms_compl_nd): after preparation of R_p ... ");
+  CTIME("after preparation of R_p ... ");
   matfree(Ylm);
 
   /* Multiply matrices: L*Mbg*R */
@@ -685,11 +682,9 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   Tmm = matmul(Tmm, L_m, Maux);
   Rpm = matmul(Rpm, L_p, Maux);
 
-  CTIME("(leed_ms_compl_nd): after multiplication R * Mbg * L");
+  CTIME("after multiplication R * Mbg * L");
 
-  #ifdef CONTROL
-  fprintf(STDCTR, "(leed_ms_compl_nd): ... completed\n");
-  #endif
+  CONTROL_MSG(CONTROL, "... completed\n");
 
   matfree(Maux);
   matfree(Mbg);
@@ -737,7 +732,6 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   /* Set up vectors L_p/m and R_p/m */
   for(k = 0; k < n_beams; k ++)
   {
-
     /* R_m (exp[- ikz(-)zmax) = L_p (exp[+ ikz(+)zmax) */
     faux_r = +beams[k].k_r[3] * z_max;
     faux_i = +beams[k].k_i[3] * z_max;
@@ -815,11 +809,9 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     cri_mul(&faux_r, &faux_i,
             L_p->rel[k+1], L_p->iel[k+1], R_p->rel[k+1], R_p->iel[k+1]);
 
-    #ifdef CONTROL_XX
-    pref_r = cri_abs(faux_r, faux_i);
-    fprintf(STDCTR, "(leed_ms_compl_nd): (%2d) propagator: (%.3f, %.3f) [%.3f]\n",
-                    k, faux_r, faux_i, pref_r);
-    #endif
+    pref_i = cri_abs(faux_r, faux_i);
+    CONTROL_MSG(CONTROL_X, "(%2d) propagator: (%.3f, %.3f) [%.3f]\n",
+                    k, faux_r, faux_i, pref_i);
 
     Tmm->rel[uaux] += faux_r;
     Tmm->iel[uaux] += faux_i;
@@ -837,7 +829,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   free(atoms);
 
-  for(iaux = 0; iaux < (size_t)n_type; iaux++)
+  for(iaux = (size_t)n_type-1; iaux >= 0; iaux--)
   {
     if(p_Tii[iaux] != NULL) matfree( p_Tii[iaux] );
   }
@@ -848,7 +840,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   *p_Rpm = Rpm;
   *p_Rmp = Rmp;
 
-  CTIME("(leed_ms_compl_nd): end of function");
+  CTIME("end of function");
 
   return(0);
 } /* end of function leed_ms_compl_nd */
