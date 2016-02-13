@@ -14,21 +14,37 @@
 
 import sys
 import os
+import datetime
+
+YEAR = datetime.date.today().strftime('%Y')
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
+# If your extensions are in another directory, add it here.
+sys.path.append('sphinxext')
+
+# Import support for ipython console session syntax highlighting (lives
+# in the sphinxext directory defined above)
+import ipython_console_highlighting
 
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
 
+# Enable Cython highlighting support (taken straight from cython's conf.py
+# Use cython as the default syntax highlighting language, as python is a subset
+# this does the right thing
+highlight_language = 'cython'
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'ipython_console_highlighting', 
+    'cython_highlighting',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
@@ -52,7 +68,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CLEED'
-copyright = u'2014, Georg Held, Liam Deacon & collaborators'
+authors = (u"Georg Held", u'Liam Deacon')
+copyright = u'2014-{}, {} & collaborators'.format(YEAR, u', '.join(authors))
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -191,7 +208,7 @@ htmlhelp_basename = 'CLEEDdoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',
@@ -205,7 +222,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'CLEED.tex', u'CLEED Documentation',
-   u'Georg Held, Liam Deacon \\& collaborators', 'manual'),
+   u'{} \\& collaborators'.format(u', '.join(authors)), 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -235,7 +252,7 @@ latex_show_urls = False
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'cleed', u'CLEED Documentation',
-     [u'Georg Held, Liam Deacon & collaborators'], 1)
+     [u'{} & collaborators'.format(u', '.join(authors)], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -248,9 +265,11 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'CLEED', u'CLEED Documentation',
-   u'Georg Held, Liam Deacon & collaborators', 'CLEED', 'One line description of project.',
-   'Miscellaneous'),
+  (u'index', u'CLEED', u'CLEED Documentation',
+   u'{} & collaborators'.format(u', '.join(authors)), 
+   u'CLEED', 
+   u'Computational Low Energy Electron Diffraction.',
+   u'Physics/Chemistry'),
 ]
 
 # Documents to append as an appendix to all manuals.
@@ -270,9 +289,9 @@ texinfo_documents = [
 
 # Bibliographic Dublin Core info.
 epub_title = u'CLEED'
-epub_author = u'Georg Held, Liam Deacon & collaborators'
-epub_publisher = u'Georg Held, Liam Deacon & collaborators'
-epub_copyright = u'2014, Georg Held, Liam Deacon & collaborators'
+epub_author = u'{} & collaborators'.format(u', '.join(authors))
+epub_publisher = u'{} & collaborators'.format(u', '.join(authors))
+epub_copyright = u'2014-{}, {} & collaborators'.format(YEAR, u', '.join(authors))
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'CLEED'
