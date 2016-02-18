@@ -19,31 +19,45 @@
 
 #include <math.h>  
 #include <stdio.h>
+#include <string.h>
 
 #include "mat.h"
 
 
 /*!
- * Display the member valuess of #mat for matrix \p M and print to #STDOUT
+ * Display the member values of #mat for matrix \p M and print to \p stream
+ *
+ * \param stream Pointer to output file stream.
  * \param[in] M Matrix whose header is to be displayed.
+ *
+ * \return pointer to a string containing the matrix parameters.
+ * \note No output will be written if \p stream is \c NULL
+ * \warning A zero length string will be returned on error and an
+ * message printed to \c stderr
  */
-void matshowpar(const mat M)
+const char *matshowpar(FILE *stream, const mat M)
 {
-  
+  static char str[10*STRSZ] = "";
+  size_t len = 0;
   if (matcheck(M) < 1)
   {
-    ERROR_MSG("matrix does not exist \n");
-    return;
+    ERROR_MSG("matrix does not exist\n");
+    return "";
   }
 
-  fprintf(STDOUT, "(matshowpar):\n");
-  fprintf(STDOUT, "\t(int) mag_no   = 0x%4x\n", M->mag_no);
-  fprintf(STDOUT, "\t(int) blk_type = 0x%4x\n", M->blk_type);
-  fprintf(STDOUT, "\t(int) mat_type = 0x%4x\n", M->mat_type);
-  fprintf(STDOUT, "\t(int) num_type = 0x%4x\n", M->num_type);
-  fprintf(STDOUT, "\t(int) rows     =   %4d\n", M->rows);
-  fprintf(STDOUT, "\t(int) cols     =   %4d\n", M->cols);
-  fprintf(STDOUT, "\t(real *) rel   = 0x%x\n", (size_t)M->rel);
-  fprintf(STDOUT, "\t(real *) iel   = 0x%x\n", (size_t)M->iel);
+  len = sprintf(str, "(%s):\n", __func__);
+  len += sprintf(str+len, "\t(int) mag_no   = 0x%4x\n", M->mag_no);
+  len += sprintf(str+len, "\t(int) blk_type = 0x%4x\n", M->blk_type);
+  len += sprintf(str+len, "\t(int) mat_type = 0x%4x\n", M->mat_type);
+  len += sprintf(str+len, "\t(int) num_type = 0x%4x\n", M->num_type);
+  len += sprintf(str+len, "\t(int) rows     =   %4d\n", M->rows);
+  len += sprintf(str+len, "\t(int) cols     =   %4d\n", M->cols);
+  len += sprintf(str+len, "\t(real *) rel   = 0x%x\n", (size_t)M->rel);
+  len += sprintf(str+len, "\t(real *) iel   = 0x%x\n", (size_t)M->iel);
+
+  /* print output if stream is valid */
+  if (stream) fprintf(stream, str);
+
+  return str;
 
 }  /* end of function matshowpar */

@@ -35,139 +35,164 @@ enum { CMAXCOL = 16};
 static const char* C_DIAFORM = "( *.**, *.**) ";
 
 /*!
- * Prints the elements of matrix \p M to #STDOUT
+ * Prints the elements of matrix \p M to \p stream
  *
+ * \param stream Where the output matrix will be written to.
  * \param[in] M Matrix to print.
  *
- * \note If the matrix does not exist then the function returns (after
- * printing an error message if #ERROR_LOG is defined).
+ * \return A string of the matrix output written to \p stream .
+ *
+ * \warning If the matrix does not exist then the function returns
+ * a zero length string(after printing an error message
+ * if #ERROR_LOG is defined).
+ *
+ * \note No output will be written if \p stream is \c NULL
+ * (but a string of the output will still be returned).
  */
-void matshow(const mat M)
+const char *matshow(FILE *stream, const mat M)
 {
-  size_t i_r, i_c;
+  size_t i_r, i_c, len = 0;
+
+  static char *str = NULL;
+  char mat_header[STRSZ] = "";
+  char fmt[STRSZ] = "";
 
   if (matcheck(M) < 1)
   {
     ERROR_MSG("matrix does not exist \n");
-    return;
+    return "\0";
   }
-  else
+
+  /* allocate and initialise string */
+  if (M->mat_type == NUM_REAL) sprintf(fmt, RFORM, 0.);
+  else /* assume complex */  sprintf(fmt, CFORM_2, 0., 1.);
+  sprintf(mat_header, "(%d rows) x (%d columns):\n", M->rows, M->cols);
+  size_t max_len = strlen(mat_header) + (M->rows * M->cols * (strlen(fmt)+20));
+
+  CLEED_REALLOC(mat_header, max_len* sizeof(char));
+
+  len = sprintf(str, mat_header);
+  switch(M->mat_type)
   {
-    fprintf(STDOUT, "(%d rows) x (%d columns):\n", M->rows, M->cols);
-    switch(M->mat_type)
+    case(MAT_NORMAL): case(MAT_SQUARE):
     {
-      case(MAT_NORMAL): case(MAT_SQUARE):
+      switch(M->num_type)
       {
-        switch(M->num_type)
+        case(NUM_REAL):
         {
-          case(NUM_REAL):
+          for (i_r = 1; i_r <= M->rows; i_r ++ )
           {
-            for (i_r = 1; i_r <= M->rows; i_r ++ )
+            for (i_c = 1; i_c <= M->cols; i_c ++)
             {
-              for (i_c = 1; i_c <= M->cols; i_c ++)
-              {
-                fprintf(STDOUT, RFORM, *rmatel(i_r,i_c,M));
-              }
-              fprintf(STDOUT, "\n");
+              len += sprintf(str+len, RFORM, *rmatel(i_r,i_c,M));
             }
-            fprintf(STDOUT, "\n");
+            len += sprintf(str+len, "\n");
+          }
+          len += sprintf(str+len, "\n");
 
-            break;
-          } /* case REAL */
+          break;
+        } /* case REAL */
 
-          case(NUM_COMPLEX):
+        case(NUM_COMPLEX):
+        {
+          for (i_r = 1; i_r <= M->rows; i_r ++ )
           {
-            for (i_r = 1; i_r <= M->rows; i_r ++ )
+            fprintf(STDOUT, "%3d:    ", i_r);
+            for (i_c = 1; i_c <= M->cols; i_c ++)
             {
-              fprintf(STDOUT, "%3d:    ", i_r);
-              for (i_c = 1; i_c <= M->cols; i_c ++)
+              if( (cleed_real_fabs(*rmatel(i_r, i_c, M)) < MIN_VALUE) &&
+                  (cleed_real_fabs(*imatel(i_r, i_c, M)) < MIN_VALUE) )
               {
-                if( (cleed_real_fabs(*rmatel(i_r, i_c, M)) < MIN_VALUE) &&
-                    (cleed_real_fabs(*imatel(i_r, i_c, M)) < MIN_VALUE) )
-                {
-                  fprintf(STDOUT, CFORM_ZERO);
-                }
-                else
-                {
-                  fprintf(STDOUT, CFORM_2, *rmatel(i_r, i_c, M),
-                      *imatel(i_r, i_c, M));
-                }
-                if( (i_c % CMAXCOL == 0) && (i_c < M->cols) )
-                {
-                  fprintf(STDOUT, "\n  (%3d) ", i_c+1);
-                }
+                len += sprintf(str+len, CFORM_ZERO);
               }
-              fprintf(STDOUT, "\n");
+              else
+              {
+                len += sprintf(str+len, CFORM_2, *rmatel(i_r, i_c, M),
+                    *imatel(i_r, i_c, M));
+              }
+              if( (i_c % CMAXCOL == 0) && (i_c < M->cols) )
+              {
+                len += sprintf(str+len, "\n  (%3d) ", i_c+1);
+              }
             }
-            fprintf(STDOUT, "\n");
+            len += sprintf(str+len, "\n");
+          }
+          len += sprintf(str+len, "\n");
 
-            break;
-          } /* case CLEED_COMPLEX */
+          break;
+        } /* case CLEED_COMPLEX */
 
-          case(NUM_IMAG): case(NUM_MASK): default:
-            ERROR_MSG("Unsupported data type for matrix M (%s)\n", strmtype(M->num_type));
-            return;
-            break;
+        case(NUM_IMAG): case(NUM_MASK): default:
+          ERROR_MSG("Unsupported data type for matrix M (%s)\n",
+                    strmtype(M->num_type));
+          return "";
+          break;
 
-        }  /* switch num_type */
+      }  /* switch num_type */
 
-        break;
-      }  /* MAT_NORMAL, MAT_SQUARE */
+      break;
+    }  /* MAT_NORMAL, MAT_SQUARE */
 
-      case(MAT_DIAG):
+    case(MAT_DIAG):
+    {
+      switch(M->num_type)
       {
-        switch(M->num_type)
+        case(NUM_REAL):
         {
-          case(NUM_REAL):
+          for (i_r = 1; i_r <= M->cols; i_r ++ )
           {
-            for (i_r = 1; i_r <= M->cols; i_r ++ )
+            for (i_c = 1; i_c <= M->cols; i_c ++ )
             {
-              for (i_c = 1; i_c <= M->cols; i_c ++ )
-              {
-                if(i_r == i_c) fprintf(STDOUT, RFORM, M->rel[i_r]);
-                else           fprintf(STDOUT, R_DIAFORM);
-              }
-              fprintf(STDOUT, "\n");
+              if(i_r == i_c) len += sprintf(str+len, RFORM, M->rel[i_r]);
+              else           len += sprintf(str+len, R_DIAFORM);
             }
-            fprintf(STDOUT, "\n");
+            len += sprintf(str+len, "\n");
+          }
+          len += sprintf(str+len, "\n");
 
-            break;
-          } /* case REAL */
+          break;
+        } /* case REAL */
 
-          case(NUM_COMPLEX):
+        case(NUM_COMPLEX):
+        {
+          for (i_r = 1; i_r <= M->cols; i_r ++ )
           {
-            for (i_r = 1; i_r <= M->cols; i_r ++ )
+            for (i_c = 1; i_c <= M->cols; i_c ++ )
             {
-              for (i_c = 1; i_c <= M->cols; i_c ++ )
+              if(i_r == i_c)
               {
-                if(i_r == i_c)
-                {
-                  fprintf(STDOUT, CFORM_2, M->rel[i_r], M->iel[i_r]);
-                }
-                else           fprintf(STDOUT, C_DIAFORM);
+                len += sprintf(str+len, CFORM_2, M->rel[i_r], M->iel[i_r]);
               }
-              fprintf(STDOUT, "\n");
+              else
+                len += sprintf(str+len, C_DIAFORM);
             }
-            fprintf(STDOUT, "\n");
+            len += sprintf(str+len, "\n");
+          }
+          len += sprintf(str+len, "\n");
 
-            break;
-          } /* case CLEED_COMPLEX */
+          break;
+        } /* case CLEED_COMPLEX */
 
-          case(NUM_IMAG): case(NUM_MASK): default:
-            ERROR_MSG("Unsupported data type for matrix M (%s)\n", strmtype(M->num_type));
-            return;
-            break;
-        }  /* switch num_type */
+        case(NUM_IMAG): case(NUM_MASK): default:
+          ERROR_MSG("Unsupported data type for matrix M (%s)\n",
+                    strmtype(M->num_type));
+          return "";
+          break;
+      }  /* switch num_type */
 
-        break;
-      }  /* MAT_DIAG */
+      break;
+    }  /* MAT_DIAG */
 
-      case (MAT_SCALAR): default:
-        ERROR_MSG("Unsupported type for matrix M\n");
-        return;
+    case (MAT_SCALAR): default:
+      ERROR_MSG("Unsupported type for matrix M\n");
+      return "";
 
-    }  /* switch mat_type */
+  }  /* switch mat_type */
 
-  }   /* else */
+  /* print to stream if valid */
+  if (stream)
+    fprintf(stream, str);
+
+  return str;
 
 }  /* end of function matshow */
