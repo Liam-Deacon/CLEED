@@ -109,7 +109,7 @@ int leed_write_par(leed_crystal *bulk_par,
   /* number of sets */
   if( fwrite(&n_phs, sizeof(int), 1, file) != 1 )
   {
-    ERROR_MSG("output error while writing No. of phase shifts.\n");
+    ERROR_MSG("output error while writing number of phase shifts.\n");
     ERROR_RETURN(-1);
   }
   tot_size += sizeof(int) * 1;
@@ -147,7 +147,7 @@ int leed_write_par(leed_crystal *bulk_par,
     number = strlen( (phs_shifts + i)->input_file ) + 1;
     if( fwrite( &number, sizeof(int), 1, file) != 1 )
     {
-      ERROR_MSG("output error while writing ph. shift file name (%d)\n", i);
+      ERROR_MSG("output error while writing phase shift file name (%d)\n", i);
       ERROR_RETURN(-1);
     }
     tot_size += sizeof(int) * 1;
