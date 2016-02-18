@@ -86,12 +86,15 @@ int leed_check_mirror_sym(leed_crystal *);
 
 int leed_energy_loop();
 
-leed_args *leed_args_init(void);
-leed_args *leed_args_parse(int argc, char *argv[]);
+__attribute__((returns_nonnull)) leed_args *leed_args_init(void);
+__attribute__((returns_nonnull)) leed_args *leed_args_parse(int argc, char *argv[]);
 void leed_args_free(leed_args *args);
 
-leed_model *leed_model_init(leed_args *args);
-void leed_model_calculate_energies(leed_model *model);
+__attribute__((nonnull))
+void leed_var_init(leed_var *var_par, const real vr, const real vi);
+
+__attribute__((nonnull)) leed_model *leed_model_init(leed_args *args);
+__attribute__((nonnull)) void leed_model_calculate_energies(leed_model *model);
 void leed_model_free(leed_model *model);
 
 void leed_beam_free(leed_beam *beams);
@@ -109,11 +112,12 @@ int leed_bsrinp(const char *filebsr, size_t number);
 int leed_beam_rotation_matrix_free(real **);
 
 /* Find the beams to be included (lbmgen.c) */
-int leed_beam_gen(leed_beam **, leed_crystal *, leed_var *, real);
+int leed_beam_gen(leed_beam **, const leed_crystal * const,
+    const leed_crystal * const, leed_var *, real, bool);
 
 /* Find the beams to be included (lbmgenrot.c) */
-int leed_beam_gen_sym(leed_beam **, leed_crystal *, leed_crystal *,
-                      leed_var *, real);
+__attribute__((deprecated)) int leed_beam_gen_sym(leed_beam **,
+    const leed_crystal * const, const leed_crystal *, leed_var *, real);
 
 /* create rotation matrices */
 real **leed_beam_get_rotation_matrices(int );
