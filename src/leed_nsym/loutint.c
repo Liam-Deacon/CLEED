@@ -20,6 +20,7 @@
 
 #include <malloc.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "leed.h"
 
@@ -35,18 +36,20 @@
  * \param[in] par
  * \param outfile File pointer to the output file where the intensities are
  * written to.
+ * \param sym Flag to state whether to include symmetry information.
  * \return number of intensities written to \p outfile
  * \retval -1 if failed (not currently implemented).
  * \see matsqmod()
  */
 int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
                             const leed_beam *beams_all, const leed_var *par,
-                            FILE *outfile)
+                            FILE *outfile, bool sym)
 {
   size_t i_beams_now = 0, i_beams_all, i_out;
 
   mat Int = NULL;
   real k_r = cleed_real_sqrt(2*par->eng_v);
+  real val = 0.;
 
   /* Calculate intensities as the square of the moduli of the amplitudes. */
   Int = matsqmod(Int, Amp);
@@ -62,15 +65,15 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
       if(Int->rel[i_beams_now + 1] > INT_TOLERANCE)
       {
         fprintf(STDCTR, "\t\t(%5.2f,%5.2f):\t  %.4e\n",
-                (beams_now + i_beams_now)->ind_1,
-                (beams_now + i_beams_now)->ind_2,
+                beams_now[i_beams_now].ind_1,
+                beams_now[i_beams_now].ind_2,
                 Int->rel[i_beams_now + 1]);
       }
       else
       {
         fprintf(STDCTR, "\t\t(%5.2f,%5.2f):\t   < %.0e\n",
-                (beams_now + i_beams_now)->ind_1,
-                (beams_now + i_beams_now)->ind_2,
+                beams_now[i_beams_now].ind_1,
+                beams_now[i_beams_now].ind_2,
                 INT_TOLERANCE);
       }
       i_out ++;
@@ -87,15 +90,15 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
 #endif
 
 #if CONTROL_ALL
-  fprintf(STDCTR, "\n(leed_output_int): all beams: \n");
+  CONTROL_MSG(CONTROL_ALL, "all beams: \n");
 
   for (i_beams_all = 0;
-      ! IS_EQUAL_REAL((beams_all + i_beams_all)->k_par, F_END_OF_LIST);
+      ! IS_EQUAL_REAL(beams_all[i_beams_all].k_par, F_END_OF_LIST);
       i_beams_all ++)
   {
     fprintf(STDCTR, "\t\t(%5.2f,%5.2f)\n",
-            (beams_all + i_beams_all)->ind_1,
-            (beams_all + i_beams_all)->ind_2);
+            beams_all[i_beams_all].ind_1,
+            beams_all[i_beams_all].ind_2);
   }
   fprintf(STDCTR, "\t\t(%d)\n", i_beams_all);
 #endif
@@ -108,16 +111,24 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
   {
     for(i_beams_now = 0; i_beams_now < Int->rows; i_beams_now ++)
     {
-      if( IS_EQUAL_REAL((beams_all+i_beams_all)->ind_1,
-                        (beams_now+i_beams_now)->ind_1) &&
-          IS_EQUAL_REAL((beams_all+i_beams_all)->ind_2,
-                        (beams_now+i_beams_now)->ind_2)  )
+      if( IS_EQUAL_REAL(beams_all[i_beams_all].ind_1,
+                        beams_now[i_beams_now].ind_1) &&
+          IS_EQUAL_REAL(beams_all[i_beams_all].ind_2,
+                        beams_now[i_beams_now].ind_2)  )
       {
         if((beams_now + i_beams_now)->k_par <= k_r)
         {
           if(Int->rel[i_beams_now + 1] > INT_TOLERANCE)
           {
-            fprintf(outfile, "%.6e ", Int->rel[i_beams_now + 1]);
+          	#if CONTROL_ALL
+          	if (sym)
+            	CONTROL_MSG(CONTROL_ALL, "neqbs = %d  neqbb = %d beam%d \n",
+            	            beams_now[i_beams_now].n_eqb_s,
+            	            beams_now[i_beams_now].n_eqb_b,
+            	            i_beams_now);
+						#endif
+           	val = Int->rel[i_beams_now + 1] / beams_now[i_beams_now].n_eqb_s;
+           	fprintf(outfile, "%.6e ", sym ? val : Int->rel[i_beams_now + 1]);
           }
           else fprintf(outfile, "%.6e ",0.);
         }
