@@ -100,7 +100,7 @@ mat ms_ltok ( mat Mkk, mat Mlm, mat Ylm, mat Yxlm,
 
     if (mchk[0] < 1 || mchk[1] < 1 || mchk[2] < 1 || mchk[3] < 0)
       ERROR_EXIT_RETURN(1, NULL);
-  }
+
 
 #else /* FIND_Yx is defined */
 
@@ -131,10 +131,7 @@ mat ms_ltok ( mat Mkk, mat Mlm, mat Ylm, mat Yxlm,
   Mkk = matmul(Mkk, Ylm, Mlm);
   Mkk = matmul(Mkk, Mkk, Yxlm);
 
-#ifdef CONTROL
-  CONTROL_MSG(CONTROL, "Ylm * Mlm * Yxlm = \n");
-  matshow(Mkk);
-#endif
+  CONTROL_MSG(CONTROL, "Ylm * Mlm * Yxlm = \n%s", matshow(NULL, Mkk));
 
   /**********************************************************************
    * Loop over k' (exit beams: rows of Mk'k):
