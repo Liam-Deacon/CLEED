@@ -22,21 +22,99 @@
 
 static const double EPSILON = 0.001L; /*!< comparison threshold for floating point values */
 
+/*! enum to indicate symmetry type */
+typedef enum {
+  ROT_SYM,      /*!< Rotational Symmetry */
+  MIR_SYM       /*!< Mirror Symmetry */
+} symmetry_type;
+
+#if CONTROL
+/*!
+ * Prints control message stating which layers are to be tested (bulk or surface).
+ */
+static void leed_print_layer_test_type(leed_structure layer_type)
+{
+  switch(layer_type)
+  {
+    case(OVER):
+      CONTROL_MSG(CONTROL, "testing the overlayers\n");
+      break;
+    case(BULK):
+      CONTROL_MSG(CONTROL, "testing the bulk layers\n");
+      break;
+    default:
+      CONTROL_MSG(CONTROL, "can not test "
+        "symmetry, because the nature of the layer is unknown!\n");
+  }
+}
+
+/*!
+ * Prints warnings about rotational/mirror symmetry for lattice vector or layer
+ *
+ * \param i layer number
+ * \param faux difference (for tolerance)
+ * \param sym symmetry type (\c ROT_SYM or \c MIR_SYM)
+ * \param i_mir mirror plane
+ * \param alpha rotation about mirror plane
+ *
+ * \note \p i_mir and \p alpha are only used if \p sym is \c MIR_SYM
+ *
+ */
+static inline void
+leed_print_symmetry_warnings(
+    size_t i, real faux, symmetry_type sym, size_t i_mir, real alpha)
+{
+  char buf[1024] = "\0";
+  if(i < 4)
+  {
+    CONTROL_MSG(CONTROL, "lattice vector has no %s symmetry, difn = %e\n",
+                sym == ROT_SYM ? "rotational" : "mirror", faux);
+  }
+  else
+  {
+    if (sym == MIR_SYM)
+      sprintf(buf, " for mirror plane #%d alpha%f", i_mir, alpha);
+    CONTROL_MSG(CONTROL, "layer%d has no %s symmetry%s, difn = %e\n",
+        sym == ROT_SYM ? "rotational" : "mirror", buf,
+        ((i % 2) != 0) ? (i-5)/2 : (i-4)/2, faux);
+  } /* end else */
+}
+#else
+#define leed_print_layer_type(layer_type)
+#define leed_print_symmetry_warnings(...)
+#endif
+
+/*! Returns pointer to lattice vector of layer type to test */
+static inline real
+  *leed_get_symmetry_lattice_vector_for_layer(const leed_crystal * const p_cryst)
+{
+  if (p_cryst && p_cryst->layers)
+  {
+    return (p_cryst->layers[0].bulk_over == OVER) ? p_cryst->b : p_cryst->a;
+  }
+  else
+    WARNING_MSG("'p_cryst%s' must be allocated\n", p_cryst ? "->layers" : "");
+
+  return NULL;
+}
+
 /*!
  * Checks rotational symmetry.
  *
  * \param p_cryst Pointer to crystallographic structure to test.
  * \return number of rotational symmetries.
+ * \warning \p p_cryst is assumed to be initialised in memory.
  */
-int leed_check_rotation_sym(leed_crystal *p_cryst)
+int leed_check_rotation_sym(const leed_crystal * const p_cryst)
 {
   size_t i, i_c, i_d;
   size_t i_atoms, n_rot, i_rot;
-  int ctrol;
-  size_t n_size;
+  int ctrol = 0;
+
+  size_t n_size = 2*p_cryst->n_layers + 4; /* size for alloc */
 
   real a1x, a1y, a2x, a2y; /* 2-dim lattice shifttors: 1=x, 2=y 0 is not used */
-  real det;                /* Determinante */
+  real det;                /* Determinant */
 
   real **R_n = NULL;       /* Rot.-matrix */
   real *vecrot = NULL;
@@ -45,42 +123,19 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
 
   real faux;
   real vaux[2];
-             
 
-  if(p_cryst->layers[0].bulk_over == OVER)
-  {
-    a1x = p_cryst->b[1];
-    a1y = p_cryst->b[3];
-    a2x = p_cryst->b[2];
-    a2y = p_cryst->b[4];
- 
-    n_size = 2*p_cryst->n_layers + 4;
-    det = (a1x * a2y - a1y * a2x);
-  }
-  else
-  {
-    a1x = p_cryst->a[1];
-    a1y = p_cryst->a[3];
-    a2x = p_cryst->a[2];
-    a2y = p_cryst->a[4];
+  real *a = leed_get_symmetry_lattice_vector_for_layer(p_cryst);
 
-    det = (a1x * a2y - a1y * a2x);
-    n_size = 2*p_cryst->n_layers + 4;
-  }
- 
-  if(p_cryst->layers[0].bulk_over == OVER)
-  {
-    CONTROL_MSG(CONTROL, "testing the overlayers\n");
-  }
-  else if(p_cryst->layers[0].bulk_over == BULK)
-  {
-    CONTROL_MSG(CONTROL, "testing the bulk layers\n");
-  }
-  else
-  {
-    CONTROL_MSG(CONTROL, "can not test rotational "
-        "symmetry, because the nature of the layer is unknown!\n");
-  }
+  /* do initial checks */
+  leed_print_layer_test_type(p_cryst->layers[0].bulk_over);
+
+  /* setup lattice vectors */
+  a1x = a[1];
+  a1y = a[3];
+  a2x = a[2];
+  a2y = a[4];
+
+  det = (a1x * a2y - a1y * a2x);
 
   /* Allocate memory */
   CLEED_ALLOC_CHECK(vecrot = (real *) calloc(n_size, sizeof(real)));
@@ -89,7 +144,6 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
 
   /* calculate rotation matrix */
   R_n = leed_beam_get_rotation_matrices(n_rot);
-  ctrol = 0;
 
   #ifdef CONTROL_X
   for(i_rot = 1; i_rot < n_rot; i_rot++)
@@ -147,27 +201,7 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
         if(cleed_real_fabs(faux) > EPSILON)
         {
           ctrol = 1;
-
-          if(i < 4)
-          {
-            CONTROL_MSG(CONTROL,
-                "lattice vector has no rotational symmetry, difn = %e\n", faux);
-          }
-          else
-          {
-            if((i % 2) != 0)
-            {
-              CONTROL_MSG(CONTROL, "layer%d has no "
-                  "rotational symmetry, difn = %e\n", ((i-5)/2), faux);
-            }
-            else
-            {
-              CONTROL_MSG(CONTROL, "layer%d has no "
-                  "rotational symmetry, difn = %e\n", ((i-4)/2), faux);
-            } /* if i % 2 */
-
-          } /* end else */
-   
+          leed_print_symmetry_warnings(i, faux, ROT_SYM, 0, 0.);
         } /* if cleed_real_fabs ...*/
 
       } /*for i */
@@ -293,18 +327,20 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
  * \param p_cryst pointer to \c struct containing information about the bulk or
  * overlayer structure.
  * \return the number of mirror planes.
+ * \retval -1 if failed and \c EXIT_ON_ERROR is not defined.
+ * \warning \p p_cryst is assumed to be initialised in memory.
  */
-int leed_check_mirror_sym(leed_crystal *p_cryst)
+int leed_check_mirror_sym(const leed_crystal * const p_cryst)
 {
   size_t i, i_c, i_d;
   size_t i_atoms, n_mir, i_mir;
-  int ctrol;
-  size_t n_size;
+  int ctrol = 0;
+  size_t n_size = 2*p_cryst->n_layers + 4; /* size for alloc */
 
   real a1x, a1y, a2x, a2y; /* 2-dim lattice shifttors: 1=x, 2=y 0 is not used */
   real det;                /* Determinante */
 
-  real R_m[5];             /* mirror -matrix*/
+  real R_m[5] = {0., 1., 1., 1., 1.};  /* mirror -matrix*/
   real *vecrot = NULL;
   real *integ = NULL;      /* in case of rot.sym., it must be an integer */
   real *position = NULL;   /* intermediate storage for reflectd atom positions */
@@ -312,51 +348,23 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   real faux;
   real vaux[2];
 
-  R_m[1] = R_m[2] = R_m[3] = R_m[4] = 1.0;
+  real *a = leed_get_symmetry_lattice_vector_for_layer(p_cryst);
 
+  /* do initial checks */
+  leed_print_layer_test_type(p_cryst->layers[0].bulk_over);
 
-  if(p_cryst->layers[0].bulk_over == OVER)
-  {
-    a1x = p_cryst->b[1];
-    a1y = p_cryst->b[3];
-    a2x = p_cryst->b[2];
-    a2y = p_cryst->b[4];
+  /* setup lattice vectors */
+  a1x = a[1];
+  a1y = a[3];
+  a2x = a[2];
+  a2y = a[4];
 
-    n_size = 2*p_cryst->n_layers + 4;
-    det = (a1x * a2y - a1y * a2x);
-  }
-  else
-  {
-    a1x = p_cryst->a[1];
-    a1y = p_cryst->a[3];
-    a2x = p_cryst->a[2];
-    a2y = p_cryst->a[4];
-
-    det = (a1x*a2y - a1y*a2x);
-    n_size = 2*p_cryst->n_layers + 4;
-  }
-
-  #ifdef CONTROL
-  if((p_cryst->layers + 0)->bulk_over == OVER)
-  {
-    CONTROL_MSG(CONTROL, "testing the overlayers\n");
-  }
-  else if((p_cryst->layers + 0)->bulk_over == BULK)
-  {
-    CONTROL_MSG(CONTROL, "testing the bulk\n");
-  }
-  else
-  {
-    CONTROL_MSG(CONTROL, "can not test mirror symmetry, "
-        "because the nature of the layer is unknown!\n");
-  }
-  #endif
+  det = (a1x * a2y - a1y * a2x);
 
   /* Allocate */
   CLEED_ALLOC_CHECK(vecrot = (real *) calloc(n_size, sizeof(real)));
   CLEED_ALLOC_CHECK(integ = (real *) calloc(n_size, sizeof(real)));
   n_mir = p_cryst->n_mir;
-  ctrol = 0;
 
   /* TEST REFLECTION */
   for(i_mir=0; i_mir < n_mir; i_mir++)
@@ -365,12 +373,12 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
     {
       R_m[1] = cleed_real_cos(2* p_cryst->alpha[i_mir]);
       R_m[2] = cleed_real_sin(2* p_cryst->alpha[i_mir]);
-      R_m[3] = R_m[2];
-      R_m[4] = - R_m[1];
+      R_m[3] =  R_m[2];
+      R_m[4] = -R_m[1];
 
       #ifdef CONTROL_X
       fprintf(STDCTR, "%d: (%6.3f %6.3f)\n", i_mir, R_m[1], R_m[2]);
-      fprintf(STDCTR,"    (%6.3f %6.3f)\n",        R_m[3], R_m[4]);
+      fprintf(STDCTR, "    (%6.3f %6.3f)\n",        R_m[3], R_m[4]);
       #endif
 
       /* reflect lattice vector */
@@ -416,29 +424,8 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
         if(cleed_real_fabs(faux) > EPSILON)
         {
           ctrol = 1;
-
-          if(i < 4)
-          {
-            CONTROL_MSG(CONTROL,
-                    "no mirror symmetry for lattice vector in case of "
-                    "mirror plane #%d alpha%f , difn = %e\n",
-                    i_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
-          }
-          else
-          {
-            if((i % 2) != 0)
-            {
-              CONTROL_MSG(CONTROL, "layer%d has no mirror "
-                  "symmetry for mirror plane #%d alpha%f , difn = %e\n",
-                  ((i-5)/2), n_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
-            }
-            else
-            {
-              CONTROL_MSG(CONTROL, "layer%d has no mirror "
-                  "symmetry for mirror plane #%d alpha%f , difn = %e\n",
-                  ((i-4)/2), n_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
-            }
-          }/* end else */
+          leed_print_symmetry_warnings(i, faux, MIR_SYM,
+              n_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG);
 
         }/* if cleed_real_fabs ...*/
 
@@ -456,13 +443,16 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
 
   }/* for */
 
-  /* test mirror symmetry for composite layer.
+  /*
+   * test mirror symmetry for composite layer.
    * therefore reflect all atoms in the layer
    * check if you reach this position .......
    */
 
-  /* find the layer with max atoms and allocate storage space.
-   * n_size is the maximum space needed. */
+  /*
+   * find the layer with max atoms and allocate storage space.
+   * n_size is the maximum space needed.
+   */
   n_size = p_cryst->layers[0].n_atoms;
   for(i=0; i < p_cryst->n_layers; i++)
   {
@@ -536,8 +526,10 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
   } /* for i (layer) */
 
   /* reset p_cryst->n_rot when all okay */
-  if(ctrol == 0) p_cryst->n_mir = n_mir;
-  else p_cryst->n_mir = 0;
+  if(ctrol == 0)
+    p_cryst->n_mir = n_mir;
+  else
+    p_cryst->n_mir = 0;
 
   /* WARNING_LOG if no rotational symmetry */
   if(p_cryst->n_mir == 0)
