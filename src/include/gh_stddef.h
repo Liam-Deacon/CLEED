@@ -296,7 +296,6 @@ static const size_t MBYTE = 1048576;
 /*********************************************************************
  * special definitions
  *********************************************************************/
-
 enum {
   STRSZ = 256  /*!< maximum length of strings */
 };
@@ -318,6 +317,37 @@ static const double F_END_OF_LIST = NAN;       /*!< list terminator (float)  */
 #define IEND_OF_LIST   I_END_OF_LIST  //!< alias for list terminator (integer)
 #define FEND_OF_LIST   F_END_OF_LIST  //!< alias for list terminator (float)
 */
+
+typedef enum {
+  BAD_SYMMETRY,       /*< Inconsistent or invalid symmetry */
+  CLEED_FAILURE=-1,
+  CLEED_SUCCESS=0
+} cleed_error_code;
+
+typedef struct {
+    cleed_error_code code;
+    char *msg;
+} cleed_error_map;
+
+/*!
+ * A simple error code to message map for all known CLEED errors
+ */
+static const cleed_error_map cleed_error_code_map[] =
+{
+  {BAD_SYMMETRY, "Inconsistent or invalid symmetry"},
+  {CLEED_FAILURE, "General failure"},
+  {CLEED_SUCCESS, "Operation was successful"}
+};
+
+static inline const char *cleed_strerror(cleed_error_code code) {
+  size_t i, n = sizeof(cleed_error_code_map);
+  for (i=0; i < n; i++) {
+    if (cleed_error_code_map[i].code == code)
+      return cleed_error_code_map[i].msg;
+  }
+  return strerror(code);
+}
+
 
 /*********************************************************************
  * macros:
