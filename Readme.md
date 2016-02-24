@@ -109,7 +109,7 @@ allows much more sophisticated setups, for more details see:
     
     set_env.py --help
 
-The search is started by::
+The search is started by:
 
     csearch -i <inp_file>
 
@@ -136,7 +136,7 @@ In order to test the R factor program separately, call it by:
     crfac -c <ctr_file> -t <output_file_from_cleed>
 
 On Linux machines, for the search it is recommended to use the `nohup` 
-command together with `&` which runs the search in the background::
+command together with `&` which runs the search in the background:
 
     nohup csearch -i <inp_file> > <out_file> 2> <err_file> &
 
