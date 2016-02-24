@@ -41,7 +41,7 @@ such as MSVC and CYGWIN have not been tested).
 For those who have access to full CPython installation, it should be 
 possible to install CLEED in an easier manner using pip::
 
-   pip install cleed
+    pip install cleed
 
 If you have Cython installed on your system then the experimental Python 
 bindings will also be installed so that you have access to the CLEED 
