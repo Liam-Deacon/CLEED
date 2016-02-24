@@ -23,7 +23,7 @@ package has been developed using CMake as a dependency tracking and makefile
 generation program. CMake is available on all major desktop platforms and a 
 GUI is also available for Windows users.
 
-Use the following command in order to install CLEED for your system::
+Use the following command in order to install CLEED for your system:
 
     cd /path/to/cleed/source
     cmake -G <generator-name> --build build/ -i
@@ -39,7 +39,7 @@ Note:: Windows users will require MinGW installed (other compiler tool chains
 such as MSVC and CYGWIN have not been tested). 
 
 For those who have access to full CPython installation, it should be 
-possible to install CLEED in an easier manner using pip::
+possible to install CLEED in an easier manner using pip:
 
     pip install cleed
 
