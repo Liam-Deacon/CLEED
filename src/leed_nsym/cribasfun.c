@@ -55,7 +55,7 @@
  * \warning \p res_r and \p res_i must be allocated in memory (i.e. not \c NULL )
  * before entering the function.
  */
-void cri_mul(real *res_r, real *res_i,
+inline void cri_mul(real *res_r, real *res_i,
             real fac1_r, real fac1_i, real fac2_r, real fac2_i)
 {
  *res_r = fac1_r*fac2_r - fac1_i*fac2_i;
@@ -82,24 +82,24 @@ void cri_mul(real *res_r, real *res_i,
  * \warning \p res_r and \p res_i must be allocated in memory (i.e. not \c NULL )
  * before entering the function.
  */
-void cri_div(real *res_r, real *res_i, 
+void cri_div(real *res_r, real *res_i,
             real num_r, real num_i, real den_r, real den_i)
 {
-real r, faux;
- if (cleed_real_fabs(den_r) >= cleed_real_fabs(den_i))
- {
-   r = den_i/den_r;
-   faux = den_r + r*den_i;
-   *res_r = (num_r + r * num_i)/faux;
-   *res_i = (num_i - r * num_r)/faux;
- }
- else
- {
-   r = den_r/den_i;
-   faux = den_i + r*den_r;
-   *res_r = ( num_i + r * num_r)/faux;
-   *res_i = (-num_r + r * num_i)/faux;
- }
+  real r, faux;
+  if (cleed_real_fabs(den_r) >= cleed_real_fabs(den_i))
+  {
+    r = den_i/den_r;
+    faux = den_r + r*den_i;
+    *res_r = (num_r + r * num_i)/faux;
+    *res_i = (num_i - r * num_r)/faux;
+  }
+  else
+  {
+    r = den_r/den_i;
+    faux = den_i + r*den_r;
+    *res_r = ( num_i + r * num_r)/faux;
+    *res_i = (-num_r + r * num_i)/faux;
+  }
 } /* end of function cri_div */
 
 /*!
@@ -247,8 +247,7 @@ void cri_expi(real *res_r, real *res_i, real arg_r, real arg_i)
  */
 void cri_powi(real *res_r, real *res_i, int arg_int)
 {
-  arg_int = arg_int%4;
-  switch(arg_int)
+  switch(arg_int % 4)
   {
     case(0):
     {
