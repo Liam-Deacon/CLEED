@@ -15,13 +15,10 @@
 /*! \file */
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <time.h>
 
 #include "leed.h"
-
-#ifndef LEED_VERSION               /* should be defined in leed_def.h */
-#define LEED_VERSION "0.0 (test version GH/11.08.95)"
-#endif
 
 /*!
  * Writes header information to output file.
@@ -30,12 +27,15 @@
  */
 void leed_output_header(FILE *outfile)
 {
+  extern bool SYMMETRY_ENABLED;
+  const bool cleed_sym = SYMMETRY_ENABLED;
 
   struct tm *l_time;
   time_t t_time;
 
   fprintf(outfile, "# ####################################### #\n");
-  fprintf(outfile, "#            output from CLEED            #\n");
+  fprintf(outfile, "#            output from CLEED            #\n%s",
+       cleed_sym ? "#            (symmetry enabled)           #\n" : "");
   fprintf(outfile, "# ####################################### #\n");
 
   /* Write version number and start time to output file */
