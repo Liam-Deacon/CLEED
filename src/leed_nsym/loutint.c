@@ -127,8 +127,9 @@ int leed_output_intensities(const mat Amp, const leed_beam *beams_now,
             	            beams_now[i_beams_now].n_eqb_b,
             	            i_beams_now);
 						#endif
-           	val = Int->rel[i_beams_now + 1] / beams_now[i_beams_now].n_eqb_s;
-           	fprintf(outfile, "%.6e ", sym ? val : Int->rel[i_beams_now + 1]);
+           	val = Int->rel[i_beams_now + 1];
+           	fprintf(outfile, "%.6e ",
+           	    sym ? (val / beams_now[i_beams_now].n_eqb_s) : val);
           }
           else fprintf(outfile, "%.6e ",0.);
         }
