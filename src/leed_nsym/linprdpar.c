@@ -81,15 +81,15 @@
 int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
                            leed_crystal *bulk_par, const char *in_file)
 {
-  leed_var *var_par;
-  leed_energy *eng_par;
+  leed_var *var_par = NULL;
+  leed_energy *eng_par = NULL;
 
   int i_str;                      /* counter variables */
   int i_c;                        /* dummy variables */
 
   real faux;
 
-  FILE *inp_stream;
+  FILE *inp_stream = NULL;
   char linebuffer[STRSZ];         /* input buffer */
   char fmt_buffer[STRSZ];
 
@@ -100,34 +100,23 @@ int leed_inp_leed_read_par(leed_var **p_var_par, leed_energy **p_eng_par,
   {
     CONTROL_MSG(CONTROL_X, "allocate var_par\n");
 
-    var_par = *p_var_par = (leed_var *)malloc( sizeof(leed_var) );
+    CLEED_ALLOC_CHECK(var_par = *p_var_par =
+        (leed_var *)malloc(sizeof(leed_var)));
   }
   else var_par = *p_var_par;
 
   if (*p_eng_par == NULL)
   {
-    eng_par = *p_eng_par = (leed_energy *)malloc( sizeof(leed_energy) );
+    CLEED_ALLOC_CHECK(eng_par = *p_eng_par =
+        (leed_energy *)malloc(sizeof(leed_energy)));
   }
   else eng_par = *p_eng_par;
 
   /* Preset elements of var_par */
   /* not to be read in this function: */
-  var_par->eng_r = 0.;
-  var_par->eng_i = 0.;
-  var_par->eng_v = 0.;
+  leed_var_init(bulk_par->vr, bulk_par->vi);
 
-  var_par->vi_pre = bulk_par->vi;
-  var_par->vi_exp = 0.;
-  var_par->vr     = bulk_par->vr;
-
-  for( i_c = 0; i_c <=3; i_c ++) var_par->k_in[i_c] = 0.;
-
-  var_par->p_tl = NULL;
-
-  /* to be read in this function: */
-  var_par->theta = var_par->phi = 0.;
-  var_par->epsilon = WAVE_TOLERANCE;
-  var_par->l_max = 0;
+  /* theta, epsilon and l_max to be read in this function: */
 
   eng_par->initial = eng_par->final = 0.;
   eng_par->step = 4./HART;
