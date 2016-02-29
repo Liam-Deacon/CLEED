@@ -1,32 +1,40 @@
 /*********************************************************************
-  WB/06.10.98 
-  file contains function:
+ *                        LBMGENSYM.C
+ *
+ *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2016 Liam Deacon <liam.m.deacon@gmail.com>
+ *
+ *  Licensed under GNU General Public License 3.0 or later.
+ *  Some rights reserved. See COPYING, AUTHORS.
+ *
+ * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+ *
+ * Changes:
+ *  GH/30.08.97 - Copy from leed_beam_gen
+ *  GH/03.09.97 - include symmetrisation of beams:
+ *                reduce number of beam sets according to ROTATIONAL SYMM.
+ *                calculate phase prefactors for matrix elements.
+ *  WB/15.06.98 - remove mistakes in the case that beam set is equiv. to itself.
+ *  WB/17.08.98 - k_x_sym ... for composite layers
+ *  WB/20.08.98 - take k_x ... to create ein_b ...
+ *  WB/01.09.98 - try to input mirror planes
+ *  WB/03.09.98 - luft fuer 4,3,2,1 Achse aber nicht perfekt
+ *  WB/04.09.98 - change sign of angles and add 2PI for negative angles
+ *                luft fuer 4 perfekt
+ *                luft fr 1 perfekt falls man die richtige Ebene whlt
+ *                (mu aber unabhngig von der Ebene sei da alle gleich)
+ *                statt i_c + i_d beams+i->n_eqb_s ....
+ *                luft fuer 1Ebene falls 45 90(nur 0 nicht so gut)
+ *  WB/07.09.98 - bezug auf einheitlichen Winkel(zur 1.Ebene)
+ *                geht perfekt
+ *              - neqb_b (set 0) = 2*n_mir
+ *********************************************************************/
 
-  leed_beam_gen_sym 
-  
-  Generate only beam sets which are not equivalent by symmetry.
-
-Changes:
-
-GH/30.08.97 - Copy from leed_beam_gen
-GH/03.09.97 - include symmetrisation of beams:
-              reduce number of beam sets according to ROTATIONAL SYMM.
-              calculate phase prefactors for matrix elements.
-WB/15.06.98 - remove mistakes in the case that beam set is equiv. to itself.
-WB/17.08.98 - k_x_sym ... for composite layers
-WB/20.08.98 - take k_x ... to create ein_b ...
-WB/01.09.98 - try to input mirror planes
-WB/03.09.98 - luft fuer 4,3,2,1 Achse aber nicht perfekt
-WB/04.09.98 - change sign of angles and add 2PI for negative angles
-              luft fuer 4 perfekt 
-              luft fr 1 perfekt falls man die richtige Ebene whlt
-              (mu aber unabhngig von der Ebene sei da alle gleich)
-              statt i_c + i_d beams+i->n_eqb_s ....
-              luft fuer 1Ebene falls 45 90(nur 0 nicht so gut)
-WB/07.09.98 - bezug auf einheitlichen Winkel(zur 1.Ebene)
-              geht perfekt
-            - neqb_b (set 0) = 2*n_mir 
-*********************************************************************/
+/*!
+ * \file
+ *
+ * Generate only beam sets which are not equivalent by symmetry.
+ */
 
 #include <math.h>
 #include <malloc.h>
@@ -257,8 +265,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
   a2_x = b_par->a[2];
   a2_y = b_par->a[4];
 
-  det = a1_x*a2_y - a1_y*a2_x;
-  det = 1. / det;
+  det = 1. / (a1_x*a2_y - a1_y*a2_x);
 
   switch(b_par->symmetry)
   {
