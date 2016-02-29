@@ -355,7 +355,7 @@ void leed_model_calculate_energies(leed_model *model) {
 
     /* No scattering at potential step */
     Amp = leed_ld_potstep0(Amp, R_tot, beams_now, v_par->eng_v, vec);
-    leed_output_intensities(Amp, beams_now, beams_out, v_par, args->res_stream);
+    leed_output_intensities(Amp, beams_now, beams_out, v_par, args->res_stream, args->sym);
 
     /* Write cpu time to output */
     sprintf(linebuffer, "  %.1f   %d  ", energy * HART, n_beams_now);
