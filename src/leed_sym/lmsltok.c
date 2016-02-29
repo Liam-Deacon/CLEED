@@ -68,7 +68,7 @@
  * \return \p Mkk (may be different from input parameter). The storage
  * scheme for \p Mkk is defined by the order of Ylm and Yxlm.
  */
-mat ms_ltok ( mat Mkk, mat Mlm, mat Ylm, mat Yxlm,
+mat leed_ms_ltok ( mat Mkk, mat Mlm, mat Ylm, mat Yxlm,
     leed_beam * beams, real rel_area, real unsc)
 {
   int iaux;           /* dummy counter */
