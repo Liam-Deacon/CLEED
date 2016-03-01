@@ -1,5 +1,5 @@
 /*********************************************************************
- *                        LPCUPDATEND.C
+ *                        LPCUPDATE.C
  *
  *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
  *
@@ -17,7 +17,7 @@
 
 /*! \file
  *
- * Implements leed_par_update_nd() function to update all parameters that
+ * Implements leed_par_update() function to update all parameters that
  * change during the energy loop.
  */
 
@@ -66,10 +66,10 @@
  * \param energy New vacuum energy value.
  * \return C style return code indicating function success.
  * \retval 0 if successful.
- * \see leed_par_mktl_nd()
+ * \see leed_par_mktl()
  *
  */
-int leed_par_update_nd(leed_var *v_par, leed_phase *phs_shifts, real energy)
+int leed_par_update(leed_var *v_par, leed_phase *phs_shifts, real energy)
 {
   real faux_r;
 
@@ -99,6 +99,7 @@ int leed_par_update_nd(leed_var *v_par, leed_phase *phs_shifts, real energy)
               v_par->k_in[1], v_par->k_in[2]);
 
   /* Update phase shifts (leed_par_mktl_nd) */
+#error "change this:"
   v_par->p_tl = leed_par_mktl_nd(v_par->p_tl, phs_shifts,
                                  v_par->l_max, v_par->eng_r);
 
