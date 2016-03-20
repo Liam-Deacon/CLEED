@@ -1,9 +1,11 @@
 ![Language](https://img.shields.io/badge/language-c-ff69b4.svg "C programming language")
 ![Domain](https://img.shields.io/badge/domain-scientific_computing-20B2AA.svg "Scientific Computing")
 [![License](http://img.shields.io/badge/license-gpl3-blue.svg "GNU Public License v3.0")](http://www.gnu.org/licenses/gpl-3.0.html)
-[![Toolchain](http://img.shields.io/badge/toolchain-gcc,_mingw,_msvc++14.0-blue.svg "Supported toolchains: GCC, MinGW, Visual Studio 2015")](http://www.gnu.org/licenses/gpl-3.0.html)
-![Issues](https://img.shields.io/badge/issues-19-yellow.svg "Issues")
+[![Dependencies](https://img.shields.io/badge/dependencies-libtiff,_blas,_lapack-blue.svg "Dependencies: libTIFF, BLAS, LAPACK")]
+[![Toolchain](https://img.shields.io/badge/toolchain-gcc,_mingw,_msvc++14.0-blue.svg "Supported toolchains: GCC, MinGW, Visual Studio 2015")](http://www.gnu.org/licenses/gpl-3.0.html)
+![Issues](https://img.shields.io/badge/issues-19_open-yellow.svg "Issues")
 ![TestCoverage](https://img.shields.io/badge/test_coverage-to_do-lightgray.svg)
+![Status](https://img.shields.io/badge/status-in_development-yellow.svg "Status: In development")
 
 CLEED package
 =============
