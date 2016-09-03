@@ -21,7 +21,8 @@ build:
             sudo apt-get install autoconf -y
             sudo apt-get install libtool -y
             sudo apt-get install cmake -y
-            sudo apt-get install blas lapack -y
+            sudo apt-get install gfortran -y
+            sudo apt-get install libblas-dev liblapack-dev -y
             g++ --version
             make --version
             autoconf --version    
