@@ -1,22 +1,5 @@
-name: cleed
-version: 0.0.1
-inherits: wercker/default@0.0.1
-type: service
-platform: ubuntu@12.04
-description: Wercker box for building and testing CLEED
-keywords:
-    - CLEED
-    - Low Energy Electron Diffraction
-    - Scientific Modelling
-packages:
-    - make@3.81
-    - gcc@4.6.3
-    - binutils@2.22
-    - automake@1.11.3
-    - autoconf@2.68
-    - libtool@2.4.2
-    - cmake@3.6.1
-    
+box: wercker/ubuntu
+
 # This is the build pipeline. Pipelines are the core of wercker
 # Read more about pipelines on our dev center
 # http://devcenter.wercker.com/docs/pipelines/index.html
