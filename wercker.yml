@@ -33,6 +33,7 @@ build:
         name: make
         code: |
             #mkdir build
+            rm -rf CMakeFiles
             cmake -G "Unix Makefiles" -DBUILD_DEB=1
             #cd build/
             make
