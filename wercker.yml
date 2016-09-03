@@ -1,4 +1,4 @@
-box: trusty
+box: ubuntu
 
 # This is the build pipeline. Pipelines are the core of wercker
 # Read more about pipelines on our dev center
