@@ -266,8 +266,10 @@ INCLUDE(FortranCInterface)
 FortranCInterface_HEADER(FC.h MACRO_NAMESPACE "FC_")
 GET_FILENAME_COMPONENT (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 
-# enable resource compiler
-ENABLE_LANGUAGE(RC)
+IF(WIN32)
+    # enable resource compiler
+    ENABLE_LANGUAGE(RC)
+ENDIF(WIN32)
 
 # Set Warnings
 IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
