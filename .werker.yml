@@ -1,0 +1,33 @@
+name: cleed
+version: 0.0.1
+inherits: wercker/default@0.0.1
+type: service
+platform: ubuntu@12.04
+description: Wercker box for building and testing CLEED
+keywords:
+    - CLEED
+    - Low Energy Electron Diffraction
+    - Scientific Modelling
+packages:
+    - make@3.81
+    - gcc@4.6.3
+    - binutils@2.22
+    - automake@1.11.3
+    - autoconf@2.68
+    - libtool@2.4.2
+    - cmake@3.6.1
+script: |
+    sudo apt-get update -y
+    sudo apt-get install make -y
+    sudo apt-get install binutils -y
+    sudo apt-get install g++ -y
+    sudo apt-get install automake -y
+    sudo apt-get install autoconf -y
+    sudo apt-get install libtool -y
+    g++ --version
+    make --version
+    autoconf --version    
+    automake --version
+    libtool --version
+    cmake --version
+    # build CLEED here...
