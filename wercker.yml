@@ -27,6 +27,7 @@ build:
     - script:
         name: make
         code: |
+            mkdir build
             cmake -G "Unix Makefiles" --build build/
             cd build/
             make
