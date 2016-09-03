@@ -33,7 +33,7 @@ build:
         name: make
         code: |
             #mkdir build
-            cmake -G "Unix Makefiles"
+            cmake -G "Unix Makefiles" -DBUILD_DEB=1
             #cd build/
             make
             make install
