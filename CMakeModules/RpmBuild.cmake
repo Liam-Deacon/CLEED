@@ -5,9 +5,9 @@
 # Here comes the list of used variables:
 #
 
-IF(CMAKE_BINARY_DIR)
-  MESSAGE(FATAL_ERROR "CPackRPM.cmake may only be used by CPack internally.")
-ENDIF(CMAKE_BINARY_DIR)
+# IF(CMAKE_BINARY_DIR)
+#   MESSAGE(FATAL_ERROR "CPackRPM.cmake may only be used by CPack internally.")
+# ENDIF(CMAKE_BINARY_DIR)
 
 IF(NOT UNIX)
   MESSAGE(FATAL_ERROR "CPackRPM.cmake may only be used under UNIX.")
