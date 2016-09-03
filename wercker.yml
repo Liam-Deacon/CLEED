@@ -27,6 +27,7 @@ build:
             sudo apt-get install libqt4-dev -y
             sudo apt-get install gsl-bin libgsl0-dev -y
             sudo apt-get install python-dev -y
+            sudo apt-get install rpm alien -y
     # a step to build project         
     - script:
         name: make
