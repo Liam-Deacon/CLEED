@@ -27,20 +27,22 @@ build:
   # http://devcenter.wercker.com/docs/steps/index.html
   steps:
     # A step that installs dependencies
-    - script: |
-        sudo apt-get update -y
-        sudo apt-get install make -y
-        sudo apt-get install binutils -y
-        sudo apt-get install g++ -y
-        sudo apt-get install automake -y
-        sudo apt-get install autoconf -y
-        sudo apt-get install libtool -y
-        sudo apt-get install cmake -y
-        sudo apt-get install blas lapack -y
-        g++ --version
-        make --version
-        autoconf --version    
-        automake --version
-        libtool --version
-        cmake --version
-        # build CLEED here...
+    - script: 
+        name: install dependencies
+        code: |
+            sudo apt-get update -y
+            sudo apt-get install make -y
+            sudo apt-get install binutils -y
+            sudo apt-get install g++ -y
+            sudo apt-get install automake -y
+            sudo apt-get install autoconf -y
+            sudo apt-get install libtool -y
+            sudo apt-get install cmake -y
+            sudo apt-get install blas lapack -y
+            g++ --version
+            make --version
+            autoconf --version    
+            automake --version
+            libtool --version
+            cmake --version
+            # build CLEED here...
