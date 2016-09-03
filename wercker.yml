@@ -23,10 +23,10 @@ build:
             sudo apt-get install cmake -y
             sudo apt-get install gfortran -y
             sudo apt-get install libblas-dev liblapack-dev -y
-            g++ --version
-            make --version
-            autoconf --version    
-            automake --version
-            libtool --version
-            cmake --version
-            # build CLEED here...
+    - script:
+        name: make
+        code: |
+            cmake -G "Unix Makefiles" --build build/
+            cd build/
+            make
+            make install
