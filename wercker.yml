@@ -23,7 +23,6 @@ build:
             sudo apt-get install cmake -y
             sudo apt-get install gfortran -y
             sudo apt-get install libblas-dev liblapack-dev -y
-            sudo apt-get install opencl-1.2-intel-devel -y
     # a step to build project         
     - script:
         name: make
