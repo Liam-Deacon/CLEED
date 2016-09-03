@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <errno.h>
 
 #if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L
 #define true 1
