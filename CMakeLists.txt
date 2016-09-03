@@ -72,7 +72,7 @@ OPTION(WITH_PHASESHIFTS "Set to ON to download and integrate PhaseShifts Python 
 OPTION(BUILD_SHARED_LIBS "Set to OFF to build static libraries" ON)
 OPTION(USE_OPENMP "Set to OFF to have single threaded executables" ON)
 OPTION(WITH_QT "Set to ON to build Qt app frontends" ON)
-OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" ON)
+OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" OFF)
 OPTION(INSTALL_DOC "Set to OFF to skip build/install Documentation" ON)
 OPTION(PACK_SOURCE "Set to OFF to pack without source code" ON)
 OPTION(WITH_LAPACK "Set to OFF to build without BLAS/LAPACK support - NOTE: This option will take preference over 'GSL_BACKEND'" ON)
