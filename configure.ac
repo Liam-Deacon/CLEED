@@ -5,7 +5,7 @@
 # Author: Liam Deacon                                                        #
 ##############################################################################
 AC_PREREQ([2.69])
-AC_INIT([CLEED], [2016-01-25_Development], [liam.m.deacon@gmail.com])
+AC_INIT([CLEED], [2016.01.25], [liam.m.deacon@gmail.com])
 AC_CONFIG_SRCDIR([INCLUDE/caoi_leed.h])
 AC_CONFIG_AUX_DIR([config])
 AC_COPYRIGHT(Copyright 2015-2016 Liam Deacon)
@@ -64,16 +64,6 @@ AS_IF([test "x$enable_fast_math" = "xyes"], [
     CFLAGS="$CFLAGS -ffast-math"
 ])
 
-# Enable/disable OpenMP
-AC_ARG_ENABLE([openmp],
-    AS_HELP_STRING([--disable-openmp], 
-      [disable parallel OpenMP code (-fopenmp)])
-)
-AS_IF([test "x$enable_openmp" != "xno"], [
-    CFLAGS="$CFLAGS -fopenmp"
-    LDFLAGS="-fopenmp $LDFLAGS"
-])
-
 #=============================================================================
 # Checks for programs.
 #=============================================================================
@@ -116,7 +106,7 @@ AC_UNISTD_H
 # Checks for libraries.
 #=============================================================================
 # FIXME: Replace `main' with a function in `-lm':
-AC_CHECK_LIB([m], [main])
+AC_CHECK_LIB([m], [cos])
 # FIXME: Replace `main' with a function in `-lpsapi':
 AC_CHECK_LIB([psapi], [main])
 # FIXME: Replace `main' with a function in `-lws2_32':
@@ -159,11 +149,29 @@ AC_CHECK_HEADERS([
 ])
 
 #=============================================================================
+# Check whether to enable OpenMP support
+#=============================================================================
+AC_OPENMP
+
+AC_ARG_ENABLE([openmp], 
+    AS_HELP_STRING([--disable-openmp], [Disable parallel OpenMP code]),
+    [ CPPFLAGS="$CPPFLAGS $OPENMP_CFLAGS -D_USE_OPENMP=1" ],
+    [ OPENMP_CFLAGS="" ]
+  )
+
+AS_IF([test "x$enable_openmp" != "xno"], [
+    CFLAGS="$CFLAGS -fopenmp"
+    LDFLAGS="-fopenmp $LDFLAGS"
+])
+
+AC_SUBST(OPENMP_CFLAGS)
+
+#=============================================================================
 # Check whether to build OpenCL support
 #=============================================================================
 AC_ARG_WITH([opencl],
 AS_HELP_STRING([--with-opencl], [Build with OpenCL support]), [
-  CPPFLAGS="$CPPFLAGS -D_OPENCL"
+  CFLAGS="$CFLAGS $OPENCL_CFLAGS -D_OPENCL"
   AS_IF([test "$(uname -s)" != "Darwin"], 
    [AC_CHECK_HEADERS(CL/cl.h)], 
    [AC_CHECK_HEADERS(OpenCL/cl.h)]
@@ -175,6 +183,32 @@ AS_HELP_STRING([--with-opencl], [Build with OpenCL support]), [
 AC_SUBST([OPENCL_DIR])
 AC_SUBST([OPENCL_LT])
 
+#=============================================================================
+# Check whether to build GNU Scientific Library support
+#=============================================================================
+AC_ARG_WITH([gsl],
+    AS_HELP_STRING([--with-gsl], [Use GSL for vector/matrix operations]),
+    [use_gsl=$withval], 
+    [use_gsl=no]
+  )
+
+AS_IF([test "x$use_gsl" != "xno"], 
+  [
+    CFLAGS="$CFLAGS -D_USE_GSL=1"
+    LDFLAGS="$LDFLAGS"
+    
+    AC_CHECK_LIB([m],[cos])
+    AC_CHECK_LIB([gslcblas],[cblas_dgemm])
+    AC_CHECK_LIB([gsl],[gsl_blas_dgemm])
+    AC_CHECK_HEADER([gsl/gsl_version.h], ,
+             [AC_MSG_ERROR([Cannot find GSL headers.])
+    
+    AC_SUBST(GSL_CFLAGS)
+    AC_SUBST(GSL_LIBS)
+    
+  ]
+)
+   
 #=============================================================================
 # Check typedefs, structures, and compiler characteristics.
 #=============================================================================
@@ -235,3 +269,22 @@ AC_CONFIG_FILES([Makefile
                  
 
 AC_OUTPUT
+
+AC_MSG_RESULT([
+        $PACKAGE_NAME $VERSION
+
+        cleed:                   yes
+        enable OpenMP:           ${enable_openmp}
+        documentation:           ${build_docs}
+
+        with OpenCL support:     ${}
+        with GSL support:        ${DEFAULT_XKB_RULES}
+        with BLAS support:       ${DEFAULT_XKB_MODEL}
+        with LAPACK support:     ${DEFAULT_XKB_LAYOUT}
+        with CAIRO support:      ${DEFAULT_XKB_VARIANT}
+
+        prefix:                  ${prefix}
+        includedir:              ${includedir}
+        libdir:                  ${libdir}
+        datarootdir:             ${datarootdir}
+])
