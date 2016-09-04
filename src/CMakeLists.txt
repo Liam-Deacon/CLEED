@@ -1,6 +1,6 @@
 # CLEED - Computational Low Energy Electron Diffraction
-# Copyright (C) 1994-2014 Georg Held
-# Copyright (C) 2013-2014 Liam Deacon
+# Copyright (C) 1994-2016 Georg Held
+# Copyright (C) 2013-2016 Liam Deacon
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 # Recursive CMake Source Subdirectories
-ADD_SUBDIRECTORY(aoi_leed)
-ADD_SUBDIRECTORY(aoi_rfac)
+#ADD_SUBDIRECTORY(aoi_leed)
+#ADD_SUBDIRECTORY(aoi_rfac)
 ADD_SUBDIRECTORY(debye)
 ADD_SUBDIRECTORY(ftsmooth)
 ADD_SUBDIRECTORY(latt)
