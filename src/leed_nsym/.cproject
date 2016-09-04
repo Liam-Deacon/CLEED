@@ -4,20 +4,20 @@
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.mingw.base.839802680">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.839802680" moduleId="org.eclipse.cdt.core.settings" name="Debug.MinGW">
 				<macros>
-					<stringMacro name="WARNING" type="VALUE_TEXT" value="1"/>
 					<stringMacro name="USE_CBLAS" type="VALUE_TEXT" value="1"/>
-					<stringMacro name="CONTROL" type="VALUE_TEXT" value=""/>
+					<stringMacro name="USE_GSL" type="VALUE_TEXT" value="1"/>
+					<stringMacro name="WARNING" type="VALUE_TEXT" value="1"/>
 					<stringMacro name="DEBUG" type="VALUE_TEXT" value="1"/>
 					<stringMacro name="CONTROL_X" type="VALUE_TEXT" value=""/>
-					<stringMacro name="USE_GSL" type="VALUE_TEXT" value="1"/>
+					<stringMacro name="CONTROL" type="VALUE_TEXT" value=""/>
 				</macros>
 				<externalSettings/>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -59,10 +59,8 @@
 								<option id="gnu.cpp.link.option.flags.1588442448" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-pg" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.139664641" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="m"/>
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gslcblas"/>
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="ws2_32"/>
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gsl"/>
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="psapi"/>
+									<listOptionValue builtIn="false" value="ws2_32"/>
+									<listOptionValue builtIn="false" value="psapi"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.802118987" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${GSL_HOME}/bin&quot;"/>
@@ -93,12 +91,12 @@
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.mingw.base.839802680.1557585339">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.839802680.1557585339" moduleId="org.eclipse.cdt.core.settings" name="Debug.MinGW.lib">
 				<macros>
-					<stringMacro name="WARNING" type="VALUE_TEXT" value="1"/>
 					<stringMacro name="USE_CBLAS" type="VALUE_TEXT" value="1"/>
-					<stringMacro name="DEBUG" type="VALUE_TEXT" value="1"/>
-					<stringMacro name="CONTROL" type="VALUE_TEXT" value=""/>
 					<stringMacro name="USE_GSL" type="VALUE_TEXT" value="1"/>
+					<stringMacro name="WARNING" type="VALUE_TEXT" value="1"/>
+					<stringMacro name="DEBUG" type="VALUE_TEXT" value="1"/>
 					<stringMacro name="CONTROL_X" type="VALUE_TEXT" value=""/>
+					<stringMacro name="CONTROL" type="VALUE_TEXT" value=""/>
 				</macros>
 				<externalSettings>
 					<externalSetting>
@@ -108,11 +106,11 @@
 					</externalSetting>
 				</externalSettings>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
