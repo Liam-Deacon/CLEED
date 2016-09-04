@@ -616,7 +616,7 @@ MAN_LINKS              = NO
 # feature is still experimental and incomplete at the 
 # moment.
 
-GENERATE_XML           = NO
+GENERATE_XML           = YES
 
 #---------------------------------------------------------------------------
 # Configuration options related to the preprocessor   

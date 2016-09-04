@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CLEED'
-copyright = u'2014, Georg Held, Liam Deacon & collaborators'
+copyright = u'2014-2016, Georg Held, Liam Deacon & collaborators'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -272,7 +272,7 @@ texinfo_documents = [
 epub_title = u'CLEED'
 epub_author = u'Georg Held, Liam Deacon & collaborators'
 epub_publisher = u'Georg Held, Liam Deacon & collaborators'
-epub_copyright = u'2014, Georg Held, Liam Deacon & collaborators'
+epub_copyright = u'2014-2016, Georg Held, Liam Deacon & collaborators'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'CLEED'
