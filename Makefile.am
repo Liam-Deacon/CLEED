@@ -12,7 +12,7 @@ APP_NAME=cleed
 
 # Create a deb package
 pkg-deb: pkg-src
-		- rm -r $(TMP_DIR)
+		rm -r $(TMP_DIR)
 		mkdir -p $(TMP_DIR)
 		cp pkg/$(APP_NAME)-$(VERSION).tar.bz2 $(TMP_DIR)/
 		tar --directory $(TMP_DIR)/ \
@@ -37,10 +37,10 @@ pkg-rpm: pkg-src
 	mkdir -p $(HOME)/.rpm/BUILD
 	mkdir -p $(HOME)/.rpm/SOURCES
 	mkdir -p $(HOME)/.rpm/tmp
-	- rm -r $(HOME)/.rpm/BUILD/$(APP_NAME)-root
-	- rm -r $(HOME)/.rpm/RPMS/$(APP_NAME)-*
-	- rm -r $(HOME)/.rpm/SRPMS/$(APP_NAME)-*
-	- rm -r $(HOME)/.rpm/SOURCES/$(APP_NAME)-*
+	rm -r $(HOME)/.rpm/BUILD/$(APP_NAME)-root
+	rm -r $(HOME)/.rpm/RPMS/$(APP_NAME)-*
+	rm -r $(HOME)/.rpm/SRPMS/$(APP_NAME)-*
+	rm -r $(HOME)/.rpm/SOURCES/$(APP_NAME)-*
 	cp pkg/$(APP_NAME)-$(VERSION).tar.bz2 $(HOME)/.rpm/SOURCES/
 	rpmbuild --quiet --nodeps --define="_topdir $(HOME)/.rpm" \
 			-ba install/rpm/gssmp.spec
