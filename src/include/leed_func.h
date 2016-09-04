@@ -138,8 +138,10 @@ int leed_par_reset(leed_var *, leed_crystal *);
 /* update energy (lpcupdate.c) and tl (lpcmktl.c) */
 int leed_par_update(leed_var *, leed_phase *, real);
 int leed_par_update_nd(leed_var *, leed_phase *, real);
-mat *leed_par_mktl(mat *, const leed_phase *, size_t, real);
-mat *leed_par_mktl_nd(mat *, const leed_phase *, size_t, real);
+__attribute__((nonnull(2))) mat *leed_par_mktl(
+    mat *, const leed_phase *, size_t, real);
+__attribute__((deprecated)) mat *leed_par_mktl_nd(
+    mat *, const leed_phase *, size_t, real);
 
 /* temperature dependent scattering factors */
 mat leed_par_temp_tl(mat, mat, real, real, size_t, size_t);
@@ -150,12 +152,10 @@ int pc_mk_ms(mat *, mat *, mat *, mat *, mat *, mat *, size_t);
  * Output
  *********************************************************************/
 void leed_output_header(FILE *);
-int leed_out_head_2(const char *, const char *, FILE *);
 int leed_output_beam_list(leed_beam **, const leed_beam *,
                           const leed_energy *, FILE *);
 int leed_output_intensities(const mat, const leed_beam *, const leed_beam *,
-                            const leed_var *, FILE *);
-int leed_output_iint_sym(mat, leed_beam *, leed_beam *, leed_var *, FILE *);
+                            const leed_var *, FILE *, bool);
 
 /* check cpu time */
 double leed_cpu_time(FILE *, const char *);

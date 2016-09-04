@@ -29,9 +29,14 @@
 #elif _MSC_VER
 #define strncasecmp(x,y,z) _strnicmp((x),(y),(z))
 #define strcasecmp(x,y) _stricmp((x),(y))
+#define strdup(x,y) _strdup(x,y)
 #else
+#define strncasecmp(x,y,z) cleed_strncasecmp((x),(y),(z))
+#define strcasecmp(x,y) cleed_strcasecmp((x),(y))
+#define strdup(x,y) cleed_strdup(x,y)
+
 /* use rudimentary implementation of strncasecmp */
-static int strncasecmp(const char *x, const char *y, size_t n) {
+static int cleed_strncasecmp(const char *x, const char *y, size_t n) {
   int i;
   if (!x || !y || n<=0) return x == y ? 0 : -1; /* added for NULL safety */
   for (i = 0; i < n; i++) {
@@ -39,11 +44,20 @@ static int strncasecmp(const char *x, const char *y, size_t n) {
     else if (x[i] == '\0') return 0;
   }
 }
+
 /* use rudimentary implementation of strcasecmp */
-static int strcasecmp(const char *x, const char *y) {
+static int cleed_strcasecmp(const char *x, const char *y) {
   size_t len_x = x != NULL ? strlen(x) : 0;
   size_t len_y = y != NULL ? strlen(y) : 0;
   return strncasecmp(x, y, len_x < len_y ? len_x : len_y);
+}
+
+/* strdup is not standard C (its POSIX) */
+static inline char *cleed_strdup(const char *str)
+{
+  int n = strlen(str) + 1;
+  char *dup = malloc(n);
+  return dup ? memcpy(dup, str, n) : NULL;
 }
 
 #endif

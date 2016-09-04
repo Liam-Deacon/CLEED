@@ -88,10 +88,10 @@ __attribute__((nonnull, returns_nonnull))
 mat matscal(mat, const mat, real, real);
 
 /* print a matrix in file matshow.c */
-__attribute__((nonnull)) void matshow(const mat);
+__attribute__((returns_nonnull)) const char *matshow(FILE *, const mat);
 
 /* print the modulus of a matrix in file matshow.c */
-__attribute__((nonnull)) void matshowabs(const mat);
+__attribute__((returns_nonnull)) const char *matshowabs(FILE *, const mat);
 
 /* print the parameters of a matrix in file matshowpar.c */
 __attribute__((nonnull)) void matshowpar(const mat);

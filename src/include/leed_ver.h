@@ -31,7 +31,7 @@ static const char *LEED_VERSION[] = { "cleed_nsym (2014.07.04 - )" };
 static const char LEED_NAME[] = { "CLEED_NSYM" };
 
 /* additional program information */
-static const char LEED_PROG[] =  {"cleed_nsym"};
+static const char LEED_PROG[] =  {"cleed"};
 static const char LEED_PROG_COPYRIGHT[] = { "Copyright (C) 1994-2014 Georg Held\n" \
 "Copyright (C) 2014 Liam Deacon" };
 static const char LEED_PROG_LICENSE[] = { "GNU General Public License v3" };

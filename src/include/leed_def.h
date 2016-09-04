@@ -78,7 +78,7 @@ static const size_t LMAX_TOO_LARGE = (size_t)-1;
 /*!
  * Default path name for phase shift input relative to HOME directory
  */
-//static const char *PHASE_PATH = "phase";
+static const char *PHASE_PATH = "phase";
                                
 /*!
  * Default temperature for calculating thermal vibrations
