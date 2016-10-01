@@ -38,14 +38,16 @@ build:
             #cd build/
             make
             make install
-           
+
+# testing pipeline           
 test:
   steps:
     - script:
         name: test 
         code: |
             make check
-     
+
+# deployment pipeline
 deploy:
   steps:
     - script:
