@@ -4,8 +4,9 @@
 [![Dependencies](https://img.shields.io/badge/dependencies-libtiff,_blas,_lapack-blue.svg "Dependencies: libTIFF, BLAS, LAPACK")](https://bitbucket.org/cleed/cleed/wiki/)
 [![Toolchain](https://img.shields.io/badge/toolchain-gcc,_mingw,_msvc++14.0-blue.svg "Supported toolchains: GCC, MinGW, Visual Studio 2015")](https://bitbucket.org/cleed/cleed/wiki/)
 [![Issues](https://img.shields.io/badge/issues-19_open-yellow.svg "Issues")](https://bitbucket.org/cleed/cleed/issues?status=new&status=open)
-![TestCoverage](https://img.shields.io/badge/test_coverage-to_do-lightgray.svg)
-[![Status](https://img.shields.io/badge/status-in_development-yellow.svg "Status: In development")](https://bitbucket.org/cleed/cleed/src/be5e2f37f58bb710e4f3b46b15b85bfaa77bdb5d?at=develop)
+[![Coverage Status](https://coveralls.io/repos/bitbucket/cleed/cleed/badge.svg)](https://coveralls.io/bitbucket/cleed/cleed)[![Status](https://img.shields.io/badge/status-in_development-yellow.svg "Status: In development")](https://bitbucket.org/cleed/cleed/src/be5e2f37f58bb710e4f3b46b15b85bfaa77bdb5d?at=develop)
+[![Build status](https://ci.appveyor.com/api/projects/status/luqbgb6piifcrpae?svg=true)](https://ci.appveyor.com/project/Liam_Deacon/cleed)
+[![wercker status](https://app.wercker.com/status/c8b08bd5b20550fad9911f2e52a91c2e/s/master "wercker status")](https://app.wercker.com/project/byKey/c8b08bd5b20550fad9911f2e52a91c2e)
 
 CLEED package
 =============
