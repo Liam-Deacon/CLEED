@@ -43,9 +43,12 @@ build:
 test:
   steps:
     - script:
-        name: test 
+        name: test
         code: |
+            export COVERALLS_REPO_TOKEN=zQm31jVZ69m6SbsMrlRbt68Pza4WGBrCs
+            sudo pip install cpp-coveralls
             make check
+            coveralls --exclude lib --exclude tests --gcov-options '\-lp'
 
 # deployment pipeline
 deploy:
