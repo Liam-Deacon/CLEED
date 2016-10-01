@@ -45,4 +45,10 @@ test:
         name: test 
         code: |
             make check
-            
+     
+deploy:
+  steps:
+    - script:
+        name: deploy
+        code: |
+            echo to do...
