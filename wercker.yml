@@ -50,7 +50,7 @@ test:
 # deployment pipeline
 deploy:
   steps:
-    - script:
+    - script: 
         name: deploy
         code: |
             echo to do...
