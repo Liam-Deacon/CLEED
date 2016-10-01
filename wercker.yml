@@ -22,7 +22,7 @@ build:
             sudo apt-get install libtool -y
             sudo apt-get install cmake -y
             sudo apt-get install gfortran -y
-            sudo apt-get install libblas-dev liblapack-dev -y
+            sudo apt-get install libblas-dev liblapack-dev liblapacke-dev -y
             sudo apt-get install libatlas-base-dev -y
             sudo apt-get install libqt4-dev -y
             sudo apt-get install gsl-bin libgsl0-dev -y
@@ -34,8 +34,8 @@ build:
         code: |
             #mkdir build
             rm -rf CMakeFiles
-            cmake -G "Unix Makefiles" -DBUILD_DEB=1
-            #cd build/
+            cmake -G "Unix Makefiles" -DBUILD_DEB=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
+            #cd build
             make
             make install
 
