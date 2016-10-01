@@ -23,7 +23,7 @@ build:
             sudo apt-get install cmake -y
             sudo apt-get install gfortran -y
             sudo apt-get install libblas-dev liblapack-dev -y
-            sudo aptdap-get install libatlas-base-dev -y
+            sudo apt-get install libatlas-base-dev -y
             sudo apt-get install libqt4-dev -y
             sudo apt-get install gsl-bin libgsl0-dev -y
             sudo apt-get install python-dev -y
