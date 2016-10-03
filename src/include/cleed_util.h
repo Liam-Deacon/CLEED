@@ -24,14 +24,14 @@
 extern "C" {
 #endif
 
-#if _MSC_VER /* mangle function names to make MSC happy */
+#ifdef _MSC_VER /* mangle function names to make MSC happy */
 #define strncasecmp(x,y,z) _strnicmp((x),(y),(z))
 #define fileno(x) _fileno(x)
 #define fopen(x) fopen_s(x)
 #define isatty(x) _isatty(x)
-#define strcpy(x,y) strcpy_s(x,y)
-#define strncpy(x,y,z) strncpy_s(x,y,z)
-#define strcat(x,y) strcat_s(x,y)
+#define strcpy(x,y) strcpy_s((x),(y))
+#define strncpy(x,y,z) strncpy_s((x),(y),(z))
+#define strcat(x,y) strcat_s((x),(y))
 #else /* use posix symbols */
 #include <strings.h>
 #endif
