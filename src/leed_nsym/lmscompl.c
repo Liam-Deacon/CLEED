@@ -29,17 +29,20 @@
 
 #include <math.h>
 #include <malloc.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "leed.h"
 
-#define CPUTIME
+#define CPUTIME 1
 
 #ifdef CPUTIME
-#define CTIME(x) leed_cpu_time(STDCPU,x)
+static char cpu_msg[STRSZ] = "";
+#define CTIME(x) do {snprintf(cpu_msg, STRSZ-1, "%s: %s", __func__, (x)); \
+  cpu_msg[STRSZ-1]="\-0"; leed_cpu_time(STDCPU, cpu_msg);} while(0)
 #else
-#define CTIME(x) 
+#define CTIME(x)
 #endif
 
 /*!
@@ -97,8 +100,9 @@
  * matinv() , matmul() , leed_ms_lsum_ii() , leed_ms_lsum_ij() ,
  * leed_ms_tmat_ii() , leed_ms_tmat_ij() and ms_partinv()
  */
-int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
-                  leed_var *v_par, leed_layer *layer, leed_beam *beams)
+__attribute__((deprecated("This function has been superceded by the symmetry version")))
+int _leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
+                   leed_var *v_par, leed_layer *layer, leed_beam *beams)
 {
   size_t iaux;
   size_t off_row, off_col;
@@ -119,7 +123,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   real *ptr_r, *ptr_i, *ptr_end;
 
-  leed_atom *atoms;             /* atomic positions and scattering properties */
+  leed_atom *atoms = NULL;      /* atomic positions and scattering properties */
 
   mat Ylm = NULL;               /* spherical harmonics (for exit beams) */
   mat Llm_ij = NULL, Llm_ji = NULL;    /* interlayer lattice sums */
@@ -132,11 +136,10 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
                                    will be copied to output */
   mat *p_Tii;                  /* Array of Bravais layer scattering matrices */
 
-  CTIME("(leed_ms_compl): start of function\t\t");
+  CTIME("start of function\t\t");
 
   /* Check the validity of input matrices p_T/R
-   * iaux is used as error flag
-   */
+   * iaux is used as error flag */
   iaux = 0;
   if (matcheck(*p_Tpp)  < 0)
   {
@@ -204,7 +207,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     (atoms+i_atoms)->pos[1]  = (layer->atoms+i_atoms)->pos[1];
     (atoms+i_atoms)->pos[2]  = (layer->atoms+i_atoms)->pos[2];
     (atoms+i_atoms)->pos[3]  = (layer->atoms+i_atoms)->pos[3];
-   
+
     CONTROL_MSG(CONTROL, "atom%d  z = %.3f\n",
             i_atoms, (layer->atoms+i_atoms)->pos[3]);
 
@@ -227,7 +230,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   CONTROL_MSG(CONTROL, "z_min = %f  z_max =%f lmax = %d\n", z_min, z_max, l_max);
 
-  (atoms+n_atoms)->type = I_END_OF_LIST;   /* terminate list atoms */
+  atoms[n_atoms].type = I_END_OF_LIST;     /* terminate list atoms */
   n_type ++;                               /* n_type = number of types */
 
   /* this would reset l_max to its maximum value */
@@ -250,11 +253,11 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     n = 0;
     for(j_atoms = 0; j_atoms < n_atoms; j_atoms ++)
     {
-      if( cleed_real_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] )
+      if( cleed_real_fabs( atoms[j_atoms].pos[3] - atoms[i_atoms].pos[3] )
          < GEO_TOLERANCE )
       { n ++; }
     }    /* for j_atoms */
-   
+
     if(n > n_plane)
     {
       n_plane = n;
@@ -282,7 +285,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
         iaux = (atoms+i_atoms)->type;
         (atoms+i_atoms)->type = (atoms+j_atoms)->type;
         (atoms+j_atoms)->type = iaux;
-  
+
         for(iaux = 1; iaux <= 3; iaux ++)
         {
           faux_r = (atoms+i_atoms)->pos[iaux];
@@ -295,8 +298,8 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     }  /* if cleed_real_fabs ... */
   }  /* for i_atoms */
 
-#ifdef CONTROL
-  fprintf(STDCTR, "(leed_ms_compl): after sorting:\n");
+	#if CONTROL
+  CONTROL_MSG(CONTROL, "after sorting:\n");
   for(i_atoms = 0; i_atoms < n_atoms; i_atoms ++)
   {
     fprintf(STDCTR, "\t(%d) pos: (%5.2f,%5.2f,%5.2f) A type: %d\n",
@@ -304,7 +307,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
             (atoms+i_atoms)->pos[2]*BOHR, (atoms+i_atoms)->pos[3]*BOHR,
             (atoms+i_atoms)->type);
   }  /* for i_atoms */
-#endif
+	#endif
 
   /* Create Bravais layer scattering matrices Tii
    * - Allocate a matrix array p_Tii n_type long (max. number of different atoms)
@@ -331,7 +334,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   /* Calculate Bravais lattice sum (only once) */
   Llm_ij = leed_ms_lsum_ii(Llm_ij, beams->k_r[0], beams->k_i[0],
                             v_par->k_in, layer->a_lat, 2*l_max, v_par->epsilon);
- 
+
   CONTROL_MSG(CONTROL_X, "Calculate scattering matrices\n");
 
   /* Calculate scattering matrix Tii[type] for Bravais lattices and store in p_Tii */
@@ -393,13 +396,12 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
         CONTROL_MSG(CONTROL, "d(%d->%d) = (%5.2f, %5.2f, %5.2f) A\n",
                 i_atoms, j_atoms, d_ij[1]*BOHR, d_ij[2]*BOHR, d_ij[3]*BOHR);
 
-        leed_ms_lsum_ij ( &Llm_ij, &Llm_ji, beams->k_r[0], beams->k_i[0],
+        leed_ms_lsum_ij (&Llm_ij, &Llm_ji, beams->k_r[0], beams->k_i[0],
                   v_par->k_in, layer->a_lat, d_ij, 2 * l_max, v_par->epsilon );
 
 #if CONTROL_LSUM
-        CONTROL_MSG(CONTROL_LSUM, "Lij\n");
         Maux = mattrans(Maux, Llm_ij);
-        matshow(Maux);
+        CONTROL_MSG(CONTROL_LSUM, "Lij\n%s", matshow(Maux));
 #endif
 
         /* Copy matrix Tjj * Gji to position (j,i) = (off_col,off_row)
@@ -448,7 +450,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
       } /* for j_atoms / if not marked */
 
   } /* for i_atoms */
- 
+
   /* free memory */
   matfree(Llm_ij);
   matfree(Llm_ji);
@@ -468,7 +470,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   matnattovht(Mbg, l_max, n_atoms);
 #endif
 
-  CTIME("(leed_ms_compl): before giant matrix inversion");
+  CTIME("before giant matrix inversion");
 
   Mbg = ms_partinv(Mbg, Mbg, n_plane, l_max);
 
@@ -478,7 +480,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
    */
 
   CONTROL_MSG(CONTROL, " ... completed\n");
-  CTIME("(leed_ms_compl): after giant matrix inversion");
+  CTIME("after giant matrix inversion");
 
   /*
    * Prepare matrices for conversion into plane waves:
@@ -576,7 +578,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
     /* L_p(g',jlm) = Ylm(g'+) * exp(- ikg'(+) * rj) */
     Maux = leed_ms_yp_ym(Maux, Ylm);
-   
+
     /* Multiply the rows of Maux with exp(- ikg(+) * ri) */
     for(k = 0; k < Maux->rows; k ++)
     {
@@ -638,7 +640,7 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
   }
 
-  CTIME("(leed_ms_compl): after preparation of R_p ... ");
+  CTIME("after preparation of R_p ... ");
   matfree(Ylm);
 
   /* Multiply matrices: L*Mbg*R */
@@ -650,9 +652,9 @@ int leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   Tmm = matmul(Tmm, L_m, Maux);
   Rpm = matmul(Rpm, L_p, Maux);
 
-  CTIME("(leed_ms_compl): after multiplication R * Mbg * L");
+  CTIME("after multiplication R * Mbg * L");
 
-  CONTROL_MSG(CONTROL, " ... completed\n");
+  CONTROL_MSG(CONTROL, "... completed\n");
 
   matfree(Maux);
   matfree(Mbg);
