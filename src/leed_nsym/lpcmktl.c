@@ -15,14 +15,14 @@
 
 /*! \file
  *
- * Implements leed_par_mktl() function for calculating atomic scattering
- * factors for a given energy.
+ * Calculates atomic scattering factors for a given energy.
  */
 
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "leed.h"
 
@@ -39,7 +39,8 @@
  * \return Pointer to the new set of scattering factor matrices.
  * \retval NULL if any error occurred and #EXIT_ON_ERROR is not defined.
  */
-mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
+__attribute__((deprecated("This function has been superceded by its symmetry version")))
+mat *_leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
                    size_t l_max, real energy)
 {
 
@@ -69,15 +70,15 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
     CLEED_ALLOC_CHECK(p_tl = (mat *)malloc(n_set * sizeof(mat)));
     for(i_set = 0; i_set < n_set; i_set ++) p_tl[i_set] = NULL;
   }
- 
-  /*  Calculate tl for each set of phase shifts. */
+
+  /* Calculate tl for each set of phase shifts. */
   for(i_set = 0; i_set < n_set; i_set ++)
   {
 
     l_set_1 = phs_shifts[i_set].lmax + 1;
 
     CONTROL_MSG(CONTROL_X, "i_set = %u, l_max(set) = %u, n_eng = %u\n",
-            i_set, l_set_1 - 1, phs_shifts[i_set].n_eng);
+                i_set, l_set_1 - 1, phs_shifts[i_set].n_eng);
 
     p_tl[i_set] = matalloc(p_tl[i_set], l_set_1, 1, NUM_COMPLEX);
 
@@ -121,13 +122,8 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
       leed_par_temp_tl(p_tl[i_set], p_tl[i_set], phs_shifts[i_set].dr[0],
                        energy, l_max, phs_shifts[i_set].lmax);
 
-
-      CONTROL_MSG(CONTROL, "after leed_par_temp_tl, dr[0] = %.3f A^2:\n",
-                  phs_shifts[i_set].dr[0]*BOHR*BOHR);
-#if CONTROL
-      matshow(p_tl[i_set]);
-#endif
-
+      CONTROL_MSG(CONTROL, "after leed_par_temp_tl, dr[0] = %.3f A^2:\n%s",
+                  phs_shifts[i_set].dr[0]*BOHR*BOHR, matshow(p_tl[i_set]));
     } /* else if (energy too high) */
     else
     {
@@ -137,7 +133,7 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
        */
       for(i_eng = 0; phs_shifts[i_set].energy[i_eng] < energy; i_eng ++)
       { ; }
-     
+
       for(l = 0; l < l_set_1; l ++)
       {
         delta =  phs_shifts[i_set].pshift[i_eng*l_set_1 + l] -
@@ -159,11 +155,8 @@ mat *leed_par_mktl(mat *p_tl, const leed_phase *phs_shifts,
       leed_par_temp_tl(p_tl[i_set], p_tl[i_set], phs_shifts[i_set].dr[0],
                        energy, l_max, phs_shifts[i_set].lmax);
 
-      CONTROL_MSG(CONTROL, "after leed_par_temp_tl, "
-                  "dr[0] = %.3f A^2:\n", phs_shifts[i_set].dr[0]*BOHR*BOHR);
-#if CONTROL
-      matshow(p_tl[i_set]);
-#endif
+      CONTROL_MSG(CONTROL, "after leed_par_temp_tl, dr[0] = %.3f A^2:\n%s",
+						      phs_shifts[i_set].dr[0]*BOHR*BOHR, matshow(p_tl[i_set]));
 
     } /* else (in the right energy range) */
 
