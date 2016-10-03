@@ -16,7 +16,6 @@
  */
 
 #include "rfac.h"
-#include "cleed_util.h"
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>

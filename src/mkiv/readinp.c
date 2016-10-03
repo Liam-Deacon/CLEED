@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include "mkiv.h"
 #include "inputs.h"
-#include "cleed_util.h"
 
 void mkiv_input_free(mkiv_input *inp)
 {

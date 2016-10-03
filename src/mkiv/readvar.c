@@ -25,7 +25,6 @@
 #include "mkiv.h"
 #include "variables.h"
 #include "file_functs.h"
-#include "cleed_util.h"
 
 void mkiv_params_free(mkiv_params *params)
 {

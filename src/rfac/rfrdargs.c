@@ -28,7 +28,6 @@
 #include <malloc.h>
 
 #include "rfac.h"
-#include "cleed_util.h"
 
 /*!
  * Read argument list from command line and set the adequate parameters

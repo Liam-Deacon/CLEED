@@ -23,7 +23,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include "cleed_util.h"
 
 #ifdef USE_MAGICK
 # include <wand/magick_wand.h>
