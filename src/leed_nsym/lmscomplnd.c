@@ -480,7 +480,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
         #ifdef CONTROL_LSUM
         Maux = mattrans(Maux, Llm_ij);
-        fprintf(STDCTR, "%s: Lij\n%s", __func__, matshow(Maux));
+        fprintf(STDCTR, "%s: Lij\n%s", __func__, matshow(NULL, Maux));
         #endif
 
         /* Copy matrix Tjj * Gji to position (j,i) = (off_col,off_row)
@@ -613,7 +613,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     if(i_atoms == 0)
     {
       CONTROL_MSG(CONTROL_X, "%s: R_p (atom%d)\n%s",
-                  __func__, i_atoms, matshow(Maux));
+                  __func__, i_atoms, matshow(NULL, Maux));
     }
 
     R_p  = matins(R_p, Maux, off_row, 1);
@@ -672,7 +672,7 @@ int leed_ms_compl_nd(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     if(i_atoms == 0)
     {
       CONTROL_MSG(CONTROL_X, "R_p (atom%d)\n%s%s", i_atoms,
-              matshow(Maux), matshowabs(Maux));
+                  matshow(NULL, Maux), matshowabs(Maux));
     }
     #endif
 

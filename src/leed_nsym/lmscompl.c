@@ -401,7 +401,7 @@ int _leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
 
 #if CONTROL_LSUM
         Maux = mattrans(Maux, Llm_ij);
-        CONTROL_MSG(CONTROL_LSUM, "Lij\n%s", matshow(Maux));
+        CONTROL_MSG(CONTROL_LSUM, "Lij\n%s", matshow(NULL, Maux));
 #endif
 
         /* Copy matrix Tjj * Gji to position (j,i) = (off_col,off_row)
@@ -547,7 +547,7 @@ int _leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     if(i_atoms == 0)
     {
       CONTROL_MSG(CONTROL_XXX, "R_p (atom%d)\n", i_atoms);
-      matshow(Maux);
+      matshow(NULL, Maux);
     }
 #endif
 
@@ -605,8 +605,8 @@ int _leed_ms_compl(mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
     if(i_atoms == 0)
     {
       CONTROL_MSG(CONTROL_XXX, "R_p (atom%d)\n", i_atoms);
-      matshow(Maux);
-      matshowabs(Maux);
+      matshow(NULL, Maux);
+      matshowabs(NULL, Maux);
     }
 #endif
 
