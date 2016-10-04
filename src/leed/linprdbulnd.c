@@ -116,7 +116,7 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
    * - set symmetry flags to no symmetry.
    */
 
-  atoms_rd = (leed_atom *) malloc(2*sizeof(leed_atom));
+  CLEED_ALLOC_CHECK(atoms_rd = (leed_atom *) calloc(2, sizeof(leed_atom)));
   for (i_c = 0; i_c < 4; i_c++) a1[i_c] = a2[i_c] = a3[i_c] = 0.;
 
   /* set initial bulk parameters */
@@ -462,7 +462,7 @@ int leed_inp_read_bul_nd(leed_crystal **p_bulk_par, leed_phase **p_phs_shifts,
 
         /* input of atomic phase shifts */
         atoms_rd[i_atoms].type = leed_inp_phase_nd(phaseinp, vaux,
-                                    atoms_rd[i_atoms].t_type, p_phs_shifts);
+                                    p_phs_shifts, atoms_rd[i_atoms].t_type);
         bulk_par->n_types = MAX(atoms_rd[i_atoms].type + 1, bulk_par->n_types);
 
         i_atoms++;

@@ -56,7 +56,7 @@
  * smaller than #MIN_DIST . In this case the bulk must be modelled as one
  * composite layer.
  */
-int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
+int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3, bool sym)
 {
   size_t i, j, u_c, u_d;
   int i_c, i_d;
@@ -244,11 +244,7 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
 
     vec[4*i_layer + 1] = orig[1] + a3[1];
     vec[4*i_layer + 2] = orig[2] + a3[2];
-#ifdef NSYM
     vec[4*i_layer + 3] = orig[3] + a3[3] - vaux[3] - atom_list[n_atoms-1].pos[3];
-#else
-    vec[4*i_layer + 3] = a3[3] - atom_list[n_atoms-1].pos[3] - vaux[3] + orig[3];
-#endif
  }
  else
  {
@@ -409,14 +405,14 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   #ifndef NSYM
   for(i=0; i< i_layer; i++)
   {
-    fprintf(STDCTR, "(leed_inp_bul_layer_sym): shift_orig: %.4f %.4f \n",
+    CONTROL_MSG(CONTROL_X, "shift_orig: %.4f %.4f \n",
                     shift[2*i]*BOHR, shift[2*i +1]*BOHR);
   }
-  fprintf(STDCTR,"(leed_inp_bul_layer_sym):i_layer = %d\n", i_layer);
+  CONTROL_MSG(CONTROL_X, "i_layer = %d\n", i_layer);
   #else
   for(i=0; i < i_layer; i++)
   {
-    fprintf(STDCTR, "(leed_inp_bul_layer): vec_org: %.4f %.4f %.4f layer%d\n",
+    CONTROL_MSG(CONTROL, "vec_orig: %.4f %.4f %.4f layer%d\n",
                  vec[3*i + 1] *BOHR, vec[4*i + 2]*BOHR, vec[4*i + 3]*BOHR, i);
   }
   #endif
@@ -457,10 +453,10 @@ int leed_inp_bul_layer(leed_crystal *par, leed_atom *atom_list, const real *a3)
   #if CONTROL_X
   for(i=0; i < i_layer; i++)
   {
-    fprintf(STDCTR, "(leed_inp_bul_layer): vec_mod: %.4f %.4f %.4f \n",
+    CONTROL_MSG(CONTROL_X, "vec_mod: %.4f %.4f %.4f \n",
                  vec[4*i + 1]*BOHR, vec[4*i + 2]*BOHR, vec[4*i + 3]*BOHR);
   }
-  fprintf(STDCTR, "(leed_inp_bul_layer):i_layer = %d\n", i_layer);
+  CONTROL_MSG(CONTROL_X, "i_layer = %d\n", i_layer);
   #endif
 
   /* Allocate array "layers" and copy all relevant information from

@@ -36,23 +36,14 @@
 #include "leed.h"
 #include "leed_def.h"
 
-#ifdef __STRICT_ANSI__ 
-char *strdup(const char *str) /* strdup is not standard C (its POSIX) */
-{
-    int n = strlen(str) + 1;
-    char *dup = malloc(n);
-    if(dup) strcpy(dup, str);
-    return dup;
-}
-#endif
-
 #if defined(WIN32) || defined(_WIN32)
 static const char *PATH_SEPARATOR = "\\";
 #else
 static const char *PATH_SEPARATOR = "/";
 #endif
 
-static size_t i_phase = 0;      /* number of atom types */
+static size_t i_phase = 0;      /*!< number of unique phase shifts */
+static int ignore_t_type = 0;
 
 /*!
  * Updates the number of phase shifts
@@ -74,7 +65,7 @@ size_t leed_update_phase(size_t n)
  * for type of atom (will have the path contained in the \c CLEED_PHASE
  * environment variable prepended and extension ".phs" appended on to each tag).
  * \param dr Pointer to displacement vector for thermal vibrations.
- * \param t_type
+ * \param t_type Matrix type to match (<0 to ignore).
  * \param[out] p_phs_shifts Double pointer to the phase shifts.
  * \return number of phase shifts.
  * \retval -1 on failure and if #EXIT_ON_ERROR is not defined.
@@ -83,13 +74,13 @@ size_t leed_update_phase(size_t n)
  * \warning The phase shifts in the input file must be for increasing energies.
  * \todo Check behavior is maintained from previous version.
  */
-int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
-                      leed_phase **p_phs_shifts )
+int leed_inp_phase(const char *phaseinp,
+    real *dr, leed_phase **p_phs_shifts, int t_type)
 {
   FILE *inp_stream = NULL;
 
-  char filename[STRSZ];
-  char linebuffer[STRSZ];
+  char filename[STRSZ] = "";
+  char linebuffer[STRSZ] = "";
   char eng_type[STRSZ] = "";
   char fmt_buffer[STRSZ] = "%e";
 
@@ -113,7 +104,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
    * - Check whether environment variable CLEED_PHASE exists at all.
    */
 
-  if( (*phaseinp != '/') || (isalpha(phaseinp[0]) && phaseinp[1] == ':'))
+  if( (*phaseinp != '/') || !(isalpha(phaseinp[0]) && phaseinp[1] == ':'))
   {
     if(getenv("CLEED_PHASE") == NULL)
     {
@@ -146,7 +137,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
           ( cleed_real_fabs(dr[1] - (*p_phs_shifts + i)->dr[1]) < GEO_TOLERANCE ) &&
           ( cleed_real_fabs(dr[2] - (*p_phs_shifts + i)->dr[2]) < GEO_TOLERANCE ) &&
           ( cleed_real_fabs(dr[3] - (*p_phs_shifts + i)->dr[3]) < GEO_TOLERANCE ) &&
-          ( t_type == (*p_phs_shifts + i)->t_type ))
+          ( t_type == (*p_phs_shifts + i)->t_type  || t_type < 0))
       {
         return((int)i);
         break;
@@ -159,7 +150,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   {
     i_phase ++;
     CLEED_ALLOC_CHECK(
-      *p_phs_shifts = (leed_phase *) malloc( 2 * sizeof(leed_phase) ));
+      *p_phs_shifts = (leed_phase *) calloc( 2, sizeof(leed_phase) ));
   }
 
   /* Terminate list of phase shifts */
@@ -211,19 +202,16 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   if( !strncmp(eng_type, "eV", 2) || !strncmp(eng_type, "EV", 2) )
   {
     eng_scale = 1./HART;
-
     CONTROL_MSG(CONTROL, "Energy input in eV\n");
   }
   else if( !strncmp(eng_type, "Ry", 2) || !strncmp(eng_type, "RY", 2) )
   {
     eng_scale = 2.;
-
     CONTROL_MSG(CONTROL, "Energy input in Rydberg (13.59 eV)\n");
   }
   else
   {
     eng_scale = 1.;
-
     CONTROL_MSG(CONTROL, "Energy input in Hartree (27.18 eV)\n");
   }
   
@@ -236,8 +224,8 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   phs_shifts->lmax = lmax;
   nl = lmax + 1;
 
-  phs_shifts->energy = (real *)malloc( neng * sizeof(real) );
-  phs_shifts->pshift = (real *)malloc( neng * nl * sizeof(real) );
+  CLEED_ALLOC_CHECK(phs_shifts->energy = (real*)calloc(neng, sizeof(real)));
+  CLEED_ALLOC_CHECK(phs_shifts->pshift = (real*)calloc(neng*nl, sizeof(real)));
  
  
   for( i_eng = 0;
@@ -263,10 +251,10 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
    
     if( fgets(linebuffer, STRSZ, inp_stream) != NULL)
     {
-      for( i_str = 0, i = 0; i<nl; i++)
+      for( i_str = 0, i = 0; i < nl; i++)
       {
         if (sscanf(linebuffer + i_str, fmt_buffer,
-               phs_shifts->pshift + i_eng*nl + i) < 1)
+               &phs_shifts->pshift[(i_eng*nl)+i]) < 1)
         {
           ERROR_MSG("phaseshift could not be read on line '%s'\n", linebuffer);
           exit(EIO);
@@ -308,14 +296,12 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   fprintf(STDCTR, "\n");
 #endif
 
-#ifdef WARNING_LOG
   if(phs_shifts->n_eng != neng)
   {
     WARNING_MSG("EOF found before reading all phase shifts:\n"
                 "     expected energies: %3d, found: %3d, file: %s\n",
                 neng, i_eng+1, filename);
   }
-#endif
 
   return ((int)i_phase-1);
 } /* end of function leed_leed_inp_phase */
