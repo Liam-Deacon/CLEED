@@ -492,7 +492,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        }
 
      /* input of atomic phase shifts */
-       atoms_rd[i_atoms].type = leed_inp_phase(phaseinp, vaux, p_phs_shifts);
+       atoms_rd[i_atoms].type = leed_inp_phase(phaseinp, vaux, p_phs_shifts, -1);
        bulk_par->n_types = MAX(atoms_rd[i_atoms].type+1, bulk_par->n_types);
 
        i_atoms ++;

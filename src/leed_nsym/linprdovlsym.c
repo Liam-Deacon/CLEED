@@ -303,7 +303,7 @@ int leed_read_overlayer_sym(leed_crystal **p_over_par,
         }
 
         /* input of atomic phase shifts */
-        atoms_rd[i_atoms].type = leed_leed_inp_phase(phaseinp, vaux, p_phs_shifts);
+        atoms_rd[i_atoms].type = leed_inp_phase(phaseinp, vaux, p_phs_shifts, -1);
         over_par->n_types = MAX(atoms_rd[i_atoms].type+1, over_par->n_types);
 
         i_atoms ++;

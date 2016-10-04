@@ -182,7 +182,7 @@ int leed_inp_phase(const char *phaseinp, real *dr, leed_phase **p_phs_shifts )
   }
   else if( !strncmp(eng_type, "Ry", 2) || !strncmp(eng_type, "RY", 2) )
   {
-    eng_scale = 2./HART;
+    eng_scale = 2./HART; /*!FIXME: is this correct? */
     CONTROL_MSG(CONTROL, "Energy input in Rydberg (13.59 eV)\n");
   }
   else
