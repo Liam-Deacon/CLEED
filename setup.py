@@ -250,7 +250,7 @@ has_macro = lambda name, macros: any([name == key[0] for key in macros])
 src_glob = lambda *x: [unix_path(y) for y in glob(join(*x))]
 
 # setup C compiler ----
-os.environ["CC"] = "ccache gcc"
+os.environ["CC"] = "gcc"
 cc = ccompiler.CCompiler
 cc = ccompiler.new_compiler(compiler="mingw32", verbose=True)
 cc.add_include_dir(join("src", "include"))
