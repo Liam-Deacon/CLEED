@@ -1,3 +1,0 @@
-C:/Users/kss07698/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/CMakeFiles/FortranCInterface/CMakeFiles/FortranCInterface.dir
-C:/Users/kss07698/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/CMakeFiles/FortranCInterface/CMakeFiles/myfort.dir
-C:/Users/kss07698/Dropbox/Windows Tweaks/CLEED_tools_win32/cleed/src/CLEED/CMakeFiles/FortranCInterface/CMakeFiles/symbols.dir
