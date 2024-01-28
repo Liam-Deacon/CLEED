@@ -1,0 +1,2 @@
+conan>=2
+pytest>=7,<8
