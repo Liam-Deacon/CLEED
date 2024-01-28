@@ -31,7 +31,7 @@ SET(LATT_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}")
 SET(LATT_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
 CONFIGURE_FILE( "${CMAKE_CURRENT_SOURCE_DIR}/../include/latt.h.in"
    "${CMAKE_CURRENT_SOURCE_DIR}/../include/latt.h" IMMEDIATE @ONLY )
-   
+
 ###############################################################################
 # Sources
 ###############################################################################
@@ -39,7 +39,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET (latt_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-SET (latt_SRCS 
+SET (latt_SRCS
     basis.c
     coord.c
     lattice.c
@@ -56,30 +56,30 @@ IF (WIN32)
     # configure for windows icon
     CONFIGURE_FILE ("res/windows/latt.rc.in"
         "res/windows/latt.rc" IMMEDIATE @ONLY )
-        
+
     SET (latt_SRCS ${latt_SRCS} res/windows/latt.rc)
-    
+
     ADD_EXECUTABLE(latt latt.c ${latt_SRCS})
-    
+
 ELSE (WIN32)
 
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(latt MACOSX_BUNDLE ${latt_SRCS})
             INSTALL(TARGETS latt BUNDLE DESTINATION ../Applications)
-            
+
         ELSE(APPLE)
-        
-            ADD_EXECUTABLE(latt ${latt_SRCS})  
-            
+
+            ADD_EXECUTABLE(latt latt.c ${latt_SRCS})
+
         ENDIF(APPLE)
-        
+
     ENDIF(UNIX)
-    
+
 ENDIF (WIN32)
-    
+
 TARGET_LINK_LIBRARIES (latt ${EXTRA_LIBS} m)
 
 INSTALL (TARGETS latt RUNTIME DESTINATION bin COMPONENT runtime)
