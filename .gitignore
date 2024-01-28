@@ -1,4 +1,52 @@
+*venv*/
+*.eggs/
+/build/
+/dist/
+cleed.egg-info/
+MANIFEST
 build/
 bin/
 autom4te.cache/
 /Default
+
+# python files
+__pycache__/
+*.pyc
+
+# temp files
+*.tmp
+*.bak
+_build/
+
+# testing
+.hypothesis/
+
+# cache
+*.pyc
+**/__pycache__
+_skbuild/
+
+# built binary objects
+*.so
+*.exe
+*.DLL
+*.pyd
+bin/cleed*
+bin/csearch
+bin/crfac
+bin/mkiv
+
+# log files
+*.log
+
+# docs
+/docs/_build/
+
+# read-only
+*.zip
+*.pdf
+
+# testing
+.coverage
+**/coverage.xml
+htmlcov/
