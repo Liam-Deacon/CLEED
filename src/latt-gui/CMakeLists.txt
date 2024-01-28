@@ -9,8 +9,8 @@ SET( QT_USE_QTXML TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR} 
-    ${CMAKE_CURRENT_BINARY_DIR} 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
     ${QT_INCLUDES}
     ${QT_QTCORE_INCLUDE_DIR}
     ${QT_QTGUI_INCLUDE_DIR}
@@ -32,8 +32,8 @@ SET (latt_gui_SRCS main.cpp lattmainwindow.cpp qcompile.cpp)
 
 IF (Qt5_POSITION_INDEPENDENT_CODE OR Qt4_POSITION_INDEPENDENT_CODE)
   SET (CMAKE_POSITION_INDEPENDENT_CODE ON)
-ENDIF ()   
-   
+ENDIF ()
+
 QT4_WRAP_UI(UI_SRCS lattmainwindow.ui advancedoutput.ui)
 Qt4_WRAP_CPP(MOC_SRCS latt_gui.hpp lattmainwindow.h qcompile.h)
 QT4_ADD_RESOURCES(RESOURCES_RCC res/icons.qrc)
@@ -45,7 +45,7 @@ IF(WIN32) # Check if we are on Windows
     CONFIGURE_FILE ("res/windows/latt-gui.rc.in" "res/windows/latt-gui.rc" IMMEDIATE @ONLY )
     LIST(APPEND latt_gui_SRCS res/windows/latt-gui.rc)
 
-  ADD_EXECUTABLE(latt-gui WIN32 ${latt_gui_SRCS} 
+  ADD_EXECUTABLE(latt-gui WIN32 ${latt_gui_SRCS}
     ${MOC_SRCS} ${UI_SRCS} ${RESOURCES_RCC})
   if(MSVC) # Check if we are using the Visual Studio compiler
     set_target_properties(latt-gui PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
@@ -56,7 +56,7 @@ IF(WIN32) # Check if we are on Windows
   endif()
 elseif(UNIX)
   # Nothing special required
-  ADD_EXECUTABLE(latt-gui main.cpp lattmainwindow.cpp qcompile.cpp 
+  ADD_EXECUTABLE(latt-gui main.cpp lattmainwindow.cpp qcompile.cpp
     ${MOC_SRCS} ${UI_SRCS} ${RESOURCES_RCC})
 else()
   message(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
@@ -68,12 +68,12 @@ TARGET_LINK_LIBRARIES(latt-gui ${QT_LIBRARIES} m)
 
 # ensure all necessary dependencies are included in distribution
 IF (WIN32)
-    FILE (GLOB LATT_GUI_QT_DLLS 
+    FILE (GLOB LATT_GUI_QT_DLLS
         "${QT_BINARY_DIR}/QtCore*.dll"
-        "${QT_BINARY_DIR}/QtGui*.dll" 
+        "${QT_BINARY_DIR}/QtGui*.dll"
         "${QT_BINARY_DIR}/QtNetwork*.dll"
     )
 
     INSTALL (FILES ${LATT_GUI_QT_DLLS} COMPONENT gui DESTINATION bin)
-    
+
 ENDIF (WIN32)

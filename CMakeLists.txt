@@ -73,7 +73,7 @@ OPTION(BUILD_SHARED_LIBS "Set to OFF to build static libraries" ON)
 OPTION(BUILD_RPM "Set to ON to build an RPM" OFF)
 OPTION(BUILD_DEB "Set to ON to build a Debian package file" OFF)
 OPTION(USE_OPENMP "Set to OFF to have single threaded executables" ON)
-OPTION(WITH_QT "Set to ON to build Qt app frontends" ON)
+OPTION(WITH_QT "Set to ON to build Qt app frontends" OFF)
 OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" OFF)
 OPTION(INSTALL_DOC "Set to OFF to skip build/install Documentation" ON)
 OPTION(PACK_SOURCE "Set to OFF to pack without source code" ON)
@@ -675,14 +675,14 @@ MESSAGE( STATUS )
 ##############################################################################
 ADD_SUBDIRECTORY(src)
 
-IF (USE_PHASESHIFTS STREQUAL "ON")
+IF (WITH_PHASESHIFTS STREQUAL "ON")
     IF (NOT PYTHON_PIP_EXECUTABLE STREQUAL "PYTHON_PIP-NOTFOUND")
         ADD_CUSTOM_COMMAND (TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND pip install phaseshifts
             COMMENT "Install Python phaseshift package using pip"
         )
     ENDIF (NOT PYTHON_PIP STREQUAL "PYTHON_PIP-NOTFOUND")
-ENDIF (USE_PHASESHIFTS STREQUAL "ON")
+ENDIF (WITH_PHASESHIFTS STREQUAL "ON")
 
 # install documents
 IF (INSTALL_DOC STREQUAL "ON")
