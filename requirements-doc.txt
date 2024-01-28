@@ -1,0 +1,5 @@
+# These are the requirements for needed for building the documentation using Sphinx.
+sphinx>=7
+breathe
+numpydoc
+sphinx-rtd-theme
