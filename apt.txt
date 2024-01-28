@@ -1,0 +1,17 @@
+make
+binutils
+g++
+automake
+autoconf
+libtool
+cmake
+gfortran
+libblas-dev
+liblapack-dev
+liblapacke-dev
+libatlas-base-dev
+gsl-bin
+libgsl-dev
+python3-dev
+rpm
+alien
