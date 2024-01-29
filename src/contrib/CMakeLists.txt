@@ -1,5 +1,0 @@
-set(ZLIB_INCLUDE_DIR "zlib-1.2.7-1-mingw32-src/zlib-1.2.7")
-set(PNG_INCLUDE_DIR "lpng1612")
-add_subdirectory(zlib-1.2.7-1-mingw32-src)
-add_subdirectory(lpng1612)
-add_subdirectory(libharu-libharu-ec89be4)
