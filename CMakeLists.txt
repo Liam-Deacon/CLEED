@@ -55,7 +55,7 @@ SET(CPACK_PACKAGE_VERSION_MAJOR "2014")
 SET(CPACK_PACKAGE_VERSION_MINOR "07")
 SET(CPACK_PACKAGE_VERSION_PATCH "04")
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CLEED")
-SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY 
+SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY
 "CLEED ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 SET(CPACK_PACKAGE_URL "https://bitbucket.org/cleed/cleed")
 SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};ALL;/")
@@ -77,7 +77,7 @@ OPTION(WITH_QT "Set to ON to build Qt app frontends" OFF)
 OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" OFF)
 OPTION(INSTALL_DOC "Set to OFF to skip build/install Documentation" ON)
 OPTION(PACK_SOURCE "Set to OFF to pack without source code" ON)
-OPTION(WITH_LAPACK "Set to OFF to build without BLAS/LAPACK support - NOTE: This option will take preference over 'GSL_BACKEND'" ON)
+OPTION(WITH_LAPACK "Set to OFF to build without BLAS/LAPACK support - NOTE: This option will take preference over 'WITH_GSL'" ON)
 OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration - NOTE: this means the code is no longer open source" ON)
 OPTION(USE_INTEL_MKL "Use Intel MKL for BLAS/LAPACK routines" OFF)
 OPTION(USE_ATLAS "Use ATLAS for BLAS/LAPACK routines" OFF)
@@ -101,13 +101,13 @@ IF (WITH_QT STREQUAL "ON")
     ELSE ()
         FIND_PACKAGE(Qt4)
         SET (QT_VERSION "Qt4")
-        FOREACH (QT_MODULE ${QT_INCLUDE_MODULES})  
+        FOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
             # apply fix for Windows Qt Library path problems...
             IF (EXISTS QT_QMAKE_EXCUTABLE AND WIN32)
                 STRING(TOUPPER ${QT_MODULE} _upper_qt_module)
                 GET_FILENAME_COMPONENT(QT_DLL_DIR ${QT_QMAKE_EXECUTABLE} PATH)
                 IF (QT_${_upper_qt_module}_LIBRARY_DEBUG MATCHES "*NOTFOUND")
-                    SET (QT_${_upper_qt_module}_LIBRARY_DEBUG 
+                    SET (QT_${_upper_qt_module}_LIBRARY_DEBUG
                         "${QT_DLL_DIR}/${_upper_qt_module}d4.dll"
                         CACHE STRING "" FORCE)
                 ENDIF ()
@@ -119,11 +119,11 @@ IF (WITH_QT STREQUAL "ON")
             ENDIF (EXISTS QT_QMAKE_EXCUTABLE AND WIN32)
         ENDFOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
     ENDIF ()
-    
+
     # Instruct CMake to run moc automatically when needed.
     #SET(CMAKE_AUTOMOC ON)
     SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-      
+
     INCLUDE(${QT_USE_FILE})
     IF (NOT EXTRA_COMPONENTS)
         SET (EXTRA_COMPONENTS gui)
@@ -152,7 +152,7 @@ IF (WITH_OPENCL STREQUAL "ON")
         ENDIF (WIN32)
     ELSE (OpenCL_FOUND OR OPENCL_FOUND)
         SET (WITH_OPENCL OFF)
-    ENDIF (OpenCL_FOUND OR OPENCL_FOUND)    
+    ENDIF (OpenCL_FOUND OR OPENCL_FOUND)
 ENDIF()
 
 # Check whether to build open source version of CLEED using GSL
@@ -163,8 +163,8 @@ IF (WITH_GSL STREQUAL "ON")
     IF (NOT WIN32)
         FIND_PACKAGE(GSL REQUIRED)
     ENDIF (NOT WIN32)
-    
-    
+
+
     IF(WIN32)
         FIND_LIBRARY(GSL_LIBRARY NAMES gsl HINTS "${PROJECT_SOURCE_DIR}/lib/win32")
     ELSE(WIN32)
@@ -174,20 +174,20 @@ IF (WITH_GSL STREQUAL "ON")
         SET (WITH_GSL ON)
         SET ( GSL_FOUND ON )
         SET ( GSL_LIBRARIES ${GSL_LIBRARY} )
-        
+
         ADD_DEFINITIONS(-DUSE_GSL=1)
-        GET_FILENAME_COMPONENT(GSL_LIBRARY_DIR "${GSL_LIBRARY}" PATH)        
+        GET_FILENAME_COMPONENT(GSL_LIBRARY_DIR "${GSL_LIBRARY}" PATH)
         LINK_DIRECTORIES("${GSL_LIBRARY_DIR}")
         IF (WIN32)
             INSTALL (FILES "${GSL_LIBRARY}" DESTINATION bin COMPONENT runtime)
         ENDIF (WIN32)
         FIND_LIBRARY(GSLCBLAS_LIBRARY NAMES gslcblas HINTS "${PROJECT_SOURCE_DIR}/lib/win32")
         IF (GSLCBLAS_LIBRARY)
-            GET_FILENAME_COMPONENT(GSLCBLAS_LIBRARY_DIR "${GSL_CBLAS_LIBRARY}" PATH)        
+            GET_FILENAME_COMPONENT(GSLCBLAS_LIBRARY_DIR "${GSL_CBLAS_LIBRARY}" PATH)
             LINK_DIRECTORIES("${GSLCBLAS_LIBRARY_DIR}")
             IF (WIN32)
                 INSTALL (FILES "${GSLCBLAS_LIBRARY}" DESTINATION bin COMPONENT runtime)
-            ENDIF (WIN32)            
+            ENDIF (WIN32)
         ENDIF()
     ELSE (GSL_LIBRARY)
         SET (WITH_GSL OFF)
@@ -199,7 +199,7 @@ IF (WITH_LAPACK STREQUAL "ON")
     set( WITH_LAPACK OFF )
     set( CBLAS_FOUND OFF )
     set( LAPACK_FOUND OFF )
-    
+
     IF (WIN32)
         FIND_LIBRARY( CBLAS_LIBRARY NAMES cblas blas HINTS "${PROJECT_SOURCE_DIR}/lib/win32" )
         FIND_LIBRARY( LAPACK_LIBRARY NAMES lapacke lapack HINTS "${PROJECT_SOURCE_DIR}/lib/win32" )
@@ -213,12 +213,13 @@ IF (WITH_LAPACK STREQUAL "ON")
             SET ( LAPACK_FOUND ON )
             SET ( LAPACK_LIBRARIES ${LAPACK_LIBRARY} )
             SET ( LAPACK_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/win32" )
+            SET ( WITH_GSL OFF )
         ENDIF(LAPACK_LIBRARY)
     ELSE(WIN32)
         FIND_PACKAGE(CBLAS REQUIRED)
         FIND_PACKAGE(LAPACK REQUIRED)
     ENDIF(WIN32)
-    
+
     IF (CBLAS_FOUND AND NOT CBLAS_IS_BLAS)
         ADD_DEFINITIONS(-DUSE_CBLAS=1)
     ELSE (CBLAS_FOUND AND NOT CBLAS_IS_BLAS)
@@ -227,10 +228,10 @@ IF (WITH_LAPACK STREQUAL "ON")
     IF (LAPACK_FOUND)
         ADD_DEFINITIONS(-DUSE_LAPACK=1)
     ENDIF (LAPACK_FOUND)
-    
+
     IF (CBLAS_FOUND AND LAPACK_FOUND)
         SET(WITH_LAPACK ON)
-    ENDIF (CBLAS_FOUND AND LAPACK_FOUND)    
+    ENDIF (CBLAS_FOUND AND LAPACK_FOUND)
 ENDIF()
 
 ##############################################################################
@@ -248,7 +249,7 @@ INCLUDE(CheckCXXCompilerFlag)
 # endif()
 
 # find java
-FIND_PACKAGE (Java 
+FIND_PACKAGE (Java
 #    REQUIRED
 )
 INCLUDE (UseJava)
@@ -302,7 +303,7 @@ SET(CMAKE_C_FLAGS ${WARNINGS}
 
 IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
     CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    
+
     # check compiler flags
     CHECK_C_COMPILER_FLAG(-fexceptions CC_HAS_EXCEPTIONS_FLAG)
     CHECK_C_COMPILER_FLAG(-fbounds-check CC_HAS_BOUNDS_CHECK_FLAG)
@@ -319,30 +320,30 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
     CHECK_C_COMPILER_FLAG(-std=c99 CC_HAS_STD_C99_FLAG)
     CHECK_C_COMPILER_FLAG(-std=gnu99 CC_HAS_STD_GNU99_FLAG)
     CHECK_C_COMPILER_FLAG(-fdiagnostics-color=auto CC_HAS_DIAGNOSTICS_COLOR_FLAG)
-        
+
     IF (CC_HAS_STD_GNU99_FLAG)
         SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
     ELSEIF (CC_HAS_C99_FLAG)
         SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
     ENDIF(CC_HAS_STD_GNU99_FLAG)
-    
+
     IF (CC_HAS_DIAGNOSTICS_COLOR_FLAG)
         SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=auto")
     ENDIF (CC_HAS_DIAGNOSTICS_COLOR_FLAG)
-    
+
     IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
         IF (CC_HAS_O0_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
         ENDIF (CC_HAS_O0_FLAG)
     ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    
+
     # use '-mtune=native' on all but 'MinSizeRel' build
     IF (NOT CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
         IF (CC_HAS_TUNE_NATIVE_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mtune=native")
         ENDIF (CC_HAS_TUNE_NATIVE_FLAG)
     ENDIF (NOT CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-    
+
     # add debugging options or else fast code optimisations for 'MinSizeRel' build
     IF (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
         CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
@@ -350,7 +351,7 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
         IF (CC_HAS_EXCEPTIONS_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fexceptions")
         ENDIF (CC_HAS_EXCEPTIONS_FLAG)
-            
+
         IF (CC_HAS_BOUNDS_CHECK_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fbounds-check")
         ENDIF (CC_HAS_BOUNDS_CHECK_FLAG)
@@ -358,45 +359,45 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
         IF (CC_HAS_STACK_CHECK_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-check")
         ENDIF (CC_HAS_STACK_CHECK_FLAG)
-        
+
         IF (CC_HAS_G3_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3")
         ELSEIF (CC_HAS_G_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
         ENDIF()
-        
+
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
         SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
         SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
-    
+
     ELSEIF (CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
         # optimise for fast & lean code
         IF (CC_HAS_O3_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
         ENDIF (CC_HAS_O3_FLAG)
-        
+
         IF (CC_HAS_FAST_MATH_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffast-math")
         ENDIF (CC_HAS_FAST_MATH_FLAG)
-        
+
         IF (CC_HAS_UNROLL_LOOPS_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -funroll-loops")
         ENDIF (CC_HAS_UNROLL_LOOPS_FLAG)
-        
+
         IF (CC_HAS_ARCH_NATIVE_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
         ENDIF (CC_HAS_ARCH_NATIVE_FLAG)
-        
+
         IF (CC_HAS_FPMATH_SSE_FLAG)
             SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpmath=sse")
         ENDIF (CC_HAS_FPMATH_SSE_FLAG)
     ENDIF()
-    
+
 ENDIF()
 
 IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    
+
     # check compiler flags
     CHECK_CXX_COMPILER_FLAG(-fexceptions CXX_HAS_EXCEPTIONS_FLAG)
     CHECK_CXX_COMPILER_FLAG(-fbounds-check CXX_HAS_BOUNDS_CHECK_FLAG)
@@ -412,28 +413,28 @@ IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     CHECK_CXX_COMPILER_FLAG(-mtune=native CXX_HAS_TUNE_NATIVE_FLAG)
     CHECK_CXX_COMPILER_FLAG(-std=c++11 CXX_HAS_STD_GNUXX11_FLAG)
     CHECK_CXX_COMPILER_FLAG(-fdiagnostics-color=auto CXX_HAS_DIAGNOSTICS_COLOR_FLAG)
-        
+
     # IF (CXX_HAS_STD_GNUXX11_FLAG)
         # SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
     # ENDIF(CXX_HAS_STD_GNUXX11_FLAG)
-    
+
     IF (CXX_HAS_DIAGNOSTICS_COLOR_FLAG)
         SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
     ENDIF (CXX_HAS_DIAGNOSTICS_COLOR_FLAG)
-    
+
     IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
         IF (CXX_HAS_O0_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
         ENDIF (CXX_HAS_O0_FLAG)
     ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    
+
     # use '-mtune=native' on all but 'MinSizeRel' build
     IF (NOT CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
         IF (CXX_HAS_TUNE_NATIVE_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native")
         ENDIF (CXX_HAS_TUNE_NATIVE_FLAG)
     ENDIF (NOT CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-    
+
     # add debugging options or else fast code optimisations for 'MinSizeRel' build
     IF (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
         CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
@@ -441,7 +442,7 @@ IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
         IF (CXX_HAS_EXCEPTIONS_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
         ENDIF (CXX_HAS_EXCEPTIONS_FLAG)
-            
+
         IF (CXX_HAS_BOUNDS_CHECK_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fbounds-check")
         ENDIF (CXX_HAS_BOUNDS_CHECK_FLAG)
@@ -449,36 +450,36 @@ IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
         IF (CXX_HAS_STACK_CHECK_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-check")
         ENDIF (CXX_HAS_STACK_CHECK_FLAG)
-        
+
         IF (CXX_HAS_G3_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3")
         ELSEIF (CXX_HAS_G_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
         ENDIF()
-    
+
     ELSEIF (CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
         # optimise for fast & lean code
         IF (CXX_HAS_O3_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
         ENDIF (CXX_HAS_O3_FLAG)
-        
+
         IF (CXX_HAS_FAST_MATH_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
         ENDIF (CXX_HAS_FAST_MATH_FLAG)
-        
+
         IF (CXX_HAS_UNROLL_LOOPS_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -funroll-loops")
         ENDIF (CXX_HAS_UNROLL_LOOPS_FLAG)
-        
+
         IF (CXX_HAS_ARCH_NATIVE_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
         ENDIF (CXX_HAS_ARCH_NATIVE_FLAG)
-        
+
         IF (CXX_HAS_FPMATH_SSE_FLAG)
             SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse")
         ENDIF (CXX_HAS_FPMATH_SSE_FLAG)
     ENDIF()
-    
+
 ENDIF()
 
 # FFLAGS depend on the compiler
@@ -542,18 +543,18 @@ SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm")
 
 # MinGW can also link to a MS .lib
 if(MSYS OR MINGW)
-  set(CMAKE_EXTRA_LINK_EXTENSIONS ".lib") 
+  set(CMAKE_EXTRA_LINK_EXTENSIONS ".lib")
 endif()
 
 # create uninstall configuration file
 CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/cmake_uninstall.cmake.in"
    "${PROJECT_BINARY_DIR}/cmake_uninstall.cmake"
-   IMMEDIATE @ONLY 
+   IMMEDIATE @ONLY
 )
 
 # create uninstall target
-ADD_CUSTOM_TARGET( uninstall "${CMAKE_COMMAND}" 
-    -P "${PROJECT_BINARY_DIR}/cmake_uninstall.cmake" 
+ADD_CUSTOM_TARGET( uninstall "${CMAKE_COMMAND}"
+    -P "${PROJECT_BINARY_DIR}/cmake_uninstall.cmake"
 )
 
 # display status message for important variables
@@ -690,8 +691,8 @@ IF (INSTALL_DOC STREQUAL "ON")
     FILE(GLOB_RECURSE DOCUMENTS  RELATIVE ${PROJECT_SOURCE_DIR}
         ${PROJECT_SOURCE_DIR}/doc/*.pdf)
     INSTALL(FILES ${DOCUMENTS} DESTINATION doc COMPONENT documentation)
-    
-    FILE(GLOB_RECURSE MAN_PAGES RELATIVE ${PROJECT_SOURCE_DIR} 
+
+    FILE(GLOB_RECURSE MAN_PAGES RELATIVE ${PROJECT_SOURCE_DIR}
         ${PROJECT_SOURCE_DIR}/man/*.*)
     INSTALL(FILES ${MAN_PAGES} DESTINATION man COMPONENT documentation)
 
@@ -707,7 +708,7 @@ IF (WIN32)
     # /Gm -> enable minimal rebuild
     # /RTC1 -> runtime checks: stack frames + uninitialized variables
     # /MTd -> Multi-threaded Debug
-    
+
     # Given this bug in the NMake generator related to 'manifest files' in CMake 2.6
     # http://www.cmake.org/Bug/view.php?id=7222
     # it is recommended to use CMake 2.4.7 in Windows, so that both the
@@ -716,7 +717,7 @@ IF (WIN32)
     # SET(CMAKE_CXX_FLAGS_DEBUG "/RTC1 /Gm /MTd /ZI /W3 /Od")
     #SET(CMAKE_CXX_FLAGS_RELEASE "/RTC1 /Gm /MT /Zi")
     #SET(CMAKE_EXE_LINKER_FLAGS "/MACHINE:X86 /DYNAMICBASE:NO /MANIFEST:NO /LTCG")
-    
+
     # This sets up the exe icon for windows under mingw.
     IF (MINGW)
         SET(CMAKE_RC_COMPILER_INIT windres)
@@ -738,7 +739,7 @@ IF (WIN32)
     SET(CPACK_NSIS_DISPLAY_NAME "CLEED")
     SET(CPACK_NSIS_INSTALLER_ICON_CODE "")
     SET(CPACK_PACKAGE_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
-    
+
 ELSE (WIN32)
 
     IF (UNIX)
@@ -763,28 +764,28 @@ ELSE (WIN32)
             # This information is needed to compile the GUI application as a "bundle".
             # Info on how to use OSX frameworks taken from
             # http://www.vtk.org/Wiki/CMake:HowToUseExistingOSXFrameworks
-        
+
             # Header files are located in these directories
             INCLUDE_DIRECTORIES (
                 /usr/local/include/cleed/../ # Somehow the tests won't build if not specified like this!
             )
-        
+
             # Libraries are located in these directories
             LINK_DIRECTORIES (/usr/local/lib/)
 
             ENABLE_TESTING()
             #ADD_TEST(cleed ${CMAKE_CURRENT_BINARY_DIR}/cleedtest)
-            
+
             # The support for Mac OS X bundle installation is available for version 2.6 of CMake:
             # http://www.cmake.org/pipermail/cmake/2007-October/016893.html
 
-            
+
             SET(CPACK_PACKAGE_INSTALL_DIRECTORY "cleed ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
             SET(CPACK_PACKAGE_EXECUTABLES "cleed;cleed")
             SET(CPACK_GENERATOR "PackageMaker")
-            
+
             INSTALL_FILES(${CPACK_PACKAGE_INSTALL_DIRECTORY} ${RUNTIME_LIBRARIES})
-        
+
         ELSE (APPLE)
             # ============ BUILD SETTINGS FOR LINUX ============
             # ============ USING MAKEFILE ============
@@ -796,47 +797,47 @@ ELSE (WIN32)
                 "/usr/local/include/"
                 "/usr/include"
             )
-        
+
             # Libraries are located in these directories
             LINK_DIRECTORIES (
                 "/usr/local/lib/"
                 "/usr/X11R6/lib/"
             )
-            
+
             ADD_DEFINITIONS(
                 -DLINUX
             )
-        
-            SET (CPACK_GENERATOR "TGZ;STGZ")  
-        
+
+            SET (CPACK_GENERATOR "TGZ;STGZ")
+
             IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
                 SET (DDM_DESKTOP_DIR "/usr/share/applications/")
                 SET (DDM_PIXMAPS_DIR "/usr/share/icons/")
-                
+
                 # copy the icon/pixmap files
-                INSTALL (FILES 
-                    share/*.desktop 
-                    share/*.xml 
+                INSTALL (FILES
+                    share/*.desktop
+                    share/*.xml
                     DESTINATION ${DDM_DESKTOP_DIR}
                 )
                 INSTALL (FILES share/*.png DESTINATION ${DDM_PIXMAPS_DIR})
-                
+
                 # try to set up the menu system
                 find_program(XDG-MIME_EXECUTABLE xdg-mime)
                 find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu)
-                
+
                 INSTALL(CODE "
                     execute_process(COMMAND ${XDG-MIME_EXECUTABLE} install --novendor ${DDM_DESKTOP_DIR}/ddm.xml)
                     execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${DDM_DESKTOP_DIR}/ddm.desktop)
                     execute_process(COMMAND ${XDG-MIME_EXECUTABLE} default ${DDM_DESKTOP_DIR}/ddm.desktop application/x-ddm-item)
                     "
                 )
-                
+
                 # Debian packaging
                 IF (BUILD_DEB)
                     INCLUDE (${CMAKE_MODULE_PATH}/DpkgBuild.cmake)
-                
-                    IF(DPKG_FOUND AND NOT WIN32)    
+
+                    IF(DPKG_FOUND AND NOT WIN32)
                         SET(CPACK_GENERATOR "${CPACK_GENERATOR};DEB")
                         SET(CPACK_DEBIAN_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
                         SET(CPACK_DEBIAN_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION})
@@ -850,11 +851,11 @@ ELSE (WIN32)
                         SET(CPACK_SET_DESTDIR TRUE)
                     ENDIF(DPKG_FOUND AND NOT WIN32)
                 ENDIF (BUILD_DEB)
-                
+
                 # RPM packaging
                 IF (BUILD_RPM)
                     INCLUDE (${CMAKE_MODULE_PATH}/RpmBuild.cmake)
-                
+
                     IF (RPM_FOUND AND NOT WIN32)
                         SET(CPACK_GENERATOR "${CPACK_GENERATOR};RPM")
                         SET(CPACK_RPM_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
@@ -871,9 +872,9 @@ ELSE (WIN32)
                         SET(CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}")
                     ENDIF (RPM_FOUND AND NOT WIN32)
                 ENDIF (BUILD_RPM)
-                
+
             ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
-        
+
             ENABLE_TESTING()
             ADD_TEST(cleedtest ${CMAKE_CURRENT_BINARY_DIR}/cleedtest)
 
@@ -882,9 +883,9 @@ ELSE (WIN32)
 ENDIF (WIN32)
 
 # install include files for external library use
-INSTALL ( DIRECTORY "${PROJECT_SOURCE_DIR}/src/include" DESTINATION . 
+INSTALL ( DIRECTORY "${PROJECT_SOURCE_DIR}/src/include" DESTINATION .
     COMPONENT headers
-    PATTERN "*~" EXCLUDE PATTERN "*CVS*" EXCLUDE 
+    PATTERN "*~" EXCLUDE PATTERN "*CVS*" EXCLUDE
     PATTERN "*.bak" EXCLUDE PATTERN "*.in" EXCLUDE)
 
 # setup file associations and desktop icons
@@ -895,9 +896,9 @@ IF (UNIX AND NOT APPLE)
     LIST (APPEND EXTRA_COMPONENTS "associations")
 ELSEIF(WIN32)
     FILE(GLOB EXTRA_DIST "${PROJECT_SOURCE_DIR}/data/win32/dist/*.*")
-    INSTALL (FILES 
+    INSTALL (FILES
         ${EXTRA_DIST}
-        DESTINATION bin 
+        DESTINATION bin
         COMPONENT runtime
     )
 
@@ -905,13 +906,13 @@ ELSEIF(WIN32)
     SET (CPACK_COMPONENT_ICONS_DISPLAY_NAME "Icons")
     SET (CPACK_COMPONENT_ICONS_GROUP_NAME "extra")
     LIST (APPEND EXTRA_COMPONENTS "icons")
-    
+
     INSTALL (DIRECTORY "${PROJECT_SOURCE_DIR}/data/templates" DESTINATION . COMPONENT explorer)
     SET (CPACK_COMPONENT_EXPLORER_DISPLAY_NAME "Input file templates")
     SET (CPACK_COMPONENT_EXPLORER_GROUP_NAME "extra")
     LIST (APPEND EXTRA_COMPONENTS "explorer")
-    
-    SET (CPACK_COMPONENT_GROUP_EXTRA_DISPLAY_NAME "Extra Components") 
+
+    SET (CPACK_COMPONENT_GROUP_EXTRA_DISPLAY_NAME "Extra Components")
     SET (CPACK_COMPONENT_GROUP_EXTRA_EXPANDED ON)
 ENDIF ()
 
@@ -926,7 +927,7 @@ IF (PACK_SOURCE STREQUAL ON)
 ENDIF (PACK_SOURCE STREQUAL ON)
 
 # specify CPack components
-SET (CPACK_COMPONENTS_ALL 
+SET (CPACK_COMPONENTS_ALL
     runtime examples phaseshifts libraries headers)
 SET (CPACK_COMPONENT_RUNTIME_DISPLAY_NAME "CLEED Runtime")
 SET (CPACK_COMPONENT_RUNTIME_REQUIRED ON)
@@ -951,7 +952,7 @@ SET (DOLLAR "$")
 SET (CPACK "@CPACK")
 SET (AT "@")
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.cmake.in"
-    "${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.in" @IMMEDIATE) 
+    "${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.in" @IMMEDIATE)
 # configure CPack - doesn't appear to work...
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CPackOptions.cmake.in"
     "${CMAKE_BINARY_DIR}/CPackOptions.cmake" @ONLY)

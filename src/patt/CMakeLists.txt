@@ -24,11 +24,13 @@ SET(PATT_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
 CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h.in"
    "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h" IMMEDIATE @ONLY )
 
+# find_package(Cairo)
+
 ###############################################################################
 # Sources
 ###############################################################################
 SET (patt_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-SET (patt_SRCS 
+SET (patt_SRCS
     matrix_2x2.c
     nice_frac.c
     patt.c
@@ -54,33 +56,33 @@ IF (WIN32)
     # configure for windows icon
     CONFIGURE_FILE ("res/windows/patt.rc.in"
         "res/windows/patt.rc" IMMEDIATE @ONLY )
-        
+
     SET (patt_SRCS ${patt_SRCS} res/windows/patt.rc)
-    
+
     ADD_EXECUTABLE(patt ${patt_SRCS})
-    
+
 ELSE (WIN32)
 
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(patt MACOSX_BUNDLE ${patt_SRCS})
             INSTALL(TARGETS patt BUNDLE DESTINATION ../Applications)
-            
-        ELSE(APPLE)
-        
-            ADD_EXECUTABLE(patt ${patt_SRCS})  
-            
-        ENDIF(APPLE)
-        
-    ENDIF(UNIX)
-    
-ENDIF (WIN32)
-    
-TARGET_LINK_LIBRARIES (patt ${EXTRA_LIBS} m)
 
-INSTALL (TARGETS patt 
-    RUNTIME DESTINATION bin 
+        ELSE(APPLE)
+
+            ADD_EXECUTABLE(patt ${patt_SRCS})
+
+        ENDIF(APPLE)
+
+    ENDIF(UNIX)
+
+ENDIF (WIN32)
+
+TARGET_LINK_LIBRARIES (patt ${EXTRA_LIBS} m ${Cairo_LIBRARIES})
+
+INSTALL (TARGETS patt
+    RUNTIME DESTINATION bin
     COMPONENT runtime
 )
