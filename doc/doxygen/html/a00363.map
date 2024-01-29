@@ -1,9 +1,0 @@
-<map id="atom.h" name="atom.h">
-<area shape="rect" id="node2" href="$a00091.html" title="Header file for latt (Lattice generator) " alt="" coords="191,155,242,181"/>
-<area shape="rect" id="node6" href="$a00093.html" title="Parses command line arguments to latt program. " alt="" coords="281,229,403,256"/>
-<area shape="rect" id="node7" href="$a00095.html" title="Header for struct #lattice and contains prototypes for its associated functions. " alt="" coords="317,80,383,107"/>
-<area shape="rect" id="node3" href="$a00039.html" title="Master include file for the CLEED project. " alt="" coords="5,229,76,256"/>
-<area shape="rect" id="node4" href="$a00090_source.html" title="latt.c" alt="" coords="101,229,151,256"/>
-<area shape="rect" id="node5" href="$a00092_source.html" title="latt_help.c" alt="" coords="176,229,257,256"/>
-<area shape="rect" id="node8" href="$a00094.html" title="lattice.c" alt="" coords="379,155,446,181"/>
-</map>

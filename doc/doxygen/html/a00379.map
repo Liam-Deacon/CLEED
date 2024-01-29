@@ -1,8 +1,0 @@
-<map id="rfhelp.c" name="rfhelp.c">
-<area shape="rect" id="node6" href="$a00278.html" title="master include file for R factor program. " alt="" coords="320,80,375,107"/>
-<area shape="rect" id="node14" href="$a00281_source.html" title="rfac_ver.h" alt="" coords="497,155,577,181"/>
-<area shape="rect" id="node7" href="$a00084_source.html" title="gh_stddef.h" alt="" coords="156,155,245,181"/>
-<area shape="rect" id="node10" href="$a00274_source.html" title="real.h" alt="" coords="284,304,339,331"/>
-<area shape="rect" id="node11" href="$a00279.html" title="Header file for rfac data structures, definitions and constants. " alt="" coords="347,229,427,256"/>
-<area shape="rect" id="node13" href="$a00280.html" title="Header file for function prototypes used in the R factor program. " alt="" coords="385,155,472,181"/>
-</map>

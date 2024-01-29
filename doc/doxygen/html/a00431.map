@@ -1,8 +1,0 @@
-<map id="rfintindl.c" name="rfintindl.c">
-<area shape="rect" id="node6" href="$a00276.html" title="master include file for R factor program. " alt="" coords="251,80,305,107"/>
-<area shape="rect" id="node7" href="$a00086.html" title="Header file for constants and macros generally used throughout the CLEED code. " alt="" coords="124,155,213,181"/>
-<area shape="rect" id="node9" href="$a00273.html" title="Definitions in connection with the type #real. " alt="" coords="411,304,465,331"/>
-<area shape="rect" id="node10" href="$a00277.html" title="Header file for rfac data structures, definitions and constants. " alt="" coords="355,229,435,256"/>
-<area shape="rect" id="node12" href="$a00278.html" title="Header file for function prototypes used in the R factor program. " alt="" coords="393,155,480,181"/>
-<area shape="rect" id="node13" href="$a00279_source.html" title="rfac_ver.h" alt="" coords="238,155,318,181"/>
-</map>
