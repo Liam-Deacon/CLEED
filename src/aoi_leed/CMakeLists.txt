@@ -33,7 +33,7 @@ SET (caoi_leed_SRCS
 
 IF (WIN32)
     # ADD_CUSTOM_TARGET(caoi_leed.res
-        # COMMAND ${CMAKE_RC_COMPILER} 
+        # COMMAND ${CMAKE_RC_COMPILER}
             # ${caoi_leed_SOURCE_DIR}/res/windows/caoi_leed.rc
             # ${caoi_leed_SOURCE_DIR}/res/windows/caoi_leed.res
         # DEPENDS ${caoi_leed_SOURCE_DIR}/res/windows/caoi_leed.ico
@@ -43,35 +43,35 @@ IF (WIN32)
     # configure for windows icon
     CONFIGURE_FILE ("res/windows/caoi_leed.rc.in"
         "res/windows/caoi_leed.rc" IMMEDIATE @ONLY )
-        
+
     SET (caoi_leed_SRCS ${caoi_leed_SRCS} res/windows/caoi_leed.rc)
-    
+
     ADD_EXECUTABLE(caoi_leed ${caoi_leed_SRCS})
 
     TARGET_LINK_LIBRARIES(caoi_leed ws2_32 psapi)
-    
+
 ELSE (WIN32)
 
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(caoi_leed MACOSX_BUNDLE ${caoi_leed_SRCS})
             INSTALL(TARGETS caoi_leed BUNDLE DESTINATION ../Applications)
-            
+
         ELSE(APPLE)
-        
-            ADD_EXECUTABLE(caoi_leed ${caoi_leed_SRCS})   
-            
+
+            ADD_EXECUTABLE(caoi_leed ${caoi_leed_SRCS})
+
         ENDIF(APPLE)
-        
+
     ENDIF(UNIX)
-    
+
 ENDIF (WIN32)
-    
+
 TARGET_LINK_LIBRARIES (caoi_leed m)
 
-INSTALL (TARGETS caoi_leed 
+INSTALL (TARGETS caoi_leed
     RUNTIME DESTINATION bin
     COMPONENT runtime
 )

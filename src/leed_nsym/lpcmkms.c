@@ -78,7 +78,7 @@ int pc_mk_ms(mat *p_Mx, mat *p_My, mat *p_Mz,
   mat Mz, MzMz;
   mat Unity = NULL;
 
-  CONTROL_MSG(CONTROL, "Enter function lmax = %d\n", l_max);
+  CONTROL_MSG(CONTROL, "Enter function lmax = %ld\n", l_max);
 
   /* Call mk_cg_coef() to make sure that all C.G. coefficients are available. */
   mk_cg_coef(2*l_max);

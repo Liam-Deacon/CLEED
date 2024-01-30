@@ -26,8 +26,8 @@
 #include "leed_aoi.h"
 
 #if _MSC_VER
-#define strncasecmp(x,y,z) _strnicmp((x),(y),(z)) 
-#else                
+#define strncasecmp(x,y,z) _strnicmp((x),(y),(z))
+#else
 #include <strings.h>
 #endif
 
@@ -94,9 +94,9 @@ size_t leed_get_number_of_angles(const char *filebsr)
   {
     if (!strncasecmp(linebuffer, "sa:", 3))
     {
-      if (sscanf(linebuffer+3, " %u", &sa) < 1)
+      if (sscanf(linebuffer+3, " %lu", &sa) < 1)
       {
-        WARNING_MSG("could not read value from '%s'(sa=%u)\n", linebuffer, sa);
+        WARNING_MSG("could not read value from '%s'(sa=%lu)\n", linebuffer, sa);
       }
     }
   }  /*while*/
@@ -123,7 +123,7 @@ void leed_create_aoi_filename(char *aoi_filename,
 {
   if (src_filename == NULL) return;
   char *ext = src_filename ? strrchr(src_filename, '.') : NULL;
-  size_t length = ext ? (ext - src_filename) : strlen(src_filename);
+  size_t length = ext ? (size_t)(ext - src_filename) : strlen(src_filename);
   if (aoi_filename == NULL) {
     if ((aoi_filename = (char*)calloc(length + 1, sizeof(char))) == NULL)
     {
@@ -183,7 +183,7 @@ int leed_merge_result_files(const char *par_file, size_t sa) {
   {
     strncpy(tmp_filename, par_file, length);
     tmp_filename[length] = '\0';
-    sprintf(tmp_filename + length, "ia_%u.res", i_ang + 1);
+    sprintf(tmp_filename + length, "ia_%lu.res", i_ang + 1);
     if ((read_stream = fopen(tmp_filename, "r")) == NULL)
     {
       ERROR_MSG("could not open output file \"%s\"\n", tmp_filename);
@@ -247,7 +247,7 @@ int leed_bsrinp(const char *filebsr, size_t number)
   FILE *readstream = NULL;
   FILE *writestream = NULL;
 
-  CONTROL_MSG(CONTROL, "sa: %u\n", number);
+  CONTROL_MSG(CONTROL, "sa: %lu\n", number);
   fprintf(STDERR, "%s\n", filebsr);
 
   /* Open .bsr file for reading */
@@ -263,15 +263,15 @@ int leed_bsrinp(const char *filebsr, size_t number)
   {
     length = ext - filebsr;
   }
-  fprintf(STDERR, "length = %d\n", length);
+  fprintf(STDERR, "length = %lu\n", length);
 
   for (i_ang = 0; i_ang < number; i_ang ++)
   {
     rewind(readstream);
     strncpy(bsr_filename, filebsr, length);
     bsr_filename[FILENAME_MAX - 1] = '\0';
-    fprintf(STDERR, "i_ang: %u\n%s\n", i_ang, bsr_filename);
-    sprintf(linebuffer + length, "%s%u.bsr", leed_aoi_extension, i_ang + 1);
+    fprintf(STDERR, "i_ang: %lu\n%s\n", i_ang, bsr_filename);
+    sprintf(linebuffer + length, "%s%lu.bsr", leed_aoi_extension, i_ang + 1);
     fprintf(STDERR, "%s\n", bsr_filename);
 
     if ((writestream = fopen(bsr_filename, "w")) == NULL)
@@ -285,14 +285,14 @@ int leed_bsrinp(const char *filebsr, size_t number)
     {
       if (!strncasecmp(linebuffer, "ipt:", 4))
       {
-        if (sscanf(linebuffer + 4, " %u", &num) < 1)
+        if (sscanf(linebuffer + 4, " %lu", &num) < 1)
           ERROR_MSG("no value given for 'ipt:'\n");
- 
+
         if (num == (i_ang + 1))
         {
-          if (err = sscanf(linebuffer + 4, " %u %f %f", &num, &ip, &it) < 3) 
+          if (err = sscanf(linebuffer + 4, " %lu %f %f", &num, &ip, &it) < 3)
           {
-            ERROR_MSG("could not read all values from line '%s' (%i read)\n", 
+            ERROR_MSG("could not read all values from line '%s' (%i read)\n",
               linebuffer, err);
           }
           fprintf(writestream, "ip: %.2f\nit: %.2f\n", ip, it);

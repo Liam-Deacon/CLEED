@@ -45,7 +45,8 @@ typedef struct stat plat_stat;    /*!< platform specific stat struct */
 /*!
  * Returns a timestamp string in the format 'YYYY-mm-dd_HHMM'
  *
- *  * \return Pointer to timestamp string.
+ *
+ * \return Pointer to timestamp string.
  */
 const char *timestamp()
 {
@@ -64,7 +65,8 @@ const char *timestamp()
  * Tests whether a file exists.
  *
  * \param filename Path to file to test.
- *  * \return Integer representing result of test.
+ *
+ * \return Integer representing result of test.
  * \retval 0 \p filename does not exist.
  * \retval 1 \p filename exists.
  */
@@ -81,7 +83,8 @@ int file_exists(const char *filename)
  *
  * \param src_path Path to source file.
  * \param dst_path Destination file path.
- *  * \return Integer representing function success.
+ *
+ * \return Integer representing function success.
  * \retval 0 if copy is successful.
  * \retval -1 if copying is unsuccessful.
  */
@@ -93,14 +96,14 @@ int file_copy(const char *src_path, const char *dst_path)
 
   if( (p = fopen(src_path, "r")) == NULL)
   {
-    ERROR_MSG("cannot open: '%s' (%s)\n", 
-              src_path, strerror(s));
+    ERROR_MSG("cannot open: '%s' (%s)\n",
+              src_path, strerror(errno));
     return(-1);
   }
 
   if( (q = fopen(dst_path, "w")) == NULL)
   {
-    ERROR_MSG("cannot open: '%s' (%s)\n", 
+    ERROR_MSG("cannot open: '%s' (%s)\n",
               dst_path, strerror(errno));
     return(-1);
   }
@@ -111,14 +114,15 @@ int file_copy(const char *src_path, const char *dst_path)
   fclose(q);
 
   return(0);
-} 
+}
 
 /*!
  * Convenience function for moving files (emulates unix \c mv command).
  *
  * \param[in] src_path Path string for source file.
  * \param[in] dst_path Destination path string.
- *  * \return Integer representing function success following normal C convention.
+ *
+ * \return Integer representing function success following normal C convention.
  */
 int file_move(const char *src_path, const char *dst_path)
 {
@@ -131,7 +135,8 @@ int file_move(const char *src_path, const char *dst_path)
  * Convenience function for backing up files.
  *
  * \param[in] filepath Path to source file to backup.
- *  * \return Integer representing function success following normal C convention.
+ *
+ * \return Integer representing function success following normal C convention.
  * \retval 0 indicates backup was successful.
  * \retval -1 if the backup cannot be copied.
  */
@@ -156,7 +161,8 @@ int file_backup(const char *filepath)
  * Gets the content of a file (emulates the unix 'cat' command)
  *
  * \param[in] filename Path to source file.
- *  * \return Pointer to file content string.
+ *
+ * \return Pointer to file content string.
  */
 char* file_content(const char* filename)
 {

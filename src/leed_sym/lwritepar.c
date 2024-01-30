@@ -31,7 +31,7 @@
    leed_var   *par - (input) other parameters necessary to control
               the program.
    leed_energy   *eng - (input) energy parameters.
-   leed_beam  *beams - (input) all output beams used at the highest 
+   leed_beam  *beams - (input) all output beams used at the highest
               energy.
    FILE* file - (input) pointer to output file.
 
@@ -94,7 +94,7 @@ int leed_write_par(leed_crystal *bulk_par,
         (bulk_par->layers + i)->n_atoms, file)
         != (size_t) (bulk_par->layers + i)->n_atoms )
     {
-      ERROR_MSG("output error while writing atoms of bulk layer %d\n", i);
+      ERROR_MSG("output error while writing atoms of bulk layer %lu\n", i);
       ERROR_RETURN(-1);
     }
     tot_size += sizeof(leed_atom) * (bulk_par->layers + i)->n_atoms;
@@ -136,7 +136,7 @@ int leed_write_par(leed_crystal *bulk_par,
     number = (phs_shifts + i)->n_eng;
     if( fwrite( (phs_shifts + i)->energy, sizeof(real), number, file) != number)
     {
-      ERROR_MSG("output error while writing phase shift energies (%d)\n", i);
+      ERROR_MSG("output error while writing phase shift energies (%lu)\n", i);
       ERROR_RETURN(-1);
     }
     tot_size += sizeof(real) * number;
@@ -145,7 +145,7 @@ int leed_write_par(leed_crystal *bulk_par,
     number = (phs_shifts + i)->n_eng * ( (phs_shifts + i)->lmax + 1);
     if( fwrite( (phs_shifts + i)->pshift, sizeof(real), number, file) != number)
     {
-      ERROR_MSG("output error while writing phase shifts (%d)\n", i);
+      ERROR_MSG("output error while writing phase shifts (%lu)\n", i);
       ERROR_RETURN(-1);
     }
     tot_size += sizeof(real) * number;
@@ -154,7 +154,7 @@ int leed_write_par(leed_crystal *bulk_par,
     number = strlen( (phs_shifts + i)->input_file ) + 1;
     if( fwrite( &number, sizeof(int), 1, file) != 1 )
     {
-      ERROR_MSG("output error while writing ph. shift file name (%d)\n", i);
+      ERROR_MSG("output error while writing ph. shift file name (%lu)\n", i);
       ERROR_RETURN(-1);
     }
     tot_size += sizeof(int) * 1;
@@ -163,7 +163,7 @@ int leed_write_par(leed_crystal *bulk_par,
     if( fwrite( (phs_shifts + i)->input_file, sizeof(char), number, file)
         != number)
     {
-      ERROR_MSG("output error while writing phase shifts input file (%d)\n", i);
+      ERROR_MSG("output error while writing phase shifts input file (%lu)\n", i);
       ERROR_RETURN(-1);
     }
     tot_size += sizeof(char) * number;
@@ -222,7 +222,7 @@ int leed_write_par(leed_crystal *bulk_par,
   }
   tot_size += sizeof(leed_beam) * number;
 
-  CONTROL_MSG(CONTROL, "%d bytes written\n", tot_size);
+  CONTROL_MSG(CONTROL, "%lu bytes written\n", tot_size);
 
 
   /************************************************************************

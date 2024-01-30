@@ -247,7 +247,7 @@ leed_beam  *beams;
    }
 
 #ifdef CONTROL
-   fprintf(STDCTR,"\tset %d: n_eng = %d, lmax = %d, ",
+   fprintf(STDCTR,"\tset %d: n_eng = %lu, lmax = %lu, ",
            i, (phs_shifts + i)->n_eng, (phs_shifts + i)->lmax );
 #endif
 

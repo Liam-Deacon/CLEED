@@ -12,7 +12,7 @@
  *   LD/02.02.2015 - Creation (copy from srsx.c)
  ***********************************************************************/
 
-#include "search.h"
+#include "csearch.h"
 
 /*! \file
  *

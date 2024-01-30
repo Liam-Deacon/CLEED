@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if USE_GSL
+#if USE_GSL == 1
 #include <gsl/gsl_permutation.h>
 #endif
 
@@ -38,7 +38,7 @@ namespace cleed {
 
 typedef int cleed_permutation;
 
-#elif USE_GSL
+#elif USE_GSL == 1
 
 #define GSL_ONLY 1 /* GSL only */
 
@@ -79,7 +79,7 @@ static inline cleed_permutation *cleed_permutation_alloc(size_t n)
 __attribute__((nonnull))
 static inline void cleed_permutation_free(cleed_permutation *p)
 {
-  if (p != NULL) free(p); p = NULL;
+  if (p != NULL) { free(p); } p = NULL;
 }
 
 __attribute__((nonnull(2)))

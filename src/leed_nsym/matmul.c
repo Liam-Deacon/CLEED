@@ -20,17 +20,17 @@
 
 /*! \file
  *
- * Implements matmul() function for matrix multiplication. 
+ * Implements matmul() function for matrix multiplication.
  *
  * The original Numerical Recipes routines have been replaced with a
- * CBLAS one, which gives massive speed gains over the original textbook 
+ * CBLAS one, which gives massive speed gains over the original textbook
  * version (kindly contributed by Michael Fink <Michael.Fink@uibk.ac.at>).
- * 
+ *
  * \note An initial attempt to use OpenCL for GPGPU calculations has been added
  * but is not tested. It can be enabled by defining #USE_OPENCL when compiling.
  */
 
-#include <math.h>   
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -60,7 +60,7 @@
  *
  * \note A uniform interface to several matrix multiplication backends (CBLAS,
  * GSL and native) is provided through the use of preprocessor macros, which
- * are defined in cblas_aux.h .
+ * are defined in `cleed_blas.h`.
  *
  */
 mat matmul(mat Mr, const mat M1, const mat M2)
@@ -88,11 +88,11 @@ mat matmul(mat Mr, const mat M1, const mat M2)
     ERROR_MSG("dimensions of input matrices do not match\n");
     ERROR_RETURN(NULL);
   }
-  
+
   /* check size of real */
   if ( sizeof(real) != sizeof(float) && sizeof(real) != sizeof(double) )
   {
-    ERROR_MSG("unexpected sizeof(real)=%u\n", sizeof(real));
+    ERROR_MSG("unexpected sizeof(real)=%lu\n", sizeof(real));
     ERROR_RETURN(NULL);
   }
 
@@ -127,43 +127,43 @@ mat matmul(mat Mr, const mat M1, const mat M2)
 
   /* Allocate memory for the resultant native matrix */
   Mr = matalloc(Mr, M1->rows, M2->cols, result_num_type);
-  
+
   /* Perform the multiplication */
   CONTROL_MSG(CONTROL, "start multiplication\n");
 
   switch(result_num_type)
   {
-   case (NUM_REAL):
-   {
-     real alpha = 1.0;
-     real beta =  0.0;
+    case (NUM_REAL):
+    {
+      real alpha = 1.0;
+      real beta =  0.0;
 
-     CLEED_REAL_CBLAS_GEMM(alpha, m1, M1->rows, M1->cols,
+      CLEED_REAL_CBLAS_GEMM(alpha, m1, M1->rows, M1->cols,
                             m2, M2->cols, beta, mr);
-     CLEED_REAL_CBLAS2MAT(mrc, Mr);
-     break;
+      CLEED_REAL_CBLAS2MAT(mrc, Mr);
+      break;
 
-     /* should never reach here: */
-     alpha = alpha*1;
-     beta = beta*1;
-     break;
-   }  /* endcase NUM_REAL */
+      /* should never reach here: */
+      alpha = alpha*1;
+      beta = beta*1;
+      break;
+    }  /* endcase NUM_REAL */
 
-   case (NUM_COMPLEX):
-   {
-     cleed_complex alpha = CLEED_COMPLEX_INIT(1.0, 0.0);
-     cleed_complex beta = CLEED_COMPLEX_INIT(0.0, 0.0);
+    case (NUM_COMPLEX):
+    {
+        cleed_complex alpha = CLEED_COMPLEX_INIT(1.0, 0.0);
+        cleed_complex beta = CLEED_COMPLEX_INIT(0.0, 0.0);
 
-     CLEED_COMPLEX_CBLAS_GEMM(alpha, m1c, M1->rows, M1->cols,
-                               m2c, M2->cols, beta, mrc);
-     CLEED_COMPLEX_CBLAS2MAT(mrc, Mr);
-     break;
+        CLEED_COMPLEX_CBLAS_GEMM(alpha, m1c, M1->rows, M1->cols,
+                                  m2c, M2->cols, beta, mrc);
+        CLEED_COMPLEX_CBLAS2MAT(mrc, Mr);
+        break;
 
-     /* should never reach here: */
-     alpha[0] = alpha[0]*1;
-     beta[0] = beta[0]*1;
-     break;
-   }  /* endcase NUM_COMPLEX */
+        /* should never reach here: */
+        alpha[0] = alpha[0]*1;
+        beta[0] = beta[0]*1;
+        break;
+    }  /* endcase NUM_COMPLEX */
 
   }   /* endswitch */
 

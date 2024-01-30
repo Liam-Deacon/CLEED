@@ -34,7 +34,7 @@ extern "C" {
 "Copyright (C) 2014 Liam Deacon"
 #define PROG_LICENSE "GNU General Public License v3"
 #define PROG_VERSION "2014.07.04 "
-#define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
+#define PROG_AUTHOR "Georg Held (georg.held@diamond.ac.uk)"
 #define PROG_MAINTAINER "Liam Deacon <liam.m.deacon@gmail.com>" 
 #define PROG_SHORTDESC "Symmetrised LEED program"
 

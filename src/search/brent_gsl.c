@@ -19,7 +19,7 @@
  */
 
 #include <math.h>
-#include "search.h"
+#include "csearch.h"
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>

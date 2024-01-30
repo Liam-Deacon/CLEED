@@ -1,5 +1,5 @@
 #include <math.h>
-#include "search.h"
+#include "csearch.h"
 
 #define SIGN(a,b) ((b) > 0.0 ? fabs(a) : -fabs(a))
 #define SHFT(a,b,c,d) (a)=(b);(b)=(c);(c)=(d);

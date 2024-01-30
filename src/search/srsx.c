@@ -22,7 +22,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include "search.h"
+#include "csearch.h"
 #include "gh_stddef.h"
 
 /*!
@@ -50,7 +50,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   /* SIMPLEX METHOD */
   if( (log_stream = fopen(log_file, "a")) == NULL)
   {
-    ERROR_MSG("Could not open log file '%s' for reading (%s)\n", 
+    ERROR_MSG("Could not open log file '%s' for reading (%s)\n",
               log_file, strerror(errno));
     log_stream = fopen(NULL_FILENAME, "w");
   }
@@ -110,12 +110,11 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
 
   /* Write final results to log file */
 
-  CONTROL_MSG(CONTROL, "%d function evaluations in sr_amoeba\n", nfunc);
+  CONTROL_MSG(CONTROL, "%ld function evaluations in sr_amoeba\n", nfunc);
 
-  fprintf(log_stream, "\n=> No. of function evaluations in sr_amoeba: %3d\n",
-          nfunc);
+  fprintf(log_stream, "\n=> No. of function evaluations in sr_amoeba: %3ld\n", nfunc);
   fprintf(log_stream, "=> Vertices and function values of final 3-d simplex:\n");
- 
+
   /* print 1st line */
   fprintf(log_stream, "%3d:", 0);
   for (j_par = 0; j_par < n_dim; j_par++ )
@@ -127,7 +126,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
   /* print other lines */
   for (i_par = 1; i_par < mpar; i_par++ )
   {
-    fprintf(log_stream, "%3d ", i_par);
+    fprintf(log_stream, "%3ld ", i_par);
     for (j_par = 0; j_par < n_dim; j_par++ )
     {
       faux = cleed_basic_matrix_get(p, 0, j_par, n_dim);
@@ -140,7 +139,7 @@ void sr_sx(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
     faux += cleed_vector_get(y, 0);
     cleed_vector_set(y, 0, faux);
   }
- 
+
   fprintf(log_stream, "\navg:");
   for (j_par=0; j_par < n_dim; j_par++ )
   {

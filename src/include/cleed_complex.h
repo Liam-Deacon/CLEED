@@ -29,23 +29,26 @@
 namespace cleed {
 #endif
 
-#if USE_CBLAS || USE_MKL || USE_LAPACK
+#if (USE_GSL == 1)
+
+# include <gsl/gsl_complex.h>
+
+# if CLEED_REAL_IS_DOUBLE
+typedef gsl_complex cleed_complex;  /* assume double precision floating point */
+# else
+typedef gsl_complex_float cleed_complex;
+# endif
+
+# define CLEED_COMPLEX_INIT(i,r)               {(real)(i), (real)(r)}
+# define CLEED_COMPLEX_SET(z,r,i)              GSL_COMPLEX_SET((z),(r),(i))
+
+
+#elif USE_CBLAS || USE_MKL || USE_LAPACK
 
 typedef real cleed_complex[2];
 
 # define CLEED_COMPLEX_INIT(i,r)               {(real)(i), (real)(r)}
 # define CLEED_COMPLEX_SET(z,r,i) do {z[0] = (real)r; z[1] = (real)i;} while (0)
-
-#elif USE_GSL
-
-# if CLEED_REAL_IS_FLOAT
-typedef gsl_complex_float cleed_complex;
-# else /* assume double precision floating point */
-typedef gsl_complex cleed_complex;
-# endif
-
-# define CLEED_COMPLEX_INIT(i,r)               {(real)(i), (real)(r)}
-# define CLEED_COMPLEX_SET(z,r,i)              GSL_COMPLEX_SET((z),(r),(i))
 
 #else /* USE_NATIVE */
 

@@ -18,7 +18,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "search.h"
+#include "csearch.h"
 
 static const real ALPHA = 1.0;
 static const real BETA = 0.5;

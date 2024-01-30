@@ -31,7 +31,7 @@
 #include <time.h>
 #include <math.h>
 
-#include "search.h"
+#include "csearch.h"
 
 #define GEO_PREF 10.                 /*!< rgeo is 1 if the actual distance
                                       * between two atoms is by 1/GEO_PREF

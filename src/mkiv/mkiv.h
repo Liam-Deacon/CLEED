@@ -1,7 +1,7 @@
 /*********************************************************************
  *                             MKIV.H
  *
- *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1992-2014 Georg Held <georg.held@diamond.ac.uk>
  *  Copyright 1993-2014 Christian Stellwag <leed@iron.E20.physik.tu-muenchen.de>
  *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *

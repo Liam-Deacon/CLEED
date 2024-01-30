@@ -16,14 +16,14 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 INCLUDE(InstallRequiredSystemLibraries)
 # allow more human readable "if then else" constructs
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 SET(CMAKE_COLOR_MAKEFILE ON)
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
-   
+
 ###############################################################################
 # Sources
 ###############################################################################
@@ -47,7 +47,7 @@ TARGET_LINK_LIBRARIES(cleedplusplusStatic m)
 TARGET_LINK_LIBRARIES(cleedplusplus m)
 
 IF (WIN32)
-    INSTALL (TARGETS cleedplusplus 
+    INSTALL (TARGETS cleedplusplus
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION bin
         COMPONENT runtime

@@ -17,16 +17,22 @@
  *
  * \note img2tif() uses ImageMagick libraries as the conversion backend, but
  * must be enabled by defining \c USE_MAGICK when compiling.
- * 
+ *
  */
 
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 
-#ifdef USE_MAGICK
-# include <wand/magick_wand.h>
+#define _USE_MAGICK_6  6
+#define _USE_MAGICK_7  7
+
+#ifndef USE_MAGICK
+#define USE_MAGIC  0
 #endif
+
+#define MAGICKCORE_HDRI_ENABLE 1
+#include <MagickWand/MagickWand.h>
 
 #if defined(_WIN32) || defined(__WIN32__)
 # define PATH_SEPARATOR ';' /*!< Separator for PATH names on Windows */
@@ -77,8 +83,8 @@ int img2tif(const char *img_filename, char *tif_filename)
   strcat(tif_filename, ".tif");
 
   /* Check bit depth */
-  if (MagickGetImageDepth() > 16)
-    MagickSetImageDepth(16); /* only 8 or 16bit TIFF is supported by mkiv */
+  if (MagickGetImageDepth(mw) > 16)
+    MagickSetImageDepth(mw, 16); /* only 8 or 16bit TIFF is supported by mkiv */
 
   /* Write the output TIFF image */
   MagickSetFormat(mw, "TIFF");

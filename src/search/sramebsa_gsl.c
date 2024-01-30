@@ -35,7 +35,7 @@ LD/30.04.14 - Removed dependence on 'cp' and 'date' system calls
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_multimin.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "copy_file.h"
 
 #ifndef MAX_ITER_AMOEBA        /* should be defined in "search_def.h" */

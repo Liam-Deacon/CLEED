@@ -28,7 +28,7 @@
  * \param b Pointer to matrix @b B
  * \param n The dimension of the matrices @b A and @b B
  * \return pointer to @p res
- * @note enough memory must be allocated for @p res
+ * \note enough memory must be allocated for @p res
  */
 real *r_sqmul(real *res, real *a, real *b, size_t n)
 {

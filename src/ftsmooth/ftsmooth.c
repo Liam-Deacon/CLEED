@@ -6,7 +6,7 @@ LD/24.04.14
 
   ftsmooth (24.04.14)
     perform Fourier Transform smoothing on x,y data
-  
+
 Changes:
 
 *********************************************************************/
@@ -16,11 +16,11 @@ Changes:
 #include <errno.h>
 
 /****************************************************************
-*					Fourier Transformation						*
+*          Fourier Transformation                               *
 *****************************************************************/
 /* This subroutine performs the Fourier smoothing of the data */
 int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
-	  double cutoff, double tailoff, int stdout_flag)
+    double cutoff, double tailoff, int stdout_flag)
 {
 
   size_t i_x;
@@ -39,7 +39,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   double k_step, k_max;
   double x_step, x_max, x_now;
   double faux;
-  
+
 /* parameters for x */
 
   faux   = x[n_x-1] - x[0];
@@ -48,13 +48,13 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   x_step = faux/(n_x - 1);
   i_k = 0;
 
-  if (x_step <= 0.) 
+  if (x_step <= 0.)
   {
     ERROR_MSG("x step < or = 0.: %.3e\n", x_step);
     exit(EINVAL);
   }
 
-/* 
+/*
    parameters for cubic/linear interpolation:
     a1,a3: between -x_0 and x_0 (cubic);
     b1,b2: between  x_f and x_f + 2*x_0 (linear);
@@ -63,7 +63,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   faux = x[1] - x[0] + x_0;
   a3 = (fx[1]/faux  - fx[0]/x_0) / (faux*faux - x_0*x_0);
   a1 = fx[0]/x_0 - a3*x_0*x_0;
- 
+
   b1 = fx[n_x-1];
   b2 = - fx[n_x-1]/x_0;
 
@@ -75,7 +75,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   n_k  = (n_x*(size_t)rint(1.5 * faux)) + 1;
 
   CONTROL_MSG(CONTROL, "# cutoff: %.3f, tailoff: %.3f => k range: %.3f\n",
-			   cutoff, tailoff, faux);
+         cutoff, tailoff, faux);
   if (!stdout_flag)
   {
     printf("#> cutoff: %.3f, tailoff: %.3f => k range: %.3f\n",
@@ -107,31 +107,31 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
     k[i_k]  = i_k * k_step;
     fk_s[i_k] = 0.;
     fk_c[i_k] = 0.;
-  
+
 
     /* (a) over linear part: 0 < x < x_0 and x[n_x-1] < x < x[n_x-1] + x_0 */
     for (x_now = x_step, i_x = 0; x_now < x_0; x_now += x_step, i_x ++)
     {
       faux  = k[i_k] * x_now;
       fk_s[i_k] += (a3*x_now*x_now + a1)*x_now * sin(faux);
-	  
+
       if (i_k == 0) CONTROL_MSG(CONTROL, "%e %e\n",
                       x_now, (a3*x_now*x_now + a1)*x_now );
 
       faux  = k[i_k] * (x[n_x-1] - x[0] + x_0 + x_now);
       fk_s[i_k] += (b1 + b2 * x_now) * sin(faux);
 
-	  #ifdef DEBUG
+    #ifdef DEBUG
       if (i_k == 1) fprintf(stdout, "%e %e\n",
               (x[n_x-1] - x[0] + x_0 + x_now), (b1 + b2 * x_now) );
-	  #endif
+    #endif
     } /* for x_now */
 
-    if ((i_k == 0) && (!stdout_flag)) 
-      printf("#> %u (2 x %u) interpolated function values are used \n", 
+    if ((i_k == 0) && (!stdout_flag))
+      printf("#> %lu (2 x %lu) interpolated function values are used \n",
         2*i_x, i_x);
 
-/* 
+/*
  (b) over actual function: x[0] < x < x[n_x-1]
 */
     for (i_x = 0; i_x < n_x; i_x ++)
@@ -141,7 +141,7 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
       fk_s[i_k] += fx[i_x] * sin(faux);
 
       if (i_k == 0) CONTROL_MSG(CONTROL, "%e %e\n", x_now, fx[i_x] );
-	 
+
     } /* for i_x */
 
     faux = tailoff * (cutoff - k[i_k]);
@@ -151,16 +151,15 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
  }  /* for i_k */
 
   if(!stdout_flag)
-    printf("#> last point in FT (%u): k = %.3f weight = %.3f\n", 
-         i_k-1, k[i_k-1],faux);
+    printf("#> last point in FT (%lu): k = %.3f weight = %.3f\n", i_k-1, k[i_k-1], faux);
 
-/* 
+/*
   back transformation (for data points 2 to n_x - 3):
   Use the input values of x.
 */
 
   x_step = SQRT_PI * x_max / (n_x * 3.);
- 
+
   for( i_x = 0; i_x < n_x; i_x ++)
   {
     x_now = x[i_x] - x[0] + x_0;
@@ -191,8 +190,8 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   /* data points 2 to n_x - 3 */
   for( i_x = 2; i_x < n_x - 2; i_x ++)
   {
-    faux = 0.0625*(fx[i_x-2] + fx[i_x+2]) + 
-           0.25  *(fx[i_x-1] + fx[i_x+1]) + 
+    faux = 0.0625*(fx[i_x-2] + fx[i_x+2]) +
+           0.25  *(fx[i_x-1] + fx[i_x+1]) +
            0.375 * fx[i_x];
     fx[i_x] = faux;
   }  /* for i_x */
@@ -204,9 +203,9 @@ int ftsmooth(FILE *out_stream, double *x, double *fx, size_t n_x,
   /* last data point =  no smooth */
 
   /* clean up */
-  if (k) free(k); 
+  if (k) free(k);
   if (fk_s) free(fk_s);
   if (fk_c) free(fk_c);
-  
+
   return(0);
 }

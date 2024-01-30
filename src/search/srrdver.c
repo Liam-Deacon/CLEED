@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "search.h"
+#include "csearch.h"
 
 /*!
  * Read vertex for simplex algorithm from backup file.
@@ -145,7 +145,7 @@ int sr_rdver(const char *ver_file, cleed_vector *y, cleed_basic_matrix *p, int n
   fprintf(STDCTR, "(sr_rdver): vertex read from \"%s\":\n", ver_file);
   for (i_par = 0; i_par < m_par; i_par++)
   {
-    fprintf(STDCTR, "(%2d) %7.4f :", i_par, cleed_vector_get(y, i_par));
+    fprintf(STDCTR, "(%2ld) %7.4f :", i_par, cleed_vector_get(y, i_par));
     for(j_par=0; j_par < (size_t)n_dim; j_par++)
     {
       fprintf(STDCTR, " %6.3f", cleed_basic_matrix_get(p, i_par, j_par, (size_t)n_dim));

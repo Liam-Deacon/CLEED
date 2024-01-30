@@ -3,7 +3,7 @@
  *
  *  Copyright (C) 2013-2015 Liam Deacon <liam.m.deacon@gmail.com>
  *
- *  Licensed under GNU General Public License 3.0 or later. 
+ *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
@@ -25,7 +25,8 @@
 
 #ifdef __cplusplus /* if this is a C++ compiler then use C linkage */
 
-#include <Core/Coordinate.hh>
+#include <vector>
+#include "Core/Coordinate.hh"
 #include "basis.h"
 
 namespace cleed {
@@ -49,6 +50,7 @@ class Basis : public basis {
     Basis& setA3(double a3_x, double a3_y, double a3_z);
     Basis& setBasis(const Coordinate &a1, const Coordinate &a2, const Coordinate &a3);
     Basis& setBasis(const Basis &basis);
+    Basis& setBasis(const Basis *basis);
 
     /* getters */
     const Coordinate getA1() const;
@@ -60,6 +62,9 @@ class Basis : public basis {
     void rotate(double **R);
     void rotate(const std::vector< std::vector<double> > &R);
     void rotate(double alpha, double beta, double gamma);
+
+    private:
+      basis *basis_ptr;
 };
 
 

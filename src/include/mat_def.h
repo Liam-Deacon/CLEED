@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           MAT_DEF.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
@@ -44,7 +44,7 @@ enum { MATRIX = 0xaffe };   /*!< magic number for matrix */
 
 /*
  * matrix types:
- * Use only lower half of high bytes for mat_type, 
+ * Use only lower half of high bytes for mat_type,
  * i.e. 0x0FFF >= MAT_* > 0x00FF (NUM_MASK)
  */
 typedef enum {
@@ -57,7 +57,7 @@ typedef enum {
 
 /*
  * block types:
- * Use only high half of high bytes for mat_type, 
+ * Use only high half of high bytes for mat_type,
  * i.e. 0xFFFF >= BLK_* > 0x0FFF (NUM_MASK)
  */
 
@@ -117,7 +117,7 @@ struct mat_str      /*!< real or complex matrix */
   mat_enum num_type; /*!< type of matrix elements */
   size_t rows;       /*!< 1st dimension of matrix (number of rows) */
   size_t cols;       /*!< 2nd dimension of matrix (number of columns) */
-  real *rel;         /*!< pointer to real matrix elements */ 
+  real *rel;         /*!< pointer to real matrix elements */
   real *iel;         /*!< pointer to complex matrix elements */
 };
 

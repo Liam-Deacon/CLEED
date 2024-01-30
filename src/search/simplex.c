@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include "cleed_vector.h"
 #include "cleed_matrix.h"
-#include "search.h"
+#include "csearch.h"
 
 static const double ZEPS = 1e-10;
 

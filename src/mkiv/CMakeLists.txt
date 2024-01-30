@@ -21,8 +21,11 @@ SET(MKIV_VERSION_MAJOR "${CPACK_PACKAGE_VERSION_MAJOR}")
 SET(MKIV_VERSION_MINOR "${CPACK_PACKAGE_VERSION_MINOR}")
 SET(MKIV_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}")
 SET(MKIV_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
-CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/mkiv/mkiv_ver.h.in"
-   "${PROJECT_SOURCE_DIR}/src/mkiv/mkiv_ver.h" IMMEDIATE @ONLY )
+CONFIGURE_FILE(
+    "${PROJECT_SOURCE_DIR}/src/mkiv/mkiv_ver.h.in"
+    "${PROJECT_SOURCE_DIR}/src/mkiv/mkiv_ver.h"
+    IMMEDIATE @ONLY
+)
 
 ###############################################################################
 # Sources
@@ -58,19 +61,19 @@ SET (mkivLib_SRCS
     sign.c
     readtif.c
     writetif.c
-    
+
     signs.h
     variables.h
-    
+
     mkiv.h
+    mkiv_funcs.h
     mkiv_ver.h
+
+    mkiv_args.c
     mkiv_help.c
 )
 
 SET (mkiv_SRCS mkiv.c)
-
-# include directories
-INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/src/mkiv)
 
 FIND_LIBRARY(TIFF_LIBRARY NAME tiff tiff3 libtiff libtiff3)
 IF(WIN32 AND NOT TIFF_LIBRARY_FOUND)
@@ -78,17 +81,28 @@ IF(WIN32 AND NOT TIFF_LIBRARY_FOUND)
     GET_FILENAME_COMPONENT(TIFF_LIBRARY_DIR "${TIFF_LIBRARY}" PATH)
 ENDIF()
 
-# try to include ImageMagick 
-FIND_PACKAGE(ImageMagick COMPONENTS MagickWand MagickCore QUIET)
+# try to include ImageMagick
+FIND_PACKAGE(ImageMagick COMPONENTS MagickWand MagickCore)
 IF(WIN32 AND NOT ImageMagick_FOUND)
     FILE (GLOB ImageMagick_LIBRARIES ${PROJECT_SOURCE_DIR}/lib/win32/CORE_RL_*.dll)
-    SET(ImageMagick_INCLUDE_DIRS 
+    SET(ImageMagick_INCLUDE_DIRS
         "${PROJECT_SOURCE_DIR}/lib/win32/ImageMagick/include" CACHE STRING "" FORCE)
     SET(ImageMagick_FOUND TRUE)
-ENDIF()               
-IF(ImageMagick_FOUND)
-    ADD_DEFINITIONS(-DUSE_MAGICK)
-ENDIF()      
+ENDIF()
+IF(ImageMagickFOUND OR (ImageMagick_MagickWand_FOUND AND ImageMagick_MagickCore_FOUND))
+    # use the major version number as the value for USE_MAGICK and print a message
+    ADD_DEFINITIONS(-DUSE_MAGICK=${ImageMagick_VERSION_MAJOR})
+    MESSAGE(STATUS "Using ImageMagick version ${ImageMagick_VERSION_MAJOR}")
+ENDIF()
+
+# include directories
+INCLUDE_DIRECTORIES (
+    ${PROJECT_SOURCE_DIR}/src/mkiv
+    ${ImageMagick_MagickWand_INCLUDE_DIRS}
+    ${ImageMagick_MagickCore_INCLUDE_DIRS}
+)
+
+
 ###############################################################################
 # INSTALL TARGETS
 ###############################################################################
@@ -100,22 +114,22 @@ SET_TARGET_PROPERTIES(mkivLibStatic PROPERTIES OUTPUT_NAME mkiv)
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
-    
+
     # configure for windows icon
     CONFIGURE_FILE ("${mkiv_SOURCE_DIR}/res/windows/mkiv.rc.in"
-        "${mkiv_SOURCE_DIR}/res/windows/mkiv.rc" IMMEDIATE @ONLY ) 
-        
-    SET (mkiv_SRCS 
-        ${mkiv_SRCS} 
+        "${mkiv_SOURCE_DIR}/res/windows/mkiv.rc" IMMEDIATE @ONLY )
+
+    SET (mkiv_SRCS
+        ${mkiv_SRCS}
         "${mkiv_SOURCE_DIR}/res/windows/mkiv.rc"
     )
-    
+
     ADD_EXECUTABLE(mkiv ${mkiv_SRCS})
-    
+
     TARGET_LINK_LIBRARIES (mkiv -L"${TIFF_LIBRARY_DIR}" ${ImageMagick_LIBRARIES} tiff3 m)
     TARGET_LINK_LIBRARIES (mkivLib -L"${TIFF_LIBRARY_DIR}" ${ImageMagick_LIBRARIES} tiff3 m)
     TARGET_LINK_LIBRARIES (mkivLibStatic -L"${TIFF_LIBRARY_DIR}" ${ImageMagick_LIBRARIES} tiff3 m)
-    
+
     # These are the symbols for the linker
     INSTALL(FILES
         ${ImageMagick_LIBRARIES}
@@ -126,34 +140,34 @@ IF (WIN32)
         DESTINATION bin
         COMPONENT runtime
     )
-    
+
     # Header files are located in these directories
     INCLUDE_DIRECTORIES (
         "${PROJECT_SOURCE_DIR}/lib/win32/libtiff/include"
         ${ImageMagick_INCLUDE_DIRS}
     )
-    
+
 ELSE (WIN32)
-    
+
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(mkiv MACOSX_BUNDLE ${mkiv_SRCS})
             INSTALL(TARGETS mkiv BUNDLE DESTINATION ../Applications)
-            
-        ELSE(APPLE)
-        
-            ADD_EXECUTABLE(mkiv ${mkiv_SRCS})  
-            
+
+        ELSE(APPLE)  # Linux
+
+            ADD_EXECUTABLE(mkiv ${mkiv_SRCS})
+
             # These are the symbols for the linker
-            TARGET_LINK_LIBRARIES (mkiv tiff)
-            TARGET_LINK_LIBRARIES (mkivLib tiff)
-            TARGET_LINK_LIBRARIES (mkivLibStatic tiff)
+            TARGET_LINK_LIBRARIES (mkiv ${ImageMagick_LIBRARIES} tiff)
+            TARGET_LINK_LIBRARIES (mkivLib ${ImageMagick_LIBRARIES} tiff)
+            TARGET_LINK_LIBRARIES (mkivLibStatic ${ImageMagick_LIBRARIES} tiff)
         ENDIF(APPLE)
-        
+
     ENDIF(UNIX)
-    
+
 ENDIF (WIN32)
 
 TARGET_LINK_LIBRARIES(mkivLib m)

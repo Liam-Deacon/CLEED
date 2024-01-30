@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     /* Make a new .bsr file for each angle of incidence */
     leed_bsrinp(args->bul_file, args->sa);
-    CONTROL_MSG(CONTROL, "sa = %d ***\n", args->sa);
+    CONTROL_MSG(CONTROL, "sa = %lu ***\n", args->sa);
 
     for (size_t i_ang = 0; i_ang < args->sa; i_ang++)
     {

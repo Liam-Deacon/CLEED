@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           RFAC.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -32,8 +32,10 @@ extern "C" {
 
 #include "gh_stddef.h"
 
-/*!FIXME: real is always float */
-#define CLEED_REAL_IS_FLOAT    /* should be float for DEC alpha */
+#ifdef __alpha__ || __osf__ /* DEC alpha */
+#define CLEED_REAL_IS_FLOAT    /*!< should be float for DEC alpha due to issues with results */
+#endif /* __alpha__ */
+
 #include "cleed_real.h"
 
 /*********************************************************************

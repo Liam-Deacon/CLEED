@@ -375,12 +375,12 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
                   i_set, bm_off[i_set].ind_1, bm_off[i_set].ind_2);
         if( bm_off[i_set].n_eqb_s > 0)
         {
-          fprintf(STDCTR, "represents %d sets (%d beam(s)).\n",
+          fprintf(STDCTR, "represents %lu sets (%lu beam(s)).\n",
               bm_off[i_set].n_eqb_s, bm_off[i_set].n_eqb_b);
         }
         else
         {
-          fprintf(STDCTR, "\t\tis equivalent to %d (%5.2f %5.2f).\n",
+          fprintf(STDCTR, "\t\tis equivalent to %lu (%5.2f %5.2f).\n",
                           bm_off[i_set].n_eqb_b,
                           bm_off[i_set].ind_1,
                           bm_off[i_set].ind_2);
@@ -405,7 +405,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
 #if WARNING_LOG
        if( bm_off[i_set].n_eqb_s != n_rot)
        {
-         WARNING_MSG("n_eqb_s * n_eqb_b = %d "
+         WARNING_MSG("n_eqb_s * n_eqb_b = %lu "
                      "!= n_rot = %d for beam set (%5.2f %5.2f)\n",
                      bm_off[i_set].n_eqb_s, n_rot, bm_off[i_set].ind_1,
                      bm_off[i_set].ind_2);
@@ -422,7 +422,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
     CONTROL_MSG(CONTROL, "%d sets in symmetrised list of beamsets:\n", n_set);
     for(i_set = 0; i_set < n_set; i_set ++)
     {
-      CONTROL_MSG(CONTROL, "set %d: (%5.2f %5.2f), (%d %d)\n",
+      CONTROL_MSG(CONTROL, "set %d: (%5.2f %5.2f), (%ld %ld)\n",
                  i_set, bm_off[i_set].ind_1,  bm_off[i_set].ind_2,
                         bm_off[i_set].n_eqb_s,bm_off[i_set].n_eqb_b);
     } /* for i_set */
@@ -539,7 +539,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               /* OUTPUT from all beams and her symmetry related */
 #if CONTROL_X
               fprintf(STDCTR, "**********************\n");
-              fprintf(STDCTR, "beam%d (%f %f)(%f %f): neqb_s %d  neqb_b %d \n",
+              fprintf(STDCTR, "beam%d (%f %f)(%f %f): neqb_s %lu  neqb_b %lu \n",
                       i_beams,beams[i_beams].ind_1, beams[i_beams].ind_2,
                       beams[i_beams].k_x_sym[0] * BOHR,
                       beams[i_beams].k_y_sym[0] * BOHR,
@@ -924,12 +924,12 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
 
         if(bm_off[i_set].n_eqb_s > 0)
         {
-          fprintf(STDCTR,"represents %d sets (%d beam(s)).\n",
+          fprintf(STDCTR,"represents %lu sets (%lu beam(s)).\n",
              bm_off[i_set].n_eqb_s, bm_off[i_set].n_eqb_b);
         }
         else
         {
-          fprintf(STDCTR,"\t\tis equivalent to %d (%5.2f %5.2f).\n",
+          fprintf(STDCTR,"\t\tis equivalent to %lu (%5.2f %5.2f).\n",
              bm_off[i_set].n_eqb_b,
              (bm_off+ bm_off[i_set].n_eqb_b)->ind_1,
              (bm_off+ bm_off[i_set].n_eqb_b)->ind_2);
@@ -953,7 +953,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
 #if WARNING_LOG
         if( bm_off[i_set].n_eqb_s != 2*n_mir)
         {
-          WARNING_MSG("n_eqb_s * n_eqb_b = %d "
+          WARNING_MSG("n_eqb_s * n_eqb_b = %lu "
                       "!= n_mir = %d for beam set (%5.2f %5.2f)\n",
                       bm_off[i_set].n_eqb_s,
                       2*n_mir, bm_off[i_set].ind_1, bm_off[i_set].ind_2);
@@ -970,7 +970,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
     CONTROL_MSG(CONTROL, "%d sets in symmetrised list of beamsets:\n", n_set);
     for(i_set = 0; i_set < n_set; i_set ++)
     {
-      CONTROL_MSG(CONTROL, "set %d: (%5.2f %5.2f), (%d %d)\n",
+      CONTROL_MSG(CONTROL, "set %d: (%5.2f %5.2f), (%lu %lu)\n",
                   i_set, bm_off[i_set].ind_1,  bm_off[i_set].ind_2,
                          bm_off[i_set].n_eqb_s,bm_off[i_set].n_eqb_b);
     } /* for i_set */
@@ -1154,7 +1154,7 @@ int leed_beam_gen_sym(leed_beam ** p_beams,
               /* OUTPUT of all beams and their equivalents by symmetry */
 #if CONTROL_X
               fprintf(STDCTR,"********************\n");
-              fprintf(STDCTR,"beam%d (%f %f) (%f %f): neqb_s %d  neqb_b %d \n",
+              fprintf(STDCTR,"beam%d (%f %f) (%f %f): neqb_s %ld  neqb_b %ld \n",
                       i_beams,beams[i_beams].ind_1,beams[i_beams].ind_2,
                       beams[i_beams].k_x_sym[0],beams[i_beams].k_y_sym[0],
                       beams[i_beams].n_eqb_s,beams[i_beams].n_eqb_b);

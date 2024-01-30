@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           MAT_FUNC.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -19,15 +19,12 @@
 #ifndef MAT_FUNC_H
 #define MAT_FUNC_H
 
-#if !__GNUC__
-#define __attribute__(x) /* empty */
-#endif
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
 #endif
 
 #include <stdio.h>
+#include "cc_attribute.h"
 #include "cleed_real.h"
 #include "mat_def.h"
 

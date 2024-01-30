@@ -49,7 +49,7 @@ void bsrinp(char *filebsr, size_t number)
   FILE *readstream = NULL;
   FILE *writestream = NULL;
 
-  CONTROL_MSG(CONTROL, "sa: %u\n", number);
+  CONTROL_MSG(CONTROL, "sa: %lu\n", number);
   ERROR_MSG("%s\n", filebsr);
 
 /***********************************************************************
@@ -77,7 +77,7 @@ void bsrinp(char *filebsr, size_t number)
     rewind(readstream);
     strncpy(linebuffer, filebsr, length);
     ERROR_MSG("%s\n", linebuffer);
-    sprintf(linebuffer + length, "ia_%u.bsr", i_ang + 1);
+    sprintf(linebuffer + length, "ia_%lu.bsr", i_ang + 1);
     ERROR_MSG("%s\n", linebuffer);
 
     if ((writestream = fopen(linebuffer, "w")) == NULL)
@@ -90,11 +90,11 @@ void bsrinp(char *filebsr, size_t number)
     {
       if (!strncasecmp(helpstring, "ipt:", 4))
       {
-        sscanf(helpstring + 4, " %u", &num);
- 
+        sscanf(helpstring + 4, " %lu", &num);
+
         if (num == (i_ang + 1))
         {
-          sscanf(helpstring+4, " %u %f %f", &num, &ip, &it);
+          sscanf(helpstring+4, " %lu %f %f", &num, &ip, &it);
           fprintf(writestream, "ip: %.2f\nit: %.2f\n", ip, it);
         }
       }
@@ -107,6 +107,6 @@ void bsrinp(char *filebsr, size_t number)
 
   } /*for i_ang*/
 
- fclose(readstream);
+  fclose(readstream);
 
 } /*bsrinp*/

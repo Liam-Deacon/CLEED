@@ -26,14 +26,14 @@ GH/19.09.95 - Criterion of termination is absolute deviation in vertex
               rather than relative deviation.
 
 ***********************************************************************/
-#if USE_GSL
+#if USE_GSL == 1
 
 #include <math.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_multiroots.h>
 
-#include "search.h"
+#include "csearch.h"
 
 int powell (const gsl_vector *x, void *params, gsl_vector *f)
 {

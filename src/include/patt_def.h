@@ -119,7 +119,7 @@ enum { NUM_SUBS = 54 };
 /* map to postscript symbol font */
 extern const char substitutes[NUM_SUBS][2][STRSZ];
 
-char line_buffer[STRSZ];
+static char line_buffer[STRSZ];
 
 /*******************************************************
 Pattern Structures
@@ -132,7 +132,7 @@ Pattern Structures
 /*! \struct patt_text
  *  \brief Struct for displaying text label.
  */
-typedef struct patt_text 
+typedef struct patt_text
 {
   patt_color_rgb color;   /*!< Color of text label */
   double alpha;           /*!< Alpha transparency (0. to 1. is 0 to 100%) */
@@ -165,7 +165,7 @@ extern patt_screen screen_default;
 /*! \struct patt_gun
  *  \brief Structure for containing electron gun drawing parameters.
  */
-typedef struct patt_gun 
+typedef struct patt_gun
 {
   double x;                 /*!< x-axis centre for gun */
   double y;                 /*!< y-axis centre for gun */
@@ -177,7 +177,7 @@ typedef struct patt_gun
   bool visible;             /*!< determines gun visibility */
   double alpha;             /*!< fractional alpha transparency (0. to 1.) */
 } patt_gun;
-extern patt_gun gun_default; 
+extern patt_gun gun_default;
 
 
 /*! \struct patt_vector
@@ -195,13 +195,13 @@ typedef struct patt_vector
   double head_size;
 
 } patt_vector;
-extern patt_vector vector_default; 
+extern patt_vector vector_default;
 
 
 /*! \struct patt_drawing
  *  \brief Master struct for containing all drawing parameters.
  */
-typedef struct patt_drawing 
+typedef struct patt_drawing
 {
   basis basis_gs[MAX_INPUT_FILES];
   basis basis_ss[MAX_INPUT_FILES][MAX_DOMAINS];

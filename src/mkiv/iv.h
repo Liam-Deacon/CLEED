@@ -1,7 +1,7 @@
 /*********************************************************************
  *                       IV.H
  *
- *  Copyright 1992-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1992-2014 Georg Held <georg.held@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.

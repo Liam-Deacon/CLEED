@@ -1,7 +1,7 @@
 /************************************************************************
  *                            FTSMOOTH_FUNC.H
  *
- *  Copyright 1995-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1995-2014 Georg Held <georg.held@diamond.ac.uk>
  *  Copyright 2013-2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
@@ -65,7 +65,7 @@ int parse_args(int argc, char *argv[],
     double *lbound, double *ubound, int *del_flag);
 
 /* globals */
-char line_buffer[STRSZ];
+static char line_buffer[STRSZ];
 
 /* macros */
 static inline void arg_parse_dbl(double *x, int argc, char *argv[], int i_arg)

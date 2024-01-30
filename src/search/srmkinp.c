@@ -23,12 +23,12 @@
 #include <strings.h>
 #endif
 
-#include "search.h"
+#include "csearch.h"
 
 extern search_atom *sr_atoms;
 extern search *sr_search;
 
-char line_buffer[STRSZ];
+static char line_buffer[STRSZ];
 
 /*!
  * Prepares parameter input file for CLEED program.
@@ -110,7 +110,7 @@ int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
     theta = theta*(-1.);
     phi = phi+180.;
   }
- 
+
   /*  Confine the phi angle between 0 and 360 degrees: */
   while(phi > 360.) { phi=phi-360.; }
   while(phi < 0.)   { phi=phi+360.; }
@@ -123,7 +123,7 @@ int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
 #endif
     /* find first non blank character */
     for( i_str = 0;  *(line_buffer+i_str) == ' '; i_str ++);
-   
+
     if( !strncasecmp(line_buffer+i_str, "ip:", 3) )
     {
       fprintf(iv_bul_out, "ip: %.2f\n", phi);
@@ -137,7 +137,7 @@ int sr_mkinp(const char *filename, const cleed_vector *par, size_t iter)
     {
       fprintf(iv_bul_out, "%s", line_buffer);
     }
-    
+
   }
 
   fclose(iv_bul_in);

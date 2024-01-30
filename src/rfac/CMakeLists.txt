@@ -51,22 +51,22 @@ SET (rfaclib_SRCS
     crfr2.c
     crfsort.c
     crfspline.c
-    crfsplint.c 
+    crfsplint.c
 )
 
 FILE ( GLOB rfaclib_SRCS "*.c" )
 LIST ( REMOVE_ITEM rfaclib_SRCS crfac.c )
 
 IF (NOT USE_GSL)
-  FILE ( GLOB rfac_gsl_SRCS "*gsl*.c" )
-  IF (rfac_gsl_SRCS)
-    LIST( REMOVE_ITEM rfaclib_SRCS ${rfac_gsl_SRCS} )
-  ENDIF (rfac_gsl_SRCS)
+    FILE ( GLOB rfac_gsl_SRCS "*gsl*.c" )
+    IF (rfac_gsl_SRCS)
+        LIST( REMOVE_ITEM rfaclib_SRCS ${rfac_gsl_SRCS} )
+    ENDIF (rfac_gsl_SRCS)
 ENDIF (NOT USE_GSL)
 
 FILE ( GLOB rfac_test_SRCS "*test*.c")
 IF (rfac_test_SRCS)
-  LIST( REMOVE_ITEM rfaclib_SRCS ${rfac_test_SRCS} )
+    LIST( REMOVE_ITEM rfaclib_SRCS ${rfac_test_SRCS} )
 ENDIF (rfac_test_SRCS)
 
 
@@ -82,37 +82,48 @@ SET_TARGET_PROPERTIES(rfacStatic PROPERTIES OUTPUT_NAME rfac)
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
-    
+
     # configure for windows icon
     CONFIGURE_FILE ("${crfac_SOURCE_DIR}/res/windows/crfac.rc.in"
-        "${crfac_SOURCE_DIR}/res/windows/crfac.rc" IMMEDIATE @ONLY ) 
-        
+        "${crfac_SOURCE_DIR}/res/windows/crfac.rc" IMMEDIATE @ONLY )
+
     SET (crfac_SRCS ${crfac_SRCS} res/windows/crfac.rc)
-    
+
     ADD_EXECUTABLE(crfac ${crfac_SRCS})
-    
+
 ELSE (WIN32)
-    
+
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(crfac MACOSX_BUNDLE ${crfac_SRCS})
             INSTALL(TARGETS crfac BUNDLE DESTINATION ../Applications)
-            
+
         ELSE(APPLE)
-        
-            ADD_EXECUTABLE(crfac ${crfac_SRCS})  
-            
+
+            ADD_EXECUTABLE(crfac ${crfac_SRCS})
+
         ENDIF(APPLE)
-        
+
     ENDIF(UNIX)
-    
+
 ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES(rfac ${GSL_LIBRARY} m)
-TARGET_LINK_LIBRARIES(rfacStatic ${GSL_LIBRARY} m)
-TARGET_LINK_LIBRARIES(crfac rfac ${GSL_LIBRARY} m)
+IF (NOT USE_GSL)
+    SET (RFAC_LINK_LIBRARIES
+    m
+)
+ELSE (NOT USE_GSL)
+    SET (RFAC_LINK_LIBRARIES
+        ${GSL_LIBRARY}
+        m
+    )
+ENDIF (NOT USE_GSL)
+
+TARGET_LINK_LIBRARIES(rfac ${RFAC_LINK_LIBRARIES})
+TARGET_LINK_LIBRARIES(rfacStatic ${RFAC_LINK_LIBRARIES})
+TARGET_LINK_LIBRARIES(crfac rfac ${RFAC_LINK_LIBRARIES})
 
 IF (WIN32)
     INSTALL (TARGETS crfac rfac

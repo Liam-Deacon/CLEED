@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "search.h"
+#include "csearch.h"
 
 extern char *sr_project;
 

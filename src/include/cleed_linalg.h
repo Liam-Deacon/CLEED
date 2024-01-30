@@ -3,7 +3,7 @@
  *
  *  Copyright (C) 2013-2015 Liam Deacon <liam.m.deacon@gmail.com>
  *
- *  Licensed under GNU General Public License 3.0 or later. 
+ *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
@@ -30,30 +30,29 @@
 #include "cleed_blas.h"
 #include "attributes.h"
 
-#if USE_GSL
+#if USE_GSL == 1
+# include <gsl/gsl_blas_types.h>
+# include <gsl/gsl_blas.h>
 # include <gsl/gsl_linalg.h>
-#endif
-
-#if USE_MKL
-# include <mkl_lapacke.h>
-#elif USE_CLAPACK /* Netlib's F2C interface for LAPACK */
-# include <clapack.h>
-#elif USE_LAPACKE /* C interface to LAPACK */
-# include <lapacke.h>
-#elif USE_ATLAS /* Automatically Tuned Linear Algebra Software */
-# include <clapack.h>
 #else
-# include "clapack.h" /* default is Netlib's CLAPACK interface */
-# if (!USE_GSL)
-#define NO_LINALG_STR "No linear algebra back-end selected (either LAPACK or GSL) - using native routines."
-#if __GNUC__
-#warning NO_LINALG_STR
-#elif _MSC_VER
-#pragma message ("warning: " NO_LINALG_STR)
-#endif
-#undef NO_LINALG_STR
-# endif
-#endif
+# if USE_MKL
+# include <mkl_lapacke.h>
+# elif USE_CLAPACK /* Netlib's F2C interface for LAPACK */
+# include <clapack.h>
+# elif USE_LAPACKE /* C interface to LAPACK */
+# include <lapacke.h>
+# elif USE_ATLAS /* Automatically Tuned Linear Algebra Software */
+# include <clapack.h>  /* default is Netlib's CLAPACK interface */
+# else
+#  define NO_LINALG_STR "No linear algebra back-end selected (either LAPACK or GSL) - using native routines."
+#  if __GNUC__
+#   warning NO_LINALG_STR
+#  elif _MSC_VER
+#   pragma message ("warning: " NO_LINALG_STR)
+#  endif /* __GNUC__ */
+#  undef NO_LINALG_STR
+# endif /* USE_MKL */
+#endif /* USE_GSL */
 
 /********************************************************************
  * Linear algebra interface for LU decomposition and matrix inversion
@@ -69,39 +68,48 @@
 # define ZGETRF(m,n,a,lda,ipiv,info)                                          \
   (info) = clapack_zgetrf(CblasRowMajor, (m), (n), (a), (lda), (ipiv) )
 # define SGETRI(n,a,lda,ipiv,info)                                            \
-  (info) = clapack_sgetri(CblasRowMajor), (n), (a), (lda), (ipiv) )
+  (info) = clapack_sgetri(CblasRowMajor, (n), (a), (lda), (ipiv) )
 # define DGETRI(n,a,lda,ipiv,info)                                            \
-  (info) = clapack_dgetri(CblasRowMajor), (n), (a), (lda), (ipiv) )
+  (info) = clapack_dgetri(CblasRowMajor, (n), (a), (lda), (ipiv) )
 # define CGETRI(n,a,lda,ipiv,info)                                            \
-  (info) = clapack_cgetri(CblasRowMajor), (n), (a), (lda), (ipiv) )
+  (info) = clapack_cgetri(CblasRowMajor, (n), (a), (lda), (ipiv) )
 # define ZGETRI(n,a,lda,ipiv,info)                                            \
-  (info) = clapack_zgetri(CblasRowMajor), (n), (a), (lda), (ipiv) )
-#elif (USE_LAPACKE)
+  (info) = clapack_zgetri(CblasRowMajor, (n), (a), (lda), (ipiv) )
+#elif (USE_LAPACKE || defined(_LAPACKE_H_))
 # define SGETRF(m,n,a,lda,ipiv,info)                                          \
-  LAPACKE_sgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_sgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv))
 # define DGETRF(m,n,a,lda,ipiv,info)                                          \
-  LAPACKE_dgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_dgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv))
 # define CGETRF(m,n,a,lda,ipiv,info)                                          \
-  LAPACKE_cgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_cgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv))
 # define ZGETRF(m,n,a,lda,ipiv,info)                                          \
-  LAPACKE_zgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_zgetrf(CblasRowMajor, &(m), &(n), (a), &(lda), (ipiv))
 # define SGETRI(n,a,lda,ipiv,info)                                            \
-  LAPACKE_sgetri(CblasRowMajor), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_sgetri(CblasRowMajor, &(n), (a), &(lda), (ipiv))
 # define DGETRI(n,a,lda,ipiv,info)                                            \
-  LAPACKE_dgetri(CblasRowMajor), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_dgetri(CblasRowMajor, &(n), (a), &(lda), (ipiv))
 # define CGETRI(n,a,lda,ipiv,info)                                            \
-  LAPACKE_cgetri(CblasRowMajor), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_cgetri(CblasRowMajor, &(n), (a), &(lda), (ipiv))
 # define ZGETRI(n,a,lda,ipiv,info)                                            \
-  LAPACKE_zgetri(CblasRowMajor), &(n), (a), &(lda), (ipiv), &(info) )
+  LAPACKE_zgetri(CblasRowMajor, &(n), (a), &(lda), (ipiv))
 #else /* FORTRAN style lapack */
-# define SGETRF(m,n,a,lda,ipiv,info) sgetrfac_(m,n,a,lda,ipiv,&(info))
-# define DGETRF(m,n,a,lda,ipiv,info) dgetrfac_(m,n,a,lda,ipiv,&(info))
-# define CGETRF(m,n,a,lda,ipiv,info) cgetrfac_(m,n,a,lda,ipiv,&(info))
-# define ZGETRF(m,n,a,lda,ipiv,info) zgetrfac_(m,n,a,lda,ipiv,&(info))
-# define SGETRI(n,a,lda,ipiv,info)   sgetri_(n,a,lda,ipiv,&(info))
-# define DGETRI(n,a,lda,ipiv,info)   dgetri_(n,a,lda,ipiv,&(info))
-# define CGETRI(n,a,lda,ipiv,info)   cgetri_(n,a,lda,ipiv,&(info))
-# define ZGETRI(n,a,lda,ipiv,info)   zgetri_(n,a,lda,ipiv,&(info))
+// # define SGETRF(m,n,a,lda,ipiv,info) sgetrfac_(m,n,a,lda,ipiv,&(info))
+// # define DGETRF(m,n,a,lda,ipiv,info) dgetrfac_(m,n,a,lda,ipiv,&(info))
+// # define CGETRF(m,n,a,lda,ipiv,info) cgetrfac_(m,n,a,lda,ipiv,&(info))
+// # define ZGETRF(m,n,a,lda,ipiv,info) zgetrfac_(m,n,a,lda,ipiv,&(info))
+// # define SGETRI(n,a,lda,ipiv,info)   sgetri_(n,a,lda,ipiv,&(info))
+// # define DGETRI(n,a,lda,ipiv,info)   dgetri_(n,a,lda,ipiv,&(info))
+// # define CGETRI(n,a,lda,ipiv,info)   cgetri_(n,a,lda,ipiv,&(info))
+// # define ZGETRI(n,a,lda,ipiv,info)   zgetri_(n,a,lda,ipiv,&(info))
+
+# define SGETRF(m,n,a,lda,ipiv,info) sgetrf_(m,n,a,lda,ipiv,info)
+# define DGETRF(m,n,a,lda,ipiv,info) dgetrf_(m,n,a,lda,ipiv,info)
+# define CGETRF(m,n,a,lda,ipiv,info) cgetrf_(m,n,a,lda,ipiv,info)
+# define ZGETRF(m,n,a,lda,ipiv,info) zgetrf_(m,n,a,lda,ipiv,info)
+# define SGETRI(n,a,lda,ipiv,info)   sgetri_(n,a,lda,ipiv,info)
+# define DGETRI(n,a,lda,ipiv,info)   dgetri_(n,a,lda,ipiv,info)
+# define CGETRI(n,a,lda,ipiv,info)   cgetri_(n,a,lda,ipiv,info)
+# define ZGETRI(n,a,lda,ipiv,info)   zgetri_(n,a,lda,ipiv,info)
 #endif
 
 /* Produce LAPACK function macros appropriate to package and precision of real type */
@@ -126,16 +134,16 @@ namespace cleed {
 #endif /* __cplusplus */
 
 /*!
- * \define CLEED_REAL_LU_DECOMPOSITION
+ * \def CLEED_REAL_LU_DECOMPOSITION
  * Macro that performs LU decomposition for a real matrix.
  *
- * \define CLEED_COMPLEX_LU_DECOMPOSITION
+ * \def CLEED_COMPLEX_LU_DECOMPOSITION
  * Macro that performs LU decomposition for a complex matrix.
  *
- * \define CLEED_MATRIX_REAL_INVERSION
+ * \def CLEED_MATRIX_REAL_INVERSION
  * Macro for performing real matrix inversion.
  *
- * \define CLEED_MATRIX_COMPLEX_INVERSION
+ * \def CLEED_MATRIX_COMPLEX_INVERSION
  * Macro for performing complex matrix inversion.
  *
  */
@@ -148,24 +156,24 @@ namespace cleed {
 # define CLEED_COMPLEX_LU_DECOMPOSITION(a, perm, n, info)                     \
 do { CLEED_COMPLEX_GETRF( n, n, a, n, perm, info ); } while (0)
 
-# define CLEED_MATRIX_REAL_INVERSION(a, n, perm, a_1, info)               \
+# define CLEED_MATRIX_REAL_INVERSION(a, n, perm, a_1, info)                   \
   do {                                                                        \
       const int p1 = 1, m1 = -1;                                              \
       int nb = CLEED_REAL_ILAENV(&p1, &(n), &m1);                             \
       int lwork = (n)*nb;                                                     \
       cleed_matrix *work = cleed_matrix_alloc((n), nb);                       \
-      CLEED_REAL_GETRI( (n), (a), (perm), work, &lwork, (info));              \
+      CLEED_REAL_GETRI( (n), (a), (perm), (lwork), (info) );                  \
       cleed_matrix_free(work);                                                \
 } while(0);
 
-# define CLEED_MATRIX_COMPLEX_INVERSION(a, n, perm, a_1, info)            \
+# define CLEED_MATRIX_COMPLEX_INVERSION(a, n, perm, a_1, info)                \
   do {                                                                        \
     const int p1 = 1, m1 = -1;                                                \
     int nb = CLEED_COMPLEX_ILAENV(&p1, &(n), &m1);                            \
     int lwork = (n)*nb;                                                       \
     cleed_matrix_complex *work = cleed_matrix_complex_alloc((n), nb);         \
-    CLEED_COMPLEX_GETRI( n, a, perm, work, &lwork, info);             \
-    cleed_matrix_complex_free(work);                                      \
+    CLEED_COMPLEX_GETRI( (n), (a), (perm), (work), (info) );                  \
+    cleed_matrix_complex_free(work);                                          \
 } while(0);
 
 /*!
@@ -229,7 +237,7 @@ cleed_linalg_invert(cleed_matrix *a,
   cleed_matrix *work = cleed_matrix_alloc((n), nb);
 
   a_1 = a; a = tmp; /* switch pointers */
-  CLEED_REAL_GETRI( n, a_1, perm, work, &lwork, &info);
+  CLEED_REAL_GETRI( n, a_1, perm, work, &info);
   cleed_matrix_free(work);
 
   return (info);
@@ -255,22 +263,22 @@ cleed_linalg_complex_invert(cleed_matrix_complex *a,
   cleed_matrix_complex *tmp = a_1;
   const int p1 = 1, m1 = -1;
   int nb = CLEED_COMPLEX_ILAENV(&p1, &(n), &m1);
-  int lwork = (n)*nb;
+  int lwork = *(n)*nb;
   cleed_matrix_complex *work = cleed_matrix_complex_alloc((n), nb);
 
   a_1 = a; a = tmp; /* switch pointers */
-  CLEED_COMPLEX_GETRI( n, a_1, perm, work, &lwork, info);
+  int info = CLEED_COMPLEX_GETRI( n, a_1, perm, work, info);
   cleed_matrix_complex_free(work);
 
   return (info);
 }
 
-#elif USE_GSL
+#elif USE_GSL == 1
 
-# define CLEED_REAL_LU_DECOMPOSITION(a, perm, s, info)                        \
+# define CLEED_REAL_LU_DECOMPOSITION(a, perm, s, info)                    \
 (info = gsl_linalg_LU_decomp ((a), (perm), &s))
 
-# define CLEED_COMPLEX_LU_DECOMPOSITION(a, perm, s, info)                     \
+# define CLEED_COMPLEX_LU_DECOMPOSITION(a, perm, s, info)                 \
 (info = gsl_linalg_complex_LU_decomp ((a), (perm), &s))
 
 # define CLEED_MATRIX_REAL_INVERSION(a, perm, a_1, info)                  \

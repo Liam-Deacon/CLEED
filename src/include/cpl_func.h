@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           CPL_FUNC.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -14,7 +14,7 @@
 
 /*!
  * \file
- * \author Georg Held <g.held@reading.ac.uk>
+ * \author Georg Held <georg.held@diamond.ac.uk>
  * \brief Header file declaring prototype functions cri_mul(), cri_div(),
  * cri_sqrt(), cri_exp(), cri_expi() and cri_powi() for complex operations.
  */

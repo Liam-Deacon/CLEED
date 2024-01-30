@@ -77,7 +77,7 @@ leed_model *leed_model_init(leed_args *args) {
   CONTROL_MSG(CONTROL, "E_ini = %.1f, E_fin = %.1f, E_stp %.1f\n",
               energy->initial*HART, energy->final*HART, energy->step*HART);
 
-  CONTROL_MSG(CONTROL, "n_set = %d\n", n_set);
+  CONTROL_MSG(CONTROL, "n_set = %lu\n", n_set);
 
   return model;
 }

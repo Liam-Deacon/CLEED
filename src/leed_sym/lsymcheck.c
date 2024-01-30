@@ -48,7 +48,7 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
 
   real faux;
   real vaux[2];
-             
+
 
   if(p_cryst->layers[0].bulk_over == OVER)
   {
@@ -56,7 +56,7 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
     a1y = p_cryst->b[3];
     a2x = p_cryst->b[2];
     a2y = p_cryst->b[4];
- 
+
     n_size = 2*p_cryst->n_layers + 4;
     det = (a1x * a2y - a1y * a2x);
   }
@@ -70,7 +70,7 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
     det = (a1x * a2y - a1y * a2x);
     n_size = 2*p_cryst->n_layers + 4;
   }
- 
+
   #ifdef CONTROL
   if(p_cryst->layers[0].bulk_over == OVER)
   {
@@ -99,8 +99,8 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
   #ifdef CONTROL_X
   for(i_rot = 1; i_rot < n_rot; i_rot++)
   {
-    fprintf(STDCTR, "%d: (%6.3f %6.3f)\n", i_rot, R_n[i_rot][1], R_n[i_rot][2]);
-    fprintf(STDCTR, "    (%6.3f %6.3f)\n",        R_n[i_rot][3], R_n[i_rot][4]);
+    fprintf(STDCTR, "%lu: (%6.3f %6.3f)\n", i_rot, R_n[i_rot][1], R_n[i_rot][2]);
+    fprintf(STDCTR, "    (%6.3f %6.3f)\n",         R_n[i_rot][3], R_n[i_rot][4]);
   }
   #endif
 
@@ -163,29 +163,29 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
           {
             if((i % 2) != 0)
             {
-              fprintf(STDCTR, "(leed_check_rotation_sym): layer%d has no "
+              fprintf(STDCTR, "(leed_check_rotation_sym): layer%lu has no "
                   "rotational symmetry, difn = %e\n", ((i-5)/2), faux);
             }
             else
             {
-              fprintf(STDCTR,"(leed_check_rotation_sym): layer%d has no "
+              fprintf(STDCTR,"(leed_check_rotation_sym): layer%lu has no "
                   "rotational symmetry, difn = %e\n", ((i-4)/2), faux);
             } /* if i % 2 */
 
           } /* end else */
           #endif
-   
+
         } /* if cleed_real_fabs ...*/
 
       } /*for i */
-   
+
       /* reset p_cryst->n_rot when all are okay */
       if(ctrol != 0)
       {
         p_cryst->n_rot = 1;
         n_rot = 1;
       }
-     
+
     }/* if */
 
   }/* for */
@@ -255,8 +255,7 @@ int leed_check_rotation_sym(leed_crystal *p_cryst)
             if(ctrol < p_cryst->layers[i].n_atoms) ctrol = 0;
             else
             {
-              fprintf(STDCTR, "no rotational symmetry for atom%d in layer%d\n",
-                  i_c, i);
+              fprintf(STDCTR, "no rotational symmetry for atom%lu in layer%lu\n", i_c, i);
             }
 
           } /* if ctrol */
@@ -376,8 +375,8 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
       R_m[4] = - R_m[1];
 
       #ifdef CONTROL_X
-      fprintf(STDCTR, "%d: (%6.3f %6.3f)\n", i_mir, R_m[1], R_m[2]);
-      fprintf(STDCTR,"    (%6.3f %6.3f)\n",        R_m[3], R_m[4]);
+      fprintf(STDCTR, "%lu: (%6.3f %6.3f)\n", i_mir, R_m[1], R_m[2]);
+      fprintf(STDCTR, "    (%6.3f %6.3f)\n",         R_m[3], R_m[4]);
       #endif
 
       /* reflect lattice vector */
@@ -429,21 +428,21 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
           {
             fprintf(STDCTR, "(leed_check_mirror_sym): "
                     "no mirror symmetry for lattice vector in case of "
-                    "mirror plane #%d alpha%f , difn = %e\n",
+                    "mirror plane #%ld alpha%f , difn = %e\n",
                     i_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
           }
           else
           {
             if((i % 2) != 0)
             {
-              fprintf(STDCTR, "(leed_check_mirror_sym): layer%d has no mirror "
-                  "symmetry for mirror plane #%d alpha%f , difn = %e\n",
+              fprintf(STDCTR, "(leed_check_mirror_sym): layer%ld has no mirror "
+                  "symmetry for mirror plane #%ld alpha%f , difn = %e\n",
                   ((i-5)/2), n_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
             }
             else
             {
-              fprintf(STDCTR, "(leed_check_mirror_sym): layer%d has no mirror "
-                  "symmetry for mirror plane #%d alpha%f , difn = %e\n",
+              fprintf(STDCTR, "(leed_check_mirror_sym): layer%ld has no mirror "
+                  "symmetry for mirror plane #%ld alpha%f , difn = %e\n",
                   ((i-4)/2), n_mir+1, p_cryst->alpha[i_mir]*RAD_TO_DEG, faux);
             }
           }/* end else */
@@ -529,7 +528,7 @@ int leed_check_mirror_sym(leed_crystal *p_cryst)
             else
             {
               fprintf(STDCTR, "(leed_check_mirror_sym): no mirror symmetry in "
-                  "mirror plane #%d(alpha %f) for atom%d in layer%d\n",
+                  "mirror plane #%ld(alpha %f) for atom%lu in layer%lu\n",
                   i_mir, p_cryst->alpha[i_mir], i_c, i);
             }
 

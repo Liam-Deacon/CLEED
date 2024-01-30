@@ -20,16 +20,16 @@ file contains functions:
  Changes:
 
 NR/16.09.95 - Copy from Num. Rec.
-GH/19.09.95 - BRENT_TOLERANCE defined in "search_def.h" (to 2.e-2 
+GH/19.09.95 - BRENT_TOLERANCE defined in "search_def.h" (to 2.e-2
               from 2.0e-4)
 
 ***********************************************************************/
-#include "search.h"
+#include "csearch.h"
 #include <errno.h>
 
-/* 
-   static variables communicating with 
-   function f1dim 
+/*
+   static variables communicating with
+   function f1dim
 */
 static size_t ncom = 0;
 static cleed_vector *pcom = NULL;
@@ -38,13 +38,13 @@ static cleed_real (*nrfunc)();
 
 void linmin(real *p, real *xi, size_t n, real *fret, real (*func)() )
 {
-	size_t j;
-	real xx, xmin, fx, fb, fa, bx, ax, faux;
+  size_t j;
+  real xx, xmin, fx, fb, fa, bx, ax, faux;
 
-	ncom = n;
-	pcom = cleed_vector_alloc(n);
-	xicom = cleed_vector_alloc(n);
-	nrfunc = func;
+  ncom = n;
+  pcom = cleed_vector_alloc(n);
+  xicom = cleed_vector_alloc(n);
+  nrfunc = func;
 
   if (pcom == NULL) {
     ERROR_MSG("could not allocate memory for pcom\n");
@@ -56,27 +56,27 @@ void linmin(real *p, real *xi, size_t n, real *fret, real (*func)() )
     exit(ENOMEM);
   }
 
-	for (j=0; j<n; j++)
-	{
-		cleed_vector_set(pcom, j, cleed_vector_get(p, j));
-		cleed_vector_set(xicom, j, cleed_vector_get(xi, j));
-	}
+  for (j=0; j<n; j++)
+  {
+    cleed_vector_set(pcom, j, cleed_vector_get(p, j));
+    cleed_vector_set(xicom, j, cleed_vector_get(xi, j));
+  }
 
-	ax = 0.0;
-	xx = 1.0;
-	bx = 2.0;
-	mnbrak(&ax, &xx, &bx, &fa, &fx, &fb, f1dim);
-	*fret = brent(ax, xx, bx, f1dim, BRENT_TOLERANCE, &xmin);
+  ax = 0.0;
+  xx = 1.0;
+  bx = 2.0;
+  mnbrak(&ax, &xx, &bx, &fa, &fx, &fb, f1dim);
+  *fret = brent(ax, xx, bx, f1dim, BRENT_TOLERANCE, &xmin);
 
-	for (j=0; j<n; j++)
-	{
-	  faux = cleed_vector_get(xi, j);
-		cleed_vector_set(xi, j, faux*xmin);
-		cleed_vector_set(p, j, cleed_vector_get(p, j) + faux);
-	}
+  for (j=0; j<n; j++)
+  {
+    faux = cleed_vector_get(xi, j);
+    cleed_vector_set(xi, j, faux*xmin);
+    cleed_vector_set(p, j, cleed_vector_get(p, j) + faux);
+  }
 
-	cleed_vector_free(xicom);
-	cleed_vector_free(pcom);
+  cleed_vector_free(xicom);
+  cleed_vector_free(pcom);
 }
 
 real f1dim(real x)

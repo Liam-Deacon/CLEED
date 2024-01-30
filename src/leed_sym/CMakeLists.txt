@@ -21,8 +21,11 @@ SET(CLEED_SYM_VERSION_MAJOR "${CPACK_PACKAGE_VERSION_MAJOR}")
 SET(CLEED_SYM_VERSION_MINOR "${CPACK_PACKAGE_VERSION_MINOR}")
 SET(CLEED_SYM_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}")
 SET(CLEED_SYM_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
-CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/leed_ver_sym.h.in"
-   "${PROJECT_SOURCE_DIR}/src/include/leed_ver_sym.h" IMMEDIATE @ONLY )
+CONFIGURE_FILE(
+    "${PROJECT_SOURCE_DIR}/src/include/leed_ver_sym.h.in"
+    "${PROJECT_SOURCE_DIR}/src/include/leed_ver_sym.h"
+    @ONLY
+)
 
 ###############################################################################
 # Sources
@@ -35,37 +38,40 @@ SET (cleed_sym_SRCS cleed_sym.c)
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
-    
+
     # configure for windows icon
-    CONFIGURE_FILE ("${cleed_sym_SOURCE_DIR}/res/windows/cleed_sym.rc.in"
-        "${cleed_sym_SOURCE_DIR}/res/windows/cleed_sym.rc" IMMEDIATE @ONLY )       
-        
+    CONFIGURE_FILE(
+        "${cleed_sym_SOURCE_DIR}/res/windows/cleed_sym.rc.in"
+        "${cleed_sym_SOURCE_DIR}/res/windows/cleed_sym.rc"
+        @ONLY
+    )
+
     SET (cleed_sym_SRCS ${cleed_sym_SRCS} res/windows/cleed_sym.rc)
-    
+
     ADD_EXECUTABLE(cleed_sym ${cleed_sym_SRCS})
 
     TARGET_LINK_LIBRARIES(cleed_sym ws2_32 psapi leed m)
-    
+
 ELSE (WIN32)
-    
+
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(cleed_sym MACOSX_BUNDLE ${cleed_sym_SRCS})
             INSTALL(TARGETS cleed_sym BUNDLE DESTINATION ../Applications)
-            
+
             TARGET_LINK_LIBRARIES(cleed_sym leed m)
-            
+
         ELSE(APPLE)
-        
-            ADD_EXECUTABLE(cleed_sym ${cleed_sym_SRCS})  
-            
+
+            ADD_EXECUTABLE(cleed_sym ${cleed_sym_SRCS})
+
             TARGET_LINK_LIBRARIES(cleed_sym leed m)
         ENDIF(APPLE)
-        
+
     ENDIF(UNIX)
-    
+
 ENDIF (WIN32)
 
 INSTALL (TARGETS cleed_sym COMPONENT runtime RUNTIME DESTINATION bin)

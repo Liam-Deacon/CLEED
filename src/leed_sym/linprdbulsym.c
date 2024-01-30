@@ -9,11 +9,11 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
  * Changes:
- *29.09.00 
+ *29.09.00
   file contains function:
 
   leed_inp_read_bul_sym
- 
+
 Changes:
 
 GH/17.08.94 - insert CLEED_REAL_IS_DOUBLE and CLEED_REAL_IS_FLOAT for sscanf.
@@ -57,7 +57,7 @@ GH/29.09.00 - calculate dr2 for dmt input in function leed_inp_debye_temp
 
 /********************************************************************/
 
-int leed_inp_read_bul_sym(leed_crystal **p_bulk_par, 
+int leed_inp_read_bul_sym(leed_crystal **p_bulk_par,
                 leed_phase **p_phs_shifts,
                 char *filename)
 /*********************************************************************
@@ -65,35 +65,35 @@ int leed_inp_read_bul_sym(leed_crystal **p_bulk_par,
 
   DESIGN
 
-  Letters 'e' - 'k' are reserved as identifiers for parameter input 
+  Letters 'e' - 'k' are reserved as identifiers for parameter input
   through function leed_inp_leed_read_par
 
   currently recognized identifier:
-  
+
   'a1','a2','a3': lattice vectors of bulk unit cell
   'b1','b2': superstructure unit cell.
   'c': comment
-  
+
   'm1','m2': superstructure matrix.
   'pb': postion and type of bulk atoms.
   'vi','vr': imag. and real part of optical potential.
 
   FUNCTION CALLS
 
-   - leed_leed_inp_phase
-   - leed_inp_bul_layer
+    - leed_inp_phase
+    - leed_inp_bul_layer
 
   RETURN VALUES
 
     1 if ok.
-   -1 if failed (and EXIT_ON_ERROR is not defined)
+    -1 if failed (and EXIT_ON_ERROR is not defined)
 
 *********************************************************************/
 {
 FILE *inp_stream;
 
 /* input buffers */
-char linebuffer[STRSZ];  
+char linebuffer[STRSZ];
 char phaseinp[STRSZ];
 char whatnext[STRSZ];
 
@@ -103,13 +103,13 @@ int i_com;
 int i_atoms;
 int i_layer;
 int i_plane;                  /*i_plane is only for mirrorplanes
-                                do not use it otherwise */  
+                                do not use it otherwise */
 
 real faux;                    /* dummy variable */
 real a1[4], a2[4], a3[4];     /* vectors: 1=x, 2=y, 3=z, 0 is not used */
 real vaux[4];                 /* dummy vector */
 
-leed_crystal *bulk_par;   /* use *bulk_par instead of the pointer 
+leed_crystal *bulk_par;   /* use *bulk_par instead of the pointer
                                  p_bulk_par */
 
 leed_atom atom_aux;     /* used for sorting atoms */
@@ -122,8 +122,8 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
   If bulk_par or phs_shifts is NULL: allocate memory and copy back to;
 *********************************************************************/
  bulk_par = NULL;
- if (*p_bulk_par == NULL) 
-   bulk_par = *p_bulk_par = 
+ if (*p_bulk_par == NULL)
+   bulk_par = *p_bulk_par =
                 (leed_crystal *)malloc( sizeof(leed_crystal) );
 
 /********************************************************************
@@ -171,7 +171,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 /********************************************************************
   Open and Read input file
 ********************************************************************/
- if( (inp_stream = fopen(filename, "r")) == NULL) 
+ if( (inp_stream = fopen(filename, "r")) == NULL)
  {
 #ifdef ERROR_LOG
    fprintf(STDERR,
@@ -182,12 +182,12 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #else
   return(-1);
 #endif
- } 
+ }
 
 #ifdef CONTROL
  fprintf(STDCTR,"(leed_inp_read_bul): Reading file \"%s\"\n",filename);
 #endif
- while ( fgets(linebuffer, STRSZ, inp_stream) != NULL) 
+ while ( fgets(linebuffer, STRSZ, inp_stream) != NULL)
  {
 #ifdef CONTROL_X
    fprintf(STDCTR,"%s", linebuffer);
@@ -197,13 +197,13 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    switch( *(linebuffer+i_str) )
    {
      case ('a'): case ('A'):
-   /*********************************** 
+   /***********************************
      input of bulk unit cell parameters
    ***********************************/
      {
        switch( *(linebuffer+i_str+1) )
        {
-         case('1'): 
+         case('1'):
          {
 #ifdef CLEED_REAL_IS_DOUBLE
            if( sscanf(linebuffer+i_str+3," %lf %lf %lf", a1+1, a1+2, a1+3) < 2)
@@ -213,7 +213,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #endif
            {
 #ifdef ERROR_LOG
-             fprintf(STDERR, 
+             fprintf(STDERR,
                "*** error (leed_inp_read_bul): nead at least x/y coordinates of a1\n");
 #endif
 #ifdef EXIT_ON_ERROR
@@ -223,10 +223,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #endif
            }
            for(i=1; i<=3; i++) a1[i] /= BOHR;
-           break; 
+           break;
          } /* a1 */
 
-         case('2'): 
+         case('2'):
          {
 #ifdef CLEED_REAL_IS_DOUBLE
            if( sscanf(linebuffer+i_str+3," %lf %lf %lf", a2+1, a2+2, a2+3) < 2)
@@ -234,9 +234,9 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #ifdef CLEED_REAL_IS_FLOAT
            if( sscanf(linebuffer+i_str+3," %f %f %f", a2+1, a2+2, a2+3) < 2)
 #endif
-           { 
+           {
 #ifdef ERROR_LOG
-             fprintf(STDERR, 
+             fprintf(STDERR,
                "*** error (leed_inp_read_bul): nead at least x/y coordinates of a2\n");
 #endif
 #ifdef EXIT_ON_ERROR
@@ -246,10 +246,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #endif
            }
            for(i=1; i<=3; i++) a2[i] /= BOHR;
-           break; 
+           break;
          } /* a2 */
 
-         case('3'): 
+         case('3'):
          {
 #ifdef CLEED_REAL_IS_DOUBLE
            sscanf(linebuffer+i_str+3 ," %lf %lf %lf", a3+1, a3+2, a3+3);
@@ -258,7 +258,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
            sscanf(linebuffer+i_str+3 ," %f %f %f", a3+1, a3+2, a3+3);
 #endif
            for(i=1; i<=3; i++) a3[i] /= BOHR;
-           break; 
+           break;
          } /* a3 */
        }
        break;
@@ -274,7 +274,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
          case('1'):
          {
 #ifdef CLEED_REAL_IS_DOUBLE
-           if( sscanf(linebuffer+i_str+3," %lf %lf", 
+           if( sscanf(linebuffer+i_str+3," %lf %lf",
                (bulk_par->b)+1, (bulk_par->b)+3 ) < 2)
 #endif
 #ifdef CLEED_REAL_IS_FLOAT
@@ -325,21 +325,21 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
      } /* case 'b' */
 
      case ('c'): case ('C'):
-   /*********************************** 
+   /***********************************
      input of comments to be stored
    ***********************************/
      {
-       bulk_par->comments = ( char * * ) realloc( 
-                           bulk_par->comments, (i_com+2) * sizeof(char *) ); 
+       bulk_par->comments = ( char * * ) realloc(
+                           bulk_par->comments, (i_com+2) * sizeof(char *) );
 
        *(bulk_par->comments + i_com) = (char *)calloc(
-            strlen(filename) + strlen(linebuffer) + 2 - i_str, 
+            strlen(filename) + strlen(linebuffer) + 2 - i_str,
             sizeof(char));
        *(bulk_par->comments + i_com+1) = NULL;
 
        sprintf(*(bulk_par->comments + i_com), "(%s): %s",
                filename, linebuffer+i_str+2);
-       
+
        i_com ++;
        break;
      } /* case 'c' */
@@ -354,21 +354,21 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
        {
          case('1'): {
 #ifdef CLEED_REAL_IS_DOUBLE
-           sscanf(linebuffer+i_str+3 ," %lf %lf", 
+           sscanf(linebuffer+i_str+3 ," %lf %lf",
                   bulk_par->m_recip+1, bulk_par->m_recip+2);
 #endif
 #ifdef CLEED_REAL_IS_FLOAT
-           sscanf(linebuffer+i_str+3 ," %f %f", 
+           sscanf(linebuffer+i_str+3 ," %f %f",
                   bulk_par->m_recip+1, bulk_par->m_recip+2);
 #endif
            break; }
          case('2'): {
 #ifdef CLEED_REAL_IS_DOUBLE
-           sscanf(linebuffer+i_str+3 ," %lf %lf", 
+           sscanf(linebuffer+i_str+3 ," %lf %lf",
                   bulk_par->m_recip+3, bulk_par->m_recip+4);
 #endif
 #ifdef CLEED_REAL_IS_FLOAT
-           sscanf(linebuffer+i_str+3 ," %f %f", 
+           sscanf(linebuffer+i_str+3 ," %f %f",
                   bulk_par->m_recip+3, bulk_par->m_recip+4);
 #endif
            break; }
@@ -377,7 +377,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
      } /* case 'm' */
 
      case ('p'): case ('P'):
-   /*********************************** 
+   /***********************************
      input of atom positions and types
      for bulk through 'pb':
    ***********************************/
@@ -395,7 +395,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
          break;
        }
 
-       atoms_rd = ( leed_atom *) realloc( 
+       atoms_rd = ( leed_atom *) realloc(
                    atoms_rd, (i_atoms+2) * sizeof(leed_atom) );
 
 #ifdef CLEED_REAL_IS_DOUBLE
@@ -404,22 +404,22 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #ifdef CLEED_REAL_IS_FLOAT
        iaux = sscanf(linebuffer+i_str+3 ," %s %f %f %f %s %f %f %f",
 #endif
-              phaseinp, 
-              atoms_rd[i_atoms].pos+1, 
-              atoms_rd[i_atoms].pos+2, 
+              phaseinp,
+              atoms_rd[i_atoms].pos+1,
+              atoms_rd[i_atoms].pos+2,
               atoms_rd[i_atoms].pos+3,
               whatnext, vaux+1, vaux+2, vaux+3);
 
        for(i=1; i<=3; i++) atoms_rd[i_atoms].pos[i] /= BOHR;
-       
+
      /**********************************
        Input of phaseshifts and displacements due to thermal vibrations:
 
        Eventually, the vector vaux will contain
 
          vaux[0] = <dr^2> = <dx^2> + <dy^2> + <dz^2>;
-         vaux[1] = sqrt(<dx^2>), 
-         vaux[2] = sqrt(<dy^2>), 
+         vaux[1] = sqrt(<dx^2>),
+         vaux[2] = sqrt(<dy^2>),
          vaux[3] = sqrt(<dz^2>),
 
        In the case of isotropic vibrations
@@ -448,11 +448,11 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
              vaux[0] = SQUARE(vaux[1]) + SQUARE(vaux[2]) + SQUARE(vaux[3]);
            }
 
-     /* 
+     /*
         Input of Debye temperature, atomic mass and temperature:
           vaux[1] = Debye temperature
           vaux[2] = atomic mass
-          vaux[3] = temperature (has to be specified only for the first atom; 
+          vaux[3] = temperature (has to be specified only for the first atom;
                     if not specified, DEF_TEMP K is used)
 
           <r^2> is calculated in leed_inp_debye_temp
@@ -474,7 +474,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
              vaux[1] = vaux[2] = vaux[3] = cleed_real_sqrt(vaux[0])/SQRT3;
 
 #ifdef CONTROL_X
-             fprintf(STDCTR, "(leed_inp_read_bul): temp = %.1f dr = %.3f\n", 
+             fprintf(STDCTR, "(leed_inp_read_bul): temp = %.1f dr = %.3f\n",
              bulk_par->temp, vaux[1] * SQRT3*BOHR);
 #endif
            }
@@ -500,7 +500,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
      } /* case 'p' */
 
      case ('v'): case ('V'):
-   /*********************************** 
+   /***********************************
      input of optical potentials
    ***********************************/
      {
@@ -521,7 +521,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 #ifdef WARNING_LOG
              fprintf(STDWAR, "* warning (leed_inp_read_bul):");
              fprintf(STDWAR,
-               "Vi must be positive, use the negative value of input %.1f\n", 
+               "Vi must be positive, use the negative value of input %.1f\n",
                bulk_par->vi*HART);
 #endif
            }
@@ -561,11 +561,11 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
       case('r'): case('R'):
         {
 #ifdef CLEED_REAL_IS_DOUBLE
-           if( sscanf(linebuffer+i_str+3,"%d %lf %lf",
+           if( sscanf(linebuffer+i_str+3,"%lu %lf %lf",
                &(bulk_par->n_rot),(bulk_par->rot_axis)+1,(bulk_par->rot_axis)+2) < 3)
 #endif
 #ifdef CLEED_REAL_IS_FLOAT
-           if( sscanf(linebuffer+i_str+3,"%d %f %f",
+           if( sscanf(linebuffer+i_str+3,"%lu %f %f",
                &(bulk_par->n_rot),(bulk_par->rot_axis)+1,(bulk_par->rot_axis)+2) < 3)
 #endif
            {
@@ -585,18 +585,18 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
       case('m'): case('M'):
       {
-   /**allocate**/  
+   /**allocate**/
          i_plane++;
          bulk_par->m_plane = (real *)realloc
                  (bulk_par->m_plane , (2*i_plane + 1) * sizeof(real));
          bulk_par->alpha = (real *)realloc
                  (bulk_par->alpha , (i_plane + 1) * sizeof(real));
- 
+
          i = 2 *i_plane -1;
-         j = 2 *i_plane -2; 
+         j = 2 *i_plane -2;
 #ifdef CLEED_REAL_IS_DOUBLE
          if(sscanf(linebuffer+i_str+3," %lf %lf ",
-            (bulk_par->m_plane)+j ,(bulk_par->m_plane)+i) < 2) 
+            (bulk_par->m_plane)+j ,(bulk_par->m_plane)+i) < 2)
 #endif
 #ifdef CLEED_REAL_IS_FLOAT
          if(sscanf(linebuffer+i_str+i," %f %f ",
@@ -613,9 +613,9 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
              return(-1);
 #endif
          }
-         bulk_par->m_plane[j] /= BOHR; 
+         bulk_par->m_plane[j] /= BOHR;
          bulk_par->m_plane[i] /= BOHR;
-         bulk_par->m_plane[i+1] = F_END_OF_LIST; 
+         bulk_par->m_plane[i+1] = F_END_OF_LIST;
          bulk_par->n_mir = i_plane;
 
          break;
@@ -630,22 +630,22 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
 
    /***********************************
-     comments not to be stored and 
+     comments not to be stored and
      new line characters
    ***********************************/
-     case ('#'): case ('\n'): case('\r'): 
+     case ('#'): case ('\n'): case('\r'):
    /***********************************
      identifiers used in leed_inp_leed_read_par
    ***********************************/
-     case ('e'): case ('E'): 
-     case ('f'): case ('F'): 
-     case ('i'): case ('I'): 
-     case ('l'): case ('L'): 
+     case ('e'): case ('E'):
+     case ('f'): case ('F'):
+     case ('i'): case ('I'):
+     case ('l'): case ('L'):
      { break; }
 
-     default: 
+     default:
    /***********************************
-     default: print warning for not 
+     default: print warning for not
               recognized key words
    ***********************************/
      {
@@ -654,13 +654,13 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
   "* warning (leed_inp_read_bul): could not interpret line \n\t%s\t(in file \"%s\")\n",
        linebuffer, filename);
 #endif
-       break; 
+       break;
      }
    } /* switch linebuffer */
  }   /* while: read input file */
- 
+
  fclose(inp_stream);
-  
+
 /*******************************************
  END OF INPUT
  SORT the mirrorplanes according to the angle
@@ -696,7 +696,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    fprintf(STDOUT,"alpha%d = %f\n",i,bulk_par->alpha[i]/ DEG_TO_RAD);
    fprintf(STDOUT,"mirrorplane (%f %f)\n\n",bulk_par->m_plane[2* i]*BOHR,
                                             bulk_par->m_plane[2*i+1]*BOHR);
- } 
+ }
 
 /************************************************************************
  Check the number of bulk atoms. Exit if zero
@@ -705,7 +705,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  {
 #ifdef ERROR_LOG
    fprintf(STDERR,
-   "*** error (leed_inp_read_bul): could not find any bulk atoms (i_atoms = %d)\n", 
+   "*** error (leed_inp_read_bul): could not find any bulk atoms (i_atoms = %d)\n",
    i_atoms);
 #endif
 #ifdef EXIT_ON_ERROR
@@ -716,10 +716,10 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  }
 
 /************************************************************************
- Make shure that the basis vectors for the bulk unit cell specified 
+ Make shure that the basis vectors for the bulk unit cell specified
  through a1, a2, a3 form a right-handed system with a3 pointing into
  the crystal (i.e. a3[3] < 0).
- If not: change the directions and the order of a1, a2, a3. 
+ If not: change the directions and the order of a1, a2, a3.
 
  Store a1 and a2 and their inverse values in bul_par.a / bul_par.a_1
  2x2 - matrices are stored as:  m[1]  m[2]
@@ -742,9 +742,9 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  }
 
 /* check the direction of a3 */
- if( a3[3] > 0.0 ) a3[3] = - a3[3]; 
+ if( a3[3] > 0.0 ) a3[3] = - a3[3];
 
-/* 
+/*
    Check the angle between a1 and a2 (1: must be >= pi/2, i.e. a1*a2 < 0).
    if not: take a1 and -a2 as basic vectors and modify transformation matrix.
 */
@@ -754,8 +754,8 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    bulk_par->m_trans[2] = - bulk_par->m_trans[2];
    bulk_par->m_trans[4] = - bulk_par->m_trans[4];
  }
-/* 
-   Check the angle between a1 and a2 (2: must be < pi, i.e. a1*a2 > 0) 
+/*
+   Check the angle between a1 and a2 (2: must be < pi, i.e. a1*a2 > 0)
    if not: exchange a1 and a2 and modify transformation matrix.
 */
  if( (a1[1] * a2[2] - a1[2] * a2[1]) < 0.0)
@@ -763,11 +763,11 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    faux = a2[1]; a2[1] = a1[1]; a1[1] = faux;
    faux = a2[2]; a2[2] = a1[2]; a1[2] = faux;
 
-   faux = bulk_par->m_trans[1]; 
+   faux = bulk_par->m_trans[1];
    bulk_par->m_trans[1] = bulk_par->m_trans[2];
    bulk_par->m_trans[2] = faux;
 
-   faux = bulk_par->m_trans[3]; 
+   faux = bulk_par->m_trans[3];
    bulk_par->m_trans[3] = bulk_par->m_trans[4];
    bulk_par->m_trans[4] = faux;
  }
@@ -788,7 +788,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
 /************************************************************************
  Superstructure:
- 
+
  - The superstructure matrix in the input files is defined with respect to
    the unmodified unit cell vectors a:
    b = m_super * a => b = m_super * m_trans * a_prg
@@ -799,11 +799,11 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 
  if( cleed_real_hypot(bulk_par->b[1], bulk_par->b[3]) < GEO_TOLERANCE)
  /*
-   There was no input of superstructure lattice vectors 
+   There was no input of superstructure lattice vectors
    => use matrix to calculate them.
  */
  {
-   bulk_par->m_super[1] = bulk_par->m_recip[1] * bulk_par->m_trans[1] + 
+   bulk_par->m_super[1] = bulk_par->m_recip[1] * bulk_par->m_trans[1] +
                           bulk_par->m_recip[2] * bulk_par->m_trans[3];
    bulk_par->m_super[2] = bulk_par->m_recip[1] * bulk_par->m_trans[2] +
                           bulk_par->m_recip[2] * bulk_par->m_trans[4];
@@ -811,12 +811,12 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
                           bulk_par->m_recip[4] * bulk_par->m_trans[3];
    bulk_par->m_super[4] = bulk_par->m_recip[3] * bulk_par->m_trans[2] +
                           bulk_par->m_recip[4] * bulk_par->m_trans[4];
-/* 
-   Calculate superstructure lattice vectors b_t = m*a_t 
+/*
+   Calculate superstructure lattice vectors b_t = m*a_t
      b1x = b[1], b2x = b[2]
      b1y = b[3], b2y = b[4]
 */
- 
+
    bulk_par->b[1] = bulk_par->m_super[1] * bulk_par->a[1] +
                     bulk_par->m_super[2] * bulk_par->a[2];
    bulk_par->b[3] = bulk_par->m_super[1] * bulk_par->a[3] +
@@ -850,14 +850,14 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    Check the matrix for noninteger elements
 */
 
- if( 
+ if(
   (cleed_real_fabs(bulk_par->m_super[1]-cleed_real_nint(bulk_par->m_super[1])) > GEO_TOLERANCE) ||
   (cleed_real_fabs(bulk_par->m_super[2]-cleed_real_nint(bulk_par->m_super[2])) > GEO_TOLERANCE) ||
   (cleed_real_fabs(bulk_par->m_super[3]-cleed_real_nint(bulk_par->m_super[3])) > GEO_TOLERANCE) ||
   (cleed_real_fabs(bulk_par->m_super[4]-cleed_real_nint(bulk_par->m_super[4])) > GEO_TOLERANCE) )
  {
 #ifdef ERROR_LOG
-  fprintf(STDERR, 
+  fprintf(STDERR,
           "*** error (leed_inp_read_bul): superstructure is not commensurate \n");
 #endif
 #ifdef EXIT_ON_ERROR
@@ -886,16 +886,16 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  }
 
 #ifdef CONTROL_X
-   fprintf(STDCTR,"M_super: %5.2f %5.2f\n", 
+   fprintf(STDCTR,"M_super: %5.2f %5.2f\n",
                    bulk_par->m_super[1], bulk_par->m_super[2]);
-   fprintf(STDCTR,"         %5.2f %5.2f\n", 
+   fprintf(STDCTR,"         %5.2f %5.2f\n",
                    bulk_par->m_super[3], bulk_par->m_super[4]);
    fprintf(STDCTR,"b1: %5.2f %5.2f\n", bulk_par->b[1]*BOHR,bulk_par->b[3]*BOHR);
    fprintf(STDCTR,"b2: %5.2f %5.2f\n", bulk_par->b[2]*BOHR,bulk_par->b[4]*BOHR);
 #endif
 
-/* 
-   area of superstructure unit cell in multiples of the (1x1) unit cell 
+/*
+   area of superstructure unit cell in multiples of the (1x1) unit cell
    = det(m_super)
 */
  faux = bulk_par->m_super[1] * bulk_par->m_super[4] -
@@ -911,17 +911,17 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  bulk_par->m_recip[4] = +faux * bulk_par->m_super[1];
 
 #ifdef CONTROL_X
-   fprintf(STDCTR,"M_recip: %5.2f %5.2f\n", 
+   fprintf(STDCTR,"M_recip: %5.2f %5.2f\n",
                    bulk_par->m_recip[1], bulk_par->m_recip[2]);
-   fprintf(STDCTR,"         %5.2f %5.2f\n", 
+   fprintf(STDCTR,"         %5.2f %5.2f\n",
                    bulk_par->m_recip[3], bulk_par->m_recip[4]);
    fprintf(STDCTR,"area_sup: %5.2f\n", bulk_par->rel_area_sup);
 #endif
 
-/* 
+/*
   Calculate reciprocal superstructure vectors: b_1 = 2PI * b^-1
     b*1x = b_1[1], b*1y = b_1[2]
-    b*2x = b_1[3], b*2y = b_1[4] 
+    b*2x = b_1[3], b*2y = b_1[4]
 */
 
  faux = 2*PI/(bulk_par->b[1]*bulk_par->b[4] - bulk_par->b[2]*bulk_par->b[3]);
@@ -934,7 +934,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
 /************************************************************************
  subtract the coordinates of the rotationaxis(i.e.............mirrorplanes)
  from the atomic positions
- Move all atomic positions specified in atoms.pos into the 2-dim bulk unit 
+ Move all atomic positions specified in atoms.pos into the 2-dim bulk unit
  cell specified through a1 and a2:
 
  The vector x = A_1*pos must only have components between 0 and 1.
@@ -946,28 +946,28 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    atoms_rd[i].pos[1] -= bulk_par->rot_axis[1];
    atoms_rd[i].pos[2] -= bulk_par->rot_axis[2];
 
-   vaux[1] = (atoms_rd[i].pos[1] * bulk_par->a_1[1] + 
+   vaux[1] = (atoms_rd[i].pos[1] * bulk_par->a_1[1] +
               atoms_rd[i].pos[2] * bulk_par->a_1[2]) / (2. * PI);
-   vaux[2] = (atoms_rd[i].pos[1] * bulk_par->a_1[3] + 
+   vaux[2] = (atoms_rd[i].pos[1] * bulk_par->a_1[3] +
               atoms_rd[i].pos[2] * bulk_par->a_1[4]) / (2. * PI);
-   
+
    if( vaux[1] < - 0.0001) iaux = (int) vaux[1] - 1;
    else              iaux = (int) vaux[1];
-   
+
    atoms_rd[i].pos[1] -= iaux*bulk_par->a[1] ;
    atoms_rd[i].pos[2] -= iaux*bulk_par->a[3] ;
-  
+
 
    if( vaux[2] < - 0.0001) iaux = (int) vaux[2] - 1;
    else              iaux = (int) vaux[2];
- 
+
    atoms_rd[i].pos[1] -= iaux*bulk_par->a[2] ;
    atoms_rd[i].pos[2] -= iaux*bulk_par->a[4] ;
-  
- } 
+
+ }
 
 /************************************************************************
-  Sort the atoms specified through atoms.pos according to their z 
+  Sort the atoms specified through atoms.pos according to their z
   coordinates (largest z first).
 *************************************************************************/
 
@@ -997,9 +997,9 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
       fprintf(STDWAR,
       "                       bulk unit cell and will not be considered:\n");
       for(j = i; j < i_atoms; j ++)
-        fprintf(STDWAR," %s \t %7.4f  %7.4f  %7.4f\n", phaseinp, 
-                        atoms_rd[j].pos[1]*BOHR, 
-                        atoms_rd[j].pos[2]*BOHR, 
+        fprintf(STDWAR," %s \t %7.4f  %7.4f  %7.4f\n", phaseinp,
+                        atoms_rd[j].pos[1]*BOHR,
+                        atoms_rd[j].pos[2]*BOHR,
                         atoms_rd[j].pos[3]*BOHR);
 #endif
       break;
@@ -1008,9 +1008,9 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  i_atoms = i;
  atoms_rd[i_atoms].type = I_END_OF_LIST;
  bulk_par->n_atoms = i_atoms;
- 
+
 /************************************************************************
-   ATTENTION 
+   ATTENTION
  - Distribute the atoms to layers.
  - Find the minimum interlayer distance.
  - in the function leed_leed_inp_bul_layer_sym the symmetry is tested,so
@@ -1031,15 +1031,15 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
   exit(0);
 #endif
  }
- 
+
  i_layer = i_layer*1; /* remove unused warning */
- 
+
  free(atoms_rd);
 
  bulk_par->dmin = cleed_real_fabs(bulk_par->layers[0].vec_from_last[3]);
  for(i=0; i < bulk_par->n_layers - 1 /* origin is not relevant */; i++)
  {
-   bulk_par->dmin = 
+   bulk_par->dmin =
             MIN(bulk_par->dmin, cleed_real_fabs(bulk_par->layers[i].vec_to_next[3]) );
  }
 
@@ -1050,7 +1050,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
   second number shows rotationaxe (2-fold,3-fold,4-fold)
   third number shows mirrorplanes (1,2,3,4)
 *************************************************************************/
- vaux[1] = cleed_real_atan2(bulk_par->b[3],bulk_par->b[1]); 
+ vaux[1] = cleed_real_atan2(bulk_par->b[3],bulk_par->b[1]);
  vaux[2] = cleed_real_atan2(bulk_par->b[4],bulk_par->b[2]);
  faux = cleed_real_fabs(vaux[1] - vaux[2]);
 
@@ -1066,13 +1066,13 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
      bulk_par->symmetry = 300 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
   }
 
-  else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE && 
+  else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE &&
      cleed_real_fabs(vaux[1] - vaux[2]) < GEO_TOLERANCE)
   {
     bulk_par->symmetry = 400 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
-  }   
- 
-  else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE && 
+  }
+
+  else if(cleed_real_fabs(vaux[0]) < GEO_TOLERANCE &&
      cleed_real_fabs(vaux[1] - vaux[2]) > GEO_TOLERANCE)
   {
     bulk_par->symmetry = 200 + 10 * bulk_par->n_mir +  bulk_par->n_rot;
@@ -1082,7 +1082,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
   {
     bulk_par->symmetry = 100 + 10 * bulk_par->n_mir + bulk_par->n_rot;
   }
- } 
+ }
 
  else
  {
@@ -1093,12 +1093,12 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
  switch(bulk_par->symmetry)
  {
    case NOSYM:
-   { 
+   {
      fprintf(STDOUT,"\n(leed_inp_read_bul)SYMMETRY :\tTHE STRUCTURE HAS NO SYMMETRY\n\n");
       break;
    }
    case MONO_2ROT:
-   { 
+   {
      fprintf(STDOUT,"\n(leed_inp_read_bul)SYMMETRY :\tTHE MONOCLINE STRUCTURE HAS ROTATIONSYMMETRY 2!\n\n");
      break;
    }
@@ -1108,22 +1108,22 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
      break;
    }
    case REC_2ROT:
-   { 
+   {
      fprintf(STDOUT,"\n(leed_inp_read_bul)SYMMETRY :\tTHE RECTANGULAR STRUCTURE HAS ROTATIONSYMMETRY 2!\n\n");
      break;
    }
    case REC_1MIR:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE RECTANGULAR STRUCTURE HAS ONE MIRRORPLANE\n\n");
      break;
    }
    case REC_2MIR:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE RECTANGULAR STRUCTURE HAS TWO MIRRORPLANES\n\n");
      break;
    }
    case HEX_3ROT:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE HEXAGONAL STRUCTURE HAS ROTATIONSYMMETRY 3!\n\n");
      break;
    }
@@ -1134,12 +1134,12 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    }
 
    case HEX_3MIR:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE HEXAGONAL STRUCTURE HAS THREE MIRRORPLANES\n\n");
      break;
    }
    case SQ_2ROT:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE SQUARE STRUCTURE HAS ROTATIONSYMMETRY 2! \n\n");
      break;
    }
@@ -1149,17 +1149,17 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
      break;
    }
    case SQ_1MIR:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE SQUARE STRUCTURE HAS ONE MIRRORPLANE \n\n");
      break;
    }
    case SQ_2MIR:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE SQUARE STRUCTURE HAS TWO MIRRORPLANES\n\n");
      break;
    }
    case SQ_4MIR:
-   { 
+   {
      fprintf(STDOUT,"(leed_inp_read_bul)SYMMETRY :\tTHE SQUARE STRUCTURE HAS FOUR MIRRORPLANES\n\n");
      break;
    }
@@ -1171,7 +1171,7 @@ leed_atom *atoms_rd;    /* this vector of structure atom_str is
    }
 
  }/* switch */
-   
+
 #endif
 
 /************************************************************************

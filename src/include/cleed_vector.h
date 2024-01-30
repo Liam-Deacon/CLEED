@@ -3,7 +3,7 @@
  *
  *  Copyright (C) 2013-2015 Liam Deacon <liam.m.deacon@gmail.com>
  *
- *  Licensed under GNU General Public License 3.0 or later. 
+ *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
@@ -27,10 +27,6 @@
 #include "cleed_real.h"
 #include "cleed_complex.h"
 
-#if USE_GSL
-#include <gsl/gsl_vector.h>
-#endif
-
 #if !__GNUC__
 #define __attribute__(x) /* empty */
 #endif
@@ -40,7 +36,9 @@ namespace cleed {
 #endif
 
 
-#if USE_GSL
+#if USE_GSL == 1
+
+#include <gsl/gsl_vector.h>
 
 # if CLEED_REAL_IS_FLOAT
 
@@ -75,7 +73,7 @@ typedef gsl_vector_complex cleed_vector_complex;
 #define CLEED_VECTOR_COMPLEX_ALLOC(i)         gsl_vector_complex_calloc((i))
 #define CLEED_VECTOR_COMPLEX_FREE(v)          gsl_vector_complex_free((v)
 
-# endif
+# endif /* CLEED_REAL_IS_FLOAT */
 
 # if CLEED_REAL_IS_FLOAT
 
@@ -156,7 +154,7 @@ cleed_vector_complex_alloc(size_t n)
 __attribute__((nonnull))
 static inline void cleed_vector_complex_free(cleed_vector_complex *v)
 {
-  if (v != NULL) free(v);
+  if (v != NULL) { free(v); }
   v = NULL;
 }
 
@@ -218,7 +216,7 @@ static inline cleed_vector *cleed_vector_alloc(size_t n)
 __attribute__((nonnull))
 static inline void cleed_vector_free(cleed_vector *v)
 {
-  gsl_vector_free(n);
+  gsl_vector_free(v);
 }
 
 /*!
@@ -246,7 +244,7 @@ __attribute__((nonnull))
 static inline void
 cleed_vector_set(cleed_vector *v, size_t index, cleed_real value)
 {
-  v[index] = value;
+  gsl_vector_set(v, index, value);
 }
 
 /* now the same for complex vectors */
@@ -272,7 +270,8 @@ __attribute__((nonnull))
 static inline void
 cleed_vector_complex_free(cleed_vector_complex *v)
 {
-  if (v != NULL) free(v); v = NULL;
+  if (v != NULL) { free(v); }
+  v = NULL;
 }
 
 /*!
@@ -302,8 +301,7 @@ cleed_vector_complex_set(cleed_vector_complex *v,
                          size_t index,
                          cleed_complex value)
 {
-  v[2*index] = value[0];
-  v[2*index + 1] = value[1];
+  gsl_vector_complex_set(v, index, value);
 }
 
 #   endif /* __STDC_VERSION__ */
@@ -319,7 +317,7 @@ typedef cleed_real cleed_vector_complex;
 # define CLEED_VECTOR_GET(v, i)        ( (v)[(i)] )
 # define CLEED_VECTOR_SET(v, i, x)     do { (v)[(i)] = (x); } while(0)
 
-# define CLEED_VECTOR_COMPLEX_ALLOC(n)         ( (cleed_vector*)calloc((n), sizeof(cleed_vector)) )
+# define CLEED_VECTOR_COMPLEX_ALLOC(n)         ( (cleed_vector*)calloc((2*n), sizeof(cleed_vector)) )
 # define CLEED_VECTOR_COMPLEX_FREE(v)          (free((v)))
 # define CLEED_VECTOR_COMPLEX_GET(v, i)        ( (v)[(i)] )
 # define CLEED_VECTOR_COMPLEX_SET(v, i, x)     do{ (v)[2*(i)] = (x)[0]; (v)[2*(i) + 1] = (x)[0]; }while(0)
@@ -344,10 +342,9 @@ static inline cleed_vector *cleed_vector_alloc(size_t n)
  *
  * \param[in,out] v Pointer to vector to be freed.
  */
-__attribute__((nonnull))
 static inline void cleed_vector_free(cleed_vector *v)
 {
-  if (v != NULL) free(v); v = NULL;
+  if (v != NULL) { free(v); } v = NULL;
 }
 
 /*!
@@ -400,7 +397,7 @@ __attribute__((nonnull))
 static inline void
 cleed_vector_complex_free(cleed_vector_complex *v)
 {
-  if (v != NULL) free(v); v = NULL;
+  if (v != NULL) { free(v); } v = NULL;
 }
 
 /*!

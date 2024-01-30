@@ -1,9 +1,9 @@
 /*********************************************************************
-  GH/27.09.00 
+  GH/27.09.00
   file contains functions:
 
   leed_ms_compl_sym           (03.02.95)
-     Transformation of the multiple scattering matrix from angular 
+     Transformation of the multiple scattering matrix from angular
      momentum space into k-space.
 
  Changes:
@@ -16,7 +16,7 @@
                replace matrix array Tii by pointer p_Tii.
                find smallest l_max necessary.
  GH/04.08.95 - order atoms such that the most populated plane comes first.
- GH/07.08.95 - perform matrix inversion by partitioning (function 
+ GH/07.08.95 - perform matrix inversion by partitioning (function
                ms_partinv instead of matinv).
  WB/04.05.98 - copy lmscompl.c
                input sum over equivalent beams
@@ -41,7 +41,7 @@
 #ifdef CPUTIME
 #define CTIME(x) leed_cpu_time(STDCPU,x)
 #else
-#define CTIME(x) 
+#define CTIME(x)
 #endif
 
 #ifndef GEO_TOLERANCE          /* should be defined in "leed_def.h" */
@@ -57,42 +57,42 @@
 
 
 int leed_ms_compl_sym( mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
-                 leed_var *v_par, 
+                 leed_var *v_par,
                  leed_layer * layer,
                  leed_beam * beams )
 
 /************************************************************************
- 
+
   Calculate scattering matrix for composite layer (combined space method)
 
  INPUT:
 
-   mat * p_Tpp, p_Tmm, p_Rpm, p_Rmp - (output) pointers to composite layer 
+   mat * p_Tpp, p_Tmm, p_Rpm, p_Rmp - (output) pointers to composite layer
               diffraction matrices in k-space.
               Tpp  k(+) -> k(+) (transmission matrix)
               Tmm  k(-) -> k(-) (transmission matrix)
               Rpm  k(-) -> k(+) (reflection matrix)
               Rmp  k(+) -> k(-) (reflection matrix)
 
-   leed_var v_par - (input) parameters which vary during the energy 
-              loop. Used: k_in    (parallel components of the incoming beam), 
-                          l_max   (max. l quantum number), 
-                          tl      (atomic scattering factors), 
-                          epsilon (smallesti relative wave amplitude to 
+   leed_var v_par - (input) parameters which vary during the energy
+              loop. Used: k_in    (parallel components of the incoming beam),
+                          l_max   (max. l quantum number),
+                          tl      (atomic scattering factors),
+                          epsilon (smallesti relative wave amplitude to
                                    be considered).
-   
-   leed_layer * layer - (input) list containing all relevant 
+
+   leed_layer * layer - (input) list containing all relevant
               information about the composite layer. Used in this function:
 
               int natoms: number of atoms in the layer.
-              leed_atom * atoms: positions, and scattering properties 
+              leed_atom * atoms: positions, and scattering properties
                      of all atoms.
               real a_lat[5]: lattice vectors:
                      a_lat[1] = a1_x, a_lat[2] = a2_x,
                      a_lat[3] = a1_y, a_lat[4] = a2_y;
               real rel_area: area of the unit cell relative to 1x1.
 
-   leed_beam * beams - (input) additional information about the k 
+   leed_beam * beams - (input) additional information about the k
               vectors involved (in this case: (A kz)^-1).
               The order of beams must be equal to the first dimension of
               Ykl (not checked).
@@ -119,7 +119,7 @@ int leed_ms_compl_sym( mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
        z coordinate (atom No. n_atoms-1):
 
  FUNCTION CALLS
-  
+
   matarralloc
   matalloc
   matfree
@@ -127,14 +127,14 @@ int leed_ms_compl_sym( mat *p_Tpp, mat *p_Tmm, mat *p_Rpm, mat *p_Rmp,
   matins
   matinv
   matmul
-  
+
   leed_ms_lsum_ii
   leed_ms_lsum_ij
   leed_ms_tmat_ii
   leed_ms_tmat_ij
 
   ms_partinv
-  
+
  RETURN VALUES:
 
   1 if o.k.
@@ -147,7 +147,7 @@ int off_row, off_col;
 
 int l_max, l_max_2;
 int i_type, n_type, l_type , i_layer ;      /**** new  l_type ***/
-int n_atoms, i_atoms, j_atoms; 
+int n_atoms, i_atoms, j_atoms;
 int n_beams, i_beams, k, l, i_c;            /**new m, i_beams, i_r ,i_c**/
 int n_plane;
 
@@ -169,7 +169,7 @@ mat Llm_ij, Llm_ji;             /* interlayer lattice sums */
 mat Maux, Mbg, Mark;            /* dummy matrices */
 mat L_p, L_m, R_p, R_m;         /* dummy matrices */
 
-mat Tpp, Tmm, Rpm, Rmp;         /* Layer diffraction matrices in k-space 
+mat Tpp, Tmm, Rpm, Rmp;         /* Layer diffraction matrices in k-space
                                    will be copied to output */
 mat * p_Tii;                    /* Array of Bravais layer scattering matrices */
 
@@ -189,7 +189,7 @@ mat * p_Tii;                    /* Array of Bravais layer scattering matrices */
 
  CTIME("(leed_ms_compl): start of function\t\t");
 
-/********************************************************************** 
+/**********************************************************************
  Check the validity of input matrices p_T/R
  iaux is used as error flag
 **********************************************************************/
@@ -225,7 +225,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 #endif
   }
 
-/********************************************************************** 
+/**********************************************************************
  Prepare Calculation:
   (i) Allocate memory for array atoms and copy the relevant information
       into the list.
@@ -243,12 +243,12 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
  Rmp = *p_Rmp;
 
 /* find number of beams */
- for(n_beams = 0; 
+ for(n_beams = 0;
      ! IS_EQUAL_REAL((beams + n_beams)->k_par, F_END_OF_LIST); n_beams ++);
 
-/* 
-   (i) Copy layer->atoms to atoms, 
-       find max number of atom types and outer-most z coordinates 
+/*
+   (i) Copy layer->atoms to atoms,
+       find max number of atom types and outer-most z coordinates
        find maximum l necessary for all atom types
 */
 
@@ -269,7 +269,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    (atoms+i_atoms)->pos[1]  = (layer->atoms+i_atoms)->pos[1];
    (atoms+i_atoms)->pos[2]  = (layer->atoms+i_atoms)->pos[2];
    (atoms+i_atoms)->pos[3]  = (layer->atoms+i_atoms)->pos[3];
-   
+
 /* find n_type and z_min/z_max */
    n_type = MAX( (atoms+i_atoms)->type, n_type);
 
@@ -297,12 +297,12 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
  l_max_2 = (l_max+1)*(l_max+1);
 
 #ifdef CONTROL_X
- fprintf(STDCTR,"(leed_ms_compl_sym): l_max = %d, No of beams = %d, No of atoms = %d\n", 
+ fprintf(STDCTR,"(leed_ms_compl_sym): l_max = %d, No of beams = %d, No of atoms = %d\n",
          l_max, n_beams, n_atoms);
  fprintf(STDCTR,"(leed_ms_compl_sym): before sorting:\n");
 #endif
 
-/* (ii)a 
+/* (ii)a
    Find plane containing most atoms
 */
  z_plane = (atoms+0)->pos[3];
@@ -313,11 +313,11 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    iaux = 0;
    for(j_atoms = 0; j_atoms < n_atoms; j_atoms ++)
    {
-     if( cleed_real_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] ) 
+     if( cleed_real_fabs( (atoms+j_atoms)->pos[3] - (atoms+i_atoms)->pos[3] )
          < GEO_TOLERANCE )
      { iaux ++; }
    }    /* for j_atoms */
-   
+
    if(iaux > n_plane)
    {
      n_plane = iaux;
@@ -331,8 +331,8 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 #endif
  }    /* for i_atoms */
 
-/* (ii)b 
-   Move atoms of the most populated plane to the front of atoms list 
+/* (ii)b
+   Move atoms of the most populated plane to the front of atoms list
 */
  for(i_atoms = 0, j_atoms = 0; i_atoms < n_atoms; i_atoms ++)
  {
@@ -344,7 +344,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
        iaux = (atoms+i_atoms)->type;
        (atoms+i_atoms)->type = (atoms+j_atoms)->type;
        (atoms+j_atoms)->type = iaux;
-  
+
        for(iaux = 1; iaux <= 3; iaux ++)
        {
          faux_r = (atoms+i_atoms)->pos[iaux];
@@ -368,7 +368,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
  }  /* for i_atoms */
 #endif
 
-/********************************************************************** 
+/**********************************************************************
   Create Bravais layer scattering matrices Tii
   - Allocate a matrix array p_Tii n_type long (max. number of different atoms)
   - Calculate lattice sum for a single Bravais lattice (stored in L_ij).
@@ -390,7 +390,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
  }
  else
  {
-   for(i_type = 0; i_type < n_type; i_type ++) 
+   for(i_type = 0; i_type < n_type; i_type ++)
    {
      p_Tii[i_type] = NULL;
    }
@@ -403,12 +403,12 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 /* Calculate Bravais lattice sum (only once) */
  Llm_ij = leed_ms_lsum_ii(Llm_ij, beams->k_r[0], beams->k_i[0],
                      v_par->k_in, layer->a_lat, 2 * l_max, v_par->epsilon );
- 
+
 #ifdef CONTROL_X
    fprintf(STDCTR,"(leed_ms_compl_sym):  Calculate scattering matrices\n");
 #endif
 
-/* 
+/*
    Calculate scattering matrix Tii[type] for Bravais lattices and store in
    p_Tii
 */
@@ -420,12 +420,12 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 #ifdef CONTROL_X
    fprintf(STDCTR,"(leed_ms_compl_sym):  before leed_ms_tmat_ii\n");
 #endif
-     p_Tii[i_type] = 
+     p_Tii[i_type] =
          leed_ms_tmat_ii( p_Tii[i_type], Llm_ij, v_par->p_tl[i_type], l_max);
 #ifdef CONTROL_X
    fprintf(STDCTR,"(leed_ms_compl_sym):  before mattrans\n");
 #endif
-     p_Tii[i_type] = 
+     p_Tii[i_type] =
          mattrans(p_Tii [i_type], p_Tii [i_type]);
 
 
@@ -446,10 +446,10 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    }
  }
 
-/********************************************************************** 
+/**********************************************************************
   Giant Matrix Inversion
   - Allocate giant matrix Mbg to be inverted.
-  - Create interlayer propagators Gij/Gji (Maux) 
+  - Create interlayer propagators Gij/Gji (Maux)
   - Calculate -Tii * Gij and -Tjj * Gji and copy into Mbg.
   - Add identity to Mbg and invert giant matrix.
   - free storage space for interlayer lattice sums.
@@ -488,11 +488,11 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    Copy matrix Tjj * Gji to position (j,i) = (off_col,off_row)
     and matrix Tii * Gij to position (i,j) = (off_row,off_col)
 */
-     Maux = leed_ms_tmat_ij( Maux, Llm_ij, 
+     Maux = leed_ms_tmat_ij( Maux, Llm_ij,
                         p_Tii[(atoms+j_atoms)->type], l_max);
      Mbg  = matins(Mbg, Maux, off_col, off_row);
 
-     Maux = leed_ms_tmat_ij( Maux, Llm_ji, 
+     Maux = leed_ms_tmat_ij( Maux, Llm_ji,
                         p_Tii[(atoms+i_atoms)->type], l_max);
      Mbg  = matins(Mbg, Maux, off_row, off_col);
 
@@ -506,7 +506,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 
    } /* for j_atoms / if not marked */
  } /* for i_atoms */
- 
+
  matfree(Llm_ij);
  matfree(Llm_ji);
  matfree(Mark);
@@ -518,7 +518,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 
 #ifdef CONTROL
    fprintf(STDCTR,
-   "(leed_ms_compl_sym): giant matrix inversion (%d x %d), E = %.1f eV ...\n",
+   "(leed_ms_compl_sym): giant matrix inversion (%ld x %ld), E = %.1f eV ...\n",
    Mbg->cols, Mbg->rows, v_par->eng_v*HART);
 #endif
 
@@ -537,18 +537,18 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 
 #ifdef CONTROL
    fprintf(STDCTR,"(leed_ms_compl_sym): ... completed\n");
-   fprintf(STDCTR,"(leed_ms_compl_sym):Mbg cols %d  Mbg rows %d \n",Mbg->cols,Mbg->rows); 
+   fprintf(STDCTR,"(leed_ms_compl_sym):Mbg cols %ld  Mbg rows %ld \n",Mbg->cols,Mbg->rows);
 #endif
  CTIME("(leed_ms_compl_sym): after giant matrix inversion");
 
-/********************************************************************** 
+/**********************************************************************
   Prepare matrices for conversion into plane waves:
 
    L_p(g',jlm) = Ylm(g'+) * exp(- ikg'(+) * rj)
    L_m(g',jlm) = Ylm(g'-) * exp(+ ikg'(-) * rj)
-  to be multiplied with Mbg from the l.h.s. and 
-   R_p(ilm',g)  = exp(+ ikg(+) * ri) *Tii * Ylm'*(g+) 
-   R_m(ilm',g)  = exp(- ikg(-) * ri) *Tii * Ylm'*(g-) 
+  to be multiplied with Mbg from the l.h.s. and
+   R_p(ilm',g)  = exp(+ ikg(+) * ri) *Tii * Ylm'*(g+)
+   R_m(ilm',g)  = exp(- ikg(-) * ri) *Tii * Ylm'*(g-)
   to be multiplied from the r.h.s.
 
   Ylm = spherical harmonics.
@@ -607,7 +607,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
   L_p(g',jlm) = Ylm(g'+) * exp(- ikg'(+) * rj)
 ******************************************************************************/
    Maux = leed_ms_yp_ym(Maux, Ylm);
-   
+
  /* Multiply the rows of Maux with exp(- ikg(+) * ri) */
    for(k = 0; k < Maux->rows; k ++)
    {
@@ -634,16 +634,16 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    {
      for(i_beams = 0; i_beams < Maux->rows; i_beams ++)
      {
-       faux_r = *((beams+i_beams)->eout_b_r+i_layer); 
+       faux_r = *((beams+i_beams)->eout_b_r+i_layer);
        faux_i = *((beams+i_beams)->eout_b_i+i_layer);
        for(i_c = 0; i_c < Maux->cols; i_c ++, ptr_r ++, ptr_i ++ )
        {
-         cri_mul(ptr_r, ptr_i, *ptr_r, *ptr_i, faux_r, faux_i); 
+         cri_mul(ptr_r, ptr_i, *ptr_r, *ptr_i, faux_r, faux_i);
        }
 
      }  /* for i_beams */
 
-   } /** if BULK **/ 
+   } /** if BULK **/
 
 
    if(l_type == OVER)
@@ -720,7 +720,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 
      }  /* for i_beams */
 
-   }/** if OVER **/ 
+   }/** if OVER **/
 
 /**************************************************************************/
 
@@ -802,7 +802,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
  for(k = 0; k < n_beams; k ++)
  {
 
-/* R_m (exp[- ikz(-)zmax) = L_p (exp[+ ikz(+)zmax) */ 
+/* R_m (exp[- ikz(-)zmax) = L_p (exp[+ ikz(+)zmax) */
 
    faux_r = +(beams+k)->k_r[3] * z_max;
    faux_i = +(beams+k)->k_i[3] * z_max;
@@ -810,7 +810,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    L_p->rel[k+1] = R_m->rel[k+1];
    L_p->iel[k+1] = R_m->iel[k+1];
 
-/* R_p (exp[- ik(+)zmin) = L_m (exp[+ ik(-)zmin) */ 
+/* R_p (exp[- ik(+)zmin) = L_m (exp[+ ik(-)zmin) */
 
    faux_r = -(beams+k)->k_r[3] * z_min;
    faux_i = -(beams+k)->k_i[3] * z_min;
@@ -882,14 +882,14 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
    }
 
 /*
-  Add propagator of the unscattered wave to Tpp/Tmm: 
+  Add propagator of the unscattered wave to Tpp/Tmm:
     exp[-ikz(+) * (zn - z1)]
 */
 
  for(iaux = 1, k = 0; k < n_beams; iaux += n_beams + 1, k ++)
  {
 /* exp[-ikz(+) * (zn - z1)] */
-   cri_mul(&faux_r, &faux_i, 
+   cri_mul(&faux_r, &faux_i,
            L_p->rel[k+1], L_p->iel[k+1], R_p->rel[k+1], R_p->iel[k+1]);
 
    *(Tmm->rel+iaux) += faux_r;
@@ -913,7 +913,7 @@ fprintf(STDERR," *** error (leed_ms_compl_sym): invalid input matrix (4th argume
 
  free(atoms);
 
- for(iaux = 0; iaux < n_type; iaux++) 
+ for(iaux = 0; iaux < n_type; iaux++)
    if(p_Tii[iaux] != NULL) matfree( p_Tii[iaux] );
 
  free(p_Tii);

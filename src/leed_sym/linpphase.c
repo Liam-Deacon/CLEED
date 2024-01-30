@@ -159,7 +159,7 @@ int leed_inp_phase(const char *phaseinp, real *dr, leed_phase **p_phs_shifts )
   Open and Read input file for a new set of phase shifts
    ********************************************************************/
 
-  CONTROL_MSG(CONTROL, "reading file \"%s\", i_phase = %d\n", filename, i_phase-1);
+  CONTROL_MSG(CONTROL, "reading file \"%s\", i_phase = %ld\n", filename, i_phase-1);
 
   /*
   Open input file.
@@ -188,7 +188,7 @@ int leed_inp_phase(const char *phaseinp, real *dr, leed_phase **p_phs_shifts )
     ERROR_MSG("unexpected EOF found while reading file \"%s\"\n", filename);
     exit(1);
   }
-  else if( sscanf(linebuffer, "%d %d %s", &n_eng, &lmax, eng_type) < 2)
+  else if( sscanf(linebuffer, "%lu %lu %s", &n_eng, &lmax, eng_type) < 2)
   {
     ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
     exit(1);
@@ -270,10 +270,10 @@ int leed_inp_phase(const char *phaseinp, real *dr, leed_phase **p_phs_shifts )
   phs_shifts->n_eng = i_eng;
 
 #if CONTROL
-  CONTROL_MSG(CONTROL, "Number of energies = %d, lmax = %d\n",
+  CONTROL_MSG(CONTROL, "Number of energies = %lu, lmax = %lu\n",
               phs_shifts->n_eng, phs_shifts->lmax);
   fprintf(STDCTR,"\n\t  E(H)");
-  for(i=0; i<nl; i++) fprintf(STDCTR,"\t  l=%2d",i);
+  for(i=0; i<nl; i++) fprintf(STDCTR,"\t  l=%2ld",i);
   fprintf(STDCTR,"\n\n");
 
   for(i_eng = 0; i_eng < phs_shifts->n_eng; i_eng ++)
@@ -299,4 +299,4 @@ int leed_inp_phase(const char *phaseinp, real *dr, leed_phase **p_phs_shifts )
   }
 
   return(i_phase - 1);
-} /* end of function leed_leed_inp_phase */
+} /* end of function leed_inp_phase */

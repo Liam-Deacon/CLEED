@@ -19,8 +19,7 @@
 
 using namespace cleed;
 
-const std::map<std::string, BasicElement::BasicElement>
-BasicElement::ELEMENTS = {
+std::map<const std::string, const BasicElement> BasicElement::ELEMENTS = {
   {"Hydrogen", BasicElement(1)},
   {"Helium", BasicElement(2)},
   {"Lithium", BasicElement(3)},
@@ -135,7 +134,7 @@ BasicElement::ELEMENTS = {
   {"Copernicium", BasicElement(112)}
 };
 
-const std::map<std::string, int> BasicElement::NAMES = {
+std::map<const std::string, const unsigned int> BasicElement::NAMES = {
   {"Hydrogen", 1},
   {"Helium", 2},
   {"Lithium", 3},
@@ -239,7 +238,7 @@ const std::map<std::string, int> BasicElement::NAMES = {
   {"Mendelevium", 101},
   {"Nobelium", 102},
   {"Lawrencium", 103},
-  {"Rutherfordium", 104}
+  {"Rutherfordium", 104},
   {"Dubnium", 105},
   {"Seaborgium", 106},
   {"Bohrium", 107},
@@ -250,7 +249,7 @@ const std::map<std::string, int> BasicElement::NAMES = {
   {"Copernicium", 112}
 };
 
-const std::map<std::string, int> BasicElement::SYMBOLS = {
+std::map<const std::string, const unsigned int> BasicElement::SYMBOLS = {
   {"H", 1},
   {"He", 2},
   {"Li", 3},
@@ -369,13 +368,18 @@ BasicElement::BasicElement() {
   setAtomicNumber(1); // default to Hydrogen (most abundant element anyway)
 }
 
-BasicElement::BasicElement(int Z) {
+BasicElement::BasicElement(unsigned int Z) {
   setAtomicNumber(Z);
 }
 
 BasicElement::BasicElement(const std::string &name) {
-  int Z = NAMES[name] > 0 ? NAMES[name] : SYMBOLS[name];
-  setAtomicNumber(Z);
+  if (NAMES.find(name) != NAMES.end()) {
+    Z = NAMES[name];
+  } else if (SYMBOLS.find(name) != SYMBOLS.end()){
+    Z = SYMBOLS[name];
+  } else {
+    throw invalidElementException("Element name is not valid");
+  }
 }
 
 BasicElement::~BasicElement() {
@@ -386,24 +390,26 @@ inline bool BasicElement::operator!() {
   return (this != nullptr);
 }
 
-BasicElement &BasicElement::operator=(const BasicElement &other) {
-  return &other;
-}
-
 BasicElement &BasicElement::operator=(int Z) {
   return setAtomicNumber(Z);
 }
 
 BasicElement &BasicElement::operator-(int Z) {
+  if (getAtomicNumber() - Z < 0) {
+    throw invalidElementException("Atomic number Z is not valid");
+  }
   return setAtomicNumber(getAtomicNumber() - Z);
 }
 
 BasicElement &BasicElement::operator+(int Z) {
+  if (getAtomicNumber() + Z > ELEMENTS.size()) {
+    throw invalidElementException("Atomic number Z is not valid");
+  }
   return setAtomicNumber(getAtomicNumber() + Z);
 }
 
 inline bool BasicElement::operator==(const BasicElement &other) {
-  return (this == other);
+  return (Z == other.Z);
 }
 
 inline bool BasicElement::operator==(const std::string &element) {
@@ -411,31 +417,31 @@ inline bool BasicElement::operator==(const std::string &element) {
 }
 
 inline bool BasicElement::operator!=(const BasicElement &other) {
-  return (this->getAtomicNumber() >= other.atomicNumber);
+  return (this->getAtomicNumber() >= other.Z);
 }
 
 inline bool BasicElement::operator!=(const std::string &element) {
-  return !(this == element);
+  return !(Z == BasicElement::NAMES[element] );
 }
 
 inline bool BasicElement::operator<(const BasicElement &other) {
-  (this->getAtomicNumber() < other.atomicNumber);
+  (this->getAtomicNumber() < other.Z);
 }
 
 inline bool BasicElement::operator>(const BasicElement &other) {
-  (this->getAtomicNumber() > other.atomicNumber);
+  (this->getAtomicNumber() > other.Z);
 }
 
 inline bool BasicElement::operator<=(const BasicElement &other) {
-  return (this->getAtomicNumber() <= other.atomicNumber);
+  return (this->getAtomicNumber() <= other.Z);
 }
 
 inline bool BasicElement::operator>=(const BasicElement &other) {
-  return (this->getAtomicNumber() >= other.atomicNumber);
+  return (this->getAtomicNumber() >= other.Z);
 }
 
 inline int BasicElement::getAtomicNumber() const {
-  return atomicNumber;
+  return Z;
 }
 
 inline const std::string &BasicElement::getName() const {
@@ -447,8 +453,11 @@ inline const std::string &BasicElement::getSymbol() const {
 }
 
 inline BasicElement &BasicElement::setAtomicNumber(size_t Z) {
-  return (Z > 0 && Z < ELEMENTS.size()) ? &ELEMENTS(Z) :
+  if (Z > 0 && Z < ELEMENTS.size()) {
     throw invalidElementException("Atomic number Z is not valid");
+  }
+  this->Z = static_cast<atomicNumber>(Z);
+  return *this;
 }
 
 BasicElement &BasicElement::setName(const std::string &name) {
@@ -456,5 +465,5 @@ BasicElement &BasicElement::setName(const std::string &name) {
 }
 
 BasicElement &BasicElement::setSymbol(const std::string &symbol) {
-  return setAtomicNumber(static_cast<int>(SYMBOLS[symbol]));
+  return this->setAtomicNumber(static_cast<int>(SYMBOLS[symbol]));
 }

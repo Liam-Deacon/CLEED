@@ -17,8 +17,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 # Recursive CMake Source Subdirectories
-ADD_SUBDIRECTORY(aoi_leed)
-ADD_SUBDIRECTORY(aoi_rfac)
+IF (BUILD_ANGLE_OF_INCIDENCE_EXTENSION STREQUAL "ON")
+    ADD_SUBDIRECTORY(aoi_leed)
+    ADD_SUBDIRECTORY(aoi_rfac)
+ENDIF (BUILD_ANGLE_OF_INCIDENCE_EXTENSION STREQUAL "ON")
 ADD_SUBDIRECTORY(debye)
 ADD_SUBDIRECTORY(ftsmooth)
 ADD_SUBDIRECTORY(latt)
@@ -30,8 +32,10 @@ ADD_SUBDIRECTORY(rfac)
 ADD_SUBDIRECTORY(search)
 ADD_SUBDIRECTORY(scripts)
 
-# c++ interface library
-ADD_SUBDIRECTORY(cleed++)
+IF (BUILD_CPP_BINDINGS STREQUAL "ON")
+    # c++ interface library
+    ADD_SUBDIRECTORY(cleed++)
+ENDIF (BUILD_CPP_BINDINGS STREQUAL "ON")
 
 IF (WITH_QT STREQUAL "ON")
     # optional gui elements

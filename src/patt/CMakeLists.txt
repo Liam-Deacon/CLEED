@@ -21,10 +21,13 @@ SET(PATT_VERSION_MAJOR "${CPACK_PACKAGE_VERSION_MAJOR}")
 SET(PATT_VERSION_MINOR "${CPACK_PACKAGE_VERSION_MINOR}")
 SET(PATT_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}")
 SET(PATT_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
-CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h.in"
-   "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h" IMMEDIATE @ONLY )
+CONFIGURE_FILE(
+    "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h.in"
+    "${PROJECT_SOURCE_DIR}/src/include/patt_ver.h"
+    IMMEDIATE @ONLY
+)
 
-# find_package(Cairo)
+find_package(Cairo)
 
 ###############################################################################
 # Sources
@@ -47,42 +50,49 @@ SET (patt_SRCS
     spots.c
 )
 
+INCLUDE_DIRECTORIES(
+    "${CAIRO_INCLUDE_DIRS}"
+)
 
 ###############################################################################
 # INSTALL TARGETS
 ###############################################################################
-IF (WIN32)
-    ENABLE_LANGUAGE(RC)
-    # configure for windows icon
-    CONFIGURE_FILE ("res/windows/patt.rc.in"
-        "res/windows/patt.rc" IMMEDIATE @ONLY )
+IF (CAIRO_FOUND)
+    IF (WIN32)
+        ENABLE_LANGUAGE(RC)
+        # configure for windows icon
+        CONFIGURE_FILE ("res/windows/patt.rc.in"
+            "res/windows/patt.rc" IMMEDIATE @ONLY )
 
-    SET (patt_SRCS ${patt_SRCS} res/windows/patt.rc)
+        SET (patt_SRCS ${patt_SRCS} res/windows/patt.rc)
 
-    ADD_EXECUTABLE(patt ${patt_SRCS})
+        ADD_EXECUTABLE(patt ${patt_SRCS})
 
-ELSE (WIN32)
+    ELSE (WIN32)
 
-    IF (UNIX)
+        IF (UNIX)
 
-        IF(APPLE)
+            IF(APPLE)
 
-            ADD_EXECUTABLE(patt MACOSX_BUNDLE ${patt_SRCS})
-            INSTALL(TARGETS patt BUNDLE DESTINATION ../Applications)
+                ADD_EXECUTABLE(patt MACOSX_BUNDLE ${patt_SRCS})
+                INSTALL(TARGETS patt BUNDLE DESTINATION ../Applications)
 
-        ELSE(APPLE)
+            ELSE(APPLE)  # Linux
 
-            ADD_EXECUTABLE(patt ${patt_SRCS})
+                ADD_EXECUTABLE(patt ${patt_SRCS})
 
-        ENDIF(APPLE)
+            ENDIF(APPLE)
 
-    ENDIF(UNIX)
+        ENDIF(UNIX)
 
-ENDIF (WIN32)
+    ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES (patt ${EXTRA_LIBS} m ${Cairo_LIBRARIES})
+    TARGET_LINK_LIBRARIES (patt ${EXTRA_LIBS} "${CAIRO_LIBRARIES}" m)
 
-INSTALL (TARGETS patt
-    RUNTIME DESTINATION bin
-    COMPONENT runtime
-)
+    INSTALL (TARGETS patt
+        RUNTIME DESTINATION bin
+        COMPONENT runtime
+    )
+ELSE (CAIRO_FOUND)
+    MESSAGE (WARNING "Cairo not found, patt will not be built")
+ENDIF (CAIRO_FOUND)

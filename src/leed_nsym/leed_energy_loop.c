@@ -156,7 +156,7 @@ void leed_model_calculate_energies(leed_model *model) {
     iaux = leed_beam_get_selection(&beams_now, beams_all, v_par, bulk->dmin);
     n_beams_now = (iaux > 0) ? (size_t)iaux : 0;
 
-    CONTROL_MSG(CONTROL, "\n\t => E = %.1f eV (%d beams used) <=\n\n",
+    CONTROL_MSG(CONTROL, "\n\t => E = %.1f eV (%lu beams used) <=\n\n",
         v_par->eng_v*HART, n_beams_now);
 
     /* BULK:
@@ -179,7 +179,7 @@ void leed_model_calculate_energies(leed_model *model) {
       /* Compute scattering matrices for bottom-most bulk layer:
        * - single Bravais layer or composite layer
        */
-      CONTROL_MSG(CONTROL_FLOW, "bulk layer %d/%d, set %d/%d\n",
+      CONTROL_MSG(CONTROL_FLOW, "bulk layer %u/%lu, set %lu/%lu\n",
           0, bulk->n_layers - 1, i_set, n_set - 1);
 
       if( (bulk->layers + 0)->n_atoms == 1)
@@ -201,7 +201,7 @@ void leed_model_calculate_energies(leed_model *model) {
           ((bulk->layers+i_layer)->periodic == 1) && (i_layer < bulk->n_layers);
           i_layer ++)
       {
-        CONTROL_MSG(CONTROL_FLOW, "[periodic] bulk layer %d/%d, set %d/%d\n",
+        CONTROL_MSG(CONTROL_FLOW, "[periodic] bulk layer %lu/%lu, set %lu/%lu\n",
                     i_layer, bulk->n_layers - 1, i_set, n_set - 1);
 
         /*
@@ -252,7 +252,7 @@ void leed_model_calculate_energies(leed_model *model) {
       if( i_layer == bulk->n_layers - 1 )
       {
         CONTROL_MSG(CONTROL_FLOW,
-                    "(%s not periodic): bulk layer %d/%d, set %d/%d\n",
+                    "(%s not periodic): bulk layer %lu/%lu, set %lu/%lu\n",
                     LEED_NAME, i_layer, bulk->n_layers - 1, i_set, n_set - 1);
 
         if( (bulk->layers + i_layer)->n_atoms == 1)
@@ -282,7 +282,7 @@ void leed_model_calculate_energies(leed_model *model) {
       offset += n_beams_set;
 
       /* Write cpu time to output */
-      sprintf(linebuffer, "(%s): bulk layers set %d, E = %.1f",
+      sprintf(linebuffer, "(%s): bulk layers set %lu, E = %.1f",
               LEED_NAME, i_set, energy*HART);
       leed_cpu_time(STDCPU, linebuffer);
     }  /* for i_set */
@@ -290,7 +290,7 @@ void leed_model_calculate_energies(leed_model *model) {
     /* OVERLAYER: Loop over all overlayer layers */
     for(i_layer = 0; i_layer < over->n_layers; i_layer ++)
     {
-      CONTROL_MSG(CONTROL_FLOW, "overlayer %d/%d\n", i_layer, over->n_layers-1);
+      CONTROL_MSG(CONTROL_FLOW, "overlayer %lu/%lu\n", i_layer, over->n_layers-1);
 
       /* Calculate scattering matrices for a single overlayer layer
        * - only single Bravais layer */
@@ -305,7 +305,7 @@ void leed_model_calculate_energies(leed_model *model) {
             v_par, (over->layers + i_layer), beams_now);
       }
 
-      CONTROL_MSG(CONTROL_X, "overlayer %d  ...\n", i_layer);
+      CONTROL_MSG(CONTROL_X, "overlayer %lu  ...\n", i_layer);
       print_scattering_matrices(Tpp_s, Tmm_s, Rpm_s, Rmp_s);
 
       /* Add the single layer matrices to the rest by layer doubling:
@@ -343,7 +343,7 @@ void leed_model_calculate_energies(leed_model *model) {
       }
 
       /* Write cpu time to output */
-      sprintf(linebuffer, "(%s): overlayer %d, E = %.1f",
+      sprintf(linebuffer, "(%s): overlayer %lu, E = %.1f",
               LEED_NAME, i_layer, energy * HART);
       leed_cpu_time(STDCPU, linebuffer);
 
@@ -358,7 +358,7 @@ void leed_model_calculate_energies(leed_model *model) {
     leed_output_intensities(Amp, beams_now, beams_out, v_par, args->res_stream);
 
     /* Write cpu time to output */
-    sprintf(linebuffer, "  %.1f   %d  ", energy * HART, n_beams_now);
+    sprintf(linebuffer, "  %.1f   %lu  ", energy * HART, n_beams_now);
     leed_cpu_time(STDWAR, linebuffer);
 
   } /* end of energy loop */

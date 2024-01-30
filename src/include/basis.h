@@ -3,7 +3,7 @@
  *
  *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
- *  Licensed under GNU General Public License 3.0 or later. 
+ *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
@@ -11,7 +11,7 @@
  * Change Log:
  *   LD/2014.07.30 - Creation
  ************************************************************************/
- 
+
 /*!
  * \file
  * \author Liam Deacon <liam.m.deacon@gmail.com>
@@ -52,7 +52,7 @@ typedef struct {
   coord a[3];       /*!< Basis vectors \f$ \vec{a}_1 \f$, \f$ \vec{a}_2 \f$,
                      * & \f$ \vec{a}_3 \f$.
                      * \note uses C indexing (first element is \c a[0] ) */
-} basis; 
+} basis;
 
 /* rotation functions */
 __attribute__((nonnull, returns_nonnull))

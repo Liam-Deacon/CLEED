@@ -19,7 +19,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "search.h"
+#include "csearch.h"
 
 static const double START_TEMP = 3.5L;
 static const double EPSILON = 0.25L;
@@ -124,9 +124,9 @@ void sr_sa(size_t n_dim, real dpos, const char *bak_file, const char *log_file)
  * Write final results to log file
  ***********************************************************************/
 
-  CONTROL_MSG(CONTROL, "%d function evaluations in sr_amebsa\n", nfunc);
+  CONTROL_MSG(CONTROL, "%ld function evaluations in sr_amebsa\n", nfunc);
 
-  fprintf(log_stream, "\n=> No. of iterations in sr_powell: %3d\n", nfunc);
+  fprintf(log_stream, "\n=> No. of iterations in sr_powell: %3ld\n", nfunc);
   fprintf(log_stream, "=> Optimum parameter set and function value:\n");
 
   for (j_par = 0; j_par <= n_dim; j_par++ )

@@ -1,7 +1,7 @@
 /*********************************************************************
  *                       SEARCH_FUNC.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
@@ -19,7 +19,7 @@
 /*!
  * \file
  * \brief Contains all the function prototypes for the search program.
- * \author Georg Held <g.held@reading.ac.uk>
+ * \author Georg Held <georg.held@diamond.ac.uk>
  * \author Liam Deacon <liam.m.deacon@gmail.com>
  *
  * There are two code interfaces for the search routines. The original
@@ -106,7 +106,7 @@ static inline SR_POWELL_FUNC(cleed_vector *p, cleed_basic_matrix *y, size_t n_di
 }
 #define SR_GENETIC_FUNC {ERROR_MSG("Genetic Algorithm not implemented\n"); exit(1);}
 
-#elif USE_GSL /* GNU Scientific Library Interface */
+#elif USE_GSL == 1 /* GNU Scientific Library Interface */
 #warning "GSL implementation not yet complete"
 /* sramoeba_gsl.c - downhill simplex */
 int sr_amoeba(cleed_basic_matrix *, cleed_vector *, real , size_t *);
@@ -169,7 +169,7 @@ void sr_powell(cleed_vector *p, cleed_basic_matrix *xi, size_t n,
                cleed_real ftol, size_t *iter, cleed_real *fret,
                cleed_real (*func)() );
 
-#endif 
+#endif
 
 /* debye temperature */
 real leed_inp_debye_temp(real , real , real);

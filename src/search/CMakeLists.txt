@@ -37,7 +37,7 @@ IF (WITH_GSL STREQUAL "OFF")
         nrrbrent.c
         nrrlinmin.c
         nrrmnbrak.c
-        nrrran1.c 
+        nrrran1.c
         sramoeba.c
         sramebsa.c
         srckgeo.c
@@ -61,11 +61,11 @@ ELSE()
         srckrot.c
         srhelp.c
         srrdinp.c
-        
+
         #brent_gsl.c
         #linmin_gsl.c
-        #ran1.c 
-        
+        #ran1.c
+
         #sramebsa_gsl.c
         #srpowell_gsl.c
         sramoeba_gsl.c
@@ -77,13 +77,13 @@ ELSE()
         #srsa_gsl.c
         srer_gsl.c
         srsx_gsl.c
-        
+
         ${cleed_nsym_SOURCE_DIR}/linpdebtemp.c
     )
     ADD_DEFINITIONS(-DUSE_GSL)
     ADD_DEFINITIONS(-D_USE_GSL)
 ENDIF()
-    
+
 # new method - greedy
 FILE ( GLOB searchlib_SRCS "*.c" )
 LIST ( REMOVE_ITEM searchlib_SRCS csearch.c )
@@ -99,7 +99,7 @@ FILE ( GLOB search_test_SRCS "*test*.c")
 IF (search_test_SRCS)
   LIST( REMOVE_ITEM searchlib_SRCS ${search_test_SRCS} )
 ENDIF (search_test_SRCS)
-    
+
 
 SET (csearch_SRCS csearch.c)
 
@@ -113,32 +113,32 @@ SET_TARGET_PROPERTIES(searchStatic PROPERTIES OUTPUT_NAME search)
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
-    
+
     # configure for windows icon
     CONFIGURE_FILE ("${csearch_SOURCE_DIR}/res/windows/csearch.rc.in"
-        "${csearch_SOURCE_DIR}/res/windows/csearch.rc" IMMEDIATE @ONLY ) 
-        
+        "${csearch_SOURCE_DIR}/res/windows/csearch.rc" IMMEDIATE @ONLY )
+
     SET (csearch_SRCS ${csearch_SRCS} res/windows/csearch.rc)
-    
+
     ADD_EXECUTABLE(csearch ${csearch_SRCS})
-    
+
 ELSE (WIN32)
-    
+
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(csearch MACOSX_BUNDLE ${csearch_SRCS})
             INSTALL(TARGETS csearch BUNDLE DESTINATION ../Applications)
-            
+
         ELSE(APPLE)
-        
-            ADD_EXECUTABLE(csearch ${csearch_SRCS})  
-            
+
+            ADD_EXECUTABLE(csearch ${csearch_SRCS})
+
         ENDIF(APPLE)
-        
+
     ENDIF(UNIX)
-    
+
 ENDIF (WIN32)
 
 TARGET_LINK_LIBRARIES(search m)

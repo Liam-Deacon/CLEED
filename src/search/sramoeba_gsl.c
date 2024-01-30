@@ -37,7 +37,7 @@ LD/01.07.2014 - Modified to use the GNU Scientific Library
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_multimin.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "search_func.h"
 #include "copy_file.h"
 

@@ -37,7 +37,7 @@ GH/30.12.04 - calculate original and mirrored geometry at the same time and aver
 #include <math.h>
 #include <stdlib.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "copy_file.h"
 
 #define SYS_ERROR_TO_LOG(x)   log_stream = fopen(log_file, "a"); \

@@ -37,8 +37,8 @@ size_t fts_trim_data(double *x, double *fx, size_t n_x,
   size_t ix, ir, it, n_t;
   int write_x;
   size_t N;
-  double *trim_x, *trim_fx;
-  
+  double *trim_x = NULL, *trim_fx = NULL;
+
   n_t = n_x;
 
   /* first pass to get number of values after trimming */
@@ -53,15 +53,15 @@ size_t fts_trim_data(double *x, double *fx, size_t n_x,
       if ((x[ix]>=lbound[ir]) && (x[ix]<=ubound[ir])) write_x = 1;
     }
     if (!write_x) n_t -= 1;
-  }  
-  
+  }
+
   /* stop if no trimming required */
   if(n_x == n_t) return(n_x);
-  
+
   /* allocate new matrices */
   trim_x  = (double *) malloc (n_t * sizeof(double) );
   trim_fx = (double *) malloc (n_t * sizeof(double) );
-  
+
   /* second pass to add values to trimmed matrices */
   it = 0;
   #ifdef _OMP_H_DEF
@@ -82,24 +82,24 @@ size_t fts_trim_data(double *x, double *fx, size_t n_x,
       it++;
     }
   }
-  
+
   /* reallocate space for trimmed data
 	 using factors of STRSZ to reduce memory fragmentation */
   if(n_t > STRSZ) N = (n_t-(n_t % STRSZ))*2; /* N=2^i blocks, where i is an integer */
   else N = STRSZ;
-	
+
   if(n_t >= N-1)
   {
     ERROR_MSG("trimmed data (%i) > %i!\n", n_t, N);
     exit(-1);
   }
-  
+
   x  = (double *) realloc(trim_x, (N * sizeof(double)));
   fx = (double *) realloc(trim_fx,(N * sizeof(double)));
-  
+
   /* clean up */
-  free(trim_x);
-  free(trim_fx);
-  
+  if (trim_x != NULL) free(trim_x);
+  if (trim_fx != NULL) free(trim_fx);
+
   return(n_t);
 }

@@ -116,9 +116,9 @@ inline void Coordinate::print(FILE *f)
   ::coord_printf(f, this->pos);
 }
 
-std::ostream& Coordinate::operator<<(std::ostream &out, const Coordinate &pos)
+std::ostream& operator<<(std::ostream &out, const Coordinate &pos)
 {
   const std::string &delim = std::string(", ");
-  out << this->getX() << delim << this->getY() << delim << this->getZ();
+  out << pos.x << delim << pos.y << delim << pos.z;
   return out;
 }

@@ -21,8 +21,11 @@ SET(CLEED_NSYM_VERSION_MAJOR "${CPACK_PACKAGE_VERSION_MAJOR}")
 SET(CLEED_NSYM_VERSION_MINOR "${CPACK_PACKAGE_VERSION_MINOR}")
 SET(CLEED_NSYM_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}")
 SET(CLEED_NSYM_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
-CONFIGURE_FILE(  "${PROJECT_SOURCE_DIR}/src/include/leed_ver.h.in"
-    "${PROJECT_SOURCE_DIR}/src/include/leed_ver.h" IMMEDIATE @ONLY )
+CONFIGURE_FILE(
+    "${PROJECT_SOURCE_DIR}/src/include/leed_ver.h.in"
+    "${PROJECT_SOURCE_DIR}/src/include/leed_ver.h"
+    @ONLY
+)
 
 ###############################################################################
 # Sources
@@ -30,8 +33,36 @@ CONFIGURE_FILE(  "${PROJECT_SOURCE_DIR}/src/include/leed_ver.h.in"
 SET (cleed_nsym_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/leed_nsym CACHE STRING "" FORCE)
 SET (cleed_sym_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/leed_sym CACHE STRING "" FORCE)
 
+IF (WITH_CBLAS STREQUAL "ON")
+    # enable CBLAS
+    ADD_DEFINITIONS(-DUSE_CBLAS=1)
+ELSEIF (WITH_GSL STREQUAL "ON")
+    # enable GSL
+    ADD_DEFINITIONS(-DUSE_GSL=1)
+ELSE ()
+    ADD_DEFINITIONS(-DUSE_CBLAS=0)
+    ADD_DEFINITIONS(-DUSE_GSL=0)
+ENDIF ()
+
+# leed functions
+SET (LEEDFUNCOBJ
+    ${cleed_nsym_SOURCE_DIR}/leed_args.c
+    ${cleed_nsym_SOURCE_DIR}/leed_beam.c
+    ${cleed_nsym_SOURCE_DIR}/leed_bsrinp.c
+    ${cleed_nsym_SOURCE_DIR}/leed_crystal.c
+    ${cleed_nsym_SOURCE_DIR}/leed_energy_loop.c
+    ${cleed_nsym_SOURCE_DIR}/leed_layer.c
+    ${cleed_nsym_SOURCE_DIR}/leed_model.c
+    ${cleed_nsym_SOURCE_DIR}/leed_phase.c
+    ${cleed_nsym_SOURCE_DIR}/leed_var.c
+)
+
+SET (LEEDPHASEOBJ
+    ${cleed_nsym_SOURCE_DIR}/linpphasend.c
+)
+
 # basic qm functions
-SET (QMOBJ 
+SET (QMOBJ
     ${cleed_nsym_SOURCE_DIR}/qmbessm.c
     ${cleed_nsym_SOURCE_DIR}/qmcgc.c
     ${cleed_nsym_SOURCE_DIR}/qmhank.c
@@ -39,7 +70,9 @@ SET (QMOBJ
 )
 
 # matrix library
-SET (MATOBJ 
+SET (MATOBJ
+    ${cleed_nsym_SOURCE_DIR}/cblas_aux.c
+    # NOTE: These files need to be reviewed to ensure OSS compliance
     ${cleed_nsym_SOURCE_DIR}/matabs.c
     ${cleed_nsym_SOURCE_DIR}/matalloc.c
     ${cleed_nsym_SOURCE_DIR}/matarralloc.c
@@ -74,141 +107,141 @@ SET (MATOBJ
 # input for LEED programs
 SET (DEBOBJ ${cleed_nsym_SOURCE_DIR}/linpdebtemp.c)
 
-SET (INPOBJ 
-    ${cleed_nsym_SOURCE_DIR}/linpbullayer.c 
-    ${cleed_nsym_SOURCE_DIR}/linpovllayer.c 
-    ${cleed_nsym_SOURCE_DIR}/linpphasend.c  
-    ${cleed_nsym_SOURCE_DIR}/linprdbulnd.c  
-    ${cleed_nsym_SOURCE_DIR}/linprdpar.c    
-    ${cleed_nsym_SOURCE_DIR}/linprdovlnd.c  
-    ${cleed_nsym_SOURCE_DIR}/linpshowbop.c  
-    ${cleed_nsym_SOURCE_DIR}/linpmatlm.c 
+SET (INPOBJ
+    ${cleed_nsym_SOURCE_DIR}/linpbullayer.c
+    ${cleed_nsym_SOURCE_DIR}/linpovllayer.c
+    ${cleed_nsym_SOURCE_DIR}/linpphasend.c
+    ${cleed_nsym_SOURCE_DIR}/linprdbulnd.c
+    ${cleed_nsym_SOURCE_DIR}/linprdpar.c
+    ${cleed_nsym_SOURCE_DIR}/linprdovlnd.c
+    ${cleed_nsym_SOURCE_DIR}/linpshowbop.c
+    ${cleed_nsym_SOURCE_DIR}/linpmatlm.c
     # include lindebtemp.c
     ${DEBOBJ}
 )
 
 SET (INPOBJSYM
-    ${cleed_sym_SOURCE_DIR}/linpbullaysym.c 
-    ${cleed_sym_SOURCE_DIR}/linpovlaysym.c  
-    ${cleed_sym_SOURCE_DIR}/linprdbulsym.c  
-    ${cleed_sym_SOURCE_DIR}/linprdovlsym.c  
-    ${cleed_sym_SOURCE_DIR}/linpphase.c     
-    ${cleed_sym_SOURCE_DIR}/lwritepar.c     
+    ${cleed_sym_SOURCE_DIR}/linpbullaysym.c
+    ${cleed_sym_SOURCE_DIR}/linpovlaysym.c
+    ${cleed_sym_SOURCE_DIR}/linprdbulsym.c
+    ${cleed_sym_SOURCE_DIR}/linprdovlsym.c
+    ${cleed_sym_SOURCE_DIR}/linpphase.c
+    ${cleed_sym_SOURCE_DIR}/lwritepar.c
     ${cleed_sym_SOURCE_DIR}/lreadpar.c
     ${cleed_sym_SOURCE_DIR}/lsymcheck.c
 )
 
 # output for LEED programs
-SET (OUTOBJ 
-    ${cleed_nsym_SOURCE_DIR}/loutbmlist.c 
-    ${cleed_nsym_SOURCE_DIR}/louthead.c   
-    ${cleed_nsym_SOURCE_DIR}/loutint.c 
+SET (OUTOBJ
+    ${cleed_nsym_SOURCE_DIR}/loutbmlist.c
+    ${cleed_nsym_SOURCE_DIR}/louthead.c
+    ${cleed_nsym_SOURCE_DIR}/loutint.c
 )
-          
+
 SET (OUTOBJSYM
     ${cleed_sym_SOURCE_DIR}/louthead2.c
     ${cleed_sym_SOURCE_DIR}/loutintsym.c
 )
 
 # beams:
-SET (BEAMOBJ 
-    ${cleed_nsym_SOURCE_DIR}/lbmgen.c    
-    ${cleed_nsym_SOURCE_DIR}/lbmselect.c 
+SET (BEAMOBJ
+    ${cleed_nsym_SOURCE_DIR}/lbmgen.c
+    ${cleed_nsym_SOURCE_DIR}/lbmselect.c
     ${cleed_nsym_SOURCE_DIR}/lbmset.c
 )
 
-SET (BEAMOBJSYM 
-    ${cleed_sym_SOURCE_DIR}/lbmgensym.c 
+SET (BEAMOBJSYM
+    ${cleed_sym_SOURCE_DIR}/lbmgensym.c
     ${cleed_sym_SOURCE_DIR}/lbmrotmat.c
 )
-             
+
 # parameter control:
-SET (PCOBJ 
-    ${cleed_nsym_SOURCE_DIR}/lpcmktlnd.c 
-    ${cleed_nsym_SOURCE_DIR}/lpctemtl.c 
+SET (PCOBJ
+    ${cleed_nsym_SOURCE_DIR}/lpcmktlnd.c
+    ${cleed_nsym_SOURCE_DIR}/lpctemtl.c
     ${cleed_nsym_SOURCE_DIR}/lpcupdatend.c
 )
 
-SET (PCOBJSYM 
+SET (PCOBJSYM
     ${cleed_sym_SOURCE_DIR}/lsymcheck.c
     ${cleed_sym_SOURCE_DIR}/lpcupdate.c
     ${cleed_sym_SOURCE_DIR}/lpcmktl.c
 )
 
 # layer doubling:
-SET (LDOBJ 
-    ${cleed_nsym_SOURCE_DIR}/lld2n.c      
-    ${cleed_nsym_SOURCE_DIR}/lld2lay.c    
-    ${cleed_nsym_SOURCE_DIR}/lld2layrpm.c 
-    ${cleed_nsym_SOURCE_DIR}/lldpotstep.c 
+SET (LDOBJ
+    ${cleed_nsym_SOURCE_DIR}/lld2n.c
+    ${cleed_nsym_SOURCE_DIR}/lld2lay.c
+    ${cleed_nsym_SOURCE_DIR}/lld2layrpm.c
+    ${cleed_nsym_SOURCE_DIR}/lldpotstep.c
     ${cleed_nsym_SOURCE_DIR}/lldpotstep0.c
 )
 
 # multiple scattering:
-SET (MSOBJ 
-    ${cleed_nsym_SOURCE_DIR}/lmsbravlnd.c  
-    ${cleed_nsym_SOURCE_DIR}/lmscomplnd.c  
-    ${cleed_nsym_SOURCE_DIR}/lmslsumii.c   
-    ${cleed_nsym_SOURCE_DIR}/lmslsumij.c   
-    ${cleed_nsym_SOURCE_DIR}/lmspartinv.c  
-    ${cleed_nsym_SOURCE_DIR}/lmstmatii.c   
-    ${cleed_nsym_SOURCE_DIR}/lmstmatndii.c 
-    ${cleed_nsym_SOURCE_DIR}/lmstmatij.c   
-    ${cleed_nsym_SOURCE_DIR}/lmsymat.c     
-    ${cleed_nsym_SOURCE_DIR}/lmsymatset.c  
-    ${cleed_nsym_SOURCE_DIR}/lmsymat.c    
+SET (MSOBJ
+    ${cleed_nsym_SOURCE_DIR}/lmsbravlnd.c
+    ${cleed_nsym_SOURCE_DIR}/lmscomplnd.c
+    ${cleed_nsym_SOURCE_DIR}/lmslsumii.c
+    ${cleed_nsym_SOURCE_DIR}/lmslsumij.c
+    ${cleed_nsym_SOURCE_DIR}/lmspartinv.c
+    ${cleed_nsym_SOURCE_DIR}/lmstmatii.c
+    ${cleed_nsym_SOURCE_DIR}/lmstmatndii.c
+    ${cleed_nsym_SOURCE_DIR}/lmstmatij.c
+    ${cleed_nsym_SOURCE_DIR}/lmsymat.c
+    ${cleed_nsym_SOURCE_DIR}/lmsymatset.c
+    ${cleed_nsym_SOURCE_DIR}/lmsymat.c
     ${cleed_nsym_SOURCE_DIR}/lmsypy.c
 )
 
-SET (MSOBJSYM  
-    ${cleed_sym_SOURCE_DIR}/lmscomplsym.c 
-    ${cleed_sym_SOURCE_DIR}/lmscompksum.c 
-    ${cleed_sym_SOURCE_DIR}/lmsbravlsym.c 
-    ${cleed_sym_SOURCE_DIR}/lmsbravl.c    
-    ${cleed_nsym_SOURCE_DIR}/lmscompl.c    
+SET (MSOBJSYM
+    ${cleed_sym_SOURCE_DIR}/lmscomplsym.c
+    ${cleed_sym_SOURCE_DIR}/lmscompksum.c
+    ${cleed_sym_SOURCE_DIR}/lmsbravlsym.c
+    ${cleed_sym_SOURCE_DIR}/lmsbravl.c
+    ${cleed_nsym_SOURCE_DIR}/lmscompl.c
     ${cleed_sym_SOURCE_DIR}/lmsltok.c
 )
 
 SET (CPLOBJ ${cleed_nsym_SOURCE_DIR}/cribasfun.c)
 
-SET (PRGOBJ 
-    ${cleed_nsym_SOURCE_DIR}/prgcheck.c 
+SET (PRGOBJ
+    ${cleed_nsym_SOURCE_DIR}/prgcheck.c
     ${cleed_nsym_SOURCE_DIR}/lhelp.c
 )
 
 IF (WIN32)
-    LIST (APPEND PRGOBJ 
-        ${cleed_nsym_SOURCE_DIR}/getrusage_win32.c 
+    LIST (APPEND PRGOBJ
+        ${cleed_nsym_SOURCE_DIR}/getrusage_win32.c
     )
 ENDIF (WIN32)
-         
+
 SET (PRGOBJSYM
     ${cleed_sym_SOURCE_DIR}/lhelpsym.c
 )
 
-SET (TMAOBJ 
-    ${cleed_nsym_SOURCE_DIR}/lpccumtl.c 
+SET (TMAOBJ
+    ${cleed_nsym_SOURCE_DIR}/lpccumtl.c
     ${cleed_nsym_SOURCE_DIR}/lpcmkms.c
 )
 
-SET (LEEDOBJ 
-    ${CPLOBJ}  
-    ${QMOBJ}   
-    ${MATOBJ}  
-    ${INPOBJ}  
-    ${PCOBJ}   
-    ${PRGOBJ}  
-    ${OUTOBJ}  
-    ${BEAMOBJ} 
-    ${LDOBJ}   
-    ${MSOBJ}   
+SET (LEEDOBJ
+    ${CPLOBJ}
+    ${QMOBJ}
+    ${MATOBJ}
+    ${INPOBJ}
+    ${PCOBJ}
+    ${PRGOBJ}
+    ${OUTOBJ}
+    ${BEAMOBJ}
+    ${LDOBJ}
+    ${MSOBJ}
     ${TMAOBJ}
 )
 
-SET (SYMOBJ 
-    ${MSOBJSYM} 
-    ${OUTOBJSYM} 
-    ${INPOBJSYM} 
+SET (SYMOBJ
+    ${MSOBJSYM}
+    ${OUTOBJSYM}
+    ${INPOBJSYM}
     ${PCOBJSYM}
     ${PRGOBJSYM}
     ${BEAMOBJSYM}
@@ -216,7 +249,7 @@ SET (SYMOBJ
 
 # Specify list of sources for each target
 IF (WITH_OPENCL STREQUAL "ON")
-    SET (OPENCL_SRCS 
+    SET (OPENCL_SRCS
         ${cleed_nsym_SOURCE_DIR}/err_code.c
     )
 ELSE()
@@ -229,7 +262,8 @@ SET (leedlib_SRCS
     ${OPENCL_SRCS}
 )
 
-SET (cleed_nsym_SRCS cleed_nsym.c)
+SET (cleed_nsym_SRCS cleed_nsym.c ${LEEDFUNCOBJ} ${LEEDPHASEOBJ})
+
 
 ###############################################################################
 # INSTALL TARGETS
@@ -241,41 +275,44 @@ SET_TARGET_PROPERTIES(leedStatic PROPERTIES OUTPUT_NAME leed)
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
-    
+
     # configure for windows icon
-    CONFIGURE_FILE ("${cleed_nsym_SOURCE_DIR}/res/windows/cleed_nsym.rc.in"
-        "${cleed_nsym_SOURCE_DIR}/res/windows/cleed_nsym.rc" IMMEDIATE @ONLY ) 
-        
+    CONFIGURE_FILE(
+        "${cleed_nsym_SOURCE_DIR}/res/windows/cleed_nsym.rc.in"
+        "${cleed_nsym_SOURCE_DIR}/res/windows/cleed_nsym.rc"
+        @ONLY
+    )
+
     SET (cleed_nsym_SRCS ${cleed_nsym_SRCS} res/windows/cleed_nsym.rc)
-    
+
     ADD_EXECUTABLE(cleed_nsym ${cleed_nsym_SRCS})
 
     TARGET_LINK_LIBRARIES(leed ws2_32 psapi m)
     TARGET_LINK_LIBRARIES(leedStatic ws2_32 psapi m)
     TARGET_LINK_LIBRARIES(cleed_nsym ws2_32 psapi)
-    
+
 ELSE (WIN32)
-    
+
     IF (UNIX)
-    
+
         IF(APPLE)
-        
+
             ADD_EXECUTABLE(cleed_nsym MACOSX_BUNDLE ${cleed_nsym_SRCS})
             INSTALL(TARGETS cleed_nsym BUNDLE DESTINATION ../Applications)
-            
+
             TARGET_LINK_LIBRARIES(leed m)
             TARGET_LINK_LIBRARIES(leedStatic m)
-            
+
         ELSE(APPLE)
-        
-            ADD_EXECUTABLE(cleed_nsym ${cleed_nsym_SRCS})  
-            
+
+            ADD_EXECUTABLE(cleed_nsym ${cleed_nsym_SRCS})
+
             TARGET_LINK_LIBRARIES(leed m)
             TARGET_LINK_LIBRARIES(leedStatic m)
         ENDIF(APPLE)
-        
+
     ENDIF(UNIX)
-    
+
 ENDIF (WIN32)
 
 TARGET_LINK_LIBRARIES (cleed_nsym leed m)
@@ -283,21 +320,28 @@ IF (WITH_OPENCL STREQUAL "ON")
     TARGET_LINK_LIBRARIES(leed OpenCl)
     TARGET_LINK_LIBRARIES(leedStatic OpenCl)
     TARGET_LINK_LIBRARIES (cleed_nsym OpenCl)
-ENDIF (WITH_OPENCL STREQUAL "ON")    
+ENDIF (WITH_OPENCL STREQUAL "ON")
 
 
 IF (WIN32)
     INSTALL (TARGETS leed cleed_nsym
         COMPONENT runtime
-        RUNTIME DESTINATION bin 
+        RUNTIME DESTINATION bin
         LIBRARY DESTINATION bin
     )
 ELSE (WIN32)
     INSTALL (TARGETS leed cleed_nsym
         COMPONENT runtime
-        RUNTIME DESTINATION bin 
+        RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
     )
 ENDIF (WIN32)
-    
+
+IF (BLAS_FOUND)
+    # add blas library to linker
+    TARGET_LINK_LIBRARIES(leed ${BLAS_LIBRARIES})
+    TARGET_LINK_LIBRARIES(leedStatic ${BLAS_LIBRARIES})
+    TARGET_LINK_LIBRARIES(cleed_nsym ${BLAS_LIBRARIES})
+ENDIF (BLAS_FOUND)
+
 INSTALL (TARGETS leedStatic COMPONENT libraries ARCHIVE DESTINATION lib)

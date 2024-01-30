@@ -1,5 +1,5 @@
 /*********************************************************************
-  GH/11.08.95 
+  GH/11.08.95
   file contains function:
 
   leed_output_iint_sym(mat Amp, leed_beam *beams, leed_var *par, FILE * outfile)
@@ -7,7 +7,7 @@
  Intensity output function
 
  Changes:
- 
+
  WB/02.06.98 - copy from outint
  WB/02.06.98 - input the faktor 1/rot
 *********************************************************************/
@@ -27,14 +27,14 @@ int leed_output_iint_sym(mat Amp, leed_beam *beams_now, leed_beam *beams_all,
 /************************************************************************
 
  output of beam intensities
- 
+
  INPUT:
 
   mat Amp - (input) vector containing the beam amplitudes of all beams
            included at the current energy.
   leed_beam *beams_now  -  all beams included at the current energy.
   leed_beam *beams_all  -  all beams included at the highest energy.
-  FILE * outfile - pointer to the output file were the intensities are 
+  FILE * outfile - pointer to the output file were the intensities are
            written to.
 
  RETURN VALUES:
@@ -54,20 +54,20 @@ real k_r;
 
  Int = NULL;
 /*********************************************************
-   Calculate intensitied as the square of the moduli of the 
+   Calculate intensitied as the square of the moduli of the
    amplitudes.
 *********************************************************/
 
  Int = matsqmod(Int, Amp);
 
  k_r = cleed_real_sqrt(2*par->eng_v);
- 
+
 /*********************************************************
    Print intensities for non-evanescent beams
 *********************************************************/
 
 #ifdef CONTROL
- fprintf(STDCTR,"(leed_output_iint_sym):\t     beam\t  intensity\n\t\t\t== %.2f eV ==\n", 
+ fprintf(STDCTR,"(leed_output_iint_sym):\t     beam\t  intensity\n\t\t\t== %.2f eV ==\n",
                 par->eng_v*HART);
  for (i_beams_now = 0, i_out = 0; i_beams_now < Int->rows; i_beams_now ++)
  {
@@ -79,7 +79,7 @@ real k_r;
          Int->rel[i_beams_now + 1]/(beams_now + i_beams_now)->n_eqb_s);
      else
        fprintf(STDCTR,"\t\t(%5.2f,%5.2f):\t   < %.0e\n",
-        (beams_now + i_beams_now)->ind_1, (beams_now + i_beams_now)->ind_2, 
+        (beams_now + i_beams_now)->ind_1, (beams_now + i_beams_now)->ind_2,
          INT_TOLERANCE);
      i_out ++;
    }
@@ -96,8 +96,8 @@ real k_r;
 #ifdef CONTROL_ALL
  fprintf(STDCTR,"\n(leed_output_iint_sym): all beams: \n");
 
- for (i_beams_all = 0; 
-      ! IS_EQUAL_REAL((beams_all + i_beams_all)->k_par, F_END_OF_LIST); 
+ for (i_beams_all = 0;
+      ! IS_EQUAL_REAL((beams_all + i_beams_all)->k_par, F_END_OF_LIST);
       i_beams_all ++)
  {
    fprintf(STDCTR,"\t\t(%5.2f,%5.2f)\n",
@@ -110,7 +110,7 @@ real k_r;
  fprintf(outfile,"%.2f ", par->eng_v*HART);
 
 
- for(i_beams_all = 0; 
+ for(i_beams_all = 0;
      ! IS_EQUAL_REAL((beams_all + i_beams_all)->k_par, F_END_OF_LIST);
      i_beams_all ++)
  {
@@ -123,13 +123,13 @@ real k_r;
        {
          if(Int->rel[i_beams_now + 1] > INT_TOLERANCE)
          {
-           val = (Int->rel[i_beams_now + 1])/((beams_now + i_beams_now)->n_eqb_s);   
+           val = (Int->rel[i_beams_now + 1])/((beams_now + i_beams_now)->n_eqb_s);
 #ifdef CONTROL_ALL
- fprintf(STDCTR,"\n(leed_output_iint_sym):neqbs = %d  neqbb = %d beam%d \n",
+ fprintf(STDCTR,"\n(leed_output_iint_sym):neqbs = %lu  neqbb = %lu beam%d \n",
                       (beams_now + i_beams_now)->n_eqb_s,
                       (beams_now + i_beams_now)->n_eqb_b,
                       i_beams_now);
-#endif  
+#endif
            fprintf(outfile,"%.6e ", val);
          }
          else

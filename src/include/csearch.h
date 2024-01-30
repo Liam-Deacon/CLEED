@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           SEARCH.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -15,7 +15,7 @@
 /*!
  * \file
  * \brief Master include file for search program.
- * \author Georg Held <g.held@reading.ac.uk>
+ * \author Georg Held <georg.held@diamond.ac.uk>
  *
  */
 
@@ -47,25 +47,21 @@ extern "C" {
 /*********************************************************************
  * Include type definitions and constant values and functions for SEARCH
  *********************************************************************/
-
-#if USE_GSL == 0 || !defined(USE_GSL) /* use numerical recipes */
-# if !defined(USE_GSL)
-#   define USE_GSL 0
-# endif
-# include "nrr.h"
-#else /* use the GNU Scientific Library (open source) */
+#if USE_GSL == 1  /* use the GNU Scientific Library (open source) */
 # include <gsl/gsl_vector.h>
 # include <gsl/gsl_matrix.h>
 # include <gsl/gsl_multimin.h>
+#else  /* use numerical recipes - NOTE: Not open source */
+# include "nrr.h"
 #endif
 
 #include "search_def.h"
 #include "search_func.h"
 #include "search_ver.h"
 
-search_atom *sr_atoms;
-search *sr_search;
-char *sr_project;
+extern search_atom *sr_atoms;
+extern search *sr_search;
+extern char *sr_project;
 
 /*********************************************************************
  * End of include file

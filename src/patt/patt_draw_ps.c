@@ -73,7 +73,7 @@ int patt_draw_ps(const patt_drawing *drawing)
         pat = pattern_read(f);
 		if (!pat) {
 			ERROR_MSG("unable to read pattern from '%s' (skipped)\n",
-				input_files[i_file]);
+				drawing->input_files[i_file]);
 			continue;
 		}
       }

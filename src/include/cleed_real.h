@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           REAL.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -36,14 +36,10 @@
 #define _USE_MATH_DEFINES
 #endif
 
+#include <float.h>
 #include <math.h>
 #include <stdbool.h>
-
-#if (__GNUC__)
-#define PURE __attribute__ ((pure))
-#else
-#define PURE
-#endif
+#include "cc_attribute.h"
 
 /*!
  * \typedef real
@@ -101,7 +97,6 @@ namespace cleed {
  ************************************************/
 
 #ifdef CLEED_REAL_IS_FLOAT
-#include <float.h>
 
 static const char CLEED_REAL_FMT[] = "";
 
@@ -111,57 +106,14 @@ typedef float real;
   Define macros for math operations of type float
 */
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
+#ifdef __alpha__ || __osf__        /* DEC ALPHA */
+# include "_cleed_real_dec_alpha.h"
+#else                              /* IBM and others (standard math library) */
+# include "_cleed_real_ibm.h"
 #endif
 
-PURE static inline double sind(real x) { return sinf(x * (real)(M_PI / 180)); }
-PURE static inline double cosd(real x) { return cosf(x * (real)(M_PI / 180)); }
-
-#ifdef __osf__                                     /* DEC */
-
-PURE static inline real cleed_real_cos(real x) { return (cosf(x)); }
-PURE static inline real cleed_real_cosd(real x) { return (cosd(x)); }
-PURE static inline real cleed_real_sin(real x)  { return (sinf(x)); }
-PURE static inline real cleed_real_sind(real x) { return (sind(x)); }
-PURE static inline real cleed_real_atan2(real x, real y) { return atan2f(x, y); }
-
-PURE static inline real cleed_real_cosh(real x) { return coshf(x); }
-PURE static inline real cleed_real_sinh(real x) { return sinhf(x); }
-
-PURE static inline real cleed_real_exp(real x) { return expf(x); }
-PURE static inline real cleed_real_log(real x) { return logf(x); }
-
-PURE static inline real cleed_real_fabs(real x) { return fabsf(x); }
-PURE static inline real cleed_real_sqrt(real x) { return sqrtf(x); }
-
-PURE static inline real cleed_real_cabs(real x, real y) { return hypotf(x, y); }
-PURE static inline real cleed_real_hypot(real x, real y) { return hypotf(x, y); }
-
-PURE static inline real cleed_real_nint(real x) { return (rintf(x));}
-
-#else                              /* IBM and others (standard math library) */
-
-PURE static inline real cleed_real_cos(double x) { return ((real) cos(x)); }
-PURE static inline real cleed_real_cosd(double x) { return ((real) cosd((real)x)); }
-PURE static inline real cleed_real_sin(double x)  { return ((real) sin(x)); }
-PURE static inline real cleed_real_sind(double x) { return ((real) sind((real)x)); }
-PURE static inline real cleed_real_atan2(double x, double y) { return (real) atan2(x, y); }
-
-PURE static inline real cleed_real_cosh(double x) { return (real) cosh(x); }
-PURE static inline real cleed_real_sinh(double x) { return (real) sinh(x); }
-
-PURE static inline real cleed_real_exp(double x) { return (real) exp(x); }
-PURE static inline real cleed_real_log(double x) { return (real) log(x); }
-
-PURE static inline real cleed_real_fabs(double x) { return (real) fabs(x); }
-PURE static inline real cleed_real_sqrt(double x) { return (real) sqrt(x); }
-
-PURE static inline real cleed_real_cabs(double x, double y) { return (real) hypot(x, y); }
-PURE static inline real cleed_real_hypot(double x, double y) { return (real) hypot(x, y); }
-
-PURE static inline real cleed_real_nint(double x) { return ((real)rint(x));}
-
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
 #endif
 
 PURE static inline bool is_equal_real(real x, real y) { return (fabs(x-y) < FLT_EPSILON); }
@@ -173,8 +125,6 @@ PURE static inline bool is_equal_real(real x, real y) { return (fabs(x-y) < FLT_
 #endif
 
 #else
-
-#include <float.h>
 
 typedef double real;
 

@@ -16,7 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 INCLUDE(InstallRequiredSystemLibraries)
 # allow more human readable "if then else" constructs
@@ -68,6 +68,7 @@ SET(SOURCE_BRANCH "Development")
 SET(LICENSE "GNU General Public License v3")
 
 # Project options
+OPTION(BUILD_CPP_BINDINGS "Set to ON to build (experimental) C++ bindings" OFF)
 OPTION(WITH_PHASESHIFTS "Set to ON to download and integrate PhaseShifts Python package" OFF)
 OPTION(BUILD_SHARED_LIBS "Set to OFF to build static libraries" ON)
 OPTION(BUILD_RPM "Set to ON to build an RPM" OFF)
@@ -81,6 +82,8 @@ OPTION(WITH_LAPACK "Set to OFF to build without BLAS/LAPACK support - NOTE: This
 OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration - NOTE: this means the code is no longer open source" ON)
 OPTION(USE_INTEL_MKL "Use Intel MKL for BLAS/LAPACK routines" OFF)
 OPTION(USE_ATLAS "Use ATLAS for BLAS/LAPACK routines" OFF)
+OPTION(GPL_COMPATIBLE_ONLY "Set to OFF to build restricted dependencies that do not comply with open source license" ON)
+OPTION(BUILD_ANGLE_OF_INCIDENCE_EXTENSION, "Set to ON to build the angle of incidence (*_aoi) extensions to cleed/crfac" OFF)
 
 # set cmake module path
 IF (NOT CMAKE_MODULE_PATH)
@@ -155,23 +158,22 @@ IF (WITH_OPENCL STREQUAL "ON")
     ENDIF (OpenCL_FOUND OR OPENCL_FOUND)
 ENDIF()
 
+IF(WIN32)
+    FIND_LIBRARY(GSL_LIBRARY NAMES gsl HINTS "${PROJECT_SOURCE_DIR}/lib/win32")
+ELSE(WIN32)
+    FIND_LIBRARY(GSL_LIBRARY NAMES gsl)
+ENDIF(WIN32)
+
 # Check whether to build open source version of CLEED using GSL
 IF (WITH_GSL STREQUAL "ON")
     set( GSL_FOUND OFF )
-    set( GSL_CBLAS_FOUND OFF )
 
     IF (NOT WIN32)
         FIND_PACKAGE(GSL REQUIRED)
     ENDIF (NOT WIN32)
 
-
-    IF(WIN32)
-        FIND_LIBRARY(GSL_LIBRARY NAMES gsl HINTS "${PROJECT_SOURCE_DIR}/lib/win32")
-    ELSE(WIN32)
-        FIND_LIBRARY(GSL_LIBRARY NAMES gsl)
-    ENDIF(WIN32)
     IF (GSL_LIBRARY)
-        SET (WITH_GSL ON)
+        SET ( WITH_GSL ON )
         SET ( GSL_FOUND ON )
         SET ( GSL_LIBRARIES ${GSL_LIBRARY} )
 
@@ -195,44 +197,30 @@ IF (WITH_GSL STREQUAL "ON")
 ENDIF()
 
 # Alternatively, build using the BLAS/LAPACK backend (still open source)
+FIND_PACKAGE(BLAS)
+FIND_PACKAGE(LAPACK)
+
 IF (WITH_LAPACK STREQUAL "ON")
-    set( WITH_LAPACK OFF )
-    set( CBLAS_FOUND OFF )
-    set( LAPACK_FOUND OFF )
+    SET( WITH_LAPACK OFF )
 
-    IF (WIN32)
-        FIND_LIBRARY( CBLAS_LIBRARY NAMES cblas blas HINTS "${PROJECT_SOURCE_DIR}/lib/win32" )
-        FIND_LIBRARY( LAPACK_LIBRARY NAMES lapacke lapack HINTS "${PROJECT_SOURCE_DIR}/lib/win32" )
-        IF (CBLAS_LIBRARY)
-            SET ( CBLAS_FOUND ON )
-            SET ( CBLAS_LIBRARIES ${CBLAS_LIBRARY} )
-            SET ( CBLAS_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/win32" )
-            SET ( CBLAS_IS_BLAS ON )
-        ENDIF(CBLAS_LIBRARY)
-        IF (LAPACK_LIBRARY)
-            SET ( LAPACK_FOUND ON )
-            SET ( LAPACK_LIBRARIES ${LAPACK_LIBRARY} )
-            SET ( LAPACK_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/win32" )
-            SET ( WITH_GSL OFF )
-        ENDIF(LAPACK_LIBRARY)
-    ELSE(WIN32)
-        FIND_PACKAGE(CBLAS REQUIRED)
-        FIND_PACKAGE(LAPACK REQUIRED)
-    ENDIF(WIN32)
-
-    IF (CBLAS_FOUND AND NOT CBLAS_IS_BLAS)
-        ADD_DEFINITIONS(-DUSE_CBLAS=1)
-    ELSE (CBLAS_FOUND AND NOT CBLAS_IS_BLAS)
+    IF (BLAS_FOUND AND LAPACK_FOUND)
         ADD_DEFINITIONS(-DUSE_BLAS=1)
-    ENDIF (CBLAS_FOUND AND NOT CBLAS_IS_BLAS)
-    IF (LAPACK_FOUND)
         ADD_DEFINITIONS(-DUSE_LAPACK=1)
-    ENDIF (LAPACK_FOUND)
-
-    IF (CBLAS_FOUND AND LAPACK_FOUND)
+        ADD_DEFINITIONS(-DUSE_GSL=0)
         SET(WITH_LAPACK ON)
-    ENDIF (CBLAS_FOUND AND LAPACK_FOUND)
-ENDIF()
+    ENDIF (BLAS_FOUND AND LAPACK_FOUND)
+ENDIF (WITH_LAPACK STREQUAL "ON")
+
+# perform checks for linear algebra libraries
+IF (NOT WITH_GSL STREQUAL "ON" AND NOT WITH_LAPACK STREQUAL "ON")
+    IF (GPL_COMPATIBLE_ONLY STREQUAL "ON")
+        # Error and stop if neither GSL nor LAPACK are found
+        MESSAGE (FATAL_ERROR "Neither GSL nor LAPACK were found. Open source GPL-compliant CLEED cannot be built without one of these libraries.")
+    ELSE (GPL_COMPATIBLE_ONLY STREQUAL "ON")
+    # emit a warning if neither GSL nor LAPACK are found
+        MESSAGE (WARNING "Neither GSL nor LAPACK were found. CLEED will not be able to perform any linear algebra calculations.")
+    ENDIF (GPL_COMPATIBLE_ONLY STREQUAL "ON")
+ENDIF (NOT WITH_GSL STREQUAL "ON" AND NOT WITH_LAPACK STREQUAL "ON")
 
 ##############################################################################
 #                          Compiler section                                  #
@@ -255,8 +243,7 @@ FIND_PACKAGE (Java
 INCLUDE (UseJava)
 
 # find Python libraries & commands
-FIND_PACKAGE(PythonInterp)
-FIND_PACKAGE(PythonLibs)
+FIND_PACKAGE(Python3)
 FIND_PROGRAM(PYTHON_PIP_EXECUTABLE pip)
 FIND_PROGRAM(PYTHON_EASY_INSTALL easy_install)
 FIND_PROGRAM(CYTHON NAMES cython cython.py)
@@ -732,7 +719,7 @@ IF (WIN32)
     SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\cleed_nsym.exe")
     SET(CPACK_NSIS_HELP_LINK "http://www.reading.ac.uk/web/FILES/chemistry/Georg_Held_LEED_Description.pdf")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://www.reading.ac.uk/web/FILES/chemistry/Georg_Held_LEED_Description.pdf")
-    SET(CPACK_NSIS_CONTACT "g.held@reading.ac.uk or liam.m.deacon@gmail.com")
+    SET(CPACK_NSIS_CONTACT "georg.held@diamond.ac.uk or liam.m.deacon@gmail.com")
     SET(CPACK_NSIS_MODIFY_PATH ON)
     # SET(CPACK_PACKAGE_EXECUTABLES "cleed-gui;cleed-gui")
     SET(CPACK_GENERATOR "NSIS;ZIP")
@@ -952,7 +939,7 @@ SET (DOLLAR "$")
 SET (CPACK "@CPACK")
 SET (AT "@")
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.cmake.in"
-    "${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.in" @IMMEDIATE)
+    "${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.in")
 # configure CPack - doesn't appear to work...
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CPackOptions.cmake.in"
     "${CMAKE_BINARY_DIR}/CPackOptions.cmake" @ONLY)

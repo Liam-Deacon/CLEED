@@ -20,7 +20,7 @@
 #include <errno.h>
 #include <time.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "copy_file.h"
 
 extern long sa_idum;       /* seed for ran1, defined and initialized in main */

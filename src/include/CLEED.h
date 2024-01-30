@@ -30,7 +30,7 @@
  *
  * A (still rather incomplete) documentation of the program package can be
  * found in the :download:`manual <CLEED_Manual.pdf>`, but it is probably best
- * to send an email, with all input files, to <g.held@reading.ac.uk> when you
+ * to send an email, with all input files, to <georg.held@diamond.ac.uk> when you
  * encounter any problems (it is very likely you will ...)
  *
  * \section install Installation
@@ -264,7 +264,7 @@
  * \subsection authors Authors
  *
  * The primary author of the CLEED project is Georg Held
- * <g.held@reading.ac.uk>, however contributions & development has also been
+ * <georg.held@diamond.ac.uk>, however contributions & development has also been
  * undertaken by:
  *
  * - Liam Deacon <liam.m.deacon@gmail.com> : Windows port with Explorer
@@ -277,16 +277,16 @@
  * development.
  *
  * If you wish to contribute to this project then please contact either
- * Georg Held <g.held@reading.ac.uk>, Liam Deacon <liam.m.deacon@gmail.com>
+ * Georg Held <georg.held@diamond.ac.uk>, Liam Deacon <liam.m.deacon@gmail.com>
  * or Jacopo Ardini <j.ardini@pgr.reading.ac.uk>.
  *
  **/
- 
+
 #ifndef __CLEED_H__
 #define __CLEED_H__
 
 #include "leed.h"
-#include "search.h"
+#include "csearch.h"
 #include "rfac.h"
 
 #include "latt.h"

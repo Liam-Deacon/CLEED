@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           RFAC_FUNC.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.

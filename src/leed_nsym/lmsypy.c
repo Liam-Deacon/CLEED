@@ -83,7 +83,7 @@ mat leed_ms_yp_yxp ( mat Yxmat, const mat Ymat)
 
   l_max = (size_t)(cleed_real_sqrt((real) Yxmat->rows ) + 0.1) - 1;
 
-  CONTROL_MSG(CONTROL, "l_max = %2d\n", l_max);
+  CONTROL_MSG(CONTROL, "l_max = %2u\n", l_max);
 
 
   /*
@@ -272,7 +272,7 @@ mat leed_ms_yp_ym ( mat Ymmat, const mat Ypmat)
 
   l_max = (size_t)(cleed_real_sqrt((real) Ymmat->cols ) + 0.1) - 1;
 
-  CONTROL_MSG(CONTROL, "l_max = %2d\n", l_max);
+  CONTROL_MSG(CONTROL, "l_max = %2lu\n", l_max);
 
   /* Loop over l,m (l > 0, m > 0): */
 

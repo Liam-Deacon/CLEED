@@ -39,7 +39,7 @@ enum {
 #endif
 
 /* shapes */
-/*! \enum patt_shape 
+/*! \enum patt_shape
  */
 typedef enum {
   PATT_CIRCLE,          /*!< circle shape */
@@ -76,7 +76,7 @@ typedef struct spot
 /*! \typedef spots
  *  \brief LEED spot list structure.
  *
- * List structure for LEED spots. Contains members to control drawing 
+ * List structure for LEED spots. Contains members to control drawing
  * of spots group.
  */
 typedef struct _spots

@@ -41,7 +41,7 @@ LD/30.04.14  - removed dependence on 'cp' system call, now uses
 #include <stdlib.h>
 #include <gsl/gsl_vector.h>
 
-#include "search.h"
+#include "csearch.h"
 #include "copy_file.h"
 
 /*

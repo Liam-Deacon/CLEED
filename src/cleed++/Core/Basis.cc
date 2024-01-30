@@ -41,37 +41,37 @@ Basis::~Basis()
 
 inline Basis& Basis::setA1(const Coordinate &a1)
 {
-  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 0), const_cast<coord*>(a1.pos));
+  ::coord_copy(&this->basis_ptr->a[0], const_cast<coord*>(a1.pos));
   return *this;
 }
 
 inline Basis& Basis::setA2(const Coordinate &a2)
 {
-  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 1), const_cast<coord*>(a2.pos));
+  ::coord_copy(&this->basis_ptr->a[1], const_cast<coord*>(a2.pos));
   return *this;
 }
 
 inline Basis& Basis::setA3(const Coordinate &a3)
 {
-  ::coord_copy(BASIS_VECTOR_PTR(this->basis_ptr, 2), const_cast<coord*>(a3.pos));
+  ::coord_copy(&this->basis_ptr->a[2], const_cast<coord*>(a3.pos));
   return *this;
 }
 
 inline Basis& Basis::setA1(double a1_x, double a1_y, double a1_z)
 {
-  ::coord_set(BASIS_VECTOR_PTR(this->basis_ptr, 0), a1_x, a1_y, a1_z);
+  ::coord_set(&this->basis_ptr->a[0], a1_x, a1_y, a1_z);
   return *this;
 }
 
 inline Basis& Basis::setA2(double a2_x, double a2_y, double a2_z)
 {
-  ::coord_set(BASIS_VECTOR_PTR(this->basis_ptr, 1), a2_x, a2_y, a2_z);
+  ::coord_set(&this->basis_ptr->a[1], a2_x, a2_y, a2_z);
   return *this;
 }
 
 inline Basis& Basis::setA3(double a3_x, double a3_y, double a3_z)
 {
-  ::coord_set(BASIS_VECTOR_PTR(this->basis_ptr, 2), a3_x, a3_y, a3_z);
+  ::coord_set(&this->basis_ptr->a[2], a3_x, a3_y, a3_z);
 }
 
 Basis& Basis::setBasis(

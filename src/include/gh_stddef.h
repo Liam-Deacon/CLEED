@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           GH_STDDEF.H
  *
- *  Copyright 2006-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2006-2014 Georg Held <georg.held@diamond.ac.uk>
  *
  *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
@@ -13,10 +13,16 @@
  ********************************************************************/
 
 /*!
- * \file
- * \author Georg Held <g.held@reading.ac.uk>
+ * \file gh_stddef.h
+ * \author Georg Held <georg.held@diamond.ac.uk>
  * \brief Header file for constants and macros generally used
  * throughout the CLEED code.
+ *
+ * <br>
+ *
+ * Constants and macros are defined here which either are CLEED specific
+ * or else added as a compatibility layer between different C standards
+ * and compilers.
  *
  * \note When compiling with \c DEBUG defined, the maximum amount of
  * program control information will be printed to the log during execution.
@@ -24,6 +30,10 @@
 
 #ifndef STD_DEF_H
 #define STD_DEF_H
+
+#if !defined(USE_GSL)
+# define USE_GSL 0  /*!< flag to use GNU Scientific Library for linear algebra operations */
+#endif
 
 #if __cplusplus
 #include <cmath>
@@ -39,10 +49,10 @@
 #include <errno.h>
 
 #if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L
-#define true 1
-#define false 0
+# define true 1    /*!< boolean `true` value as an ANSI C `int` (emulates C99 `<stdbool.h>`) */
+# define false 0   /*!< boolean `false` value as an ANSI C `int` (emulates C99 `<stdbool.h>`) */
 #else
-#include <stdbool.h>
+# include <stdbool.h>
 #endif
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
@@ -57,15 +67,16 @@ namespace cleed {
 
 /* set compiler specific options */
 #if (!__GNUC__)
-# define __attribute__(x) /* ignore GCC style attributes */
+# define __attribute__(x) /*!< Set to an empty string, i.e. ignore GCC style attributes when not using GNU compatible compiler */
 #endif
 
 #if defined(_MSC_VER)
 # define DLL_PUBLIC __declspec(dllexport) /* Note: actually gcc seems to also supports this syntax */
 # ifndef __cplusplus
-#   define inline   /* MSVC doesn't seem to allow linking of inline functions in C */
+#   define inline   /*!< MSVC doesn't seem to allow linking of inline functions in C */
 # endif
 #else
+/*! Defines that a symbol should be exported for public consumption. */
 # if __GNUC__
 #   define DLL_PUBLIC __attribute__((dllexport))
 # else
@@ -78,6 +89,12 @@ namespace cleed {
 #define IBM
 */
 
+/*!
+ * Define for IBM specific behaviour
+ *
+ * \warning This appears to be unused.
+ * If you know more please <a href="https://Liam-Deacon/CLEED/issues">open an issue on GitHub</a>
+ */
 #define IBM
 /*
 #define free(x) free((void *)(x))
@@ -93,34 +110,37 @@ namespace cleed {
 #define STDCTR stdout /*!< output redirection for normal messages */
 #define STDCPU stdout /*!< output redirection for CPU messages */
 
+/*!
+ * Defines the output file stream string for the given OS platform as a macro.
+ */
 #ifdef _WIN32
 #define NULL_FILENAME "NUL"
 #else
-static inline char *const nullfilename = "/dev/null";
-#define NULL_FILENAME nullfilename
+#define NULL_FILENAME "/dev/null"
 #endif
+static const char null_filename[] = NULL_FILENAME; /*!< `null` filepath for the given OS platform => writes no output */
 
 /*********************************************************************
  * printing verbosity and debugging messages
  *********************************************************************/
 
-/*! 
- * \define EXIT_ON_ERROR
+/*!
+ * \def EXIT_ON_ERROR
  * \brief Exits program if error occurs.
  *
- * \define ERROR_LOG
+ * \def ERROR_LOG
  * \brief Error messages flag for debugging to #STDERR output.
  *
- * \define WARNING_LOG
+ * \def WARNING_LOG
  * \brief Warning messages flag for debugging to #STDWAR .
  *
- * \define CONTROL
+ * \def CONTROL
  * \brief Control messages flag for debugging to #STDCTR
  *
- * \define CONTROL_ALL
+ * \def CONTROL_ALL
  * \brief Adds maximum level of control information for debugging.
  *
- * \define ERROR_RETURN
+ * \def ERROR_RETURN
  * \brief Exits with integer code 1 if #EXIT_ON_ERROR is defined, otherwise
  * the function will return with the given error code.
  */
@@ -131,7 +151,7 @@ static inline char *const nullfilename = "/dev/null";
 # define WARNING_LOG    1 /*!< Enable warning logging to #STDWAR */
 #endif
 
-#ifndef EXIT_ON_ERROR 
+#ifndef EXIT_ON_ERROR
 #define EXIT_ON_ERROR 0
 #endif
 
@@ -145,14 +165,14 @@ static inline char *const nullfilename = "/dev/null";
 #endif
 
 #ifndef CONTROL_ALL
-# define CONTROL       1
-# define CONTROL_X     2
-# define CONTROL_FLOW  3
-# define CONTROL_IO    4
-# define CONTROL_MBG   5
-# define CONTROL_LSUM  6
-# define CONTROL_MATB  7
-# define CONTROL_ALL   8   /*!< The most verbose mode - includes all others */
+# define CONTROL 1
+# define CONTROL_X 2
+# define CONTROL_FLOW 3
+# define CONTROL_IO 4
+# define CONTROL_MBG 5
+# define CONTROL_LSUM 6
+# define CONTROL_MATB 7
+# define CONTROL_ALL 8   /*!< The most verbose mode - includes all others */
 # define CONTROL_LEVEL CONTROL_ALL
 #endif
 
@@ -189,7 +209,7 @@ static inline char *const nullfilename = "/dev/null";
 # define ERROR_EXIT_RETURN(a,b)  exit((a))
 # define ASSERT_MSG(expr, ...) \
   do { ERROR_MSG(__VA_ARGS__); assert((expr)); } while(0)
-# 
+#
 #else
 # define ERROR_RETURN(i) return((i))
 # define ERROR_EXIT_RETURN(a,b)  return((b))
@@ -205,12 +225,16 @@ static inline char *const nullfilename = "/dev/null";
 #endif
 
 
-  /* remove annoying rest arguments warning with ISO C99 & GCC */
+/* remove annoying rest arguments warning with ISO C99 & GCC */
 #if __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvariadic-macros"
 #endif /* GCC */
 
+/*!
+ * \def ERROR_MSG
+ * \brief Macro that accepts VARARGS and prints error message to #STDERR output.
+ */
 #if ERROR_LOG && __STDC_VERSION__ >= 199901L
 # ifdef _MSC_VER
 #   define ERROR_MSG(fmt, ...)                                                \
@@ -225,6 +249,10 @@ static inline char *const nullfilename = "/dev/null";
 # define ERROR_MSG(fmt, ...) {} /* dummy message: will warn of unused value */
 #endif
 
+/*!
+ * \def WARNING_MSG
+ * \brief Macro that accepts VARARGS and prints warning message to #STDWAR output.
+ */
 #if WARNING_LOG && __STDC_VERSION__ >= 199901L
 # ifdef _MSC_VER
 #   define WARNING_MSG(fmt, ...)                                              \
@@ -239,6 +267,10 @@ static inline char *const nullfilename = "/dev/null";
 # define WARNING_MSG(fmt, ...) {} /* dummy message: will warn of unused value */
 #endif
 
+/*!
+ * \def CONTROL_MSG
+ * \brief Macro that accepts VARARGS and prints control message to #STDCTR output.
+ */
 #if CONTROL && __STDC_VERSION__ >= 199901L
 # ifdef _MSC_VER
 #   define CONTROL_MSG(level, fmt, ...)                                       \
@@ -256,64 +288,71 @@ static inline char *const nullfilename = "/dev/null";
 #endif
 
 #if __GNUC__
-#pragma GCC diagnostic pop /* restore rest aguments warning */
+#pragma GCC diagnostic pop /* restore rest arguments warning */
 #endif /* __GNUC__ */
 
 /*********************************************************************
  * general mathematical definitions / constants
  *********************************************************************/
 
+/*!
+ * \def PI
+  * \brief \f$\pi\f$ constant
+  *
+  * Defines either an alias of `M_PI` (when defined in `<math.h>`) or else
+  * defines the value of \f$\pi\f$ to 20 decimal places.
+ */
 #ifdef M_PI
 static const double PI = M_PI;
 #else
 static const double PI = 3.1415926535897932385;
 #endif
 
-#ifndef NAN 
-#define NAN (0./0.)
+#ifndef NAN
+#define NAN (0./0.)  /*!< Explicitly defines NaN when using ANSI C (from C99 `<math.h>`) */
 #endif
 
 #if __STDC_VERSION__ < 199901L
 #ifndef isnan
-#define isnan(x) ((x) != (x))
+#define isnan(x) ((x) != (x))  /*!< rough equivalent of `isnan()` function from C99 `<math.h>` when compiling using ANSI C standard */
 #endif
 #ifndef isinf
-#define isinf(x) (!isnan((x)) && isnan((x) - (x)))
+#define isinf(x) (!isnan((x)) && isnan((x) - (x))) /*!< rough equivalent of `isinf()` function from C99 `<math.h>` when compiling using ANSI C standard */
 #endif
 #endif
 
 static const double DEG_TO_RAD = 0.017453293;  /*!< conversion degree to radian */
 static const double RAD_TO_DEG = 57.29578;     /*!< conversion radian to degree */
 
-static const double M2_H = 0.2631894506957162;      /*!< 2*m/h       [eV^-1   A^-2] */
-static const double SQRT_M2_H = 0.5130199320647456; /*!< sqrt(2*m/h) [eV^-0.5 A^-1] */
+static const double M2_H = 0.2631894506957162;      /*!< \f$2m/h\f$ in units [eV^-1   A^-2] */
+static const double SQRT_M2_H = 0.5130199320647456; /*!< \f$\sqrt{2m/h}\f$ in units [eV^-0.5 A^-1] */
 
 /*********************************************************************
  * general other definitions / constants
  *********************************************************************/
 
-static const size_t KBYTE = 1024;
-static const size_t MBYTE = 1048576;
+static const size_t KBYTE = 1024;     /*!< number of bytes in 1 kilobyte (1kB, not 1KiB) */
+static const size_t MBYTE = 1048576;  /*!< number of bytes in 1 megabyte (1MB, 1024kB) */
 
 /*********************************************************************
  * special definitions
  *********************************************************************/
 
-enum {
+enum common_string_lengths {
   STRSZ = 256  /*!< maximum length of strings */
 };
 
-enum {
+enum common_name_lengths {
   NAMSZ = 128  /*!< maximum length of name */
 };
 
-enum {
+enum yes_no {
   NO = 0,
   YES = 1
 };
 
-enum { U_END_OF_LIST = (sizeof(size_t) - 1) }; /*!< list terminator (unsigned int) */
-enum { I_END_OF_LIST = -9999 };                /*!< list terminator (integer)*/
+enum unsigned_int_list_terminator { U_END_OF_LIST = (sizeof(size_t) - 1) }; /*!< list terminator (unsigned int) */
+enum signed_int_list_terminator   { I_END_OF_LIST = -9999 };                /*!< list terminator (integer)*/
 static const double F_END_OF_LIST = NAN;       /*!< list terminator (float)  */
 
 /*
@@ -473,7 +512,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
 #define int_roundup(x) ((int)( ceil( (x) + 5*DBL_EPSILON )))
 
 /* aliases */
-#define SQUARE square
+#define SQUARE square  /*!< alias for square() */
 #define ODD is_odd
 #define M1P m1p
 
@@ -494,10 +533,10 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
 * helper macros:
 *********************************************************************/
 #ifndef CLEED_LEAN_AND_MEAN
-/*! 
- * \define CLEED_ALLOC 
+/*!
  * \brief wrapper logic around realloc function to avoid memory leaks.
- * \note exits program if \c errno is raised because memory cannot 
+ *
+ * \note exits program if \c errno is raised because memory cannot
  *  be allocated.
  */
 #define CLEED_REALLOC(ptr, new_size)                              \
@@ -508,7 +547,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
       ptr = tmp_ptr;                                              \
     else                                                          \
     {                                                             \
-      ERROR_MSG("could not reallocate %u blocks of memory "       \
+      ERROR_MSG("could not reallocate %lu blocks of memory "      \
                 "for '" #ptr "' at address %p (%s)\n",            \
                 new_size, (void*)ptr, strerror(errno));           \
       exit(errno);                                                \
@@ -516,12 +555,11 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
   } while (0)
 
 /*!
- * \define CLEED_ALLOC
  * \brief Performs memory allocation in \c expr and checks for \c NULL
  * \note The program will exit with code given by \c errno on failure.
- * The exit is justified as the main reason for memory allocation 
- * failures will be because the system has ran out of resources and 
- * therefore it is questionable whether there is any benefit in 
+ * The exit is justified as the main reason for memory allocation
+ * failures will be because the system has ran out of resources and
+ * therefore it is questionable whether there is any benefit in
  * continuing to run the program.
  */
 
@@ -534,7 +572,7 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
                 #expr "'(%s)\n", strerror(errno));                \
       exit(errno);                                                \
     }                                                             \
-  } while(0)       
+  } while(0)
 
 #else /* do not use memory allocation safety checks */
 
@@ -545,13 +583,13 @@ static inline double irndupf(float x) { return ((int)( (x) + 1.)); }
 #endif
 
 
-/*! 
- * \define __NARGS
+/*!
+ * \def __NARGS
  * \brief Helper for \c N_ARGS macro
  *
- * \define NARGS
+ * \def NARGS
  * \brief Counts number of arguments of variadic arguments \c __VA_ARGS__
- * \warning This macro has a 20 argument limit. 
+ * \warning This macro has a 20 argument limit.
  *
  */
 #define __NARGS(_1, _2, _3, _4, _5,_6, _7, _8, _9, _10, _11, _12, _13, \
@@ -578,7 +616,7 @@ inline void *cleed_realloc(void* ptr, size_t new_size)
     ptr = tmp_ptr;
   else
   {
-    ERROR_MSG("could not reallocate %u blocks of memory for "
+    ERROR_MSG("could not reallocate %lu blocks of memory for "
       "pointer at address %p (%s)\n", new_size, ptr, strerror(errno));
     exit(errno);
   }
@@ -592,7 +630,7 @@ inline void *cleed_realloc(void* ptr, size_t new_size)
 #endif
 
 /*!
- * \define CLEED_SSCANF
+ * \def CLEED_SSCANF
  * \brief Safely scans values for \c fmt format-specifier and exits if fails
  */
 #ifndef CLEED_LEAN_AND_MEAN

@@ -49,7 +49,7 @@ mat matextract(mat Msm, const mat Mbg,
     ERROR_MSG("input matrix Mbg does not exist\n");
     ERROR_RETURN(NULL);
   }
- 
+
   if (matcheck(Msm) < 0)
   {
     ERROR_MSG("improper matrix Msm\n");
@@ -62,10 +62,10 @@ mat matextract(mat Msm, const mat Mbg,
       (off_col < 1)         ||
       (end_row > Mbg->rows) ||
       (end_col > Mbg->cols)
-   )
+  )
   {
     ERROR_MSG("matrix indices do not match:\n"
-              "\trows: %d -> %d (%d)\tcols:%d -> %d (%d)\n",
+              "\trows: %lu -> %lu (%lu)\tcols:%lu -> %lu (%lu)\n",
               off_row, end_row, Mbg->rows, off_col, end_col, Mbg->cols);
     ERROR_RETURN(NULL);
   }

@@ -15,7 +15,7 @@
  *   GH/02.09.97 - Set input path by environment variable CLEED_PHASE
  *                 (makes PHASE_PATH obsolete)
  *   WB/26.02.98 - Correct control output
- *   GH/03.05.00 - extend list of parameters for leed_leed_inp_phase: t_type
+ *   GH/03.05.00 - extend list of parameters for leed_inp_phase: t_type
  *   GH/15.07.03 - fix bug in energy scaling factor for Ry (was 2./HART, now 2.).
  *********************************************************************/
 
@@ -36,7 +36,7 @@
 #include "leed.h"
 #include "leed_def.h"
 
-#ifdef __STRICT_ANSI__ 
+#ifdef __STRICT_ANSI__
 char *strdup(const char *str) /* strdup is not standard C (its POSIX) */
 {
     int n = strlen(str) + 1;
@@ -83,7 +83,7 @@ size_t leed_update_phase(size_t n)
  * \warning The phase shifts in the input file must be for increasing energies.
  * \todo Check behavior is maintained from previous version.
  */
-int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
+int leed_inp_phase_nd(const char *phaseinp, real *dr, leed_matrix_diag t_type,
                       leed_phase **p_phs_shifts )
 {
   FILE *inp_stream = NULL;
@@ -173,14 +173,14 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
 
   /* Open and Read input file for a new set of phase shifts */
   CONTROL_MSG(CONTROL,
-              "Reading file \"%s\", i_phase = %d\n", filename, i_phase-1);
+              "Reading file \"%s\", i_phase = %lu\n", filename, i_phase-1);
 
   /* Open input file.
    * Copy the full filename into phs_shifts->input_file.
    */
   if( (inp_stream = fopen(filename, "r")) == NULL)
   {
-    ERROR_MSG("could not open file \"%s\" (%s)\n", 
+    ERROR_MSG("could not open file \"%s\" (%s)\n",
       filename, strerror(errno));
     ERROR_EXIT_RETURN(errno, -1);
   }
@@ -192,14 +192,15 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
    * number (lmax). */
 
   /* read comment lines */
+  int error = 0;
   while( *fgets(linebuffer, STRSZ, inp_stream) == '#');
 
-  if ( linebuffer == NULL)     /* EOF found */
+  if ( linebuffer == EOF)     /* EOF found */
   {
     ERROR_MSG("unexpected EOF found while reading file \"%s\"\n", filename);
     exit(EIO);
   }
-  else if( sscanf(linebuffer, "%d %d %s", &neng, &lmax, eng_type) < 3)
+  else if( sscanf(linebuffer, "%lu %lu %s", &neng, &lmax, eng_type) < 3)
   {
     ERROR_MSG("improper input line in file \"%s\":\n%s", filename, linebuffer);
     ERROR_EXIT_RETURN(EIO, -1);
@@ -226,7 +227,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
 
     CONTROL_MSG(CONTROL, "Energy input in Hartree (27.18 eV)\n");
   }
-  
+
   /* Read energies and phase shifts.
    * Find max and min energy
    * NB: The search for blank or '-' after reading each number is needed
@@ -238,8 +239,8 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
 
   phs_shifts->energy = (real *)malloc( neng * sizeof(real) );
   phs_shifts->pshift = (real *)malloc( neng * nl * sizeof(real) );
- 
- 
+
+
   for( i_eng = 0;
       (i_eng < neng) && (fgets(linebuffer, STRSZ, inp_stream) != NULL);
        i_eng ++)
@@ -247,11 +248,11 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
 
     if (sscanf(linebuffer, fmt_buffer, phs_shifts->energy + i_eng) < 1)
     {
-      ERROR_MSG("could not read energy value #%u from '%s'\n",
+      ERROR_MSG("could not read energy value #%lu from '%s'\n",
         i_eng, linebuffer);
     }
     phs_shifts->energy[i_eng] *= eng_scale;
-   
+
     if (i_eng == 0)
     {
       phs_shifts->eng_min = phs_shifts->energy[i_eng];
@@ -260,7 +261,7 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
     {
       phs_shifts->eng_max = phs_shifts->energy[i_eng];
     }
-   
+
     if( fgets(linebuffer, STRSZ, inp_stream) != NULL)
     {
       for( i_str = 0, i = 0; i<nl; i++)
@@ -282,14 +283,14 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
       break;
     }
   }
- 
+
   phs_shifts->n_eng = i_eng;
 
 #if CONTROL
-  CONTROL_MSG(CONTROL, "Number of energies = %d, lmax = %d\n",
+  CONTROL_MSG(CONTROL, "Number of energies = %lu, lmax = %lu\n",
               phs_shifts->n_eng, phs_shifts->lmax);
   fprintf(STDCTR, "\n\t  E(H)");
-  for(i=0; i < nl; i++) fprintf(STDCTR, "\t  l=%2d",i);
+  for(i=0; i < nl; i++) fprintf(STDCTR, "\t  l=%2lu",i);
   fprintf(STDCTR, "\n\n");
 
   for(i_eng = 0; i_eng < phs_shifts->n_eng; i_eng ++)
@@ -312,10 +313,10 @@ int leed_inp_phase_nd(const char *phaseinp, real *dr, int t_type,
   if(phs_shifts->n_eng != neng)
   {
     WARNING_MSG("EOF found before reading all phase shifts:\n"
-                "     expected energies: %3d, found: %3d, file: %s\n",
+                "     expected energies: %3lu, found: %3lu, file: %s\n",
                 neng, i_eng+1, filename);
   }
 #endif
 
   return ((int)i_phase-1);
-} /* end of function leed_leed_inp_phase */
+} /* end of function leed_inp_phase */

@@ -20,7 +20,7 @@
 #include <time.h>
 
 #include "copy_file.h"
-#include "search.h"
+#include "csearch.h"
 
 extern char *sr_project;
 

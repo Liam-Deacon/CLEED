@@ -1,7 +1,7 @@
 /************************************************************************
  *                           RFAC_DEF.H
  *
- *  Copyright 2006-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 2006-2014 Georg Held <georg.held@diamond.ac.uk>
  *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
@@ -61,8 +61,8 @@ static const real F_FAIL = -1.;      /*!< float return value if failed */
 enum { I_FAIL = -1 };                /*!< integer return value if failed */
 enum { SM_LORENTZ = 1 };             /*!< flag for Lorentzian smooth */
 
-#define ALL_CURVES   NULL      /*!< flag for rfac_cmpr: use all IV curves
-                                * for R-factor calculation */
+#define ALL_CURVES   NULL      /*!< flag for rfac_cmpr: use all IV curves for R-factor calculation */
+
 /*!
  * \brief Ignore Features larger than 100eV (defines the lower limit in Fourier
  * space when calculating Rg-Factor)
@@ -111,7 +111,7 @@ typedef enum {
 } rfactor_type;
 
 /*! \typedef rfac_axis
- *  \brief Enumeration representing IV axis 
+ *  \brief Enumeration representing IV axis
  */
 typedef enum {
   E_AXIS=0,     /*!< Use an I(E) curve for R factor calculations */
@@ -209,7 +209,7 @@ typedef struct            /* Struct for comparing two I(V) curves */
                            * curves e.g. integral/superstructure */
   real eng_0;             /*!< Energy of beam appearance (1.1) */
   rfac_spot spot_id;      /*!< One labeling set of spot indices */
-  
+
   /* theoretical data */
   rfac_iv *theory;        /*!< Pointer to theoretical IV curve data */
 

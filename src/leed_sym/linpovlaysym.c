@@ -22,7 +22,7 @@ Creation:
 #define MIN_DIST 2.0
 #endif
 
-int leed_inp_overlayer_sym(leed_crystal *par,leed_atom * atom_list) 
+int leed_inp_overlayer_sym(leed_crystal *par,leed_atom * atom_list)
 
 /************************************************************************
 
@@ -30,11 +30,11 @@ int leed_inp_overlayer_sym(leed_crystal *par,leed_atom * atom_list)
  - group atoms to composite layers if necessary;
  - determine inter layer vectors;
 
- 
+
  INPUT PARAMETERS:
 
  leed_crystal *par (input, output)
-     structure that contains all geometrical and nongeometrical 
+     structure that contains all geometrical and nongeometrical
      parameters of the overlayer except atom positions and types.
      Output will be written to structure element layers.
 
@@ -53,7 +53,7 @@ int leed_inp_overlayer_sym(leed_crystal *par,leed_atom * atom_list)
 
 *************************************************************************/
 {
-int i; 
+int i;
 int i_c,i_d;
 int n_mir,n_rot;
 int n_atoms, i_atoms;
@@ -61,8 +61,8 @@ int i_layer;
 //int end_per;             /* indicates end of vertical periodicity */
 
 real b1x,b1y,b2x,b2y;    /* 2-dim lattice shifttors: 1=x, 2=y 0 is not used */
-real orig;         
-                  
+real orig;
+
 real *vec;               /* intermediate storage for inter layer vectors */
 real *shift;             /* intermediate storage for registry-shifts */
 int *no_of_atoms;        /* intermediate storage for number of atoms in layer */
@@ -72,7 +72,7 @@ real vaux[2];
 
 
 #ifdef CONTROL
- fprintf(STDCTR,"(leed_inp_overlayer_sym): entering leed_inp_overlayer_sym MIN_DIST= %.3f n_atoms = %d\n", 
+ fprintf(STDCTR,"(leed_inp_overlayer_sym): entering leed_inp_overlayer_sym MIN_DIST= %.3f n_atoms = %ld\n",
          MIN_DIST*BOHR ,  par->n_atoms);
 #endif
 /************************************************************************
@@ -95,19 +95,19 @@ real vaux[2];
 #endif
 
 
-/* 
+/*
   Allocate memory for intermediate storage vectors vec,shift and no_of_atoms:
-  max. number of layers = number of atoms 
+  max. number of layers = number of atoms
 */
-   vec = (real *) calloc( (4*(n_atoms) + 1), sizeof(real) ); 
+   vec = (real *) calloc( (4*(n_atoms) + 1), sizeof(real) );
  shift = (real *) calloc( (2*(n_atoms) + 1), sizeof(real) );
  no_of_atoms = (int *) calloc(n_atoms , sizeof(int) );
- 
+
 /************************************************************************
-  i_layer indicates the layer which an atom belongs to; it will eventually 
+  i_layer indicates the layer which an atom belongs to; it will eventually
           be the total number of layers.
   orig  keeps track of the position of the rotaxis(new origin).
-        the origin is set to (0;0;0) 
+        the origin is set to (0;0;0)
   vaux  is used to store the z-position of the topmost atom in the layer.
 *************************************************************************/
 
@@ -119,7 +119,7 @@ real vaux[2];
 
  vaux[0] = atom_list[0].pos[3];
  atom_list[0].pos[3] = 0.;
- 
+
 #ifdef CONTROL
  for(i_atoms = 0;i_atoms < n_atoms; i_atoms++)
   fprintf(STDCTR,"(leed_inp_overlayer_sym): old atomlist, atom%d (%f %f)\n",
@@ -128,22 +128,22 @@ real vaux[2];
 
  for(i_atoms=1; i_atoms<n_atoms; i_atoms++)
  {
-  if( cleed_real_fabs(atom_list[i_atoms-1].pos[3]+vaux[0] - atom_list[i_atoms].pos[3]) 
+  if( cleed_real_fabs(atom_list[i_atoms-1].pos[3]+vaux[0] - atom_list[i_atoms].pos[3])
         > MIN_DIST )
   {
 /*********************************************************************
    New layer:
-   - check, weather the previous layer contains only one atom 
-     (no_of_atoms[i_layer] == 1). 
+   - check, weather the previous layer contains only one atom
+     (no_of_atoms[i_layer] == 1).
    - set up new inter layer vector (vec[3*i_layer + i_c]);
    - increase i_layer;
    - set up new origin of the layer;
 **********************************************************************/
 #ifdef CONTROL
-     fprintf(STDCTR,"(leed_inp_overlayer_sym): new layer, no_of_atoms[%d] = %d\n", 
+     fprintf(STDCTR,"(leed_inp_overlayer_sym): new layer, no_of_atoms[%d] = %d\n",
                      i_layer, no_of_atoms[i_layer]);
 #endif
- 
+
    if(no_of_atoms[i_layer] != 1)
    {
     *(shift + 2*i_layer + 0) = 0;
@@ -154,7 +154,7 @@ real vaux[2];
     *(vec + 4*i_layer + 2) = 0.;
     *(vec + 4*i_layer + 3) =
     atom_list[i_atoms].pos[3] - atom_list[i_atoms-1].pos[3] - vaux[0];
-     
+
    }
    else
    {
@@ -185,7 +185,7 @@ real vaux[2];
    no_of_atoms[i_layer]++;
    atom_list[i_atoms].layer = i_layer;
    if(no_of_atoms[i_layer] > 1)
-   { 
+   {
    atom_list[i_atoms].pos[3] -= vaux[0];
    }
  }  /* for i_atoms (loop through atoms) */
@@ -205,7 +205,7 @@ real vaux[2];
  *(shift + 2*i_layer + 1) = 0;
  }
  else
- { 
+ {
  *(shift + 2*i_layer + 0) = -atom_list[n_atoms -1].pos[1];
  *(shift + 2*i_layer + 1) = -atom_list[n_atoms -1].pos[2];
  }
@@ -251,7 +251,7 @@ real vaux[2];
      }
    } /* for i_c, i_d */
  } /* for i */
- 
+
 #ifdef CONTROL_X
  for(i=0; i< i_layer; i++)
  fprintf(STDCTR,"(leed_leed_inp_bul_layer_sym): shift_mod: %.4f %.4f \n",
@@ -266,7 +266,7 @@ real vaux[2];
   The z order of layers will be the reverse of the order of atom_list
   (smallest z, i.e. deepest layer, first)
 *************************************************************************/
- 
+
  par->layers =
        (leed_layer *) malloc( (i_layer + 1) * sizeof(leed_layer) );
 
@@ -274,20 +274,20 @@ real vaux[2];
  {
    par->layers[i].no_of_layer = i;
    par->layers[i].bulk_over = OVER;
-   par->layers[i].reg_shift[1] = *(shift+2*i+0); 
+   par->layers[i].reg_shift[1] = *(shift+2*i+0);
    par->layers[i].reg_shift[2] = *(shift+2*i+1);
  }
 
  for(i=0; i< i_layer; i++)
  {
 
-/********************************************************************* 
+/*********************************************************************
    i refers to index in shift, no_of_atoms, and atom_list
    Write to par->layers[j]:
-   - number of atoms (from no_of_atoms), 
-   - periodicity indicator 
+   - number of atoms (from no_of_atoms),
+   - periodicity indicator
    - lattice vectors (from par->a)
-   - interlayer vectors 
+   - interlayer vectors
 *********************************************************************/
    par->layers[i].n_atoms = no_of_atoms[i];
    par->layers[i].periodic = 0;
@@ -303,11 +303,11 @@ real vaux[2];
 
 /************************************************************************
    vec_from_last points to the previous layer (i-1) except for the deepest
-   layer (i_layer) where it points to the origin. 
+   layer (i_layer) where it points to the origin.
 *************************************************************************/
    if(i == 0)
    {
-   par->layers[i].vec_from_last[1] = 0;  
+   par->layers[i].vec_from_last[1] = 0;
    par->layers[i].vec_from_last[2] = 0;
    par->layers[i].vec_from_last[3] = orig;
    }
@@ -316,10 +316,10 @@ real vaux[2];
     for(i_c = 1; i_c <= 4; i_c ++)
        par->layers[i].vec_from_last[i_c] = vec[4*(i-1) + i_c];
    }
-  
-/************************************************************************* 
-   Allocate structure element atoms in layer 
-   and copy the appropriate entries from list atom_list into 
+
+/*************************************************************************
+   Allocate structure element atoms in layer
+   and copy the appropriate entries from list atom_list into
    par->layers[j].atoms
 **************************************************************************/
    par->layers[i].atoms =
@@ -331,7 +331,7 @@ real vaux[2];
      {
        par->layers[i].atoms[i_c].layer = i;
        par->layers[i].atoms[i_c].type = atom_list[i_atoms].type;
-       
+
        par->layers[i].atoms[i_c].pos[1] = atom_list[i_atoms].pos[1];
        par->layers[i].atoms[i_c].pos[2] = atom_list[i_atoms].pos[2];
        par->layers[i].atoms[i_c].pos[3] = atom_list[i_atoms].pos[3];
@@ -363,7 +363,7 @@ fprintf(STDOUT,"(leed_inp_overlayer_sym):bulk_over = %d \n",(par->layers + 0)->b
     n_rot = leed_check_rotation_sym(par);
  if(n_mir > 0)
     n_mir = leed_check_mirror_sym(par);
- 
+
 /**************************************************************************
   and now,
   the useful control of all variables.
@@ -398,7 +398,7 @@ fprintf(STDCTR,"atom_position:\n");
                              par->layers[i_c].atoms[i].pos[2]*BOHR,
                              par->layers[i_c].atoms[i].pos[3]*BOHR,
                              par->layers[i_c].atoms[i].type);
-fprintf(STDCTR,"********************************\n\n"); 
+fprintf(STDCTR,"********************************\n\n");
 }
 #endif
 

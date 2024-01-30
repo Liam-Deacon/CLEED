@@ -106,7 +106,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
 #if CONTROL
   CONTROL_MSG(CONTROL, "Enter function: \n"
               "\t(ux, uy, uz) = (%.3f, %.3f, %.3f) [au]; "
-              "energy = %.3f H; lmax_t = %u, lmax_0 = %u\n",
+              "energy = %.3f H; lmax_t = %lu, lmax_0 = %lu\n",
               ux, uy, uz, energy, l_max_t, l_max_0);
   matshow(tl_0);
 #endif
@@ -179,7 +179,7 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
    */
   if( (n_call == 0) || (last_l != (int)l_max_t) )
   {
-    CONTROL_MSG(CONTROL, "calculate Mx, etc. for l_max = %d\n", l_max_t);
+    CONTROL_MSG(CONTROL, "calculate Mx, etc. for l_max = %ld\n", l_max_t);
 
     pc_mk_ms( &Mx, &My, &Mz, &MxMx, &MyMy, &MzMz, l_max_t);
   }
@@ -264,11 +264,11 @@ mat leed_par_cumulative_tl(mat Tmat, mat tl_0, real ux, real uy, real uz,
 #if CONTROL_X
     if (i_iter < 4)
     {
-      CONTROL_MSG(CONTROL_X, "MzMzTn(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "MzMzTn(%ld):\n", i_iter-1);
       matshow(MzMzTn);
-      CONTROL_MSG(CONTROL_X, "MzTnMz(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "MzTnMz(%ld):\n", i_iter-1);
       matshow(MzTnMz);
-      CONTROL_MSG(CONTROL_X, "TnMzMz(%d):\n", i_iter-1);
+      CONTROL_MSG(CONTROL_X, "TnMzMz(%ld):\n", i_iter-1);
       matshow(TnMzMz);
     }
 #endif

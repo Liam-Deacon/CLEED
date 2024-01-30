@@ -238,8 +238,8 @@ mat ms_partinv(mat Minv, const mat Mbg, size_t first_atoms, size_t l_max)
   LL = matextract(LL, Mbg, iaux+1, Mbg->rows, 1, iaux);
   LR = matextract(LR, Mbg, iaux+1, Mbg->rows, iaux+1, Mbg->cols);
 
-  CONTROL_MSG(CONTROL, "\n\tUL(%d x %d) UR(%d x %d)\n"
-              "\t\tLL(%d x %d) LR(%d x %d)\n",
+  CONTROL_MSG(CONTROL, "\n\tUL(%ld x %ld) UR(%ld x %ld)\n"
+              "\t\tLL(%ld x %ld) LR(%ld x %ld)\n",
                   UL->rows, UL->cols, UR->rows, UR->cols,
                   LL->rows, LL->cols, LR->rows, LR->cols);
 

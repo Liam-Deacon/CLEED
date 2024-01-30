@@ -40,7 +40,7 @@ class invalidElementException : public std::exception {
 
 class BasicElement {
   public:
-    typedef static const enum ATOMIC_NUMBERS {
+    typedef enum ATOMIC_NUMBERS {
       HYDROGEN=1,
       HELIUM=2,
       LITHIUM=3,
@@ -155,17 +155,17 @@ class BasicElement {
       COPERNICIUM=112
     } atomicNumber;
 
-    static const std::map<std::string, int> NAMES;
-    static const std::map<std::string, int> SYMBOLS;
-    virtual static const std::map<std::string, BasicElement> ELEMENTS;
+    static std::map<const std::string, const unsigned int> NAMES;
+    static std::map<const std::string, const unsigned int> SYMBOLS;
+    static std::map<const std::string, const BasicElement> ELEMENTS;
 
     BasicElement();
-    BasicElement(int Z);
+    BasicElement(unsigned int Z);
     BasicElement(const std::string &name);
     virtual ~BasicElement();
 
     virtual bool operator!();
-    virtual BasicElement &operator=();
+    virtual BasicElement &operator=(std::string id);
     virtual BasicElement &operator=(int Z);
     virtual BasicElement &operator-(int Z);
     virtual BasicElement &operator+(int Z);
@@ -187,7 +187,7 @@ class BasicElement {
     BasicElement &setSymbol(const std::string &symbol);
 
   private:
-    atomicNumber Z;
+    unsigned int Z;
     std::string name;
     std::string symbol;
 };

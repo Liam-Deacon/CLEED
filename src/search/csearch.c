@@ -30,7 +30,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "search.h"
+
+#include "csearch.h"
+
+char *sr_project = NULL;
 
 void search_parse_args(int argc, char *argv[], real *delta,
                        search_method *search_type, char *inp_file,
@@ -217,7 +220,7 @@ int main(int argc, char *argv[])
 # if CONTROL
   fprintf(STDCTR, "(SEARCH): project name  = %s\n", sr_project);
   fprintf(STDCTR, "(SEARCH): log file name = %s\n", log_file);
-  fprintf(STDCTR, "(SEARCH): dimension = %d\n", n_dim);
+  fprintf(STDCTR, "(SEARCH): dimension = %ld\n", n_dim);
 # endif
 
 /***********************************************************************

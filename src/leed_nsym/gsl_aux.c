@@ -18,7 +18,7 @@
  * Contains mat2gsl(), gsl2mat() and gsl2blas() and blas2gsl() functions
  * for converting matrices between native, GSL and CBLAS style matrices.
  */
-#if USE_GSL
+#if USE_GSL == 1
 
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_matrix.h>

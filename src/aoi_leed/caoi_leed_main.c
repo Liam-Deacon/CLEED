@@ -29,6 +29,9 @@
 extern void caoi_leed_info();
 extern void caoi_leed_usage(FILE *);
 
+/* Preset program parameters */
+size_t sa = 999;
+
 int main (int argc, char *argv[])
 {
   int i_arg = 0;
@@ -39,8 +42,8 @@ int main (int argc, char *argv[])
   char par_file[FILENAME_MAX] = "";
   char res_file[FILENAME_MAX] = "leed.res";
 
+  char helpstring[(3 * FILENAME_MAX) + STRSZ] = "";
   char linebuffer[STRSZ] = "";
-  char helpstring[STRSZ] = "";
   char line_buffer[STRSZ] = "";
 
   FILE *inp_stream = NULL;
@@ -48,9 +51,6 @@ int main (int argc, char *argv[])
   FILE *read_stream = NULL;
 
   bool sa_parsed = false;
-
-  /* Preset program parameters */
-  sa = 999;
 
   /* Decode arguments:
    * -b project name for modified bulk file
@@ -77,20 +77,20 @@ int main (int argc, char *argv[])
 
       /* Display help */
       if(strcmp(argv[i_arg], "-h") == 0 ||
-         strcmp(argv[i_arg], "--help") == 0) 
+         strcmp(argv[i_arg], "--help") == 0)
       {
         caoi_leed_usage(stdout);
         exit(0);
-      }  
+      }
 
       /* Display program information */
-      if(strcmp(argv[i_arg], "-V") == 0 || 
+      if(strcmp(argv[i_arg], "-V") == 0 ||
          strcmp(argv[i_arg], "--version") == 0)
       {
         caoi_leed_info();
         exit(0);
       }
-      
+
       /* Read modified bulk file */
       if(strncmp(argv[i_arg], "-b", 2) == 0)
       {
@@ -171,7 +171,7 @@ int main (int argc, char *argv[])
   {
     if (!strncasecmp(linebuffer, "sa:", 3))
     {
-      sa_parsed = (sscanf(linebuffer+3, "%u", &sa) < 1) || sa_parsed;
+      sa_parsed = (sscanf(linebuffer+3, "%lu", &sa) < 1) || sa_parsed;
     }
   }
 
@@ -190,7 +190,7 @@ int main (int argc, char *argv[])
 
   bsrinp(bsr_file, sa);
 
-  CONTROL_MSG(CONTROL, "sa = %d ***\n", sa);
+  CONTROL_MSG(CONTROL, "sa = %lu ***\n", sa);
 
   /* Call cleed_nsym program for each angle of incidence */
   for (i_ang = 0; i_ang < sa; i_ang ++)
@@ -198,21 +198,22 @@ int main (int argc, char *argv[])
 
     /* append "ia_<i_ang>" to par_file */
     strncpy(linebuffer, par_file, length);
-    sprintf(linebuffer + length, "ia_%u", i_ang + 1);
+    sprintf(linebuffer + length, "ia_%lu", i_ang + 1);
 
     /* execute cleed program held in CAOI_LEED environment variable */
-    sprintf(helpstring,            /* note the quotations in next line */
-         "\"%s\" -b \"%s.bsr\" -i \"%s\" -o \"%s.res\" > \"%s.out\"",
-         getenv("CAOI_LEED"),      /* environment variable for cleed program */
-         linebuffer,               /* project name for modified bulk file */
-         par_file,                 /* parameter file for overlayer */
-         linebuffer,               /* project name for results file */
-         linebuffer                /* project name for output file */    
-       );
+    sprintf(
+      helpstring,            /* note the quotations in next line */
+      "\"%s\" -b \"%s.bsr\" -i \"%s\" -o \"%s.res\" > \"%s.out\"",
+      getenv("CAOI_LEED"),      /* environment variable for cleed program */
+      linebuffer,               /* project name for modified bulk file */
+      par_file,                 /* parameter file for overlayer */
+      linebuffer,               /* project name for results file */
+      linebuffer                /* project name for output file */
+    );
 
     /* get result from system call */
     if (system(helpstring) != 0)
-    { 
+    {
       ERROR_MSG("system call: %s failed\n", helpstring);
     }
 
@@ -231,7 +232,7 @@ int main (int argc, char *argv[])
   for (i_ang = 0; i_ang < sa; i_ang ++)
   {
     strncpy(helpstring, par_file, length);
-    sprintf(helpstring + length, "ia_%u.res", i_ang + 1);
+    sprintf(helpstring + length, "ia_%lu.res", i_ang + 1);
     if ((read_stream = fopen(helpstring,"r")) == NULL)
     {
       ERROR_MSG("could not open output file \"%s\"\n", helpstring);
@@ -246,7 +247,7 @@ int main (int argc, char *argv[])
     }
 
     fclose(read_stream);
-    
+
   } /* for i_ang */
 
   fclose(write_stream);

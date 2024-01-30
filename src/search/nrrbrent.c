@@ -26,7 +26,7 @@ GH/19.09.95 - Criterion of termination is absolute deviation in vertex
  ***********************************************************************/
 
 #include <math.h>
-#include "search.h"
+#include "csearch.h"
 
 static const size_t ITMAX = 100;
 static const real CGOLD = 0.3819660;

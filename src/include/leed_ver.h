@@ -27,23 +27,23 @@ extern "C" {
 #endif
 
 /* current symmetry version */
-static const char *LEED_VERSION[] = { "cleed_nsym (2014.07.04 - )" };
-static const char LEED_NAME[] = { "CLEED_NSYM" };
+static const char LEED_VERSION[] = "cleed_nsym (2014.07.04 - )";
+static const char LEED_NAME[] = "CLEED_NSYM";
 
 /* additional program information */
-static const char LEED_PROG[] =  {"cleed_nsym"};
-static const char LEED_PROG_COPYRIGHT[] = { "Copyright (C) 1994-2014 Georg Held\n" \
-"Copyright (C) 2014 Liam Deacon" };
-static const char LEED_PROG_LICENSE[] = { "GNU General Public License v3" };
-static const char LEED_PROG_VERSION[] = { ".. " };
-static const char LEED_PROG_AUTHOR[] = { "Georg Held (g.held@reading.ac.uk)" };
-static const char LEED_PROG_MAINTAINER[] = { "Liam Deacon (liam.m.deacon@gmail.com)" }; 
-static const char LEED_PROG_SHORTDESC[] = { "Calculate LEED_PROG intensities for a given geometry" };
+static const char LEED_PROG[] =  "cleed_nsym";
+static const char LEED_PROG_COPYRIGHT[] = "Copyright (C) 1994-2014 Georg Held\n" \
+"Copyright (C) 2014 Liam Deacon";
+static const char LEED_PROG_LICENSE[] = "GNU General Public License v3";
+static const char LEED_PROG_VERSION[] = ".. ";
+static const char LEED_PROG_AUTHOR[] = "Georg Held (g.held@reading.ac.uk)";
+static const char LEED_PROG_MAINTAINER[] = "Liam Deacon (liam.m.deacon@gmail.com)"; 
+static const char LEED_PROG_SHORTDESC[] = "Calculate LEED_PROG intensities for a given geometry";
 
 /* platform information */
 #if defined(WIN32) || defined(_WIN32) \
                    || defined(__WIN32) || defined(__WIN32__)
-static const char LEED_PROG_PLAT[] = { "Win32" };
+static const char LEED_PROG_PLAT[] = "Win32";
 #elif defined(__CYGWIN__) || defined(__CYGWIN32__)
 static const char LEED_PROG_PLAT[] = "Win32_Cygwin";
 #elif defined(__ANDROID__)

@@ -3,7 +3,7 @@
  *
  *  Copyright (C) 2013-2015 Liam Deacon <liam.m.deacon@gmail.com>
  *
- *  Licensed under GNU General Public License 3.0 or later. 
+ *  Licensed under GNU General Public License 3.0 or later.
  *  Some rights reserved. See COPYING, AUTHORS.
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
@@ -57,6 +57,8 @@ namespace cleed {
 
       // other methods
       void print(FILE *f = stdout);
+    public:
+      coord *pos;
   };
 
 } /* namespace cleed */

@@ -41,17 +41,17 @@
 #include <strings.h>
 #endif
 
-#include "search.h"
+#include "csearch.h"
 
 static const double GEOM_TOLERANCE = 0.0001;
 enum { BUFSZ = 1024 };                   /*!< max. length of input line */
 
-extern search_atom *sr_atoms;
-extern search *sr_search;
+search_atom *sr_atoms;
+search *sr_search;
 extern char *sr_project;
 
 /* input buffers */
-char buf[BUFSZ]; 
+char buf[BUFSZ];
 char atom_name[STRSZ];
 char whatnext[STRSZ];
 
@@ -170,9 +170,9 @@ int sr_rdinp(const char *inp_file)
   types->r_min = F_END_OF_LIST;
   n_types = 0;
 
-  /* 
-   * calloc causes z_only, b_lat[], sr_angle, rot_axis[], mir_point[] and 
-   * mir_dir[] to all be zero 
+  /*
+   * calloc causes z_only, b_lat[], sr_angle, rot_axis[], mir_point[] and
+   * mir_dir[] to all be zero
    */
   CLEED_ALLOC_CHECK(sr_search = (search *) calloc(1, sizeof(search)));
   sr_search->rot_deg = 1;
@@ -224,7 +224,7 @@ int sr_rdinp(const char *inp_file)
         ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
       }
     }  /* a1 */
-   
+
     else if( !strncasecmp(buf+i_str, "a2:" ,3) )
     {
       sprintf(fmt_buffer, " %%%sf %%%sf %%%sf",
@@ -344,7 +344,7 @@ int sr_rdinp(const char *inp_file)
         ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
       }
     }  /* a1 */
-   
+
     else if( !strncasecmp(buf+i_str,"a2:",3) )
     {
       sprintf(fmt_buffer, " %%%sf %%%sf %%%sf",
@@ -396,7 +396,7 @@ int sr_rdinp(const char *inp_file)
     else if( !strncasecmp(buf+i_str, "m2:", 3) )
     {
       sprintf(fmt_buffer, " %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
-      if (iaux = sscanf(buf+i_str+3, fmt_buffer, m_super+3, m_super+4) < 2) 
+      if (iaux = sscanf(buf+i_str+3, fmt_buffer, m_super+3, m_super+4) < 2)
         WARNING_MSG("could not read m2 (%i values read\n", iaux);
     } /* m2 */
 
@@ -472,7 +472,7 @@ int sr_rdinp(const char *inp_file)
 
           vaux[0] = leed_inp_debye_temp(vaux[1], vaux[2], temp);
           (sr_atoms+n_atoms)->dr = cleed_real_sqrt(vaux[0]) * BOHR;
-         
+
           CONTROL_MSG(CONTROL, "temp = %.1f dr = %.3f\n",
                       temp, (sr_atoms+n_atoms)->dr);
         }
@@ -871,7 +871,7 @@ int sr_rdinp(const char *inp_file)
     {
       (sr_atoms+i_atoms)->r_min = (types+i_types)->r_min;
     }
-   
+
   } /* for i_atoms */
 
   /* The input of the superstructure unit cell parameters can either be
@@ -891,7 +891,7 @@ int sr_rdinp(const char *inp_file)
       ERROR_MSG("Cannot determine lattice parameters\n");
       ERROR_EXIT_RETURN(SR_INVALID_INPUT_FILE, -1);
     }
-  
+
     sr_search->b_lat[1] = m_super[1] * a1[1] + m_super[2] * a2[1];
     sr_search->b_lat[3] = m_super[1] * a1[2] + m_super[2] * a2[2];
     sr_search->b_lat[2] = m_super[3] * a1[1] + m_super[4] * a2[1];

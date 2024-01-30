@@ -34,11 +34,11 @@ basis *basis_init()
 {
   basis *_basis = (basis*) malloc(sizeof(basis));
   if (_basis == NULL) return NULL;
-  
+
   coord_set(&_basis->a[0], 0., 0., 0.);
   coord_set(&_basis->a[1], 0., 0., 0.);
   coord_set(&_basis->a[2], 0., 0., 0.);
-  
+
   return(_basis);
 }
 
@@ -58,7 +58,7 @@ basis *basis_init_vectors(const coord *a1, const coord *a2, const coord *a3)
   if (_basis == NULL) return NULL;
 
   basis_set_vectors(_basis, a1, a2, a3);
-  
+
   return(_basis);
 }
 
@@ -82,7 +82,7 @@ void basis_free(basis *_basis)
  * \param[in] a2 pointer to source #coord basis vector \f$ \vec{a_2} \f$
  * \param[in] a3 pointer to source #coord basis vector \f$ \vec{a_3} \f$
  */
-void basis_set_vectors(basis *basis, const coord *a1, 
+void basis_set_vectors(basis *basis, const coord *a1,
                        const coord *a2, const coord *a3)
 {
   coord_set(&basis->a[0], a1->x, a1->y, a1->z);
@@ -98,7 +98,7 @@ void basis_set_vectors(basis *basis, const coord *a1,
  * \note prints \c NULL if @basis::a is unallocated in memory.
  */
 void basis_printf(FILE *f, const basis *basis)
-{ 
+{
   if (basis != NULL)
   {
     fprintf(f, "a1: ");
@@ -108,7 +108,7 @@ void basis_printf(FILE *f, const basis *basis)
     fprintf(f, "a3: ");
     coord_printf(f, &basis->a[2]);
   }
-  else 
+  else
   {
     fprintf(f, "NULL\n");
   }
@@ -144,7 +144,7 @@ void basis_copy(basis *dst, const basis *src)
  * \note The #coord objects \p a1 , \p a2 and \p a3 are assumed to be
  * initialized in memory before entering the function.
  */
-void basis_get_vectors(const basis *basis, coord *a1, 
+void basis_get_vectors(const basis *basis, coord *a1,
                        coord *a2, coord *a3)
 {
   coord_copy(a1, &basis->a[0]);
@@ -194,7 +194,7 @@ coord *basis_rotate_vector_list(const coord *list, size_t n, double **R)
   size_t i;
   double faux_x, faux_y, faux_z;
   coord *rotated_list;
-  
+
   if (n > 0)
   {
     rotated_list = (coord*) malloc(sizeof(coord) * n);
@@ -202,20 +202,20 @@ coord *basis_rotate_vector_list(const coord *list, size_t n, double **R)
   else {
     return NULL;
   }
-  
+
   if (!rotated_list) return NULL;
-  
+
   for(i = 0; i < n; i++)
   {
-    faux_x = list[i].x; 
-    faux_y = list[i].y; 
+    faux_x = list[i].x;
+    faux_y = list[i].y;
     faux_z = list[i].z;
 
     rotated_list[i].x = R[0][0] * faux_x + R[0][1] * faux_y + R[0][2] * faux_z;
     rotated_list[i].y = R[1][0] * faux_x + R[1][1] * faux_y + R[1][2] * faux_z;
     rotated_list[i].z = R[2][0] * faux_x + R[2][1] * faux_y + R[2][2] * faux_z;
   }
-  
+
   return (rotated_list);
 }
 
@@ -233,28 +233,28 @@ basis *basis_rotate_basis(const basis *_basis, double **R)
   coord *faux = coord_init();
 
   new_basis = basis_init();
-  
+
   coord_copy(faux, &_basis->a[0]);
-  
-  coord_set(&new_basis->a[0], 
+
+  coord_set(&new_basis->a[0],
                 R[0][0] * faux->x + R[0][1] * faux->y + R[0][2] * faux->z,
                 R[1][0] * faux->x + R[1][1] * faux->y + R[1][2] * faux->z,
                 R[2][0] * faux->x + R[2][1] * faux->y + R[2][2] * faux->z);
 
   coord_copy(faux, &_basis->a[1]);
-  
-  coord_set(&new_basis->a[1], 
+
+  coord_set(&new_basis->a[1],
                 R[0][0] * faux->x + R[0][1] * faux->y + R[0][2] * faux->z,
                 R[1][0] * faux->x + R[1][1] * faux->y + R[1][2] * faux->z,
                 R[2][0] * faux->x + R[2][1] * faux->y + R[2][2] * faux->z);
 
   coord_copy(faux, &_basis->a[2]);
-  
-  coord_set(&new_basis->a[2], 
+
+  coord_set(&new_basis->a[2],
                 R[0][0] * faux->x + R[0][1] * faux->y + R[0][2] * faux->z,
                 R[1][0] * faux->x + R[1][1] * faux->y + R[1][2] * faux->z,
                 R[2][0] * faux->x + R[2][1] * faux->y + R[2][2] * faux->z);
-  
+
   return (new_basis);
 }
 
@@ -270,7 +270,7 @@ basis *basis_rotate_basis(const basis *_basis, double **R)
  *
  * \todo Implement rotation
  */
-basis *basis_angle_rotate(const basis *a, double alpha, 
+basis *basis_angle_rotate(const basis *a, double alpha,
                             double beta, double gamma)
 {
   basis *new_basis = (basis*) calloc(1, sizeof(basis));
@@ -318,7 +318,7 @@ double **normal_get_rotation_matrix(const coord *normal)
   sin_t = sqrt ( 1 - cos_t*cos_t);
 
   faux_x = sqrt(normal->x*normal->x + normal->y*normal->y);
- 
+
   if (fabs(faux_x) > TOLERANCE)
   {
     cos_p = normal->x / faux_x;
@@ -361,7 +361,7 @@ basis *basis_rotate_parallel_to_x_axis_rhs(const basis *_basis, double **R)
   double faux_x;
   basis *rot_basis = basis_init();
   if (rot_basis == NULL) return NULL;
-  
+
   faux_x = sqrt(_basis->a[0].x*_basis->a[0].x + _basis->a[0].y*_basis->a[0].y);
 
   R[0][0] = _basis->a[0].x / faux_x;
@@ -369,7 +369,7 @@ basis *basis_rotate_parallel_to_x_axis_rhs(const basis *_basis, double **R)
 
   R[1][0] = -R[0][1];
   R[1][1] =  R[0][0];
-  
+
   /* rotate lattice vectors b1, b2, b3 such that b1 || x-axis */
   rot_basis->a[0].x = R[0][0] * _basis->a[0].x + R[0][1] * _basis->a[0].y;
   rot_basis->a[0].y = R[1][0] * _basis->a[0].x + R[1][1] * _basis->a[0].y;
@@ -379,7 +379,7 @@ basis *basis_rotate_parallel_to_x_axis_rhs(const basis *_basis, double **R)
 
   rot_basis->a[2].x = R[0][0] * _basis->a[2].x + R[0][1] * _basis->a[2].y;
   rot_basis->a[2].y = R[1][0] * _basis->a[2].x + R[1][1] * _basis->a[2].y;
-  
+
   return (rot_basis);
 }
 
@@ -466,26 +466,26 @@ coord *basis_get_normal(const basis *_basis, const miller_hkl *hkl)
   const coord *a2 = (const coord *) &_basis->a[1];
   const coord *a3 = (const coord *) &_basis->a[2];
   coord *normal = coord_init();
-  
+
   if (normal == NULL) return NULL;
 
   /* h, k, l not all 0 */
-  if( (fabs(hkl->h) > TOLERANCE) || 
-      (fabs(hkl->k) > TOLERANCE) || 
+  if( (fabs(hkl->h) > TOLERANCE) ||
+      (fabs(hkl->k) > TOLERANCE) ||
       (fabs(hkl->l) > TOLERANCE) )
-  { 
-    normal->x = (hkl->h*(a2->y*a3->z - a2->z*a3->y) + 
-                 hkl->k*(a3->y*a1->z - a3->z*a1->y) + 
-                 hkl->l*(a1->y*a2->z - a1->z*a2->y) ); 
-    
-    normal->y = (hkl->h*(a2->z*a3->x - a2->x*a3->z) + 
-                 hkl->k*(a3->z*a1->x - a3->x*a1->z) + 
+  {
+    normal->x = (hkl->h*(a2->y*a3->z - a2->z*a3->y) +
+                 hkl->k*(a3->y*a1->z - a3->z*a1->y) +
+                 hkl->l*(a1->y*a2->z - a1->z*a2->y) );
+
+    normal->y = (hkl->h*(a2->z*a3->x - a2->x*a3->z) +
+                 hkl->k*(a3->z*a1->x - a3->x*a1->z) +
                  hkl->l*(a1->z*a2->x - a1->x*a2->z) );
-    
-    normal->z = (hkl->h*(a2->x*a3->y - a2->y*a3->x) + 
-                 hkl->k*(a3->x*a1->y - a3->y*a1->x) + 
-                 hkl->l*(a1->x*a2->y - a1->y*a2->x) ); 
+
+    normal->z = (hkl->h*(a2->x*a3->y - a2->y*a3->x) +
+                 hkl->k*(a3->x*a1->y - a3->y*a1->x) +
+                 hkl->l*(a1->x*a2->y - a1->y*a2->x) );
   }
-  
+
   return (normal);
 }

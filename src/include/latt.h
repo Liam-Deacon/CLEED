@@ -32,7 +32,7 @@ static const char LATT_COPYRIGHT[] = "Copyright (C) 1994-2014 Georg Held\n" \
 static const char LATT_LICENSE[] = "GNU General Public License v3";
 static const char LATT_VERSION[] = "2014-07-04 Development";
 static const char LATT_AUTHOR[] = "Georg Held (g.held@reading.ac.uk)";
-static const char LATT_MAINTAINER[] = "Liam Deacon <liam.m.deacon@gmail.com>";
+static const char LATT_MAINTAINER[] = "Liam Deacon <liam.m.deacon@gmail.com>"; 
 static const char LATT_SHORTDESC[] = "Lattice generator";
 
 /* platform information */
@@ -79,11 +79,11 @@ else                                                                        \
   exit(INVALID_ARGUMENT_ERROR);                                             \
 }
 
-#define ARG_PARSE_INT(x)                                                  \
+#define ARG_PARSE_INT(x)                                                    \
 if (i_arg < argc)                                                           \
 {                                                                           \
   i_arg++;                                                                  \
-  x = (int) atoi(argv[i_arg]);                                            \
+  x = (int) atoi(argv[i_arg]);                                              \
   continue;                                                                 \
 }                                                                           \
 else                                                                        \
@@ -116,11 +116,11 @@ else                                                                        \
   exit(INVALID_ARGUMENT_ERROR);                                             \
 }
 
-#define ARG_PARSE_INT(x)                                                  \
+#define ARG_PARSE_INT(x)                                                    \
 if (i_arg < argc)                                                           \
 {                                                                           \
   i_arg++;                                                                  \
-  x = (int) atoi(argv[i_arg]);                                            \
+  x = (int) atoi(argv[i_arg]);                                              \
   continue;                                                                 \
 }                                                                           \
 else                                                                        \

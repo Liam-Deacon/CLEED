@@ -1,7 +1,7 @@
 /*********************************************************************
  *                           LEED_FUNC.H
  *
- *  Copyright 1994-2014 Georg Held <g.held@reading.ac.uk>
+ *  Copyright 1994-2014 Georg Held <georg.held@diamond.ac.uk>
  *  Copyright 2014 Liam Deacon <liam.m.deacon@gmail.com>
  *
  *  Licensed under GNU General Public License 3.0 or later.
@@ -54,7 +54,7 @@ mat leed_inp_mat_lm(mat, size_t, const char *);
 
 /* read phase shifts; file linpphase.c */
 int leed_inp_phase(const char *, real *, leed_phase **);
-int leed_inp_phase_nd(const char *, real *, int, leed_phase **);
+int leed_inp_phase_nd(const char *, real *, leed_matrix_diag, leed_phase **);
 size_t leed_update_phase(size_t);
 
 /* read bulk parameters; file linprdbul.c */

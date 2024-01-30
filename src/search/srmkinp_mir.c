@@ -30,12 +30,12 @@
 #include <strings.h>
 #endif
 
-#include "search.h"
+#include "csearch.h"
 
 extern search_atom *sr_atoms;
 extern search *sr_search;
 
-char line_buffer[STRSZ];
+static char line_buffer[STRSZ];
 
 /*!
  * Setup \c *.par input file for \c cleed_sym IV program
