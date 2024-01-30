@@ -1,5 +1,5 @@
 # These are the requirements for needed for building the documentation using Sphinx.
 sphinx>=7
-breathe
+breathe  # requires doxygen to be installed
 numpydoc
 sphinx-rtd-theme
