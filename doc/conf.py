@@ -15,6 +15,7 @@
 # pylint: disable=invalid-name
 
 from __future__ import unicode_literals, print_function
+import os
 
 import sys
 import datetime
@@ -49,6 +50,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.viewcode",
     "sphinx.ext.todo",
+    "sphinx.ext.graphviz",
     "breathe",
     "numpydoc",
 ]
@@ -360,6 +362,40 @@ epub_copyright = "2014-{}, {} & collaborators".format(YEAR, ", ".join(authors))
 # If false, no index is generated.
 # epub_use_index = True
 
+# -- Options for breathe doxygen generation -------------------------------
+
+# See https://breathe.readthedocs.io/en/latest/directives.html#config-values
+PROJECT_ROOT = os.path.join(os.path.dirname(__file__), "..")
+breathe_projects = {"CLEED": os.path.join(PROJECT_ROOT, "src")}
+breathe_build_directory = os.path.join(os.path.dirname(__file__), "_build")
+breathe_default_project = "CLEED"
+breathe_implementation_filename_extensions = [".c", ".cpp", ".f", ".for", ".f90"]
+breathe_default_members = ("members", "undoc-members", "private-members")
+breathe_domain_by_extension = {
+    "h" : "cpp",
+}
+breathe_show_define_initializer = True
+breathe_show_enumvalue_initializer = True
+breathe_show_include = True
+breathe_order_parameters_first = True
+breathe_projects_source = {
+    project: tuple(
+        (
+            src_dir,
+            [
+                os.path.relpath(os.path.join(root, filename), src_dir)
+                for root, _, files in os.walk(src_dir)
+                for filename in files
+                if not filename.startswith("test_")
+                and os.path.splitext(filename)[1] in list(breathe_implementation_filename_extensions) + [".h"]
+            ]
+        )
+    )
+    for project, src_dir in breathe_projects.items()
+}
+breathe_doxygen_config_options = {
+    "EXCLUDE_SYMBOLS": ["PI"]
+}
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"http://docs.python.org/": None}

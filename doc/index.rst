@@ -14,7 +14,7 @@ Contents:
    :maxdepth: 2
    :numbered:
    :glob:
-   
+
    introduction
    background
    LEED_programs
@@ -25,6 +25,7 @@ Contents:
    license
    acknowledgements
    contact
+   api_reference
 
 
 

@@ -16,5 +16,5 @@ Frequently Asked Questions
 2. *Why does* :ref:`csearch` *stop without calculating the LEED-IV curves?*
   This could be any number of reasons, but the underlying cause should be
   outlined in either :code:`stderr` or the :file:`*.err` log file. If in
-  doubt, `email us<g.held@reading.ac.uk>`_ and we can improve our error messages 
+  doubt, `email us <georg.held@diamond.ac.uk>`_ and we can improve our error messages 
   and instruction manual accordingly.
