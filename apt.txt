@@ -7,6 +7,8 @@ libtool
 cmake
 gfortran
 libblas-dev
+libfontenc-dev
+libhpdf-dev
 liblapack-dev
 liblapacke-dev
 libatlas-base-dev
@@ -15,3 +17,5 @@ libgsl-dev
 python3-dev
 rpm
 alien
+libmagickcore-dev
+libmagickwand-dev
