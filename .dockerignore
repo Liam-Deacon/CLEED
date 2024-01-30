@@ -1,0 +1,13 @@
+/build/
+/doc*/
+
+**/win32/*.dll
+
+/CLEED.sln
+/CLEED.vcxproj
+/CLEED.vcxproj.filters
+
+/android.toolchain.cmake
+/wercker.yml
+
+*.log
