@@ -59,19 +59,19 @@ Options
 Environment
 -----------
 
-:envvar:`CLEED_HOME`
+.. envvar:: CLEED_HOME
   Parent directory of CLEED distribution.
 
-:envvar:`CSEARCH_LEED`
+.. envvar:: CSEARCH_LEED
   Path of the program used for the LEED calculations. This
   may simply be 'csearch' if the parent directory of this program is in
   the system :envar:`PATH` variable.
 
-:envvar:`CSEARCH_RFAC`
+.. envvar:: CSEARCH_RFAC
   Path of the crfac program  used  for the R factor evaluation. This may simply be 'crfac'
   if the parent directory of this program is in the system :envar:`PATH` variable.
 
-:envvar:`CLEED_PHASE`
+.. envvar:: CLEED_PHASE
   Directory path of the phase shift files used in  the  surface and bulk models. 
   Please refer to :ref:`phsh` for more information on generating phase shift files.
 
