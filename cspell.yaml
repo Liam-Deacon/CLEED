@@ -1,0 +1,18 @@
+---
+language: en
+dictionaries:
+  - python
+  - c
+  - softwareTerms
+words:
+  # acronyms
+  - CLEED
+  - EEAS
+  - LEED
+  - LEEDPACK
+  - SATLEED
+  # file exts
+  - .bmin
+  - .pmin
+  # other terms
+  - autogen
