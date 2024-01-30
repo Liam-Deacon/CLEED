@@ -40,7 +40,8 @@ bin/mkiv
 *.log
 
 # docs
-/docs/_build/
+/doc*/_build/
+/doc*/doxygen
 
 # read-only
 *.zip
