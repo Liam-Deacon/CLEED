@@ -143,12 +143,14 @@ ENDIF()
 IF (WIN32)
     INSTALL (TARGETS csearch search
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION bin
     )
 ELSE (WIN32)
     INSTALL (TARGETS csearch search
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
     )

@@ -89,12 +89,14 @@ TARGET_LINK_LIBRARIES(ftsmooth ftsmoothLib m)
 IF (WIN32)
     INSTALL (TARGETS ftsmooth ftsmoothLib
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION bin
     )
 ELSE (WIN32)
     INSTALL (TARGETS ftsmooth ftsmoothLib
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
     )

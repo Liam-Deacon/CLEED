@@ -70,4 +70,8 @@ ENDIF (WIN32)
     
 TARGET_LINK_LIBRARIES (caoi_rfac m)
 
-INSTALL (TARGETS caoi_rfac  RUNTIME DESTINATION bin COMPONENT runtime)
+INSTALL (TARGETS caoi_rfac
+    BUNDLE DESTINATION ../Applications
+    RUNTIME DESTINATION bin
+    COMPONENT runtime
+)

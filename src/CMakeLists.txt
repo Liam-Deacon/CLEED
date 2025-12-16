@@ -31,8 +31,10 @@ ADD_SUBDIRECTORY(search)
 ADD_SUBDIRECTORY(scripts)
 
 # optional gui elements
-ADD_SUBDIRECTORY(latt-gui)
-ADD_SUBDIRECTORY(patt-gui)
+IF (WITH_QT)
+    ADD_SUBDIRECTORY(latt-gui)
+    ADD_SUBDIRECTORY(patt-gui)
+ENDIF()
 
 # additional python components
 SET(PHASESHIFTS_VERSION_MAJOR 0)
@@ -41,7 +43,7 @@ SET(PHASESHIFTS_VERSION_PATCH 3)
 SET (PHSH_VERSION 
     "phaseshifts-${PHASESHIFTS_VERSION_MAJOR}.${PHASESHIFTS_VERSION_MINOR}.${PHASESHIFTS_VERSION_PATCH}-dev")
 SET (PHSH_URL https://pypi.python.org/packages/source/p/phaseshifts/${PHSH_VERSION}.zip)
-IF (F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYTHONLIBS_FOUND)
+IF (WITH_PHASESHIFTS AND F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYTHONLIBS_FOUND)
     IF (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/../${PHSH_VERSION}.zip")
         MESSAGE (STATUS "Downloading: ${PHSH_URL}")
         FILE(DOWNLOAD ${PHSH_URL} "${CMAKE_CURRENT_BINARY_DIR}/../${PHSH_VERSION}.zip" 
@@ -68,12 +70,14 @@ IF (F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYTHONLIBS_FOUND)
         COMMENT "Embedding Python Intepreter into 'phsh.cpp'..."
     )
     
-    ENABLE_LANGUAGE(RC)
-    CONFIGURE_FILE("${phsh_SOURCE_DIR}/res/windows/phaseshifts.rc.in"
-        "${phsh_SOURCE_DIR}/res/windows/phaseshifts.rc") 
     SET (phsh_SRCS 
-        "${phsh_SOURCE_DIR}/cython/phsh.cpp"
-        "${phsh_SOURCE_DIR}/res/windows/phaseshifts.rc")
+        "${phsh_SOURCE_DIR}/cython/phsh.cpp")
+    IF (WIN32)
+        ENABLE_LANGUAGE(RC)
+        CONFIGURE_FILE("${phsh_SOURCE_DIR}/res/windows/phaseshifts.rc.in"
+            "${phsh_SOURCE_DIR}/res/windows/phaseshifts.rc")
+        LIST(APPEND phsh_SRCS "${phsh_SOURCE_DIR}/res/windows/phaseshifts.rc")
+    ENDIF()
     INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIR})
     ADD_EXECUTABLE(phsh ${phsh_SRCS} cython_source cython_build)
     TARGET_LINK_LIBRARIES(phsh ${PYTHON_LIBRARIES})
@@ -81,6 +85,7 @@ IF (F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYTHONLIBS_FOUND)
     # create libphsh library
     SET(libphsh_SRCS "${phsh_SOURCE_DIR}/lib/libphsh.f")
     
+    ENABLE_LANGUAGE(Fortran)
     ADD_LIBRARY(libphsh SHARED ${libphsh_SRCS})
     SET_TARGET_PROPERTIES(libphsh PROPERTIES OUTPUT_NAME phsh)
     
@@ -100,4 +105,4 @@ IF (F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYTHONLIBS_FOUND)
         INSTALL(TARGETS phsh libphsh COMPONENT runtime RUNTIME DESTINATION bin LIBRARY DESTINATION lib)
     ENDIF(WIN32)
 
-ENDIF (F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYTHONLIBS_FOUND)
+ENDIF (WITH_PHASESHIFTS AND F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYTHONLIBS_FOUND)

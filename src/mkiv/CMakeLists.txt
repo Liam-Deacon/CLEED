@@ -149,12 +149,14 @@ TARGET_LINK_LIBRARIES(mkiv mkivLib m)
 IF (WIN32)
     INSTALL (TARGETS mkiv mkivLib
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION bin
     )
 ELSE (WIN32)
     INSTALL (TARGETS mkiv mkivLib
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
     )

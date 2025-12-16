@@ -16,7 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.16)
 MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 INCLUDE(InstallRequiredSystemLibraries)
 # allow more human readable "if then else" constructs
@@ -59,27 +59,31 @@ IF (WIN32)
         
     SET (latt_SRCS ${latt_SRCS} res/windows/latt.rc)
     
-    ADD_EXECUTABLE(latt latt.c ${latt_SRCS})
-    
-ELSE (WIN32)
+	    ADD_EXECUTABLE(latt latt.c ${latt_SRCS})
+	    
+	ELSE (WIN32)
 
-    IF (UNIX)
-    
-        IF(APPLE)
-        
-            ADD_EXECUTABLE(latt MACOSX_BUNDLE ${latt_SRCS})
-            INSTALL(TARGETS latt BUNDLE DESTINATION ../Applications)
-            
-        ELSE(APPLE)
-        
-            ADD_EXECUTABLE(latt ${latt_SRCS})  
-            
-        ENDIF(APPLE)
-        
-    ENDIF(UNIX)
+	    IF (UNIX)
+	    
+	        IF(APPLE)
+	        
+	            ADD_EXECUTABLE(latt MACOSX_BUNDLE latt.c ${latt_SRCS})
+	            INSTALL(TARGETS latt BUNDLE DESTINATION ../Applications)
+	            
+	        ELSE(APPLE)
+	        
+	            ADD_EXECUTABLE(latt latt.c ${latt_SRCS})
+	            
+	        ENDIF(APPLE)
+	        
+	    ENDIF(UNIX)
     
 ENDIF (WIN32)
     
 TARGET_LINK_LIBRARIES (latt ${EXTRA_LIBS} m)
 
-INSTALL (TARGETS latt RUNTIME DESTINATION bin COMPONENT runtime)
+INSTALL (TARGETS latt
+    BUNDLE DESTINATION ../Applications
+    RUNTIME DESTINATION bin
+    COMPONENT runtime
+)

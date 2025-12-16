@@ -289,12 +289,14 @@ ENDIF (WITH_OPENCL STREQUAL "ON")
 IF (WIN32)
     INSTALL (TARGETS leed cleed_nsym
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin 
         LIBRARY DESTINATION bin
     )
 ELSE (WIN32)
     INSTALL (TARGETS leed cleed_nsym
         COMPONENT runtime
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin 
         LIBRARY DESTINATION lib
     )

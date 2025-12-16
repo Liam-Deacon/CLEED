@@ -16,7 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.16)
 MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 INCLUDE(InstallRequiredSystemLibraries)
 # allow more human readable "if then else" constructs
@@ -34,7 +34,7 @@ ENDIF()
 
 # set default install prefix to project root directory
 IF(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
-    SET(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")
+    SET(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}")
 ENDIF()
 
 
@@ -130,7 +130,7 @@ ENDIF ()
 # This is only required for the script to work in the version control
 IF (WITH_OPENCL STREQUAL "ON")
     SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeModules")
-    FIND_PACKAGE( OpenCL REQUIRED )
+    FIND_PACKAGE(OpenCL)
     INCLUDE_DIRECTORIES( ${OpenCL_INCLUDE_DIRS} ${OPENCL_INCLUDE_DIR} )
     IF (OpenCL_FOUND OR OPENCL_FOUND)
         SET (WITH_OPENCL ON)
@@ -192,10 +192,10 @@ INCLUDE(CheckCXXCompilerFlag)
 # endif()
 
 # find java
-FIND_PACKAGE (Java 
-#    REQUIRED
-)
-INCLUDE (UseJava)
+FIND_PACKAGE(Java)
+IF (Java_FOUND)
+    INCLUDE (UseJava)
+ENDIF()
 
 # find Python libraries & commands
 FIND_PACKAGE(PythonInterp)
@@ -205,14 +205,10 @@ FIND_PROGRAM(PYTHON_EASY_INSTALL easy_install)
 FIND_PROGRAM(CYTHON NAMES cython cython.py)
 FIND_PROGRAM(F2PY_EXECUTABLE NAMES f2py f2py.py)
 
-# enable Fortran support
-ENABLE_LANGUAGE (Fortran)
-INCLUDE(FortranCInterface)
-FortranCInterface_HEADER(FC.h MACRO_NAMESPACE "FC_")
-GET_FILENAME_COMPONENT (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
-
-# enable resource compiler
-ENABLE_LANGUAGE(RC)
+# enable resource compiler (Windows only)
+IF (WIN32)
+    ENABLE_LANGUAGE(RC)
+ENDIF()
 
 # Set Warnings
 IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
@@ -673,8 +669,7 @@ ELSE (WIN32)
             # http://groups.google.com/group/vim_mac/browse_thread/thread/064da55ec412e768
             # which means typing the following command in Terminal.app:
             # $ sudo ln -s /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/crt1.o /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/crt1.10.5.o
-            SET(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk)
-            SET(CMAKE_OSX_ARCHITECTURES i386)
+            # Do not force SDK/architectures here; let the active toolchain decide.
             SET(MACOSX_BUNDLE_ICON_FILE icon.icns)
             SET(MACOSX_BUNDLE_BUNDLE_NAME cleed)
             SET(MACOSX_BUNDLE_BUNDLE_VERSION ${VERSION})
@@ -706,7 +701,8 @@ ELSE (WIN32)
             SET(CPACK_PACKAGE_EXECUTABLES "cleed;cleed")
             SET(CPACK_GENERATOR "PackageMaker")
             
-            INSTALL_FILES(${CPACK_PACKAGE_INSTALL_DIRECTORY} ${RUNTIME_LIBRARIES})
+            # `install_files()` was removed from CMake; keep runtime library installs
+            # in the relevant per-platform targets instead.
         
         ELSE (APPLE)
             # ============ BUILD SETTINGS FOR LINUX ============
@@ -870,7 +866,7 @@ SET (DOLLAR "$")
 SET (CPACK "@CPACK")
 SET (AT "@")
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.cmake.in"
-    "${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.in" @IMMEDIATE) 
+    "${CMAKE_BINARY_DIR}/NSIS.template.in" @ONLY)
 # configure CPack - doesn't appear to work...
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CPackOptions.cmake.in"
     "${CMAKE_BINARY_DIR}/CPackOptions.cmake" @ONLY)
