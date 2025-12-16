@@ -69,7 +69,7 @@ IF (WITH_PHASESHIFTS AND F2PY_EXECUTABLE AND CYTHON AND PYTHONLIBS_FOUND AND PYT
     ADD_CUSTOM_COMMAND(OUTPUT cython_source
         COMMAND "${PYTHONINTERP}" "${CYTHON}" --cplus --embed phsh.pyx
         WORKING_DIRECTORY "${phsh_SOURCE_DIR}/cython"
-        COMMENT "Embedding Python Intepreter into 'phsh.cpp'..."
+        COMMENT "Embedding Python Interpreter into 'phsh.cpp'..."
     )
     
     SET (phsh_SRCS 
