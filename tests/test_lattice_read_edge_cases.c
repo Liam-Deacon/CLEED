@@ -78,7 +78,7 @@ static int test_lattice_read_truncates_long_element_name(void)
 
     CLEED_TEST_ASSERT(lattice_read(lat, &a1, &a2, &a3, &nor, &bas, &bas_name, &n_bas) == 0);
     CLEED_TEST_ASSERT(n_bas == 1);
-    CLEED_TEST_ASSERT(strlen(bas_name) == 127);
+    CLEED_TEST_ASSERT(strnlen(bas_name, NAMSZ) == 127);
 
     free_read(lat, bas, bas_name);
     cleed_test_remove_file(path);

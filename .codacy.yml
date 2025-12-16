@@ -5,6 +5,9 @@ exclude_paths:
   - "src/**/CMakeFiles/**"
   - "doc/_build/**"
 
+  # Tests (still checked locally via pre-commit/cppcheck)
+  - "tests/**"
+
   # Vendored third-party code
   - "src/contrib/**"
 
@@ -21,4 +24,3 @@ exclude_paths:
   - "**/*.so"
   - "**/*.dylib"
   - "**/*.dll"
-

@@ -13,6 +13,10 @@ Codacy reports issues from multiple analyzers (including Cppcheck). The current 
 
 These thresholds are enforced by Codacy and should be treated as the “source of truth”.
 
+### Scope
+
+Codacy exclusions are configured in `.codacy.yml`. We exclude `tests/**` from Codacy analysis to avoid test-only false positives/noise, while still keeping local `pre-commit`/Cppcheck coverage on tests.
+
 ## Local Cppcheck (pre-commit)
 
 We run Cppcheck locally via pre-commit to give fast feedback.
@@ -47,4 +51,3 @@ cppcheck --enable=warning,performance,portability,style,information \
 - Prefer bounded operations (`strnlen`, bounded `sscanf` formats, etc.) when parsing external input.
 - Keep parsing logic table-driven and split into small helpers to stay under Codacy complexity/LOC thresholds.
 - When changing algorithms, add tests that lock behaviour to protect against regressions.
-
