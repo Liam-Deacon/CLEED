@@ -92,6 +92,27 @@ PR descriptions must include:
 - **Links**: related issues, and GitHub **permalinks** for key code references
 - **Follow-ups** (if any) as checkboxes
 
+#### Multi-line `gh` bodies (avoid literal `\\n`)
+
+When using the GitHub CLI, prefer passing multi-line content via a file. Shell quoting can easily turn newlines into literal `\\n`, or break on braces/quotes.
+
+Use `--body-file` / `--title` with a here-doc:
+
+```bash
+cat <<'EOF' > /tmp/pr-body.md
+## Summary
+- ...
+
+## Testing
+- ...
+EOF
+
+gh pr create --title "fix(latt): ..." --body-file /tmp/pr-body.md
+gh pr comment 22 --body-file /tmp/pr-body.md
+```
+
+For small one-liners, `--body "..."` is fine, but prefer `--body-file` for anything with formatting.
+
 ### 5) Keep issues actionable
 
 When filing issues, include:

@@ -1,0 +1,26 @@
+##############################################################################
+#                 Minimal lattice fixture (for tests)                         #
+##############################################################################
+#
+# Keep this file intentionally small and deterministic; CTest invokes `latt`
+# with --max-layers/--max-cells/--max-atoms to bound runtime/output size.
+#
+#------------------------------------------------------------------------------
+# BEGIN INPUT
+#------------------------------------------------------------------------------
+
+c: minimal
+
+# basis vectors (arbitrary orthogonal cell)
+a1: 1.0 0.0 0.0
+a2: 0.0 1.0 0.0
+a3: 0.0 0.0 1.0
+
+# atoms in unit cell
+pb: Ca 0.0 0.0 0.0
+pb: O  0.5 0.5 0.5
+
+# layer parameters
+il: 1
+nl: 1
+

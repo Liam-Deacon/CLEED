@@ -43,6 +43,7 @@ ENDIF()
 ##############################################################################
 
 PROJECT(CLEED)
+INCLUDE(CTest)
 SET(CPACK_PACKAGE_NAME "CLEED")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Automated Surface Structure determination from LEED-IV curves")
 SET(CPACK_PACKAGE_VENDOR "Liam Deacon")
@@ -597,6 +598,10 @@ MESSAGE( STATUS )
 #                         Packaging section                                  #
 ##############################################################################
 ADD_SUBDIRECTORY(src)
+
+IF (BUILD_TESTING)
+    ADD_SUBDIRECTORY(tests)
+ENDIF()
 
 IF (USE_PHASESHIFTS STREQUAL "ON")
     IF (NOT PYTHON_PIP_EXECUTABLE STREQUAL "PYTHON_PIP-NOTFOUND")

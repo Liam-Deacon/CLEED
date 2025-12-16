@@ -32,12 +32,13 @@ int main(int argc, char *argv[])
   
   int n1, n2, n3;
   
-  int n_bas=0, i_bas;
+  size_t n_bas = 0;
+  size_t i_bas;
   size_t i_atom, j_atom;
   
   double faux_x, faux_y, faux_z, faux_len;
   
-  char *bas_name = malloc(sizeof(char) * NAMSZ);
+  char *bas_name = (char *)malloc(sizeof(char) * NAMSZ);
   
   double b1_len = 0., b2_len = 0., b3_len = 0.;
   double nor_len = 0.0;
@@ -153,7 +154,11 @@ int main(int argc, char *argv[])
   
   basis_t *a = basis_init();
   
-  lattice_setup(lat, a1, a2, a3, nor, bas, bas_name, &n_bas);
+  if (lattice_setup(lat, a1, a2, a3, nor, &bas, &bas_name, &n_bas) != 0)
+  {
+    fprintf(stderr, "*** error (latt): failed to set up lattice basis\n");
+    return 1;
+  }
   
   basis_set_a1(a, a1);
   basis_set_a2(a, a2);
@@ -178,10 +183,10 @@ int main(int argc, char *argv[])
 
   for(i_bas = 0; i_bas < n_bas; i_bas ++)
   {
-    fprintf(inf_stream, "\tbas[%d] = %s (%7.3f; %7.3f; %7.3f)\n", 
+    fprintf(inf_stream, "\tbas[%zu] = %s (%7.3f; %7.3f; %7.3f)\n", 
             i_bas, bas_name+(i_bas*NAMSZ), 
             bas[i_bas].x, bas[i_bas].y, bas[i_bas].z);
-    fprintf(ctr_stream, "\tbas[%d] = %s (%7.3f; %7.3f; %7.3f)\n", 
+    fprintf(ctr_stream, "\tbas[%zu] = %s (%7.3f; %7.3f; %7.3f)\n", 
             i_bas, bas_name+(i_bas*NAMSZ), 
             bas[i_bas].x, bas[i_bas].y, bas[i_bas].z);
   }
@@ -454,10 +459,10 @@ int main(int argc, char *argv[])
   fprintf(ctr_stream, " Basis:\n" );
   for(i_bas = 0; i_bas < n_bas; i_bas ++)
   {
-    fprintf(inf_stream, "\tbas[%d] = %s (%7.3f; %7.3f; %7.3f)\n", 
+    fprintf(inf_stream, "\tbas[%zu] = %s (%7.3f; %7.3f; %7.3f)\n", 
             i_bas, bas_name+(i_bas*NAMSZ), 
             bas[i_bas].x, bas[i_bas].y, bas[i_bas].z);
-    fprintf(ctr_stream, "\tbas[%d] = %s (%7.3f; %7.3f; %7.3f)\n", 
+    fprintf(ctr_stream, "\tbas[%zu] = %s (%7.3f; %7.3f; %7.3f)\n", 
             i_bas, bas_name+(i_bas*NAMSZ), 
             bas[i_bas].x, bas[i_bas].y, bas[i_bas].z);
   }
@@ -498,8 +503,8 @@ int main(int argc, char *argv[])
 
     if(i_pass > 0) 
     {
-      fprintf(ctr_stream, " n_atom = %d; n_layers = %d\n", 
-              lat->n_atoms, lat->max_layers); 
+      fprintf(ctr_stream, " n_atom = %zu; n_layers = %zu\n",
+              lat->n_atoms, lat->max_layers);
     }
 
 
@@ -536,8 +541,8 @@ int main(int argc, char *argv[])
                                          n2 * b2->y + n3 * b3->y + bas[i_bas].y;
                   lat->atoms[i_atom].z = n1 * b1->z +
                                          n2 * b2->z + n3 * b3->z + bas[i_bas].z;
-                  strncpy(lat->atoms[i_atom].element, 
-                          bas_name+(i_bas+NAMSZ), NAMSZ);
+                  snprintf(lat->atoms[i_atom].element, NAMSZ, "%s",
+                           bas_name + (i_bas * NAMSZ));
                 }
   
                 i_atom ++;
@@ -573,8 +578,8 @@ int main(int argc, char *argv[])
                   lat->atoms[i_atom].x = faux->x;
                   lat->atoms[i_atom].y = faux->y;
                   lat->atoms[i_atom].z = faux->z;
-                  strncpy(lat->atoms[i_atom].element, 
-                          bas_name+(i_bas+NAMSZ), NAMSZ);
+                  snprintf(lat->atoms[i_atom].element, NAMSZ, "%s",
+                           bas_name + (i_bas * NAMSZ));
                 }
   
                 i_atom ++;
@@ -621,7 +626,7 @@ int main(int argc, char *argv[])
           dist_min, dist_max);
 
   lattice_printf(stdout, lat);
-  fprintf(inf_stream, "\n Atoms in list = %d; layers = %d\n", n_atoms, lat->max_layers);
+  fprintf(inf_stream, "\n Atoms in list = %d; layers = %zu\n", n_atoms, lat->max_layers);
   
   fclose(inf_stream);
   fclose(ctr_stream);
@@ -639,6 +644,7 @@ int main(int argc, char *argv[])
   basis_free(a);
   basis_free(b);
   basis_free(rot_a);
+  free(bas_name);
 
   free(R[0]);
   free(R[1]);
@@ -648,4 +654,3 @@ int main(int argc, char *argv[])
   
   return (0);
 } /* end of main */
-

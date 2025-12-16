@@ -39,12 +39,21 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET (latt_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-SET (latt_SRCS 
+SET (latt_CORE_SRCS
     basis.c
     coord.c
     lattice.c
+)
+
+SET (latt_APP_SRCS
     latt_help.c
     latt_parse_args.c
+)
+
+add_library(latt_core OBJECT ${latt_CORE_SRCS})
+target_include_directories(latt_core PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 
@@ -59,7 +68,7 @@ IF (WIN32)
         
     SET (latt_SRCS ${latt_SRCS} res/windows/latt.rc)
     
-	    ADD_EXECUTABLE(latt latt.c ${latt_SRCS})
+	    ADD_EXECUTABLE(latt latt.c ${latt_APP_SRCS} $<TARGET_OBJECTS:latt_core>)
 	    
 	ELSE (WIN32)
 
@@ -67,12 +76,12 @@ IF (WIN32)
 	    
 	        IF(APPLE)
 	        
-	            ADD_EXECUTABLE(latt MACOSX_BUNDLE latt.c ${latt_SRCS})
+	            ADD_EXECUTABLE(latt MACOSX_BUNDLE latt.c ${latt_APP_SRCS} $<TARGET_OBJECTS:latt_core>)
 	            INSTALL(TARGETS latt BUNDLE DESTINATION ../Applications)
 	            
 	        ELSE(APPLE)
 	        
-	            ADD_EXECUTABLE(latt latt.c ${latt_SRCS})
+	            ADD_EXECUTABLE(latt latt.c ${latt_APP_SRCS} $<TARGET_OBJECTS:latt_core>)
 	            
 	        ENDIF(APPLE)
 	        
