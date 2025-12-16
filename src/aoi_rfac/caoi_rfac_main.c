@@ -18,6 +18,9 @@ Changes:
 #include "gh_stddef.h"
 #include "proghelp.h"
 
+int sa;
+char proj_name[STRSIZE];
+
 int main(int argc, char *argv[])
 
 {
@@ -313,4 +316,3 @@ int main(int argc, char *argv[])
   return 0;
   
 } /*main*/
-
