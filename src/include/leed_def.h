@@ -336,6 +336,9 @@ typedef struct eng_str  /*!< contains all parameters that change during the
  real stp;      /*!< energy step */
 } leed_eng_t;
 
+/* Backwards-compatible alias used by several headers/sources. */
+typedef leed_eng_t leed_energy_t;
+
 #endif /* LEED_DEF_H */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
