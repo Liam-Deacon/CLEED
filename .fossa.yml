@@ -1,0 +1,34 @@
+version: 3
+
+project:
+  url: https://github.com/Liam-Deacon/CLEED
+
+# Keep FOSSA focused on maintained source. This repo currently contains many
+# generated artifacts and vendored trees which otherwise produce noisy results.
+paths:
+  exclude:
+    - ./.git
+    - ./build
+    - ./CMakeFiles
+    - ./doc/_build
+    - ./src/contrib
+    - ./src/**/CMakeFiles
+
+vendoredDependencies:
+  scanMethod: CLILicenseScan
+  licenseScanPathFilters:
+    exclude:
+      - ".git/**"
+      - "build/**"
+      - "CMakeFiles/**"
+      - "doc/_build/**"
+      - "src/contrib/**"
+      - "src/**/CMakeFiles/**"
+      - "**/*.exe"
+      - "**/*.o"
+      - "**/*.a"
+      - "**/*.so"
+      - "**/*.dylib"
+      - "**/*.dll"
+      - "**/*.class"
+
