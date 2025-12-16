@@ -49,9 +49,77 @@ static lattice_t *create_minimal_lattice(void)
     return lat;
 }
 
+static double max_basis_z(const coord_t *bas, size_t n_bas)
+{
+    if (!bas || n_bas == 0) {
+        return 0.0;
+    }
+    double max_z = bas[0].z;
+    for (size_t i = 1; i < n_bas; ++i) {
+        if (bas[i].z > max_z) {
+            max_z = bas[i].z;
+        }
+    }
+    return max_z;
+}
+
+typedef struct lattice_read_fixture {
+    const char *path;
+    lattice_t *lat;
+    coord_t a1;
+    coord_t a2;
+    coord_t a3;
+    coord_t nor;
+    coord_t *bas;
+    char *bas_name;
+    size_t n_bas;
+} lattice_read_fixture_t;
+
+static int lattice_read_fixture_run(lattice_read_fixture_t *fixture,
+                                    const char *contents)
+{
+    ASSERT_TRUE(fixture != NULL);
+    ASSERT_TRUE(cleed_test_write_text_file(fixture->path, contents) == 0);
+
+    fixture->lat = create_minimal_lattice();
+    ASSERT_TRUE(fixture->lat != NULL);
+    ASSERT_TRUE(lattice_set_input_filename(fixture->lat, fixture->path) == 0);
+
+    fixture->a1 = (coord_t){.x = 0., .y = 0., .z = 0.};
+    fixture->a2 = (coord_t){.x = 0., .y = 0., .z = 0.};
+    fixture->a3 = (coord_t){.x = 0., .y = 0., .z = 0.};
+    fixture->nor = (coord_t){.x = 0., .y = 0., .z = 0.};
+
+    fixture->bas = (coord_t *)calloc(1, sizeof(coord_t));
+    fixture->bas_name = (char *)calloc(NAMSZ, sizeof(char));
+    fixture->n_bas = 0;
+    ASSERT_TRUE(fixture->bas != NULL);
+    ASSERT_TRUE(fixture->bas_name != NULL);
+
+    const int rc = lattice_read(fixture->lat, &fixture->a1, &fixture->a2, &fixture->a3,
+                                &fixture->nor, &fixture->bas, &fixture->bas_name,
+                                &fixture->n_bas);
+    ASSERT_TRUE(rc == 0);
+    return 0;
+}
+
+static void lattice_read_fixture_free(lattice_read_fixture_t *fixture)
+{
+    if (!fixture) {
+        return;
+    }
+    free(fixture->bas);
+    free(fixture->bas_name);
+    if (fixture->lat) {
+        lattice_free(fixture->lat);
+    }
+    if (fixture->path) {
+        cleed_test_remove_file(fixture->path);
+    }
+}
+
 static int test_lattice_read_parses_commands(void)
 {
-    const char *path = "test_lattice_read_full.latt";
     const char *contents =
         "a1: 1 0 0\n"
         "a2: 0 1 0\n"
@@ -65,56 +133,29 @@ static int test_lattice_read_parses_commands(void)
         "uc: 7\n"
         "q\n";
 
-    ASSERT_TRUE(cleed_test_write_text_file(path, contents) == 0);
+    lattice_read_fixture_t fixture = {.path = "test_lattice_read_full.latt"};
+    ASSERT_TRUE(lattice_read_fixture_run(&fixture, contents) == 0);
 
-    lattice_t *lat = create_minimal_lattice();
-    ASSERT_TRUE(lat != NULL);
-    ASSERT_TRUE(lattice_set_input_filename(lat, path) == 0);
+    ASSERT_TRUE(fixture.n_bas == 2);
+    ASSERT_NEAR(fixture.a1.x, 2.0, 1e-12);
+    ASSERT_NEAR(fixture.a1.y, 0.0, 1e-12);
+    ASSERT_NEAR(fixture.a2.x, 0.0, 1e-12);
+    ASSERT_NEAR(fixture.a2.y, 3.0, 1e-12);
+    ASSERT_NEAR(fixture.a3.z, 5.0, 1e-12);
 
-    coord_t a1 = {.x = 0., .y = 0., .z = 0.};
-    coord_t a2 = {.x = 0., .y = 0., .z = 0.};
-    coord_t a3 = {.x = 0., .y = 0., .z = 0.};
-    coord_t nor = {.x = 0., .y = 0., .z = 0.};
+    ASSERT_NEAR(fixture.lat->image_len, 12.5, 1e-12);
+    ASSERT_TRUE(fixture.lat->max_layers == 4);
+    ASSERT_TRUE(fixture.lat->max_cells == 7);
 
-    coord_t *bas = (coord_t *)calloc(1, sizeof(coord_t));
-    char *bas_name = (char *)calloc(NAMSZ, sizeof(char));
-    size_t n_bas = 0;
-    ASSERT_TRUE(bas != NULL);
-    ASSERT_TRUE(bas_name != NULL);
+    ASSERT_TRUE(strcmp(fixture.bas_name, "Ca") == 0);
+    ASSERT_TRUE(strcmp(fixture.bas_name + NAMSZ, "Ca") == 0);
+    ASSERT_NEAR(max_basis_z(fixture.bas, fixture.n_bas), 0.0, 1e-12);
 
-    const int rc = lattice_read(lat, &a1, &a2, &a3, &nor, &bas, &bas_name, &n_bas);
-    ASSERT_TRUE(rc == 0);
-    ASSERT_TRUE(n_bas == 2);
+    ASSERT_NEAR(fixture.nor.x, 0.0, 1e-12);
+    ASSERT_NEAR(fixture.nor.y, 0.0, 1e-12);
+    ASSERT_NEAR(fixture.nor.z, 6.0, 1e-12);
 
-    ASSERT_NEAR(a1.x, 2.0, 1e-12);
-    ASSERT_NEAR(a1.y, 0.0, 1e-12);
-    ASSERT_NEAR(a2.x, 0.0, 1e-12);
-    ASSERT_NEAR(a2.y, 3.0, 1e-12);
-    ASSERT_NEAR(a3.z, 5.0, 1e-12);
-
-    ASSERT_NEAR(lat->image_len, 12.5, 1e-12);
-    ASSERT_TRUE(lat->max_layers == 4);
-    ASSERT_TRUE(lat->max_cells == 7);
-
-    ASSERT_TRUE(strcmp(bas_name, "Ca") == 0);
-    ASSERT_TRUE(strcmp(bas_name + NAMSZ, "Ca") == 0);
-
-    double max_z = bas[0].z;
-    for (size_t i = 1; i < n_bas; ++i) {
-        if (bas[i].z > max_z) {
-            max_z = bas[i].z;
-        }
-    }
-    ASSERT_NEAR(max_z, 0.0, 1e-12);
-
-    ASSERT_NEAR(nor.x, 0.0, 1e-12);
-    ASSERT_NEAR(nor.y, 0.0, 1e-12);
-    ASSERT_NEAR(nor.z, 6.0, 1e-12);
-
-    free(bas);
-    free(bas_name);
-    lattice_free(lat);
-    cleed_test_remove_file(path);
+    lattice_read_fixture_free(&fixture);
     return 0;
 }
 
@@ -171,4 +212,3 @@ int main(void)
 
     return 0;
 }
-

@@ -35,6 +35,18 @@ typedef struct lattice_read_ctx
 typedef bool (*lattice_line_handler_t)(lattice_read_ctx_t *ctx, const char *payload);
 
 static size_t lattice_line_length(const char *line);
+static int lattice_open_input_stream(const lattice_t *lat, FILE **stream,
+                                     bool *should_close);
+static int lattice_prepare_basis_buffers(coord_t **bas, char **bas_name,
+                                         size_t *n_bas);
+static void lattice_apply_superstructure(coord_t *a1, coord_t *a2,
+                                         const double R[2][2]);
+static void lattice_update_constants(lattice_t *lat, const coord_t *a1,
+                                     const coord_t *a2, const coord_t *a3);
+static void lattice_update_nearest_neighbour(lattice_t *lat);
+static void lattice_update_surface_normal(lattice_t *lat, const coord_t *a1,
+                                          const coord_t *a2, const coord_t *a3,
+                                          coord_t *nor);
 
 static bool lattice_handle_a1(lattice_read_ctx_t *ctx, const char *payload);
 static bool lattice_handle_a2(lattice_read_ctx_t *ctx, const char *payload);
@@ -49,6 +61,17 @@ static bool lattice_handle_uc(lattice_read_ctx_t *ctx, const char *payload);
 static bool lattice_dispatch_prefixed(lattice_read_ctx_t *ctx,
                                       const char *line,
                                       size_t line_len);
+
+typedef enum lattice_line_result
+{
+  LATTICE_LINE_CONTINUE = 0,
+  LATTICE_LINE_STOP = 1
+} lattice_line_result_t;
+
+static lattice_line_result_t lattice_process_input_line(lattice_read_ctx_t *ctx,
+                                                        const char *line);
+static void lattice_read_input_stream(lattice_read_ctx_t *ctx, FILE *stream,
+                                      char *line_buffer);
 
 /**
  * @brief Resize the basis buffers used by @ref lattice_read.
@@ -124,6 +147,121 @@ static size_t lattice_line_length(const char *line)
   return strnlen(line, STRSZ);
 }
 
+static int lattice_open_input_stream(const lattice_t *lat, FILE **stream,
+                                     bool *should_close)
+{
+  if (!lat || !stream || !should_close)
+  {
+    return -1;
+  }
+
+  *stream = stdin;
+  *should_close = false;
+
+  if (strcmp(lat->input_filename, "stdin") == 0)
+  {
+    return 0;
+  }
+
+  FILE *handle = fopen(lat->input_filename, "r");
+  if (!handle)
+  {
+    fprintf(stderr, "*** error (lattice_read): open failed %s\n",
+            lat->input_filename);
+    return -1;
+  }
+
+  *stream = handle;
+  *should_close = true;
+  fprintf(inf_stream, "Read lattice input from file \"%s\" \n",
+          lat->input_filename);
+  fprintf(ctr_stream, "Read lattice input from file \"%s\" \n",
+          lat->input_filename);
+  return 0;
+}
+
+static int lattice_prepare_basis_buffers(coord_t **bas, char **bas_name,
+                                         size_t *n_bas)
+{
+  if (!bas || !bas_name || !n_bas)
+  {
+    return -1;
+  }
+
+  *n_bas = (size_t)MAX_INP_ATOMS;
+  if (lattice_resize_basis(bas, bas_name, *n_bas) != 0)
+  {
+    fprintf(stderr, "*** error (lattice_read): allocation failed\n");
+    return -1;
+  }
+  return 0;
+}
+
+static void lattice_apply_superstructure(coord_t *a1, coord_t *a2,
+                                         const double R[2][2])
+{
+  coord_t b1, b2;
+  b1.x = R[0][0] * a1->x + R[0][1] * a2->x;
+  b1.y = R[0][0] * a1->y + R[0][1] * a2->y;
+
+  b2.x = R[1][0] * a1->x + R[1][1] * a2->x;
+  b2.y = R[1][0] * a1->y + R[1][1] * a2->y;
+
+  a1->x = b1.x;
+  a1->y = b1.y;
+  a2->x = b2.x;
+  a2->y = b2.y;
+
+  #if DEBUG > 0
+  fprintf(stderr, "** debug (lattice_read): update basis vectors\n");
+  fprintf(stderr, "a1 = ");
+  coord_printf(stderr, a1);
+  fprintf(stderr, "a2 = ");
+  coord_printf(stderr, a2);
+  fprintf(stderr, "b1 = ");
+  coord_printf(stderr, &b1);
+  fprintf(stderr, "b2 = ");
+  coord_printf(stderr, &b2);
+  #endif
+}
+
+static void lattice_update_constants(lattice_t *lat, const coord_t *a1,
+                                     const coord_t *a2, const coord_t *a3)
+{
+  lat->a_latt = COORD_MAGNITUDE(a1);
+  lat->b_latt = COORD_MAGNITUDE(a2);
+  lat->c_latt = COORD_MAGNITUDE(a3);
+}
+
+static void lattice_update_nearest_neighbour(lattice_t *lat)
+{
+  lat->a_nn = lat->a_latt;
+  if (lat->b_latt < lat->a_nn)
+  {
+    lat->a_nn = lat->b_latt;
+  }
+  if (lat->c_latt < lat->a_nn)
+  {
+    lat->a_nn = lat->c_latt;
+  }
+}
+
+static void lattice_update_surface_normal(lattice_t *lat, const coord_t *a1,
+                                          const coord_t *a2, const coord_t *a3,
+                                          coord_t *nor)
+{
+  coord_t *surface_normal = lattice_get_surface_normal(lat, a1, a2, a3);
+  if (surface_normal)
+  {
+    coord_set(nor, surface_normal->x, surface_normal->y, surface_normal->z);
+    coord_free(surface_normal);
+  }
+
+  #if DEBUG > 0
+  fprintf(stderr, "** debug (lattice_read): end of lattice_read\n");
+  #endif
+}
+
 /**
  * @brief Compare a line to a command token, allowing trailing newlines.
  *
@@ -144,7 +282,11 @@ static bool lattice_line_equals(const char *line, const char *value)
     return false;
   }
 
-  size_t len = strlen(value);
+  size_t len = strnlen(value, STRSZ);
+  if (len == STRSZ)
+  {
+    return false;
+  }
   if (line_len < len)
   {
     return false;
@@ -238,6 +380,46 @@ static bool lattice_is_quit_command(const char *line)
 static bool lattice_is_help_command(const char *line)
 {
   return lattice_line_equals(line, "help");
+}
+
+static lattice_line_result_t lattice_process_input_line(lattice_read_ctx_t *ctx,
+                                                        const char *line)
+{
+  size_t line_len = lattice_line_length(line);
+  if (line_len == STRSZ || line_len == 0)
+  {
+    return LATTICE_LINE_CONTINUE;
+  }
+
+  if (lattice_is_quit_command(line))
+  {
+    return LATTICE_LINE_STOP;
+  }
+
+  if (lattice_is_help_command(line) &&
+      strcmp(ctx->lat->input_filename, "stdin") == 0)
+  {
+    lattice_print_help();
+    return LATTICE_LINE_CONTINUE;
+  }
+
+  (void) lattice_dispatch_prefixed(ctx, line, line_len);
+  return LATTICE_LINE_CONTINUE;
+}
+
+static void lattice_read_input_stream(lattice_read_ctx_t *ctx, FILE *stream,
+                                      char *line_buffer)
+{
+  while ((fgets(line_buffer, STRSZ, stream) != NULL) &&
+         (*ctx->i_bas < *ctx->n_bas))
+  {
+    lattice_log_line(line_buffer);
+
+    if (lattice_process_input_line(ctx, line_buffer) == LATTICE_LINE_STOP)
+    {
+      break;
+    }
+  }
 }
 
 /**
@@ -1073,12 +1255,23 @@ miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat)
 int lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
                  coord_t *nor, coord_t **bas, char **bas_name, size_t *n_bas)
 {
-  FILE *inp_stream = stdin;
+  FILE *inp_stream = NULL;
+  bool should_close = false;
   size_t i_bas = 0;
-  coord_t b1, b2;
   double R[2][2] = {{1., 0.}, {0., 1.}};
   char line_buffer[STRSZ];
-  coord_t *surface_normal = NULL;
+
+  if (lattice_open_input_stream(lat, &inp_stream, &should_close) != 0)
+  {
+    return -1;
+  }
+
+  if (lattice_prepare_basis_buffers(bas, bas_name, n_bas) != 0)
+  {
+    if (should_close) fclose(inp_stream);
+    return -1;
+  }
+
   lattice_read_ctx_t ctx = {.lat = lat,
                             .a1 = a1,
                             .a2 = a2,
@@ -1090,115 +1283,14 @@ int lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
                             .i_bas = &i_bas,
                             .R = R};
 
-  if (strcmp(lat->input_filename, "stdin") != 0)
-  {
-    if ((inp_stream = fopen(lat->input_filename, "r")) == NULL)
-    {
-      fprintf(stderr, "*** error (lattice_read): open failed %s\n",
-              lat->input_filename);
-      return -1;
-    }
-    fprintf(inf_stream, "Read lattice input from file \"%s\" \n",
-            lat->input_filename);
-    fprintf(ctr_stream, "Read lattice input from file \"%s\" \n",
-            lat->input_filename);
-  }
-
-  *n_bas = (size_t)MAX_INP_ATOMS;
-  if (lattice_resize_basis(bas, bas_name, *n_bas) != 0)
-  {
-    fprintf(stderr, "*** error (lattice_read): allocation failed\n");
-    return -1;
-  }
-
-  while ((fgets(line_buffer, STRSZ, inp_stream) != NULL) &&
-         (i_bas < *n_bas))
-  {
-    lattice_log_line(line_buffer);
-
-    size_t line_len = lattice_line_length(line_buffer);
-    if (line_len == STRSZ)
-    {
-      continue;
-    }
-    if (lattice_is_quit_command(line_buffer))
-    {
-      break;
-    }
-    if (lattice_is_help_command(line_buffer) &&
-        strcmp(lat->input_filename, "stdin") == 0)
-    {
-      lattice_print_help();
-      continue;
-    }
-    (void) lattice_dispatch_prefixed(&ctx, line_buffer, line_len);
-  }
+  lattice_read_input_stream(&ctx, inp_stream, line_buffer);
+  if (should_close) fclose(inp_stream);
 
   *n_bas = i_bas;
-
-  b1.x = R[0][0] * a1->x + R[0][1] * a2->x;
-  b1.y = R[0][0] * a1->y + R[0][1] * a2->y;
-
-  b2.x = R[1][0] * a1->x + R[1][1] * a2->x;
-  b2.y = R[1][0] * a1->y + R[1][1] * a2->y;
-
-  a1->x = b1.x;
-  a1->y = b1.y;
-
-  a2->x = b2.x;
-  a2->y = b2.y;
-
-  #if DEBUG > 0
-  fprintf(stderr, "** debug (lattice_read): update basis vectors\n");
-  fprintf(stderr, "a1 = ");
-  coord_printf(stderr, a1);
-  fprintf(stderr, "a2 = ");
-  coord_printf(stderr, a2);
-  fprintf(stderr, "b1 = ");
-  coord_printf(stderr, &b1);
-  fprintf(stderr, "b2 = ");
-  coord_printf(stderr, &b2);
-  #endif
-
-  lat->a_latt = COORD_MAGNITUDE(a1);
-  lat->b_latt = COORD_MAGNITUDE(a2);
-  lat->c_latt = COORD_MAGNITUDE(a3);
-
-  lat->a_nn = lat->a_latt;
-  if (lat->b_latt < lat->a_nn)
-  {
-    lat->a_nn = lat->b_latt;
-  }
-  if (lat->c_latt < lat->a_nn)
-  {
-    lat->a_nn = lat->c_latt;
-  }
-
+  lattice_apply_superstructure(a1, a2, R);
+  lattice_update_constants(lat, a1, a2, a3);
+  lattice_update_nearest_neighbour(lat);
   lattice_normalize_basis(*bas, *n_bas);
-
-  #if DEBUG > 0
-  for (size_t index = 0; index < *n_bas; ++index)
-  {
-    fprintf(stderr, "  bas[%zu] = ", index);
-    coord_printf(stderr, &(*bas)[index]);
-  }
-  fprintf(stderr, "** debug (lattice_read): end basis assignment\n");
-  #endif
-
-  surface_normal = lattice_get_surface_normal(lat, a1, a2, a3);
-  if (surface_normal)
-  {
-    coord_set(nor, surface_normal->x, surface_normal->y, surface_normal->z);
-    coord_free(surface_normal);
-  }
-
-  #if DEBUG > 0
-  fprintf(stderr, "** debug (lattice_read): n_bas = %zu\n", *n_bas);
-  #endif
-
-  #if DEBUG > 0
-  fprintf(stderr, "** debug (lattice_read): end of lattice_read\n");
-  #endif
-
+  lattice_update_surface_normal(lat, a1, a2, a3, nor);
   return 0;
 }

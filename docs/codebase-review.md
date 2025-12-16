@@ -9,6 +9,8 @@ This document is intended to be:
 - a **roadmap** for modernisation and release readiness,
 - a source for **actionable GitHub issues**.
 
+Static analysis notes (Codacy + local `pre-commit`/Cppcheck): `docs/static-analysis.md`.
+
 ---
 
 ## Executive summary
@@ -381,4 +383,3 @@ Non-exhaustive:
 - `gets` (`src/debye/debye.c`)
 - `system` (`src/rfac/file2buffer.c`)
 - many `sprintf`/`strcpy`/`strcat` without bounds checks
-
