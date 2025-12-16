@@ -1,0 +1,23 @@
+# See https://pre-commit.com for more information
+# To run locally:
+#   pre-commit install
+#   pre-commit run --all-files
+#
+# This configuration is intentionally minimal at first to avoid a huge
+# whitespace/formatting churn across the historic repository contents.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+        files: \.(ya?ml)$
+
+      - id: check-merge-conflict
+
+      - id: end-of-file-fixer
+        files: ^(\.pre-commit-config\.yaml|CONTRIBUTING\.md)$
+
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        files: ^(\.pre-commit-config\.yaml|CONTRIBUTING\.md)$
