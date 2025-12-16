@@ -100,12 +100,14 @@ TARGET_LINK_LIBRARIES(crfac rfac m)
 
 IF (WIN32)
     INSTALL (TARGETS crfac rfac
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION bin
         COMPONENT runtime
     )
 ELSE (WIN32)
     INSTALL (TARGETS crfac rfac
+        BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         COMPONENT runtime

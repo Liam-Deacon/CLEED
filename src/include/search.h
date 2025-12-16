@@ -43,9 +43,9 @@ extern "C" {
 #include "search_func.h"
 #include "search_ver.h"
 
-struct sratom_str *sr_atoms;
-struct search_str *sr_search;
-char *sr_project;
+extern struct sratom_str *sr_atoms;
+extern struct search_str *sr_search;
+extern char *sr_project;
 
 /*********************************************************************
  End of include file 

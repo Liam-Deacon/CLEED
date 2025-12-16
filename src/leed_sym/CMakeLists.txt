@@ -68,5 +68,8 @@ ELSE (WIN32)
     
 ENDIF (WIN32)
 
-INSTALL (TARGETS cleed_sym COMPONENT runtime RUNTIME DESTINATION bin)
-
+INSTALL (TARGETS cleed_sym
+    COMPONENT runtime
+    BUNDLE DESTINATION ../Applications
+    RUNTIME DESTINATION bin
+)

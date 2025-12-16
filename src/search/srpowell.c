@@ -17,7 +17,6 @@ GH/19.09.95 - Criterion of termination is absolute deviation in vertex
 
 ***********************************************************************/
 #include <math.h>
-#include <gsl/gsl_vector.h>
 #include "search.h"
 
 #ifndef MAX_ITER_POWELL      /* should be defined in "search_def.h" */

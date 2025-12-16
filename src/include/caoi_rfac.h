@@ -48,9 +48,9 @@ extern "C" {
 /*********************************************************************
 include global values for multiple datasets
 *********************************************************************/
-int sa;
+extern int sa;
 int ctrinp (char filectr[STRSIZE]);
-char proj_name[STRSIZE];
+extern char proj_name[STRSIZE];
 
 /*********************************************************************
 END

@@ -72,6 +72,7 @@ ENDIF (WIN32)
 TARGET_LINK_LIBRARIES (caoi_leed m)
 
 INSTALL (TARGETS caoi_leed 
+    BUNDLE DESTINATION ../Applications
     RUNTIME DESTINATION bin
     COMPONENT runtime
 )

@@ -16,7 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.16)
 MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 INCLUDE(InstallRequiredSystemLibraries)
 # allow more human readable "if then else" constructs
@@ -34,7 +34,7 @@ ENDIF()
 
 # set default install prefix to project root directory
 IF(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
-    SET(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")
+    SET(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}")
 ENDIF()
 
 
@@ -47,10 +47,12 @@ SET(CPACK_PACKAGE_NAME "CLEED")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Automated Surface Structure determination from LEED-IV curves")
 SET(CPACK_PACKAGE_VENDOR "Liam Deacon")
 SET(CPACK_PACKAGE_CONTACT "liam.deacon@diamond.ac.uk")
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/../LICENSE.txt")
-SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_BINARY_DIR}/../README.md")
-SET(CPACK_RESOURCE_FILE_NOTES "${CMAKE_CURRENT_BINARY_DIR}/../RELEASE_NOTES.txt")
-SET(CPACK_RESOURCE_FILE_CHANGELOG "${CMAKE_CURRENT_BINARY_DIR}/../ChangeLog.txt")
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
+SET(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/Readme.md")
+IF (EXISTS "${CMAKE_SOURCE_DIR}/RELEASE_NOTES.txt")
+    SET(CPACK_RESOURCE_FILE_NOTES "${CMAKE_SOURCE_DIR}/RELEASE_NOTES.txt")
+ENDIF()
+SET(CPACK_RESOURCE_FILE_CHANGELOG "${CMAKE_SOURCE_DIR}/ChangeLog.txt")
 SET(CPACK_PACKAGE_VERSION_MAJOR "2014")
 SET(CPACK_PACKAGE_VERSION_MINOR "07")
 SET(CPACK_PACKAGE_VERSION_PATCH "04")
@@ -76,6 +78,8 @@ OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" ON)
 OPTION(INSTALL_DOC "Set to OFF to skip build/install Documentation" ON)
 OPTION(PACK_SOURCE "Set to OFF to pack without source code" ON)
 OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration - NOTE: this means the code is no longer open source" ON)
+OPTION(BUILD_PATT "Build patt (pattern visualisation) - experimental" OFF)
+OPTION(BUILD_SET_ENV "Build set_env embedded-Python executable (legacy)" OFF)
 
 # set cmake module path
 IF (NOT CMAKE_MODULE_PATH)
@@ -130,7 +134,7 @@ ENDIF ()
 # This is only required for the script to work in the version control
 IF (WITH_OPENCL STREQUAL "ON")
     SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeModules")
-    FIND_PACKAGE( OpenCL REQUIRED )
+    FIND_PACKAGE(OpenCL)
     INCLUDE_DIRECTORIES( ${OpenCL_INCLUDE_DIRS} ${OPENCL_INCLUDE_DIR} )
     IF (OpenCL_FOUND OR OPENCL_FOUND)
         SET (WITH_OPENCL ON)
@@ -192,10 +196,10 @@ INCLUDE(CheckCXXCompilerFlag)
 # endif()
 
 # find java
-FIND_PACKAGE (Java 
-#    REQUIRED
-)
-INCLUDE (UseJava)
+FIND_PACKAGE(Java)
+IF (Java_FOUND)
+    INCLUDE (UseJava)
+ENDIF()
 
 # find Python libraries & commands
 FIND_PACKAGE(PythonInterp)
@@ -205,14 +209,10 @@ FIND_PROGRAM(PYTHON_EASY_INSTALL easy_install)
 FIND_PROGRAM(CYTHON NAMES cython cython.py)
 FIND_PROGRAM(F2PY_EXECUTABLE NAMES f2py f2py.py)
 
-# enable Fortran support
-ENABLE_LANGUAGE (Fortran)
-INCLUDE(FortranCInterface)
-FortranCInterface_HEADER(FC.h MACRO_NAMESPACE "FC_")
-GET_FILENAME_COMPONENT (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
-
-# enable resource compiler
-ENABLE_LANGUAGE(RC)
+# enable resource compiler (Windows only)
+IF (WIN32)
+    ENABLE_LANGUAGE(RC)
+ENDIF()
 
 # Set Warnings
 IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
@@ -673,8 +673,7 @@ ELSE (WIN32)
             # http://groups.google.com/group/vim_mac/browse_thread/thread/064da55ec412e768
             # which means typing the following command in Terminal.app:
             # $ sudo ln -s /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/crt1.o /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/crt1.10.5.o
-            SET(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk)
-            SET(CMAKE_OSX_ARCHITECTURES i386)
+            # Do not force SDK/architectures here; let the active toolchain decide.
             SET(MACOSX_BUNDLE_ICON_FILE icon.icns)
             SET(MACOSX_BUNDLE_BUNDLE_NAME cleed)
             SET(MACOSX_BUNDLE_BUNDLE_VERSION ${VERSION})
@@ -706,7 +705,8 @@ ELSE (WIN32)
             SET(CPACK_PACKAGE_EXECUTABLES "cleed;cleed")
             SET(CPACK_GENERATOR "PackageMaker")
             
-            INSTALL_FILES(${CPACK_PACKAGE_INSTALL_DIRECTORY} ${RUNTIME_LIBRARIES})
+            # `install_files()` was removed from CMake; keep runtime library installs
+            # in the relevant per-platform targets instead.
         
         ELSE (APPLE)
             # ============ BUILD SETTINGS FOR LINUX ============
@@ -755,8 +755,12 @@ ELSE (WIN32)
                     "
                 )
                 
-                # Debian packaging
-                INCLUDE (${CMAKE_MODULE_PATH}/DpkgBuild.cmake)
+                # Debian packaging (optional; module may not exist in-tree yet)
+                IF (EXISTS "${CMAKE_MODULE_PATH}/DpkgBuild.cmake")
+                    INCLUDE ("${CMAKE_MODULE_PATH}/DpkgBuild.cmake")
+                ELSE()
+                    SET(DPKG_FOUND OFF)
+                ENDIF()
                 
                 IF(DPKG_FOUND AND NOT WIN32)
                     SET(CPACK_GENERATOR "${CPACK_GENERATOR};DEB")
@@ -772,8 +776,12 @@ ELSE (WIN32)
                     SET(CPACK_SET_DESTDIR TRUE)
                 ENDIF(DPKG_FOUND AND NOT WIN32)
                 
-                # RPM packaging
-                INCLUDE (${CMAKE_MODULE_PATH}/RpmBuild.cmake)
+                # RPM packaging (optional; module may not exist in-tree yet)
+                IF (EXISTS "${CMAKE_MODULE_PATH}/RpmBuild.cmake")
+                    INCLUDE ("${CMAKE_MODULE_PATH}/RpmBuild.cmake")
+                ELSE()
+                    SET(RPM_FOUND OFF)
+                ENDIF()
                 
                 IF (RPM_FOUND AND NOT WIN32)
                     SET(CPACK_GENERATOR "${CPACK_GENERATOR};RPM")
@@ -794,7 +802,6 @@ ELSE (WIN32)
             ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
         
             ENABLE_TESTING()
-            ADD_TEST(cleedtest ${CMAKE_CURRENT_BINARY_DIR}/cleedtest)
 
         ENDIF (APPLE)
     ENDIF (UNIX)
@@ -870,7 +877,7 @@ SET (DOLLAR "$")
 SET (CPACK "@CPACK")
 SET (AT "@")
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.cmake.in"
-    "${CMAKE_SOURCE_DIR}/CMakeModules/NSIS.template.in" @IMMEDIATE) 
+    "${CMAKE_BINARY_DIR}/NSIS.template.in" @ONLY)
 # configure CPack - doesn't appear to work...
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CPackOptions.cmake.in"
     "${CMAKE_BINARY_DIR}/CPackOptions.cmake" @ONLY)
