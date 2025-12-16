@@ -16,4 +16,3 @@ Run the hooks manually:
 ```bash
 pre-commit run --all-files
 ```
-
