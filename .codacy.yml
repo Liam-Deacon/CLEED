@@ -1,0 +1,24 @@
+exclude_paths:
+  # Generated/build artifacts (some are currently committed historically)
+  - "build/**"
+  - "CMakeFiles/**"
+  - "src/**/CMakeFiles/**"
+  - "doc/_build/**"
+
+  # Vendored third-party code
+  - "src/contrib/**"
+
+  # IDE/user configuration files
+  - "**/*.pro.user"
+  - ".externalToolBuilders/**"
+  - ".cproject"
+  - ".project"
+
+  # Binaries and object files (should not be analysed)
+  - "**/*.exe"
+  - "**/*.o"
+  - "**/*.a"
+  - "**/*.so"
+  - "**/*.dylib"
+  - "**/*.dll"
+
