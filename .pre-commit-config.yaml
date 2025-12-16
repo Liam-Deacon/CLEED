@@ -21,3 +21,12 @@ repos:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
         files: ^(\.pre-commit-config\.yaml|CONTRIBUTING\.md)$
+
+  - repo: local
+    hooks:
+      - id: cppcheck
+        name: Run cppcheck (lattice/tests)
+        entry: scripts/run-cppcheck.sh
+        language: script
+        files: ^(src/latt|tests).*\.(c|h|cc|cpp)$
+        pass_filenames: true
