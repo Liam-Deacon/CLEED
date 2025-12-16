@@ -29,12 +29,8 @@ static int find_min_index(const real *values, int n)
     return min_index;
 }
 
-int main(void)
+static int setup_sr_project(void)
 {
-    const int ndim = 2;
-    const int mpts = ndim + 1;
-    int nfunk = 0;
-
     sr_project = (char *)malloc((size_t)STRSZ + 1);
     if (!sr_project) {
         fprintf(stderr, "allocation failed: sr_project\n");
@@ -44,16 +40,24 @@ int main(void)
 
     if (cleed_test_write_text_file("amoeba_test.ver", "seed\n") != 0) {
         fprintf(stderr, "failed to create amoeba_test.ver\n");
+        free(sr_project);
+        sr_project = NULL;
         return 1;
     }
 
-    real **p = cleed_test_alloc_matrix_1based(mpts, ndim);
-    real *y = cleed_test_alloc_vector_1based(mpts);
-    if (!p || !y) {
-        fprintf(stderr, "allocation failed: simplex\n");
-        return 1;
-    }
+    return 0;
+}
 
+static void teardown_sr_project(void)
+{
+    cleed_test_remove_file("amoeba_test.ver");
+    cleed_test_remove_file("amoeba_test.vbk");
+    free(sr_project);
+    sr_project = NULL;
+}
+
+static void configure_simplex(real **p, real *y)
+{
     p[1][1] = 0.0;
     p[1][2] = 0.0;
     p[2][1] = 1.0;
@@ -61,17 +65,20 @@ int main(void)
     p[3][1] = 0.0;
     p[3][2] = 1.0;
 
+    const int mpts = 3;
     for (int i = 1; i <= mpts; i++) {
         y[i] = quadratic_2d(p[i]);
     }
+}
 
-    sr_amoeba(p, y, ndim, 1e-6, (real (*)())quadratic_2d, &nfunk);
-
+static int verify_amoeba_result(real **p, real *y, int nfunk)
+{
+    const int mpts = 3;
+    const real tol = 1e-3;
     const int best = find_min_index(y, mpts);
     const real best_x = p[best][1];
     const real best_y = p[best][2];
 
-    const real tol = 1e-3;
     if (fabs(best_x - 1.0) > tol || fabs(best_y + 2.0) > tol) {
         fprintf(stderr, "unexpected optimum: (%g, %g)\n", (double)best_x, (double)best_y);
         return 1;
@@ -82,14 +89,46 @@ int main(void)
         return 1;
     }
 
+    return 0;
+}
+
+static int run_amoeba_regression(void)
+{
+    const int ndim = 2;
+    const int mpts = ndim + 1;
+    int nfunk = 0;
+
+    real **p = cleed_test_alloc_matrix_1based(mpts, ndim);
+    real *y = cleed_test_alloc_vector_1based(mpts);
+    if (!p || !y) {
+        fprintf(stderr, "allocation failed: simplex\n");
+        if (p) {
+            cleed_test_free_matrix_1based(p);
+        }
+        if (y) {
+            cleed_test_free_vector_1based(y);
+        }
+        return 1;
+    }
+
+    configure_simplex(p, y);
+    sr_amoeba(p, y, ndim, 1e-6, (real (*)())quadratic_2d, &nfunk);
+
+    const int result = verify_amoeba_result(p, y, nfunk);
     cleed_test_free_matrix_1based(p);
     cleed_test_free_vector_1based(y);
 
-    cleed_test_remove_file("amoeba_test.ver");
-    cleed_test_remove_file("amoeba_test.vbk");
+    return result;
+}
 
-    free(sr_project);
-    sr_project = NULL;
+int main(void)
+{
+    if (setup_sr_project() != 0) {
+        return 1;
+    }
 
-    return 0;
+    const int status = run_amoeba_regression();
+    teardown_sr_project();
+
+    return status;
 }
