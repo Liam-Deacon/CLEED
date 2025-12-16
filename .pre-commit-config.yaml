@@ -21,3 +21,15 @@ repos:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
         files: ^(\.pre-commit-config\.yaml|CONTRIBUTING\.md)$
+
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+      - id: cppcheck
+        additional_dependencies: [cppcheck==1.5.1]
+        args:
+          - "--enable=warning,performance,portability,style,information"
+          - "--template=[{severity}] {file}:{line}: {message}"
+          - "--suppress=missingIncludeSystem"
+          - "--error-exitcode=0"
+        files: ^(src/latt|tests).*\.(c|h|cc|cpp)$
