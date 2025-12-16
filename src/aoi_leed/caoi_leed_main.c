@@ -18,11 +18,12 @@ Changes:
 #include "caoi_leed.h"
 #include "proghelp.h"
 
+int sa;
+
 int main (int argc, char *argv[])
 {
   int i_arg;
   int length;
-  /* int sa; */     /* should be defined as global variable in caoi_leed.h */
   int i_ang;
 
   char bsr_file[STRSIZE];
