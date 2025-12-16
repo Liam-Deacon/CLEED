@@ -4,10 +4,60 @@
 #include <math.h>
 // cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdbool.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
 #include "lattice.h"
 
+/**
+ * @brief Scratch context for parsing a lattice input stream.
+ *
+ * The parser reads a line-oriented command format (e.g. "a1:", "pb:", "il:")
+ * and updates the provided lattice and output buffers. This struct keeps the
+ * function signatures small and makes the dispatch table-driven to keep
+ * cyclomatic complexity low (Codacy thresholds).
+ */
+typedef struct lattice_read_ctx
+{
+  lattice_t *lat;
+  coord_t *a1;
+  coord_t *a2;
+  coord_t *a3;
+  coord_t *nor;
+  coord_t **bas;
+  char **bas_name;
+  size_t *n_bas;
+  size_t *i_bas;
+  double (*R)[2];
+} lattice_read_ctx_t;
+
+typedef bool (*lattice_line_handler_t)(lattice_read_ctx_t *ctx, const char *payload);
+
+static size_t lattice_line_length(const char *line);
+
+static bool lattice_handle_a1(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_a2(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_a3(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_m1(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_m2(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_pb(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_po(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_il(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_nl(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_handle_uc(lattice_read_ctx_t *ctx, const char *payload);
+static bool lattice_dispatch_prefixed(lattice_read_ctx_t *ctx,
+                                      const char *line,
+                                      size_t line_len);
+
+/**
+ * @brief Resize the basis buffers used by @ref lattice_read.
+ *
+ * @param bas Pointer to the basis coordinate array.
+ * @param bas_name Pointer to the basis element-name buffer (NAMSZ bytes per entry).
+ * @param n_bas New number of basis entries.
+ * @return 0 on success, non-zero on allocation failure.
+ */
 static int lattice_resize_basis(coord_t **bas, char **bas_name, size_t n_bas)
 {
   int rc = 0;
@@ -35,6 +85,14 @@ static int lattice_resize_basis(coord_t **bas, char **bas_name, size_t n_bas)
   return rc;
 }
 
+/**
+ * @brief Copy an element name into a fixed-size destination buffer.
+ *
+ * The destination buffer is always NUL-terminated (when non-NULL).
+ *
+ * @param dest Destination buffer (at least @ref NAMSZ bytes).
+ * @param element Source string (may be NULL).
+ */
 static void lattice_copy_element_name(char *dest, const char *element)
 {
   if (!dest)
@@ -51,22 +109,61 @@ static void lattice_copy_element_name(char *dest, const char *element)
   snprintf(dest, NAMSZ, "%s", element);
 }
 
-static bool lattice_line_startswith(const char *line, const char *prefix)
+/**
+ * @brief Return the bounded length of an input line buffer.
+ *
+ * Uses @ref STRSZ as the maximum scan length so callers never rely on
+ * unbounded traversal of potentially malformed buffers.
+ */
+static size_t lattice_line_length(const char *line)
 {
-  return strncmp(line, prefix, strlen(prefix)) == 0;
+  if (!line)
+  {
+    return 0;
+  }
+  return strnlen(line, STRSZ);
 }
 
+/**
+ * @brief Compare a line to a command token, allowing trailing newlines.
+ *
+ * @param line Line buffer as read by fgets.
+ * @param value Token to compare against (e.g. "help").
+ * @return true when the line matches exactly (ignoring newline), false otherwise.
+ */
 static bool lattice_line_equals(const char *line, const char *value)
 {
-  size_t len = strlen(value);
-  if (strncmp(line, value, len) != 0)
+  if (!line || !value)
   {
     return false;
   }
+
+  size_t line_len = lattice_line_length(line);
+  if (line_len == STRSZ)
+  {
+    return false;
+  }
+
+  size_t len = strlen(value);
+  if (line_len < len)
+  {
+    return false;
+  }
+  if (memcmp(line, value, len) != 0)
+  {
+    return false;
+  }
+
   char after = line[len];
   return after == '\0' || after == '\n' || after == '\r';
 }
 
+/**
+ * @brief Forward input lines to the diagnostic streams.
+ *
+ * This preserves historical behaviour where lattice input is echoed to
+ * info/trace streams during parsing.
+ */
 static void lattice_log_line(const char *line)
 {
   fprintf(inf_stream, "%s", line);
@@ -75,6 +172,9 @@ static void lattice_log_line(const char *line)
 #endif
 }
 
+/**
+ * @brief Print interactive help for stdin-driven lattice input.
+ */
 static void lattice_print_help(void)
 {
   printf("Valid input commands are as follows - \n"
@@ -92,6 +192,12 @@ static void lattice_print_help(void)
          "'help' \n");
 }
 
+/**
+ * @brief Translate basis coordinates so the maximum z becomes 0.
+ *
+ * The lattice input format expects that subsequent operations work with a
+ * basis that has been shifted such that all z coordinates are <= 0.
+ */
 static void lattice_normalize_basis(coord_t *bas, size_t n_bas)
 {
   if (!bas || n_bas == 0)
@@ -118,93 +224,230 @@ static void lattice_normalize_basis(coord_t *bas, size_t n_bas)
   }
 }
 
-static bool lattice_parse_coord_line(const char *line, const char *prefix,
-                                     coord_t *value)
-{
-  if (!lattice_line_startswith(line, prefix))
-  {
-    return false;
-  }
-
-  double x = 0., y = 0., z = 0.;
-  if (sscanf(line + strlen(prefix), "%lf %lf %lf", &x, &y, &z) == 3)
-  {
-    coord_set(value, x, y, z);
-    return true;
-  }
-
-  return false;
-}
-
-static bool lattice_parse_matrix_line(const char *line, const char *prefix,
-                                     double *first, double *second)
-{
-  if (!lattice_line_startswith(line, prefix))
-  {
-    return false;
-  }
-
-  return sscanf(line + strlen(prefix), "%lf %lf", first, second) == 2;
-}
-
-static bool lattice_parse_atom_line(const char *line, const char *prefix,
-                                    char *dest_name, coord_t *position)
-{
-  if (!lattice_line_startswith(line, prefix))
-  {
-    return false;
-  }
-
-  return sscanf(line + strlen(prefix), " %127s %lf %lf %lf", dest_name,
-                &position->x, &position->y, &position->z) == 4;
-}
-
-static bool lattice_parse_double_line(const char *line, const char *prefix,
-                                     double *value)
-{
-  if (!lattice_line_startswith(line, prefix))
-  {
-    return false;
-  }
-
-  char *endptr = NULL;
-  double result = strtod(line + strlen(prefix), &endptr);
-  if (endptr == line + strlen(prefix))
-  {
-    return false;
-  }
-
-  *value = result;
-  return true;
-}
-
-static bool lattice_parse_size_t_line(const char *line, const char *prefix,
-                                      size_t *value)
-{
-  if (!lattice_line_startswith(line, prefix))
-  {
-    return false;
-  }
-
-  char *endptr = NULL;
-  unsigned long long result = strtoull(line + strlen(prefix), &endptr, 10);
-  if (endptr == line + strlen(prefix))
-  {
-    return false;
-  }
-
-  *value = (size_t)result;
-  return true;
-}
-
+/**
+ * @brief True when a line begins with the quit command token.
+ */
 static bool lattice_is_quit_command(const char *line)
 {
   return line[0] == 'q';
 }
 
+/**
+ * @brief True when a line equals the help command token.
+ */
 static bool lattice_is_help_command(const char *line)
 {
   return lattice_line_equals(line, "help");
+}
+
+/**
+ * @brief Parse an "a1:" line payload into the first lattice vector.
+ */
+static bool lattice_handle_a1(lattice_read_ctx_t *ctx, const char *payload)
+{
+  double x = 0., y = 0., z = 0.;
+  if (sscanf(payload, "%lf %lf %lf", &x, &y, &z) != 3)
+  {
+    return false;
+  }
+  coord_set(ctx->a1, x, y, z);
+  return true;
+}
+
+/**
+ * @brief Parse an "a2:" line payload into the second lattice vector.
+ */
+static bool lattice_handle_a2(lattice_read_ctx_t *ctx, const char *payload)
+{
+  double x = 0., y = 0., z = 0.;
+  if (sscanf(payload, "%lf %lf %lf", &x, &y, &z) != 3)
+  {
+    return false;
+  }
+  coord_set(ctx->a2, x, y, z);
+  return true;
+}
+
+/**
+ * @brief Parse an "a3:" line payload into the third lattice vector.
+ */
+static bool lattice_handle_a3(lattice_read_ctx_t *ctx, const char *payload)
+{
+  double x = 0., y = 0., z = 0.;
+  if (sscanf(payload, "%lf %lf %lf", &x, &y, &z) != 3)
+  {
+    return false;
+  }
+  coord_set(ctx->a3, x, y, z);
+  return true;
+}
+
+/**
+ * @brief Parse an "m1:" superstructure matrix row.
+ */
+static bool lattice_handle_m1(lattice_read_ctx_t *ctx, const char *payload)
+{
+  return sscanf(payload, "%lf %lf", &ctx->R[0][0], &ctx->R[0][1]) == 2;
+}
+
+/**
+ * @brief Parse an "m2:" superstructure matrix row.
+ */
+static bool lattice_handle_m2(lattice_read_ctx_t *ctx, const char *payload)
+{
+  return sscanf(payload, "%lf %lf", &ctx->R[1][0], &ctx->R[1][1]) == 2;
+}
+
+/**
+ * @brief Parse a "pb:"/"po:" payload into an element name and position.
+ */
+static bool lattice_parse_atom_payload(const char *payload, char *name, coord_t *position)
+{
+  if (!payload || !name || !position)
+  {
+    return false;
+  }
+  return sscanf(payload, " %127s %lf %lf %lf", name,
+                &position->x, &position->y, &position->z) == 4;
+}
+
+/**
+ * @brief Parse a "pb:" basis line and append it to the basis arrays.
+ */
+static bool lattice_handle_pb(lattice_read_ctx_t *ctx, const char *payload)
+{
+  if (!ctx || !ctx->bas || !ctx->bas_name || !ctx->n_bas || !ctx->i_bas)
+  {
+    return false;
+  }
+  if (*ctx->i_bas >= *ctx->n_bas)
+  {
+    return false;
+  }
+
+  coord_t position = {.x = 0., .y = 0., .z = 0.};
+  char element[NAMSZ];
+  if (!lattice_parse_atom_payload(payload, element, &position))
+  {
+    return false;
+  }
+
+  (*ctx->bas)[*ctx->i_bas] = position;
+  lattice_copy_element_name((*ctx->bas_name) + (*ctx->i_bas * NAMSZ), element);
+  (*ctx->i_bas)++;
+  return true;
+}
+
+/**
+ * @brief Parse a "po:" overlayer line and append it to the basis arrays.
+ *
+ * Historically, reading an overlayer atom implies at least one layer.
+ */
+static bool lattice_handle_po(lattice_read_ctx_t *ctx, const char *payload)
+{
+  if (!ctx || !ctx->lat)
+  {
+    return false;
+  }
+  if (ctx->lat->max_layers == 0)
+  {
+    ctx->lat->max_layers = 1;
+  }
+  return lattice_handle_pb(ctx, payload);
+}
+
+/**
+ * @brief Parse an "il:" image length line.
+ */
+static bool lattice_handle_il(lattice_read_ctx_t *ctx, const char *payload)
+{
+  char *endptr = NULL;
+  double result = strtod(payload, &endptr);
+  if (endptr == payload)
+  {
+    return false;
+  }
+  ctx->lat->image_len = result;
+  return true;
+}
+
+/**
+ * @brief Parse an "nl:" max layers line.
+ */
+static bool lattice_handle_nl(lattice_read_ctx_t *ctx, const char *payload)
+{
+  char *endptr = NULL;
+  unsigned long long result = strtoull(payload, &endptr, 10);
+  if (endptr == payload)
+  {
+    return false;
+  }
+  ctx->lat->max_layers = (size_t)result;
+  return true;
+}
+
+/**
+ * @brief Parse a "uc:" max cells line.
+ */
+static bool lattice_handle_uc(lattice_read_ctx_t *ctx, const char *payload)
+{
+  char *endptr = NULL;
+  unsigned long long result = strtoull(payload, &endptr, 10);
+  if (endptr == payload)
+  {
+    return false;
+  }
+  ctx->lat->max_cells = (size_t)result;
+  return true;
+}
+
+/**
+ * @brief Dispatch prefixed lattice commands to small handler functions.
+ *
+ * The dispatch is table-driven to keep parsing logic readable and maintainable
+ * while meeting static analysis complexity thresholds.
+ */
+static bool lattice_dispatch_prefixed(lattice_read_ctx_t *ctx,
+                                      const char *line,
+                                      size_t line_len)
+{
+  if (!ctx || !line)
+  {
+    return false;
+  }
+  if (line_len == STRSZ || line_len < 3)
+  {
+    return false;
+  }
+
+  typedef struct lattice_command_spec
+  {
+    char token[4];
+    lattice_line_handler_t handler;
+  } lattice_command_spec_t;
+
+  static const lattice_command_spec_t commands[] = {
+      {"a1:", lattice_handle_a1},
+      {"a2:", lattice_handle_a2},
+      {"a3:", lattice_handle_a3},
+      {"m1:", lattice_handle_m1},
+      {"m2:", lattice_handle_m2},
+      {"pb:", lattice_handle_pb},
+      {"po:", lattice_handle_po},
+      {"il:", lattice_handle_il},
+      {"nl:", lattice_handle_nl},
+      {"uc:", lattice_handle_uc},
+  };
+
+  for (size_t index = 0; index < (sizeof(commands) / sizeof(commands[0])); ++index)
+  {
+    if (memcmp(line, commands[index].token, 3) == 0)
+    {
+      return commands[index].handler(ctx, line + 3);
+    }
+  }
+
+  return false;
 }
 
 void lattice_debug(const lattice_t *lat)
@@ -322,6 +565,7 @@ lattice_t *lattice_init(size_t n_atoms)
     lat->atoms[i_atom].x = 0.;
     lat->atoms[i_atom].y = 0.;
     lat->atoms[i_atom].z = 0.;
+    lat->atoms[i_atom].element = NULL;
   }
   
   return (lat);
@@ -722,32 +966,60 @@ static bool lattice_miller_indices_valid(const lattice_t *lat)
            fabs(lat->vec_l) < TOLERANCE);
 }
 
+/**
+ * @brief Initialize lattice vectors, basis, and surface normal from lattice type.
+ *
+ * For built-in lattice types (FCC/HCP/BCC/DIA) this function computes the
+ * primitive vectors and nearest-neighbour distance. For @ref LAT_INP it reads
+ * an external lattice definition via @ref lattice_read.
+ *
+ * @param lat Lattice configuration and output values.
+ * @param a1 Output first lattice vector.
+ * @param a2 Output second lattice vector.
+ * @param a3 Output third lattice vector.
+ * @param nor Output surface normal.
+ * @param bas Output basis coordinate array (reallocated as required).
+ * @param bas_name Output basis name buffer (reallocated as required).
+ * @param n_bas Output number of basis atoms.
+ * @return 0 on success, non-zero on error.
+ */
 int lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
         coord_t *a3, coord_t *nor, coord_t **bas, char **bas_name, size_t *n_bas)
 {
+  typedef int (*lattice_setup_impl_t)(lattice_t *lat, coord_t *a1, coord_t *a2,
+                                      coord_t *a3, coord_t *nor, coord_t **bas,
+                                      char **bas_name, size_t *n_bas);
+  static const lattice_setup_impl_t impls[] = {
+      NULL,
+      lattice_setup_fcc,
+      lattice_setup_hcp,
+      lattice_setup_bcc,
+      lattice_setup_dia,
+  };
+  lattice_setup_impl_t impl = NULL;
   int status = 0;
 
-  switch (lat->latt_type)
+  if (lat->latt_type >= LAT_FCC && lat->latt_type <= LAT_DIA)
   {
-    case LAT_FCC:
-      status = lattice_setup_fcc(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
-      break;
-    case LAT_HCP:
-      status = lattice_setup_hcp(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
-      break;
-    case LAT_BCC:
-      status = lattice_setup_bcc(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
-      break;
-    case LAT_DIA:
-      status = lattice_setup_dia(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
-      break;
-    case LAT_INP:
-      status = lattice_read(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
-      break;
-    default:
-      fprintf(stderr, "*** error (lattice_setup): bad lattice type or input file\n");
-      return -1;
+    impl = impls[lat->latt_type];
   }
+  else if (lat->latt_type == LAT_INP)
+  {
+    return lattice_read(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
+  }
+  else
+  {
+    fprintf(stderr, "*** error (lattice_setup): bad lattice type or input file\n");
+    return -1;
+  }
+
+  if (!impl)
+  {
+    fprintf(stderr, "*** error (lattice_setup): unsupported lattice type\n");
+    return -1;
+  }
+
+  status = impl(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
 
   if (status != 0)
   {
@@ -782,6 +1054,22 @@ miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat)
   return (hkl);
 }
 
+/**
+ * @brief Read a lattice definition from a file or stdin.
+ *
+ * The expected format is line-oriented with commands:
+ * - Lattice vectors: "a1:", "a2:", "a3:"
+ * - Superstructure matrix: "m1:", "m2:"
+ * - Basis entries: "pb:" (bulk) and "po:" (overlayer)
+ * - Scalars: "il:" (image length), "nl:" (max layers), "uc:" (max cells)
+ * - Control: "q" to stop reading, "help" for interactive help (stdin only)
+ *
+ * After parsing, the function applies the superstructure matrix to a1/a2,
+ * updates lattice constants, normalizes the basis (max z -> 0), and computes
+ * the surface normal from the Miller indices and lattice vectors.
+ *
+ * @return 0 on success, non-zero on error.
+ */
 int lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
                  coord_t *nor, coord_t **bas, char **bas_name, size_t *n_bas)
 {
@@ -791,6 +1079,16 @@ int lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
   double R[2][2] = {{1., 0.}, {0., 1.}};
   char line_buffer[STRSZ];
   coord_t *surface_normal = NULL;
+  lattice_read_ctx_t ctx = {.lat = lat,
+                            .a1 = a1,
+                            .a2 = a2,
+                            .a3 = a3,
+                            .nor = nor,
+                            .bas = bas,
+                            .bas_name = bas_name,
+                            .n_bas = n_bas,
+                            .i_bas = &i_bas,
+                            .R = R};
 
   if (strcmp(lat->input_filename, "stdin") != 0)
   {
@@ -818,51 +1116,8 @@ int lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
   {
     lattice_log_line(line_buffer);
 
-    if (lattice_parse_coord_line(line_buffer, "a1:", a1))
-    {
-      continue;
-    }
-    if (lattice_parse_coord_line(line_buffer, "a2:", a2))
-    {
-      continue;
-    }
-    if (lattice_parse_coord_line(line_buffer, "a3:", a3))
-    {
-      continue;
-    }
-    if (lattice_parse_matrix_line(line_buffer, "m1:", &R[0][0], &R[0][1]))
-    {
-      continue;
-    }
-    if (lattice_parse_matrix_line(line_buffer, "m2:", &R[1][0], &R[1][1]))
-    {
-      continue;
-    }
-    if (lattice_parse_atom_line(line_buffer, "pb:",
-                                (*bas_name) + (i_bas * NAMSZ), &(*bas)[i_bas]))
-    {
-      i_bas++;
-      continue;
-    }
-    if (lattice_parse_atom_line(line_buffer, "po:",
-                                (*bas_name) + (i_bas * NAMSZ), &(*bas)[i_bas]))
-    {
-      if (lat->max_layers == 0)
-      {
-        lat->max_layers = 1;
-      }
-      i_bas++;
-      continue;
-    }
-    if (lattice_parse_double_line(line_buffer, "il:", &lat->image_len))
-    {
-      continue;
-    }
-    if (lattice_parse_size_t_line(line_buffer, "nl:", &lat->max_layers))
-    {
-      continue;
-    }
-    if (lattice_parse_size_t_line(line_buffer, "uc:", &lat->max_cells))
+    size_t line_len = lattice_line_length(line_buffer);
+    if (line_len == STRSZ)
     {
       continue;
     }
@@ -874,7 +1129,9 @@ int lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
         strcmp(lat->input_filename, "stdin") == 0)
     {
       lattice_print_help();
+      continue;
     }
+    (void) lattice_dispatch_prefixed(&ctx, line_buffer, line_len);
   }
 
   *n_bas = i_bas;

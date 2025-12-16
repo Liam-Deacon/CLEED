@@ -9,6 +9,15 @@ add_library(cleed_test_support OBJECT
 )
 target_include_directories(cleed_test_support PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
 
+add_executable(test_lattice_read
+    test_lattice_read.c
+    $<TARGET_OBJECTS:latt_core>
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_lattice_read PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+target_link_libraries(test_lattice_read PRIVATE m)
+add_test(NAME latt.read COMMAND test_lattice_read)
+
 if (WITH_GSL STREQUAL "OFF")
     add_executable(test_search_amoeba
         test_search_amoeba.c
