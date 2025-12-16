@@ -79,6 +79,7 @@ OPTION(INSTALL_DOC "Set to OFF to skip build/install Documentation" ON)
 OPTION(PACK_SOURCE "Set to OFF to pack without source code" ON)
 OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration - NOTE: this means the code is no longer open source" ON)
 OPTION(BUILD_PATT "Build patt (pattern visualisation) - experimental" OFF)
+OPTION(BUILD_SET_ENV "Build set_env embedded-Python executable (legacy)" OFF)
 
 # set cmake module path
 IF (NOT CMAKE_MODULE_PATH)
