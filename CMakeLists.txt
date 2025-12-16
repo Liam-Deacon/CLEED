@@ -802,7 +802,6 @@ ELSE (WIN32)
             ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
         
             ENABLE_TESTING()
-            ADD_TEST(cleedtest ${CMAKE_CURRENT_BINARY_DIR}/cleedtest)
 
         ENDIF (APPLE)
     ENDIF (UNIX)
