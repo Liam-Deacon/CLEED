@@ -113,7 +113,7 @@ int parse_args(int argc, char *argv[],
 	  double *lbound, double *ubound, int *del_flag);
       
 /* globals */
-char line_buffer[STRSZ];
+extern char line_buffer[STRSZ];
 
 /* macros */
 #define ARG_PARSE_DBL(x)                                        \
