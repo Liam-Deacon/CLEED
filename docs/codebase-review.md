@@ -1,384 +1,74 @@
-# CLEED Codebase Review (Comprehensive)
+# CLEED Codebase Review
 
-Date: 2025-12-16  
-Reviewed ref: `master` @ `afe4838` (worktree base)
+This document captures the initial findings from working in the `master` tree. It is intended to serve as both a quick reference for the current blockers and a guideline for the upcoming modernization/package/QA work outlined in the roadmap.
 
-This document is intended to be:
-- a **snapshot** of the current technical state,
-- a **prioritised** list of problems (with severity/effort),
-- a **roadmap** for modernisation and release readiness,
-- a source for **actionable GitHub issues**.
+## 1. Build and toolchain
 
----
+| Symptom | Details | Severity | Recommended immediate action |
+| --- | --- | --- | --- |
+| `cmake` fails on macOS | Qt4 components (`QtSvg`, `QtGui`, `QtCore`, `QtNetwork`) and `qmake` are missing; configuration aborts with `Found unsuitable Qt version ""` | Critical | Keep `WITH_QT=ON` guarded until Qt6 support exists or update CMake to look for Qt6/QT6 components; install Qt4 or gate GUI build; document in README |
+| Pre-commit hook missing | Repository lacks a `.pre-commit-config.yaml`, which makes the `python3 -m pre_commit run` step impossible | Medium | Add a portable `.pre-commit-config.yaml` (formatting + lint) and document hook invocation in AGENTS/README |
+| Codacy/C test warnings | `lattice.c` and related tests exceed Codacy complexity/length thresholds plus `sscanf` without width specifiers | Medium | Break up helpers (already underway) and add bounds checks/cast improvements to satisfy static analysis |
 
-## Executive summary
-
-CLEED contains valuable scientific code and tooling, but the repository is currently **not release-ready** due to:
-
-1. **Build breakage on modern toolchains** (CMake compatibility + unconditional Windows tooling usage).
-2. **Licensing risk:** Multiple files are explicitly derived from **Numerical Recipes** (NR), which is not redistributable under GPL-compatible terms.
-3. **Repository hygiene issues:** Generated artifacts (e.g. `CMakeFiles/`, `*.exe`, `*.o`, Sphinx `_build/`) appear to be committed, causing bloat and confusing build state.
-4. **Outdated GUI stack:** Qt4 / PyQt4 era code is still present; modern platforms expect Qt6/PySide6 or Qt6/C++ tooling.
-5. **Testing gaps:** There is no clear unit/integration test harness guarding numerical correctness or regression behaviour.
-
-The fastest path to a releasable state is:
-
+### Observed output snippet
 ```
-fix master build → add tests (lock behaviour) → replace NR (GSL/NLopt) → modernise build/Qt → CI matrix → packaging/release automation
+-- Found unsuitable Qt version "" from NOTFOUND
+CMake Error at /opt/homebrew/share/cmake/Modules/FindQt4.cmake:1469 (message):
+  Found unsuitable Qt version "" from NOTFOUND, this code requires Qt 4.x
 ```
 
----
+## 2. Modernization opportunities
 
-## What CLEED is (high-level architecture)
+1. **Qt6 readiness:** the GUI targets still request Qt4. There is no abstraction for `QT6` modules (no `target_link_libraries` for modern components). Qt4-specific code (ifdefs, `#include <QtGui>`, etc.) needs to be rewritten or isolated.
+2. **Image codecs:** `libtiff`, `libjpeg` usage is ad-hoc; rebuilding with current wrappers (e.g., libjpeg-turbo, libtiff modern API) will reduce build pain and align with current dependencies.
+3. **Numerical Recipes (C) usage:** parts of `src` still depend on NR algorithms with restrictive licensing. Replace NR with BSD/Apache equivalents or implement sanitized versions; add regression tests to confirm behavior remains unchanged.
 
-From the README, CLEED is a package composed of multiple CLI tools and optional GUI frontends.
+| Component | Concern | Suggested alternative |
+| --- | --- | --- |
+| Qt `FindQt4.cmake` usage | Unsupported Qt version on modern systems | Move to Qt6's `find_package(Qt6 COMPONENTS Core Gui Widgets Network Svg REQUIRED)` with `cmake_minimum_required(3.26)` or similar |
+| `src/latt/latt.c` loops | Complexity hitting Codacy limits | Delegate to helper functions, reduce duplication, convert `n_bas` to `size_t`, propagate errors instead of `exit(1)` |
 
-Primary flow (simplified):
+## 3. Testing and regression protection
 
-```
-   +------------------+
-   |  user input set  |
-   |  *.bul *.inp ... |
-   +---------+--------+
-             |
-             v
-   +------------------+     calls     +-------------------+
-   |     csearch      +-------------> |   cleed_nsym      |
-   | optimisation     |               | LEED-IV simulator |
-   +---------+--------+               +-------------------+
-             |
-             | uses
-             v
-   +------------------+
-   |      crfac       |
-   |  R-factor eval   |
-   +------------------+
-             |
-             v
-   +------------------+
-   | outputs (*.log,  |
-   | *.rmin/*.pmin,   |
-   | IV curves, etc.) |
-   +------------------+
-```
-
-Key build targets observed in `src/**/CMakeLists.txt` include:
-- `cleed_nsym`, `cleed_sym`
-- `csearch`
-- `crfac`
-- `mkiv`, `patt`, `latt`, `ftsmooth`, `debye`
-- GUI targets: `patt-gui`, `latt-gui`
-
----
-
-## Repository snapshot & hygiene (high impact)
-
-### Committed build artifacts and “stateful” files
-
-The repo appears to contain *generated outputs* that should not be versioned, including:
-- `CMakeFiles/**` (and even Windows compiler test executables)
-- `doc/_build/**` and `*.doctree`
-- `*.o`, `*.d`, `*.exe`
-- IDE user files (`*.pro.user`, Eclipse `.project/.cproject`)
-- `config.log`, `config.status` and other Autotools outputs
-
-This makes it easy to accidentally build against stale objects and makes diffs/releases far larger than needed.
-
-Example committed executables (non-exhaustive):
-
-| Path | Why it’s a problem |
-|---|---|
-| `CMakeFiles/**/a.exe` | generated by CMake compiler detection |
-| `CMakeFiles/FortranCInterface/FortranCInterface.exe` | generated during configure |
-| `src/latt/*.exe` | built outputs tracked as source |
-| `src/contrib/**/example.exe` | vendored build outputs |
-
-Recommendation:
-- Remove generated artifacts from version control (likely a large PR).
-- Strengthen `.gitignore` significantly (current `.gitignore` is minimal).
-- Consider a one-time history rewrite *only if acceptable* (or leave history and clean from HEAD onwards).
-
----
-
-## Build & compilation (blocker)
-
-### Current symptoms
-
-On modern CMake, configuration fails immediately due to an old minimum:
+- There are no dedicated unit tests guarding against Numerical Recipes behavior or `n_bas` conversion issues.
+- Recommendation: create deterministic tests (e.g., `tests/test_lattice_*`) around boundary conditions, and assert convergence counts.
+- The review now has `tests/test_search_amoeba` with a long `main()` function; refactor into helper states with a clear assertion block.
 
 ```
-CMake Error at CMakeLists.txt:19 (CMAKE_MINIMUM_REQUIRED):
-  Compatibility with CMake < 3.5 has been removed from CMake.
-```
+[caller] -> [lattice_setup] -> [amoeba search] -> [state assertions]
+``` (target to cover >90% of crucial branches)
 
-Even when forcing policy minimum to proceed, configuration fails on macOS due to unconditional RC usage:
+## 4. Packaging, automation, and releases
 
-```
-CMake Error at CMakeLists.txt:215 (ENABLE_LANGUAGE):
-  No CMAKE_RC_COMPILER could be found.
-```
+Goals from the roadmap:
+- Windows installer
+- Homebrew formula for macOS
+- .deb and .rpm for Linux
+- Docker image published through GitHub Actions
 
-Additional RC enabling exists under `src/CMakeLists.txt` (phaseshifts embedding), also unconditional.
-
-### Root causes
-
-1. `CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)` is too old for modern CMake.
-2. `ENABLE_LANGUAGE(RC)` is unconditionally called on platforms where an RC compiler is not available (macOS/Linux).
-3. Legacy CMake modules and patterns (`FindPythonInterp`, `FindPythonLibs`, custom `FindQt5.cmake`) are likely to trigger policy churn and future breakage.
-4. Optional components attempt downloads at configure time (e.g. PhaseShifts from PyPI), which is brittle and non-reproducible.
-
-### Recommended fix direction
-
-Minimum viable “make master compile again” steps:
-
-1. Update `cmake_minimum_required(...)` to a modern baseline (e.g. **3.20+**; Qt6 often benefits from 3.16+).
-2. Guard resource compiler usage:
-   - only `enable_language(RC)` on Windows, and only when building targets that need `.rc`.
-3. Replace deprecated Python find logic with `find_package(Python COMPONENTS Interpreter Development)` (modern CMake).
-4. Make PhaseShifts integration:
-   - OFF by default, or
-   - implemented via `FetchContent` with pinned URL + SHA256, and no RC usage except on Windows.
-
----
-
-## Numerical Recipes (NR) usage (release blocker / licensing)
-
-### Evidence in tree
-
-The following files are explicitly copied/derived from Numerical Recipes:
-
-| File | Notes |
-|---|---|
-| `src/search/nrrutil.c` | “Copy from nrutil.c in Num. Rec. package.” |
-| `src/search/nrrbrent.c` | “Copy from Num. Rec.” |
-| `src/search/nrrlinmin.c` | “Copy from Num. Rec.” |
-| `src/search/nrrmnbrak.c` | “Copy from Num. Rec.” |
-| `src/search/nrrran1.c` | “Copy from Num. Rec.” |
-| `src/include/nrr*.h` | NR wrappers/headers |
-| `src/search/sramoeba.c`, `src/search/sramebsa.c`, `src/search/srpowell.c` | also annotated as “From Num. Rec.” |
-
-This is a **hard stop** for GPL-compatible redistribution unless you have the correct NR redistribution rights.
-
-### Recommended fix direction
-
-Prefer removal and replacement with:
-- **GSL** equivalents (the tree already contains `*_gsl.c` variants), or
-- **NLopt** (modern, permissive; strong optimisation suite), or
-- a small, clean-room reimplementation of required algorithms (only if needed).
-
-To safely migrate without scientific regressions:
-
-1. Add regression tests **first** (see Testing section).
-2. Switch implementation behind a feature flag.
-3. Compare outputs on known inputs and record tolerances.
-4. Remove NR-derived files and any code paths referencing them.
-
----
-
-## Security & robustness findings (important)
-
-### Unsafe / obsolete C APIs
-
-At least one file uses `gets()` (`src/debye/debye.c`), which is removed from modern C standards and commonly fails compilation.
-
-Other high-risk patterns found include:
-- `sprintf`/`strcpy`/`strcat` without bounds checks (numerous occurrences)
-- `system(...)` usage to run `compress`/`uncompress` (`src/rfac/file2buffer.c`)
-
-These issues are both correctness and security concerns (buffer overflows, command injection surface, portability problems).
-
-Recommended changes:
-- Replace `gets` with `fgets`.
-- Prefer `snprintf` and explicit bounds.
-- Replace shell compression calls with a library approach (zlib) or remove the feature.
-
----
-
-## GUI modernisation (Qt6 / Python)
-
-### Findings
-
-- CMake logic supports **Qt4** and a custom **Qt5** find module.
-- Python GUI code imports **PyQt4** and uses **QtWebKit**, which is effectively obsolete.
-
-### Recommendations
-
-Decide whether the GUI is:
-1) C++ Qt GUI (Qt6 Widgets/Quick), or  
-2) Python GUI (PySide6/PyQt6).
-
-Suggested approach (incremental):
-- Make GUI builds optional and OFF in CI until ported.
-- For Python GUI: migrate `PyQt4` → `PySide6` (LGPL, easier distribution) or `PyQt6`.
-- Replace QtWebKit usage with QtWebEngine (if still needed).
-
----
-
-## Image I/O dependencies (libtiff/libjpeg/libpng)
-
-### Findings
-
-The `mkiv` component uses TIFF APIs, but the repo includes **very old vendored libtiff headers** under `src/mkiv/` (with 1994 headers).
-This can conflict with system libraries and is risky from a security and compatibility standpoint.
-
-Recommendation:
-- Remove/avoid vendored TIFF headers and use system `libtiff` via `find_package(TIFF)` or pkg-config.
-- Prefer system libpng/zlib as well, unless you truly need a vendored copy for Windows-only builds (then manage via vcpkg/Conan and CI).
-
----
-
-## Testing strategy (major gap)
-
-### What’s missing
-
-There is no clear unit/integration test harness that:
-- validates numerical correctness,
-- locks down file parsing behaviour,
-- ensures algorithms produce stable results across refactors.
-
-### Recommended test layers
-
-**Layer 1: fast unit tests (per module)**
-- parsing functions (input formats)
-- basic math kernels (spline, interpolation, RNG)
-- optimisation step functions (bounded behaviour)
-
-**Layer 2: deterministic integration tests**
-- run `cleed_nsym` on a tiny fixture and compare key numeric outputs within tolerance
-- run `crfac` on fixture outputs and compare R-factor results
-
-**Layer 3: “golden” end-to-end tests**
-- use existing `examples/` as fixtures (or subset them to “CI-sized” inputs)
-- record expected outputs and accept small numeric drift within tolerance bands
-
-Practical harness suggestion:
-- Use `CTest` + a small test runner (C: `cmocka` / `criterion`; C++: Catch2) depending on existing language mix.
-- Store fixtures under `tests/fixtures/`.
-
----
-
-## CI/CD & release automation (missing)
-
-### Current state
-
-There is no `.github/workflows` directory; CI appears absent.
-
-### Minimal CI to add (recommendation)
-
-Build/test matrix (on PRs and main):
-- Linux (Ubuntu latest): GCC/Clang
-- macOS (latest): AppleClang
-- Windows (latest): MSVC + vcpkg (or MinGW if you insist, but MSVC is more standard now)
-
-ASCII pipeline:
+Ascii release pipeline:
 
 ```
-PR opened
-  |
-  +--> build (linux/mac/windows)
-  |       |
-  |       +--> unit tests
-  |       +--> integration tests
-  |
-  +--> artifacts (optional)
-
-tag pushed / release created
-  |
-  +--> build + test matrix
-  +--> package:
-  |      - Windows installer
-  |      - macOS (brew formula + tarball, optional pkg/dmg)
-  |      - Linux deb + rpm
-  |      - docker image (publish to registry, optionally attach tarball)
-  |
-  +--> publish release assets + changelog
-  +--> publish docs to ReadTheDocs
+[Source   ]
+    |
+    v
+[CI Build ] -> [Unit Tests]
+    |
+    v
+[Packaging (Windows/MSI, Homebrew, deb/rpm, Docker)]
+    |
+    v
+[GitHub Releases Assets (installer, tarballs, Docker image)]
 ```
 
-### Release changelog automation
+Each packaging target will need cross-platform toolchains, but the first step is to make the code build with modern dependencies and ensure deterministic output.
 
-Use one of:
-- `release-please` (recommended for conventional commits)
-- `git-cliff`
-- GitHub “generate release notes” + a custom action that enforces conventions
+## 5. Documentation and Sphinx
 
----
+- The manual exists in legacy format; convert (via Pandoc) to Markdown and/or reStructuredText, then integrate with Sphinx.
+- Sphinx docs should be automated in CI, with build artifacts published to ReadTheDocs on each release.
 
-## Documentation (manual conversion + Sphinx + RTD)
-
-### Findings
-
-- Sphinx documentation exists under `doc/`, but `doc/_build/` is present (should be generated).
-- The primary manual is in PDF (`doc/CLEED_Manual.pdf`).
-
-### Recommendations
-
-1. Convert the manual to a source format you can maintain:
-   - If the manual has an original LaTeX/DocBook source, prefer that.
-   - If only PDF exists, `pandoc` PDF→Markdown is often lossy; consider:
-     - extracting text + structure manually into Markdown/RST,
-     - or using OCR only for scanned PDFs.
-2. Move Sphinx sources to `docs/` (common convention) or keep `doc/` but standardise.
-3. Add a ReadTheDocs config (`.readthedocs.yaml`) and a CI job that builds docs.
-
----
-
-## Recommended roadmap (prioritised)
-
-| Priority | Theme | Why | Outcome |
-|---:|---|---|---|
-| P0 | Build works on `master` | unblock all other work | `cmake -S . -B build` succeeds on mac/linux/windows |
-| P0 | Remove NR-derived code | release legality | tree contains no NR code/derivatives |
-| P0 | Add regression tests | prevent scientific regressions | CI fails on numeric drift beyond tolerance |
-| P1 | Modernise CMake + deps | long-term maintainability | target-based CMake, modern FindPython/Qt |
-| P1 | Qt6 / GUI plan | keep GUI viable | Qt6 or Python Qt6 GUI works in CI |
-| P1 | CI matrix | cross-platform confidence | PR gating on build+tests |
-| P2 | Packaging & releases | distribution | installers/packages + docker published on release |
-| P2 | Docs/RTD | user onboarding | docs build on CI and publish on release |
-
----
-
-## Appendix A: Concrete build failure notes
-
-### Failing configure (modern CMake)
-
-```
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-```
-
-Fails because `cmake_minimum_required(VERSION 2.8.11)` is too old.
-
-### Failing configure (forcing policy minimum)
-
-```
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-```
-
-Fails on macOS because `ENABLE_LANGUAGE(RC)` is called unconditionally.
-
----
-
-## Appendix B: NR-related files (direct)
-
-```
-src/include/nrr.h
-src/include/nrr_func.h
-src/include/nrr_util.h
-src/search/nrrbrent.c
-src/search/nrrlinmin.c
-src/search/nrrmnbrak.c
-src/search/nrrran1.c
-src/search/nrrutil.c
-```
-
-Also review other files annotated “From Num. Rec.” for clean-room risk.
-
----
-
-## Appendix C: High-risk APIs observed
-
-Non-exhaustive:
-- `gets` (`src/debye/debye.c`)
-- `system` (`src/rfac/file2buffer.c`)
-- many `sprintf`/`strcpy`/`strcat` without bounds checks
-
+## Immediate next steps
+1. Capture these findings as GitHub issues (Qt4/modernization, pre-commit hook, NR dependencies, packaging automation, documentation pipeline).
+2. Build minimal reproduction of `cmake` failure and document commands in the review file.
+3. Outline a work plan for Qt6 + packaging, with a dependency graph for the roadmap items.
