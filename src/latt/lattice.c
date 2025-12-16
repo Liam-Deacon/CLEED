@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <float.h>
 #include <math.h>
+#include <stdlib.h>
 #include "lattice.h"
 
 void lattice_debug(const lattice_t *lat)
@@ -13,9 +14,9 @@ void lattice_debug(const lattice_t *lat)
   printf("c_latt = %7.4f\n", lat->c_latt);
   printf("max_disp = %7.4f\n", lat->max_disp);
   printf("max_disp_z = %7.4f\n", lat->max_disp_z);
-  printf("max_layers = %u\n", lat->max_layers);
-  printf("max_cells = %u\n", lat->max_cells);
-  printf("max_atoms = %u\n", lat->max_atoms);
+  printf("max_layers = %zu\n", lat->max_layers);
+  printf("max_cells = %zu\n", lat->max_cells);
+  printf("max_atoms = %zu\n", lat->max_atoms);
   printf("image_len = %7.4f\n", lat->image_len);
 }
 
@@ -28,7 +29,7 @@ void lattice_printf(FILE *output, const lattice_t *lat)
   char padding[2];
   
   /* first line: number of atoms */
-  fprintf(output, "%d\n", lat->n_atoms);
+  fprintf(output, "%zu\n", lat->n_atoms);
 
   /* second line: script */
   if(strlen(lat->script) > 0) 
@@ -421,8 +422,8 @@ coord_t *lattice_get_surface_normal(const lattice_t *lat, const coord_t *a1,
   return (normal);
 }
 
-void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2, 
-        coord_t *a3, coord_t *nor, coord_t *bas, char *bas_name, int *n_bas)
+void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
+        coord_t *a3, coord_t *nor, coord_t **bas, char **bas_name, int *n_bas)
 {
   
   *n_bas = 1;
@@ -439,7 +440,7 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
                             LAT_FCC 
     ********************************************************/
 
-	strncpy(bas_name, lat->atoms[0].element, NAMSZ);
+		strncpy(*bas_name, lat->atoms[0].element, NAMSZ);
 
     coord_set(a1, 0.5 * a, 0.0, 0.5 * a);
     coord_set(a2, 0.5 * a,0.5 * a, 0.0);
@@ -459,14 +460,20 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     ********************************************************/
 
     *n_bas = 2;
-    realloc((coord_t*) bas, sizeof(coord_t) * (*n_bas));
-    realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
+    coord_t *new_bas = (coord_t *)realloc(*bas, sizeof(coord_t) * (size_t)(*n_bas));
+    char *new_names = (char *)realloc(*bas_name, (size_t)(*n_bas) * NAMSZ * sizeof(char));
+    if (!new_bas || !new_names) {
+      fprintf(stderr, "*** error (lattice_setup): allocation failed\n");
+      exit(1);
+    }
+    *bas = new_bas;
+    *bas_name = new_names;
     
-    strncpy(bas_name, lat->atoms[0].element, NAMSZ);
-    strncpy(bas_name + NAMSZ, lat->atoms[0].element, NAMSZ);
+    strncpy(*bas_name, lat->atoms[0].element, NAMSZ);
+    strncpy(*bas_name + NAMSZ, lat->atoms[0].element, NAMSZ);
     
-    coord_set(&bas[0], 0., 0., 0.);
-    coord_set(&bas[1], 0., 0., 0.);
+    coord_set(&(*bas)[0], 0., 0., 0.);
+    coord_set(&(*bas)[1], 0., 0., 0.);
     
     /* value for Ru */
     if (fabs(c) < TOLERANCE) 
@@ -479,7 +486,7 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     coord_set(a2, 0.5 * a,  sqrt(0.75) * a, 0.);
     coord_set(a3, 0., 0., c);
 
-    coord_set(bas+sizeof(coord_t), 0.0, sqrt(1./3.) * a, 0.5 * c);
+    coord_set(&(*bas)[1], 0.0, sqrt(1. / 3.) * a, 0.5 * c);
 
     lat->a_nn = a;
 
@@ -493,7 +500,7 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     /********************************************************
         LAT_BCC
     ********************************************************/
-    strncpy (bas_name, lat->atoms[0].element, NAMSZ);
+    strncpy (*bas_name, lat->atoms[0].element, NAMSZ);
 
     coord_set(a1, a, 0., 0.);
     coord_set(a2, 0., a, 0.);
@@ -513,11 +520,17 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     ********************************************************/
 
     *n_bas = 2;
-    realloc((coord_t*) bas, sizeof(coord_t) * (*n_bas));
-    realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
+    coord_t *new_bas = (coord_t *)realloc(*bas, sizeof(coord_t) * (size_t)(*n_bas));
+    char *new_names = (char *)realloc(*bas_name, (size_t)(*n_bas) * NAMSZ * sizeof(char));
+    if (!new_bas || !new_names) {
+      fprintf(stderr, "*** error (lattice_setup): allocation failed\n");
+      exit(1);
+    }
+    *bas = new_bas;
+    *bas_name = new_names;
     
-    strncpy (bas_name, lat->atoms[0].element, NAMSZ);
-    strncpy (bas_name + NAMSZ, lat->atoms[0].element, NAMSZ);
+    strncpy (*bas_name, lat->atoms[0].element, NAMSZ);
+    strncpy (*bas_name + NAMSZ, lat->atoms[0].element, NAMSZ);
     
     /* value for Ru */
     if (fabs(lat->c_latt) < TOLERANCE) 
@@ -530,8 +543,8 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
     coord_set(a2, 0.5 * a, 0.5 * a, 0.0);
     coord_set(a3, 0.0, 0.5 * a, 0.5 * a);
     
-    coord_set(&bas[0], 0., 0., 0.);
-    coord_set(&bas[1], 0.25 * a, 0.25 * a, 0.25 * a);
+    coord_set(&(*bas)[0], 0., 0., 0.);
+    coord_set(&(*bas)[1], 0.25 * a, 0.25 * a, 0.25 * a);
 
     lat->a_nn = a * sqrt(0.375);
 
@@ -543,7 +556,7 @@ void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
                LAT_INP: external lattice input
     ********************************************************/
 
-    lattice_read(lat, a1, a2, a3, nor, bas, bas_name, &*n_bas);
+    lattice_read(lat, a1, a2, a3, nor, bas, bas_name, n_bas);
     
     #if DEBUG > 0
     fprintf(stderr, "** debug (lattice_read): return\n");
@@ -590,8 +603,8 @@ miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat)
   return (hkl);
 }
 
-void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3, 
-                  coord_t *nor, coord_t *bas, char *bas_name, int *n_bas)
+void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
+                  coord_t *nor, coord_t **bas, char **bas_name, int *n_bas)
 {
 
   FILE *inp_stream = stdin;
@@ -600,18 +613,7 @@ void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
   coord_t b1, b2;
   double R[2][2];
   char line_buffer[STRSZ];
-  char faux_name[NAMSZ];
-  
-  /* Translate basis vectors such that all z are < 0. */
-  faux.x = bas[0].x;
-  faux.y = bas[0].y;
-  faux.z = bas[0].z;
-  if (bas_name != NULL)
-  {
-	strncpy(faux_name, bas_name, NAMSZ);
-  }
-
-  fprintf(stderr, "%s -> %s\n", bas_name, faux_name);
+  coord_t *surface_normal = NULL;
 
   if (strcmp(lat->input_filename, "stdin") != 0) 
   {
@@ -628,9 +630,15 @@ void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
   }
   
   *n_bas = MAX_INP_ATOMS;
-  
-  realloc((coord_t*) bas, sizeof(coord_t) * (*n_bas));
-  realloc((char *) bas_name, *n_bas * NAMSZ * sizeof(char));
+
+  coord_t *new_bas = (coord_t *)realloc(*bas, sizeof(coord_t) * (size_t)(*n_bas));
+  char *new_names = (char *)realloc(*bas_name, (size_t)(*n_bas) * NAMSZ * sizeof(char));
+  if (!new_bas || !new_names) {
+    fprintf(stderr, "*** error (lattice_read): allocation failed\n");
+    exit(1);
+  }
+  *bas = new_bas;
+  *bas_name = new_names;
   
   R[0][0] = R[1][1] = 1.;
   R[0][1] = R[1][0] = 0.;
@@ -668,16 +676,16 @@ void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
     /* read basis vectors */
     if( strncmp(line_buffer, "pb:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%s %lf %lf %lf", bas_name+(i_bas * NAMSZ),
-    		  &bas[i_bas].x, &bas[i_bas].y, &bas[i_bas].z);
+      sscanf(line_buffer+3, "%s %lf %lf %lf", (*bas_name) + (i_bas * NAMSZ),
+              &(*bas)[i_bas].x, &(*bas)[i_bas].y, &(*bas)[i_bas].z);
       i_bas ++;
     }
 
     if( strncmp(line_buffer, "po:", 3) == 0  )
     {
       if (lat->max_layers == 0) lat->max_layers = 1;
-      sscanf(line_buffer+3, "%s %lf %lf %lf", bas_name+(i_bas * NAMSZ),
-             &bas[i_bas].x, &bas[i_bas].y, &bas[i_bas].z);
+      sscanf(line_buffer+3, "%s %lf %lf %lf", (*bas_name) + (i_bas * NAMSZ),
+             &(*bas)[i_bas].x, &(*bas)[i_bas].y, &(*bas)[i_bas].z);
       i_bas ++;
     }
 
@@ -689,15 +697,15 @@ void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
 
     if( strncmp(line_buffer, "nl:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%u", &lat->max_layers);
+      lat->max_layers = (size_t)strtoull(line_buffer + 3, NULL, 10);
     }
 
     if( strncmp(line_buffer, "uc:", 3) == 0 )
     {
-      sscanf(line_buffer+3, "%u", &lat->max_cells);
+      lat->max_cells = (size_t)strtoull(line_buffer + 3, NULL, 10);
     }
      
-    if( strncmp(line_buffer, "q", 1) == 0 || line_buffer == NULL) break;
+    if( strncmp(line_buffer, "q", 1) == 0 ) break;
     
     if( strcmp(line_buffer, "help") == 0 && 
         strcmp(lat->input_filename, "stdin") == 0)
@@ -718,6 +726,9 @@ void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
     }
 
   } /* for  fgets */
+
+  /* Convert from "capacity" to "actual number of basis entries read". */
+  *n_bas = (int)i_bas;
 
   #if DEBUG > 0
   fprintf(stderr, "** debug (lattice_read): end read\n");
@@ -764,34 +775,38 @@ void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
   faux.y = 0.;
   faux.z = 0.;
 
-  for(i_bas = 1; i_bas < *n_bas; i_bas ++)
+  for(i_bas = 1; i_bas < (size_t)(*n_bas); i_bas ++)
   {
-    if(bas[i_bas].z > faux.z)
+    if((*bas)[i_bas].z > faux.z)
     {
-      faux.x = bas[i_bas].x;
-      faux.y = bas[i_bas].y;
-      faux.z = bas[i_bas].z;
+      faux.x = (*bas)[i_bas].x;
+      faux.y = (*bas)[i_bas].y;
+      faux.z = (*bas)[i_bas].z;
     }
   }
 
-  for(i_bas = 0; i_bas < *n_bas; i_bas ++)
+  for(i_bas = 0; i_bas < (size_t)(*n_bas); i_bas ++)
   {  
-    bas[i_bas].z -= faux.x;
-    bas[i_bas].y -= faux.y;
-    bas[i_bas].z -= faux.z;
+    (*bas)[i_bas].x -= faux.x;
+    (*bas)[i_bas].y -= faux.y;
+    (*bas)[i_bas].z -= faux.z;
   }
 
   #if DEBUG > 0
   for(i_bas = 0; i_bas < *n_bas; i_bas ++)
   {
-	  fprintf(stderr, "  bas[%u] = ", i_bas);
-	  coord_printf(stderr, &bas[i_bas]);
+		  fprintf(stderr, "  bas[%u] = ", i_bas);
+		  coord_printf(stderr, &(*bas)[i_bas]);
   }
   fprintf(stderr, "** debug (lattice_read): end basis assignment\n");
   #endif
   
   /* Find surface normal */
-  nor = lattice_get_surface_normal(lat, a1, a2, a3);
+  surface_normal = lattice_get_surface_normal(lat, a1, a2, a3);
+  if (surface_normal) {
+    coord_set(nor, surface_normal->x, surface_normal->y, surface_normal->z);
+    coord_free(surface_normal);
+  }
 
   #if DEBUG > 0
   fprintf(stderr, "** debug (lattice_read): n_bas = %u\n", *n_bas);

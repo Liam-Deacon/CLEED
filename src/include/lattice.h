@@ -103,8 +103,8 @@ int lattice_set_output_filename(lattice_t *lat, const char *filename);
 int lattice_set_script(lattice_t *lat, const char *script);
 void lattice_free(lattice_t *lat);
 void lattice_free_atom_list(lattice_t *lat);
-void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3, 
-                  coord_t *nor, coord_t *bas, char *bas_name, int *n_bas);
+void lattice_read(lattice_t *lat, coord_t *a1, coord_t *a2, coord_t *a3,
+                  coord_t *nor, coord_t **bas, char **bas_name, int *n_bas);
 int lattice_set_atom(lattice_t *lat, const atom_t *atom, size_t index);
 int lattice_set_atom_list(lattice_t *lat, const atom_t *atoms, size_t n_atoms);
 void lattice_printf(FILE *output, const lattice_t *lat);
@@ -130,8 +130,8 @@ void lattice_atom_index_swap(const lattice_t *lat, size_t i, size_t j);
 coord_t *lattice_get_surface_normal(const lattice_t *lat, const coord_t *a1,
                                     const coord_t *a2, const coord_t *a3);
 double **lattice_normal_get_rotation_matrix(const coord_t *normal);
-void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2, 
-         coord_t *a3, coord_t *nor, coord_t *bas, char *bas_name, int *n_bas);
+void lattice_setup(lattice_t *lat, coord_t *a1, coord_t *a2,
+         coord_t *a3, coord_t *nor, coord_t **bas, char **bas_name, int *n_bas);
          
 miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat);
 

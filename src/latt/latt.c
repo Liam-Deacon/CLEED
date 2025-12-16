@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
   
   double faux_x, faux_y, faux_z, faux_len;
   
-  char *bas_name = malloc(sizeof(char) * NAMSZ);
+  char *bas_name = (char *)malloc(sizeof(char) * NAMSZ);
   
   double b1_len = 0., b2_len = 0., b3_len = 0.;
   double nor_len = 0.0;
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
   
   basis_t *a = basis_init();
   
-  lattice_setup(lat, a1, a2, a3, nor, bas, bas_name, &n_bas);
+  lattice_setup(lat, a1, a2, a3, nor, &bas, &bas_name, &n_bas);
   
   basis_set_a1(a, a1);
   basis_set_a2(a, a2);
@@ -639,6 +639,7 @@ int main(int argc, char *argv[])
   basis_free(a);
   basis_free(b);
   basis_free(rot_a);
+  free(bas_name);
 
   free(R[0]);
   free(R[1]);
@@ -648,4 +649,3 @@ int main(int argc, char *argv[])
   
   return (0);
 } /* end of main */
-
