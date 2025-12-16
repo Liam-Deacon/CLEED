@@ -14,11 +14,39 @@ if [ "$#" -eq 0 ]; then
   exit 0
 fi
 
-cppcheck \
-  --force \
-  --enable=warning,performance,portability,style,information \
-  --std=c99 \
-  --language=c \
-  --suppress=missingIncludeSystem \
-  --template='[{severity}] {file}:{line}: {message}' \
-  "$@"
+files_c=()
+files_cpp=()
+for file in "$@"; do
+  case "$file" in
+    *.c|*.h)
+      files_c+=("$file")
+      ;;
+    *.cc|*.cpp)
+      files_cpp+=("$file")
+      ;;
+    *)
+      ;;
+  esac
+done
+
+run_cppcheck() {
+  local std="$1"
+  local lang="$2"
+  shift 2
+  cppcheck \
+    --force \
+    --enable=warning,performance,portability,style,information \
+    --std="$std" \
+    --language="$lang" \
+    --suppress=missingIncludeSystem \
+    --template='[{severity}] {file}:{line}: {message}' \
+    "$@"
+}
+
+if [ "${#files_c[@]}" -ne 0 ]; then
+  run_cppcheck c99 c "${files_c[@]}"
+fi
+
+if [ "${#files_cpp[@]}" -ne 0 ]; then
+  run_cppcheck c++11 c++ "${files_cpp[@]}"
+fi
