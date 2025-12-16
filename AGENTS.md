@@ -7,9 +7,10 @@ Use this document as the default “how we work” baseline for both humans and 
 
 1. **Work in git worktrees.** One branch/worktree per task/issue.
 2. **Always test** the smallest relevant surface area before opening a PR.
-3. **Prefer root-cause fixes** over workarounds; keep changes minimal and focused.
-4. **Avoid committing generated/build artifacts** (build dirs, `CMakeFiles/`, `config.log`, etc.).
-5. **Document decisions** in PR descriptions and link to issues and permalinks.
+3. **Run `pre-commit`** (format/validate) when configured, alongside unit/integration tests.
+4. **Prefer root-cause fixes** over workarounds; keep changes minimal and focused.
+5. **Avoid committing generated/build artifacts** (build dirs, `CMakeFiles/`, `config.log`, etc.).
+6. **Document decisions** in PR descriptions and link to issues and permalinks.
 
 ## Workflow (required)
 
@@ -46,6 +47,12 @@ Keep commit bodies **digestible**:
 - notable follow-ups / known limitations
 
 ### 3) Test (required)
+
+Run `pre-commit` checks where available (requires `.pre-commit-config.yaml`):
+
+```bash
+python3 -m pre_commit run --all-files
+```
 
 Prefer out-of-source builds:
 
@@ -107,4 +114,3 @@ For larger initiatives (Qt6 migration, NR removal, packaging automation), split 
 ```
 investigation → tests (lock behavior) → refactor/replace → CI verification → packaging/release
 ```
-
