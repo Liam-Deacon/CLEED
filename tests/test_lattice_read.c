@@ -13,28 +13,6 @@
 FILE *inf_stream = NULL;
 FILE *ctr_stream = NULL;
 
-#define ASSERT_TRUE(condition)                                                 \
-    do {                                                                       \
-        if (!(condition)) {                                                    \
-            fprintf(stderr, "assert failed: %s (%s:%d)\n", #condition,         \
-                    __FILE__, __LINE__);                                       \
-            return 1;                                                          \
-        }                                                                      \
-    } while (0)
-
-#define ASSERT_NEAR(actual, expected, tol)                                     \
-    do {                                                                       \
-        const double diff = fabs((double)(actual) - (double)(expected));       \
-        if (diff > (tol)) {                                                    \
-            fprintf(stderr,                                                    \
-                    "assert failed: %s ~= %s (got=%g expected=%g tol=%g) "     \
-                    "(%s:%d)\n",                                               \
-                    #actual, #expected, (double)(actual), (double)(expected),  \
-                    (double)(tol), __FILE__, __LINE__);                        \
-            return 1;                                                          \
-        }                                                                      \
-    } while (0)
-
 static lattice_t *create_minimal_lattice(void)
 {
     lattice_t *lat = lattice_init(1);
@@ -78,12 +56,12 @@ typedef struct lattice_read_fixture {
 static int lattice_read_fixture_run(lattice_read_fixture_t *fixture,
                                     const char *contents)
 {
-    ASSERT_TRUE(fixture != NULL);
-    ASSERT_TRUE(cleed_test_write_text_file(fixture->path, contents) == 0);
+    CLEED_TEST_ASSERT(fixture != NULL);
+    CLEED_TEST_ASSERT(cleed_test_write_text_file(fixture->path, contents) == 0);
 
     fixture->lat = create_minimal_lattice();
-    ASSERT_TRUE(fixture->lat != NULL);
-    ASSERT_TRUE(lattice_set_input_filename(fixture->lat, fixture->path) == 0);
+    CLEED_TEST_ASSERT(fixture->lat != NULL);
+    CLEED_TEST_ASSERT(lattice_set_input_filename(fixture->lat, fixture->path) == 0);
 
     fixture->a1 = (coord_t){.x = 0., .y = 0., .z = 0.};
     fixture->a2 = (coord_t){.x = 0., .y = 0., .z = 0.};
@@ -93,13 +71,13 @@ static int lattice_read_fixture_run(lattice_read_fixture_t *fixture,
     fixture->bas = (coord_t *)calloc(1, sizeof(coord_t));
     fixture->bas_name = (char *)calloc(NAMSZ, sizeof(char));
     fixture->n_bas = 0;
-    ASSERT_TRUE(fixture->bas != NULL);
-    ASSERT_TRUE(fixture->bas_name != NULL);
+    CLEED_TEST_ASSERT(fixture->bas != NULL);
+    CLEED_TEST_ASSERT(fixture->bas_name != NULL);
 
     const int rc = lattice_read(fixture->lat, &fixture->a1, &fixture->a2, &fixture->a3,
                                 &fixture->nor, &fixture->bas, &fixture->bas_name,
                                 &fixture->n_bas);
-    ASSERT_TRUE(rc == 0);
+    CLEED_TEST_ASSERT(rc == 0);
     return 0;
 }
 
@@ -134,26 +112,26 @@ static int test_lattice_read_parses_commands(void)
         "q\n";
 
     lattice_read_fixture_t fixture = {.path = "test_lattice_read_full.latt"};
-    ASSERT_TRUE(lattice_read_fixture_run(&fixture, contents) == 0);
+    CLEED_TEST_ASSERT(lattice_read_fixture_run(&fixture, contents) == 0);
 
-    ASSERT_TRUE(fixture.n_bas == 2);
-    ASSERT_NEAR(fixture.a1.x, 2.0, 1e-12);
-    ASSERT_NEAR(fixture.a1.y, 0.0, 1e-12);
-    ASSERT_NEAR(fixture.a2.x, 0.0, 1e-12);
-    ASSERT_NEAR(fixture.a2.y, 3.0, 1e-12);
-    ASSERT_NEAR(fixture.a3.z, 5.0, 1e-12);
+    CLEED_TEST_ASSERT(fixture.n_bas == 2);
+    CLEED_TEST_ASSERT_NEAR(fixture.a1.x, 2.0, 1e-12);
+    CLEED_TEST_ASSERT_NEAR(fixture.a1.y, 0.0, 1e-12);
+    CLEED_TEST_ASSERT_NEAR(fixture.a2.x, 0.0, 1e-12);
+    CLEED_TEST_ASSERT_NEAR(fixture.a2.y, 3.0, 1e-12);
+    CLEED_TEST_ASSERT_NEAR(fixture.a3.z, 5.0, 1e-12);
 
-    ASSERT_NEAR(fixture.lat->image_len, 12.5, 1e-12);
-    ASSERT_TRUE(fixture.lat->max_layers == 4);
-    ASSERT_TRUE(fixture.lat->max_cells == 7);
+    CLEED_TEST_ASSERT_NEAR(fixture.lat->image_len, 12.5, 1e-12);
+    CLEED_TEST_ASSERT(fixture.lat->max_layers == 4);
+    CLEED_TEST_ASSERT(fixture.lat->max_cells == 7);
 
-    ASSERT_TRUE(strcmp(fixture.bas_name, "Ca") == 0);
-    ASSERT_TRUE(strcmp(fixture.bas_name + NAMSZ, "Ca") == 0);
-    ASSERT_NEAR(max_basis_z(fixture.bas, fixture.n_bas), 0.0, 1e-12);
+    CLEED_TEST_ASSERT(strcmp(fixture.bas_name, "Ca") == 0);
+    CLEED_TEST_ASSERT(strcmp(fixture.bas_name + NAMSZ, "Ca") == 0);
+    CLEED_TEST_ASSERT_NEAR(max_basis_z(fixture.bas, fixture.n_bas), 0.0, 1e-12);
 
-    ASSERT_NEAR(fixture.nor.x, 0.0, 1e-12);
-    ASSERT_NEAR(fixture.nor.y, 0.0, 1e-12);
-    ASSERT_NEAR(fixture.nor.z, 6.0, 1e-12);
+    CLEED_TEST_ASSERT_NEAR(fixture.nor.x, 0.0, 1e-12);
+    CLEED_TEST_ASSERT_NEAR(fixture.nor.y, 0.0, 1e-12);
+    CLEED_TEST_ASSERT_NEAR(fixture.nor.z, 6.0, 1e-12);
 
     lattice_read_fixture_free(&fixture);
     return 0;
@@ -169,11 +147,11 @@ static int test_lattice_read_sets_max_layers_from_overlayer(void)
         "po: Ca 0 0 0\n"
         "q\n";
 
-    ASSERT_TRUE(cleed_test_write_text_file(path, contents) == 0);
+    CLEED_TEST_ASSERT(cleed_test_write_text_file(path, contents) == 0);
 
     lattice_t *lat = create_minimal_lattice();
-    ASSERT_TRUE(lat != NULL);
-    ASSERT_TRUE(lattice_set_input_filename(lat, path) == 0);
+    CLEED_TEST_ASSERT(lat != NULL);
+    CLEED_TEST_ASSERT(lattice_set_input_filename(lat, path) == 0);
     lat->max_layers = 0;
 
     coord_t a1 = {.x = 0., .y = 0., .z = 0.};
@@ -184,12 +162,12 @@ static int test_lattice_read_sets_max_layers_from_overlayer(void)
     coord_t *bas = (coord_t *)calloc(1, sizeof(coord_t));
     char *bas_name = (char *)calloc(NAMSZ, sizeof(char));
     size_t n_bas = 0;
-    ASSERT_TRUE(bas != NULL);
-    ASSERT_TRUE(bas_name != NULL);
+    CLEED_TEST_ASSERT(bas != NULL);
+    CLEED_TEST_ASSERT(bas_name != NULL);
 
     const int rc = lattice_read(lat, &a1, &a2, &a3, &nor, &bas, &bas_name, &n_bas);
-    ASSERT_TRUE(rc == 0);
-    ASSERT_TRUE(lat->max_layers == 1);
+    CLEED_TEST_ASSERT(rc == 0);
+    CLEED_TEST_ASSERT(lat->max_layers == 1);
 
     free(bas);
     free(bas_name);

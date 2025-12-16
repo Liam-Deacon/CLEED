@@ -18,6 +18,24 @@ target_include_directories(test_lattice_read PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
 target_link_libraries(test_lattice_read PRIVATE m)
 add_test(NAME latt.read COMMAND test_lattice_read)
 
+add_executable(test_lattice_read_edge_cases
+    test_lattice_read_edge_cases.c
+    $<TARGET_OBJECTS:latt_core>
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_lattice_read_edge_cases PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+target_link_libraries(test_lattice_read_edge_cases PRIVATE m)
+add_test(NAME latt.read_edge_cases COMMAND test_lattice_read_edge_cases)
+
+add_executable(test_lattice_setup
+    test_lattice_setup.c
+    $<TARGET_OBJECTS:latt_core>
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_lattice_setup PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+target_link_libraries(test_lattice_setup PRIVATE m)
+add_test(NAME latt.setup COMMAND test_lattice_setup)
+
 if (WITH_GSL STREQUAL "OFF")
     add_executable(test_search_amoeba
         test_search_amoeba.c

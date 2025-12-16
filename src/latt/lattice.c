@@ -489,7 +489,7 @@ static bool lattice_parse_atom_payload(const char *payload, char *name, coord_t 
   {
     return false;
   }
-  return sscanf(payload, " %127s %lf %lf %lf", name,
+  return sscanf(payload, " %255s %lf %lf %lf", name,
                 &position->x, &position->y, &position->z) == 4;
 }
 
@@ -508,7 +508,7 @@ static bool lattice_handle_pb(lattice_read_ctx_t *ctx, const char *payload)
   }
 
   coord_t position = {.x = 0., .y = 0., .z = 0.};
-  char element[NAMSZ];
+  char element[STRSZ];
   if (!lattice_parse_atom_payload(payload, element, &position))
   {
     return false;
