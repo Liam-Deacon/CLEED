@@ -9,7 +9,7 @@ live in <stdlib.h>.
 #ifndef CLEED_COMPAT_MALLOC_H
 #define CLEED_COMPAT_MALLOC_H
 
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 
 #endif
-

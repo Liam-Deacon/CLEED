@@ -1,8 +1,12 @@
 #include "search.h"
 
+// cppcheck-suppress missingIncludeSystem
 #include <math.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
 
 #include "test_support.h"
@@ -36,8 +40,7 @@ int main(void)
         fprintf(stderr, "allocation failed: sr_project\n");
         return 1;
     }
-    strncpy(sr_project, "amoeba_test", (size_t)STRSZ);
-    sr_project[STRSZ - 1] = '\0';
+    snprintf(sr_project, (size_t)STRSZ + 1, "%s", "amoeba_test");
 
     if (cleed_test_write_text_file("amoeba_test.ver", "seed\n") != 0) {
         fprintf(stderr, "failed to create amoeba_test.ver\n");
@@ -71,6 +74,11 @@ int main(void)
     const real tol = 1e-3;
     if (fabs(best_x - 1.0) > tol || fabs(best_y + 2.0) > tol) {
         fprintf(stderr, "unexpected optimum: (%g, %g)\n", (double)best_x, (double)best_y);
+        return 1;
+    }
+
+    if (nfunk <= 0 || nfunk > 500) {
+        fprintf(stderr, "unexpected function evaluation count: %d\n", nfunk);
         return 1;
     }
 

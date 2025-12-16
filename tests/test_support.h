@@ -1,6 +1,7 @@
 #ifndef CLEED_TEST_SUPPORT_H
 #define CLEED_TEST_SUPPORT_H
 
+// cppcheck-suppress missingIncludeSystem
 #include <stddef.h>
 
 #include "real.h"

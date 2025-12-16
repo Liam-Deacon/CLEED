@@ -1,6 +1,8 @@
 #include "test_support.h"
 
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 
 int cleed_test_write_text_file(const char *path, const char *contents)
