@@ -297,7 +297,7 @@ static bool lattice_line_equals(const char *line, const char *value)
   }
 
   char after = line[len];
-  return after == '\0' || after == '\n' || after == '\r';
+  return after == '\0' || strchr("\r\n", after) != NULL;
 }
 
 /**
