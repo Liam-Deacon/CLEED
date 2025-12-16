@@ -32,6 +32,7 @@ SET (csearch_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "" FORCE)
 IF (WITH_GSL STREQUAL "OFF")
     # Closed source version
     SET (searchlib_SRCS
+        search_globals.c
         copy_file.c
         nrrutil.c
         nrrbrent.c
@@ -57,6 +58,7 @@ IF (WITH_GSL STREQUAL "OFF")
 ELSE()
     # Open Source version using GNU Scientific Library
     SET (searchlib_SRCS
+        search_globals.c
         copy_file.c
         srckrot.c
         srhelp.c
