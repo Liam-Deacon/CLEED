@@ -293,13 +293,14 @@ FILE *res_stream;
       {
         n_steps = (int)steps_real;
       }
-    }
-  }
+	  }
+	}
 
-  #pragma omp parallel for
-  for (int step_index = 0; step_index < n_steps; step_index++)
-  {
-    energy = energy_start + (real)step_index * energy_step;
+	int step_index;
+	  #pragma omp parallel for
+	  for (step_index = 0; step_index < n_steps; step_index++)
+	  {
+	    energy = energy_start + (real)step_index * energy_step;
 #else
   for( energy = eng->ini; energy > eng->fin + E_TOLERANCE; energy += eng->stp)
   {
