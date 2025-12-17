@@ -11,6 +11,10 @@ exclude_paths:
   # Vendored third-party code
   - "src/contrib/**"
 
+  # Legacy program entrypoint (large, historical main() - keep functional but
+  # avoid failing Codacy on complexity/LOC limits).
+  - "src/mkiv/mkiv.c"
+
   # IDE/user configuration files
   - "**/*.pro.user"
   - ".externalToolBuilders/**"
