@@ -63,3 +63,14 @@ add_test(
     NAME mkiv.help
     COMMAND $<TARGET_FILE:mkiv> -h
 )
+set_tests_properties(mkiv.help PROPERTIES
+    PASS_REGULAR_EXPRESSION "Syntax:"
+)
+
+add_test(
+    NAME mkiv.version
+    COMMAND $<TARGET_FILE:mkiv> -V
+)
+set_tests_properties(mkiv.version PROPERTIES
+    PASS_REGULAR_EXPRESSION "version"
+)
