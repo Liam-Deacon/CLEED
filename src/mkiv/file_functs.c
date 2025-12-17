@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "cleed_string.h"
 #include "cleed_cstring.h"
 #include <ctype.h>
 #include <sys/stat.h>
@@ -83,8 +84,8 @@ int file_backup(const char *filepath)
 {
     if (file_exists(filepath)) {
         const char *stamp = timestamp();
-        char *backup = (char *)malloc(strlen(filepath) + 
-                    strlen(stamp) + 5 * sizeof(char)); 
+        char *backup = (char *)malloc(cleed_strnlen(filepath, 4096) +
+                    cleed_strnlen(stamp, 80) + 5 * sizeof(char)); 
         strcpy(backup, filepath);
         strcat(backup, ".bak");
         strcat(backup, "_");
@@ -135,7 +136,7 @@ char *remove_ext(char* str, char dot, char sep) {
     /* Error checks and allocate string */
     if (str == NULL)
         return NULL;
-    if ((retstr = (char*)malloc(strlen(str)+1*sizeof(char))) == NULL)
+    if ((retstr = (char*)malloc(cleed_strnlen(str, 4096)+1*sizeof(char))) == NULL)
         return NULL;
 
     /* Make a copy and find the relevant characters */

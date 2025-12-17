@@ -23,6 +23,7 @@ Changes:
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "cleed_string.h"
 #include "cleed_cstring.h"
 #include "crfac.h"
 
@@ -134,7 +135,7 @@ char line_buffer[STRSZ],    /* buffer for a single command line */
 
    if (line_buffer[0] != '#')         /* exclude comments */
    {
-     for (i=0; i < (long)strlen(line_buffer); i++)
+     for (i=0; i < (long)cleed_strnlen(line_buffer, STRSZ); i++)
      {
 
 /* ef: experimental input file */

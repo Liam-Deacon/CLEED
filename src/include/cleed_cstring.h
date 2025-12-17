@@ -16,7 +16,6 @@ typedef unsigned int cleed_size_t;
 typedef unsigned long cleed_size_t;
 #endif
 
-cleed_size_t strlen(const char *s);
 int strcmp(const char *s1, const char *s2);
 int strncmp(const char *s1, const char *s2, cleed_size_t n);
 char *strcpy(char *dst, const char *src);
@@ -24,4 +23,3 @@ char *strcat(char *dst, const char *src);
 char *strrchr(const char *s, int c);
 
 #endif /* CLEED_CSTRING_H */
-

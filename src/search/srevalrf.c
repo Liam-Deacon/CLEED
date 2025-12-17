@@ -81,11 +81,10 @@ static real shift = 0.;
 static int n_eval  = 0;
 static int n_calc  = 0;
 
-int iaux;
-int i_par;
-real faux = 0.;
-real rgeo = 0.;
-real rfac = 0.;
+	int iaux;
+	int i_par;
+	real rgeo = 0.;
+	real rfac = 0.;
 
 struct tm *l_time;
 time_t t_time;
@@ -243,22 +242,22 @@ FILE *io_stream, *log_stream;
 
  while( fgets(line_buffer, STRSZ, io_stream) != NULL)
  {
-   if(
+	 if(
 #ifdef REAL_IS_DOUBLE
-       (iaux = sscanf(line_buffer, "%lf %lf %lf", &rfac, &faux, &shift) )
+	     (iaux = sscanf(line_buffer, "%lf %*lf %lf", &rfac, &shift) )
 #endif
 #ifdef REAL_IS_FLOAT
-       (iaux = sscanf(line_buffer, "%f %f %f",    &rfac, &faux, &shift) )
+	     (iaux = sscanf(line_buffer, "%f %*f %f",    &rfac, &shift) )
 #endif
-       == 3) break;
- }
+	     == 2) break;
+	 }
 
 /* Stop with error message if reading error */
- if( iaux != 3)
- {
-   log_stream = fopen(log_file, "a");
-   fprintf(log_stream,"*** error while reading output from %s\n", 
-           getenv("CSEARCH_RFAC"));
+	 if( iaux != 2)
+	 {
+	   log_stream = fopen(log_file, "a");
+	   fprintf(log_stream,"*** error while reading output from %s\n", 
+	           getenv("CSEARCH_RFAC"));
    fclose(log_stream);
    exit(1);
  }
@@ -363,4 +362,3 @@ FILE *io_stream, *log_stream;
 
  return (rfac + rgeo);
 }
-
