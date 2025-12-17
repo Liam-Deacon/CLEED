@@ -21,11 +21,18 @@ extern "C" {
 /* Optimisers (derivative-free) */
 int sr_amoeba(real **p, real *y, int ndim, real ftol, real (*funk)(real *), int *nfunk);
 
+typedef real (*sr_amebsa_func)(real *);
+
 typedef struct sr_amebsa_cfg {
   real ftol;
-  real (*funk)(real *);
+  sr_amebsa_func funk;
   real temptr;
 } sr_amebsa_cfg;
+
+static inline sr_amebsa_func sr_amebsa_cfg_get_funk(const sr_amebsa_cfg *cfg)
+{
+  return cfg->funk;
+}
 
 int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
               const sr_amebsa_cfg *cfg, int *iter);

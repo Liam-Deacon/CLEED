@@ -105,145 +105,166 @@ static void sr_simplex_extremes(const real *y, int ndim, int *ilo, int *ihi, int
   }
 }
 
-static void sr_amoeba_reflect(const real *centroid, const real *worst, int ndim, real alpha, real *trial)
+typedef struct sr_amoeba_ctx {
+  int ndim;
+  int mpts;
+  real alpha;
+  real gamma;
+  real rho;
+  real sigma;
+  real ftol;
+  real (*funk)(real *);
+  int *nfunk;
+  real **p;
+  real *y;
+  real *centroid;
+  real *trial;
+  real *trial2;
+} sr_amoeba_ctx;
+
+static real sr_amoeba_eval(sr_amoeba_ctx *ctx, real *x)
 {
-  for (int j = 1; j <= ndim; j++) {
-    trial[j] = centroid[j] + alpha * (centroid[j] - worst[j]);
-  }
+  real v = ctx->funk(x);
+  (*ctx->nfunk)++;
+  return v;
 }
 
-static int sr_amoeba_try_expand(real **p, real *y, int ndim,
-                                int ilo, int ihi,
-                                real gamma,
-                                const real *centroid,
-                                const real *trial, real *trial2,
-                                real (*funk)(real *), int *nfunk, real fr)
+static int sr_amoeba_converged(const sr_amoeba_ctx *ctx, int ilo, int ihi)
 {
-  for (int j = 1; j <= ndim; j++) {
-    trial2[j] = centroid[j] + gamma * (trial[j] - centroid[j]);
+  return (fabs((double)(ctx->y[ihi] - ctx->y[ilo])) < (double)ctx->ftol) ? 1 : 0;
+}
+
+static void sr_amoeba_accept(sr_amoeba_ctx *ctx, int ihi, const real *x, real fx)
+{
+  sr_copy_point(ctx->p[ihi], x, ctx->ndim);
+  ctx->y[ihi] = fx;
+}
+
+static real sr_amoeba_reflect(sr_amoeba_ctx *ctx, int ihi)
+{
+  for (int j = 1; j <= ctx->ndim; j++) {
+    ctx->trial[j] = ctx->centroid[j] + ctx->alpha * (ctx->centroid[j] - ctx->p[ihi][j]);
   }
-  real fe = (*funk)(trial2);
-  (*nfunk)++;
+  return sr_amoeba_eval(ctx, ctx->trial);
+}
+
+static void sr_amoeba_expand_or_reflect(sr_amoeba_ctx *ctx, int ihi, real fr)
+{
+  for (int j = 1; j <= ctx->ndim; j++) {
+    ctx->trial2[j] = ctx->centroid[j] + ctx->gamma * (ctx->trial[j] - ctx->centroid[j]);
+  }
+  real fe = sr_amoeba_eval(ctx, ctx->trial2);
 
   if (fe < fr) {
-    sr_copy_point(p[ihi], trial2, ndim);
-    y[ihi] = fe;
+    sr_amoeba_accept(ctx, ihi, ctx->trial2, fe);
   } else {
-    sr_copy_point(p[ihi], trial, ndim);
-    y[ihi] = fr;
+    sr_amoeba_accept(ctx, ihi, ctx->trial, fr);
   }
-
-  (void)ilo;
-  return 0;
 }
 
-static int sr_amoeba_contract_or_shrink(real **p, real *y, int ndim,
-                                        int ilo, int ihi,
-                                        real rho, real sigma,
-                                        const real *centroid,
-                                        const real *trial, real *trial2,
-                                        real (*funk)(real *), int *nfunk, real fr)
+static void sr_amoeba_shrink(sr_amoeba_ctx *ctx, int ilo)
 {
-  int outside = (fr < y[ihi]);
+  for (int i = 1; i <= ctx->mpts; i++) {
+    if (i == ilo) continue;
+    for (int j = 1; j <= ctx->ndim; j++) {
+      ctx->p[i][j] = ctx->p[ilo][j] + ctx->sigma * (ctx->p[i][j] - ctx->p[ilo][j]);
+      ctx->trial2[j] = ctx->p[i][j];
+    }
+    ctx->y[i] = sr_amoeba_eval(ctx, ctx->trial2);
+  }
+}
+
+static void sr_amoeba_contract_or_shrink(sr_amoeba_ctx *ctx, int ilo, int ihi, real fr)
+{
+  int outside = (fr < ctx->y[ihi]);
   if (outside) {
-    for (int j = 1; j <= ndim; j++) {
-      trial2[j] = centroid[j] + rho * (trial[j] - centroid[j]);
+    for (int j = 1; j <= ctx->ndim; j++) {
+      ctx->trial2[j] = ctx->centroid[j] + ctx->rho * (ctx->trial[j] - ctx->centroid[j]);
     }
   } else {
-    for (int j = 1; j <= ndim; j++) {
-      trial2[j] = centroid[j] + rho * (p[ihi][j] - centroid[j]);
+    for (int j = 1; j <= ctx->ndim; j++) {
+      ctx->trial2[j] = ctx->centroid[j] + ctx->rho * (ctx->p[ihi][j] - ctx->centroid[j]);
     }
   }
 
-  real fc = (*funk)(trial2);
-  (*nfunk)++;
+  real fc = sr_amoeba_eval(ctx, ctx->trial2);
 
-  if (fc < y[ihi]) {
-    sr_copy_point(p[ihi], trial2, ndim);
-    y[ihi] = fc;
-    return 0;
+  if (fc < ctx->y[ihi]) {
+    sr_amoeba_accept(ctx, ihi, ctx->trial2, fc);
+    return;
   }
 
-  int mpts = ndim + 1;
-  for (int i = 1; i <= mpts; i++) {
-    if (i == ilo) continue;
-    for (int j = 1; j <= ndim; j++) {
-      p[i][j] = p[ilo][j] + sigma * (p[i][j] - p[ilo][j]);
-      trial2[j] = p[i][j];
-    }
-    y[i] = (*funk)(trial2);
-    (*nfunk)++;
+  sr_amoeba_shrink(ctx, ilo);
+}
+
+static int sr_amoeba_step(sr_amoeba_ctx *ctx)
+{
+  int ilo = 1, ihi = 1, inhi = 1;
+  sr_simplex_extremes(ctx->y, ctx->ndim, &ilo, &ihi, &inhi);
+
+  if (sr_amoeba_converged(ctx, ilo, ihi)) return 1;
+  if (*ctx->nfunk >= MAX_ITER_AMOEBA) return -2;
+
+  sr_centroid_excluding((const real **)ctx->p, ctx->centroid, ctx->ndim, ihi);
+  real fr = sr_amoeba_reflect(ctx, ihi);
+
+  if (fr < ctx->y[ilo]) {
+    sr_amoeba_expand_or_reflect(ctx, ihi, fr);
+  } else if (fr < ctx->y[inhi]) {
+    sr_amoeba_accept(ctx, ihi, ctx->trial, fr);
+  } else {
+    sr_amoeba_contract_or_shrink(ctx, ilo, ihi, fr);
   }
 
+  (void)sr_write_vertex_file((const real **)ctx->p, ctx->y, ctx->ndim);
   return 0;
 }
 
 int sr_amoeba(real **p, real *y, int ndim, real ftol, real (*funk)(real *), int *nfunk)
 {
-  if (p == NULL || y == NULL || ndim <= 0 || funk == NULL || nfunk == NULL) {
-    return -1;
-  }
+  if (p == NULL) return -1;
+  if (y == NULL) return -1;
+  if (ndim <= 0) return -1;
+  if (funk == NULL) return -1;
+  if (nfunk == NULL) return -1;
 
-  const real alpha = 1.0;  /* reflection */
-  const real gamma = 2.0;  /* expansion */
-  const real rho = 0.5;    /* contraction */
-  const real sigma = 0.5;  /* shrink */
+  sr_amoeba_ctx ctx;
+  ctx.ndim = ndim;
+  ctx.mpts = ndim + 1;
+  ctx.alpha = (real)1.0;
+  ctx.gamma = (real)2.0;
+  ctx.rho = (real)0.5;
+  ctx.sigma = (real)0.5;
+  ctx.ftol = ftol;
+  ctx.funk = funk;
+  ctx.nfunk = nfunk;
+  ctx.p = p;
+  ctx.y = y;
+  ctx.centroid = NULL;
+  ctx.trial = NULL;
+  ctx.trial2 = NULL;
 
-  int mpts = ndim + 1;
   *nfunk = 0;
 
-  real *centroid = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  real *trial = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  real *trial2 = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  if (centroid == NULL || trial == NULL || trial2 == NULL) {
-    free(centroid);
-    free(trial);
-    free(trial2);
+  ctx.centroid = (real *)calloc((size_t)ndim + 1, sizeof(real));
+  ctx.trial = (real *)calloc((size_t)ndim + 1, sizeof(real));
+  ctx.trial2 = (real *)calloc((size_t)ndim + 1, sizeof(real));
+  if (ctx.centroid == NULL || ctx.trial == NULL || ctx.trial2 == NULL) {
+    free(ctx.centroid);
+    free(ctx.trial);
+    free(ctx.trial2);
     return -1;
   }
 
+  int rc = 0;
   for (;;) {
-    int ilo, ihi, inhi;
-    sr_simplex_extremes(y, ndim, &ilo, &ihi, &inhi);
-
-    /* Absolute convergence on function range (matches historical SEARCH behaviour). */
-    if (fabs((double)(y[ihi] - y[ilo])) < (double)ftol) {
-      break;
-    }
-
-    if (*nfunk >= MAX_ITER_AMOEBA) {
-      free(centroid);
-      free(trial);
-      free(trial2);
-      return -2;
-    }
-
-    /* Centroid excluding worst. */
-    sr_centroid_excluding((const real **)p, centroid, ndim, ihi);
-
-    /* Reflection: xr = c + alpha*(c - xh) */
-    sr_amoeba_reflect(centroid, p[ihi], ndim, alpha, trial);
-    real fr = (*funk)(trial);
-    (*nfunk)++;
-
-    if (fr < y[ilo]) {
-      /* Expansion: xe = c + gamma*(xr - c) */
-      (void)sr_amoeba_try_expand(p, y, ndim, ilo, ihi, gamma, centroid, trial, trial2, funk, nfunk, fr);
-    } else if (fr < y[inhi]) {
-      /* Accept reflection. */
-      sr_copy_point(p[ihi], trial, ndim);
-      y[ihi] = fr;
-    } else {
-      /* Contraction (with shrink fallback). */
-      (void)sr_amoeba_contract_or_shrink(p, y, ndim, ilo, ihi, rho, sigma, centroid, trial, trial2, funk, nfunk, fr);
-    }
-
-    (void)sr_write_vertex_file((const real **)p, y, ndim);
+    rc = sr_amoeba_step(&ctx);
+    if (rc != 0) break;
   }
 
-  free(centroid);
-  free(trial);
-  free(trial2);
+  free(ctx.centroid);
+  free(ctx.trial);
+  free(ctx.trial2);
 
-  return 0;
+  return (rc == 1) ? 0 : rc;
 }

@@ -58,86 +58,133 @@ static int sr_accept_move(sr_rng *rng, real current, real proposed, real temp)
   return u < prob;
 }
 
+typedef struct sr_amebsa_ctx {
+  int ndim;
+  real ftol;
+  real temptr;
+  sr_amebsa_func funk;
+  real **p;
+  real *y;
+  real *pb;
+  real *yb;
+  sr_rng rng;
+  real *centroid;
+  real *trial;
+  int budget;
+  int used;
+} sr_amebsa_ctx;
+
+static uint64_t sr_amebsa_seed_from_idum(long idum)
+{
+  uint64_t seed = (idum < 0) ? (uint64_t)(-idum) : (uint64_t)idum;
+  return (seed == 0) ? 1 : seed;
+}
+
+static int sr_amebsa_alloc(sr_amebsa_ctx *ctx)
+{
+  ctx->centroid = (real *)calloc((size_t)ctx->ndim + 1, sizeof(real));
+  ctx->trial = (real *)calloc((size_t)ctx->ndim + 1, sizeof(real));
+  if (ctx->centroid == NULL || ctx->trial == NULL) return -1;
+  return 0;
+}
+
+static void sr_amebsa_free(sr_amebsa_ctx *ctx)
+{
+  free(ctx->centroid);
+  free(ctx->trial);
+  ctx->centroid = NULL;
+  ctx->trial = NULL;
+}
+
+static void sr_amebsa_init_best(sr_amebsa_ctx *ctx)
+{
+  int ilo = 1, ihi = 1;
+  sr_simplex_extremes(ctx->y, ctx->ndim, &ilo, &ihi);
+  sr_copy_point(ctx->pb, ctx->p[ilo], ctx->ndim);
+  *ctx->yb = ctx->y[ilo];
+}
+
+static int sr_amebsa_step(sr_amebsa_ctx *ctx)
+{
+  int ilo = 1, ihi = 1;
+  sr_simplex_extremes(ctx->y, ctx->ndim, &ilo, &ihi);
+
+  if (fabs((double)(ctx->y[ihi] - ctx->y[ilo])) < (double)ctx->ftol) return 1;
+
+  sr_centroid_excluding((const real **)ctx->p, ctx->centroid, ctx->ndim, ihi);
+
+  for (int j = 1; j <= ctx->ndim; j++) {
+    double jitter = (sr_rng_uniform01(&ctx->rng) - 0.5) * 2.0;
+    ctx->trial[j] = ctx->centroid[j] + (real)1.0 * (ctx->centroid[j] - ctx->p[ihi][j]) +
+                    (real)(ctx->temptr * (real)0.05) * (real)jitter;
+  }
+
+  real fr = (*ctx->funk)(ctx->trial);
+  ctx->used++;
+
+  if (!sr_accept_move(&ctx->rng, ctx->y[ihi], fr, ctx->temptr)) return 0;
+
+  sr_copy_point(ctx->p[ihi], ctx->trial, ctx->ndim);
+  ctx->y[ihi] = fr;
+  if (fr < *ctx->yb) {
+    sr_copy_point(ctx->pb, ctx->trial, ctx->ndim);
+    *ctx->yb = fr;
+  }
+
+  return 0;
+}
+
 int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
               const sr_amebsa_cfg *cfg, int *iter)
 {
-  if (p == NULL || y == NULL || pb == NULL || yb == NULL || cfg == NULL || iter == NULL) {
-    return -1;
-  }
+  if (p == NULL) return -1;
+  if (y == NULL) return -1;
+  if (pb == NULL) return -1;
+  if (yb == NULL) return -1;
+  if (cfg == NULL) return -1;
+  if (iter == NULL) return -1;
   if (ndim <= 0) return -1;
 
-  int mpts = ndim + 1;
-  real ftol = cfg->ftol;
-  real temptr = cfg->temptr;
-  real (*funk)(real *) = cfg->funk;
-  if (funk == NULL) return -1;
+  sr_amebsa_ctx ctx;
+  ctx.ndim = ndim;
+  ctx.ftol = cfg->ftol;
+  ctx.temptr = cfg->temptr;
+  ctx.funk = sr_amebsa_cfg_get_funk(cfg);
+  ctx.p = p;
+  ctx.y = y;
+  ctx.pb = pb;
+  ctx.yb = yb;
+  ctx.centroid = NULL;
+  ctx.trial = NULL;
+  ctx.used = 0;
 
-  /* Seed deterministic RNG from the legacy global seed. */
-  sr_rng rng;
-  uint64_t seed = (sa_idum < 0) ? (uint64_t)(-sa_idum) : (uint64_t)sa_idum;
-  if (seed == 0) seed = 1;
-  sr_rng_seed(&rng, seed);
+  if (ctx.funk == NULL) return -1;
 
-  int ilo = 1, ihi = 1;
-  sr_simplex_extremes(y, ndim, &ilo, &ihi);
-  sr_copy_point(pb, p[ilo], ndim);
-  *yb = y[ilo];
+  ctx.budget = *iter;
+  if (ctx.budget < 0) ctx.budget = 0;
 
-  real *centroid = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  real *trial = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  if (centroid == NULL || trial == NULL) {
-    free(centroid);
-    free(trial);
+  if (sr_amebsa_alloc(&ctx) != 0) {
+    sr_amebsa_free(&ctx);
     return -1;
   }
 
-  int budget = *iter;
-  if (budget < 0) budget = 0;
-  int used = 0;
+  uint64_t seed = sr_amebsa_seed_from_idum(sa_idum);
+  sr_rng_seed(&ctx.rng, seed);
+  sr_amebsa_init_best(&ctx);
 
-  for (int k = 0; k < budget; k++) {
-    sr_simplex_extremes(y, ndim, &ilo, &ihi);
-
-    if (fabs((double)(y[ihi] - y[ilo])) < (double)ftol) {
-      break;
-    }
-
-    sr_centroid_excluding((const real **)p, centroid, ndim, ihi);
-
-    /* Reflection proposal with optional random jitter proportional to temperature. */
-    for (int j = 1; j <= ndim; j++) {
-      double jitter = (sr_rng_uniform01(&rng) - 0.5) * 2.0;
-      trial[j] = centroid[j] + (real)1.0 * (centroid[j] - p[ihi][j]) + (real)(temptr * (real)0.05) * (real)jitter;
-    }
-
-    real fr = (*funk)(trial);
-    used++;
-
-    if (sr_accept_move(&rng, y[ihi], fr, temptr)) {
-      sr_copy_point(p[ihi], trial, ndim);
-      y[ihi] = fr;
-      if (fr < *yb) {
-        sr_copy_point(pb, trial, ndim);
-        *yb = fr;
-      }
-    }
+  for (int k = 0; k < ctx.budget; k++) {
+    int rc = sr_amebsa_step(&ctx);
+    if (rc != 0) break;
   }
 
-  *iter = used;
-
-  free(centroid);
-  free(trial);
+  *iter = ctx.used;
 
   /* Update legacy seed to keep subsequent calls deterministic but non-constant. */
-  sa_idum = (long)(seed + (uint64_t)used + 1);
+  sa_idum = (long)(seed + (uint64_t)ctx.used + 1);
 
   /* Ensure pb/yb reflect current best. */
-  sr_simplex_extremes(y, ndim, &ilo, &ihi);
-  if (y[ilo] < *yb) {
-    sr_copy_point(pb, p[ilo], ndim);
-    *yb = y[ilo];
-  }
+  sr_amebsa_init_best(&ctx);
 
-  (void)mpts;
+  sr_amebsa_free(&ctx);
   return 0;
 }

@@ -38,22 +38,29 @@ static int sr_parse_double_token(const char *p, double *out, const char **out_en
   return 0;
 }
 
+static int sr_parse_next_double(const char **p, double *out)
+{
+  if (p == NULL || out == NULL) return -1;
+  const char *s = sr_skip_ws(*p);
+  if (s == NULL) return -1;
+  if (*s == '\0') return -1;
+  if (*s == '#') return -1;
+
+  const char *end = NULL;
+  if (sr_parse_double_token(s, out, &end) != 0) return -1;
+  *p = end;
+  return 0;
+}
+
 int sr_parse_two_reals(const char *line, real *out_a, real *out_b)
 {
   if (line == NULL || out_a == NULL || out_b == NULL) return -1;
 
-  const char *p = sr_skip_ws(line);
-  if (p == NULL || *p == '\0' || *p == '#') return -1;
-
+  const char *p = line;
   double a = 0.0;
-  const char *end = NULL;
-  if (sr_parse_double_token(p, &a, &end) != 0) return -1;
-
-  p = sr_skip_ws(end);
-  if (p == NULL || *p == '\0') return -1;
-
   double b = 0.0;
-  if (sr_parse_double_token(p, &b, &end) != 0) return -1;
+  if (sr_parse_next_double(&p, &a) != 0) return -1;
+  if (sr_parse_next_double(&p, &b) != 0) return -1;
 
   *out_a = (real)a;
   *out_b = (real)b;

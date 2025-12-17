@@ -130,13 +130,8 @@ static void sr_brent_golden_step(sr_brent_state *s, real m, real cgold)
   s->d = cgold * s->e;
 }
 
-static void sr_brent_choose_step(sr_brent_state *s, real m, real tol1, real tol2, real cgold)
+static int sr_brent_parabolic_step(sr_brent_state *s, real m, real tol1, real tol2)
 {
-  if ((real)fabs((double)s->e) <= tol1) {
-    sr_brent_golden_step(s, m, cgold);
-    return;
-  }
-
   real r = (s->x - s->w) * (s->fx - s->fv);
   real q = (s->x - s->v) * (s->fx - s->fw);
   real p = (s->x - s->v) * q - (s->x - s->w) * r;
@@ -147,27 +142,30 @@ static void sr_brent_choose_step(sr_brent_state *s, real m, real tol1, real tol2
   real etmp = s->e;
   s->e = s->d;
 
-  if ((real)fabs((double)p) >= (real)fabs((double)((real)0.5 * q * etmp))) {
-    sr_brent_golden_step(s, m, cgold);
-    return;
-  }
-  if (p <= q * (s->a - s->x)) {
-    sr_brent_golden_step(s, m, cgold);
-    return;
-  }
-  if (p >= q * (s->b - s->x)) {
-    sr_brent_golden_step(s, m, cgold);
-    return;
-  }
+  if ((real)fabs((double)p) >= (real)fabs((double)((real)0.5 * q * etmp))) return -1;
+  if (p <= q * (s->a - s->x)) return -1;
+  if (p >= q * (s->b - s->x)) return -1;
 
   s->d = p / q;
   real u = s->x + s->d;
   if (u - s->a < tol2) {
     s->d = (s->x < m) ? tol1 : -tol1;
-    return;
   }
   if (s->b - u < tol2) {
     s->d = (s->x < m) ? tol1 : -tol1;
+  }
+  return 0;
+}
+
+static void sr_brent_choose_step(sr_brent_state *s, real m, real tol1, real tol2, real cgold)
+{
+  if ((real)fabs((double)s->e) <= tol1) {
+    sr_brent_golden_step(s, m, cgold);
+    return;
+  }
+
+  if (sr_brent_parabolic_step(s, m, tol1, tol2) != 0) {
+    sr_brent_golden_step(s, m, cgold);
   }
 }
 
@@ -178,21 +176,21 @@ static real sr_brent_propose_u(const sr_brent_state *s, real tol1)
   return s->x + ((d > 0) ? tol1 : -tol1);
 }
 
-static void sr_brent_update(sr_brent_state *s, real u, real fu)
+static void sr_brent_update_better(sr_brent_state *s, real u, real fu)
 {
-  if (fu <= s->fx) {
-    if (u >= s->x) s->a = s->x;
-    else s->b = s->x;
+  if (u >= s->x) s->a = s->x;
+  else s->b = s->x;
 
-    s->v = s->w;
-    s->fv = s->fw;
-    s->w = s->x;
-    s->fw = s->fx;
-    s->x = u;
-    s->fx = fu;
-    return;
-  }
+  s->v = s->w;
+  s->fv = s->fw;
+  s->w = s->x;
+  s->fw = s->fx;
+  s->x = u;
+  s->fx = fu;
+}
 
+static void sr_brent_update_worse(sr_brent_state *s, real u, real fu)
+{
   if (u < s->x) s->a = u;
   else s->b = u;
 
@@ -226,6 +224,15 @@ static void sr_brent_update(sr_brent_state *s, real u, real fu)
     s->v = u;
     s->fv = fu;
   }
+}
+
+static void sr_brent_update(sr_brent_state *s, real u, real fu)
+{
+  if (fu <= s->fx) {
+    sr_brent_update_better(s, u, fu);
+    return;
+  }
+  sr_brent_update_worse(s, u, fu);
 }
 
 static real sr_brent_minimise(real ax, real bx, real cx,
@@ -355,55 +362,110 @@ static void sr_powell_extrapolate(real *p, int n, real *p_prev, real *p_extrap, 
   }
 }
 
-static void sr_powell_maybe_update_direction(real *p, real **xi, int n, real *fret, real (*func)(real *),
-                                             real *dir, int best_dir,
+typedef struct sr_powell_update_ctx {
+  real *p;
+  real **xi;
+  int n;
+  real *fret;
+  real (*func)(real *);
+  real *dir;
+} sr_powell_update_ctx;
+
+static void sr_powell_maybe_update_direction(sr_powell_update_ctx *ctx, int best_dir,
                                              real f_start, real f_extrap)
 {
   if (f_extrap >= f_start) return;
 
-  real f_saved = *fret;
-  if (sr_linmin(p, dir, n, fret, func) != 0) return;
-  if (*fret >= f_saved) return;
+  real f_saved = *ctx->fret;
+  if (sr_linmin(ctx->p, ctx->dir, ctx->n, ctx->fret, ctx->func) != 0) return;
+  if (*ctx->fret >= f_saved) return;
 
-  for (int j = 1; j <= n; j++) xi[j][best_dir] = dir[j];
+  for (int j = 1; j <= ctx->n; j++) ctx->xi[j][best_dir] = ctx->dir[j];
+}
+
+typedef struct sr_powell_run_ctx {
+  real *p;
+  real **xi;
+  int n;
+  real ftol;
+  real *fret;
+  real (*func)(real *);
+  real *p_prev;
+  real *p_extrap;
+  real *dir;
+} sr_powell_run_ctx;
+
+static void sr_powell_copy_prev(sr_powell_run_ctx *ctx)
+{
+  for (int j = 1; j <= ctx->n; j++) ctx->p_prev[j] = ctx->p[j];
+}
+
+static int sr_powell_iteration(sr_powell_run_ctx *ctx)
+{
+  real f_start = *ctx->fret;
+  int best_dir = 1;
+
+  if (sr_powell_minimise_all_directions(ctx->p, ctx->xi, ctx->n, ctx->fret, ctx->func, ctx->dir, &best_dir) != 0) {
+    return -2;
+  }
+
+  if (sr_powell_converged(f_start, *ctx->fret, ctx->ftol)) return 1;
+
+  sr_powell_extrapolate(ctx->p, ctx->n, ctx->p_prev, ctx->p_extrap, ctx->dir);
+  real f_extrap = (*ctx->func)(ctx->p_extrap);
+
+  sr_powell_update_ctx update_ctx;
+  update_ctx.p = ctx->p;
+  update_ctx.xi = ctx->xi;
+  update_ctx.n = ctx->n;
+  update_ctx.fret = ctx->fret;
+  update_ctx.func = ctx->func;
+  update_ctx.dir = ctx->dir;
+  sr_powell_maybe_update_direction(&update_ctx, best_dir, f_start, f_extrap);
+
+  return 0;
+}
+
+static int sr_powell_run(sr_powell_run_ctx *ctx, int *iter)
+{
+  for (*iter = 1; *iter <= MAX_ITER_POWELL; (*iter)++) {
+    int rc = sr_powell_iteration(ctx);
+    if (rc == 0) continue;
+    return (rc == 1) ? 0 : rc;
+  }
+  return -3;
 }
 
 int sr_powell(real *p, real **xi, int n, real ftol, int *iter,
               real *fret, real (*func)(real *))
 {
-  if (p == NULL || xi == NULL || n <= 0 || iter == NULL || fret == NULL || func == NULL) {
-    return -1;
-  }
+  if (p == NULL) return -1;
+  if (xi == NULL) return -1;
+  if (n <= 0) return -1;
+  if (iter == NULL) return -1;
+  if (fret == NULL) return -1;
+  if (func == NULL) return -1;
 
   real *p_prev = NULL;
   real *p_extrap = NULL;
   real *dir = NULL;
   if (sr_powell_alloc_work(n, &p_prev, &p_extrap, &dir) != 0) return -1;
 
+  sr_powell_run_ctx ctx;
+  ctx.p = p;
+  ctx.xi = xi;
+  ctx.n = n;
+  ctx.ftol = ftol;
+  ctx.fret = fret;
+  ctx.func = func;
+  ctx.p_prev = p_prev;
+  ctx.p_extrap = p_extrap;
+  ctx.dir = dir;
+
   *fret = (*func)(p);
-  for (int j = 1; j <= n; j++) p_prev[j] = p[j];
+  sr_powell_copy_prev(&ctx);
 
-  for (*iter = 1; *iter <= MAX_ITER_POWELL; (*iter)++) {
-    real f_start = *fret;
-    int best_dir = 1;
-    if (sr_powell_minimise_all_directions(p, xi, n, fret, func, dir, &best_dir) != 0) {
-      sr_powell_free_work(p_prev, p_extrap, dir);
-      return -2;
-    }
-
-    /* Absolute convergence based on improvement. */
-    if (sr_powell_converged(f_start, *fret, ftol)) {
-      sr_powell_free_work(p_prev, p_extrap, dir);
-      return 0;
-    }
-
-    /* Extrapolate point and direction. */
-    sr_powell_extrapolate(p, n, p_prev, p_extrap, dir);
-
-    real f_extrap = (*func)(p_extrap);
-    sr_powell_maybe_update_direction(p, xi, n, fret, func, dir, best_dir, f_start, f_extrap);
-  }
-
+  int rc = sr_powell_run(&ctx, iter);
   sr_powell_free_work(p_prev, p_extrap, dir);
-  return -3;
+  return rc;
 }
