@@ -45,25 +45,21 @@ LIBFLAGS += -lm -lSEARCH
 #============================================================================
 #  header files
 #
-FILES.h = $(INCLUDEDIR)/search.h $(INCLUDEDIR)/numrec.h
+FILES.h = $(INCLUDEDIR)/search.h
 
 #============================================================================
-#  subroutines 
+#  subroutines
 #
-NRRLIB =  nrrutil.o \
-          nrrbrent.o \
-          nrrlinmin.o \
-          nrrmnbrak.o \
-          nrrran1.o 
-
-SRLIB  =  sramoeba.o \
-          sramebsa.o \
+SRLIB  =  sr_alloc.o \
+          sr_rng.o \
+          sr_amoeba.o \
+          sr_amebsa.o \
+          sr_powell.o \
           srckgeo.o \
           srckrot.o \
           srevalrf.o \
           srmkinp.o \
           srpo.o \
-          srpowell.o \
           srrdinp.o \
           srrdver.o \
           srsa.o \
@@ -72,8 +68,7 @@ SRLIB  =  sramoeba.o \
 
 LEEDLIB = linpdebtemp.o
 
-LIB =    $(NRRLIB) \
-         $(SRLIB)  \
+LIB =    $(SRLIB)  \
          $(LEEDLIB)
 
 #customise the follwing to best suite your system

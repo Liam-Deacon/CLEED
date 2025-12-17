@@ -15,7 +15,6 @@ version 0.1
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
 #include <string.h>
 #include <math.h>
 #include "search.h"
@@ -277,11 +276,7 @@ int main(int argc, char *argv[])
 */
     case(SR_POWELL):
     {
-      #if defined(_USE_GSL) || defined(USE_GSL)
-         SR_NOT_IMPLEMENTED_ERROR("Powell's method");
-      #else
-         SR_PO(ndim, bak_file, log_file);
-      #endif
+      SR_PO(ndim, bak_file, log_file);
       break;
     } /* case SR_POWELL */
 
@@ -290,11 +285,7 @@ int main(int argc, char *argv[])
 */
     case(SR_SIM_ANNEALING):
     {
-      #if defined(_USE_GSL) || defined(USE_GSL)
-         SR_NOT_IMPLEMENTED_ERROR("simulated annealing");
-      #else
-         SR_SA(ndim, delta, bak_file, log_file);
-      #endif
+      SR_SA(ndim, delta, bak_file, log_file);
       break;
     } /* case SR_SIM_ANNEALING */
 

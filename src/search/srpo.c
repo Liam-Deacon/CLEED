@@ -11,16 +11,16 @@ GH/19.09.95
 ***********************************************************************/
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "cleed_cstring.h"
 #include "search.h"
 #include "gh_stddef.h"
+#include "sr_alloc.h"
 
 /**********************************************************************/
 
-void sr_po(int ndim, char *bak_file, char *log_file)
+void sr_po(int ndim, const char *bak_file, const char *log_file)
 /***********************************************************************
   Perform a search according to POWELL'S METHOD
 ***********************************************************************/
@@ -28,10 +28,11 @@ void sr_po(int ndim, char *bak_file, char *log_file)
 {
 
 int i_par, j_par;
-int nfunc;
+int nfunc = 0;
 
 real rmin;
-real *p,**xi;
+real *p = NULL;
+real **xi = NULL;
 
 FILE *log_stream;
 
@@ -46,8 +47,15 @@ FILE *log_stream;
   Set up initial direction set
 ***********************************************************************/
  i_par = 1;
- p = vector(1, ndim);
- xi = matrix(1, ndim,1, ndim);
+ p = sr_alloc_vector((size_t)ndim);
+ xi = sr_alloc_matrix((size_t)ndim, (size_t)ndim);
+ if (p == NULL || xi == NULL)
+ {
+   sr_free_vector(p);
+   sr_free_matrix(xi);
+   fprintf(STDERR, "*** error (sr_po): allocation failure\n");
+   exit(1);
+ }
 
  if(strncmp(bak_file, "---", 3) == 0)
  {
@@ -81,7 +89,10 @@ FILE *log_stream;
 /* close log file before entering the search */
  fclose(log_stream);  
 
- sr_powell(p, xi, ndim, R_TOLERANCE, &nfunc, &rmin, sr_evalrf);
+ if (sr_powell(p, xi, ndim, R_TOLERANCE, &nfunc, &rmin, sr_evalrf) != 0)
+ {
+   fprintf(STDERR, "*** error (sr_po): Powell minimiser failed\n");
+ }
 
 /***********************************************************************
   Write final results to log file
@@ -104,8 +115,8 @@ FILE *log_stream;
 
  fclose(log_stream);
 
- free_matrix(xi,1, ndim,1);
- free_vector(p,1);
+ sr_free_matrix(xi);
+ sr_free_vector(p);
 
 }  /* end of function sr_po */
 

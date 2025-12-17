@@ -14,15 +14,15 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 ***********************************************************************/
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include "cleed_cstring.h"
 #include "search.h"
+#include "sr_alloc.h"
 
 /**********************************************************************/
 
-void sr_sx(int ndim, real dpos, char *bak_file, char *log_file)
+void sr_sx(int ndim, real dpos, const char *bak_file, const char *log_file)
 
 /***********************************************************************
   SIMPLEX METHOD
@@ -30,9 +30,12 @@ void sr_sx(int ndim, real dpos, char *bak_file, char *log_file)
 {
 
 int i_par, j_par;
-int mpar, nfunc;
+int mpar;
+int nfunc = 0;
 
-real *x,*y,**p;
+real *x = NULL;
+real *y = NULL;
+real **p = NULL;
 
 FILE *log_stream;
 
@@ -49,9 +52,17 @@ FILE *log_stream;
 
  mpar = ndim + 1;
 
- x = vector(1, ndim);
- y = vector(1, mpar);
- p = matrix(1, mpar,1, ndim);
+ x = sr_alloc_vector((size_t)ndim);
+ y = sr_alloc_vector((size_t)mpar);
+ p = sr_alloc_matrix((size_t)mpar, (size_t)ndim);
+ if (x == NULL || y == NULL || p == NULL)
+ {
+   sr_free_vector(x);
+   sr_free_vector(y);
+   sr_free_matrix(p);
+   fprintf(STDERR, "*** error (sr_sx): allocation failure\n");
+   exit(1);
+ }
 
  if(strncmp(bak_file, "---", 3) == 0)
  {
@@ -101,7 +112,10 @@ FILE *log_stream;
  fprintf(log_stream,"=> Start search (abs. tolerance = %.3e)\n", R_TOLERANCE);
  fclose(log_stream);
 
- sr_amoeba(p,y,ndim,R_TOLERANCE,sr_evalrf,&nfunc);
+ if (sr_amoeba(p, y, ndim, R_TOLERANCE, sr_evalrf, &nfunc) != 0)
+ {
+   fprintf(STDERR, "*** error (sr_sx): simplex minimiser failed\n");
+ }
 
 /***********************************************************************
   Write final results to log file
@@ -145,9 +159,9 @@ FILE *log_stream;
 
  fclose(log_stream);
 
- free_matrix(p,1, mpar,1);
- free_vector(y,1);
- free_vector(x,1);
+ sr_free_matrix(p);
+ sr_free_vector(y);
+ sr_free_vector(x);
 } /* end of function sr_sx */
 
 /***********************************************************************/

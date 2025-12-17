@@ -15,10 +15,10 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 
 ***********************************************************************/
 
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
+#include <ctype.h>
 
 #include "search.h"
 
@@ -42,7 +42,7 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 
 /**********************************************************************/
 
-int sr_rdver(char * ver_file, real *y, real **p, int ndim)
+int sr_rdver(const char * ver_file, real *y, real **p, int ndim)
 
 /***********************************************************************
 
@@ -76,18 +76,10 @@ RETURN VALUES:
 
 FILE *ver_stream;
 
-char *linebuffer;                        /* input buffer */
-int n_str, i_str;
+char linebuffer[STRSZ];                  /* input buffer */
 
 int i_par, j_par;                        /* counter, dummy  variables */
 int m_par;
-
-/********************************************************************
-  First: allocate linebuffer
-********************************************************************/
-
- n_str = STRSZ;
- linebuffer = (char *)malloc(n_str * sizeof(char));
 
 /********************************************************************
   START INPUT
@@ -111,7 +103,7 @@ int m_par;
  fprintf(STDCTR,"(sr_rdver): Reading file \"%s\"\n",ver_file);
 #endif
 
- while ( *fgets(linebuffer, n_str, ver_stream) == '#');
+ while (fgets(linebuffer, (int)sizeof(linebuffer), ver_stream) != NULL && linebuffer[0] == '#') {;}
  sscanf(linebuffer, "%d %d", &i_par, &m_par);
 
  if( ndim < 0)
@@ -136,11 +128,8 @@ int m_par;
 #endif
  }
 
- n_str = m_par * 15;
- free(linebuffer);
- linebuffer = (char *)malloc(n_str * sizeof(char));
  i_par = 1;
- while( (fgets(linebuffer, n_str, ver_stream) != NULL) && (i_par <= m_par) )
+ while( (fgets(linebuffer, (int)sizeof(linebuffer), ver_stream) != NULL) && (i_par <= m_par) )
  {
 
 #ifdef CONTROL_X
@@ -149,25 +138,24 @@ int m_par;
 
    if( *linebuffer != '#')
    {
-     i_str = 0;
-     while(linebuffer[i_str] == ' ') i_str ++;
-#ifdef REAL_IS_DOUBLE
-     sscanf(linebuffer+i_str,"%le", y + i_par);
-#endif
-#ifdef REAL_IS_FLOAT
-     sscanf(linebuffer+i_str,"%e", y + i_par);
-#endif
+     const char *ptr = linebuffer;
+     while (*ptr && isspace((unsigned char)*ptr)) ptr++;
+     char *endptr = NULL;
+
+     y[i_par] = (real)strtod(ptr, &endptr);
+     if (endptr == (char *)ptr) {
+       return -1;
+     }
+     ptr = endptr;
 
      for(j_par = 1; j_par <= ndim; j_par ++)
      {
-       while(linebuffer[i_str] != ' ') i_str ++;
-       while(linebuffer[i_str] == ' ') i_str ++;
-#ifdef REAL_IS_DOUBLE
-       sscanf(linebuffer+i_str,"%le", p[i_par] + j_par);
-#endif
-#ifdef REAL_IS_FLOAT
-       sscanf(linebuffer+i_str,"%e", p[i_par] + j_par);
-#endif
+       while (*ptr && isspace((unsigned char)*ptr)) ptr++;
+       p[i_par][j_par] = (real)strtod(ptr, &endptr);
+       if (endptr == (char *)ptr) {
+         return -1;
+       }
+       ptr = endptr;
      }
 
      i_par ++;

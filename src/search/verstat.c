@@ -6,9 +6,10 @@ GH/28.09.95
 ***********************************************************************/
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <math.h>
 #include "search.h"
+#include "sr_alloc.h"
 
 #define CONTROL
 #define ERROR
@@ -23,7 +24,7 @@ char *sr_project;
 
 /**********************************************************************/
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
 int i_arg;
@@ -109,8 +110,15 @@ FILE *inp_stream;
 ***********************************************************************/
 
  mpar = ndim+1;
- y = vector(1, mpar);
- p = matrix(1, mpar, 1, ndim);
+ y = sr_alloc_vector((size_t)mpar);
+ p = sr_alloc_matrix((size_t)mpar, (size_t)ndim);
+ if (y == NULL || p == NULL)
+ {
+   sr_free_vector(y);
+   sr_free_matrix(p);
+   fprintf(STDERR, "*** error (verstat): allocation failure\n");
+   return 1;
+ }
 
  sr_rdver(inp_file, y, p, ndim);
 
@@ -118,8 +126,17 @@ FILE *inp_stream;
   Find min/max values
 ***********************************************************************/
 
- dev = vector(0, ndim);
- avg = vector(0, ndim);
+ dev = sr_alloc_vector((size_t)ndim);
+ avg = sr_alloc_vector((size_t)ndim);
+ if (dev == NULL || avg == NULL)
+ {
+   sr_free_vector(dev);
+   sr_free_vector(avg);
+   sr_free_vector(y);
+   sr_free_matrix(p);
+   fprintf(STDERR, "*** error (verstat): allocation failure\n");
+   return 1;
+ }
 
  fprintf(STDOUT,"\n");
 
@@ -197,6 +214,12 @@ FILE *inp_stream;
  }
  fprintf(STDOUT,"\n");
 
+ sr_free_vector(dev);
+ sr_free_vector(avg);
+ sr_free_vector(y);
+ sr_free_matrix(p);
+
+ return 0;
 }  /* end of main */
 
 /**********************************************************************/

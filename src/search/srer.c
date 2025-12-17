@@ -11,16 +11,17 @@ GH/21.09.02 - copy from srsx
 ***********************************************************************/
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
 #include "search.h"
+#include "sr_alloc.h"
 
 extern char *sr_project;
 
 /**********************************************************************/
 
-void sr_er(int ndim, real dpos, char *bak_file, char *log_file)
+void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file)
 
 /***********************************************************************
   ERROR BARS
@@ -57,12 +58,23 @@ FILE *io_stream, *log_stream;
  mpar = ndim + 1;
  mpar = mpar * 1; /* set but not used */
 
- x   = vector(1, ndim);
- x_0 = vector(1, ndim);
+ x   = sr_alloc_vector((size_t)ndim);
+ x_0 = sr_alloc_vector((size_t)ndim);
 
- y = vector(1, ndim);
- del = vector(1, ndim);
- err = vector(1, ndim);
+ y = sr_alloc_vector((size_t)ndim);
+ del = sr_alloc_vector((size_t)ndim);
+ err = sr_alloc_vector((size_t)ndim);
+
+ if (x == NULL || x_0 == NULL || y == NULL || del == NULL || err == NULL)
+ {
+   sr_free_vector(x);
+   sr_free_vector(x_0);
+   sr_free_vector(y);
+   sr_free_vector(del);
+   sr_free_vector(err);
+   fprintf(STDERR, "*** error (sr_er): allocation failure\n");
+   exit(1);
+ }
  
  iaux = 0;
  rdel = 0.;
@@ -219,13 +231,12 @@ FILE *io_stream, *log_stream;
 
  fclose(log_stream);
 
- free_vector(y,1);
- free_vector(x,1);
- free_vector(x_0,1);
- free_vector(del,1);
- free_vector(err,1);
+ sr_free_vector(y);
+ sr_free_vector(x);
+ sr_free_vector(x_0);
+ sr_free_vector(del);
+ sr_free_vector(err);
 
 } /* end of function sr_er */
 
 /***********************************************************************/
-

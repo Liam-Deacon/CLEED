@@ -1,11 +1,8 @@
 /*********************************************************************
-GH/15.08.95
-
-include file for SEARCH program.
- - type definitions
- - constant values
- - function prototypes
-*********************************************************************/
+ *                       SEARCH.H
+ *
+ *  Master include file for SEARCH (csearch).
+ *********************************************************************/
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
@@ -29,14 +26,11 @@ extern "C" {
  Include type definitions and constant values and functions for SEARCH
 *********************************************************************/
 
-#if !defined(USE_GSL) && !defined(_USE_GSL)
-  /* numerical receipes */
-  #include "nrr.h"              
-#else
-  /* GNU Scientific Library (open source) */
-  #include <gsl/gsl_vector.h>
-  #include <gsl/gsl_matrix.h>
-  #include <gsl/gsl_multimin.h>
+/* Optional GNU Scientific Library integration (not required for core SEARCH). */
+#if defined(USE_GSL) || defined(_USE_GSL)
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_multimin.h>
+#include <gsl/gsl_vector.h>
 #endif
 
 #include "search_def.h"

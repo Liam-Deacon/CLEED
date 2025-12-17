@@ -4,7 +4,7 @@ GH/29.12.95
 
   sr_sa(int ndim, char *bak_file, char *log_file)
  Perform a search according to the SIMULATED ANNEALING (SIMPLEX) METHOD
- Driver for routine sr_amebsa (From Numerical Recipes)
+ Driver for routine sr_amebsa
 
 Changes
 GH/20.09.95 - Creation (copy from srsx.c)
@@ -14,11 +14,11 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 ***********************************************************************/
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include "cleed_cstring.h"
 #include "search.h"
+#include "sr_alloc.h"
 
 #define START_TEMP     3.5
 #define EPSILON        0.25
@@ -30,7 +30,7 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 
 long sa_idum = -1;                /* seed for random number generator */
 
-void sr_sa(int ndim, real dpos, char *bak_file, char *log_file)
+void sr_sa(int ndim, real dpos, const char *bak_file, const char *log_file)
 
 /***********************************************************************
   SIMULATED ANNEALING
@@ -39,10 +39,11 @@ void sr_sa(int ndim, real dpos, char *bak_file, char *log_file)
 {
 
 int i_par, j_par;
-int mpar, nfunc;
+int mpar;
+int nfunc = 0;
 
 real temp, rmin;
-real *x,*y,**p;
+real *x = NULL, *y = NULL, **p = NULL;
 
 FILE *log_stream;
 
@@ -59,9 +60,17 @@ FILE *log_stream;
 
  mpar = ndim + 1;
 
- x = vector(1, ndim);
- y = vector(1, mpar);
- p = matrix(1, mpar,1, ndim);
+ x = sr_alloc_vector((size_t)ndim);
+ y = sr_alloc_vector((size_t)mpar);
+ p = sr_alloc_matrix((size_t)mpar, (size_t)ndim);
+ if (x == NULL || y == NULL || p == NULL)
+ {
+   sr_free_vector(x);
+   sr_free_vector(y);
+   sr_free_matrix(p);
+   fprintf(STDERR, "*** error (sr_sa): allocation failure\n");
+   exit(1);
+ }
 
  if(strncmp(bak_file, "---", 3) == 0)
  {
@@ -112,14 +121,15 @@ FILE *log_stream;
  fclose(log_stream);
 
  rmin = 100.;
- nfunc = -1;
+ nfunc = 0;
  for(temp = START_TEMP; temp > R_TOLERANCE; temp *= (1. - EPSILON) )
  {
 #ifdef CONTROL
    fprintf(STDCTR,"(sr_sa): temperature = %.4f\n", temp);
 #endif
-   nfunc = MAX_ITER_SA;
-   sr_amebsa(p, y, ndim, x, &rmin, temp, sr_evalrf, &nfunc, temp);
+   int budget = MAX_ITER_SA;
+   (void)sr_amebsa(p, y, ndim, x, &rmin, temp, sr_evalrf, &budget, temp);
+   nfunc += budget;
  }
 
 /***********************************************************************
@@ -142,9 +152,9 @@ FILE *log_stream;
 
  fclose(log_stream);
 
- free_matrix(p,1, mpar,1);
- free_vector(y,1);
- free_vector(x,1);
+ sr_free_matrix(p);
+ sr_free_vector(y);
+ sr_free_vector(x);
 
 } /* end of function sr_sa */
 
