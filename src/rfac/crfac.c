@@ -30,12 +30,11 @@ real rr;
  main structures:
 */
 struct crargs  args;              /* program parameters from argument list */
-struct crivcur *iv_cur;           /* input data */
-
-char rfversion[STRSZ];            /* current program version */
-char t[1], e[1];
-
-strcpy(t, "t");strcpy(e, "e");
+	struct crivcur *iv_cur;           /* input data */
+	
+	char rfversion[STRSZ];            /* current program version */
+	char t[2] = "t";
+	char e[2] = "e";
 
 /* print program version */
  rf_version(rfversion);

@@ -8,13 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-// cppcheck-suppress missingIncludeSystem
-#include <string.h>
 #include <ctype.h>
 #include <time.h>
 
-// cppcheck-suppress missingIncludeSystem
-#include <tiffio.h>
+#include "tiffio.h"
 #include "mkiv.h"
 
 #ifdef _USE_OPENMP
@@ -74,11 +71,12 @@ LD/28.02.14
 
 
 /**************************************************************************/
-// cppcheck-suppress functionTooLong
-// cppcheck-suppress cyclomaticComplexity
-int main(int argc, char **argv)
+int main(argc, argv)
 /**************************************************************************/
 /* parameters */
+
+int argc;                          /* number of arguments                  */
+char *argv[];
 {
 
 /* type definitions */
@@ -123,6 +121,7 @@ int main(int argc, char **argv)
                                    /* spot.(kp_len,lind1/2,x0,y0,xx,yy,    */
                                    /*    cos_th,intensity,s2u,s2n,control) */
 
+    struct spot *mem4spots();      /* subroutine allocating memory 4 spots */
     float inty[I_MAX];             /* intensity values interim storage     */
 
     int ndesi, nexcl, nref;        /* number of used array-members         */
@@ -181,7 +180,7 @@ int main(int argc, char **argv)
     char *dummy = (char*)malloc(sizeof(char)*FILENAME_MAX); 
     
 /* open statements */
-    FILE *fopen(), *cur_stream, *smcur_stream, *iv_stream;
+    FILE *cur_stream, *smcur_stream, *iv_stream;
 
 /***************************************************************************/
 

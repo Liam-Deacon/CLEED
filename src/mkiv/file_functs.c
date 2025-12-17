@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "cleed_cstring.h"
 #include <ctype.h>
 #include <sys/stat.h>
 

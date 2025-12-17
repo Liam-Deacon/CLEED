@@ -17,6 +17,7 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 #include <strings.h>
 #include <math.h>
 #include <stdlib.h>
+#include "cleed_cstring.h"
 #include "search.h"
 
 /**********************************************************************/
@@ -150,4 +151,3 @@ FILE *log_stream;
 } /* end of function sr_sx */
 
 /***********************************************************************/
-

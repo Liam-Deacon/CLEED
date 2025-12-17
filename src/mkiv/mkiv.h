@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <tiffio.h>
+#include "tiffio.h"
 #include "mkiv_def.h"
 #include "mkiv_funcs.h"
 
@@ -25,7 +25,7 @@
 
 #include <setjmp.h>
 #include <signal.h>
-#include <strings.h>
+#include "strings.h"
 #include <ctype.h>
 
 void mkiv_usage(FILE *output);

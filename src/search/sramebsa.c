@@ -23,6 +23,7 @@ LD/30.04.14 - Removed dependence on 'cp' and 'date' system calls
 #include <stdlib.h>
 #include <time.h>
 
+#include "cleed_cstring.h"
 #include "search.h"
 #include "copy_file.h"
 
