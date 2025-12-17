@@ -24,6 +24,7 @@ extern "C" {
    /* Decide which atoms belong to which layer; file linplayer.c */
 int leed_leed_inp_bul_layer(leed_cryst_t *, leed_atom_t *, real *);
 int leed_leed_inp_bul_layer_sym(leed_cryst_t *, leed_atom_t *, real *);
+int leed_inp_bul_layer(leed_cryst_t *, leed_atom_t *, real *);
 real leed_inp_debye_temp(real , real , real );
 int leed_inp_overlayer(leed_cryst_t *, leed_atom_t *);
 int leed_inp_overlayer_sym(leed_cryst_t *, leed_atom_t *);
@@ -33,6 +34,7 @@ mat leed_inp_mat_lm(mat , int , const char *);
 
    /* read phase shifts; file linpphase.c */
 int leed_inp_phase(char * , real * , leed_phs_t **);
+int leed_leed_inp_phase(char * , real * , leed_phs_t **);
 int leed_leed_inp_phase_nd(char * , real * , int , leed_phs_t **);
 int leed_update_phase(int);
 

@@ -8,10 +8,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <string.h>
 #include <ctype.h>
 #include <time.h>
 
-#include "tiffio.h"
+#include <tiffio.h>
 #include "mkiv.h"
 
 #ifdef _USE_OPENMP
@@ -71,12 +72,9 @@ LD/28.02.14
 
 
 /**************************************************************************/
-int main(argc, argv)
+int main(int argc, char **argv)
 /**************************************************************************/
 /* parameters */
-
-int argc;                          /* number of arguments                  */
-char *argv[];
 {
 
 /* type definitions */
@@ -103,9 +101,6 @@ char *argv[];
 
     char *linebuffer;
 
-    char *filename(),              /* filename of actual leed image        */
-         *strrchr(), *strcpy();
-
     char *fname2;
     char fname[STRSZ],             /* filename of first leed image         */
          maskname[STRSZ];
@@ -124,7 +119,6 @@ char *argv[];
                                    /* spot.(kp_len,lind1/2,x0,y0,xx,yy,    */
                                    /*    cos_th,intensity,s2u,s2n,control) */
 
-    struct spot *mem4spots();      /* subroutine allocating memory 4 spots */
     float inty[I_MAX];             /* intensity values interim storage     */
 
     int ndesi, nexcl, nref;        /* number of used array-members         */

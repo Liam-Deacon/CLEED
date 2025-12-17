@@ -10,6 +10,7 @@
 #include "mkiv.h"
 #include "file_funcs.h"
 #include <strings.h>
+#include <string.h>
 #include <ctype.h>
 
 /**************************************************************************/
@@ -60,11 +61,9 @@ CS/23.8.93
      float router,rinner,radius;   /* bounds of visible screen             */
      float ratio;                  /* (screen radius)/(camera distance)    */
 
-     int numb;                     /* run through number for subsequent    */
-                                   /* leed image data files                */
-     int nstart,nstop,e_step;      /* number of first and last LEED image  */
-     char *filename(),             /* filename of actual leed image        */
-          *strrchr();
+	     int numb;                     /* run through number for subsequent    */
+	                                   /* leed image data files                */
+	     int nstart,nstop,e_step;      /* number of first and last LEED image  */
 
      char fname[STRSZ];            /* filename of first leed image         */
      char maskname[STRSZ];
@@ -83,8 +82,7 @@ CS/23.8.93
                                    /* spot.(kp_len,lind1/2,x0,y0,xx,yy,    */
                                    /*    cos_th,intensity,s2u,s2n,control) */
 
-     struct spot *mem4spots();     /* subroutine allocating memory 4 spots */
-     float inty[I_MAX];            /* intensity values interim storage     */
+	     float inty[I_MAX];            /* intensity values interim storage     */
 
      int ndesi, nexcl, nref;       /* number of used array-members         */
      struct lindex desi[I_MAX],    /* indices of the desired reflexes      */

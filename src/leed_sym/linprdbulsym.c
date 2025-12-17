@@ -31,6 +31,7 @@ GH/29.09.00 - calculate dr2 for dmt input in function leed_inp_debye_temp
 
 #include "leed.h"
 #include "leed_def.h"
+#include "leed_func.h"
 
 /*
 #define CONTROL_X

@@ -71,11 +71,88 @@ SET (mkiv_SRCS mkiv.c)
 # include directories
 INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/src/mkiv)
 
-FIND_LIBRARY(TIFF_LIBRARY NAME tiff)
-IF(WIN32)
-    SET (TIFF_LIBRARY "${PROJECT_SOURCE_DIR}/lib/win32/libtiff3.dll" CACHE STRING "" FORCE)
-    GET_FILENAME_COMPONENT(TIFF_LIBRARY_DIR "${TIFF_LIBRARY}" PATH)
-ENDIF(WIN32)
+FIND_PACKAGE(TIFF REQUIRED)
+IF (TARGET TIFF::TIFF)
+    SET(_mkiv_tiff_target TIFF::TIFF)
+ELSE()
+    SET(_mkiv_tiff_target ${TIFF_LIBRARIES})
+    INCLUDE_DIRECTORIES (${TIFF_INCLUDE_DIR})
+ENDIF()
+
+# Prefer shared libtiff when available (avoids explicitly linking codec deps).
+IF (NOT TARGET TIFF::TIFF)
+    SET(_mkiv_tiff_target_shared "")
+    FOREACH(_mkiv_tiff_lib IN LISTS _mkiv_tiff_target)
+        IF (_mkiv_tiff_lib MATCHES "\\.a$")
+            IF (APPLE)
+                STRING(REPLACE ".a" ".dylib" _mkiv_tiff_lib_shared "${_mkiv_tiff_lib}")
+            ELSE()
+                STRING(REPLACE ".a" ".so" _mkiv_tiff_lib_shared "${_mkiv_tiff_lib}")
+            ENDIF()
+            IF (EXISTS "${_mkiv_tiff_lib_shared}")
+                LIST(APPEND _mkiv_tiff_target_shared "${_mkiv_tiff_lib_shared}")
+            ELSE()
+                LIST(APPEND _mkiv_tiff_target_shared "${_mkiv_tiff_lib}")
+            ENDIF()
+        ELSE()
+            LIST(APPEND _mkiv_tiff_target_shared "${_mkiv_tiff_lib}")
+        ENDIF()
+    ENDFOREACH()
+    SET(_mkiv_tiff_target "${_mkiv_tiff_target_shared}")
+ENDIF()
+
+# libtiff may be discovered as a static library (e.g. Homebrew), which requires
+# explicitly linking its optional codec dependencies.
+SET(_mkiv_tiff_extra_targets "")
+SET(_mkiv_tiff_extra_libs "")
+
+FIND_PACKAGE(JPEG QUIET)
+IF (JPEG_FOUND)
+    IF (TARGET JPEG::JPEG)
+        LIST(APPEND _mkiv_tiff_extra_targets JPEG::JPEG)
+    ELSE()
+        LIST(APPEND _mkiv_tiff_extra_libs ${JPEG_LIBRARIES})
+        INCLUDE_DIRECTORIES (${JPEG_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+
+FIND_PACKAGE(LibLZMA QUIET)
+IF (LIBLZMA_FOUND)
+    IF (TARGET LibLZMA::LibLZMA)
+        LIST(APPEND _mkiv_tiff_extra_targets LibLZMA::LibLZMA)
+    ELSE()
+        LIST(APPEND _mkiv_tiff_extra_libs ${LIBLZMA_LIBRARIES})
+        INCLUDE_DIRECTORIES (${LIBLZMA_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+
+FIND_PACKAGE(ZLIB QUIET)
+IF (ZLIB_FOUND)
+    IF (TARGET ZLIB::ZLIB)
+        LIST(APPEND _mkiv_tiff_extra_targets ZLIB::ZLIB)
+    ELSE()
+        LIST(APPEND _mkiv_tiff_extra_libs ${ZLIB_LIBRARIES})
+        INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+
+FIND_LIBRARY(_mkiv_zstd_library NAMES zstd)
+IF (_mkiv_zstd_library)
+    LIST(APPEND _mkiv_tiff_extra_libs ${_mkiv_zstd_library})
+ENDIF()
+
+SET(_mkiv_zlib_library "")
+IF (APPLE AND CMAKE_OSX_SYSROOT)
+    FIND_LIBRARY(_mkiv_zlib_library NAMES z PATHS "${CMAKE_OSX_SYSROOT}/usr/lib" NO_DEFAULT_PATH)
+ENDIF()
+IF (NOT _mkiv_zlib_library)
+    FIND_LIBRARY(_mkiv_zlib_library NAMES z)
+ENDIF()
+IF (_mkiv_zlib_library)
+    LIST(APPEND _mkiv_tiff_extra_libs ${_mkiv_zlib_library})
+ELSEIF (UNIX AND NOT WIN32)
+    LIST(APPEND _mkiv_tiff_extra_libs z)
+ENDIF()
                      
 ###############################################################################
 # INSTALL TARGETS
@@ -85,6 +162,9 @@ ADD_LIBRARY(mkivLibStatic STATIC ${mkivLib_SRCS})
 
 SET_TARGET_PROPERTIES(mkivLib PROPERTIES OUTPUT_NAME mkiv)
 SET_TARGET_PROPERTIES(mkivLibStatic PROPERTIES OUTPUT_NAME mkiv)
+
+TARGET_LINK_LIBRARIES(mkivLib ${_mkiv_tiff_target} ${_mkiv_tiff_extra_targets} ${_mkiv_tiff_extra_libs} m)
+TARGET_LINK_LIBRARIES(mkivLibStatic ${_mkiv_tiff_target} ${_mkiv_tiff_extra_targets} ${_mkiv_tiff_extra_libs} m)
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
@@ -99,25 +179,7 @@ IF (WIN32)
     )
     
     ADD_EXECUTABLE(mkiv ${mkiv_SRCS})
-    
-    TARGET_LINK_LIBRARIES (mkiv -L"${TIFF_LIBRARY_DIR}" tiff3 m)
-    TARGET_LINK_LIBRARIES (mkivLib -L"${TIFF_LIBRARY_DIR}" tiff3 m)
-    TARGET_LINK_LIBRARIES (mkivLibStatic -L"${TIFF_LIBRARY_DIR}" tiff3 m)
-    
-    # These are the symbols for the linker
-    INSTALL(FILES
-        ${PROJECT_SOURCE_DIR}/lib/win32/libtiff3.dll
-        ${PROJECT_SOURCE_DIR}/lib/win32/jpeg62.dll
-        ${PROJECT_SOURCE_DIR}/lib/win32/zlib1.dll
-        ${RUNTIME_LIBRARIES}
-        DESTINATION bin
-        COMPONENT runtime
-    )
-    
-    # Header files are located in these directories
-    INCLUDE_DIRECTORIES (
-        "${PROJECT_SOURCE_DIR}/lib/win32/libtiff/include"
-    )
+    TARGET_LINK_LIBRARIES (mkiv mkivLib m)
     
 ELSE (WIN32)
     
@@ -127,23 +189,18 @@ ELSE (WIN32)
         
             ADD_EXECUTABLE(mkiv MACOSX_BUNDLE ${mkiv_SRCS})
             INSTALL(TARGETS mkiv BUNDLE DESTINATION ../Applications)
+            TARGET_LINK_LIBRARIES (mkiv mkivLib m)
             
         ELSE(APPLE)
         
             ADD_EXECUTABLE(mkiv ${mkiv_SRCS})  
-            
-            # These are the symbols for the linker
-            TARGET_LINK_LIBRARIES (mkiv tiff)
-            TARGET_LINK_LIBRARIES (mkivLib tiff)
-            TARGET_LINK_LIBRARIES (mkivLibStatic tiff)
+            TARGET_LINK_LIBRARIES (mkiv mkivLib m)
         ENDIF(APPLE)
         
     ENDIF(UNIX)
     
 ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES(mkivLib m)
-TARGET_LINK_LIBRARIES(mkivLibStatic m)
 TARGET_LINK_LIBRARIES(mkiv mkivLib m)
 
 IF (WIN32)
