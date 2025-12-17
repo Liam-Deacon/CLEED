@@ -10,6 +10,7 @@
 #ifndef SR_RNG_H
 #define SR_RNG_H
 
+// cppcheck-suppress missingIncludeSystem
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -19,6 +20,11 @@ extern "C" {
 typedef struct sr_rng {
   uint64_t state;
 } sr_rng;
+
+static inline uint64_t sr_rng_state(const sr_rng *rng)
+{
+  return rng->state;
+}
 
 /* Seeds the RNG; a seed of 0 is mapped to a non-zero value. */
 void sr_rng_seed(sr_rng *rng, uint64_t seed);
@@ -31,4 +37,3 @@ double sr_rng_uniform01(sr_rng *rng);
 #endif
 
 #endif /* SR_RNG_H */
-

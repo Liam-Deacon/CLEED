@@ -4,6 +4,7 @@
  *  GPL-3.0-or-later
  *********************************************************************/
 
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 
 #include "sr_alloc.h"
@@ -47,4 +48,3 @@ void sr_free_matrix(real **m)
   free(m[0]);
   free(m);
 }
-

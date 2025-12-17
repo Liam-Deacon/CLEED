@@ -5,6 +5,7 @@
  *  (energy, intensity) points.
  ********************************************************************/
 
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 
 #include "crfac.h"

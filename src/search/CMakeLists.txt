@@ -36,6 +36,8 @@ SET (searchlib_SRCS
     # Core optimisation algorithms (GPL-compatible, in-tree)
     sr_alloc.c
     sr_rng.c
+    sr_parse.c
+    sr_vertex_stats.c
     sr_amoeba.c
     sr_amebsa.c
     sr_powell.c

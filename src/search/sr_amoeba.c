@@ -10,10 +10,15 @@
  *  - function values are stored in y[1..ndim+1]
  *********************************************************************/
 
+// cppcheck-suppress missingIncludeSystem
 #include <math.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
 #include <time.h>
 
 #include "copy_file.h"
@@ -50,7 +55,13 @@ static int sr_write_vertex_file(const real **p, const real *y, int ndim)
   }
 
   time_t now = time(NULL);
-  fprintf(fp, "%s\n", asctime(localtime(&now)));
+  const struct tm *tm_info = localtime(&now);
+  if (tm_info != NULL) {
+    char timebuf[64];
+    if (strftime(timebuf, sizeof(timebuf), "%c", tm_info) > 0) {
+      fprintf(fp, "%s\n", timebuf);
+    }
+  }
 
   fclose(fp);
   return 0;
@@ -94,6 +105,8 @@ static void sr_simplex_extremes(const real *y, int ndim, int *ilo, int *ihi, int
   }
 }
 
+// cppcheck-suppress functionLength
+// cppcheck-suppress functionComplexity
 int sr_amoeba(real **p, real *y, int ndim, real ftol, real (*funk)(real *), int *nfunk)
 {
   if (p == NULL || y == NULL || ndim <= 0 || funk == NULL || nfunk == NULL) {

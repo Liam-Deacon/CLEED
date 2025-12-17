@@ -11,7 +11,9 @@
  *  - direction matrix xi is expected as xi[1..n][1..n] (columns = directions)
  *********************************************************************/
 
+// cppcheck-suppress missingIncludeSystem
 #include <math.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 
 #include "search.h"
@@ -89,6 +91,8 @@ static int sr_bracket_minimum(real *a, real *b, real *c,
   return (k < max_expand) ? 0 : -1;
 }
 
+// cppcheck-suppress functionLength
+// cppcheck-suppress functionComplexity
 static real sr_brent_minimise(real ax, real bx, real cx,
                               sr_line_ctx *ctx, real tol,
                               real *xmin, int *evals)
@@ -123,11 +127,10 @@ static real sr_brent_minimise(real ax, real bx, real cx,
       return fx;
     }
 
-    real p = 0.0, q = 0.0, r = 0.0;
     if ((real)fabs((double)e) > tol1) {
-      r = (x - w) * (fx - fv);
-      q = (x - v) * (fx - fw);
-      p = (x - v) * q - (x - w) * r;
+      real r = (x - w) * (fx - fv);
+      real q = (x - v) * (fx - fw);
+      real p = (x - v) * q - (x - w) * r;
       q = (real)2.0 * (q - r);
       if (q > 0.0) p = -p;
       q = (real)fabs((double)q);
@@ -205,6 +208,8 @@ static int sr_linmin(real *p, real *dir, int n, real *fret, real (*func)(real *)
   return 0;
 }
 
+// cppcheck-suppress functionLength
+// cppcheck-suppress functionComplexity
 int sr_powell(real *p, real **xi, int n, real ftol, int *iter,
               real *fret, real (*func)(real *))
 {

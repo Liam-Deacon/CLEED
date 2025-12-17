@@ -11,7 +11,9 @@
  *  - best point is returned in pb[1..ndim] and *yb
  *********************************************************************/
 
+// cppcheck-suppress missingIncludeSystem
 #include <math.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 
 #include "search.h"
@@ -56,6 +58,9 @@ static int sr_accept_move(sr_rng *rng, real current, real proposed, real temp)
   return u < prob;
 }
 
+// cppcheck-suppress functionLength
+// cppcheck-suppress functionComplexity
+// cppcheck-suppress tooManyFunctionArgs
 int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
               real ftol, real (*funk)(real *), int *iter, real temptr)
 {

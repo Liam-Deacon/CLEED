@@ -15,9 +15,13 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 
 ***********************************************************************/
 
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
 #include <ctype.h>
 
 #include "search.h"

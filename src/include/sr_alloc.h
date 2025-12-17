@@ -12,6 +12,7 @@
 #ifndef SR_ALLOC_H
 #define SR_ALLOC_H
 
+// cppcheck-suppress missingIncludeSystem
 #include <stddef.h>
 
 #include "real.h"
