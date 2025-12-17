@@ -112,13 +112,49 @@ static int run_amoeba_regression(void)
     }
 
     configure_simplex(p, y);
-    sr_amoeba(p, y, ndim, 1e-6, (real (*)())quadratic_2d, &nfunk);
+    const int rc = sr_amoeba(p, y, ndim, 1e-6, quadratic_2d, &nfunk);
+    if (rc != 0) {
+        fprintf(stderr, "sr_amoeba failed: %d\n", rc);
+        cleed_test_free_matrix_1based(p);
+        cleed_test_free_vector_1based(y);
+        return 1;
+    }
 
     const int result = verify_amoeba_result(p, y, nfunk);
     cleed_test_free_matrix_1based(p);
     cleed_test_free_vector_1based(y);
 
     return result;
+}
+
+static int verify_vertex_files_written(void)
+{
+    FILE *vbk = fopen("amoeba_test.vbk", "r");
+    if (!vbk) {
+        fprintf(stderr, "expected amoeba_test.vbk to exist\n");
+        return 1;
+    }
+    fclose(vbk);
+
+    FILE *ver = fopen("amoeba_test.ver", "r");
+    if (!ver) {
+        fprintf(stderr, "expected amoeba_test.ver to exist\n");
+        return 1;
+    }
+    char header[128];
+    if (!fgets(header, (int)sizeof(header), ver)) {
+        fclose(ver);
+        fprintf(stderr, "failed to read amoeba_test.ver header\n");
+        return 1;
+    }
+    fclose(ver);
+
+    if (strstr(header, "amoeba_test") == NULL) {
+        fprintf(stderr, "unexpected amoeba_test.ver header: %s\n", header);
+        return 1;
+    }
+
+    return 0;
 }
 
 int main(void)
@@ -128,6 +164,10 @@ int main(void)
     }
 
     const int status = run_amoeba_regression();
+    if (status == 0 && verify_vertex_files_written() != 0) {
+        teardown_sr_project();
+        return 1;
+    }
     teardown_sr_project();
 
     return status;

@@ -36,19 +36,52 @@ target_include_directories(test_lattice_setup PRIVATE ${CLEED_TEST_INCLUDE_DIRS}
 target_link_libraries(test_lattice_setup PRIVATE m)
 add_test(NAME latt.setup COMMAND test_lattice_setup)
 
-if (WITH_GSL STREQUAL "OFF")
-    add_executable(test_search_amoeba
-        test_search_amoeba.c
-        $<TARGET_OBJECTS:cleed_test_support>
-    )
-    target_include_directories(test_search_amoeba PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
-    if (WIN32)
-        target_link_libraries(test_search_amoeba PRIVATE searchStatic m)
-    else()
-        target_link_libraries(test_search_amoeba PRIVATE search m)
-    endif()
-    add_test(NAME search.amoeba COMMAND test_search_amoeba)
+add_executable(test_search_amoeba
+    test_search_amoeba.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_amoeba PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_amoeba PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_amoeba PRIVATE search m)
 endif()
+add_test(NAME search.amoeba COMMAND test_search_amoeba)
+
+add_executable(test_search_powell
+    test_search_powell.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_powell PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_powell PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_powell PRIVATE search m)
+endif()
+add_test(NAME search.powell COMMAND test_search_powell)
+
+add_executable(test_search_amebsa
+    test_search_amebsa.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_amebsa PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_amebsa PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_amebsa PRIVATE search m)
+endif()
+add_test(NAME search.amebsa COMMAND test_search_amebsa)
+
+add_executable(test_rfac_spline
+    test_rfac_spline.c
+)
+target_include_directories(test_rfac_spline PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_rfac_spline PRIVATE rfacStatic m)
+else()
+    target_link_libraries(test_rfac_spline PRIVATE rfac m)
+endif()
+add_test(NAME rfac.spline COMMAND test_rfac_spline)
 
 add_test(
     NAME latt.minimal_fixture

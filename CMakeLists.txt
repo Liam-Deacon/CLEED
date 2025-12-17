@@ -78,7 +78,7 @@ OPTION(WITH_QT "Set to ON to build Qt app frontends" ON)
 OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" ON)
 OPTION(INSTALL_DOC "Set to OFF to skip build/install Documentation" ON)
 OPTION(PACK_SOURCE "Set to OFF to pack without source code" ON)
-OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration - NOTE: this means the code is no longer open source" ON)
+OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration" ON)
 OPTION(BUILD_PATT "Build patt (pattern visualisation) - experimental" OFF)
 OPTION(BUILD_SET_ENV "Build set_env embedded-Python executable (legacy)" OFF)
 
