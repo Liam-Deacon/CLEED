@@ -82,6 +82,12 @@ OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration 
 OPTION(BUILD_PATT "Build patt (pattern visualisation) - experimental" OFF)
 OPTION(BUILD_SET_ENV "Build set_env embedded-Python executable (legacy)" OFF)
 
+# Windows/MSVC doesn't have a separate libm; many subdirectories link against
+# "m" for historical *nix builds, so make it a no-op CMake target on Windows.
+IF (WIN32 AND NOT TARGET m)
+    ADD_LIBRARY(m INTERFACE)
+ENDIF()
+
 # set cmake module path
 IF (NOT CMAKE_MODULE_PATH)
     SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules")
@@ -465,18 +471,13 @@ ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
 
 INCLUDE_DIRECTORIES ( ${PROJECT_SOURCE_DIR}/src/include)
 
-# LD flags
-IF(WIN32)
-    SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
-    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
-ELSE(WIN32)
-    SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
-    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
-ENDIF(WIN32)
-
-SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
-SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lm")
-SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm")
+# NOTE: Do not override CMake's default library search behavior (prefixes /
+# suffixes). Previous overrides broke vcpkg-provided packages on Windows.
+IF (UNIX AND NOT WIN32)
+    SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
+    SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lm")
+    SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm")
+ENDIF()
 
 # MinGW can also link to a MS .lib
 if(MSYS OR MINGW)
