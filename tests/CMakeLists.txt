@@ -121,6 +121,28 @@ set_tests_properties(latt.minimal_fixture PROPERTIES
 )
 
 add_test(
+    NAME latt.example_tio2_110
+    COMMAND ${CMAKE_COMMAND}
+        -DPROGRAM=$<TARGET_FILE:latt>
+        -DINPUT=${PROJECT_SOURCE_DIR}/examples/latt/TiO2_110_1x1.latt
+        -DH=1 -DK=1 -DL=0
+        -DOUT_BASENAME=tio2_110_1x1
+        -DNEEDLES_PIPE=Read lattice input from file|pb: Ti|pb: O|il:
+        -P ${PROJECT_SOURCE_DIR}/tests/cmake/run_latt_example.cmake
+)
+
+add_test(
+    NAME latt.example_re_0001
+    COMMAND ${CMAKE_COMMAND}
+        -DPROGRAM=$<TARGET_FILE:latt>
+        -DINPUT=${PROJECT_SOURCE_DIR}/examples/latt/Re_0001.latt
+        -DH=0 -DK=0 -DL=1
+        -DOUT_BASENAME=re_0001
+        -DNEEDLES_PIPE=Read lattice input from file|pb: Re|il:
+        -P ${PROJECT_SOURCE_DIR}/tests/cmake/run_latt_example.cmake
+)
+
+add_test(
     NAME mkiv.help
     COMMAND $<TARGET_FILE:mkiv> -h
 )
