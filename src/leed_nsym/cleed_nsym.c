@@ -282,18 +282,22 @@ FILE *res_stream;
   const real energy_stop = eng->fin + E_TOLERANCE;
   const real energy_step = eng->stp;
 
-  long long n_steps = 0;
+  int n_steps = 0;
   if (energy_step < 0)
   {
     const real delta = energy_start - energy_stop;
     if (delta > 0)
     {
-      n_steps = (long long)ceil(delta / (-energy_step));
+      const real steps_real = ceil(delta / (-energy_step));
+      if (steps_real < 2147483647.0)
+      {
+        n_steps = (int)steps_real;
+      }
     }
   }
 
   #pragma omp parallel for
-  for (long long step_index = 0; step_index < n_steps; step_index++)
+  for (int step_index = 0; step_index < n_steps; step_index++)
   {
     energy = energy_start + (real)step_index * energy_step;
 #else

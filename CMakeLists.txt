@@ -236,6 +236,8 @@ ELSEIF("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
     SET(WARNINGS "/W4 /EHsc")
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
     ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNINGS)
+    # Provide POSIX aliases used throughout legacy code.
+    ADD_DEFINITIONS(-Dstrcasecmp=_stricmp -Dstrncasecmp=_strnicmp)
     SET(RUNTIME_LIBRARIES
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcm90.dll"
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcp90.dll"
