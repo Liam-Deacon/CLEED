@@ -203,7 +203,9 @@ ADD_LIBRARY(mkivLib SHARED ${mkivLib_SRCS})
 ADD_LIBRARY(mkivLibStatic STATIC ${mkivLib_SRCS})
 
 SET_TARGET_PROPERTIES(mkivLib PROPERTIES OUTPUT_NAME mkiv)
-SET_TARGET_PROPERTIES(mkivLibStatic PROPERTIES OUTPUT_NAME mkiv)
+IF (NOT WIN32)
+    SET_TARGET_PROPERTIES(mkivLibStatic PROPERTIES OUTPUT_NAME mkiv)
+ENDIF()
 
 TARGET_LINK_LIBRARIES(mkivLib ${_mkiv_tiff_target} ${_mkiv_tiff_extra_targets} ${_mkiv_tiff_extra_libs} m)
 TARGET_LINK_LIBRARIES(mkivLibStatic ${_mkiv_tiff_target} ${_mkiv_tiff_extra_targets} ${_mkiv_tiff_extra_libs} m)

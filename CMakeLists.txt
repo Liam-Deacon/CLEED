@@ -233,9 +233,13 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
     GET_FILENAME_COMPONENT(C_COMPILER_PARENT_DIR ${CMAKE_C_COMPILER} PATH)
     FILE (GLOB RUNTIME_LIBRARIES ${C_COMPILER_PARENT_DIR}/*.dll)
 ELSEIF("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
-    SET(WARNINGS "/W4 /EHsc")
+    # Keep warnings high, but silence the most common "unused" noise in the
+    # legacy C codebase so CI logs stay readable.
+    SET(WARNINGS "/W4 /EHsc /wd4100 /wd4101")
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
     ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNINGS)
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
+    ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE)
     # Provide POSIX aliases used throughout legacy code.
     ADD_DEFINITIONS(-Dstrcasecmp=_stricmp -Dstrncasecmp=_strnicmp)
     SET(RUNTIME_LIBRARIES

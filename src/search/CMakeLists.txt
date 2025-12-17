@@ -94,7 +94,9 @@ SET (csearch_SRCS csearch.c)
 ADD_LIBRARY(search SHARED ${searchlib_SRCS})
 ADD_LIBRARY(searchStatic STATIC ${searchlib_SRCS})
 
-SET_TARGET_PROPERTIES(searchStatic PROPERTIES OUTPUT_NAME search)
+IF (NOT WIN32)
+    SET_TARGET_PROPERTIES(searchStatic PROPERTIES OUTPUT_NAME search)
+ENDIF()
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
