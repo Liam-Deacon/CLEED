@@ -1,3 +1,44 @@
+# Build output
 build/
 bin/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
+DartConfiguration.tcl
+Testing/
+compile_commands.json
+
+# Autotools configure output
 autom4te.cache/
+config.log
+config.status
+
+# Sphinx docs build output
+doc/_build/
+docs/_build/
+
+# Compiled artifacts
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# IDE / user files
+.project
+.cproject
+.externalToolBuilders/
+*.pro.user
+
+# Editor backups
+*~
+*.bak
+.DS_Store
