@@ -103,9 +103,6 @@ char *argv[];
 
     char *linebuffer;
 
-    char *filename(),              /* filename of actual leed image        */
-         *strrchr(), *strcpy();
-
     char *fname2;
     char fname[STRSZ],             /* filename of first leed image         */
          maskname[STRSZ];
@@ -183,7 +180,7 @@ char *argv[];
     char *dummy = (char*)malloc(sizeof(char)*FILENAME_MAX); 
     
 /* open statements */
-    FILE *fopen(), *cur_stream, *smcur_stream, *iv_stream;
+    FILE *cur_stream, *smcur_stream, *iv_stream;
 
 /***************************************************************************/
 

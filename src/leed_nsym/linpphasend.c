@@ -4,7 +4,7 @@
 
   leed_update_phase
    Update the number of phase shifts.
-  leed_leed_leed_leed_inp_phase_nd
+  leed_leed_inp_phase_nd
    Read phase shifts from an input file and store them.
 
 Changes:
@@ -68,7 +68,7 @@ RETURN VALUE:
 
 /********************************************************************/
 
-int leed_leed_leed_leed_inp_phase_nd( char * phaseinp, real * dr, int t_type, 
+int leed_leed_inp_phase_nd( char * phaseinp, real * dr, int t_type, 
                  leed_phs_t **p_phs_shifts )
 
 /*********************************************************************

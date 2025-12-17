@@ -17,6 +17,7 @@ Changes:
 #include <strings.h>
 #include <malloc.h>
 
+#include "cleed_cstring.h"
 #include "crfac.h"
 
 #define ARG_IS(text) (strcmp(argv[i], text) == 0)

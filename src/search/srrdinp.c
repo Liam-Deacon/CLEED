@@ -1208,10 +1208,16 @@ zr:
                  sr_search->b_lat[2], sr_search->b_lat[4]);
  #endif
 
- sr_search->x_max = MAX(fabs(sr_search->b_lat[1]), fabs(sr_search->b_lat[2]) );
+ sr_search->x_max =
+   (fabs(sr_search->b_lat[1]) > fabs(sr_search->b_lat[2]))
+     ? fabs(sr_search->b_lat[1])
+     : fabs(sr_search->b_lat[2]);
  sr_search->x_min = - sr_search->x_max;
 
- sr_search->y_max = MAX(fabs(sr_search->b_lat[3]), fabs(sr_search->b_lat[4]) );
+ sr_search->y_max =
+   (fabs(sr_search->b_lat[3]) > fabs(sr_search->b_lat[4]))
+     ? fabs(sr_search->b_lat[3])
+     : fabs(sr_search->b_lat[4]);
  sr_search->y_min = - sr_search->y_max;
 
  #ifdef CONTROL

@@ -26,6 +26,7 @@ GH/29.09.00 - calculate dr2 for dmt input in function leed_inp_debye_temp
 
 #include "leed.h"
 #include "leed_def.h"
+#include "leed_func.h"
 
 
 #ifndef GEO_TOLERANCE          /* should be defined in "leed_def.h" */
@@ -63,7 +64,7 @@ int leed_inp_read_bul_nd (leed_cryst_t **p_bulk_par,
 
   FUNCTION CALLS
 
-   - leed_leed_leed_leed_inp_phase_nd
+   - leed_leed_inp_phase_nd
    - leed_inp_bul_layer
 
   RETURN VALUES
@@ -491,7 +492,7 @@ leed_atom_t * atoms_rd;   /* this vector of structure atom_str is
        }
 
      /* input of atomic phase shifts */
-       atoms_rd[i_atoms].type = leed_leed_leed_leed_inp_phase_nd(phaseinp, vaux, 
+       atoms_rd[i_atoms].type = leed_leed_inp_phase_nd(phaseinp, vaux, 
                                             atoms_rd[i_atoms].t_type, 
                                             p_phs_shifts);
        bulk_par->ntypes = MAX(atoms_rd[i_atoms].type+1, bulk_par->ntypes);

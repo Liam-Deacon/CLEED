@@ -2,8 +2,20 @@
 #include "atom.h"
 #include "lattice.h"
 #include <stdio.h>
-#include <strings.h>
+#include "strings.h"
 #include <limits.h>
+#include "cleed_string.h"
+
+#ifndef PATH_MAX
+#ifdef _WIN32
+#ifndef _MAX_PATH
+#define _MAX_PATH 260
+#endif
+#define PATH_MAX _MAX_PATH
+#else
+#define PATH_MAX 4096
+#endif
+#endif
 
 void latt_parse_args(int argc, char *argv[], lattice_t *latt)
 {
@@ -128,8 +140,7 @@ void latt_parse_args(int argc, char *argv[], lattice_t *latt)
           latt->input_filename = (char*) malloc(sizeof(char) * PATH_MAX);
         }
      
-        strncpy(latt->input_filename, argv[i_arg], PATH_MAX);
-        strcat(latt->input_filename, "\0");
+        cleed_strlcpy(latt->input_filename, argv[i_arg], PATH_MAX);
         latt->latt_type = LAT_INP;
       }
 

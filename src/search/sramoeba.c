@@ -23,6 +23,8 @@ LD/30.04.14 - Removed dependence on 'cp' and 'date' system calls
 #include <stdlib.h>
 #include <time.h>
 
+#include "cleed_cstring.h"
+#include "cleed_string.h"
 #include "search.h"
 #include "copy_file.h"
 
@@ -105,8 +107,8 @@ time_t result;
   Write y/p to backup file
 ***************************************************************************/
        /* removed dependence on 'cp' & 'date' system calls */
-       old_file = (char *) malloc(sizeof(char)*(strlen(sr_project)+5));
-       new_file = (char *) malloc(sizeof(char)*(strlen(sr_project)+5));
+       old_file = (char *) malloc(sizeof(char)*(cleed_strnlen(sr_project, STRSZ)+5));
+       new_file = (char *) malloc(sizeof(char)*(cleed_strnlen(sr_project, STRSZ)+5));
        
        /* remove 'cp' system call dependence */
        strcpy(old_file, sr_project);

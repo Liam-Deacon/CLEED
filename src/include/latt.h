@@ -26,9 +26,9 @@ Changes:
 #define PROG_COPYRIGHT "Copyright (C) 1994-2014 Georg Held\n" \
 "Copyright (C) 2013-2014 Liam Deacon"
 #define PROG_LICENSE ""
-#define PROG_VERSION "-- "
+#define PROG_VERSION "2014-07-04 Development"
 #define PROG_AUTHOR "Georg Held (g.held@reading.ac.uk)"
-#define PROG_MAINTAINER " <>" 
+#define PROG_MAINTAINER "Liam Deacon <liam.deacon@diamond.ac.uk>" 
 #define PROG_SHORTDESC "Lattice generator"
 
 /* platform information */

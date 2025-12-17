@@ -50,7 +50,9 @@ ADD_LIBRARY(ftsmoothLib SHARED ${ftsmoothlib_SRCS})
 ADD_LIBRARY(ftsmoothLibStatic STATIC ${ftsmoothlib_SRCS})
 
 SET_TARGET_PROPERTIES(ftsmoothLib PROPERTIES OUTPUT_NAME ftsmooth)
-SET_TARGET_PROPERTIES(ftsmoothLibStatic PROPERTIES OUTPUT_NAME ftsmooth)
+IF (NOT WIN32)
+    SET_TARGET_PROPERTIES(ftsmoothLibStatic PROPERTIES OUTPUT_NAME ftsmooth)
+ENDIF()
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
@@ -84,7 +86,11 @@ ENDIF (WIN32)
 
 TARGET_LINK_LIBRARIES(ftsmoothLib m)
 TARGET_LINK_LIBRARIES(ftsmoothLibStatic m)
-TARGET_LINK_LIBRARIES(ftsmooth ftsmoothLib m)
+IF (WIN32)
+    TARGET_LINK_LIBRARIES(ftsmooth ftsmoothLibStatic m)
+ELSE()
+    TARGET_LINK_LIBRARIES(ftsmooth ftsmoothLib m)
+ENDIF()
 
 IF (WIN32)
     INSTALL (TARGETS ftsmooth ftsmoothLib

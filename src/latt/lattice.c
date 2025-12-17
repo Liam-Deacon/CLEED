@@ -10,6 +10,12 @@
 #include <string.h>
 #include "lattice.h"
 
+#ifndef PATH_MAX
+#ifdef _WIN32
+#define PATH_MAX _MAX_PATH
+#endif
+#endif
+
 /**
  * @brief Scratch context for parsing a lattice input stream.
  *

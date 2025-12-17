@@ -82,6 +82,12 @@ OPTION(WITH_GSL "Set to OFF to build without GNU Scientific Library integration 
 OPTION(BUILD_PATT "Build patt (pattern visualisation) - experimental" OFF)
 OPTION(BUILD_SET_ENV "Build set_env embedded-Python executable (legacy)" OFF)
 
+# Windows/MSVC doesn't have a separate libm; many subdirectories link against
+# "m" for historical *nix builds, so make it a no-op CMake target on Windows.
+IF (WIN32 AND NOT TARGET m)
+    ADD_LIBRARY(m INTERFACE)
+ENDIF()
+
 # set cmake module path
 IF (NOT CMAKE_MODULE_PATH)
     SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules")
@@ -227,7 +233,15 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
     GET_FILENAME_COMPONENT(C_COMPILER_PARENT_DIR ${CMAKE_C_COMPILER} PATH)
     FILE (GLOB RUNTIME_LIBRARIES ${C_COMPILER_PARENT_DIR}/*.dll)
 ELSEIF("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
-    SET(WARNINGS "/W4 /WX /EHsc")
+    # Keep warnings high, but silence the most common "unused" noise in the
+    # legacy C codebase so CI logs stay readable.
+    SET(WARNINGS "/W4 /EHsc /wd4100 /wd4101")
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+    ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNINGS)
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
+    ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE)
+    # Provide POSIX aliases used throughout legacy code.
+    ADD_DEFINITIONS(-Dstrcasecmp=_stricmp -Dstrncasecmp=_strnicmp)
     SET(RUNTIME_LIBRARIES
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcm90.dll"
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcp90.dll"
@@ -447,9 +461,13 @@ IF (USE_OPENMP STREQUAL "ON")
         LIST (REMOVE_DUPLICATES CMAKE_C_FLAGS)
         LIST (REMOVE_DUPLICATES CMAKE_CXX_FLAGS)
         ADD_DEFINITIONS (-D_USE_OPENMP)
-        SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
-        SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
-        SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+        # OpenMP flags are compiler flags; passing them to the MSVC linker emits
+        # warnings (e.g. /openmp is not a linker option).
+        IF (NOT MSVC)
+            SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+            SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+            SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+        ENDIF()
         SET (USE_OPENMP ON)
     ELSE (OPENMP_FOUND OR OpenMP_FOUND)
         SET (USE_OPENMP OFF)
@@ -465,18 +483,13 @@ ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
 
 INCLUDE_DIRECTORIES ( ${PROJECT_SOURCE_DIR}/src/include)
 
-# LD flags
-IF(WIN32)
-    SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
-    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
-ELSE(WIN32)
-    SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
-    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
-ENDIF(WIN32)
-
-SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
-SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lm")
-SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm")
+# NOTE: Do not override CMake's default library search behavior (prefixes /
+# suffixes). Previous overrides broke vcpkg-provided packages on Windows.
+IF (UNIX AND NOT WIN32)
+    SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
+    SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lm")
+    SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm")
+ENDIF()
 
 # MinGW can also link to a MS .lib
 if(MSYS OR MINGW)

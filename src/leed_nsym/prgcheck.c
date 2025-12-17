@@ -15,8 +15,6 @@ LD/04.06.13 - Add windows headers
 
 #include <malloc.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
 
 #if defined(WIN32) || defined(_WIN32)|| \
 defined(__WIN32__) || defined(__MINGW__) || defined(_WIN64) 
@@ -28,6 +26,7 @@ defined(__WIN32__) || defined(__MINGW__) || defined(_WIN64)
 #else
 
 /* use LINUX headers */
+#include <unistd.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 
@@ -71,7 +70,11 @@ static char *hostname;
  {
    r_usage = (struct rusage *) malloc (sizeof(struct rusage));
    hostname = (char *) malloc (STRSZ * sizeof(char));
-   gethostname(hostname, STRSZ);
+   if (gethostname(hostname, STRSZ) != 0)
+   {
+     snprintf(hostname, STRSZ, "unknown");
+   }
+   hostname[STRSZ - 1] = '\0';
  }
 
  getrusage ( RUSAGE_SELF, r_usage );
@@ -91,4 +94,3 @@ static char *hostname;
 }  /* end of function leed_cpu_time */
 
 /*************************************************************************/
-

@@ -15,6 +15,8 @@ Changes:
 *********************************************************************/
 
 #include "ftsmooth.h"
+#include "cleed_cstring.h"
+#include "cleed_string.h"
 
 
 /****************************************************************
@@ -121,7 +123,7 @@ int parse_args(int argc, char *argv[],
 		   *offset_flag = OFFSET_Y_TO_ZERO;
 	       break;
 		 case '-': /* check argument */
-		   if (strlen(argv[i_arg])-1) /* check for command options */
+		   if (cleed_strnlen(argv[i_arg], 4096) > 1) /* check for command options */
 		     if ((isalpha(argv[i_arg][1])) || (argv[i_arg][1] == '-'))
 			 {
 			    *offset_flag = OFFSET_Y_TO_ZERO;
@@ -196,7 +198,7 @@ Encoding as follows:
   char *str;
   char ichar[1];
 
-  str = (char *) malloc(sizeof(char)*(strlen(argv)+1));
+  str = (char *) malloc(sizeof(char)*(cleed_strnlen(argv, 4096)+1));
   ichar[0] = '\0';
   
   pos = 0; 

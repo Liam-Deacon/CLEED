@@ -44,7 +44,7 @@ IF (WIN32)
     
     ADD_EXECUTABLE(cleed_sym ${cleed_sym_SRCS})
 
-    TARGET_LINK_LIBRARIES(cleed_sym ws2_32 psapi leed m)
+    TARGET_LINK_LIBRARIES(cleed_sym ws2_32 psapi leedStatic m)
     
 ELSE (WIN32)
     

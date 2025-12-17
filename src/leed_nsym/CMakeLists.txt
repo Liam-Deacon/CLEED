@@ -237,7 +237,9 @@ SET (cleed_nsym_SRCS cleed_nsym.c)
 ADD_LIBRARY(leed SHARED ${leedlib_SRCS})
 ADD_LIBRARY(leedStatic STATIC ${leedlib_SRCS})
 
-SET_TARGET_PROPERTIES(leedStatic PROPERTIES OUTPUT_NAME leed)
+IF (NOT WIN32)
+    SET_TARGET_PROPERTIES(leedStatic PROPERTIES OUTPUT_NAME leed)
+ENDIF()
 
 IF (WIN32)
     ENABLE_LANGUAGE(RC)
@@ -278,7 +280,11 @@ ELSE (WIN32)
     
 ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES (cleed_nsym leed m)
+IF (WIN32)
+    TARGET_LINK_LIBRARIES (cleed_nsym leedStatic m)
+ELSE()
+    TARGET_LINK_LIBRARIES (cleed_nsym leed m)
+ENDIF()
 IF (WITH_OPENCL STREQUAL "ON")
     TARGET_LINK_LIBRARIES(leed OpenCl)
     TARGET_LINK_LIBRARIES(leedStatic OpenCl)

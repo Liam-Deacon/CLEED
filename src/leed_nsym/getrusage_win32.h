@@ -7,7 +7,9 @@ extern "C"
 {
 #endif
 
+#ifndef ENODATA
 #define ENODATA 61
+#endif
 #define RUSAGE_SELF 0
 #define RUSAGE_CHILDREN -1
 

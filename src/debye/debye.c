@@ -12,6 +12,21 @@
 #include <math.h> 
 #include <string.h>
 
+static int read_line(char *buffer, size_t buffer_size)
+{
+    if (buffer_size == 0) {
+        return 0;
+    }
+
+    if (fgets(buffer, (int)buffer_size, stdin) == NULL) {
+        buffer[0] = '\0';
+        return 0;
+    }
+
+    buffer[strcspn(buffer, "\r\n")] = '\0';
+    return 1;
+}
+
 /* constants */
 #define H_BAR 1.05457148e-34
 #define K_BOLTKZMANN 1.3806503e-23
@@ -63,7 +78,7 @@ int main(int argc, char *argv[]) {
   strcpy(amu_str, "");
   strcpy(debye_str, "");
   
-  for (i = 1; i <= argc; i++) { 
+	  for (i = 1; i < argc; i++) { 
   
     if (i + 1 != argc + 1) {
 	  
@@ -126,9 +141,12 @@ int main(int argc, char *argv[]) {
     else {
         printf("Input mass of atom in kilograms: ");  
     }
-    gets(amu_str);
-    amu = atof(amu_str); 
-  }
+	    if (!read_line(amu_str, 1024)) {
+	      fprintf(stderr, "Failed to read input.\n");
+	      return 1;
+	    }
+	    amu = atof(amu_str); 
+	  }
   
   if (!kilo_flag) {
     mass = amu*KILOGRAMS_PER_AMU; 
@@ -138,18 +156,24 @@ int main(int argc, char *argv[]) {
   }
   
   /* get experimental temperature */
-  while (temp <= 0.0) {
-    printf("Input experimental temperature (K): ");
-    gets(temp_str);
-    temp = atof(temp_str); 
-  } 
+	  while (temp <= 0.0) {
+	    printf("Input experimental temperature (K): ");
+	    if (!read_line(temp_str, 1024)) {
+	      fprintf(stderr, "Failed to read input.\n");
+	      return 1;
+	    }
+	    temp = atof(temp_str); 
+	  } 
 
   /* get Debye temperature */
-  while (debye_temp <= 0.0) {
-    printf("Input Debye Temperature (K): ");
-    gets(debye_str);
-    debye_temp=atof(debye_str); 
-  } 
+	  while (debye_temp <= 0.0) {
+	    printf("Input Debye Temperature (K): ");
+	    if (!read_line(debye_str, 1024)) {
+	      fprintf(stderr, "Failed to read input.\n");
+	      return 1;
+	    }
+	    debye_temp=atof(debye_str); 
+	  } 
   
   /* Calculate mean square displacement  of atomic vibrations */
   displacement = (H_BAR/K_BOLTKZMANN)*H_BAR;

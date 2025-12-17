@@ -63,7 +63,7 @@ extern "C" {
 #define R_nint rint
 #define R_rint rint
 
-#define IS_EQUAL_REAL(x,y) (fabs(x-y) < DBL_EPSILON)
+#define IS_EQUAL_REAL(x,y) (fabs(((x) - (y))) < DBL_EPSILON)
 
 #endif  /* REAL_IS_DOUBLE */
 
@@ -131,7 +131,7 @@ extern "C" {
 
 #endif
 
-#define IS_EQUAL_REAL(x,y) (fabs(x-y) < FLT_EPSILON)
+#define IS_EQUAL_REAL(x,y) (fabs(((x) - (y))) < FLT_EPSILON)
 
 #endif  /* REAL_IS_FLOAT */
 

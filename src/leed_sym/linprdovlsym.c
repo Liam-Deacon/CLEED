@@ -29,6 +29,7 @@ GH/29.09.00 - calculate dr2 for dmt input in function leed_inp_debye_temp
 #include "stddef.h"
 #include "leed.h"
 #include "leed_def.h"
+#include "leed_func.h"
 
 #ifndef GEO_TOLERANCE           /* should be defined in "leed_def.h" */
 #define GEO_TOLERANCE 0.0001

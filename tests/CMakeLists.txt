@@ -42,7 +42,11 @@ if (WITH_GSL STREQUAL "OFF")
         $<TARGET_OBJECTS:cleed_test_support>
     )
     target_include_directories(test_search_amoeba PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
-    target_link_libraries(test_search_amoeba PRIVATE search m)
+    if (WIN32)
+        target_link_libraries(test_search_amoeba PRIVATE searchStatic m)
+    else()
+        target_link_libraries(test_search_amoeba PRIVATE search m)
+    endif()
     add_test(NAME search.amoeba COMMAND test_search_amoeba)
 endif()
 
@@ -57,4 +61,20 @@ add_test(
 )
 set_tests_properties(latt.minimal_fixture PROPERTIES
     PASS_REGULAR_EXPRESSION "Ca"
+)
+
+add_test(
+    NAME mkiv.help
+    COMMAND $<TARGET_FILE:mkiv> -h
+)
+set_tests_properties(mkiv.help PROPERTIES
+    PASS_REGULAR_EXPRESSION "Syntax:"
+)
+
+add_test(
+    NAME mkiv.version
+    COMMAND $<TARGET_FILE:mkiv> -V
+)
+set_tests_properties(mkiv.version PROPERTIES
+    PASS_REGULAR_EXPRESSION "version"
 )

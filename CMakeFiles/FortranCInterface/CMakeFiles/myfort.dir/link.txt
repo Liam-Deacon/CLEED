@@ -1,2 +1,0 @@
-C:\MinGW\bin\ar.exe cr libmyfort.a  CMakeFiles/myfort.dir/mysub.f.obj CMakeFiles/myfort.dir/my_sub.f.obj
-C:\MinGW\bin\ranlib.exe libmyfort.a

@@ -14,6 +14,7 @@ GH/19.09.95
 #include <strings.h>
 #include <stdlib.h>
 #include <math.h>
+#include "cleed_cstring.h"
 #include "search.h"
 #include "gh_stddef.h"
 

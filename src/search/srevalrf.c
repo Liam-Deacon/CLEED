@@ -25,11 +25,12 @@ LD/30.04.14  - removed dependence on 'cp' system call, now uses
 
 ***********************************************************************/
 #include <stdio.h>
-#include <strings.h>
+#include "strings.h"
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>
 
+#include "cleed_string.h"
 #include "search.h"
 #include "copy_file.h"
 
@@ -80,10 +81,10 @@ static real shift = 0.;
 static int n_eval  = 0;
 static int n_calc  = 0;
 
-int iaux;
-int i_par;
-real faux;
-real rgeo, rfac;
+	int iaux;
+	int i_par;
+	real rgeo = 0.;
+	real rfac = 0.;
 
 struct tm *l_time;
 time_t t_time;
@@ -241,22 +242,22 @@ FILE *io_stream, *log_stream;
 
  while( fgets(line_buffer, STRSZ, io_stream) != NULL)
  {
-   if(
+	 if(
 #ifdef REAL_IS_DOUBLE
-       (iaux = sscanf(line_buffer, "%lf %lf %lf", &rfac, &faux, &shift) )
+	     (iaux = sscanf(line_buffer, "%lf %*lf %lf", &rfac, &shift) )
 #endif
 #ifdef REAL_IS_FLOAT
-       (iaux = sscanf(line_buffer, "%f %f %f",    &rfac, &faux, &shift) )
+	     (iaux = sscanf(line_buffer, "%f %*f %f",    &rfac, &shift) )
 #endif
-       == 3) break;
- }
+	     == 2) break;
+	 }
 
 /* Stop with error message if reading error */
- if( iaux != 3)
- {
-   log_stream = fopen(log_file, "a");
-   fprintf(log_stream,"*** error while reading output from %s\n", 
-           getenv("CSEARCH_RFAC"));
+	 if( iaux != 2)
+	 {
+	   log_stream = fopen(log_file, "a");
+	   fprintf(log_stream,"*** error while reading output from %s\n", 
+	           getenv("CSEARCH_RFAC"));
    fclose(log_stream);
    exit(1);
  }
@@ -273,41 +274,53 @@ FILE *io_stream, *log_stream;
 
  if(rfac < rfac_min)
  {
-   /* removed dependence on cp system call */
-   char old_path[strlen(sr_project)+5];
-   char new_path[strlen(sr_project)+5];
+   /* removed dependence on cp system call (no VLA for MSVC builds) */
+   const size_t project_len = cleed_strnlen(sr_project, 4096);
+   if (!sr_project || project_len == 0 || project_len >= 4096)
+   {
+     fprintf(STDERR, "*** error (sr_evalrf): invalid project name\n");
+     exit(1);
+   }
+
+   const size_t path_len = project_len + 6;
+   char *old_path = (char *)malloc(path_len);
+   char *new_path = (char *)malloc(path_len);
+   if (!old_path || !new_path)
+   {
+     free(old_path);
+     free(new_path);
+     fprintf(STDERR, "*** error (sr_evalrf): allocation error\n");
+     exit(1);
+   }
    
    /* res file */
-   strcpy(old_path, sr_project);
-   strcat(old_path, ".res");
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".rmin");
+   snprintf(old_path, path_len, "%s.res", sr_project);
+   snprintf(new_path, path_len, "%s.rmin", sr_project);
    if (copy_file(old_path, new_path)) 
    {
      COPY_ERROR_TO_LOG(old_path, new_path);
    }
    
    /* par file */
-   strcpy(old_path, sr_project);
-   strcat(old_path, ".par");
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".pmin");
+   snprintf(old_path, path_len, "%s.par", sr_project);
+   snprintf(new_path, path_len, "%s.pmin", sr_project);
    if (copy_file(old_path, new_path)) 
    {
      COPY_ERROR_TO_LOG(old_path, new_path);
    }
    
    /* bsr file */
-   strcpy(old_path, sr_project);
-   strcat(old_path, ".bsr");
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".bmin");
+   snprintf(old_path, path_len, "%s.bsr", sr_project);
+   snprintf(new_path, path_len, "%s.bmin", sr_project);
    if (copy_file(old_path, new_path)) 
    {
      COPY_ERROR_TO_LOG(old_path, new_path);
    }
 
    rfac_min = rfac;
+
+   free(old_path);
+   free(new_path);
  }
 
  rfac_max = MAX(rfac, rfac_max);
@@ -349,8 +362,3 @@ FILE *io_stream, *log_stream;
 
  return (rfac + rgeo);
 }
-
-
-
-
-
