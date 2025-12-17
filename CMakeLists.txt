@@ -235,6 +235,8 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
 ELSEIF("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
     SET(WARNINGS "/W4 /EHsc")
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+    # MSVC does not provide POSIX strcasecmp/strncasecmp; map to MSVC equivalents.
+    ADD_DEFINITIONS(-Dstrcasecmp=_stricmp -Dstrncasecmp=_strnicmp)
     SET(RUNTIME_LIBRARIES
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcm90.dll"
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcp90.dll"
@@ -454,9 +456,13 @@ IF (USE_OPENMP STREQUAL "ON")
         LIST (REMOVE_DUPLICATES CMAKE_C_FLAGS)
         LIST (REMOVE_DUPLICATES CMAKE_CXX_FLAGS)
         ADD_DEFINITIONS (-D_USE_OPENMP)
-        SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
-        SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
-        SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+        # OpenMP flags are compiler flags; passing them to the MSVC linker emits
+        # warnings (e.g. /openmp is not a linker option).
+        IF (NOT MSVC)
+            SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+            SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+            SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
+        ENDIF()
         SET (USE_OPENMP ON)
     ELSE (OPENMP_FOUND OR OpenMP_FOUND)
         SET (USE_OPENMP OFF)
