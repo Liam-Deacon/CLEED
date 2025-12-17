@@ -7,11 +7,6 @@
  * strcasecmp/strncasecmp.
  */
 
-// cppcheck-suppress missingIncludeSystem
-#include <stddef.h>
-// cppcheck-suppress missingIncludeSystem
-#include <string.h>
-
 #ifdef _MSC_VER
 /* MSVC does not provide POSIX strcasecmp/strncasecmp. */
 #define strcasecmp _stricmp
@@ -22,7 +17,7 @@ extern "C" {
 #endif
 
 int strcasecmp(const char *s1, const char *s2);
-int strncasecmp(const char *s1, const char *s2, size_t n);
+int strncasecmp(const char *s1, const char *s2, unsigned long n);
 
 #ifdef __cplusplus
 } /* extern "C" */

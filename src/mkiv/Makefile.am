@@ -46,6 +46,7 @@ libmkiv_la_SOURCES =                        \
     readtif.c                               \
     writetif.c                              \
     signs.h                                 \
+    tiffio.h                                \
     variables.h                             \
     v_iorw.h                                \
     vinclude.h                              \
@@ -56,5 +57,10 @@ libmkiv_la_SOURCES =                        \
 libmkiv_a_SOURCES = $(libmkiv_la_SOURCES)
 
 if WINDOWS
+    bin_DATA +=                             \
+        ../../lib/win32/libtiff3.dll        \
+        ../../lib/win32/jpeg62.dll          \
+        ../../lib/win32/zlib1.dll
+        
     mkiv_SOURCES += res/windows/mkiv.res
 endif

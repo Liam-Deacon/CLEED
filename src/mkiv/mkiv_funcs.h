@@ -35,8 +35,6 @@ int drawgrid(ImageMatrix *image, int write, char *fname);
 
 char *filename(char *fname, int n);
 
-Spot *mem4spots(int *spot_max, Vector a[], int ndom, Domain *superlat, ImageMatrix *image);
-
 int fimax4(int nspot, Spot spot[], int step, float range, ImageMatrix *image);
 
 int getdomain (char *buffer, struct domain *superlat);

@@ -2,7 +2,7 @@
 #include "atom.h"
 #include "lattice.h"
 #include <stdio.h>
-#include <strings.h>
+#include "strings.h"
 #include <limits.h>
 #include "cleed_string.h"
 

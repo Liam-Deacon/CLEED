@@ -25,7 +25,7 @@ LD/30.04.14  - removed dependence on 'cp' system call, now uses
 
 ***********************************************************************/
 #include <stdio.h>
-#include <strings.h>
+#include "strings.h"
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>
@@ -363,5 +363,4 @@ FILE *io_stream, *log_stream;
 
  return (rfac + rgeo);
 }
-
 

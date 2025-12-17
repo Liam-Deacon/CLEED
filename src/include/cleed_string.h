@@ -6,33 +6,43 @@
  * legacy code paths (and to keep Codacy/MSVC happy).
  */
 
-// cppcheck-suppress missingIncludeSystem
-#include <stddef.h>
-// cppcheck-suppress missingIncludeSystem
-#include <string.h>
-
 static inline size_t cleed_strnlen(const char *s, size_t maxlen)
 {
+  size_t i;
+
   if (!s)
     return 0;
-  const void *terminator = memchr(s, '\0', maxlen);
-  return terminator ? (size_t)((const char *)terminator - s) : maxlen;
+
+  for (i = 0; i < maxlen; i++)
+  {
+    if (s[i] == '\0')
+      return i;
+  }
+
+  return maxlen;
 }
 
 static inline size_t cleed_strlcpy(char *dst, const char *src, size_t dstsize)
 {
+  size_t i = 0;
+
   if (!dst || !dstsize)
     return 0;
+
   if (!src)
   {
     dst[0] = '\0';
     return 0;
   }
 
-  const size_t copy_len = cleed_strnlen(src, dstsize - 1);
-  memcpy(dst, src, copy_len);
-  dst[copy_len] = '\0';
-  return copy_len;
+  while (i + 1 < dstsize && src[i] != '\0')
+  {
+    dst[i] = src[i];
+    i++;
+  }
+
+  dst[i] = '\0';
+  return i;
 }
 
 #endif /* CLEED_STRING_H */

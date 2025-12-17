@@ -14,29 +14,10 @@ GH/02.09.97 - Add hostname
 
 #include <malloc.h>
 #include <stdio.h>
-// cppcheck-suppress missingIncludeSystem
-#include <string.h>
 
-// cppcheck-suppress missingIncludeSystem
-#include <sys/types.h>
-
-#include "cleed_platform.h"
-
-#if defined(WIN32) || defined(_WIN32)|| \
-defined(__WIN32__) || defined(__MINGW__) || defined(_WIN64)
-
-/* alternative headers for WINDOWS */
-#include "getrusage_win32.h"
-#include <windows.h>
-
-#else
-
-/* use LINUX headers */
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-
-#endif
 
 
 #include "gh_stddef.h"
@@ -86,7 +67,7 @@ static char *hostname;
  {
    r_usage = (struct rusage *) malloc (sizeof(struct rusage));
    hostname = (char *) malloc (STRSZ * sizeof(char));
-   cleed_get_hostname(hostname, STRSZ);
+   gethostname(hostname, STRSZ);
  }
 
  getrusage ( RUSAGE_SELF, r_usage );
