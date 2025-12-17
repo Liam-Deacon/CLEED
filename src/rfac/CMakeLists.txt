@@ -98,7 +98,11 @@ ENDIF (WIN32)
 
 TARGET_LINK_LIBRARIES(rfac m)
 TARGET_LINK_LIBRARIES(rfacStatic m)
-TARGET_LINK_LIBRARIES(crfac rfac m)
+IF (WIN32)
+    TARGET_LINK_LIBRARIES(crfac rfacStatic m)
+ELSE()
+    TARGET_LINK_LIBRARIES(crfac rfac m)
+ENDIF()
 
 IF (WIN32)
     INSTALL (TARGETS crfac rfac

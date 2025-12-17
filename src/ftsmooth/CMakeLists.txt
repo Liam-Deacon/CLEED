@@ -86,7 +86,11 @@ ENDIF (WIN32)
 
 TARGET_LINK_LIBRARIES(ftsmoothLib m)
 TARGET_LINK_LIBRARIES(ftsmoothLibStatic m)
-TARGET_LINK_LIBRARIES(ftsmooth ftsmoothLib m)
+IF (WIN32)
+    TARGET_LINK_LIBRARIES(ftsmooth ftsmoothLibStatic m)
+ELSE()
+    TARGET_LINK_LIBRARIES(ftsmooth ftsmoothLib m)
+ENDIF()
 
 IF (WIN32)
     INSTALL (TARGETS ftsmooth ftsmoothLib

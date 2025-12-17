@@ -280,7 +280,11 @@ ELSE (WIN32)
     
 ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES (cleed_nsym leed m)
+IF (WIN32)
+    TARGET_LINK_LIBRARIES (cleed_nsym leedStatic m)
+ELSE()
+    TARGET_LINK_LIBRARIES (cleed_nsym leed m)
+ENDIF()
 IF (WITH_OPENCL STREQUAL "ON")
     TARGET_LINK_LIBRARIES(leed OpenCl)
     TARGET_LINK_LIBRARIES(leedStatic OpenCl)

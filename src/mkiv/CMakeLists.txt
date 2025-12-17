@@ -223,7 +223,7 @@ IF (WIN32)
     )
     
     ADD_EXECUTABLE(mkiv ${mkiv_SRCS})
-    TARGET_LINK_LIBRARIES (mkiv mkivLib m)
+    TARGET_LINK_LIBRARIES (mkiv mkivLibStatic m)
     
 ELSE (WIN32)
     
@@ -245,7 +245,9 @@ ELSE (WIN32)
     
 ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES(mkiv mkivLib m)
+IF (NOT WIN32)
+    TARGET_LINK_LIBRARIES(mkiv mkivLib m)
+ENDIF()
 
 IF (WIN32)
     INSTALL (TARGETS mkiv mkivLib
