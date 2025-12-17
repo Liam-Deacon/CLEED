@@ -71,13 +71,13 @@ mat c_bess ( mat Jl, real z_r, real z_i, int l_max )
   cos(z) =  1/2 ( exp(iz) + exp(-iz) )
          = cos(z_r)*cosh(z_i) - i*sin(z_r)*sinh(z_i)
 
- Miller's device is described in some detail in the "Handbook of 
- mathematical functions" by Abramowitz and Stegun (p.452) and in Num. Rec.
- (p. 181/ p. 235). The start index is chosen as 
+ Miller's device is described in some detail in the "Handbook of
+ Mathematical Functions" by Abramowitz and Stegun (p. 452). The start index
+ is chosen as
 
   l_start =  l_max + (int) R_sqrt(ACC*l_max)
 
- Where ACC determines the accuracy of the approximation (Num. Rec.: 40.0
+ Where ACC determines the accuracy of the approximation (typical value: 40.0
  for double precision).
  
  RETURN VALUE:

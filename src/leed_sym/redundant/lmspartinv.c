@@ -36,7 +36,7 @@ mat ms_partinv ( mat Minv, mat Mbg, int first_atoms, int l_max)
 
    * General *
 
- The function follows the formulae given in Num. Rec. (2.7.22 ff/p. 77).
+ The function follows standard block matrix inversion formulae.
  The inverse of the matrix
 
            Mbg  = (UL UR)

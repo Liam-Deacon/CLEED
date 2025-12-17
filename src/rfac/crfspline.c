@@ -1,74 +1,71 @@
 /********************************************************************
-  GH/11.08.95
-  file contains function:
+ *                       CRFSPLINE.C
+ *
+ *  Prepare natural cubic spline second derivatives for a list of
+ *  (energy, intensity) points.
+ ********************************************************************/
 
-  void cr_spline(struct crelist *list, int leng, real yp1,real ypn)
-
- Prepare cubic spline
-
- Changes:
-
- GH/11.08.95 - Creation (copy from spline.c in Numerical Receipes)
-
-********************************************************************/
-#include <malloc.h>
+#include <stdlib.h>
 
 #include "crfac.h"
 
-
 void cr_spline(struct crelist *list, int leng)
-
-/********************************************************************
- First stage of cubic spline
-
-INPUT:
- 
- struct crelist *list - (input, output) list of energy/intensity 
-          values to be interpolated by cubic spline.
-          The function will generate the structure elements 
-          deriv2 which will be used for interpolation in function
-          cr_splint.
- int leng - (input) number of elements in list.
-
-DESIGN:
-
- For a description see Num. Rec. Capter 3.3. The boundary conditions
- are set for natural spline (zero second derivative on both boundaries).
-
-RETURN VALUE:
- 
- No return values.
-********************************************************************/
 {
-int i,k;
-real p,qn,sig,un;
-real *buf;
+  if (list == NULL) return;
+  if (leng <= 1) {
+    if (leng == 1) list[0].deriv2 = 0.0;
+    return;
+  }
 
- buf = (real *)malloc( leng * sizeof(real) );
+  /* Natural spline boundary conditions. */
+  list[0].deriv2 = 0.0;
+  list[leng - 1].deriv2 = 0.0;
 
- (list+0)->deriv2 = buf[0] = 0.0;
+  if (leng <= 2) return;
 
- for (i=1; i <= leng-2; i++) 
- {
-   sig = ( (list+i)->energy - (list+i-1)->energy )/
-         ( (list+i+1)->energy - (list+i-1)->energy);
-   p = sig * (list+i-1)->deriv2 + 2.0;
-   (list+i)->deriv2 = (sig-1.0)/p;
-   buf[i] = ( (list+i+1)->intens - (list+i)->intens )/
-            ( (list+i+1)->energy - (list+i)->energy ) - 
-            ( (list+i)->intens - (list+i-1)->intens )/
-            ( (list+i)->energy - (list+i-1)->energy );
-   buf[i] = ( 6.0*buf[i] /
-            ( (list+i+1)->energy - (list+i-1)->energy ) - sig*buf[i-1])/p;
- }
+  int n_unknown = leng - 2;
+  real *c_prime = (real *)calloc((size_t)n_unknown, sizeof(real));
+  real *d_prime = (real *)calloc((size_t)n_unknown, sizeof(real));
+  if (c_prime == NULL || d_prime == NULL) {
+    free(c_prime);
+    free(d_prime);
+    return;
+  }
 
- qn=un=0.0;
+  /* Build and solve the tridiagonal system for M[1..leng-2]. */
+  for (int k = 0; k < n_unknown; k++) {
+    int i = k + 1; /* original point index */
+    real h_im1 = list[i].energy - list[i - 1].energy;
+    real h_i = list[i + 1].energy - list[i].energy;
+    if (IS_EQUAL_REAL(h_im1, 0.0) || IS_EQUAL_REAL(h_i, 0.0)) {
+      /* Degenerate spacing; fall back to zero curvature locally. */
+      list[i].deriv2 = 0.0;
+      continue;
+    }
 
- (list+leng-1)->deriv2 = ( un - qn*buf[leng-2] ) / 
-                         ( qn*(list+leng-2)->deriv2 + 1.0);
- for (k=leng-2; k>=0; k--)
-   (list+k)->deriv2 = (list+k)->deriv2 * (list+k+1)->deriv2 + buf[k];
+    real a = (i == 1) ? 0.0 : h_im1;
+    real b = 2.0 * (h_im1 + h_i);
+    real c = (i == leng - 2) ? 0.0 : h_i;
+    real d = 6.0 * ((list[i + 1].intens - list[i].intens) / h_i -
+                    (list[i].intens - list[i - 1].intens) / h_im1);
 
- free(buf);
-}  /* end of function cr_spline */
-/********************************************************************/
+    if (k == 0) {
+      c_prime[k] = c / b;
+      d_prime[k] = d / b;
+    } else {
+      real denom = b - a * c_prime[k - 1];
+      c_prime[k] = (IS_EQUAL_REAL(denom, 0.0)) ? 0.0 : (c / denom);
+      d_prime[k] = (IS_EQUAL_REAL(denom, 0.0)) ? 0.0 : ((d - a * d_prime[k - 1]) / denom);
+    }
+  }
+
+  /* Back substitution. */
+  list[leng - 2].deriv2 = d_prime[n_unknown - 1];
+  for (int k = n_unknown - 2; k >= 0; k--) {
+    int i = k + 1;
+    list[i].deriv2 = d_prime[k] - c_prime[k] * list[i + 1].deriv2;
+  }
+
+  free(c_prime);
+  free(d_prime);
+}

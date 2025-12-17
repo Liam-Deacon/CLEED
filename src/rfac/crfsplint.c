@@ -1,75 +1,41 @@
 /********************************************************************
-GH/29.08.95
-File contains function:
+ *                       CRFSPLINT.C
+ *
+ *  Natural cubic spline interpolation using second derivatives prepared
+ *  by cr_spline().
+ ********************************************************************/
 
-  real cr_splint(real eng, struct crelist *list, int leng)
-
-Cubic spline interpolation
-
-Changes:
-
-GH/29.08.95 - Creation (copy from splint.c in Numerical Receipes)
-
-********************************************************************/
 #include <stdlib.h>
+
 #include "crfac.h"
 
 real cr_splint(real eng, struct crelist *list, int leng)
-
-/********************************************************************
- Cubic spline interpolation
-
-INPUT:
-
- real eng - (input) energy value for which interpolation is 
-          to be performed.
- struct crelist *list - (input, output) list of energy/intensity/deriv2
-          values the latter of which is generated in function cr_spline.
- int leng - (input) number of elements in list.
-
-DESIGN:
-
- For a description see Num. Rec. Capter 3.3.
-
-RETURN VALUE:
-
- y: interpolated intensity.
-********************************************************************/
 {
-real y;
-int klo,khi,k;
-real h,b,a;
+  if (list == NULL || leng <= 0) return 0.0;
+  if (leng == 1) return list[0].intens;
 
-/* 
-  Find the right place in list by means of bisection. 
-*/
- klo=0;
- khi=leng-1;
- while (khi-klo > 1) 
- {
-   k=(khi+klo) >> 1;                     /* integer division by 2 */
-   if ((list+k)->energy > eng) khi=k;
-   else klo=k;
- }
+  /* Clamp to data bounds (avoids extrapolation surprises). */
+  if (eng <= list[0].energy) return list[0].intens;
+  if (eng >= list[leng - 1].energy) return list[leng - 1].intens;
 
- h = (list+khi)->energy - (list+klo)->energy;
- if (IS_EQUAL_REAL(h, 0.0)) 
- {
-#ifdef ERROR
-   fprintf(STDERR,"*** error (cr_splint): Bad list input\n");
-#endif
-   exit(1);
- }
+  int lo = 0;
+  int hi = leng - 1;
+  while (hi - lo > 1) {
+    int mid = lo + (hi - lo) / 2;
+    if (list[mid].energy > eng) hi = mid;
+    else lo = mid;
+  }
 
- a=((list+khi)->energy - eng)/h;
- b=(eng - (list+klo)->energy)/h;
+  real h = list[hi].energy - list[lo].energy;
+  if (IS_EQUAL_REAL(h, 0.0)) return list[lo].intens;
 
-/* 
-  Evaluate cubic spline polynomial 
-*/
- y = a*(list+klo)->intens + b*(list+khi)->intens + 
-     ( (a*a*a-a)*(list+klo)->deriv2 + (b*b*b-b)*(list+khi)->deriv2 )*(h*h)/6.0;
+  real a = (list[hi].energy - eng) / h;
+  real b = (eng - list[lo].energy) / h;
 
- return(y);
-} /* end of function cr_splint */
-/********************************************************************/
+  real y = a * list[lo].intens + b * list[hi].intens;
+  y += ((a * a * a - a) * list[lo].deriv2 +
+        (b * b * b - b) * list[hi].deriv2) *
+       (h * h) / 6.0;
+
+  return y;
+}
