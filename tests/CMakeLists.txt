@@ -72,6 +72,30 @@ else()
 endif()
 add_test(NAME search.amebsa COMMAND test_search_amebsa)
 
+add_executable(test_search_parse
+    test_search_parse.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_parse PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_parse PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_parse PRIVATE search m)
+endif()
+add_test(NAME search.parse COMMAND test_search_parse)
+
+add_executable(test_search_vertex_stats
+    test_search_vertex_stats.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_vertex_stats PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_vertex_stats PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_vertex_stats PRIVATE search m)
+endif()
+add_test(NAME search.vertex_stats COMMAND test_search_vertex_stats)
+
 add_executable(test_rfac_spline
     test_rfac_spline.c
 )
