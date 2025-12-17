@@ -24,6 +24,20 @@ static const char *sr_skip_ws(const char *p)
   return p;
 }
 
+static int sr_parse_double_token(const char *p, double *out, const char **out_end)
+{
+  if (p == NULL || out == NULL || out_end == NULL) return -1;
+
+  char *end = NULL;
+  errno = 0;
+  double v = strtod(p, &end);
+  if (end == p || errno != 0) return -1;
+
+  *out = v;
+  *out_end = end;
+  return 0;
+}
+
 int sr_parse_two_reals(const char *line, real *out_a, real *out_b)
 {
   if (line == NULL || out_a == NULL || out_b == NULL) return -1;
@@ -31,17 +45,15 @@ int sr_parse_two_reals(const char *line, real *out_a, real *out_b)
   const char *p = sr_skip_ws(line);
   if (p == NULL || *p == '\0' || *p == '#') return -1;
 
-  char *end = NULL;
-  errno = 0;
-  double a = strtod(p, &end);
-  if (end == p || errno != 0) return -1;
+  double a = 0.0;
+  const char *end = NULL;
+  if (sr_parse_double_token(p, &a, &end) != 0) return -1;
 
   p = sr_skip_ws(end);
   if (p == NULL || *p == '\0') return -1;
 
-  errno = 0;
-  double b = strtod(p, &end);
-  if (end == p || errno != 0) return -1;
+  double b = 0.0;
+  if (sr_parse_double_token(p, &b, &end) != 0) return -1;
 
   *out_a = (real)a;
   *out_b = (real)b;

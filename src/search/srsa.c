@@ -128,7 +128,11 @@ FILE *log_stream;
    fprintf(STDCTR,"(sr_sa): temperature = %.4f\n", temp);
 #endif
    int budget = MAX_ITER_SA;
-   (void)sr_amebsa(p, y, ndim, x, &rmin, temp, sr_evalrf, &budget, temp);
+   sr_amebsa_cfg cfg;
+   cfg.ftol = temp;
+   cfg.funk = sr_evalrf;
+   cfg.temptr = temp;
+   (void)sr_amebsa(p, y, ndim, x, &rmin, &cfg, &budget);
    nfunc += budget;
  }
 

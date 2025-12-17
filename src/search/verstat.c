@@ -28,7 +28,7 @@ char *sr_project;
 // cppcheck-suppress constParameter
 static int verstat_parse_args(int argc, char *const argv[], char inp_file[STRSZ])
 {
-  strncpy(inp_file, "---", STRSZ);
+  (void)snprintf(inp_file, STRSZ, "%s", "---");
   for (int i_arg = 1; i_arg < argc; i_arg++)
   {
     if (*argv[i_arg] != '-')
@@ -45,7 +45,7 @@ static int verstat_parse_args(int argc, char *const argv[], char inp_file[STRSZ]
         fprintf(STDERR, "*** error (verstat): no input file specified\n");
         return 1;
       }
-      strncpy(inp_file, argv[i_arg], STRSZ);
+      (void)snprintf(inp_file, STRSZ, "%s", argv[i_arg]);
     }
   }
   if (strncmp(inp_file, "---", 3) == 0)
@@ -135,18 +135,25 @@ static int verstat_alloc_stats(int ndim, real **out_min_p, real **out_max_p, rea
   return 0;
 }
 
-static void verstat_print_stats(int ndim,
-                                real min_y, const real *min_p,
-                                real max_y, const real *max_p,
-                                real avg_y, const real *avg_p,
-                                real dev_y, const real *dev_p)
+typedef struct verstat_stats {
+  real min_y;
+  real max_y;
+  real avg_y;
+  real dev_y;
+  const real *min_p;
+  const real *max_p;
+  const real *avg_p;
+  const real *dev_p;
+} verstat_stats;
+
+static void verstat_print_stats(int ndim, const verstat_stats *stats)
 {
   fprintf(STDOUT, "\n");
-  verstat_print_vector("min", min_y, min_p, ndim);
-  verstat_print_vector("max", max_y, max_p, ndim);
+  verstat_print_vector("min", stats->min_y, stats->min_p, ndim);
+  verstat_print_vector("max", stats->max_y, stats->max_p, ndim);
   fprintf(STDOUT, "\n");
-  verstat_print_vector("avg", avg_y, avg_p, ndim);
-  verstat_print_vector("dev", dev_y, dev_p, ndim);
+  verstat_print_vector("avg", stats->avg_y, stats->avg_p, ndim);
+  verstat_print_vector("dev", stats->dev_y, stats->dev_p, ndim);
 }
 
 int main(int argc, char *argv[])
@@ -183,7 +190,16 @@ int main(int argc, char *argv[])
   sr_vertex_avg(y, p, ndim, mpar, &avg_y, avg_p);
   sr_vertex_dev(y, p, ndim, mpar, avg_y, avg_p, &dev_y, dev_p);
 
-  verstat_print_stats(ndim, min_y, min_p, max_y, max_p, avg_y, avg_p, dev_y, dev_p);
+  verstat_stats stats;
+  stats.min_y = min_y;
+  stats.max_y = max_y;
+  stats.avg_y = avg_y;
+  stats.dev_y = dev_y;
+  stats.min_p = min_p;
+  stats.max_p = max_p;
+  stats.avg_p = avg_p;
+  stats.dev_p = dev_p;
+  verstat_print_stats(ndim, &stats);
 
   sr_free_vector(min_p);
   sr_free_vector(max_p);

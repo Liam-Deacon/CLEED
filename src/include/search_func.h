@@ -20,8 +20,15 @@ extern "C" {
 
 /* Optimisers (derivative-free) */
 int sr_amoeba(real **p, real *y, int ndim, real ftol, real (*funk)(real *), int *nfunk);
-int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb, real ftol,
-              real (*funk)(real *), int *iter, real temptr);
+
+typedef struct sr_amebsa_cfg {
+  real ftol;
+  real (*funk)(real *);
+  real temptr;
+} sr_amebsa_cfg;
+
+int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
+              const sr_amebsa_cfg *cfg, int *iter);
 int sr_powell(real *p, real **xi, int n, real ftol, int *iter, real *fret,
               real (*func)(real *));
 

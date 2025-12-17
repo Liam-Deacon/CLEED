@@ -55,7 +55,12 @@ static int run_amebsa_regression(void)
     real yb = 1e30;
     int budget = 500;
 
-    const int rc = sr_amebsa(p, y, ndim, pb, &yb, 1e-6, quadratic_2d, &budget, 1.0);
+    sr_amebsa_cfg cfg;
+    cfg.ftol = 1e-6;
+    cfg.funk = quadratic_2d;
+    cfg.temptr = 1.0;
+
+    const int rc = sr_amebsa(p, y, ndim, pb, &yb, &cfg, &budget);
     if (rc != 0) {
         fprintf(stderr, "sr_amebsa failed: %d\n", rc);
         cleed_test_free_matrix_1based(p);
@@ -84,4 +89,3 @@ int main(void)
 {
     return run_amebsa_regression();
 }
-

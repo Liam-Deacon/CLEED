@@ -58,18 +58,19 @@ static int sr_accept_move(sr_rng *rng, real current, real proposed, real temp)
   return u < prob;
 }
 
-// cppcheck-suppress functionLength
-// cppcheck-suppress functionComplexity
-// cppcheck-suppress tooManyFunctionArgs
 int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
-              real ftol, real (*funk)(real *), int *iter, real temptr)
+              const sr_amebsa_cfg *cfg, int *iter)
 {
-  if (p == NULL || y == NULL || pb == NULL || yb == NULL || funk == NULL || iter == NULL) {
+  if (p == NULL || y == NULL || pb == NULL || yb == NULL || cfg == NULL || iter == NULL) {
     return -1;
   }
   if (ndim <= 0) return -1;
 
   int mpts = ndim + 1;
+  real ftol = cfg->ftol;
+  real temptr = cfg->temptr;
+  real (*funk)(real *) = cfg->funk;
+  if (funk == NULL) return -1;
 
   /* Seed deterministic RNG from the legacy global seed. */
   sr_rng rng;
