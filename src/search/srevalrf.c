@@ -273,41 +273,46 @@ FILE *io_stream, *log_stream;
 
  if(rfac < rfac_min)
  {
-   /* removed dependence on cp system call */
-   char old_path[strlen(sr_project)+5];
-   char new_path[strlen(sr_project)+5];
+   /* removed dependence on cp system call (no VLA for MSVC builds) */
+   const size_t path_len = strlen(sr_project) + 6;
+   char *old_path = (char *)malloc(path_len);
+   char *new_path = (char *)malloc(path_len);
+   if (!old_path || !new_path)
+   {
+     free(old_path);
+     free(new_path);
+     fprintf(STDERR, "*** error (sr_evalrf): allocation error\n");
+     exit(1);
+   }
    
    /* res file */
-   strcpy(old_path, sr_project);
-   strcat(old_path, ".res");
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".rmin");
+   snprintf(old_path, path_len, "%s.res", sr_project);
+   snprintf(new_path, path_len, "%s.rmin", sr_project);
    if (copy_file(old_path, new_path)) 
    {
      COPY_ERROR_TO_LOG(old_path, new_path);
    }
    
    /* par file */
-   strcpy(old_path, sr_project);
-   strcat(old_path, ".par");
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".pmin");
+   snprintf(old_path, path_len, "%s.par", sr_project);
+   snprintf(new_path, path_len, "%s.pmin", sr_project);
    if (copy_file(old_path, new_path)) 
    {
      COPY_ERROR_TO_LOG(old_path, new_path);
    }
    
    /* bsr file */
-   strcpy(old_path, sr_project);
-   strcat(old_path, ".bsr");
-   strcpy(new_path, sr_project);
-   strcat(old_path, ".bmin");
+   snprintf(old_path, path_len, "%s.bsr", sr_project);
+   snprintf(new_path, path_len, "%s.bmin", sr_project);
    if (copy_file(old_path, new_path)) 
    {
      COPY_ERROR_TO_LOG(old_path, new_path);
    }
 
    rfac_min = rfac;
+
+   free(old_path);
+   free(new_path);
  }
 
  rfac_max = MAX(rfac, rfac_max);
@@ -349,7 +354,6 @@ FILE *io_stream, *log_stream;
 
  return (rfac + rgeo);
 }
-
 
 
 

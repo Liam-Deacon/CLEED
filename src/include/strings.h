@@ -10,6 +10,11 @@
 #include <stddef.h>
 #include <string.h>
 
+#ifdef _MSC_VER
+/* MSVC does not provide POSIX strcasecmp/strncasecmp. */
+#define strcasecmp _stricmp
+#define strncasecmp _strnicmp
+#else
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -17,14 +22,9 @@ extern "C" {
 int strcasecmp(const char *s1, const char *s2);
 int strncasecmp(const char *s1, const char *s2, size_t n);
 
-#ifdef _MSC_VER
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
-#endif
-
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
+#endif
 
 #endif /* CLEED_COMPAT_STRINGS_H */
-
