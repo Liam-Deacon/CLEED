@@ -58,3 +58,8 @@ add_test(
 set_tests_properties(latt.minimal_fixture PROPERTIES
     PASS_REGULAR_EXPRESSION "Ca"
 )
+
+add_test(
+    NAME mkiv.help
+    COMMAND $<TARGET_FILE:mkiv> -h
+)

@@ -10,6 +10,7 @@
 #include "mkiv.h"
 #include "file_funcs.h"
 #include <strings.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
 #include <ctype.h>
 

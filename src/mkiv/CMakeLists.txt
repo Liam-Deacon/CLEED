@@ -71,13 +71,53 @@ SET (mkiv_SRCS mkiv.c)
 # include directories
 INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/src/mkiv)
 
-FIND_PACKAGE(TIFF REQUIRED)
-IF (TARGET TIFF::TIFF)
-    SET(_mkiv_tiff_target TIFF::TIFF)
-ELSE()
-    SET(_mkiv_tiff_target ${TIFF_LIBRARIES})
-    INCLUDE_DIRECTORIES (${TIFF_INCLUDE_DIR})
+FIND_PACKAGE(TIFF QUIET)
+
+# vcpkg on Windows can provide headers/version but not populate TIFF_LIBRARY via FindTIFF.
+# Fall back to a direct library search with additional common names.
+IF (NOT TIFF_FOUND)
+    SET(TIFF_INCLUDE_DIR "")
+    SET(TIFF_LIBRARIES "")
 ENDIF()
+
+IF (NOT TIFF_INCLUDE_DIR OR NOT TIFF_LIBRARIES)
+    FIND_PATH(TIFF_INCLUDE_DIR NAMES tiffio.h)
+    FIND_LIBRARY(
+        TIFF_LIBRARY
+        NAMES
+            tiff
+            tiffxx
+            tiff3
+            tiff4
+            libtiff
+            libtiffxx
+            libtiff3
+            libtiff4
+    )
+
+    INCLUDE(FindPackageHandleStandardArgs)
+    FIND_PACKAGE_HANDLE_STANDARD_ARGS(TIFF REQUIRED_VARS TIFF_LIBRARY TIFF_INCLUDE_DIR)
+
+    SET(TIFF_LIBRARIES "${TIFF_LIBRARY}")
+ENDIF()
+
+IF (NOT TARGET TIFF::TIFF)
+    SET(_mkiv_tiff_imported_location "")
+    IF (TIFF_LIBRARY)
+        SET(_mkiv_tiff_imported_location "${TIFF_LIBRARY}")
+    ELSEIF (TIFF_LIBRARIES)
+        LIST(GET TIFF_LIBRARIES 0 _mkiv_tiff_imported_location)
+    ENDIF()
+
+    ADD_LIBRARY(TIFF::TIFF UNKNOWN IMPORTED)
+    SET_TARGET_PROPERTIES(TIFF::TIFF PROPERTIES
+        IMPORTED_LOCATION "${_mkiv_tiff_imported_location}"
+        INTERFACE_INCLUDE_DIRECTORIES "${TIFF_INCLUDE_DIR}"
+    )
+ENDIF()
+
+SET(_mkiv_tiff_target TIFF::TIFF)
+INCLUDE_DIRECTORIES (${TIFF_INCLUDE_DIR})
 
 # Prefer shared libtiff when available (avoids explicitly linking codec deps).
 IF (NOT TARGET TIFF::TIFF)

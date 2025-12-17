@@ -8,10 +8,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
 
+// cppcheck-suppress missingIncludeSystem
 #include <tiffio.h>
 #include "mkiv.h"
 
@@ -72,6 +74,8 @@ LD/28.02.14
 
 
 /**************************************************************************/
+// cppcheck-suppress functionTooLong
+// cppcheck-suppress cyclomaticComplexity
 int main(int argc, char **argv)
 /**************************************************************************/
 /* parameters */
