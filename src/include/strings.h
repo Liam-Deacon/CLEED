@@ -7,7 +7,9 @@
  * strcasecmp/strncasecmp.
  */
 
+// cppcheck-suppress missingIncludeSystem
 #include <stddef.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
 
 #ifdef _MSC_VER

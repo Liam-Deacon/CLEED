@@ -30,6 +30,7 @@ LD/30.04.14  - removed dependence on 'cp' system call, now uses
 #include <math.h>
 #include <stdlib.h>
 
+#include "cleed_string.h"
 #include "search.h"
 #include "copy_file.h"
 
@@ -82,8 +83,9 @@ static int n_calc  = 0;
 
 int iaux;
 int i_par;
-real faux;
-real rgeo, rfac;
+real faux = 0.;
+real rgeo = 0.;
+real rfac = 0.;
 
 struct tm *l_time;
 time_t t_time;
@@ -274,7 +276,14 @@ FILE *io_stream, *log_stream;
  if(rfac < rfac_min)
  {
    /* removed dependence on cp system call (no VLA for MSVC builds) */
-   const size_t path_len = strlen(sr_project) + 6;
+   const size_t project_len = cleed_strnlen(sr_project, 4096);
+   if (!sr_project || project_len == 0 || project_len >= 4096)
+   {
+     fprintf(STDERR, "*** error (sr_evalrf): invalid project name\n");
+     exit(1);
+   }
+
+   const size_t path_len = project_len + 6;
    char *old_path = (char *)malloc(path_len);
    char *new_path = (char *)malloc(path_len);
    if (!old_path || !new_path)
@@ -354,7 +363,5 @@ FILE *io_stream, *log_stream;
 
  return (rfac + rgeo);
 }
-
-
 
 

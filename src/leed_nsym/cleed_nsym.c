@@ -277,18 +277,25 @@ FILE *res_stream;
 
 #ifdef _USE_OPENMP
   
-  /* OpenMP control loops can only iterate using integers, so energy 
-     variables need to be converted using a multiplication factor */
-  #define IFAC 1e6
-  unsigned long int ienergy, istep, istop;
-  istep = (unsigned long int) eng->stp * IFAC;
-  istop = (unsigned long int) (eng->ini - E_TOLERANCE) * IFAC;
-  
-  #pragma omp parallel for 
-  for( ienergy = eng->fin*IFAC; ienergy > istop; 
-       ienergy -= istep) /* energy loop inverted to try to sync finish */
+  /* OpenMP loop index must be a signed integral type on MSVC. */
+  const real energy_start = eng->ini;
+  const real energy_stop = eng->fin + E_TOLERANCE;
+  const real energy_step = eng->stp;
+
+  long long n_steps = 0;
+  if (energy_step < 0)
   {
-    energy = (real) ienergy/IFAC; /* convert back integer representation of energy */
+    const real delta = energy_start - energy_stop;
+    if (delta > 0)
+    {
+      n_steps = (long long)ceil(delta / (-energy_step));
+    }
+  }
+
+  #pragma omp parallel for
+  for (long long step_index = 0; step_index < n_steps; step_index++)
+  {
+    energy = energy_start + (real)step_index * energy_step;
 #else
   for( energy = eng->ini; energy > eng->fin + E_TOLERANCE; energy += eng->stp)
   {

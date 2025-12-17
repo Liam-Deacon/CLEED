@@ -15,15 +15,18 @@ LD/04.06.13 - Add windows headers
 
 #include <malloc.h>
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
 #include <sys/types.h>
+
+#include "cleed_platform.h"
 
 #if defined(WIN32) || defined(_WIN32)|| \
 defined(__WIN32__) || defined(__MINGW__) || defined(_WIN64) 
 
 /* alternative headers for WINDOWS */
 #include "getrusage_win32.h"
-#include <windows.h>
 
 #else
 
@@ -72,19 +75,7 @@ static char *hostname;
  {
    r_usage = (struct rusage *) malloc (sizeof(struct rusage));
    hostname = (char *) malloc (STRSZ * sizeof(char));
-#if defined(WIN32) || defined(_WIN32)|| \
-defined(__WIN32__) || defined(__MINGW__) || defined(_WIN64)
-   {
-     DWORD hostname_size = (DWORD)STRSZ;
-     if (!GetComputerNameA(hostname, &hostname_size))
-     {
-       strncpy(hostname, "unknown", STRSZ);
-       hostname[STRSZ - 1] = '\0';
-     }
-   }
-#else
-   gethostname(hostname, STRSZ);
-#endif
+   cleed_get_hostname(hostname, STRSZ);
  }
 
  getrusage ( RUSAGE_SELF, r_usage );

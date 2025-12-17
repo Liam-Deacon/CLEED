@@ -235,8 +235,7 @@ IF (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
 ELSEIF("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
     SET(WARNINGS "/W4 /EHsc")
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-    # MSVC does not provide POSIX strcasecmp/strncasecmp; map to MSVC equivalents.
-    ADD_DEFINITIONS(-Dstrcasecmp=_stricmp -Dstrncasecmp=_strnicmp)
+    ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNINGS)
     SET(RUNTIME_LIBRARIES
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcm90.dll"
         "C:/Program Files/Microsoft Visual Studio 9.0/VC/redist/x86/Microsoft.VC90.CRT/msvcp90.dll"
