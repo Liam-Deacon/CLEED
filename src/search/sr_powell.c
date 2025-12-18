@@ -130,6 +130,18 @@ static void sr_brent_golden_step(sr_brent_state *s, real m, real cgold)
   s->d = cgold * s->e;
 }
 
+static void sr_brent_adjust_step(sr_brent_state *s, real m, real tol1, real tol2)
+{
+  real u = s->x + s->d;
+  if (u - s->a < tol2) {
+    s->d = (s->x < m) ? tol1 : -tol1;
+    return;
+  }
+  if (s->b - u < tol2) {
+    s->d = (s->x < m) ? tol1 : -tol1;
+  }
+}
+
 static int sr_brent_parabolic_step(sr_brent_state *s, real m, real tol1, real tol2)
 {
   real r = (s->x - s->w) * (s->fx - s->fv);
@@ -147,13 +159,7 @@ static int sr_brent_parabolic_step(sr_brent_state *s, real m, real tol1, real to
   if (p >= q * (s->b - s->x)) return -1;
 
   s->d = p / q;
-  real u = s->x + s->d;
-  if (u - s->a < tol2) {
-    s->d = (s->x < m) ? tol1 : -tol1;
-  }
-  if (s->b - u < tol2) {
-    s->d = (s->x < m) ? tol1 : -tol1;
-  }
+  sr_brent_adjust_step(s, m, tol1, tol2);
   return 0;
 }
 

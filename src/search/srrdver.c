@@ -27,6 +27,44 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 #include "search.h"
 
 #ifdef ERROR
+#define SR_RDVER_ERROR(...) fprintf(STDERR, __VA_ARGS__)
+#else
+#define SR_RDVER_ERROR(...) ((void)0)
+#endif
+
+#ifdef WARNING
+#define SR_RDVER_WARN(...) fprintf(STDWAR, __VA_ARGS__)
+#else
+#define SR_RDVER_WARN(...) ((void)0)
+#endif
+
+#ifdef CONTROL_X
+#define SR_RDVER_CTRLX(...) fprintf(STDCTR, __VA_ARGS__)
+#else
+#define SR_RDVER_CTRLX(...) ((void)0)
+#endif
+
+#ifdef CONTROL
+#define SR_RDVER_CTRL(...) fprintf(STDCTR, __VA_ARGS__)
+#else
+#define SR_RDVER_CTRL(...) ((void)0)
+#endif
+
+#ifdef EXIT_ON_ERROR
+#define SR_RDVER_BAIL() do { exit(1); } while(0)
+#else
+#define SR_RDVER_BAIL() do { return(-1); } while(0)
+#endif
+
+#ifdef CONTROL
+#define SR_RDVER_FLUSH() fflush(STDCTR)
+#else
+#define SR_RDVER_FLUSH() ((void)0)
+#endif
+
+/**********************************************************************/
+
+#ifdef ERROR
 #ifdef EXIT_ON_ERROR
 #define ALLERR(x) \
         fprintf(STDERR," *** error (sr_rdver): allocation error (%s)\n",x); \
@@ -48,20 +86,7 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 
 static FILE *sr_rdver_open(const char *ver_file)
 {
-  FILE *fp = fopen(ver_file, "r");
-  if (fp == NULL)
-  {
-#ifdef ERROR
-    fprintf(STDERR,
-            " *** error (sr_rdver): could not open file \"%s\"\n", ver_file);
-#endif
-#ifdef EXIT_ON_ERROR
-    exit(1);
-#else
-    return NULL;
-#endif
-  }
-  return fp;
+  return fopen(ver_file, "r");
 }
 
 static int sr_rdver_read_header(FILE *ver_stream, const char *ver_file,
@@ -75,51 +100,29 @@ static int sr_rdver_read_header(FILE *ver_stream, const char *ver_file,
   int file_ndim = 0;
   int file_mpar = 0;
   if (sscanf(linebuffer, "%d %d", &file_ndim, &file_mpar) != 2) {
-#ifdef ERROR
-    fprintf(STDERR,
-            " *** error (sr_rdver): invalid header in \"%s\"\n", ver_file);
-#endif
-#ifdef EXIT_ON_ERROR
-    exit(1);
-#else
+    SR_RDVER_ERROR(" *** error (sr_rdver): invalid header in \"%s\"\n", ver_file);
     return -1;
-#endif
   }
 
   if (ndim_in < 0)
   {
-#ifdef WARNING
-    fprintf(STDWAR,
-            " * warning (sr_rdver): ndim < 0: dimensions are not checked\n");
-#endif
+    SR_RDVER_WARN(" * warning (sr_rdver): ndim < 0: dimensions are not checked\n");
     *out_ndim = file_ndim;
     *out_mpar = file_mpar;
     return 0;
   }
 
   if (file_ndim != ndim_in) {
-#ifdef ERROR
-    fprintf(STDERR,
+    SR_RDVER_ERROR(
             " *** error (sr_rdver): dimensions do not match: %d/%d, %d/%d\n",
             file_ndim, ndim_in, file_mpar, ndim_in + 1);
-#endif
-#ifdef EXIT_ON_ERROR
-    exit(1);
-#else
     return -1;
-#endif
   }
   if (file_mpar != ndim_in + 1) {
-#ifdef ERROR
-    fprintf(STDERR,
+    SR_RDVER_ERROR(
             " *** error (sr_rdver): dimensions do not match: %d/%d, %d/%d\n",
             file_ndim, ndim_in, file_mpar, ndim_in + 1);
-#endif
-#ifdef EXIT_ON_ERROR
-    exit(1);
-#else
     return -1;
-#endif
   }
 
   *out_ndim = ndim_in;
@@ -220,50 +223,42 @@ int m_par = 0;
 ********************************************************************/
 
  ver_stream = sr_rdver_open(ver_file);
-#ifndef EXIT_ON_ERROR
- if (ver_stream == NULL) return -1;
-#endif
+ if (ver_stream == NULL)
+ {
+   SR_RDVER_ERROR(" *** error (sr_rdver): could not open file \"%s\"\n", ver_file);
+   SR_RDVER_BAIL();
+ }
 
-#ifdef CONTROL_X
- fprintf(STDCTR,"(sr_rdver): Reading file \"%s\"\n",ver_file);
-#endif
+ SR_RDVER_CTRLX("(sr_rdver): Reading file \"%s\"\n", ver_file);
 
-#ifdef EXIT_ON_ERROR
- sr_rdver_read_header(ver_stream, ver_file, ndim, &ndim, &m_par);
-#else
  if (sr_rdver_read_header(ver_stream, ver_file, ndim, &ndim, &m_par) != 0)
  {
    fclose(ver_stream);
-   return -1;
+   SR_RDVER_BAIL();
  }
-#endif
 
  if (sr_rdver_read_vertices(ver_stream, ver_file, y, p, ndim, m_par) != 0)
  {
    fclose(ver_stream);
-   return -1;
+   SR_RDVER_BAIL();
  }
 
-#ifdef CONTROL_X
-   fprintf(STDCTR,"\n");
-#endif
+ SR_RDVER_CTRLX("\n");
 /************************************************************************
   END OF INPUT
   Close input file.
 *************************************************************************/
  fclose(ver_stream);
 
-#ifdef CONTROL
- fprintf(STDCTR,"(sr_rdver): vertex read from \"%s\":\n", ver_file);
+ SR_RDVER_CTRL("(sr_rdver): vertex read from \"%s\":\n", ver_file);
  for (int i_par = 1; i_par<= m_par; i_par++)
  {
-   fprintf(STDCTR,"(%2d) %7.4f :", i_par, y[i_par]);
+   SR_RDVER_CTRL("(%2d) %7.4f :", i_par, y[i_par]);
    for(int j_par=1; j_par<= ndim; j_par++)
-     fprintf(STDCTR," %6.3f", p[i_par][j_par]);
-   fprintf(STDCTR,"\n");
+     SR_RDVER_CTRL(" %6.3f", p[i_par][j_par]);
+   SR_RDVER_CTRL("\n");
  }
- fflush(STDCTR);
-#endif
+ SR_RDVER_FLUSH();
 
  return(1);
 }  /* end of function sr_rdver */
