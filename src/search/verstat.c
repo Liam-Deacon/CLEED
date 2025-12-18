@@ -16,8 +16,11 @@ GH/28.09.95
  * thresholds.
  */
 
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
 #include <math.h>
 #include "search.h"
 #include "sr_alloc.h"
