@@ -35,6 +35,7 @@
 
 #include "copy_file.h"
 #include "search.h"
+#include "sr_simplex.h"
 
 #ifndef MAX_ITER_AMOEBA
 #define MAX_ITER_AMOEBA 2000
@@ -79,44 +80,6 @@ static int sr_write_vertex_file(const real **p, const real *y, int ndim)
   return 0;
 }
 
-static void sr_copy_point(real *dst, const real *src, int ndim)
-{
-  for (int j = 1; j <= ndim; j++) dst[j] = src[j];
-}
-
-static void sr_centroid_excluding(const real **p, real *centroid, int ndim, int exclude_index)
-{
-  int mpts = ndim + 1;
-  for (int j = 1; j <= ndim; j++) centroid[j] = 0.0;
-
-  for (int i = 1; i <= mpts; i++) {
-    if (i == exclude_index) continue;
-    for (int j = 1; j <= ndim; j++) centroid[j] += p[i][j];
-  }
-
-  /* There are ndim points when excluding one vertex. */
-  for (int j = 1; j <= ndim; j++) centroid[j] /= (real)ndim;
-}
-
-static void sr_simplex_extremes(const real *y, int ndim, int *ilo, int *ihi, int *inhi)
-{
-  int mpts = ndim + 1;
-
-  *ilo = 1;
-  *ihi = (y[1] > y[2]) ? 1 : 2;
-  *inhi = (y[1] > y[2]) ? 2 : 1;
-
-  for (int i = 1; i <= mpts; i++) {
-    if (y[i] < y[*ilo]) *ilo = i;
-    if (y[i] > y[*ihi]) {
-      *inhi = *ihi;
-      *ihi = i;
-    } else if (i != *ihi && y[i] > y[*inhi]) {
-      *inhi = i;
-    }
-  }
-}
-
 /**
  * @brief Internal state for a single sr_amoeba() invocation.
  *
@@ -155,7 +118,7 @@ static int sr_amoeba_converged(const sr_amoeba_ctx *ctx, int ilo, int ihi)
 
 static void sr_amoeba_accept(sr_amoeba_ctx *ctx, int ihi, const real *x, real fx)
 {
-  sr_copy_point(ctx->p[ihi], x, ctx->ndim);
+  sr_simplex_copy_point(ctx->p[ihi], x, ctx->ndim);
   ctx->y[ihi] = fx;
 }
 
@@ -224,7 +187,7 @@ static int sr_amoeba_step(sr_amoeba_ctx *ctx)
   if (sr_amoeba_converged(ctx, ilo, ihi)) return 1;
   if (*ctx->nfunk >= MAX_ITER_AMOEBA) return -2;
 
-  sr_centroid_excluding((const real **)ctx->p, ctx->centroid, ctx->ndim, ihi);
+  sr_simplex_centroid_excluding((const real **)ctx->p, ctx->centroid, ctx->ndim, ihi);
   real fr = sr_amoeba_reflect(ctx, ihi);
 
   if (fr < ctx->y[ilo]) {

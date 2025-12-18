@@ -96,6 +96,18 @@ else()
 endif()
 add_test(NAME search.vertex_stats COMMAND test_search_vertex_stats)
 
+add_executable(test_search_simplex
+    test_search_simplex.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_simplex PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_simplex PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_simplex PRIVATE search m)
+endif()
+add_test(NAME search.simplex_utils COMMAND test_search_simplex)
+
 add_executable(test_rfac_spline
     test_rfac_spline.c
 )

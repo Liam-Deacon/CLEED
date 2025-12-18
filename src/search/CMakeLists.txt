@@ -33,14 +33,15 @@ SET (searchlib_SRCS
     search_globals.c
     copy_file.c
 
-    # Core optimisation algorithms (GPL-compatible, in-tree)
-    sr_alloc.c
-    sr_rng.c
-    sr_parse.c
-    sr_vertex_stats.c
-    sr_amoeba.c
-    sr_amebsa.c
-    sr_powell.c
+	    # Core optimisation algorithms (GPL-compatible, in-tree)
+	    sr_alloc.c
+	    sr_rng.c
+	    sr_parse.c
+	    sr_simplex.c
+	    sr_vertex_stats.c
+	    sr_amoeba.c
+	    sr_amebsa.c
+	    sr_powell.c
 
     # Search drivers + evaluation
     srckgeo.c
