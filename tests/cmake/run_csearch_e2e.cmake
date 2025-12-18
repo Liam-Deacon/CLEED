@@ -53,9 +53,15 @@ else()
   set(path_value "${path_prefix}")
 endif()
 
+set(path_value_escaped "${path_value}")
+if(WIN32)
+  # Keep PATH as a single argument for `cmake -E env` (CMake treats ';' as a list separator).
+  string(REPLACE ";" "\\;" path_value_escaped "${path_value}")
+endif()
+
 execute_process(
   COMMAND "${CMAKE_COMMAND}" -E env
-          "PATH=${path_value}"
+          "PATH=${path_value_escaped}"
           "CSEARCH_LEED=${leed_name}"
           "CSEARCH_RFAC=${rfac_name}"
           "${PROGRAM}" -i "${inp_dst}" -s sx -d 0.1
