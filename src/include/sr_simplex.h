@@ -60,10 +60,15 @@ void sr_simplex_extremes(const real *y, int ndim, int *ilo, int *ihi, int *inhi)
  * and are suitable for SEARCH optimiser APIs that require 1-based arrays.
  */
 typedef struct sr_simplex_buffers {
+  // cppcheck-suppress unusedStructMember
   int ndim;
+  // cppcheck-suppress unusedStructMember
   int mpar;
+  // cppcheck-suppress unusedStructMember
   real *x;    /**< scratch vector (1..ndim) */
+  // cppcheck-suppress unusedStructMember
   real *y;    /**< objective values (1..mpar) */
+  // cppcheck-suppress unusedStructMember
   real **p;   /**< simplex vertices (1..mpar, 1..ndim) */
 } sr_simplex_buffers;
 
@@ -111,4 +116,3 @@ int sr_simplex_read_vertex(sr_simplex_buffers *b, const char *bak_file);
 #endif
 
 #endif
-

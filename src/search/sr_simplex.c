@@ -16,6 +16,21 @@
 
 #include "sr_alloc.h"
 
+static void sr_simplex_zero(real *v, int n)
+{
+  for (int j = 1; j <= n; j++) v[j] = 0.0;
+}
+
+static void sr_simplex_add(real *acc, const real *x, int n)
+{
+  for (int j = 1; j <= n; j++) acc[j] += x[j];
+}
+
+static void sr_simplex_scale(real *v, int n, real s)
+{
+  for (int j = 1; j <= n; j++) v[j] *= s;
+}
+
 void sr_simplex_copy_point(real *dst, const real *src, int ndim)
 {
   if (dst == NULL || src == NULL || ndim <= 0) return;
@@ -27,14 +42,34 @@ void sr_simplex_centroid_excluding(const real **p, real *centroid, int ndim, int
   if (p == NULL || centroid == NULL || ndim <= 0) return;
 
   int mpts = ndim + 1;
-  for (int j = 1; j <= ndim; j++) centroid[j] = 0.0;
+  sr_simplex_zero(centroid, ndim);
 
   for (int i = 1; i <= mpts; i++) {
     if (i == exclude_index) continue;
-    for (int j = 1; j <= ndim; j++) centroid[j] += p[i][j];
+    sr_simplex_add(centroid, p[i], ndim);
   }
 
-  for (int j = 1; j <= ndim; j++) centroid[j] /= (real)ndim;
+  sr_simplex_scale(centroid, ndim, (real)1.0 / (real)ndim);
+}
+
+static void sr_simplex_extremes_init(const real *y, int *ilo, int *ihi, int *inhi)
+{
+  *ilo = 1;
+  *ihi = (y[1] > y[2]) ? 1 : 2;
+  *inhi = (y[1] > y[2]) ? 2 : 1;
+}
+
+static void sr_simplex_extremes_update(const real *y, int i, int *ilo, int *ihi, int *inhi)
+{
+  if (y[i] < y[*ilo]) *ilo = i;
+  if (y[i] > y[*ihi]) {
+    *inhi = *ihi;
+    *ihi = i;
+    return;
+  }
+  if (i != *ihi && y[i] > y[*inhi]) {
+    *inhi = i;
+  }
 }
 
 void sr_simplex_extremes(const real *y, int ndim, int *ilo, int *ihi, int *inhi)
@@ -43,18 +78,10 @@ void sr_simplex_extremes(const real *y, int ndim, int *ilo, int *ihi, int *inhi)
 
   int mpts = ndim + 1;
 
-  *ilo = 1;
-  *ihi = (y[1] > y[2]) ? 1 : 2;
-  *inhi = (y[1] > y[2]) ? 2 : 1;
+  sr_simplex_extremes_init(y, ilo, ihi, inhi);
 
   for (int i = 1; i <= mpts; i++) {
-    if (y[i] < y[*ilo]) *ilo = i;
-    if (y[i] > y[*ihi]) {
-      *inhi = *ihi;
-      *ihi = i;
-    } else if (i != *ihi && y[i] > y[*inhi]) {
-      *inhi = i;
-    }
+    sr_simplex_extremes_update(y, i, ilo, ihi, inhi);
   }
 }
 
@@ -90,22 +117,25 @@ void sr_simplex_buffers_free(sr_simplex_buffers *b)
   b->mpar = 0;
 }
 
+static void sr_simplex_build_vertex(sr_simplex_buffers *b, int i, real dpos)
+{
+  for (int j = 1; j <= b->ndim; j++) {
+    if (i == (j + 1)) {
+      b->x[j] = b->p[i][j] = b->p[1][j] + dpos;
+    } else {
+      b->x[j] = b->p[i][j] = b->p[1][j];
+    }
+  }
+}
+
 int sr_simplex_build_initial(sr_simplex_buffers *b, real dpos, real (*func)(real *))
 {
   if (b == NULL || b->p == NULL || b->y == NULL || b->x == NULL || b->ndim <= 0 || func == NULL) return -1;
 
-  for (int j = 1; j <= b->ndim; j++) {
-    b->p[1][j] = 0.0;
-  }
+  sr_simplex_zero(b->p[1], b->ndim);
 
   for (int i = 1; i <= b->mpar; i++) {
-    for (int j = 1; j <= b->ndim; j++) {
-      if (i == (j + 1)) {
-        b->x[j] = b->p[i][j] = b->p[1][j] + dpos;
-      } else {
-        b->x[j] = b->p[i][j] = b->p[1][j];
-      }
-    }
+    sr_simplex_build_vertex(b, i, dpos);
     b->y[i] = (*func)(b->x);
   }
 
@@ -117,4 +147,3 @@ int sr_simplex_read_vertex(sr_simplex_buffers *b, const char *bak_file)
   if (b == NULL || b->p == NULL || b->y == NULL || bak_file == NULL) return -1;
   return (sr_rdver(bak_file, b->y, b->p, b->ndim) == 1) ? 0 : -1;
 }
-
