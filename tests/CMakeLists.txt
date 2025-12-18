@@ -107,6 +107,27 @@ else()
 endif()
 add_test(NAME rfac.spline COMMAND test_rfac_spline)
 
+add_executable(fake_csearch_leed
+    fakes/fake_csearch_leed.c
+)
+
+add_executable(fake_csearch_rfac
+    fakes/fake_csearch_rfac.c
+)
+
+add_test(
+    NAME csearch.e2e_stub_simplex
+    COMMAND ${CMAKE_COMMAND}
+        -DPROGRAM=$<TARGET_FILE:csearch>
+        -DLEED_PROGRAM=$<TARGET_FILE:fake_csearch_leed>
+        -DRFAC_PROGRAM=$<TARGET_FILE:fake_csearch_rfac>
+        -DINPUT=${PROJECT_SOURCE_DIR}/tests/fixtures/csearch_stub/stub.inp
+        -DBULK=${PROJECT_SOURCE_DIR}/tests/fixtures/csearch_stub/stub.bul
+        -DCTR=${PROJECT_SOURCE_DIR}/tests/fixtures/csearch_stub/stub.ctr
+        -DOUT_BASENAME=stub
+        -P ${PROJECT_SOURCE_DIR}/tests/cmake/run_csearch_e2e.cmake
+)
+
 add_test(
     NAME latt.minimal_fixture
     COMMAND $<TARGET_FILE:latt>

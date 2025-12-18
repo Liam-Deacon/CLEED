@@ -1,0 +1,5 @@
+# Minimal control file for csearch end-to-end tests.
+#
+# The fake R-factor executable ignores the contents, but the file is provided
+# to match real-world invocation patterns.
+
