@@ -29,62 +29,35 @@ CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/include/search_ver.h.in"
 ###############################################################################
 SET (csearch_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "" FORCE)
 
-IF (WITH_GSL STREQUAL "OFF")
-    # Closed source version
-    SET (searchlib_SRCS
-        search_globals.c
-        copy_file.c
-        nrrutil.c
-        nrrbrent.c
-        nrrlinmin.c
-        nrrmnbrak.c
-        nrrran1.c 
-        sramoeba.c
-        sramebsa.c
-        srckgeo.c
-        srckrot.c
-        srevalrf.c
-        srhelp.c
-        srmkinp.c
-        srpo.c
-        srpowell.c
-        srrdinp.c
-        srrdver.c
-        srsa.c
-        srer.c
-        srsx.c
-        ${cleed_nsym_SOURCE_DIR}/linpdebtemp.c
-    )
-ELSE()
-    # Open Source version using GNU Scientific Library
-    SET (searchlib_SRCS
-        search_globals.c
-        copy_file.c
-        srckrot.c
-        srhelp.c
-        srrdinp.c
-        
-        #brent_gsl.c
-        #linmin_gsl.c
-        #ran1.c 
-        
-        #sramebsa_gsl.c
-        #srpowell_gsl.c
-        sramoeba_gsl.c
-        srckgeo_gsl.c
-        srevalrf_gsl.c
-        srmkinp_gsl.c
-        #srpo_gsl.c
-        srrdver_gsl.c
-        #srsa_gsl.c
-        srer_gsl.c
-        srsx_gsl.c
-        
-        ${cleed_nsym_SOURCE_DIR}/linpdebtemp.c
-    )
-    ADD_DEFINITIONS(-DUSE_GSL)
-    ADD_DEFINITIONS(-D_USE_GSL)
-ENDIF()
+SET (searchlib_SRCS
+    search_globals.c
+    copy_file.c
+
+	    # Core optimisation algorithms (GPL-compatible, in-tree)
+	    sr_alloc.c
+	    sr_rng.c
+	    sr_parse.c
+	    sr_simplex.c
+	    sr_vertex_stats.c
+	    sr_amoeba.c
+	    sr_amebsa.c
+	    sr_powell.c
+
+    # Search drivers + evaluation
+    srckgeo.c
+    srckrot.c
+    srevalrf.c
+    srhelp.c
+    srmkinp.c
+    srpo.c
+    srrdinp.c
+    srrdver.c
+    srsa.c
+    srer.c
+    srsx.c
+
+    ${cleed_nsym_SOURCE_DIR}/linpdebtemp.c
+)
     
 SET (csearch_SRCS csearch.c)
 

@@ -15,7 +15,6 @@ version 0.1
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
 #include <string.h>
 #include <math.h>
 #include "search.h"
@@ -53,11 +52,15 @@ int main(int argc, char *argv[])
 *********************************************************************/
 
   sr_project = (char *) malloc(STRSZ * sizeof(char) );
-  strncpy(sr_project, "search", STRSZ);
+  if (sr_project == NULL) {
+    fprintf(STDERR, "*** error (SEARCH): allocation error (sr_project)\n");
+    exit(1);
+  }
+  (void)snprintf(sr_project, STRSZ, "%s", "search");
 
   delta = DPOS;
-  strncpy(inp_file,"---", STRSZ);
-  strncpy(bak_file,"---", STRSZ);
+  (void)snprintf(inp_file, sizeof(inp_file), "%s", "---");
+  (void)snprintf(bak_file, sizeof(bak_file), "%s", "---");
 
   search_type = SR_SIMPLEX;
 
@@ -96,7 +99,7 @@ int main(int argc, char *argv[])
       {
         i_arg++;
         if (i_arg < argc)
-            strncpy(inp_file, argv[i_arg], STRSZ);
+            (void)snprintf(inp_file, sizeof(inp_file), "%s", argv[i_arg]);
         else 
         {
           #ifdef ERROR
@@ -111,7 +114,7 @@ int main(int argc, char *argv[])
       {
         i_arg++;
         if (i_arg < argc)
-            strncpy(bak_file, argv[i_arg], STRSZ);
+            (void)snprintf(bak_file, sizeof(bak_file), "%s", argv[i_arg]);
         else
         {
           #ifdef ERROR
@@ -199,7 +202,7 @@ int main(int argc, char *argv[])
   fprintf(STDCTR,"(SEARCH): sr_project  = %s\n", sr_project);
 
   /* build log file */
-  sprintf(log_file,"%s.log",sr_project);
+  (void)snprintf(log_file, sizeof(log_file), "%s.log", sr_project);
 
   /* dimension of the search */
   ndim = sr_search->n_par;
@@ -277,11 +280,7 @@ int main(int argc, char *argv[])
 */
     case(SR_POWELL):
     {
-      #if defined(_USE_GSL) || defined(USE_GSL)
-         SR_NOT_IMPLEMENTED_ERROR("Powell's method");
-      #else
-         SR_PO(ndim, bak_file, log_file);
-      #endif
+      SR_PO(ndim, bak_file, log_file);
       break;
     } /* case SR_POWELL */
 
@@ -290,11 +289,7 @@ int main(int argc, char *argv[])
 */
     case(SR_SIM_ANNEALING):
     {
-      #if defined(_USE_GSL) || defined(USE_GSL)
-         SR_NOT_IMPLEMENTED_ERROR("simulated annealing");
-      #else
-         SR_SA(ndim, delta, bak_file, log_file);
-      #endif
+      SR_SA(ndim, delta, bak_file, log_file);
       break;
     } /* case SR_SIM_ANNEALING */
 

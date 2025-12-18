@@ -1,0 +1,15 @@
+# Minimal SEARCH input for csearch end-to-end tests.
+#
+# This uses a manual 1-parameter reference list (spn/spp) to keep the test fast
+# and deterministic across platforms.
+a1: 1.0000 0.0000 0.0000
+a2: 0.0000 1.0000 0.0000
+
+po: X_test 0.0000 0.0000 1.0000 dr3 0.050 0.050 0.050
+rm: X_test 0.10
+zr: 0.00 10.00
+
+spn: 1
+# last atom, z parameter, single coefficient
+spp: - z 1.0
+

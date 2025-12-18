@@ -78,6 +78,16 @@ char buf[BUFSZ];
 char atom_name[STRSZ];
 char whatnext[STRSZ];
 
+static const char *sr_rdinp_basename(const char *path)
+{
+  const char *base = path;
+  if (path == NULL) return "";
+  for (const char *p = path; *p != '\0'; p++) {
+    if (*p == '/' || *p == '\\') base = p + 1;
+  }
+  return base;
+}
+
 int sr_rdinp(
     const char *inp_file      /* input file containing start geometry and 
                                  control parameters for SEARCH. */
@@ -183,12 +193,18 @@ struct type_str *types;      /* this vector of structure type_str is
    fprintf(STDCTR,"(sr_rdinp): start of function\n");
  #endif
 
- for(i_str = 0;
-     ( inp_file[i_str] != '\0' ) &&
-     ( inp_file[i_str] != '.' )  &&
-     ( i_str < STRSZ ) ;
-     i_str ++)
- { sr_project[i_str] = inp_file[i_str]; }
+ const char *base = sr_rdinp_basename(inp_file);
+ size_t prefix_len = 0;
+ while (prefix_len < (size_t)(STRSZ - 1) &&
+        base[prefix_len] != '\0' &&
+        base[prefix_len] != '.')
+ {
+   prefix_len++;
+ }
+
+ for (i_str = 0; i_str < (int)prefix_len; i_str++) {
+   sr_project[i_str] = base[i_str];
+ }
  sr_project[i_str] = '\0';
 
  #ifdef CONTROL
@@ -209,6 +225,7 @@ struct type_str *types;      /* this vector of structure type_str is
  types = (struct type_str *)malloc( sizeof(struct type_str) );
  if( types == NULL)
  { ALLERR("types"); }
+ types->name[0] = '\0';
  types->r_min = F_END_OF_LIST;
  n_types = 0;
 
@@ -216,7 +233,7 @@ struct type_str *types;      /* this vector of structure type_str is
  if( sr_search == NULL)
  { ALLERR("sr_search"); }
 
- for(iaux = 0; iaux <= 5; iaux ++)
+ for(iaux = 0; iaux < (int)(sizeof(sr_search->b_lat) / sizeof(sr_search->b_lat[0])); iaux ++)
   sr_search->b_lat[iaux] = 0.;
 
  sr_search->sr_angle = 0; /* added for the angle search */
@@ -227,13 +244,13 @@ struct type_str *types;      /* this vector of structure type_str is
  sr_search->mir_point[1] = sr_search->mir_point[2] = 0.;
  sr_search->mir_dir[1] = sr_search->mir_dir[2] = 0.;
 
- strncpy(sr_search->rf_type, RFAC_TYP, 16);
+ (void)snprintf(sr_search->rf_type, sizeof(sr_search->rf_type), "%s", RFAC_TYP);
  sr_search->rf_range = RFAC_SHIFT_RANGE;
 
  temp = DEF_TEMP;
- for(iaux = 0; iaux <= 5; iaux ++)
+ for(iaux = 0; iaux < (int)(sizeof(m_super) / sizeof(m_super[0])); iaux ++)
   m_super[iaux] = 0.;
- for(iaux = 0; iaux <= 4; iaux ++)
+ for(iaux = 0; iaux < (int)(sizeof(a1) / sizeof(a1[0])); iaux ++)
   a1[iaux] = a2[iaux] = 0.;
 
 /* n_par != 0 indicates manual entry of parameter reference list */
@@ -604,8 +621,13 @@ po:
    else if( !strncasecmp(buf+i_str,"po:",3) )
    {
 
-     sr_atoms = ( struct sratom_str *) realloc(
-                 sr_atoms, (n_atoms+2) * sizeof(struct sratom_str) );
+     struct sratom_str *new_atoms =
+       (struct sratom_str *)realloc(sr_atoms, (n_atoms + 2) * sizeof(struct sratom_str));
+     if (new_atoms == NULL)
+     {
+       ALLERR("sr_atoms");
+     }
+     sr_atoms = new_atoms;
 
    /* preset xyz_par with NULL ref and nref with I_END_OF_LIST */
      (sr_atoms+n_atoms)->x_par = NULL;
@@ -725,14 +747,21 @@ po:
   */
      if(i_types == n_types)
      {
-       types = ( struct type_str *) realloc(
-               types, (n_types+1) * sizeof(struct type_str) );
+       struct type_str *new_types =
+         (struct type_str *)realloc(types, (n_types + 2) * sizeof(struct type_str));
+       if (new_types == NULL)
+       {
+         ALLERR("types");
+       }
+       types = new_types;
 
        strcpy( (types+i_types)->name, (sr_atoms+n_atoms)->name);
        (types+i_types)->r_min = F_END_OF_LIST;
 
        (sr_atoms+n_atoms)->type = i_types;
        n_types ++;
+       (types + n_types)->name[0] = '\0';
+       (types + n_types)->r_min = F_END_OF_LIST;
      }
 
      fprintf(STDOUT,"po(%d)\n", n_atoms);
@@ -814,7 +843,7 @@ rft:
    the array boundaries (16)
 */
      iaux = sscanf(buf+i_str+4 ,"%s", whatnext );
-     strncpy(sr_search->rf_type, whatnext, 16);
+     (void)snprintf(sr_search->rf_type, sizeof(sr_search->rf_type), "%s", whatnext);
    }
 
 /***********************************
@@ -850,11 +879,19 @@ rm:
   */
      if(i_types == n_types)
      {
-       types = ( struct type_str *) realloc(
-               types, (n_types+1) * sizeof(struct type_str) );
-       strcpy( (types+i_types)->name, atom_name);
-       (types+i_types)->r_min = faux;
+       struct type_str *new_types =
+         (struct type_str *)realloc(types, (n_types + 2) * sizeof(struct type_str));
+       if (new_types == NULL)
+       {
+         ALLERR("types");
+       }
+       types = new_types;
+
+       (void)snprintf((types + i_types)->name, sizeof((types + i_types)->name), "%s", atom_name);
+       (types + i_types)->r_min = faux;
        n_types ++;
+       (types + n_types)->name[0] = '\0';
+       (types + n_types)->r_min = F_END_OF_LIST;
      }
    } /* rm */
 
@@ -1113,7 +1150,15 @@ zr:
  fclose(inp_stream);
 
  (types+n_types)->name[0] = '\0';
+ (types+n_types)->r_min = F_END_OF_LIST;
  (sr_atoms+n_atoms)->type   = I_END_OF_LIST;
+ (sr_atoms+n_atoms)->name[0] = '\0';
+ (sr_atoms+n_atoms)->x_par = NULL;
+ (sr_atoms+n_atoms)->y_par = NULL;
+ (sr_atoms+n_atoms)->z_par = NULL;
+ (sr_atoms+n_atoms)->dr_par = NULL;
+ (sr_atoms+n_atoms)->ref = I_END_OF_LIST;
+ (sr_atoms+n_atoms)->nref = I_END_OF_LIST;
 
 /************************************************************************
 *************************************************************************

@@ -112,7 +112,13 @@ static int run_amoeba_regression(void)
     }
 
     configure_simplex(p, y);
-    sr_amoeba(p, y, ndim, 1e-6, (real (*)())quadratic_2d, &nfunk);
+    const int rc = sr_amoeba(p, y, ndim, 1e-6, quadratic_2d, &nfunk);
+    if (rc != 0) {
+        fprintf(stderr, "sr_amoeba failed: %d\n", rc);
+        cleed_test_free_matrix_1based(p);
+        cleed_test_free_vector_1based(y);
+        return 1;
+    }
 
     const int result = verify_amoeba_result(p, y, nfunk);
     cleed_test_free_matrix_1based(p);
@@ -121,13 +127,78 @@ static int run_amoeba_regression(void)
     return result;
 }
 
+static int verify_vertex_files_written(void)
+{
+    FILE *vbk = fopen("amoeba_test.vbk", "r");
+    if (!vbk) {
+        fprintf(stderr, "expected amoeba_test.vbk to exist\n");
+        return 1;
+    }
+    fclose(vbk);
+
+    FILE *ver = fopen("amoeba_test.ver", "r");
+    if (!ver) {
+        fprintf(stderr, "expected amoeba_test.ver to exist\n");
+        return 1;
+    }
+    char header[128];
+    if (!fgets(header, (int)sizeof(header), ver)) {
+        fclose(ver);
+        fprintf(stderr, "failed to read amoeba_test.ver header\n");
+        return 1;
+    }
+
+    int ndim = 0;
+    int mpts = 0;
+    char project[64] = {0};
+    if (sscanf(header, "%d %d %63s", &ndim, &mpts, project) != 3) {
+        fclose(ver);
+        fprintf(stderr, "unexpected amoeba_test.ver header: %s\n", header);
+        return 1;
+    }
+    if (ndim != 2 || mpts != 3 || strcmp(project, "amoeba_test") != 0) {
+        fclose(ver);
+        fprintf(stderr, "unexpected amoeba_test.ver header: %s\n", header);
+        return 1;
+    }
+
+    char line[256];
+    if (!fgets(line, (int)sizeof(line), ver)) {
+        fclose(ver);
+        fprintf(stderr, "failed to read amoeba_test.ver vertex line\n");
+        return 1;
+    }
+    fclose(ver);
+
+    double fy = 0.0, x = 0.0, y = 0.0;
+    if (sscanf(line, "%lf %lf %lf", &fy, &x, &y) != 3) {
+        fprintf(stderr, "unexpected amoeba_test.ver vertex line: %s\n", line);
+        return 1;
+    }
+
+    return 0;
+}
+
 int main(void)
 {
     if (setup_sr_project() != 0) {
         return 1;
     }
 
+    /* Remove any stale outputs before running. */
+    (void)cleed_test_remove_file("amoeba_test.vbk");
+    (void)cleed_test_remove_file("amoeba_test.ver");
+    if (cleed_test_write_text_file("amoeba_test.ver", "seed\n") != 0) {
+        fprintf(stderr, "failed to create amoeba_test.ver\n");
+        teardown_sr_project();
+        return 1;
+    }
+
     const int status = run_amoeba_regression();
+    if (status == 0 && verify_vertex_files_written() != 0) {
+        teardown_sr_project();
+        return 1;
+    }
     teardown_sr_project();
 
     return status;

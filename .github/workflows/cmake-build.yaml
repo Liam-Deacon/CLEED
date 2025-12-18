@@ -21,6 +21,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Source compliance guard
+      run: python tools/check_nr_free.py
+
     - name: Install build dependencies (Linux)
       if: runner.os == 'Linux'
       run: |

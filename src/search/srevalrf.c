@@ -89,7 +89,7 @@ static int n_calc  = 0;
 struct tm *l_time;
 time_t t_time;
 
-char line_buffer[STRSZ];
+char line_buffer[4096];
 char log_file[STRSZ];
 char par_file[STRSZ];
 
@@ -196,13 +196,24 @@ FILE *io_stream, *log_stream;
 
 #else
 
- sprintf(line_buffer,                 /* added quotation for filepath safety */
+/* Added quotation for filepath safety. On Windows, wrap the whole command in cmd /S /C ""..."" so redirection is parsed correctly. */
+#ifdef _WIN32
+ (void)snprintf(line_buffer, sizeof(line_buffer),
+         "cmd /S /C \"\"%s\" -b \"%s.bsr\" -i \"%s\" -o \"%s.res\" > \"%s.out\"\"",
+         getenv("CSEARCH_LEED"),      /* LEED program name */
+         sr_project,                  /* project name for modified bulk file */
+         par_file,                    /* parameter file for overlayer */
+         sr_project,                  /* project name for results file */
+         sr_project);                 /* project name for output file */
+#else
+ (void)snprintf(line_buffer, sizeof(line_buffer),
          "\"%s\" -b \"%s.bsr\" -i \"%s\" -o \"%s.res\" > \"%s.out\"",
          getenv("CSEARCH_LEED"),      /* LEED program name */
          sr_project,                  /* project name for modified bulk file */
          par_file,                    /* parameter file for overlayer */
          sr_project,                  /* project name for results file */
          sr_project);                 /* project name for output file */
+#endif
        
 #ifdef CONTROL
  fprintf(STDCTR,"(sr_evalrf %d): calculate IV curves:\n %s\n", 
@@ -217,8 +228,9 @@ FILE *io_stream, *log_stream;
 
 /* changed for Sim. Ann.: range is independent of previous shift. */
 
- sprintf(line_buffer,                 /* added quotation for safety of filepaths */
-         "\"%s\" -t \"%s.res\" -c \"%s.ctr\" -r \"%s\" -s %.2f,%.2f,%.2f > \"%s.dum\"", 
+#ifdef _WIN32
+ (void)snprintf(line_buffer, sizeof(line_buffer),
+         "cmd /S /C \"\"%s\" -t \"%s.res\" -c \"%s.ctr\" -r \"%s\" -s %.2f,%.2f,%.2f > \"%s.dum\"\"",
          getenv("CSEARCH_RFAC"),      /* R factor program name */
          sr_project,                  /* project name for the. file */
          sr_project,                  /* project name for control file */
@@ -227,6 +239,18 @@ FILE *io_stream, *log_stream;
          + RFAC_SHIFT_RANGE,          /* final shift */
          RFAC_SHIFT_STEP,             /* step of shift */
          sr_project);                 /* project name for output file */
+#else
+ (void)snprintf(line_buffer, sizeof(line_buffer),
+         "\"%s\" -t \"%s.res\" -c \"%s.ctr\" -r \"%s\" -s %.2f,%.2f,%.2f > \"%s.dum\"",
+         getenv("CSEARCH_RFAC"),      /* R factor program name */
+         sr_project,                  /* project name for the. file */
+         sr_project,                  /* project name for control file */
+         RFAC_TYP,                    /* type of R factor */
+         - RFAC_SHIFT_RANGE,          /* initial shift */
+         + RFAC_SHIFT_RANGE,          /* final shift */
+         RFAC_SHIFT_STEP,             /* step of shift */
+         sr_project);                 /* project name for output file */
+#endif
 
 #ifdef CONTROL
  fprintf(STDCTR,"(sr_evalrf %d): calculate R factor:\n %s\n", 

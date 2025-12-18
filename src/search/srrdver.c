@@ -15,12 +15,68 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 
 ***********************************************************************/
 
-#include <malloc.h>
+/**
+ * @file srrdver.c
+ * @brief Read simplex vertex files (`*.ver`) for SEARCH optimisers.
+ *
+ * The legacy file format contains a header with the problem dimensionality
+ * followed by `ndim+1` vertex lines. This implementation keeps backward
+ * compatibility while parsing strictly: each vertex line must contain
+ * exactly `1 + ndim` numeric fields (y then coordinates), otherwise the read
+ * fails explicitly to avoid partially-initialised outputs.
+ *
+ * Return values follow historical conventions: `1` on success, `-1` on
+ * failure (unless EXIT_ON_ERROR is defined).
+ */
+
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
-#include <strings.h>
+// cppcheck-suppress missingIncludeSystem
+#include <string.h>
+// cppcheck-suppress missingIncludeSystem
+#include <ctype.h>
 
 #include "search.h"
+
+#ifdef ERROR
+#define SR_RDVER_ERROR(...) fprintf(STDERR, __VA_ARGS__)
+#else
+#define SR_RDVER_ERROR(...) ((void)0)
+#endif
+
+#ifdef WARNING
+#define SR_RDVER_WARN(...) fprintf(STDWAR, __VA_ARGS__)
+#else
+#define SR_RDVER_WARN(...) ((void)0)
+#endif
+
+#ifdef CONTROL_X
+#define SR_RDVER_CTRLX(...) fprintf(STDCTR, __VA_ARGS__)
+#else
+#define SR_RDVER_CTRLX(...) ((void)0)
+#endif
+
+#ifdef CONTROL
+#define SR_RDVER_CTRL(...) fprintf(STDCTR, __VA_ARGS__)
+#else
+#define SR_RDVER_CTRL(...) ((void)0)
+#endif
+
+#ifdef EXIT_ON_ERROR
+#define SR_RDVER_BAIL() do { exit(1); } while(0)
+#else
+#define SR_RDVER_BAIL() do { return(-1); } while(0)
+#endif
+
+#ifdef CONTROL
+#define SR_RDVER_FLUSH() fflush(STDCTR)
+#else
+#define SR_RDVER_FLUSH() ((void)0)
+#endif
+
+/**********************************************************************/
 
 #ifdef ERROR
 #ifdef EXIT_ON_ERROR
@@ -42,7 +98,105 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 
 /**********************************************************************/
 
-int sr_rdver(char * ver_file, real *y, real **p, int ndim)
+static FILE *sr_rdver_open(const char *ver_file)
+{
+  return fopen(ver_file, "r");
+}
+
+static int sr_rdver_read_header(FILE *ver_stream, const char *ver_file,
+                                int ndim_in, int *out_ndim, int *out_mpar)
+{
+  char linebuffer[STRSZ];
+  while (fgets(linebuffer, (int)sizeof(linebuffer), ver_stream) != NULL) {
+    if (linebuffer[0] != '#') break;
+  }
+
+  int file_ndim = 0;
+  int file_mpar = 0;
+  if (sscanf(linebuffer, "%d %d", &file_ndim, &file_mpar) != 2) {
+    SR_RDVER_ERROR(" *** error (sr_rdver): invalid header in \"%s\"\n", ver_file);
+    return -1;
+  }
+
+  if (ndim_in < 0)
+  {
+    SR_RDVER_WARN(" * warning (sr_rdver): ndim < 0: dimensions are not checked\n");
+    *out_ndim = file_ndim;
+    *out_mpar = file_mpar;
+    return 0;
+  }
+
+  if (file_ndim != ndim_in) {
+    SR_RDVER_ERROR(
+            " *** error (sr_rdver): dimensions do not match: %d/%d, %d/%d\n",
+            file_ndim, ndim_in, file_mpar, ndim_in + 1);
+    return -1;
+  }
+  if (file_mpar != ndim_in + 1) {
+    SR_RDVER_ERROR(
+            " *** error (sr_rdver): dimensions do not match: %d/%d, %d/%d\n",
+            file_ndim, ndim_in, file_mpar, ndim_in + 1);
+    return -1;
+  }
+
+  *out_ndim = ndim_in;
+  *out_mpar = file_mpar;
+  return 0;
+}
+
+static const char *sr_rdver_skip_ws(const char *p)
+{
+  while (*p != '\0') {
+    if (!isspace((unsigned char)*p)) break;
+    p++;
+  }
+  return p;
+}
+
+static int sr_rdver_parse_vertex_line(const char *line, int ndim, real *out_y, real *out_p)
+{
+  const char *ptr = sr_rdver_skip_ws(line);
+  if (*ptr == '\0') return 1;
+  if (*ptr == '#') return 1;
+
+  char *endptr = NULL;
+  real yval = (real)strtod(ptr, &endptr);
+  if (endptr == (char *)ptr) return -1;
+  ptr = endptr;
+
+  for (int j_par = 1; j_par <= ndim; j_par++)
+  {
+    out_p[j_par] = (real)strtod(ptr, &endptr);
+    if (endptr == (char *)ptr) return -1;
+    ptr = endptr;
+  }
+
+  *out_y = yval;
+  return 0;
+}
+
+static int sr_rdver_read_vertices(FILE *ver_stream, const char *ver_file,
+                                  real *y, real **p, int ndim, int m_par)
+{
+  char linebuffer[STRSZ];
+  int i_par = 1;
+
+  while (fgets(linebuffer, (int)sizeof(linebuffer), ver_stream) != NULL)
+  {
+    if (i_par > m_par) break;
+#ifdef CONTROL_X
+    fprintf(STDCTR, "(%s): %s", ver_file, linebuffer);
+#endif
+
+    int rc = sr_rdver_parse_vertex_line(linebuffer, ndim, &y[i_par], p[i_par]);
+    if (rc < 0) return -1;
+    if (rc == 0) i_par++;
+  }
+
+  return (i_par == m_par + 1) ? 0 : -1;
+}
+
+int sr_rdver(const char * ver_file, real *y, real **p, int ndim)
 
 /***********************************************************************
 
@@ -74,126 +228,51 @@ RETURN VALUES:
 ***********************************************************************/
 {
 
-FILE *ver_stream;
-
-char *linebuffer;                        /* input buffer */
-int n_str, i_str;
-
-int i_par, j_par;                        /* counter, dummy  variables */
-int m_par;
-
-/********************************************************************
-  First: allocate linebuffer
-********************************************************************/
-
- n_str = STRSZ;
- linebuffer = (char *)malloc(n_str * sizeof(char));
+FILE *ver_stream = NULL;
+int m_par = 0;
 
 /********************************************************************
   START INPUT
   Open and Read vertex file
 ********************************************************************/
 
- if( (ver_stream = fopen(ver_file, "r")) == NULL)
+ ver_stream = sr_rdver_open(ver_file);
+ if (ver_stream == NULL)
  {
-#ifdef ERROR
-   fprintf(STDERR,
-   " *** error (sr_rdver): could not open file \"%s\"\n",ver_file);
-#endif
-#ifdef EXIT_ON_ERROR
-   exit(1);
-#else
-   return(-1);
-#endif
+   SR_RDVER_ERROR(" *** error (sr_rdver): could not open file \"%s\"\n", ver_file);
+   SR_RDVER_BAIL();
  }
 
-#ifdef CONTROL_X
- fprintf(STDCTR,"(sr_rdver): Reading file \"%s\"\n",ver_file);
-#endif
+ SR_RDVER_CTRLX("(sr_rdver): Reading file \"%s\"\n", ver_file);
 
- while ( *fgets(linebuffer, n_str, ver_stream) == '#');
- sscanf(linebuffer, "%d %d", &i_par, &m_par);
-
- if( ndim < 0)
+ if (sr_rdver_read_header(ver_stream, ver_file, ndim, &ndim, &m_par) != 0)
  {
-#ifdef WARNING
-   fprintf(STDWAR,
-   " * warning (sr_rdver): ndim < 0: dimensions are not checked\n");
-#endif
-   ndim = i_par;
- }
- else if( (i_par != ndim) || (m_par != ndim + 1) )
- {
-#ifdef ERROR
-   fprintf(STDERR,
-   " *** error (sr_rdver): dimensions do not match: %d/%d, %d/%d\n",
-   i_par, ndim, m_par, ndim + 1);
-#endif
-#ifdef EXIT_ON_ERROR
-   exit(1);
-#else
-   return(-1);
-#endif
+   fclose(ver_stream);
+   SR_RDVER_BAIL();
  }
 
- n_str = m_par * 15;
- free(linebuffer);
- linebuffer = (char *)malloc(n_str * sizeof(char));
- i_par = 1;
- while( (fgets(linebuffer, n_str, ver_stream) != NULL) && (i_par <= m_par) )
+ if (sr_rdver_read_vertices(ver_stream, ver_file, y, p, ndim, m_par) != 0)
  {
+   fclose(ver_stream);
+   SR_RDVER_BAIL();
+ }
 
-#ifdef CONTROL_X
-   fprintf(STDCTR,"(%s): %s", ver_file, linebuffer);
-#endif
-
-   if( *linebuffer != '#')
-   {
-     i_str = 0;
-     while(linebuffer[i_str] == ' ') i_str ++;
-#ifdef REAL_IS_DOUBLE
-     sscanf(linebuffer+i_str,"%le", y + i_par);
-#endif
-#ifdef REAL_IS_FLOAT
-     sscanf(linebuffer+i_str,"%e", y + i_par);
-#endif
-
-     for(j_par = 1; j_par <= ndim; j_par ++)
-     {
-       while(linebuffer[i_str] != ' ') i_str ++;
-       while(linebuffer[i_str] == ' ') i_str ++;
-#ifdef REAL_IS_DOUBLE
-       sscanf(linebuffer+i_str,"%le", p[i_par] + j_par);
-#endif
-#ifdef REAL_IS_FLOAT
-       sscanf(linebuffer+i_str,"%e", p[i_par] + j_par);
-#endif
-     }
-
-     i_par ++;
-   } /* if != '#' */
- }   /* while: read input file */
-
-#ifdef CONTROL_X
-   fprintf(STDCTR,"\n");
-#endif
+ SR_RDVER_CTRLX("\n");
 /************************************************************************
   END OF INPUT
   Close input file.
 *************************************************************************/
  fclose(ver_stream);
 
-#ifdef CONTROL
- fprintf(STDCTR,"(sr_rdver): vertex read from \"%s\":\n", ver_file);
- for (i_par = 1; i_par<= m_par; i_par++)
+ SR_RDVER_CTRL("(sr_rdver): vertex read from \"%s\":\n", ver_file);
+ for (int i_par = 1; i_par<= m_par; i_par++)
  {
-   fprintf(STDCTR,"(%2d) %7.4f :", i_par, y[i_par]);
-   for(j_par=1; j_par<= ndim; j_par++) 
-     fprintf(STDCTR," %6.3f", p[i_par][j_par]);
-   fprintf(STDCTR,"\n");
+   SR_RDVER_CTRL("(%2d) %7.4f :", i_par, y[i_par]);
+   for(int j_par=1; j_par<= ndim; j_par++)
+     SR_RDVER_CTRL(" %6.3f", p[i_par][j_par]);
+   SR_RDVER_CTRL("\n");
  }
- fflush(STDCTR);
-#endif
+ SR_RDVER_FLUSH();
 
  return(1);
 }  /* end of function sr_rdver */

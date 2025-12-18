@@ -5,10 +5,26 @@ GH/28.09.95
  GH/28.09.95
 ***********************************************************************/
 
+/**
+ * @file verstat.c
+ * @brief Print simple statistics for a SEARCH simplex vertex file.
+ *
+ * This utility reads a `*.ver` file produced by SEARCH optimisers and prints
+ * min/max/average/deviation statistics for both the objective values and the
+ * per-parameter coordinates. The implementation is intentionally split into
+ * small helpers to keep the tool easy to audit and to satisfy static analysis
+ * thresholds.
+ */
+
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
-#include <strings.h>
+// cppcheck-suppress missingIncludeSystem
+#include <string.h>
+// cppcheck-suppress missingIncludeSystem
 #include <math.h>
 #include "search.h"
+#include "sr_alloc.h"
+#include "sr_vertex_stats.h"
 
 #define CONTROL
 #define ERROR
@@ -23,180 +39,196 @@ char *sr_project;
 
 /**********************************************************************/
 
-main(int argc, char *argv[])
+// cppcheck-suppress constParameter
+static int verstat_parse_args(int argc, char *const argv[], char inp_file[STRSZ])
 {
-
-int i_arg;
-int i_par, j_par;
-int ndim, mpar;
-
-real faux;
-real *dev, *avg, *y, **p;
-
-char inp_file[STRSZ];
-char linebuffer[STRSZ];
-
-FILE *inp_stream;
-
-/*********************************************************************
-  Decode arguments:
-
-    -i <inp_file> - (mandatory input file) overlayer parameters of all 
-                    parameters.
-*********************************************************************/
-
- strncpy(inp_file,"---", STRSZ);
-
- for (i_arg = 1; i_arg < argc; i_arg++)
- {
-  if(*argv[i_arg] != '-')
+  (void)snprintf(inp_file, STRSZ, "%s", "---");
+  for (int i_arg = 1; i_arg < argc; i_arg++)
   {
-#ifdef ERROR
-   fprintf(STDERR,"*** error (verstat):\tsyntax error:\n");
-   fprintf(STDERR,"\tusage: \tverstat -i <inp_file>\n");
-#endif
-   exit(1);
+    if (*argv[i_arg] != '-')
+    {
+      fprintf(STDERR, "*** error (verstat):\tsyntax error:\n");
+      fprintf(STDERR, "\tusage: \tverstat -i <inp_file>\n");
+      return 1;
+    }
+    if (strncmp(argv[i_arg], "-i", 2) == 0)
+    {
+      i_arg++;
+      if (i_arg >= argc)
+      {
+        fprintf(STDERR, "*** error (verstat): no input file specified\n");
+        return 1;
+      }
+      (void)snprintf(inp_file, STRSZ, "%s", argv[i_arg]);
+    }
   }
-  else
+  if (strncmp(inp_file, "---", 3) == 0)
   {
-/* Read parameter input file */
-   if(strncmp(argv[i_arg], "-i", 2) == 0)
-   {
-    i_arg++;
-    strncpy(inp_file, argv[i_arg], STRSZ);
-   }
-  } /* else */
- }  /* for i_arg */
+    fprintf(STDERR,
+            "*** error (verstat): no parameter input file (option -i) specified\n");
+    return 1;
+  }
+  return 0;
+}
 
-/*********************************************************************
-  Check existence of inp_file.
-*********************************************************************/
+static int verstat_read_ndim(const char *inp_file, int *out_ndim)
+{
+  FILE *inp_stream = fopen(inp_file, "r");
+  if (inp_stream == NULL)
+  {
+    fprintf(STDERR, " *** error (verstat): could not open file \"%s\"\n", inp_file);
+    return 1;
+  }
 
- if(strncmp(inp_file, "---", 3) == 0)
- {
-#ifdef ERROR
-   fprintf(STDERR,
-   "*** error (verstat): no parameter input file (option -i) specified\n");
-#endif
-   exit(1);
- }
+  char linebuffer[STRSZ];
+  while (fgets(linebuffer, STRSZ, inp_stream) != NULL && linebuffer[0] == '#') {;}
+  if (sscanf(linebuffer, "%d", out_ndim) != 1)
+  {
+    fclose(inp_stream);
+    fprintf(STDERR, " *** error (verstat): failed to read ndim from \"%s\"\n", inp_file);
+    return 1;
+  }
 
-/***********************************************************************
-  Open input and read first line (i.e. ndim)
-  (Close afterwards)
-***********************************************************************/
+  fclose(inp_stream);
+  return 0;
+}
 
- if( (inp_stream = fopen(inp_file, "r")) == NULL)
- {
-#ifdef ERROR
-   fprintf(STDERR,
-   " *** error (sr_rdver): could not open file \"%s\"\n", inp_file);
-#endif
-#ifdef EXIT_ON_ERROR
-   exit(1);
-#else
-   return(-1);
-#endif
- }
+static void verstat_print_vector(const char *label, real y, const real *p, int ndim)
+{
+  fprintf(STDOUT, "%s: %7.4f :", label, (double)y);
+  for (int j = 1; j <= ndim; j++)
+  {
+    fprintf(STDOUT, " %6.3f", (double)p[j]);
+  }
+  fprintf(STDOUT, "\n");
+}
 
- while ( *fgets(linebuffer, STRSZ, inp_stream) == '#');
- sscanf(linebuffer, "%d", &ndim);
+static int verstat_load_vertices(const char *inp_file, int ndim, real **out_y, real ***out_p)
+{
+  const int mpar = ndim + 1;
+  real *y = sr_alloc_vector((size_t)mpar);
+  real **p = sr_alloc_matrix((size_t)mpar, (size_t)ndim);
+  if (y == NULL || p == NULL)
+  {
+    sr_free_vector(y);
+    sr_free_matrix(p);
+    return 1;
+  }
 
- fclose(inp_stream);
+  if (sr_rdver(inp_file, y, p, ndim) != 1)
+  {
+    sr_free_vector(y);
+    sr_free_matrix(p);
+    return 1;
+  }
 
-/***********************************************************************
-  Read rest of input file
-***********************************************************************/
+  *out_y = y;
+  *out_p = p;
+  return 0;
+}
 
- mpar = ndim+1;
- y = vector(1, mpar);
- p = matrix(1, mpar, 1, ndim);
+static int verstat_alloc_stats(int ndim, real **out_min_p, real **out_max_p, real **out_avg_p, real **out_dev_p)
+{
+  real *min_p = sr_alloc_vector((size_t)ndim);
+  real *max_p = sr_alloc_vector((size_t)ndim);
+  real *avg_p = sr_alloc_vector((size_t)ndim);
+  real *dev_p = sr_alloc_vector((size_t)ndim);
+  if (min_p == NULL || max_p == NULL || avg_p == NULL || dev_p == NULL)
+  {
+    sr_free_vector(min_p);
+    sr_free_vector(max_p);
+    sr_free_vector(avg_p);
+    sr_free_vector(dev_p);
+    return 1;
+  }
 
- sr_rdver(inp_file, y, p, ndim);
+  *out_min_p = min_p;
+  *out_max_p = max_p;
+  *out_avg_p = avg_p;
+  *out_dev_p = dev_p;
+  return 0;
+}
 
-/***********************************************************************
-  Find min/max values
-***********************************************************************/
+typedef struct verstat_stats {
+  real min_y;
+  real max_y;
+  real avg_y;
+  real dev_y;
+  const real *min_p;
+  const real *max_p;
+  const real *avg_p;
+  const real *dev_p;
+} verstat_stats;
 
- dev = vector(0, ndim);
- avg = vector(0, ndim);
+/**
+ * @brief Print computed statistics in the historical `verstat` format.
+ *
+ * @param ndim Dimensionality of the parameter vector.
+ * @param stats Statistics bundle to print.
+ */
+static void verstat_print_stats(int ndim, const verstat_stats *stats)
+{
+  fprintf(STDOUT, "\n");
+  verstat_print_vector("min", stats->min_y, stats->min_p, ndim);
+  verstat_print_vector("max", stats->max_y, stats->max_p, ndim);
+  fprintf(STDOUT, "\n");
+  verstat_print_vector("avg", stats->avg_y, stats->avg_p, ndim);
+  verstat_print_vector("dev", stats->dev_y, stats->dev_p, ndim);
+}
 
- fprintf(STDOUT,"\n");
+int main(int argc, char *argv[])
+{
+  char inp_file[STRSZ];
+  if (verstat_parse_args(argc, argv, inp_file) != 0) return 1;
 
- faux = y[1];
- for (i_par = 2; i_par <= mpar; i_par++ )
- { faux = MIN(faux, y[i_par]); }
- fprintf(STDOUT,"min: %7.4f :", faux);
+  int ndim = 0;
+  if (verstat_read_ndim(inp_file, &ndim) != 0) return 1;
 
- for (j_par = 1; j_par <= ndim; j_par++ )
- {
-   faux = p[1][j_par];
-   for (i_par = 2; i_par <= mpar; i_par++ )
-   {  faux = MIN(faux, p[i_par][j_par]); }
-   fprintf(STDOUT," %6.3f", faux);
- }
- fprintf(STDOUT,"\n");
+  real *y = NULL;
+  real **p = NULL;
+  if (verstat_load_vertices(inp_file, ndim, &y, &p) != 0)
+  {
+    fprintf(STDERR, "*** error (verstat): failed to read vertex file\n");
+    return 1;
+  }
 
- faux = y[1];
- for (i_par = 2; i_par <= mpar; i_par++ )
- { faux = MAX(faux, y[i_par]); }
- fprintf(STDOUT,"max: %7.4f :", faux);
+  real *min_p = NULL;
+  real *max_p = NULL;
+  real *avg_p = NULL;
+  real *dev_p = NULL;
+  if (verstat_alloc_stats(ndim, &min_p, &max_p, &avg_p, &dev_p) != 0)
+  {
+    sr_free_vector(y);
+    sr_free_matrix(p);
+    fprintf(STDERR, "*** error (verstat): allocation failure\n");
+    return 1;
+  }
 
- for (j_par = 1; j_par <= ndim; j_par++ )
- {
-   faux = p[1][j_par];
-   for (i_par = 2; i_par <= mpar; i_par++ )
-   {  faux = MAX(faux, p[i_par][j_par]); }
-   fprintf(STDOUT," %6.3f", faux);
- }
- fprintf(STDOUT,"\n\n"); 
+  real min_y = 0.0, max_y = 0.0, avg_y = 0.0, dev_y = 0.0;
+  const int mpar = ndim + 1;
+  sr_vertex_minmax(y, p, ndim, mpar, &min_y, &max_y, min_p, max_p);
+  sr_vertex_avg(y, p, ndim, mpar, &avg_y, avg_p);
+  sr_vertex_dev(y, p, ndim, mpar, avg_y, avg_p, &dev_y, dev_p);
 
-/***********************************************************************
-  Find average values
-***********************************************************************/
+  verstat_stats stats;
+  stats.min_y = min_y;
+  stats.max_y = max_y;
+  stats.avg_y = avg_y;
+  stats.dev_y = dev_y;
+  stats.min_p = min_p;
+  stats.max_p = max_p;
+  stats.avg_p = avg_p;
+  stats.dev_p = dev_p;
+  verstat_print_stats(ndim, &stats);
 
- faux = 0.;
- for (i_par = 1; i_par <= mpar; i_par++ )
- { faux += y[i_par]; }
- avg[0] = faux/mpar;
- fprintf(STDOUT,"avg: %7.4f :", avg[0]);
+  sr_free_vector(min_p);
+  sr_free_vector(max_p);
+  sr_free_vector(avg_p);
+  sr_free_vector(dev_p);
+  sr_free_vector(y);
+  sr_free_matrix(p);
 
- for (j_par = 1; j_par <= ndim; j_par++ )
- {
-   faux = 0.;
-   for (i_par = 1; i_par <= mpar; i_par++ )
-   { faux += p[i_par][j_par]; }
-   avg[j_par] = faux/mpar;
-   fprintf(STDOUT," %6.3f", avg[j_par]);
- }
- fprintf(STDOUT,"\n");
-
-/***********************************************************************
-  Calculate standard deviation
-***********************************************************************/
-
- dev[0] = 0.;
- for (i_par = 1; i_par <= mpar; i_par++ )
- { 
-   faux = y[i_par] - avg[0];
-   dev[0] += faux*faux; 
- }
- dev[0] = R_sqrt(dev[0] / mpar);
- fprintf(STDOUT,"dev: %7.4f :", dev[0]);
- 
- for (j_par = 1; j_par <= ndim; j_par++ )
- {
-   dev[j_par] = 0.;
-   for (i_par = 1; i_par <= mpar; i_par++ )
-   { 
-     faux = p[i_par][j_par] - avg[j_par]; 
-     dev[j_par] += faux*faux;
-   }
-   dev[j_par] = R_sqrt(dev[j_par] / mpar);
-   fprintf(STDOUT," %6.3f", dev[j_par]);
- }
- fprintf(STDOUT,"\n");
-
+  return 0;
 }  /* end of main */
 
 /**********************************************************************/

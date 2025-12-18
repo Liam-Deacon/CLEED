@@ -1,0 +1,9 @@
+# Minimal bulk file for csearch end-to-end tests.
+#
+# The SEARCH driver writes a modified copy to stub.bsr, updating ip/it if present.
+a1: 1.0000 0.0000 0.0000
+a2: 0.0000 1.0000 0.0000
+a3: 0.0000 0.0000 1.0000
+ip: 0.0
+it: 0.0
+
