@@ -65,11 +65,11 @@ Environment
 :envvar:`CSEARCH_LEED`
   Path of the program used for the LEED calculations. This
   may simply be 'csearch' if the parent directory of this program is in
-  the system :envar:`PATH` variable.
+  the system :envvar:`PATH` variable.
 
 :envvar:`CSEARCH_RFAC`
   Path of the crfac program  used  for the R factor evaluation. This may simply be 'crfac'
-  if the parent directory of this program is in the system :envar:`PATH` variable.
+  if the parent directory of this program is in the system :envvar:`PATH` variable.
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 
@@ -127,5 +127,5 @@ to higher experimental energies, however this leads to a loss of sensitivity,
 difficulties in resolving the LEED pattern (i.e. the spots are too close together), 
 vastly increased CLEED calculation times due to more scattering, as
 well as beam damage to the sample. As such an alternative route would
-be to use different angles of incidence. For more information 
-see :ref:`caoi_leed`.
+be to use different angles of incidence. For more information see
+``caoi_leed`` (the angle-of-incidence wrapper program).

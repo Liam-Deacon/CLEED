@@ -1,15 +1,14 @@
-.. aux_progs:
+.. _aux_progs:
 
 ******************
 Auxiliary Programs
 ******************
 
-.. include:: ./aux_programs/ftsmooth.rst
+.. toctree::
+   :maxdepth: 1
 
-.. include:: ./aux_programs/latt.rst
-
-.. include:: ./aux_programs/patt.rst
-
-.. include:: ./aux_programs/mkiv.rst
-    
-.. include:: ./aux_programs/phsh.rst
+   aux_programs/ftsmooth
+   aux_programs/latt
+   aux_programs/patt
+   aux_programs/mkiv
+   aux_programs/phsh

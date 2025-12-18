@@ -76,7 +76,7 @@ All other files are created by the programs.
 The search can be monitored through the :code:`*.log` file; at each point of the search the 
 current best fit geometries and IV curves can be found in :code:`*.rmin` and :code:`*.pmin`.
 
-These files are all described in the :download:`CLEED manual <CLEED_manual.pdf>`.
+These files are all described in the :download:`CLEED manual <CLEED_Manual.pdf>`.
 
 The phase shift input must have the same format as for the `VanHove/Tong programs
 <http://www.icts.hkbu.edu.hk/surfstructinfo/SurfStrucInfo_files/leed/leedpack.html>`_ with a 
@@ -149,5 +149,4 @@ of iterations (currently 2000), it can be restarted by: ::
 GOOD LUCK
 
 *-- Georg Held --*
-
 

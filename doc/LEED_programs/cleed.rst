@@ -93,10 +93,11 @@ The general calling syntax of the LEED program is::
 
 The first argument (:code:`-i <parameter_file>`) specifying the parameter 
 input file is the only mandatory argument. The file contains all the geometric 
-and non-geometric parameters for the LEED calculations. A sample file is shown 
-:ref:`here <cleed_input_file>`. Alternatively, the input can be split into two files, the parameter 
-file and the bulk parameter file. The latter file (
-:code:`-b <bulk_parameter_file>`) contains all the parameters which are not 
+and non-geometric parameters for the LEED calculations. For details of the
+parameter file format, see the :download:`CLEED manual <../CLEED_Manual.pdf>`.
+Alternatively, the input can be split into two files: the parameter file and
+the bulk parameter file. The latter file (:code:`-b <bulk_parameter_file>`)
+contains all the parameters which are not 
 varied during the optimisation. Consequently, the search program has to produce 
 only the parameter file containing the optimised atom positions of the 
 overlayer in each iteration step of an automated search.

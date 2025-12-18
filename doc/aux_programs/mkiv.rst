@@ -236,7 +236,7 @@ the IV extraction process. The parameters available are:
 
 :option:`VERH`
   The ratio of the axes of the underground-area to the integration-area. 
-  :option:`VERH`=1.4 indicates disks or elliptical areas with almost the same 
+  :option:`VERH` = 1.4 indicates disks or elliptical areas with almost the same 
   area of underground and signal.
 
 :option:`ACCI`

@@ -1,4 +1,4 @@
-.. authors:
+.. _authors:
 
 Authors
 =======

@@ -4,26 +4,17 @@
 Downloads
 *********
 
-.. _binary_package:
+Reference Manual (PDF)
+======================
 
-Binary Package
-==============
+The canonical reference is the original manual:
 
-The CLEED package is available in the following pre-made packages:
+* :download:`CLEED_Manual.pdf <CLEED_Manual.pdf>`
 
-+------------------------------------------------------+--------------------+-------------------+
-| File                                                 | Package type       | Operating System  |
-+======================================================+====================+===================+
-| :file:`../build/CLEED-2014.05.19-win32.exe`          | Win32 Installer    | Windows Vista/7/8 |
-+------------------------------------------------------+--------------------+-------------------+
-| :file:`../build/CLEED-2014.05.19-win32.zip`          | Win32 Zip Archive  | Windows Vista/7/8 |
-+------------------------------------------------------+--------------------+-------------------+
-| :file:`../build/CLEED-2014.05.19-win32.zip`          | Source             |                   |
-+------------------------------------------------------+--------------------+-------------------+
+Source code
+===========
 
-.. _source_package:
+The source is hosted on GitHub:
 
-Source Package
-==============
-
-If you wish to compile CLEED yourself, then please download the source package from ..
+* Repository: https://github.com/Liam-Deacon/CLEED
+* Releases: https://github.com/Liam-Deacon/CLEED/releases

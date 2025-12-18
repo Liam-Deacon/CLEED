@@ -67,7 +67,7 @@ Options
 :code:`-t <theoretical_file>`
 
   specifies the file containing the theoretical IV curves. This is
-  the CLEED *.res results file from the csearch program. See :ref:`csearch`
+  the CLEED :file:`*.res` results file from the csearch program. See :ref:`csearch`
   for more information.
 
 :code:`-v  <optical_potential>`
