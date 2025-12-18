@@ -220,15 +220,21 @@ static int sr_amoeba_step(sr_amoeba_ctx *ctx)
   return 0;
 }
 
+static int sr_amoeba_alloc_buffers(sr_amoeba_ctx *ctx, int ndim)
+{
+  ctx->centroid = (real *)calloc((size_t)ndim + 1, sizeof(real));
+  ctx->trial = (real *)calloc((size_t)ndim + 1, sizeof(real));
+  ctx->trial2 = (real *)calloc((size_t)ndim + 1, sizeof(real));
+  if (ctx->centroid == NULL) return -1;
+  if (ctx->trial == NULL) return -1;
+  if (ctx->trial2 == NULL) return -1;
+  return 0;
+}
+
 static int sr_amoeba_init(sr_amoeba_ctx *ctx, real **p, real *y, int ndim,
                           real ftol, real (*funk)(real *), int *nfunk)
 {
-  if (ctx == NULL) return -1;
-  if (p == NULL) return -1;
-  if (y == NULL) return -1;
-  if (ndim <= 0) return -1;
-  if (funk == NULL) return -1;
-  if (nfunk == NULL) return -1;
+  if (ctx == NULL || p == NULL || y == NULL || ndim <= 0 || funk == NULL || nfunk == NULL) return -1;
 
   ctx->ndim = ndim;
   ctx->mpts = ndim + 1;
@@ -247,12 +253,7 @@ static int sr_amoeba_init(sr_amoeba_ctx *ctx, real **p, real *y, int ndim,
 
   *nfunk = 0;
 
-  ctx->centroid = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  ctx->trial = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  ctx->trial2 = (real *)calloc((size_t)ndim + 1, sizeof(real));
-  if (ctx->centroid == NULL) return -1;
-  if (ctx->trial == NULL) return -1;
-  if (ctx->trial2 == NULL) return -1;
+  if (sr_amoeba_alloc_buffers(ctx, ndim) != 0) return -1;
 
   return 0;
 }
