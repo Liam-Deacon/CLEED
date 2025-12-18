@@ -11,6 +11,15 @@
  *  - best point is returned in pb[1..ndim] and *yb
  *********************************************************************/
 
+/**
+ * @file sr_amebsa.c
+ * @brief Simulated annealing wrapper around the simplex method (SEARCH).
+ *
+ * This is a lightweight annealing variant intended for SEARCH workflows.
+ * It uses a deterministic RNG (@ref sr_rng) seeded from the global SEARCH
+ * `sa_idum` value so behaviour can be regression-tested across platforms.
+ */
+
 // cppcheck-suppress missingIncludeSystem
 #include <math.h>
 // cppcheck-suppress missingIncludeSystem
@@ -58,6 +67,13 @@ static int sr_accept_move(sr_rng *rng, real current, real proposed, real temp)
   return u < prob;
 }
 
+/**
+ * @brief Internal state for a single sr_amebsa() invocation.
+ *
+ * Grouping values into a context struct keeps helper signatures short and
+ * makes it explicit which values are shared across steps (RNG, budget,
+ * tolerance, etc.).
+ */
 typedef struct sr_amebsa_ctx {
   int ndim;
   real ftol;

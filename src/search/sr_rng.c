@@ -4,6 +4,14 @@
  *  GPL-3.0-or-later
  *********************************************************************/
 
+/**
+ * @file sr_rng.c
+ * @brief Deterministic RNG implementation for SEARCH routines.
+ *
+ * The implementation uses a small xorshift64* generator and exposes only the
+ * functionality required by SEARCH (seeding + uniform deviates).
+ */
+
 #include "sr_rng.h"
 
 static uint64_t sr_rng_next_u64(sr_rng *rng)
@@ -32,4 +40,3 @@ double sr_rng_uniform01(sr_rng *rng)
   uint64_t mantissa = u >> 11;
   return (double)mantissa * (1.0 / 9007199254740992.0); /* 2^53 */
 }
-

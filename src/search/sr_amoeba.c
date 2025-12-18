@@ -10,6 +10,18 @@
  *  - function values are stored in y[1..ndim+1]
  *********************************************************************/
 
+/**
+ * @file sr_amoeba.c
+ * @brief Nelder–Mead (downhill simplex) minimiser used by SEARCH.
+ *
+ * This is a clean-room implementation that preserves the historical SEARCH
+ * calling conventions (1-based arrays) while keeping the code testable and
+ * portable.
+ *
+ * When `sr_project` is set, the minimiser writes `${sr_project}.ver` and
+ * `${sr_project}.vbk` vertex files as a best-effort checkpoint for long runs.
+ */
+
 // cppcheck-suppress missingIncludeSystem
 #include <math.h>
 // cppcheck-suppress missingIncludeSystem
@@ -105,6 +117,13 @@ static void sr_simplex_extremes(const real *y, int ndim, int *ilo, int *ihi, int
   }
 }
 
+/**
+ * @brief Internal state for a single sr_amoeba() invocation.
+ *
+ * Consolidating these inputs into a context struct keeps helper function
+ * signatures short and makes the algorithm's state transitions easier to
+ * audit during review.
+ */
 typedef struct sr_amoeba_ctx {
   int ndim;
   int mpts;

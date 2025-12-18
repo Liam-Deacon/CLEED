@@ -4,6 +4,15 @@
  *  GPL-3.0-or-later
  *********************************************************************/
 
+/**
+ * @file sr_alloc.c
+ * @brief Implementation of allocation helpers for legacy 1-based SEARCH arrays.
+ *
+ * These helpers intentionally keep the allocation strategy simple and portable
+ * (calloc + contiguous storage) so that tests can rely on deterministic
+ * zero-initialised buffers.
+ */
+
 // cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 

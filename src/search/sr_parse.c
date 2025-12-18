@@ -4,6 +4,16 @@
  *  GPL-3.0-or-later
  *********************************************************************/
 
+/**
+ * @file sr_parse.c
+ * @brief Implementation of small parsing helpers shared by SEARCH utilities.
+ *
+ * These helpers centralise a few parsing idioms used by legacy SEARCH tools:
+ * - skip whitespace
+ * - ignore comment lines beginning with `#`
+ * - parse numeric tokens robustly
+ */
+
 // cppcheck-suppress missingIncludeSystem
 #include <errno.h>
 // cppcheck-suppress missingIncludeSystem
@@ -52,6 +62,11 @@ static int sr_parse_next_double(const char **p, double *out)
   return 0;
 }
 
+/**
+ * @brief Parse two numeric values from a line into @ref real outputs.
+ *
+ * See @ref sr_parse_two_reals for full semantics.
+ */
 int sr_parse_two_reals(const char *line, real *out_a, real *out_b)
 {
   if (line == NULL || out_a == NULL || out_b == NULL) return -1;
@@ -67,6 +82,11 @@ int sr_parse_two_reals(const char *line, real *out_a, real *out_b)
   return 0;
 }
 
+/**
+ * @brief Read the first line containing two @ref real values from a file.
+ *
+ * See @ref sr_read_two_reals_from_file for full semantics.
+ */
 int sr_read_two_reals_from_file(const char *path, real *out_a, real *out_b)
 {
   if (path == NULL || out_a == NULL || out_b == NULL) return -1;

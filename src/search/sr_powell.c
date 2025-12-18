@@ -11,6 +11,19 @@
  *  - direction matrix xi is expected as xi[1..n][1..n] (columns = directions)
  *********************************************************************/
 
+/**
+ * @file sr_powell.c
+ * @brief Powell direction-set minimiser used by SEARCH.
+ *
+ * The refactor splits the algorithm into small helpers:
+ * - line evaluation via a context object
+ * - bracketing a 1D minimum
+ * - Brent line minimisation state machine
+ *
+ * This keeps the public `sr_powell()` signature stable while making the
+ * implementation easier to review and unit test.
+ */
+
 // cppcheck-suppress missingIncludeSystem
 #include <math.h>
 // cppcheck-suppress missingIncludeSystem
@@ -23,6 +36,12 @@
 #define MAX_ITER_POWELL 100
 #endif
 
+/**
+ * @brief Context for evaluating the objective along a line.
+ *
+ * The line is defined as `p(alpha) = p0 + alpha * dir`, with all vectors
+ * using legacy 1-based indexing.
+ */
 typedef struct sr_line_ctx {
   int n;
   real *p0;         /* base point (1..n) */
@@ -91,6 +110,11 @@ static int sr_bracket_minimum(real *a, real *b, real *c,
   return (k < max_expand) ? 0 : -1;
 }
 
+/**
+ * @brief Mutable state for Brent's 1D minimiser.
+ *
+ * Kept as a struct to reduce parameter counts and improve readability.
+ */
 typedef struct sr_brent_state {
   real a;
   real b;

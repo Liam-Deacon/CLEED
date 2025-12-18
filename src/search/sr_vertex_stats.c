@@ -4,6 +4,15 @@
  *  GPL-3.0-or-later
  *********************************************************************/
 
+/**
+ * @file sr_vertex_stats.c
+ * @brief Statistics helpers for SEARCH simplex vertex arrays.
+ *
+ * These utilities operate on legacy 1-based vectors/matrices and are used by
+ * refactored tooling (e.g. `verstat`) to keep the I/O layer small and the
+ * statistics logic testable.
+ */
+
 // cppcheck-suppress missingIncludeSystem
 #include <math.h>
 // cppcheck-suppress missingIncludeSystem

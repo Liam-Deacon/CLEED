@@ -15,6 +15,20 @@ GH/23.10.95 - fix bug in the fgets calls (n_str instead of STRSZ)
 
 ***********************************************************************/
 
+/**
+ * @file srrdver.c
+ * @brief Read simplex vertex files (`*.ver`) for SEARCH optimisers.
+ *
+ * The legacy file format contains a header with the problem dimensionality
+ * followed by `ndim+1` vertex lines. This implementation keeps backward
+ * compatibility while parsing strictly: each vertex line must contain
+ * exactly `1 + ndim` numeric fields (y then coordinates), otherwise the read
+ * fails explicitly to avoid partially-initialised outputs.
+ *
+ * Return values follow historical conventions: `1` on success, `-1` on
+ * failure (unless EXIT_ON_ERROR is defined).
+ */
+
 // cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
 // cppcheck-suppress missingIncludeSystem

@@ -5,6 +5,17 @@ GH/28.09.95
  GH/28.09.95
 ***********************************************************************/
 
+/**
+ * @file verstat.c
+ * @brief Print simple statistics for a SEARCH simplex vertex file.
+ *
+ * This utility reads a `*.ver` file produced by SEARCH optimisers and prints
+ * min/max/average/deviation statistics for both the objective values and the
+ * per-parameter coordinates. The implementation is intentionally split into
+ * small helpers to keep the tool easy to audit and to satisfy static analysis
+ * thresholds.
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -146,6 +157,12 @@ typedef struct verstat_stats {
   const real *dev_p;
 } verstat_stats;
 
+/**
+ * @brief Print computed statistics in the historical `verstat` format.
+ *
+ * @param ndim Dimensionality of the parameter vector.
+ * @param stats Statistics bundle to print.
+ */
 static void verstat_print_stats(int ndim, const verstat_stats *stats)
 {
   fprintf(STDOUT, "\n");
