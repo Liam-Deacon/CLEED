@@ -194,10 +194,15 @@ struct type_str *types;      /* this vector of structure type_str is
  #endif
 
  const char *base = sr_rdinp_basename(inp_file);
- const char *dot = strrchr(base, '.');
- const size_t prefix_len = (dot && dot > base) ? (size_t)(dot - base) : strlen(base);
+ size_t prefix_len = 0;
+ while (prefix_len < (size_t)(STRSZ - 1) &&
+        base[prefix_len] != '\0' &&
+        base[prefix_len] != '.')
+ {
+   prefix_len++;
+ }
 
- for (i_str = 0; i_str < (int)(STRSZ - 1) && (size_t)i_str < prefix_len; i_str++) {
+ for (i_str = 0; i_str < (int)prefix_len; i_str++) {
    sr_project[i_str] = base[i_str];
  }
  sr_project[i_str] = '\0';

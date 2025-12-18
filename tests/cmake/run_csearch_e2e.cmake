@@ -32,10 +32,32 @@ file(COPY_FILE "${INPUT}" "${inp_dst}")
 file(COPY_FILE "${BULK}" "${bul_dst}")
 file(COPY_FILE "${CTR}" "${ctr_dst}")
 
+get_filename_component(leed_dir "${LEED_PROGRAM}" DIRECTORY)
+get_filename_component(leed_name "${LEED_PROGRAM}" NAME)
+get_filename_component(rfac_dir "${RFAC_PROGRAM}" DIRECTORY)
+get_filename_component(rfac_name "${RFAC_PROGRAM}" NAME)
+
+if(WIN32)
+  set(path_sep ";")
+else()
+  set(path_sep ":")
+endif()
+
+set(path_prefix "${leed_dir}")
+if(NOT rfac_dir STREQUAL leed_dir)
+  set(path_prefix "${path_prefix}${path_sep}${rfac_dir}")
+endif()
+if(DEFINED ENV{PATH})
+  set(path_value "${path_prefix}${path_sep}$ENV{PATH}")
+else()
+  set(path_value "${path_prefix}")
+endif()
+
 execute_process(
   COMMAND "${CMAKE_COMMAND}" -E env
-          "CSEARCH_LEED=${LEED_PROGRAM}"
-          "CSEARCH_RFAC=${RFAC_PROGRAM}"
+          "PATH=${path_value}"
+          "CSEARCH_LEED=${leed_name}"
+          "CSEARCH_RFAC=${rfac_name}"
           "${PROGRAM}" -i "${inp_dst}" -s sx -d 0.1
   WORKING_DIRECTORY "${workdir}"
   RESULT_VARIABLE rc
@@ -78,4 +100,3 @@ string(REGEX MATCH "^[0-9]+[ ]+[0-9]+[ ]+${OUT_BASENAME}" ver_header_match "${ve
 if(ver_header_match STREQUAL "")
   message(FATAL_ERROR "unexpected ${OUT_BASENAME}.ver header (expected: \"ndim mpts ${OUT_BASENAME}\")")
 endif()
-
