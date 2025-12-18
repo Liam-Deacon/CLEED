@@ -22,6 +22,7 @@ Contents:
    LEED_programs
    aux_programs
    downloads
+   changelog
    FAQ
    authors
    license
