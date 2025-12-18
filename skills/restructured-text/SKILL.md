@@ -20,11 +20,13 @@ scope: "doc/**/*.rst"
 
 Example::
 
-  Title
-  =====
+```text
+Title
+=====
 
-  Section
-  -------
+Section
+-------
+```
 
 ## Lists
 
@@ -32,11 +34,13 @@ Example::
 
 Example::
 
-  1. Item title
+```text
+1. Item title
 
-     Continuation paragraph (indented).
+   Continuation paragraph (indented).
 
-  2. Next item
+2. Next item
+```
 
 ## Inline markup
 
@@ -49,11 +53,15 @@ Example::
 
 Common pitfall::
 
-  This breaks: CLEED *.res results file
+```text
+This breaks: CLEED *.res results file
+```
 
 Better::
 
-  Use :file:`*.res` results files
+```text
+Use :file:`*.res` results files
+```
 
 ## Links and references
 
@@ -66,5 +74,6 @@ Better::
 
 Example::
 
-  See :ref:`file_formats` or email `support <mailto:someone@example.com>`_.
-
+```text
+See :ref:`file_formats` or email `support <mailto:someone@example.com>`_.
+```
