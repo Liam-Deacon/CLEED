@@ -130,8 +130,39 @@ jobs:
         with:
           path: dist
 
+      - name: Determine release flags (PEP 440)
+        id: flags
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+
+          # PEP 440 prereleases: X.Y.ZaN, X.Y.ZbN, X.Y.ZrcN; also dev releases: X.Y.Z.devN
+          prerelease=false
+          draft=false
+
+          if [[ "${version}" =~ (^|[0-9])a[0-9]+$ ]] || [[ "${version}" =~ (^|[0-9])b[0-9]+$ ]] || [[ "${version}" =~ rc[0-9]+$ ]] || [[ "${version}" =~ \\.dev[0-9]+$ ]]; then
+            prerelease=true
+          fi
+
+          # Keep dev releases as drafts by default (useful for CI-produced artifacts without announcing).
+          if [[ "${version}" =~ \\.dev[0-9]+$ ]]; then
+            draft=true
+          fi
+
+          {
+            echo "version=${version}"
+            echo "prerelease=${prerelease}"
+            echo "draft=${draft}"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Publish
         uses: softprops/action-gh-release@v2.5.0
         with:
+          name: ${{ steps.flags.outputs.version }}
+          prerelease: ${{ steps.flags.outputs.prerelease }}
+          draft: ${{ steps.flags.outputs.draft }}
           files: dist/**/*
           generate_release_notes: true
