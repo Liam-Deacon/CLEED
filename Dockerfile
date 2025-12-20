@@ -33,6 +33,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=build /opt/cleed/ /usr/local/
 
+RUN useradd --system --uid 1000 --create-home --home-dir /home/cleed cleed \
+    && chown -R cleed:cleed /usr/local
+
+USER cleed
+WORKDIR /home/cleed
+
 ENTRYPOINT ["cleed_nsym"]
 CMD ["-h"]
-
