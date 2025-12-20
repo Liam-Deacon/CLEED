@@ -228,4 +228,4 @@ If a parameter occurs more than one time, the last value is taken. If it doesn't
 occur at all and a sensible value can be preset, the program takes such values. 
 Be careful with that option because the program will not mention if you forget a 
 value and it is preset by its own value. The used parameter values might be 
-controlled in output file. 
+controlled in the output file.
