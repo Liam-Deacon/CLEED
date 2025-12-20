@@ -149,3 +149,15 @@ This relation holds for each direction parallel to the surface independently. It
  particularly useful for determining the size of adsorbate islands which lead to extra
  superstructure spots. A good introduction (in German) into spot profile analysis is given
  by Henzler and Gopel in Ref. [39].
+
+.. figure:: /_static/manual/figures/figure-placeholder-p13.png
+   :alt: Placeholder for surface unit cells and LEED patterns (PDF p13).
+   :align: center
+
+   Figure TODO (PDF p13): Common surface unit cells and corresponding LEED patterns.
+
+.. figure:: /_static/manual/figures/figure-placeholder-p14.png
+   :alt: Placeholder for superstructure notation examples (PDF p14).
+   :align: center
+
+   Figure TODO (PDF p14): Superstructure matrix vs. Wood notation examples.
