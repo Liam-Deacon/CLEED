@@ -32,7 +32,7 @@ jobs:
 
       - name: Build docs
         run: |
-          make -C doc html SPHINXOPTS="--keep-going -n"
+          make -C doc html SPHINXOPTS="--keep-going -n -W"
           touch doc/_build/html/.nojekyll
 
       - name: Upload Pages artifact
