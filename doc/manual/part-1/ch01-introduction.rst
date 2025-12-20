@@ -122,13 +122,7 @@ Older experimental setups were using Faraday cups with small apertures mounted o
  goniometers which could be moved around the sample in order to collect the back-scattered
  electron current directly or spot photometers which were directed at one diffraction spot
  on the fluorescent screen which was then followed by hand while the energy was varied.
-The data collection is mostly done at normal incidence of the primary electron beam. In
+ The data collection is mostly done at normal incidence of the primary electron beam. In
  this case, usually several equivalent LEED spots exist due to the surface symmetry. By
  taking care that the :math:`I-V` curves of equivalent spots are identical, normal incidence
- conditions can be adjusted within a few tenths of a degree.
-
-.. TODO:: Figure (PDF p9)
-   Rear-view LEED optics schematic.
-
-.. TODO:: Figure (PDF p10)
-   SPA-LEED Faraday cup arrangement.
+ conditions can be adjusted within a few tenth of a degree.

@@ -20,6 +20,7 @@ Contents:
 
    introduction
    background
+   manual/index
    environment
 
 .. toctree::
