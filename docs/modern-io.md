@@ -1,6 +1,6 @@
 # Modern Input/Output for CLEED
 
-This guide explains how to use the `cleed-io` tools to convert modern crystallography files (POSCAR, CIF, XYZ) into CLEED-compatible `.bul` and `.inp` files.
+This guide explains how to use the `cleed-io` tools to convert modern crystallography files (POSCAR, CIF, XYZ) into CLEED-compatible `.bul` and `.inp` files, and vice-versa.
 
 ## Motivation
 
@@ -16,28 +16,42 @@ The tools require Python 3.8+ and the Atomic Simulation Environment (ASE).
 pip install tools/
 ```
 
+## Supported Formats
+
+Via the **ASE** backend, `cleed-convert` supports reading and writing over 30 formats, including:
+*   **VASP:** `POSCAR`, `CONTCAR`, `XDATCAR`
+*   **Crystallography:** `.cif`
+*   **XYZ:** `.xyz`, `.extxyz`
+*   **Quantum Espresso:** `.in`, `.out`
+*   **Gaussian:** `.log`
+*   **FHI-aims:** `.in`
+
 ## Usage
 
-### Converting a VASP POSCAR
+### 1. Import: POSCAR $\to$ CLEED
 
-Assume you have a `POSCAR` file representing a Ni(111) slab with a CO molecule adsorbed.
-
-```bash
-cleed-convert --input POSCAR --output ni111_co
-```
-
-This will generate:
-*   `ni111_co.bul`: Contains the bulk lattice vectors and the bottom atomic layers defined as the bulk unit.
-*   `ni111_co.inp`: Contains the adsorbate and surface reconstruction atoms.
-
-### Specifying Bulk Layers
-
-By default, the bottom 2 atomic layers are treated as the "Bulk". You can adjust this:
+Convert a VASP POSCAR to CLEED files:
 
 ```bash
-# Treat the bottom 4 layers as bulk
-cleed-convert --input structure.cif --output surface --bulk-layers 4
+cleed-convert --to-cleed --input POSCAR --output my_surface
 ```
+
+This generates:
+*   `my_surface.bul`: Contains the bulk lattice vectors and atoms.
+*   `my_surface.inp`: Contains the overlayer atoms.
+
+**Options:**
+*   `--bulk-layers N`: Specify how many bottom layers constitute the bulk (default: 2).
+
+### 2. Export: CLEED $\to$ POSCAR
+
+Convert CLEED simulation files back to a format suitable for visualization (VESTA, Ovito):
+
+```bash
+cleed-convert --from-cleed --input my_surface.inp --bulk my_surface.bul --output RECONSTRUCTED_POSCAR --format vasp
+```
+
+This reconstructs the full 3D slab geometry.
 
 ## How it Works
 
