@@ -128,6 +128,13 @@ When filing issues, include:
 - Prefer adding missing ignores over checking in generated content.
 - Keep formatting consistent with nearby code; avoid sweeping refactors in a single PR.
 
+## Documentation (reStructuredText)
+
+- The Sphinx sources under `doc/` are `*.rst` (reStructuredText), not Markdown; whitespace/indentation and blank lines are part of the syntax.
+- Prefer `.. toctree::` navigation over `.. include::` so pages are addressable and cross-references behave predictably.
+- Avoid tabs; use spaces (tabs can create accidental block quotes / unexpected indentation).
+- See `skills/restructured-text/SKILL.md` for repo-specific conventions and common pitfalls.
+
 ## Suggested escalation path
 
 For larger initiatives (Qt6 migration, NR removal, packaging automation), split work into:

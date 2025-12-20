@@ -20,10 +20,10 @@ in the figure below:
 It is sometimes useful to manually run the individual programs and therefore 
 what follows are notes to aid in the use of the CLEED programs.
     
-.. include:: ./LEED_programs/cleed.rst
+.. toctree::
+   :maxdepth: 1
 
-.. include:: ./LEED_programs/crfac.rst
-  
-.. include:: ./LEED_programs/csearch.rst
-
-.. include:: ./LEED_programs/set_env.rst
+   LEED_programs/cleed
+   LEED_programs/crfac
+   LEED_programs/csearch
+   LEED_programs/set_env

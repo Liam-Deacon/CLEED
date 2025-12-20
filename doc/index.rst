@@ -17,9 +17,12 @@ Contents:
    
    introduction
    background
+   environment
+   file_formats
    LEED_programs
    aux_programs
    downloads
+   changelog
    FAQ
    authors
    license
@@ -34,4 +37,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

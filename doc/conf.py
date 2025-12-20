@@ -40,7 +40,9 @@ extensions = [
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = {
+    ".rst": "restructuredtext",
+}
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
@@ -104,7 +106,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinxdoc'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -146,7 +148,7 @@ html_static_path = ['_static']
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
-html_use_smartypants = True
+smartquotes = True
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
@@ -218,7 +220,7 @@ latex_logo = "CLEED_logo.png"
 #latex_show_pagerefs = False
 
 # If true, show URL addresses after external links.
-latex_show_urls = False
+latex_show_urls = 'no'
 
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []
@@ -335,4 +337,6 @@ epub_copyright = u'2014, Georg Held, Liam Deacon & collaborators'
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+}

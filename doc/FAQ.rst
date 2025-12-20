@@ -5,16 +5,19 @@ Frequently Asked Questions
 **************************
 
 1. *I found a bug! What should I do?*
-  Currently, the best thing to do is to email the developers 
-  describing the exact nature of the problem and how to replicate it.
-  
-  Alternatively, the brave amongst you will find and fix the problem 
-  yourselves - in which case we would be very grateful if you either 
-  commit your changes to the github repository or 
-  `email <liam.deacon@diamond.ac.uk>`_ the developers with your bug fix!
-  
+
+   The best first step is to contact the developers with:
+
+   - a description of the problem,
+   - reproduction steps, and
+   - any relevant input/output files or logs.
+
+   Alternatively, fixes are welcome via GitHub (PRs), or you can email a patch to
+   `liam.deacon@diamond.ac.uk <mailto:liam.deacon@diamond.ac.uk>`_.
+
 2. *Why does* :ref:`csearch` *stop without calculating the LEED-IV curves?*
-  This could be any number of reasons, but the underlying cause should be
-  outlined in either :code:`stderr` or the :file:`*.err` log file. If in
-  doubt, `email us<g.held@reading.ac.uk>`_ and we can improve our error messages 
-  and instruction manual accordingly.
+
+   This could be any number of reasons, but the underlying cause should be
+   outlined in either :code:`stderr` or the :file:`*.err` log file. If in
+   doubt, `email us <mailto:g.held@reading.ac.uk>`_ and we can improve our error
+   messages and instruction manual accordingly.
