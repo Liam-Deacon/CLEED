@@ -34,7 +34,46 @@ The meaning and the syntax of the parameter specifiers is (n: integer number, f:
   Super structure matrix defining the relationship between the superstructure lattice
   vectors ``b1`` and ``b2`` and the (1 x 1) lattice vectors ``a1`` and ``a2``.
 
-TODO (PDF pp. 18-19): Insert Table 8.1 (sample parameter input file).
+.. code-block:: text
+
+   # Sample input file for
+   c: Ru(0001) + p(r3xr3)-20
+   # bulk unit cell parameters
+   a1: 1.3525 -2.3426 0.0000
+   a2: 1.3525 2.3426 0.0000
+   a3: 0.0000 0.0000 -4.2800
+   # superstructure matrix
+   m1: 2. 1.
+   m2: -1. 1.
+   # symmetry
+   sr: 3 0.0 0.0
+   # Overlayers:
+   # O atoms on hcp site
+   po: O_H2O 2.7050 0.0000 4.3100 dr3 0.05 0.05 0.05
+   po: O_H2O 1.3525 2.3426 4.1900 dr3 0.05 0.05 0.05
+   # Ru atoms of the first layer
+   po: /home/CLEED/PHASE/Ru.phs 0.0000 0.0000 2.0400 dr1 0.0707
+   po: /home/CLEED/PHASE/Ru.phs 2.7050 0.0000 2.0500 dr1 0.0707
+   po: /home/CLEED/PHASE/Ru.phs 1.3525 2.3426 2.1100 dr1 0.0707
+   # bulk layers:
+   pb: /home/CLEED/PHASE/Ru.phs 0.0000 -1.5617 0.0000 dmt 400. 101. 200.
+   pb: /home/CLEED/PHASE/Ru.phs 0.0000 -2.1400 0.0000 dmt 400. 101. 200.
+   # NON-GEOMETRIC PARAMETERS:
+   # optical potentials
+   vr: -13.00
+   vi: 4.50
+   # energies
+   ei: 32.
+   ef: 260.1
+   es: 4.
+   # angles of incidence
+   it: 0.
+   ip: 0.
+   # epsilon, lmax
+   ep: 1.e-4
+   lm: 8
+
+Table 8.1: Sample parameter input file for p(sqrt(3) x sqrt(3)) (H2)O / Ru(0001).
 
 ``sr: n f f``
   Rotational symmetry: degree (n-fold axis), position of axis (x, y in \AA).
@@ -117,9 +156,85 @@ TODO (PDF pp. 18-19): Insert Table 8.1 (sample parameter input file).
 8.2 Separate bulk and overlayer parameter input
 ------------------------------------------------
 
-TODO (PDF pp. 21-22): Populate section 8.2 and insert Table 8.2 and Table 8.3.
+If the parameter input is split into two files, all parameters except for the overlayer atom
+parameters are read from the bulk parameter input file specified by the ``-b`` option. The
+overlayer atom parameters (``po:``) are read from the parameter input file (``-i``). The
+two files corresponding to the above example of :math:`p(\sqrt{3} 	imes \sqrt{3})` H2O / Ru(0001)
+are shown in Tables 8.2 and 8.3.
+
+This way of input is used within the automated search where only the optimised ``po:``
+parameters are supplied by the search program whereas the unchanged parameters are read
+from a separate bulk file provided by the user.
+
+.. code-block:: text
+
+   # sample bulk geometry input file
+   c: Ru(0001) + p(r3xr3)
+   # bulk unit cell parameters
+   a1: 1.3525 -2.3426 0.0000
+   a2: 1.3525 2.3426 0.0000
+   a3: 0.0000 0.0000 -4.2800
+   # superstructure matrix
+   m1: 2. 1.
+   m2: -1. 1.
+   # symmetry
+   sr: 3 0.0 0.0
+   # NON-GEOMETRIC PARAMETERS:
+   # optical potentials
+   vr: -13.00
+   vi: 4.50
+   # energies
+   ei: 32.
+   ef: 260.1
+   es: 4.
+   # angles of incidence
+   it: 0.
+   ip: 0.
+   # epsilon, lmax
+   ep: 1.e-4
+   lm: 8
+
+Table 8.2: Sample bulk input file for any p(sqrt(3) x sqrt(3)) Ru(0001).
+
+.. code-block:: text
+
+   # sample overlayer geometry input file
+   c: Ru(0001) + p(r3xr3)-20
+   # Overlayers:
+   # O atoms on hcp site
+   po: O_H2O 2.7050 0.0000 4.3100 dr3 0.05 0.05 0.05
+   po: O_H2O 1.3525 2.3426 4.1900 dr3 0.05 0.05 0.05
+   # Ru atoms of the first layer
+   po: /home/CLEED/PHASE/Ru.phs 0.0000 0.0000 2.0400 dr1 0.0707
+   po: /home/CLEED/PHASE/Ru.phs 2.7050 0.0000 2.0500 dr1 0.0707
+   po: /home/CLEED/PHASE/Ru.phs 1.3525 2.3426 2.1100 dr1 0.0707
+
+Table 8.3: Sample overlayer input file for p(sqrt(3) x sqrt(3)) (H2)O / Ru(0001).
 
 8.3 Phase shifts input
 ----------------------
 
-TODO (PDF p22): Populate section 8.3 and insert Table 8.4.
+The energy dependent atomic phase shifts :math:`\delta_l(E)` are read from the files
+specified in the atom parameter sets (``po:`` and ``pb:``). These files have the format as
+shown in Table 8.4.
+
+.. code-block:: text
+
+   40 9 neng, lmax (Ru, m=101)
+   0.5000
+   .2748 -0.3054 -0.5527 0.0180 0.0007 0.0000 0.0000 0.0000 0.0000 0.0000
+   1.0000
+   .8705 -0.5465 -0.6358 0.1689 0.0115 0.0009 0.0001 0.0000 0.0000 0.0000
+   1.5000
+   .5527 -0.7538 -0.7190 0.5972 0.0497 0.0056 0.0005 0.0000 0.0000 0.0000
+   2.0000
+   .2909 -0.9420 -0.7769 1.1747 0.1270 0.0190 0.0024 0.0003 0.0000 0.0000
+   ...
+   19.0000
+   -1.2839 -3.0896 -1.8887 2.6390 1.6041 1.0384 0.6948 0.4697 0.3216 0.2165
+   19.5000
+   -1.3173 -3.1180 -1.9057 2.6399 1.6129 1.0490 0.7059 0.4795 0.3300 0.2243
+   20.0000
+   -1.3499 -3.1458 -1.9223 2.6407 1.6212 1.0593 0.7166 0.4891 0.3382 0.2319
+
+Table 8.4: Sample phase shifts input file for Ru.

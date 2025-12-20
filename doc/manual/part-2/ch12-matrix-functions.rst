@@ -31,7 +31,7 @@ In contrast to the conventional definition of matrices in C as arrays of pointer
        real *iel;         /* pointer to imag. parts of matrix elements */
    };
 
-TODO (PDF p33): Confirm Table 12.1 formatting and structure details.
+Table 12.1: Matrix structure (see code listing above).
 
 In order to make the matrix type independent of the type of the matrix elements, complex
  matrices are effectively stored as two matrices, one containing the real part of the
@@ -58,27 +58,85 @@ The matrix functions described in this section are mainly called by other "high 
  matrix functions in order to check, allocate, free, etc. memory space used to store a
  matrix. They are listed in Table 12.2.
 
-TODO (PDF p34): Insert Table 12.2 (function list).
+.. list-table:: Table 12.2: Basic matrix functions
+   :header-rows: 1
+
+   * - function name
+     - description
+     - source file
+   * - ``mat matalloc(mat, int, int, int)``
+     - allocate memory for matrix
+     - ``matalloc.c``
+   * - ``int matcheck(mat)``
+     - check validity of pointer
+     - ``matcheck.c``
+   * - ``mat matcop(mat, mat)``
+     - copy matrices
+     - ``matcop.c``
+   * - ``int matfree(mat)``
+     - free memory
+     - ``matfree.c``
 
 12.2.1 matalloc, matfree
 ------------------------
 
-TODO (PDF p35): Populate section 12.2.1.
+See Table 12.2 for function signatures.
 
 12.2.2 matcheck
 ---------------
 
-TODO (PDF p35): Populate section 12.2.2.
+See Table 12.2 for function signatures.
 
 12.2.3 matcop
 -------------
 
-TODO (PDF p35): Populate section 12.2.3.
+See Table 12.2 for function signatures.
 
 12.3 Matrix Inversion (matinv)
 ------------------------------
 
-TODO (PDF p35): Populate section 12.3.
+The storage scheme for rectangular and square matrices is:
+
+.. math::
+
+   R_M(m, n) \mapsto *(rel + (m - 1) * rows + n)
+   	ag{12.1}
+
+.. math::
+
+   I_M(m, n) \mapsto *(iel + (m - 1) * rows + n)
+   	ag{12.2}
+
+diagonal matrices are stored as:
+
+.. math::
+
+   R_M(m, m) \mapsto *(rel + m)
+   	ag{12.3}
+
+.. math::
+
+   I_M(m, m) \mapsto *(iel + m)
+   	ag{12.4}
+
+Note that the first element in the arrays ``rel`` and ``iel`` is never used, therefore these
+arrays have the length ``[(n * m + 1) * sizeof(real)]`` for a rectangular or square
+``n x m`` matrix and ``[(n + 1) * sizeof(real)]`` for a diagonal matrix.
+
+The general format for matrix functions which have a matrix as result is:
+
+.. code-block:: text
+
+   (mat) result = matfunction((mat) storage, operand_1, operand_2, ...)
+
+The first parameter of the function call (storage) is usually a matrix where the result
+will be written to (type ``mat``, i.e. a pointer to a matrix structure). If the dimensions
+or matrix type of this matrix do not match with those of the result, the necessary
+adjustments in memory will be done automatically. In particular, if storage is the null
+pointer (``NULL``), a new matrix will be created. In any case, the return value ``result``
+is a pointer to this updated matrix which is not necessarily identical with storage. The
+parameters (operands) depend on the purpose of the particular matrix function. They can
+be either matrices or single numbers.
 
 12.4 Display and Control Functions for Matrices
 -----------------------------------------------
@@ -91,4 +149,30 @@ The matrix functions described in this section are not thought to be used in the
  elements while ``int matshowabs(mat)`` displays only the modulus of complex matrix
  elements and therefore reduces the amount of output.
 
-TODO (PDF p36): Populate the example matrix and output.
+For example the matrix:
+
+.. math::
+
+   egin{pmatrix}
+   1 & 1 + i \
+   1 - i & i
+   \end{pmatrix}
+
+would be displayed by ``matshow`` as:
+
+.. code-block:: text
+
+   (2 rows) x (2 columns):
+   (1.00, 0.00) (1.00, 1.00)
+   (1.00, -1.00) (0.00, 1.00)
+
+while ``matshowabs`` would produce the following output:
+
+.. code-block:: text
+
+   *** abs *** (2 rows) x (2 columns):
+   1.00 1.41
+   1.41 1.00
+
+Note that both functions also display the matrix dimensions which is particularly useful
+when the rows are too long to be displayed in one line of the screen.
