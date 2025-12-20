@@ -1,0 +1,8 @@
+build/
+doc/_build/
+docs/_build/
+.git/
+.github/
+**/.DS_Store
+**/__pycache__/
+

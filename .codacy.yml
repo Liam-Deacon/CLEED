@@ -4,6 +4,8 @@ exclude_paths:
   - "CMakeFiles/**"
   - "src/**/CMakeFiles/**"
   - "doc/_build/**"
+  - "Dockerfile"
+  - ".github/workflows/**"
 
   # Tests (still checked locally via pre-commit/cppcheck)
   - "tests/**"

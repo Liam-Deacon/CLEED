@@ -1,0 +1,183 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  BUILD_TYPE: Release
+  VCPKG_VERSION: 2025.12.12
+
+jobs:
+  build-packages:
+    name: Package (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-14, windows-2022]
+
+    steps:
+      - uses: actions/checkout@v6.0.1
+
+      - name: Source compliance guard
+        run: python tools/check_nr_free.py
+
+      - name: Install build dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            libtiff-dev rpm
+
+      - name: Install build dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install libtiff
+
+      - name: Cache vcpkg (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/cache@v5.0.1
+        with:
+          path: ${{ github.workspace }}/vcpkg
+          key: vcpkg-${{ runner.os }}-x64-windows-${{ env.VCPKG_VERSION }}
+          restore-keys: |
+            vcpkg-${{ runner.os }}-x64-windows-
+
+      - name: Install build dependencies (Windows via vcpkg)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $vcpkgRoot = "$env:GITHUB_WORKSPACE/vcpkg"
+          if (-not (Test-Path $vcpkgRoot)) {
+            git clone --branch "$env:VCPKG_VERSION" --depth 1 https://github.com/microsoft/vcpkg $vcpkgRoot
+          }
+          if (-not (Test-Path "$vcpkgRoot/vcpkg.exe")) {
+            & "$vcpkgRoot/bootstrap-vcpkg.bat"
+          }
+          & "$vcpkgRoot/vcpkg.exe" install tiff:x64-windows
+
+      - name: Install NSIS (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install nsis -y
+          Get-Command makensis
+
+      - name: Configure CMake (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: >
+          cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          -DWITH_QT=OFF
+          -DWITH_OPENCL=OFF
+          -DWITH_PHASESHIFTS=OFF
+          -DINSTALL_DOC=OFF
+          -DBUILD_TESTING=ON
+
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        run: >
+          cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build
+          -A x64
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+          -DVCPKG_TARGET_TRIPLET=x64-windows
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          -DWITH_QT=OFF
+          -DWITH_OPENCL=OFF
+          -DWITH_PHASESHIFTS=OFF
+          -DINSTALL_DOC=OFF
+          -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }}
+
+      - name: Test
+        working-directory: ${{ github.workspace }}/build
+        run: ctest -C ${{ env.BUILD_TYPE }} --output-on-failure
+
+      - name: Package (Linux)
+        if: runner.os == 'Linux'
+        working-directory: ${{ github.workspace }}/build
+        run: |
+          cpack -C "${BUILD_TYPE}" -G TGZ
+          cpack -C "${BUILD_TYPE}" -G DEB || true
+          cpack -C "${BUILD_TYPE}" -G RPM || true
+
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        working-directory: ${{ github.workspace }}/build
+        run: |
+          cpack -C "${BUILD_TYPE}" -G TGZ
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        working-directory: ${{ github.workspace }}/build
+        shell: pwsh
+        run: |
+          cpack -C $env:BUILD_TYPE -G ZIP
+          cpack -C $env:BUILD_TYPE -G NSIS
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: packages-${{ matrix.os }}
+          path: |
+            build/*.zip
+            build/*.tar.gz
+            build/*.tgz
+            build/*.deb
+            build/*.rpm
+            build/*.exe
+
+  github-release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    needs: build-packages
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v7.0.0
+        with:
+          path: dist
+
+      - name: Determine release flags (PEP 440)
+        id: flags
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+
+          # PEP 440 prereleases: X.Y.ZaN, X.Y.ZbN, X.Y.ZrcN; also dev releases: X.Y.Z.devN
+          prerelease=false
+          draft=false
+
+          if [[ "${version}" =~ (^|[0-9])a[0-9]+$ ]] || [[ "${version}" =~ (^|[0-9])b[0-9]+$ ]] || [[ "${version}" =~ rc[0-9]+$ ]] || [[ "${version}" =~ \\.dev[0-9]+$ ]]; then
+            prerelease=true
+          fi
+
+          # Keep dev releases as drafts by default (useful for CI-produced artifacts without announcing).
+          if [[ "${version}" =~ \\.dev[0-9]+$ ]]; then
+            draft=true
+          fi
+
+          {
+            echo "version=${version}"
+            echo "prerelease=${prerelease}"
+            echo "draft=${draft}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Publish
+        uses: softprops/action-gh-release@v2.5.0
+        with:
+          name: ${{ steps.flags.outputs.version }}
+          prerelease: ${{ steps.flags.outputs.prerelease }}
+          draft: ${{ steps.flags.outputs.draft }}
+          files: dist/**/*
+          generate_release_notes: true
