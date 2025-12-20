@@ -126,7 +126,7 @@ Prints a list of the individual R factors. Output can  be  redirected  to a file
     crfac -c *.ctr -t *.res
 
 Calculates the error (relative error) for the calculated R-factor. The relative error 
-is given by: ::math:`RR = (\frac{8 V_i}{\delta E})^{\frac{1}{2}}`, where :math:`V_i` 
+is given by: :math:`RR = (\frac{8 V_i}{\delta E})^{\frac{1}{2}}`, where :math:`V_i` 
 is the imaginary component of the optical potential and :math:`\delta E` is the energy 
 range of the data. This provides the error bars, :math:`E = (1 + RR) * R_{\text{min}}`, where
 :math:`R_{\text{min}}` is the minimum R factor for the data.
