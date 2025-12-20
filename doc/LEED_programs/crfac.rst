@@ -130,4 +130,3 @@ is given by: ::math:`RR = (\frac{8 V_i}{\delta E})^{\frac{1}{2}}`, where :math:`
 is the imaginary component of the optical potential and :math:`\delta E` is the energy 
 range of the data. This provides the error bars, :math:`E = (1 + RR) * R_{\text{min}}`, where
 :math:`R_{\text{min}}` is the minimum R factor for the data.
-  

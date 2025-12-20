@@ -47,9 +47,9 @@ Example::
 - Escape characters that trigger markup when they are literal.
 - Prefer Sphinx roles for semantic markup:
 
-  - ``:file:`` for filenames (e.g. ``:file:`*.inp```).
-  - ``:command:`` for commands.
-  - ``:envvar:`` for environment variables (define them via ``.. envvar::`` somewhere in the docs).
+  - Filenames: ``:file:`` (e.g. ``:file:`*.inp```).
+  - Commands: ``:command:``.
+  - Environment variables: ``:envvar:`` (define them via ``.. envvar::`` somewhere in the docs).
 
 Common pitfall::
 
