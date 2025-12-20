@@ -17,6 +17,7 @@ Contents:
    
    introduction
    background
+   manual/index
    environment
    file_formats
    LEED_programs
