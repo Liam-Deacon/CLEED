@@ -139,8 +139,8 @@ Output files
 :file:`beam.smo`
   File contained smoothed output of beam.raw.
 :file:`mask.byte`
-  Local copy of the mask file or else generated mask from :option:`ROUTER`
-  and :option:`RINNER`.
+  Local copy of the mask file or else generated mask from ``ROUTER``
+  and ``RINNER``.
 
 .. _mkiv_input_file:
   
@@ -148,7 +148,7 @@ Input file (input)
 ^^^^^^^^^^^^^^^^^^
 This file is the primary configuration file.
 
-:option:`REF_NAME`
+``REF_NAME``
   The name of the reference LEED image that is used to calculate
   the basis. The coordinates must either be input at the beginning
   of the program or be present in the file 
@@ -159,17 +159,17 @@ This file is the primary configuration file.
   images. The extension :code:`.[0-9]+?[0-9]+?[0-9]` will be exchanged by
   the according index number.
 
-:option:`NSTART`
+``NSTART``
   The first index of the LEED image sequence.
 
-:option:`NSTOP`
+``NSTOP``
   The last index of the LEED image sequence.
 
-:option:`N_STEP`
+``N_STEP``
   Determines the step width, may be used when calculating from 
   high to low energies or for a fast run for test purposes.
 
-:option:`MASK_NAME`
+``MASK_NAME``
   Part of the LEED image is covered by the electron gun and the
   support. This and the outer boundaries may by excluded from 
   calculations by using the mask. The VIFF-image should be of type
@@ -179,42 +179,42 @@ This file is the primary configuration file.
   like a regular LEED-image. Then it may be converted into
   byte-type and into mask-type using a threshold color-value.
 
-:option:`H_CENTER`
+``H_CENTER``
 
-:option:`C_CENTER`
+``C_CENTER``
   Determine the geometric center of the LEED-screen.
 
-:option:`ROUTER`
+``ROUTER``
 
-:option:`RINNER`
+``RINNER``
   Determine the radius of the LEED-screen and the electron gun in
   the same way as the former program version. Must be set even
   when a mask is used and therefore are not taken into account.
 
-:option:`BACKGROUND`
+``BACKGROUND``
   2 or 3
   <2 - not implemented anymore (former program versions)
   2  - performing background-subtraction
   3  - no background-treatment
 
-:option:`SMOOTH`
+``SMOOTH``
   >0 - The value >0 is taken as constant beam-current value
   0  - Beam-current is taken as it is.
   -1 - The beam-current is smoothed (10 point backwards)
 
-:option:`KP_LEN_10`
+``KP_LEN_10``
   The parallel (to surface) length of the (1,0)-vector in k-space.
 
-:option:`NDOM`
+``NDOM``
   Number of superstructure domains.
 
-:option:`DOMAIN`
+``DOMAIN``
   Superstructure matrices in real-space. Each domain preceded by
-  the word :option:`DOMAIN`.
+  the word ``DOMAIN``.
 
-:option:`NDESIRE`
+``NDESIRE``
   Number  of  spots that are stored in :file:`mkiv.ivdat`, followed by the
-  Miller indices of the :option:`NDESIRE` spots:
+  Miller indices of the ``NDESIRE`` spots:
   :math:`h_1`  :math:`k_1`    > spot 1
   :math:`h_2`  :math:`k_2`    > spot 2, etc.
   .       .
@@ -227,98 +227,98 @@ Variable file (input)
 This file contains additional configuration parameters for fine tuning
 the IV extraction process. The parameters available are:
 
-:option:`COS_MIN`
+``COS_MIN``
 
-:option:`COS_MAX`
+``COS_MAX``
   The minimum and maximum value for the spots used for the recalculation 
   of the basis. Diffraction spots close to the boundaries
   may be excluded this way.
 
-:option:`VERH`
+``VERH``
   The ratio of the axes of the underground-area to the integration-area. 
-  :option:`VERH` = 1.4 indicates disks or elliptical areas with almost the same 
+  ``VERH`` = 1.4 indicates disks or elliptical areas with almost the same 
   area of underground and signal.
 
-:option:`ACCI`
+``ACCI``
 
-:option:`ACCB`
+``ACCB``
   The  minimum  percentage  of the integration and background area
   compared to the complete disk area that must  be  within  masked
   area so that the intensity value is stored. A percentage < 1.0
   allows an overlap of integration areas with screen-boundaries.
 
-:option:`DISTANCE`
+``DISTANCE``
   Minimum distance between two  spots  that  are  used  for  basis
   recalculation. Bigger values lead to more exact basis, too big
   values may cause too few reference spots thus preventing  sensible 
   basis recalculation. The value must be scaled with the size
-  of the LEED-images, like :option:`SCALE_MIN`, :option:`RANGE_MIN`, 
-  :option:`ROUTER`, :option:`RINNER` and spot positions are given 
+  of the LEED-images, like ``SCALE_MIN``, ``RANGE_MIN``, 
+  ``ROUTER``, ``RINNER`` and spot positions are given 
   according to the resolution of the images.
 
-:option:`UPDATE`
+``UPDATE``
   The output files are flushed only every UPDATE image (senseless
   if output is buffered).
 
-:option:`STEP`
+``STEP``
   The routine :code:`fimax4` normally carries out the matrix-weighted 
   summation for every pixel within range. This time-consuming habit
   isn't  always  sensible, therefore a step-size may be used. STEP
   has no effect on the second run for the spots with bad signal-to-noise 
   ratios.
 
-:option:`TRIP_MAX`
+``TRIP_MAX``
   Gives  the  maximum of triples for basis recalculation. The rou-
   tine :code:`calcbase` stops when the number of triples is exceeded.
 
-:option:`SCALE_MIN`
+``SCALE_MIN``
   This is a minimum value for the energy-dependent integration
   area (in pixels). Prevents the area from becoming too small with
   high energies. If applied, different k-space is integrated  with
   different energies.
 
-:option:`RANGE_MIN`
-  Same as :option:`SCALE_MIN`, but for search area. Value should be in pixels.
+``RANGE_MIN``
+  Same as ``SCALE_MIN``, but for search area. Value should be in pixels.
 
-:option:`S2N_REF`
+``S2N_REF``
   A minimum threshold for the reference reflections (spots) used
   for basis recalculation.
 
-:option:`S2N_GOOD`
+``S2N_GOOD``
   Spots with lower signal-to-noise ratio are treated in the second
   run with smaller range.
 
-:option:`S2N_BAD`
+``S2N_BAD``
   Serves to call spots 'bad', no other consequences.
 
-:option:`REF_MIN`
+``REF_MIN``
   A minimum number of reference spots to be taken into account. If
   less reference spots are found, all spots with a signal-to-noise
-  ratio greater than :option:`S2N_REF` are taken instead. Reference spots
+  ratio greater than ``S2N_REF`` are taken instead. Reference spots
   are indicated by a 'r' preceding the indices in file :file:`mkiv.inp`.
 
-:option:`SEC_RANGE`
+``SEC_RANGE``
   Tells  the ratio between the axes of search-area of first run to
   second run. spots with bad S2N are therefore searched within an
-  area determined by :option:`RANGE` / :option:`SEC_RANGE`.
+  area determined by ``RANGE`` / ``SEC_RANGE``.
 
-:option:`RANGE`
+``RANGE``
   Indicates  the size of the searching area in units of the length
   of the (1,0) basis-vector. The searching area therefore scales
   like the basis-vectors with the square root of the energy.
 
-:option:`SCALE_A`
+``SCALE_A``
 
-:option:`SCALE_B`
+``SCALE_B``
   Determines the size of the integration area in units of the
   length of the (1,0) basis-vector. The integration area therefore
   scales like the basis-vectors with the square root of the energy.
 
-:option:`ANGLE`
+``ANGLE``
   Indicates the angle between elliptical integration area axis and
   horizontal.
 
-:option:`RATIO`
+``RATIO``
   This  is  the ratio of LEED-screen radius to the distance of the
   camera to the LEED-screen and is used within a geometrical correction 
   formula. The finite  distance  of  the camera and the
@@ -327,7 +327,7 @@ the IV extraction process. The parameters available are:
   recalculating the basis with the found spot positions at the end
   of each energy loop.
 
-:option:`<spots>`
+``<spots>``
   A list of diffraction spots are needed for :code:`mkiv` to determine
   which reciprocal lattice indices should be extracted. They take
   the form: :code:`h  k (d_par: d k_r: kx, ky, kz)`, where h and k are
