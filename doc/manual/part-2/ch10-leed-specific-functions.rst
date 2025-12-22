@@ -94,13 +94,13 @@ with :math:`C_{l_1m_1,l_3m_3,l_2m_2}` being a Clebsch-Gordan coefficient and
    \cdot h^{(1)}_{l_3}(\kappa \cdot |\vec{R}_j|)
    \tag{10.5}
 
-computed in the function ``ms_lsum_ii``. :math:`\vec{R}_j` is the position of the *j*th atom
+computed in the function ``ms_lsum_ii``. :math:`\vec{R}_j` is the position of the jth atom
 inside the layer; :math:`h^{(1)}_{l_3}` the Hankle function of the first kind, and
 :math:`\kappa = \sqrt{2E}` the length of the wave vector.
 
-:math:`\tau` is the atomic scattering matrix *t* times :math:`-\kappa`. The functions
+:math:`\tau` is the atomic scattering matrix :math:`t` times :math:`-\kappa`. The functions
 ``ms_bravl`` and ``ms_bravl_sym`` assume isotropic scatterers with a diagonal scattering
-matrix which only depends on *l* and not on the *m* quantum numbers.
+matrix which only depends on :math:`l` and not on the :math:`m` quantum numbers.
 
 .. math::
 
