@@ -10,6 +10,7 @@ This directory contains the in-progress reStructuredText transcription of
 - The OCR text is used as a starting point, then manually cleaned into RST.
 - Figures are referenced as TODO placeholders; see `doc/manual/figures-and-tables.rst`.
 - Tables are flagged for manual verification with page numbers.
+- Equation verification PNGs are stored in `doc/manual/verify/equations`.
 
 ## Known verification tasks
 
