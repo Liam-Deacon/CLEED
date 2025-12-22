@@ -97,47 +97,58 @@ ENDIF (NOT CMAKE_MODULE_PATH)
 SET(EXTRA_COMPONENTS "")
 
 IF (WITH_QT STREQUAL "ON")
-    FIND_PACKAGE(Qt4 QUIET)
-    IF (NOT QT4_FOUND)
-        MESSAGE(WARNING "Qt4 not found; disabling GUI targets. Configure with -DWITH_QT=OFF (default) to suppress this warning.")
-        SET(WITH_QT OFF CACHE BOOL "Set to ON to build Qt app frontends" FORCE)
-    ENDIF ()
-ENDIF ()
-
-IF (WITH_QT STREQUAL "ON")
-    SET (QT_INCLUDE_MODULES "QtCore;QtGui;QtNetwork;QtSvg")
-    FOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
-        STRING(TOUPPER ${QT_MODULE} _upper_qt_module)
-        SET (QT_USE_${_upper_qt_module} ON)
-    ENDFOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
-    IF (QT_VERSION STREQUAL "Qt5" OR QT_VERSION STREQUAL "qt5" )
-        FIND_PACKAGE(Qt5)
+    # Prefer modern CMake Qt packages when available.
+    FIND_PACKAGE(Qt6 COMPONENTS Core Gui Widgets Network Svg QUIET)
+    IF (Qt6_FOUND)
+        SET(CLEED_QT_MAJOR 6)
+        SET(QT_VERSION "Qt6")
+        SET(QT_LIBRARIES Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Svg)
     ELSE ()
-        SET (QT_VERSION "Qt4")
-        FOREACH (QT_MODULE ${QT_INCLUDE_MODULES})  
-            # apply fix for Windows Qt Library path problems...
-            IF (EXISTS QT_QMAKE_EXCUTABLE AND WIN32)
-                STRING(TOUPPER ${QT_MODULE} _upper_qt_module)
-                GET_FILENAME_COMPONENT(QT_DLL_DIR ${QT_QMAKE_EXECUTABLE} PATH)
-                IF (QT_${_upper_qt_module}_LIBRARY_DEBUG MATCHES "*NOTFOUND")
-                    SET (QT_${_upper_qt_module}_LIBRARY_DEBUG 
-                        "${QT_DLL_DIR}/${_upper_qt_module}d4.dll"
-                        CACHE STRING "" FORCE)
-                ENDIF ()
-                IF (QT_${_upper_qt_module}_LIBRARY_RELEASE MATCHES "*NOTFOUND")
-                    SET (QT_${_upper_qt_module}_LIBRARY_RELEASE
-                        "${QT_DLL_DIR}/${_upper_qt_module}4.dll"
-                        CACHE STRING "" FORCE)
-                ENDIF ()
-            ENDIF (EXISTS QT_QMAKE_EXCUTABLE AND WIN32)
-        ENDFOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
-    ENDIF ()
-    
-    # Instruct CMake to run moc automatically when needed.
-    #SET(CMAKE_AUTOMOC ON)
-    SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-      
-    INCLUDE(${QT_USE_FILE})
+        FIND_PACKAGE(Qt5 COMPONENTS Core Gui Widgets Network Svg QUIET)
+        IF (Qt5_FOUND)
+            SET(CLEED_QT_MAJOR 5)
+            SET(QT_VERSION "Qt5")
+            SET(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network Qt5::Svg)
+        ELSE ()
+            FIND_PACKAGE(Qt4 QUIET)
+            IF (QT4_FOUND)
+                SET(CLEED_QT_MAJOR 4)
+                SET (QT_VERSION "Qt4")
+
+                SET (QT_INCLUDE_MODULES "QtCore;QtGui;QtNetwork;QtSvg")
+                FOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
+                    STRING(TOUPPER ${QT_MODULE} _upper_qt_module)
+                    SET (QT_USE_${_upper_qt_module} ON)
+                ENDFOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
+
+                # Apply fix for Windows Qt Library path problems...
+                FOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
+                    IF (EXISTS QT_QMAKE_EXCUTABLE AND WIN32)
+                        STRING(TOUPPER ${QT_MODULE} _upper_qt_module)
+                        GET_FILENAME_COMPONENT(QT_DLL_DIR ${QT_QMAKE_EXECUTABLE} PATH)
+                        IF (QT_${_upper_qt_module}_LIBRARY_DEBUG MATCHES "*NOTFOUND")
+                            SET (QT_${_upper_qt_module}_LIBRARY_DEBUG
+                                "${QT_DLL_DIR}/${_upper_qt_module}d4.dll"
+                                CACHE STRING "" FORCE)
+                        ENDIF ()
+                        IF (QT_${_upper_qt_module}_LIBRARY_RELEASE MATCHES "*NOTFOUND")
+                            SET (QT_${_upper_qt_module}_LIBRARY_RELEASE
+                                "${QT_DLL_DIR}/${_upper_qt_module}4.dll"
+                                CACHE STRING "" FORCE)
+                        ENDIF ()
+                    ENDIF (EXISTS QT_QMAKE_EXCUTABLE AND WIN32)
+                ENDFOREACH (QT_MODULE ${QT_INCLUDE_MODULES})
+
+                # Instruct CMake to run moc automatically when needed.
+                SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+                INCLUDE(${QT_USE_FILE})
+            ELSE ()
+                MESSAGE(WARNING "Qt (Qt6/Qt5/Qt4) not found; disabling GUI targets. Configure with -DWITH_QT=OFF (default) to suppress this warning.")
+                SET(WITH_QT OFF CACHE BOOL "Set to ON to build Qt app frontends" FORCE)
+            ENDIF (QT4_FOUND)
+        ENDIF (Qt5_FOUND)
+    ENDIF (Qt6_FOUND)
+
     IF (NOT EXTRA_COMPONENTS)
         SET (EXTRA_COMPONENTS gui)
     ELSE ()

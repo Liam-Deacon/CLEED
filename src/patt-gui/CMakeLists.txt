@@ -16,17 +16,6 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-FIND_PACKAGE(Qt4 REQUIRED)
-INCLUDE(${QT_USE_FILE})
-ADD_DEFINITIONS(${QT_DEFINITIONS})
-
-# by default only QtCore and QtGui modules are enabled
-# other modules must be enabled like this:
-SET( QT_USE_QT3SUPPORT TRUE )
-SET( QT_USE_QTXML TRUE )
-SET( QT_USE_QTNETWORK TRUE )
-SET( QT_USE_QTSVG TRUE )
-
 # Program information
 SET(PATT_GUI_VERSION_MAJOR "${CPACK_PACKAGE_VERSION_MAJOR}")
 SET(PATT_GUI_VERSION_MINOR "${CPACK_PACKAGE_VERSION_MINOR}")
@@ -90,15 +79,7 @@ SET (patt_gui_ui_SRCS
 )
 
 
-IF (Qt5_POSITION_INDEPENDENT_CODE OR Qt4_POSITION_INDEPENDENT_CODE)
-  SET (CMAKE_POSITION_INDEPENDENT_CODE ON)
-ENDIF ()
-
-QT4_WRAP_UI (patt_gui_UI_SRCS ${patt_gui_ui_SRCS})
-QT4_WRAP_CPP (patt_gui_MOC_SRCS ${patt_gui_HEADERS})
-QT4_ADD_RESOURCES(patt_gui_RESOURCES_RCC res/icons.qrc)
- 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+SET (patt_gui_RESOURCES_RCC res/icons.qrc)
  
 IF (WIN32) # Check if we are on Windows
  
@@ -107,28 +88,57 @@ IF (WIN32) # Check if we are on Windows
  CONFIGURE_FILE ("res/windows/patt-gui.rc.in" "res/windows/patt-gui.rc" IMMEDIATE @ONLY )
  LIST(APPEND patt_gui_SRCS res/windows/patt-gui.rc)
  
- ADD_EXECUTABLE(patt-gui WIN32 main.cpp ${patt_gui_SRCS} ${patt_gui_MOC_SRCS} ${patt_gui_UI_SRCS} ${patt_gui_RESOURCES_RCC}) 
+ SET(PATT_GUI_WIN32_FLAG WIN32)
  
- IF (MSVC) # Check if we are using the Visual Studio compiler
-    SET_TARGET_PROPERTIES(patt-gui PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
-  ELSEIF (CMAKE_COMPILER_IS_GNUCXX)
-    # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows") # Not tested
-  ELSE (MSVC)
-    # MESSAGE(SEND_ERROR "You are using an unsupported Windows compiler! (Not MSVC or GCC)")
-  ENDIF (MSVC)
 ELSEIF (UNIX)
   # Nothing special required
-  ADD_EXECUTABLE(patt-gui main.cpp ${patt_gui_SRCS} ${patt_gui_MOC_SRCS} ${patt_gui_UI_SRCS} ${patt_gui_RESOURCES_RCC}) 
+  SET(PATT_GUI_WIN32_FLAG "")
 ELSE ()
   # MESSAGE(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
 ENDIF()
 
-TARGET_LINK_LIBRARIES(patt-gui ${QT_LIBRARIES})
+IF (TARGET Qt6::Core OR TARGET Qt5::Core)
+    SET(CMAKE_AUTOMOC ON)
+    SET(CMAKE_AUTOUIC ON)
+    SET(CMAKE_AUTORCC ON)
+
+    ADD_EXECUTABLE(patt-gui ${PATT_GUI_WIN32_FLAG}
+        main.cpp
+        ${patt_gui_SRCS}
+        ${patt_gui_ui_SRCS}
+        ${patt_gui_RESOURCES_RCC}
+    )
+    TARGET_INCLUDE_DIRECTORIES(patt-gui PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+    TARGET_LINK_LIBRARIES(patt-gui PRIVATE ${QT_LIBRARIES})
+ELSE()
+    FIND_PACKAGE(Qt4 REQUIRED)
+    INCLUDE(${QT_USE_FILE})
+    ADD_DEFINITIONS(${QT_DEFINITIONS})
+
+    QT4_WRAP_UI (patt_gui_UI_SRCS ${patt_gui_ui_SRCS})
+    QT4_WRAP_CPP (patt_gui_MOC_SRCS ${patt_gui_HEADERS})
+    QT4_ADD_RESOURCES(patt_gui_RESOURCES_RCC res/icons.qrc)
+
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+
+    ADD_EXECUTABLE(patt-gui ${PATT_GUI_WIN32_FLAG}
+        main.cpp
+        ${patt_gui_SRCS}
+        ${patt_gui_MOC_SRCS}
+        ${patt_gui_UI_SRCS}
+        ${patt_gui_RESOURCES_RCC}
+    )
+    TARGET_LINK_LIBRARIES(patt-gui PRIVATE ${QT_LIBRARIES})
+ENDIF()
+
+IF(WIN32 AND TARGET patt-gui AND MSVC)
+    SET_TARGET_PROPERTIES(patt-gui PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
+ENDIF()
 
 INSTALL (TARGETS patt-gui RUNTIME DESTINATION bin COMPONENT gui)
 
 # ensure all necessary dependencies are included in distribution
-IF (WIN32)
+IF (WIN32 AND DEFINED QT_BINARY_DIR AND EXISTS "${QT_BINARY_DIR}")
     FILE (GLOB PATT_GUI_QT_DLLS 
         "${QT_BINARY_DIR}/QtCore*.dll"
         "${QT_BINARY_DIR}/QtGui*.dll" 
@@ -138,4 +148,4 @@ IF (WIN32)
 
     INSTALL (FILES ${PATT_GUI_QT_DLLS} COMPONENT gui DESTINATION bin)
     
-ENDIF (WIN32)
+ENDIF ()
