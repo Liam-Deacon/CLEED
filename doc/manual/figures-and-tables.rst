@@ -62,21 +62,27 @@ Equations (verification snapshots)
 Inline LaTeX is used in the RST files. The PNGs below are cropped from the PDF as
 verification references.
 
-+----------------------+----------------------+-----------------------------------------------+
-| PDF page(s)          | Equation(s)          | Verification PNG(s)                           |
-+======================+======================+===============================================+
-| 27                   | 10.1-10.3            | doc/manual/verify/equations/eq-10-1.png       |
-|                      |                      | doc/manual/verify/equations/eq-10-2-3.png     |
-+----------------------+----------------------+-----------------------------------------------+
-| 28                   | 10.4-10.7            | doc/manual/verify/equations/eq-10-4.png       |
-|                      |                      | doc/manual/verify/equations/eq-10-5.png       |
-|                      |                      | doc/manual/verify/equations/eq-10-6.png       |
-|                      |                      | doc/manual/verify/equations/eq-10-7.png       |
-+----------------------+----------------------+-----------------------------------------------+
-| 30-31                | 11.2 (cg, blm, gaunt) | doc/manual/verify/equations/eq-11-cg.png      |
-|                      |                      | doc/manual/verify/equations/eq-11-cg-transform.png |
-|                      |                      | doc/manual/verify/equations/eq-11-blm.png     |
-|                      |                      | doc/manual/verify/equations/eq-11-blm-transform.png |
-|                      |                      | doc/manual/verify/equations/eq-11-gaunt.png   |
-|                      |                      | doc/manual/verify/equations/eq-11-memory.png  |
-+----------------------+----------------------+-----------------------------------------------+
+.. list-table:: Equation verification snapshots
+   :header-rows: 1
+
+   * - PDF page(s)
+     - Equation(s)
+     - Verification PNG(s)
+   * - 27
+     - 10.1-10.3
+     - - `doc/manual/verify/equations/eq-10-1.png`
+       - `doc/manual/verify/equations/eq-10-2-3.png`
+   * - 28
+     - 10.4-10.7
+     - - `doc/manual/verify/equations/eq-10-4.png`
+       - `doc/manual/verify/equations/eq-10-5.png`
+       - `doc/manual/verify/equations/eq-10-6.png`
+       - `doc/manual/verify/equations/eq-10-7.png`
+   * - 30-31
+     - 11.2 (cg, blm, gaunt)
+     - - `doc/manual/verify/equations/eq-11-cg.png`
+       - `doc/manual/verify/equations/eq-11-cg-transform.png`
+       - `doc/manual/verify/equations/eq-11-blm.png`
+       - `doc/manual/verify/equations/eq-11-blm-transform.png`
+       - `doc/manual/verify/equations/eq-11-gaunt.png`
+       - `doc/manual/verify/equations/eq-11-memory.png`
