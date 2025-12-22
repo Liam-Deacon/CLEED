@@ -6,7 +6,7 @@ Chapter 11: Quantum Mechanical Functions
    equations and code-like function signatures that need verification.
 
 11.1 Introduction
-----------------
+-----------------
 
 This chapter summarises the quantum mechanical utility functions used by CLEED,
 primarily Clebsch-Gordan coefficients, spherical harmonics, and spherical Hankle
