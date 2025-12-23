@@ -22,7 +22,7 @@ Each parameter or set of parameters, respectively, is specified by two letters a
 The meaning and the syntax of the parameter specifiers is (n: integer number, f: floating
  point number, c: character):
 
-``al:``, ``a2:``, ``a3: f f f``
+``a1:``, ``a2:``, ``a3: f f f``
   Lattice vectors of the three-dimensional bulk unit cell (x, y, z in \AA). ``a1`` and
   ``a2`` are parallel to the surface plane, i.e. they define the two-dimensional (1 x 1)
   unit cell. ``a3`` must contain a component perpendicular to the surface. For the
@@ -31,7 +31,7 @@ The meaning and the syntax of the parameter specifiers is (n: integer number, f:
   condition.
 
 ``m1:``, ``m2: f f``
-  Super structure matrix defining the relationship between the superstructure lattice
+  Superstructure matrix defining the relationship between the superstructure lattice
   vectors ``b1`` and ``b2`` and the (1 x 1) lattice vectors ``a1`` and ``a2``.
 
 .. code-block:: text
