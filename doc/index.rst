@@ -12,11 +12,11 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
    :glob:
    
    introduction
    background
+   manual/index
    environment
    file_formats
    LEED_programs
