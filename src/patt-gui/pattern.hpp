@@ -19,7 +19,7 @@ typedef QVector < QVector < QPointF > > SPOTS; /*2d QPointF array - 1: layer, 2:
 #define LATTICE_GS 0
 #define LATTICE_SS 1
 typedef quint8 LATTICE;
-typedef quint8 DOMAIN;
+typedef quint8 DomainId;
 
 class Pattern : public QGraphicsItemGroup
 {
@@ -38,11 +38,11 @@ public slots:
     bool vectorsVisible(LATTICE lattice=LATTICE_GS);
 
     QVector<QPointF> getPositions(LATTICE lattice=LATTICE_GS,
-                                  DOMAIN domain=0);
+                                  DomainId domain=0);
 
 
     void recalculateSpots(LATTICE lattice=LATTICE_GS,
-                          DOMAIN domain=0);
+                          DomainId domain=0);
 
 
 private:

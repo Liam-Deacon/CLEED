@@ -21,6 +21,8 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QSettings>
+// cppcheck-suppress missingIncludeSystem
+#include <QStandardPaths>
 #if QT_VERSION >= 0x040300
 	#include <QtSvg/QSvgGenerator>
  #endif
@@ -65,7 +67,7 @@ MainWindow::~MainWindow()
 
 int MainWindow::actionOpen()
 {
-    QString defaultDir = QDesktopServices::storageLocation(QDesktopServices::HomeLocation);
+    const QString defaultDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     QString defaultFilter = tr("Pattern (*.patt)");
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                     defaultDir,
@@ -166,7 +168,7 @@ int MainWindow::actionSave()
     QString fileName = QFileDialog::getSaveFileName(
             this,
             "Save As...",
-            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+            QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
             tr("Windows Bitmap (*.bmp);;") +
             tr("JPEG (*.jpg);;") +
             tr("Portable Document Format (*.pdf);;") +
@@ -265,7 +267,7 @@ void MainWindow::actionZoom(int steps)
 
 void MainWindow::loadFile(const QString &fileName)
 {
-    if (fileName == QString::null)
+    if (fileName.isEmpty())
         return;
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -291,7 +293,7 @@ void MainWindow::loadFile(const QString &fileName)
 
     /* Lines beginning with '#' are interpreted as comments. */
     QStringList text;
-    QString line = QString::null;
+    QString line;
     while(! in.atEnd())
     {
         line = in.readLine();
@@ -349,16 +351,16 @@ void MainWindow::loadFile(const QString &fileName)
                 break;
 
             default: //domain rotation or mirror
-                QString op = QString::null;
+                QString op;
                 stream >> op;
                 if (!(op.startsWith('R') || op.startsWith('S')))
                 {
                     QString bufferString = op, superMatrix;
                     QStringList superMatrixList = op.replace("\t", " ").trimmed().split(" ");
-                    for(int k = 0; k < superMatrixList.count(); k++)
+                    for(int k = superMatrixList.count() - 1; k >= 0; --k)
                     {
                         QString m = superMatrixList.at(k);
-                        if (m == QString::null || m == "" || m == " ")
+                        if (m.trimmed().isEmpty())
                         {
                             superMatrixList.removeAt(k);
                         }
@@ -369,10 +371,10 @@ void MainWindow::loadFile(const QString &fileName)
                     stream >> op;
                     bufferString = op;
                     superMatrixList = op.replace("\t", " ").trimmed().split(" ");
-                    for(int k = 0; k < superMatrixList.count(); k++)
+                    for(int k = superMatrixList.count() - 1; k >= 0; --k)
                     {
                         QString m = superMatrixList.at(k);
-                        if (m == QString::null || m == "" || m == " " || m.startsWith('M'))
+                        if (m.trimmed().isEmpty() || m.startsWith('M'))
                         {
                             superMatrixList.removeAt(k);
                         }
@@ -787,8 +789,8 @@ void MainWindow::calculatePattern(LatticeStructure &structure)
 
         if (operation.startsWith('R'))
         {
-            QString lineBuffer = operation;
-            phi = lineBuffer.replace("R", QString::null).toFloat();
+            const QString lineBuffer = operation.mid(1);
+            phi = lineBuffer.toFloat();
             phi *= M_PI/180;
             det  = a[0].x()*a[1].y() - a[0].y()*a[1].x();
             aux2 = (a[0].x()*a[1].x() + a[0].y()*a[1].y()) / det;
@@ -1129,7 +1131,7 @@ void MainWindow::wheelEvent(QWheelEvent* event)
 
     if (ui->actionZoom->isChecked())
     {    // Typical Calculations (Ref Qt Doc)
-        const int degrees = event->delta() / 8;
+        const int degrees = event->angleDelta().y() / 8;
         int steps = degrees / 15;
         actionZoom(steps);
         return;

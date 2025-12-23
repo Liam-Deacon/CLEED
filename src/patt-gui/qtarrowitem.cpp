@@ -1,5 +1,7 @@
 #include <cassert>
 #include <cmath>
+// cppcheck-suppress missingIncludeSystem
+#include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QPainter>
@@ -16,10 +18,19 @@ QtArrowItem::QtArrowItem(
   const bool head,
   QGraphicsItem *parent,
   QGraphicsScene *scene)
-  : QGraphicsLineItem(x1,y1,x2,y2,parent,scene),
+  :
+#if QT_VERSION >= 0x050000
+    QGraphicsLineItem(x1, y1, x2, y2, parent),
+#else
+    QGraphicsLineItem(x1, y1, x2, y2, parent, scene),
+#endif
     m_head(head),
     m_tail(tail)
 {
+  if (scene && !this->scene())
+  {
+    scene->addItem(this);
+  }
   this->setFlag(QGraphicsItem::ItemIsMovable);
   this->setFlag(QGraphicsItem::ItemIsSelectable);
   assert(this->line().p1() == QPointF(x1,y1));

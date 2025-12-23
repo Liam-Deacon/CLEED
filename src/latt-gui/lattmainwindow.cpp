@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QDesktopServices>
+// cppcheck-suppress missingIncludeSystem
+#include <QStandardPaths>
 #include <QProcess>
 #include <QDebug>
 
@@ -13,7 +15,7 @@
 lattMainWindow::lattMainWindow(QWidget *parent) : QMainWindow(parent) {
     lattui.setupUi(this);
     advancedText = "#";
-    lattExePath = QString::Null();
+    lattExePath.clear();
 
     //form control signals
     connect(lattui.checkBox_UseInputFile, SIGNAL(toggled(bool)), this, SLOT(checkInput()));
@@ -397,7 +399,7 @@ void lattMainWindow::updateInput() {
 }
 
 void lattMainWindow::updateOutput() {
-    QFileInfo fi = lattui.lineInput->text();
+    QFileInfo fi(lattui.lineInput->text());
     if (!fi.dir().exists()) {
         lattui.lineOutput->setStatusTip("Invalid output directory!");
     }
@@ -456,7 +458,7 @@ QString lattMainWindow::pressedInputBtn() {
     QFileInfo fi(lattui.lineInput->text());
     QDir dir(fi.canonicalFilePath());
     if (!dir.exists()) {
-        dir.setPath(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+        dir.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     }
     QString ret = dialog.getOpenFileName(0, "Select Input File...", dir.canonicalPath(), "Lattice Input Files (*.latt *.lat *.inp *.bul)");
     //dialog.exec()
@@ -469,7 +471,7 @@ QString lattMainWindow::pressedOutputBtn() {
     QFileInfo fi(lattui.lineOutput->text());
     QDir dir(fi.canonicalFilePath());
     if (!dir.exists()) {
-        dir.setPath(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+        dir.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     }
     QString ret = dialog.getSaveFileName(0, "Save As...", dir.canonicalPath(), "xyz File (*.xyz)");
     //dialog.exec()
@@ -488,7 +490,7 @@ void lattMainWindow::updateScript() {
     QString script = lattui.textEdit_Script->toPlainText();
     QStringList scriptLines = script.split("\n");
     QString line;
-    script = QString::null;
+    script.clear();
     foreach(line, scriptLines) {
         if (!line.isEmpty() && !line.startsWith("#")) {
             while (line.contains("#")) {
