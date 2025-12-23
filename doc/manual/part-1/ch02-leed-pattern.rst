@@ -59,8 +59,10 @@ This equation also limits the set of observable LEED spots by the condition that
  expression inside the brackets must be greater or equal to zero. With increasing electron
  energy the number of LEED spots increases while the polar emission angle with respect
  to the surface normal, :math:`\theta = \arctan(k_{\parallel}/k_\perp)`, decreases for each
- spot except for the specular spot (0,0) whose position does not change. Figure TODO (PDF p13)
- shows examples of common surface unit cells and the corresponding LEED patterns.
+ spot except for the specular spot (0,0) whose position does not change.
+
+.. TODO:: Figure (PDF p13)
+   shows examples of common surface unit cells and the corresponding LEED patterns.
 
 In many cases (adsorption, reconstruction) the periodicity at the surface is larger than
  it is expected for a bulk-truncated surface of the given crystal which leads to additional
@@ -116,8 +118,10 @@ Another, less general way is the notation according to Wood [10] where the lengt
 "p" indicates a "primitive" and "c" a "centred" surface unit cell. Examples are
  "p(2 x 2)", "p(\sqrt{3} x \sqrt{3})R30 deg" and "c(2 x 2)". This notation is not
  applicable in all cases but it is more frequently used than the matrix notation because
- it is shorter. Figure TODO (PDF p14) shows examples of common superstructures with the
- corresponding matrix and Wood notations.
+ it is shorter.
+
+.. TODO:: Figure (PDF p14)
+   shows examples of common superstructures with the corresponding matrix and Wood notations.
 
 2.2 Spot Profile Analysis
 -------------------------
@@ -148,16 +152,6 @@ While the spot positions carry information about the size of the surface unit ce
 This relation holds for each direction parallel to the surface independently. It is
  particularly useful for determining the size of adsorbate islands which lead to extra
  superstructure spots. A good introduction (in German) into spot profile analysis is given
- by Henzler and Gopel in Ref. [39].
+ by Henzler and Göpel in Ref. [39].
 
-.. figure:: /_static/manual/figures/figure-placeholder-p13.png
-   :alt: Placeholder for surface unit cells and LEED patterns (PDF p13).
-   :align: center
 
-   Figure TODO (PDF p13): Common surface unit cells and corresponding LEED patterns.
-
-.. figure:: /_static/manual/figures/figure-placeholder-p14.png
-   :alt: Placeholder for superstructure notation examples (PDF p14).
-   :align: center
-
-   Figure TODO (PDF p14): Superstructure matrix vs. Wood notation examples.
