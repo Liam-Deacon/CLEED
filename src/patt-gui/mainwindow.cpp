@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QSettings>
+// cppcheck-suppress missingIncludeSystem
 #include <QStandardPaths>
 #if QT_VERSION >= 0x040300
 	#include <QtSvg/QSvgGenerator>

@@ -1,6 +1,7 @@
 #ifndef LATTMAINWINDOW_H
 #define LATTMAINWINDOW_H
 
+// cppcheck-suppress missingIncludeSystem
 #include <QtGlobal>
 
 #if QT_VERSION >= 0x050000

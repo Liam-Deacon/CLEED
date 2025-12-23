@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QDesktopServices>
+// cppcheck-suppress missingIncludeSystem
 #include <QStandardPaths>
 #include <QProcess>
 #include <QDebug>

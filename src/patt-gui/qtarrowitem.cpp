@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cmath>
+// cppcheck-suppress missingIncludeSystem
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
