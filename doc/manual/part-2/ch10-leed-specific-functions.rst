@@ -95,7 +95,7 @@ with :math:`C_{l_1m_1,l_3m_3,l_2m_2}` being a Clebsch-Gordan coefficient and
    \tag{10.5}
 
 computed in the function ``ms_lsum_ii``. :math:`\vec{R}_j` is the position of the jth atom
-inside the layer; :math:`h^{(1)}_{l_3}` the Hankle function of the first kind, and
+inside the layer; :math:`h^{(1)}_{l_3}` the Hankel function of the first kind, and
 :math:`\kappa = \sqrt{2E}` the length of the wave vector.
 
 :math:`\tau` is the atomic scattering matrix :math:`t` times :math:`-\kappa`. The functions
@@ -128,7 +128,7 @@ function calculates the lattice sum (if needed) by calling ``ms_lsum_ii``,
 respectively. After multiplying the outgoing wavefunctions (:math:`Y^{+}`) with
 :math:`i 8\pi/(|k|A k'_{\perp})`, the reflection and transmission are put together.
 
-.. TODO: Equation verification screenshots (PDF p27-28):
+.. TODO:: Equation verification screenshots (PDF p27-28):
 ..   doc/manual/verify/equations/eq-10-1.png (10.1)
 ..   doc/manual/verify/equations/eq-10-2-3.png (10.2-10.3)
 ..   doc/manual/verify/equations/eq-10-4.png (10.4)
@@ -139,9 +139,9 @@ respectively. After multiplying the outgoing wavefunctions (:math:`Y^{+}`) with
 10.3 Multiple scattering: combined space method
 -----------------------------------------------
 
-.. TODO (PDF p29): The section heading is present but no body text appears on the page.
+.. TODO:: (PDF p29) The section heading is present but no body text appears on the page.
 
 10.4 Layer Doubling
 -------------------
 
-.. TODO (PDF p29): The section heading is present but no body text appears on the page.
+.. TODO:: (PDF p29) The section heading is present but no body text appears on the page.

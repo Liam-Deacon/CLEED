@@ -15,10 +15,10 @@ Bibliography
 .. [9] R. L. Park, J. E. Houston, D. G. Schreiner, Rev. Sci. Instrum. 42 (1971) 60.
 .. [10] E. A. Wood, J. Appl. Phys. 35 (1964) 1306.
 .. [11] M. Henzler, in ” Electron Spectroscopy for Surface Analysis”, Ed. H. Ibach, Springer Berlin (1977) 117.
-.. [12] M. Henzler, W. G6pel, ”Oberflachenphysik des Festkérpers”, Teubner, Stuttgart, 1991.
+.. [12] M. Henzler, W. Göpel, ”Oberflachenphysik des Festkérpers”, Teubner, Stuttgart, 1991.
 .. [13] P. R. Watson, M. A. Van Hove, K. Hermann, ” NIST Surface Structure Database” (SSD) Version 3.0, NIST, Gaithersburg, 1999.
-.. [14] H. Pfniir, P. Piercy, Phys. Rev. B40 (1989) 2515.
-.. [15] H. Pfniir, P. Piercy, Phys. Rev. B41 (1990) 582. ov BIBLIOGRAPHY                                                                           98
+.. [14] H. Pfnür, P. Piercy, Phys. Rev. B40 (1989) 2515.
+.. [15] H. Pfnür, P. Piercy, Phys. Rev. B41 (1990) 582.
 .. [16] G. Hoogers, D. A. King, Surf. Sci. 286 (1993) 306.
 .. [17] E. Bauer, H. Poppa, Y. Visvanath, Surf. Sci. 58 (1976) 517.
 .. [18] C. Zhang, M. A. Van Hove, G. A. Somorjai, Surf. Sci. 149 (1985) 326.
@@ -37,7 +37,7 @@ Bibliography
 .. [31] P. J. Rous, J. B. Pendry, Surf. Sci. 219 (1989) 373.
 .. [32] P. J. Rous, Prog. Surf. Sci. 39 (1992) 3.
 .. [33] LEED I-V program packages are distributed by: G. Held: georg.held@chemie.uni-erlangen.de. V. Blum, K. Heinz: Comp. Phys. Comm. 134 (2001) 392. M. A. Van Hove: vanhoveQ@lbl.gov.
-.. [34] K. Heinz, Surf. Sci. 299/300 (1994) 433. BIBLIOGRAPHY                                                                           09
+.. [34] K. Heinz, Surf. Sci. 299/300 (1994) 433.
 .. [35] K. Heinz, S. Miiller, L. Hammer, J. Phys.: Condens. Matter 11 (1999) 9437.
 .. [36] H. Over, Prog. Surf. Sci. 58 (1998) 249.
 .. [37] A. Kahn, Surf. Sci. 299/300 (1994) 469.
@@ -51,13 +51,13 @@ Bibliography
 .. [45] M. A. Van Hove, W. H. Weinberg, C. M. Chan, Low-Energy Electron Diffraction, Springer Series in Surface Science 6, 1986.
 .. [46] G. Ertl,   J. K’ uppers, Low Energy Electrons and Surface Chemistry, 2. Auflage, VCH Weinheim, 1985.
 .. [47] J.M. Cowley, Diffraction Physics, 2.Auflage, North-Holland Amsterdam, 1986.
-.. [48] W. H. Press, B. P. Flannery, S. A. Teukolsky, W. T. Vetterling, Numerical Recipes an C, Cambridge University Press, 1988.
-.. [49] J. A. Nedler and R. Mead, Computer Journal 7, (1965), 308.
-.. [50] R. P. Brent, Algorithms for Minimization without Derivatives, Englewood Cliffs, NJ: Prentice-Hall, 1973, chapter 7. BIBLIOGRAPHY                                                                                        60
-.. [51] J.H. Holland, Adaption in Natural and Artificial Systems, The University of Michigan Press, Ann Arbor, 1975.
+.. [48] W. H. Press, B. P. Flannery, S. A. Teukolsky, W. T. Vetterling, Numerical Recipes in C, Cambridge University Press, 1988.
+.. [49] J. A. Nelder and R. Mead, Computer Journal 7, (1965), 308.
+.. [50] R. P. Brent, Algorithms for Minimization without Derivatives, Englewood Cliffs, NJ: Prentice-Hall, 1973, chapter 7.
+.. [51] J.H. Holland, Adaptation in Natural and Artificial Systems, The University of Michigan Press, Ann Arbor, 1975.
 .. [52] D. E. Goldberg, Genetic Algorithms in Search, Optimization and Machine Learning, Addison-Wesley, Reading, Mass., 1989.
 .. [53] J. B. Pendry, J. Phys.        C 13, (1980), 937.
-.. [54] G. Held, H. Pfniir and D. Menzel, Surf. Sci. 271 (1992), 21.
+.. [54] G. Held, H. Pfnür and D. Menzel, Surf. Sci. 271 (1992), 21.
 .. [55] P. J. Rous and J. B. Pendry, Surf. Sci. 219 (1989), 355.
 .. [56] P. J. Rous, M. A. Van Hove, and G. A. Somorjai, Surf. Sci. 226 (1990), 15.
 .. [57] A. Wander, J. B. Pendry, M. A. Van Hove, Phys. Rev. B 46 (1990), 9897.

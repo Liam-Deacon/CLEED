@@ -9,10 +9,10 @@ Chapter 11: Quantum Mechanical Functions
 -----------------
 
 This chapter summarises the quantum mechanical utility functions used by CLEED,
-primarily Clebsch-Gordan coefficients, spherical harmonics, and spherical Hankle
+primarily Clebsch-Gordan coefficients, spherical harmonics, and spherical Hankel
 functions.
 
-11.2 Clebsh-Gordan Coefficients
+11.2 Clebsch-Gordan Coefficients
 -------------------------------
 
 (qmcgc.c:)
@@ -141,7 +141,7 @@ The memory requirements of the list created by ``mk_cg_coef`` are for a given va
    * - 16
      - 11,673,288
 
-.. TODO: Equation verification screenshots (PDF p30-31):
+.. TODO:: Equation verification screenshots (PDF p30-31):
 ..   doc/manual/verify/equations/eq-11-cg.png (cg integral + allowed values)
 ..   doc/manual/verify/equations/eq-11-cg-transform.png (cg transformations)
 ..   doc/manual/verify/equations/eq-11-blm.png (blm integral + allowed values)
@@ -163,7 +163,7 @@ The memory requirements of the list created by ``mk_cg_coef`` are for a given va
 
 (lmsypy.c:)
 
-11.4 Spherical Hankle Functions
+11.4 Spherical Hankel Functions
 -------------------------------
 
 (qmhank.c:)

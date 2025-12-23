@@ -125,16 +125,10 @@ Older experimental setups were using Faraday cups with small apertures mounted o
 The data collection is mostly done at normal incidence of the primary electron beam. In
  this case, usually several equivalent LEED spots exist due to the surface symmetry. By
  taking care that the :math:`I-V` curves of equivalent spots are identical, normal incidence
- conditions can be adjusted within a few tenth of a degree.
+ conditions can be adjusted within a few tenths of a degree.
 
-.. figure:: /_static/manual/figures/figure-placeholder-p9.png
-   :alt: Placeholder for LEED optics schematic (PDF p9).
-   :align: center
+.. TODO:: Figure (PDF p9)
+   Rear-view LEED optics schematic.
 
-   Figure TODO (PDF p9): Rear-view LEED optics schematic.
-
-.. figure:: /_static/manual/figures/figure-placeholder-p10.png
-   :alt: Placeholder for SPA-LEED optics schematic (PDF p10).
-   :align: center
-
-   Figure TODO (PDF p10): SPA-LEED Faraday cup arrangement.
+.. TODO:: Figure (PDF p10)
+   SPA-LEED Faraday cup arrangement.

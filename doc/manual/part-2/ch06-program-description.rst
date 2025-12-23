@@ -36,7 +36,7 @@ It does not include any linear approximations such as tensor LEED [55, 56] which
 The input information required from the user is kept as little as possible; the program
  creates most of its parameters from the geometry input provided in the input files. The
  distribution of atoms over different layers is performed by the program based on the atom
- coordinates and the minimum possible vertical distance (MIN_DIST = 1.1 A) between two
+ coordinates and the minimum possible vertical distance (MIN_DIST = 1.1 \AA) between two
  layers. The list of beams (length of vectors in plane wave representation) is created on
  the basis of the final energy and the minimum distance between the layers.
 
@@ -49,7 +49,7 @@ To date there exist two versions of cleed:
   case of normal incidence and isotropic vibrations can be treated by the current version.
 - The non-symmetrised version :code:`cleed_nsym` does not have this restriction. It is
   more flexible and can treat most cases of surface geometries, provided, there is at least
-  one bulk inter-layer distance greater than MIN_DIST = 1.1 A.
+  one bulk inter-layer distance greater than MIN_DIST = 1.1 \AA.
 
 Both program versions can use the same input files, whereby :code:`cleed_sym` needs some
  additional information which is ignored by :code:`cleed_nsym`. In any case it is strongly
