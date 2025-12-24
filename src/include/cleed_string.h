@@ -1,6 +1,10 @@
 #ifndef CLEED_STRING_H
 #define CLEED_STRING_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Small, reusable string helpers to avoid common null-termination pitfalls in
  * legacy code paths (and to keep Codacy/MSVC happy).
@@ -44,5 +48,9 @@ static inline size_t cleed_strlcpy(char *dst, const char *src, size_t dstsize)
   dst[i] = '\0';
   return i;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CLEED_STRING_H */

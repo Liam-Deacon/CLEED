@@ -8,6 +8,10 @@ Changes:
 #ifndef LATT_H
 #define LATT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* includes */
 #include <stdio.h>
 #include <stdlib.h>
@@ -136,5 +140,9 @@ else                                                                        \
 }
 
 #endif
-                                        
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _LATT_H */

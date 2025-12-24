@@ -32,6 +32,10 @@ ADD_SUBDIRECTORY(rfac)
 ADD_SUBDIRECTORY(search)
 ADD_SUBDIRECTORY(scripts)
 
+IF (BUILD_CPP_BINDINGS)
+    ADD_SUBDIRECTORY(cleed++)
+ENDIF()
+
 # optional gui elements
 IF (WITH_QT)
     ADD_SUBDIRECTORY(latt-gui)
