@@ -23,7 +23,7 @@ jobs:
         os: [ubuntu-22.04, macos-14, windows-2022]
 
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v4
 
       - name: Source compliance guard
         run: python tools/check_nr_free.py
@@ -42,7 +42,7 @@ jobs:
 
       - name: Cache vcpkg (Windows)
         if: runner.os == 'Windows'
-        uses: actions/cache@v5.0.1
+        uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/vcpkg
           key: vcpkg-${{ runner.os }}-x64-windows-${{ env.VCPKG_VERSION }}
@@ -124,7 +124,7 @@ jobs:
           cpack -C $env:BUILD_TYPE -G NSIS
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6.0.0
+        uses: actions/upload-artifact@v4
         with:
           name: packages-${{ matrix.os }}
           path: |
@@ -141,7 +141,7 @@ jobs:
     needs: build-packages
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v7.0.0
+        uses: actions/download-artifact@v4
         with:
           path: dist
 
@@ -179,5 +179,8 @@ jobs:
           name: ${{ steps.flags.outputs.version }}
           prerelease: ${{ steps.flags.outputs.prerelease }}
           draft: ${{ steps.flags.outputs.draft }}
+          body: |
+            ## Docker image
+            `ghcr.io/${{ github.repository_owner }}/cleed:${{ steps.flags.outputs.version }}`
           files: dist/**/*
           generate_release_notes: true
