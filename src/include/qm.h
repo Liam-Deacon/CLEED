@@ -8,6 +8,10 @@ include file for basic quantum mechanical functions
 #ifndef QM_H
 #define QM_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*********************************************************************
 Other includes
 *********************************************************************/
@@ -16,5 +20,9 @@ Other includes
 #include "cpl.h"
 #include "mat.h"
 #include "qm_func.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QM_H */

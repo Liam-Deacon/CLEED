@@ -73,6 +73,7 @@ SET(LICENSE "")
 # Project options
 OPTION(WITH_PHASESHIFTS "Set to ON to download and integrate PhaseShifts Python package" ON)
 OPTION(BUILD_SHARED_LIBS "Set to OFF to build static libraries" ON)
+OPTION(BUILD_CPP_BINDINGS "Set to ON to build the experimental C++ library" OFF)
 OPTION(USE_OPENMP "Set to OFF to have single threaded executables" ON)
 OPTION(WITH_QT "Set to ON to build Qt app frontends" OFF)
 OPTION(WITH_OPENCL "Set to ON to enable OpenCL GPGPU support" ON)
