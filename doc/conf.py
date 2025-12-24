@@ -34,6 +34,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinxcontrib.bibtex',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -94,6 +95,9 @@ exclude_patterns = ['_build']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
+
+# Bibliography sources for sphinxcontrib-bibtex.
+bibtex_bibfiles = ['references.bib']
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []

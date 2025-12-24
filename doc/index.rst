@@ -16,12 +16,15 @@ Contents:
    :glob:
    
    introduction
+   start_here
    background
    environment
    file_formats
    LEED_programs
    aux_programs
    downloads
+   troubleshooting
+   references
    changelog
    FAQ
    authors
