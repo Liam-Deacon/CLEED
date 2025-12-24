@@ -21,6 +21,7 @@ Contents:
    introduction
    background
    environment
+   cpp_bindings
 
 .. toctree::
    :maxdepth: 2

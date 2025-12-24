@@ -34,6 +34,10 @@ ADD_SUBDIRECTORY(cleed_core)
 ADD_SUBDIRECTORY(cleed_io)
 ADD_SUBDIRECTORY(scripts)
 
+IF (BUILD_CPP_BINDINGS)
+    ADD_SUBDIRECTORY(cleed++)
+ENDIF()
+
 # optional gui elements
 IF (WITH_QT)
     ADD_SUBDIRECTORY(latt-gui)
