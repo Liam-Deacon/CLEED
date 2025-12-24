@@ -102,6 +102,39 @@ after execution. When operating in this mode, the following assumptions are made
   :envvar:`CLEED_PHASE` is, however, found then the program will place the 
   generated files in this directory unless a specific `-S <subdir>` is provided.
   
+cleed_phaseshifts.py helper
+---------------------------
+
+CLEED ships a small helper script, :file:`cleed_phaseshifts.py`, that wraps the
+``phsh.py`` CLI and records a manifest for reproducible phase shift generation.
+
+Usage::
+
+  cleed_phaseshifts.py -b Ni111_2x2O.bul -i Ni111_2x2O.inp -o ./phase
+
+This will:
+
+- Generate ``*.phs`` files using ``phsh.py`` with ``-g`` (generate only).
+- Write outputs to the provided ``--output-dir`` (or ``$CLEED_PHASE``).
+- Emit ``phaseshifts-manifest.json`` containing input hashes and command info.
+
+If ``phsh.py`` is not on your ``PATH``, pass ``--phsh /path/to/phsh.py``.
+
+Example workflow
+^^^^^^^^^^^^^^^^
+
+1. Generate phase shifts::
+
+     cleed_phaseshifts.py -b Ni111_2x2O.bul -i Ni111_2x2O.inp -o ./phase
+
+2. Point CLEED at the generated phase shifts::
+
+     export CLEED_PHASE=\"$(pwd)/phase\"
+
+3. Run CLEED with the matching input set::
+
+     cleed_nsym -c Ni111_2x2O.ctr -i Ni111_2x2O.inp -b Ni111_2x2O.bul
+
 .. _phsh_notes:
   
 Notes
