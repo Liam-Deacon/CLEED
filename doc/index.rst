@@ -18,6 +18,7 @@ Contents:
    introduction
    background
    environment
+   gui_status
    file_formats
    LEED_programs
    aux_programs
