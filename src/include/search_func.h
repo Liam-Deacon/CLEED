@@ -107,10 +107,44 @@ int sr_powell(real *p, real **xi, int n, real ftol, int *iter, real *fret,
               real (*func)(real *));
 ///@}
 
+/**
+ * @brief Configuration for particle swarm optimisation (PSO).
+ */
+typedef struct sr_pso_cfg {
+  int swarm_size;
+  int max_iters;
+  int max_evals;
+  real inertia;
+  real c1;
+  real c2;
+  real v_max;
+  unsigned long long seed;
+} sr_pso_cfg;
+
+/**
+ * @brief Initialise PSO defaults based on dimensionality and dpos.
+ */
+void sr_pso_cfg_init(sr_pso_cfg *cfg, int ndim, real dpos);
+
+/**
+ * @brief Particle swarm optimisation (PSO) minimiser.
+ *
+ * @param cfg Configuration (may be NULL for defaults).
+ * @param ndim Dimensionality of the parameter vector.
+ * @param func Objective function.
+ * @param best Output best point (`1..ndim`).
+ * @param best_val Output best function value.
+ * @param evals In/out evaluation counter (may be NULL).
+ * @return 0 on success, non-zero on failure.
+ */
+int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(real *),
+                    real *best, real *best_val, int *evals);
+
 /* Drivers */
 void sr_sa(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_sx(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_po(int ndim, const char *bak_file, const char *log_file);
+void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file);
 
 /* file input|output */

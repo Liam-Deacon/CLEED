@@ -13,3 +13,5 @@ char *sr_project = NULL;
 int sr_amoeba_eval_limit = MAX_ITER_AMOEBA;
 int sr_powell_iter_limit = MAX_ITER_POWELL;
 int sr_sa_iter_limit = MAX_ITER_SA;
+int sr_pso_eval_limit = MAX_EVAL_PSO;
+int sr_pso_iter_limit = MAX_ITER_PSO;
