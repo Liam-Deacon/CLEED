@@ -71,6 +71,19 @@ static uint64_t sr_parse_seed(const char *value, const char *invalid_msg)
   return (uint64_t)parsed;
 }
 
+static real sr_parse_positive_real(const char *value, const char *invalid_msg)
+{
+  char *end = NULL;
+  double parsed = strtod(value, &end);
+  if (end == value || parsed <= 0.0) {
+#ifdef ERROR
+    fprintf(STDERR,"%s", invalid_msg);
+#endif
+    exit(1);
+  }
+  return (real)parsed;
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -203,6 +216,46 @@ int main(int argc, char *argv[])
           "*** error (SEARCH): seed value not given\n");
       opt_cfg.seed = sr_parse_seed(value,
           "*** error (SEARCH): invalid seed value\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-swarm") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): PSO swarm size not given\n");
+      opt_cfg.pso_swarm_size = sr_parse_positive_int(value,
+          "*** error (SEARCH): invalid PSO swarm size\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-inertia") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): PSO inertia not given\n");
+      opt_cfg.pso_inertia = sr_parse_positive_real(value,
+          "*** error (SEARCH): invalid PSO inertia\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-c1") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): PSO c1 not given\n");
+      opt_cfg.pso_c1 = sr_parse_positive_real(value,
+          "*** error (SEARCH): invalid PSO c1\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-c2") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): PSO c2 not given\n");
+      opt_cfg.pso_c2 = sr_parse_positive_real(value,
+          "*** error (SEARCH): invalid PSO c2\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-vmax") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): PSO vmax not given\n");
+      opt_cfg.pso_vmax = sr_parse_positive_real(value,
+          "*** error (SEARCH): invalid PSO vmax\n");
       continue;
     }
 

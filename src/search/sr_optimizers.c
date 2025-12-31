@@ -174,6 +174,11 @@ void sr_optimizer_config_init(sr_optimizer_config *cfg)
   cfg->max_evals = 0;
   cfg->max_iters = 0;
   cfg->seed = 0;
+  cfg->pso_swarm_size = 0;
+  cfg->pso_inertia = (real)0.0;
+  cfg->pso_c1 = (real)0.0;
+  cfg->pso_c2 = (real)0.0;
+  cfg->pso_vmax = (real)0.0;
 }
 
 static int sr_optimizer_read_int_env(const char *name, int *out_value)
@@ -209,12 +214,30 @@ static int sr_optimizer_read_seed_env(const char *name, uint64_t *out_value)
   return 1;
 }
 
+static int sr_optimizer_read_real_env(const char *name, real *out_value)
+{
+  char *end = NULL;
+  const char *raw = getenv(name);
+  double parsed = 0.0;
+
+  if (!raw || !out_value) return 0;
+  parsed = strtod(raw, &end);
+  if (end == raw || parsed <= 0.0) return 0;
+  *out_value = (real)parsed;
+  return 1;
+}
+
 void sr_optimizer_config_from_env(sr_optimizer_config *cfg)
 {
   if (!cfg) return;
   (void)sr_optimizer_read_int_env("CSEARCH_MAX_EVALS", &cfg->max_evals);
   (void)sr_optimizer_read_int_env("CSEARCH_MAX_ITERS", &cfg->max_iters);
   (void)sr_optimizer_read_seed_env("CSEARCH_SEED", &cfg->seed);
+  (void)sr_optimizer_read_int_env("CSEARCH_PSO_SWARM", &cfg->pso_swarm_size);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_INERTIA", &cfg->pso_inertia);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_C1", &cfg->pso_c1);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_C2", &cfg->pso_c2);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_VMAX", &cfg->pso_vmax);
 }
 
 void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
@@ -265,6 +288,21 @@ static void sr_optimizer_log_seed(FILE *output, const char *label, uint64_t valu
   } else {
     fprintf(output, " %s=default", label);
   }
+  if (cfg->pso_swarm_size > 0) {
+    sr_pso_swarm_size = cfg->pso_swarm_size;
+  }
+  if (cfg->pso_inertia > 0.0) {
+    sr_pso_inertia = cfg->pso_inertia;
+  }
+  if (cfg->pso_c1 > 0.0) {
+    sr_pso_c1 = cfg->pso_c1;
+  }
+  if (cfg->pso_c2 > 0.0) {
+    sr_pso_c2 = cfg->pso_c2;
+  }
+  if (cfg->pso_vmax > 0.0) {
+    sr_pso_vmax = cfg->pso_vmax;
+  }
 }
 
 void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
@@ -281,6 +319,36 @@ void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
   sr_optimizer_log_int(output, "max_evals", cfg->max_evals);
   sr_optimizer_log_int(output, "max_iters", cfg->max_iters);
   sr_optimizer_log_seed(output, "seed", cfg->seed);
+
+  if (cfg->pso_swarm_size > 0) {
+    fprintf(output, " pso_swarm=%d", cfg->pso_swarm_size);
+  } else {
+    fprintf(output, " pso_swarm=default");
+  }
+
+  if (cfg->pso_inertia > 0.0) {
+    fprintf(output, " pso_inertia=%.3f", (double)cfg->pso_inertia);
+  } else {
+    fprintf(output, " pso_inertia=default");
+  }
+
+  if (cfg->pso_c1 > 0.0) {
+    fprintf(output, " pso_c1=%.3f", (double)cfg->pso_c1);
+  } else {
+    fprintf(output, " pso_c1=default");
+  }
+
+  if (cfg->pso_c2 > 0.0) {
+    fprintf(output, " pso_c2=%.3f", (double)cfg->pso_c2);
+  } else {
+    fprintf(output, " pso_c2=default");
+  }
+
+  if (cfg->pso_vmax > 0.0) {
+    fprintf(output, " pso_vmax=%.3f", (double)cfg->pso_vmax);
+  } else {
+    fprintf(output, " pso_vmax=default");
+  }
 
   fprintf(output, "\n");
 }

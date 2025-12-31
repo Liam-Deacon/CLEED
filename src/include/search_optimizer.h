@@ -27,6 +27,11 @@ typedef struct sr_optimizer_config {
   int max_iters;
   // cppcheck-suppress unusedStructMember
   uint64_t seed;
+  int pso_swarm_size;
+  real pso_inertia;
+  real pso_c1;
+  real pso_c2;
+  real pso_vmax;
 } sr_optimizer_config;
 
 typedef struct sr_optimizer_def {
