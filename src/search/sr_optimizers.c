@@ -67,6 +67,13 @@ static int sr_run_pso(int ndim, real dpos, const char *bak_file,
   return 0;
 }
 
+static int sr_run_de(int ndim, real dpos, const char *bak_file,
+                     const char *log_file)
+{
+  sr_de(ndim, dpos, bak_file, log_file);
+  return 0;
+}
+
 static const sr_optimizer_entry sr_optimizers[] = {
     {
         .def = {
@@ -137,6 +144,20 @@ static const sr_optimizer_entry sr_optimizers[] = {
         },
         .aliases = {"ps", "pso", "swarm", NULL},
         .run = sr_run_pso,
+    },
+    {
+        .def = {
+            .name = "differential evolution",
+            .primary = "de",
+            .description = "differential evolution",
+            .aliases_help = "de, differential",
+            .type = SR_DIFFERENTIAL_EVOLUTION,
+            .implemented = 1,
+            .uses_delta = 1,
+            .is_default = 0,
+        },
+        .aliases = {"de", "differential", "differential-evolution", NULL},
+        .run = sr_run_de,
     },
 };
 
@@ -249,6 +270,7 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
     sr_powell_iter_limit = cfg->max_iters;
     sr_sa_iter_limit = cfg->max_iters;
     sr_pso_iter_limit = cfg->max_iters;
+    sr_de_iter_limit = cfg->max_iters;
   } else {
     sr_powell_iter_limit = MAX_ITER_POWELL;
     sr_sa_iter_limit = MAX_ITER_SA;
@@ -256,6 +278,7 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   }
   if (cfg->max_evals > 0) {
     sr_pso_eval_limit = cfg->max_evals;
+    sr_de_eval_limit = cfg->max_evals;
   }
   sa_idum = (cfg->seed > 0) ? cfg->seed : 0;
   if (cfg->pso_swarm_size > 0) {

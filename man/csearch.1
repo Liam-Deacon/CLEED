@@ -54,21 +54,23 @@ specifies the search algorithm to be used for the structure optimisation. Possib
 'sx' : Simplex algorithm (alternative)
 .br
 'ps' : Particle swarm optimisation
+.br
+'de' : Differential evolution
 .RE
 .IP --max-evals
 .I <n>
 .RS
-limits objective evaluations (simplex/PSO). This overrides the default iteration budget.
+limits objective evaluations (simplex/PSO/DE). This overrides the default iteration budget.
 .RE
 .IP --max-iters
 .I <n>
 .RS
-limits iterations (Powell/annealing/PSO). This overrides the default iteration budget.
+limits iterations (Powell/annealing/PSO/DE). This overrides the default iteration budget.
 .RE
 .IP --seed
 .I <n>
 .RS
-sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
+sets a deterministic seed for stochastic optimizers (simulated annealing/PSO/DE).
 .RE
 .IP --pso-swarm
 .I <n>
@@ -114,11 +116,11 @@ CSEARCH_RFAC: path of the
 .I crfac
  program used for the R factor evaluation. This may simply be 'crfac' if the parent directory of this program is in the system PATH variable.
 .PP
-CSEARCH_MAX_EVALS: optional evaluation budget for simplex/PSO searches (same as --max-evals).
+CSEARCH_MAX_EVALS: optional evaluation budget for simplex/PSO/DE searches (same as --max-evals).
 .PP
-CSEARCH_MAX_ITERS: optional iteration budget for Powell/annealing/PSO searches (same as --max-iters).
+CSEARCH_MAX_ITERS: optional iteration budget for Powell/annealing/PSO/DE searches (same as --max-iters).
 .PP
-CSEARCH_SEED: optional deterministic seed for simulated annealing/PSO (same as --seed).
+CSEARCH_SEED: optional deterministic seed for simulated annealing/PSO/DE (same as --seed).
 .PP
 CSEARCH_PSO_SWARM: optional PSO swarm size (same as --pso-swarm).
 .PP

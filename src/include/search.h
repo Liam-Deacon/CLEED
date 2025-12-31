@@ -52,6 +52,8 @@ extern real sr_pso_inertia;
 extern real sr_pso_c1;
 extern real sr_pso_c2;
 extern real sr_pso_vmax;
+extern int sr_de_eval_limit;
+extern int sr_de_iter_limit;
 extern uint64_t sa_idum;
 
 /*********************************************************************

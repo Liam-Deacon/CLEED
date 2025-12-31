@@ -102,19 +102,20 @@ Options
   - :code:`po`: Powell.
   - :code:`sa`: simulated annealing.
   - :code:`ps`: particle swarm optimisation.
+  - :code:`de`: differential evolution.
   - :code:`ga`: genetic algorithm (not implemented).
 
 :code:`--max-evals <n>`
 
-  Limits objective evaluations (simplex/PSO). Overrides the default iteration budget.
+  Limits objective evaluations (simplex/PSO/DE). Overrides the default iteration budget.
 
 :code:`--max-iters <n>`
 
-  Limits iterations (Powell/annealing/PSO). Overrides the default iteration budget.
+  Limits iterations (Powell/annealing/PSO/DE). Overrides the default iteration budget.
 
 :code:`--seed <n>`
 
-  Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
+  Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO/DE).
 
 .. note::
    Seeds are parsed as unsigned 64-bit integers. A value of 0 selects the
@@ -165,13 +166,13 @@ Environment
   if the parent directory of this program is in the system :envvar:`PATH` variable.
 
 :envvar:`CSEARCH_MAX_EVALS`
-  Optional evaluation budget for simplex/PSO searches (same as :code:`--max-evals`).
+  Optional evaluation budget for simplex/PSO/DE searches (same as :code:`--max-evals`).
 
 :envvar:`CSEARCH_MAX_ITERS`
-  Optional iteration budget for Powell/annealing/PSO searches (same as :code:`--max-iters`).
+  Optional iteration budget for Powell/annealing/PSO/DE searches (same as :code:`--max-iters`).
 
 :envvar:`CSEARCH_SEED`
-  Optional deterministic seed for simulated annealing/PSO (same as :code:`--seed`).
+  Optional deterministic seed for simulated annealing/PSO/DE (same as :code:`--seed`).
 
   A value of 0 uses the built-in default seed for the deterministic annealing
   RNG. Non-zero values are parsed as unsigned 64-bit integers.
