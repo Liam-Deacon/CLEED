@@ -156,6 +156,10 @@ static int test_config_from_env_pso(void)
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_PSO_C1", "1.50") == 0);
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_PSO_C2", "1.60") == 0);
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_PSO_VMAX", "2.00") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_POP", "40") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_WEIGHT", "0.65") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_CR", "0.85") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_SPAN", "1.75") == 0);
 
     sr_optimizer_config_from_env(&cfg);
 
@@ -167,6 +171,10 @@ static int test_config_from_env_pso(void)
     CLEED_TEST_ASSERT(fabs(cfg.pso_c1 - (real)1.50) < (real)1e-6);
     CLEED_TEST_ASSERT(fabs(cfg.pso_c2 - (real)1.60) < (real)1e-6);
     CLEED_TEST_ASSERT(fabs(cfg.pso_vmax - (real)2.00) < (real)1e-6);
+    CLEED_TEST_ASSERT(cfg.de_population == 40);
+    CLEED_TEST_ASSERT(fabs(cfg.de_weight - (real)0.65) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_crossover - (real)0.85) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_init_span - (real)1.75) < (real)1e-6);
 
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
@@ -176,6 +184,10 @@ static int test_config_from_env_pso(void)
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_PSO_C1") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_PSO_C2") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_PSO_VMAX") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_POP") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_WEIGHT") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_CR") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_SPAN") == 0);
 
     return 0;
 }

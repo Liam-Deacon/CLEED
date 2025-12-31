@@ -97,6 +97,26 @@ sets the PSO social coefficient.
 .RS
 sets the PSO velocity clamp.
 .RE
+.IP --de-pop
+.I <n>
+.RS
+sets the DE population size.
+.RE
+.IP --de-weight
+.I <n>
+.RS
+sets the DE weight factor.
+.RE
+.IP --de-cr
+.I <n>
+.RS
+sets the DE crossover rate.
+.RE
+.IP --de-span
+.I <n>
+.RS
+sets the DE initial span.
+.RE
 .IP -v
 .I <vertex_file> 
 .RS
@@ -131,6 +151,14 @@ CSEARCH_PSO_C1: optional PSO cognitive coefficient (same as --pso-c1).
 CSEARCH_PSO_C2: optional PSO social coefficient (same as --pso-c2).
 .PP
 CSEARCH_PSO_VMAX: optional PSO velocity clamp (same as --pso-vmax).
+.PP
+CSEARCH_DE_POP: optional DE population size (same as --de-pop).
+.PP
+CSEARCH_DE_WEIGHT: optional DE weight factor (same as --de-weight).
+.PP
+CSEARCH_DE_CR: optional DE crossover rate (same as --de-cr).
+.PP
+CSEARCH_DE_SPAN: optional DE initial span (same as --de-span).
 .PP
 CLEED_PHASE: directory path of the phase shift files used in the surface and bulk models. Please refer to 
 .I phsh(1) 

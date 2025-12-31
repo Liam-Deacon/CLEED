@@ -259,6 +259,38 @@ int main(int argc, char *argv[])
       continue;
     }
 
+    if (strcmp(argv[i_arg], "--de-pop") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): DE population not given\n");
+      opt_cfg.de_population = sr_parse_positive_int(value,
+          "*** error (SEARCH): invalid DE population\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--de-weight") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): DE weight not given\n");
+      opt_cfg.de_weight = sr_parse_positive_real(value,
+          "*** error (SEARCH): invalid DE weight\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--de-cr") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): DE crossover not given\n");
+      opt_cfg.de_crossover = sr_parse_positive_real(value,
+          "*** error (SEARCH): invalid DE crossover rate\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--de-span") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): DE span not given\n");
+      opt_cfg.de_init_span = sr_parse_positive_real(value,
+          "*** error (SEARCH): invalid DE span\n");
+      continue;
+    }
+
     /* help */
     if ((strcmp(argv[i_arg], "-h") == 0) ||
         (strcmp(argv[i_arg], "--help") == 0)) {

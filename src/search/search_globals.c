@@ -22,3 +22,7 @@ real sr_pso_c2 = (real)0.0;
 real sr_pso_vmax = (real)0.0;
 int sr_de_eval_limit = MAX_EVAL_DE;
 int sr_de_iter_limit = MAX_ITER_DE;
+int sr_de_population = 0;
+real sr_de_weight = (real)0.0;
+real sr_de_crossover = (real)0.0;
+real sr_de_init_span = (real)0.0;
