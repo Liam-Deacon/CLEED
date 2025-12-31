@@ -52,21 +52,23 @@ specifies the search algorithm to be used for the structure optimisation. Possib
 .br
 'si' : Simplex algorithm
 'sx' : Simplex algorithm (alternative)
+.br
+'ps' : Particle swarm optimisation
 .RE
 .IP --max-evals
 .I <n>
 .RS
-limits objective evaluations (simplex). This overrides the default iteration budget.
+limits objective evaluations (simplex/PSO). This overrides the default iteration budget.
 .RE
 .IP --max-iters
 .I <n>
 .RS
-limits iterations (Powell/annealing). This overrides the default iteration budget.
+limits iterations (Powell/annealing/PSO). This overrides the default iteration budget.
 .RE
 .IP --seed
 .I <n>
 .RS
-sets a deterministic seed for stochastic optimizers (simulated annealing).
+sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
 .RE
 .IP -v
 .I <vertex_file> 
@@ -87,11 +89,11 @@ CSEARCH_RFAC: path of the
 .I crfac
  program used for the R factor evaluation. This may simply be 'crfac' if the parent directory of this program is in the system PATH variable.
 .PP
-CSEARCH_MAX_EVALS: optional evaluation budget for simplex searches (same as --max-evals).
+CSEARCH_MAX_EVALS: optional evaluation budget for simplex/PSO searches (same as --max-evals).
 .PP
-CSEARCH_MAX_ITERS: optional iteration budget for Powell/annealing searches (same as --max-iters).
+CSEARCH_MAX_ITERS: optional iteration budget for Powell/annealing/PSO searches (same as --max-iters).
 .PP
-CSEARCH_SEED: optional deterministic seed for simulated annealing (same as --seed).
+CSEARCH_SEED: optional deterministic seed for simulated annealing/PSO (same as --seed).
 .PP
 CLEED_PHASE: directory path of the phase shift files used in the surface and bulk models. Please refer to 
 .I phsh(1) 

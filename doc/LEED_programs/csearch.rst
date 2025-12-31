@@ -51,19 +51,20 @@ Options
   - :code:`si` / :code:`sx`: simplex (default).
   - :code:`po`: Powell.
   - :code:`sa`: simulated annealing.
+  - :code:`ps`: particle swarm optimisation.
   - :code:`ga`: genetic algorithm (not implemented).
 
 :code:`--max-evals <n>`
 
-  Limits objective evaluations (simplex). Overrides the default iteration budget.
+  Limits objective evaluations (simplex/PSO). Overrides the default iteration budget.
 
 :code:`--max-iters <n>`
 
-  Limits iterations (Powell/annealing). Overrides the default iteration budget.
+  Limits iterations (Powell/annealing/PSO). Overrides the default iteration budget.
 
 :code:`--seed <n>`
 
-  Sets a deterministic seed for stochastic optimizers (simulated annealing).
+  Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
 
 :code:`-v <vertex_file>`
                      
@@ -89,13 +90,13 @@ Environment
   if the parent directory of this program is in the system :envvar:`PATH` variable.
 
 :envvar:`CSEARCH_MAX_EVALS`
-  Optional evaluation budget for simplex searches (same as :code:`--max-evals`).
+  Optional evaluation budget for simplex/PSO searches (same as :code:`--max-evals`).
 
 :envvar:`CSEARCH_MAX_ITERS`
-  Optional iteration budget for Powell/annealing searches (same as :code:`--max-iters`).
+  Optional iteration budget for Powell/annealing/PSO searches (same as :code:`--max-iters`).
 
 :envvar:`CSEARCH_SEED`
-  Optional deterministic seed for simulated annealing (same as :code:`--seed`).
+  Optional deterministic seed for simulated annealing/PSO (same as :code:`--seed`).
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 

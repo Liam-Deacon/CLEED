@@ -54,6 +54,7 @@ SRLIB  =  sr_alloc.o \
           sr_rng.o \
           sr_parse.o \
           sr_optimizers.o \
+          srpso.o \
           sr_vertex_stats.o \
           sr_amoeba.o \
           sr_amebsa.o \

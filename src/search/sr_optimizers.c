@@ -54,6 +54,13 @@ static int sr_run_ga(int ndim, real dpos, const char *bak_file,
   return -1;
 }
 
+static int sr_run_pso(int ndim, real dpos, const char *bak_file,
+                      const char *log_file)
+{
+  sr_pso(ndim, dpos, bak_file, log_file);
+  return 0;
+}
+
 static const sr_optimizer_entry sr_optimizers[] = {
     {
         .def = {
@@ -110,6 +117,20 @@ static const sr_optimizer_entry sr_optimizers[] = {
         },
         .aliases = {"ga", "genetic", "genetic-algorithm", NULL},
         .run = sr_run_ga,
+    },
+    {
+        .def = {
+            .name = "pso",
+            .primary = "ps",
+            .description = "particle swarm optimisation",
+            .aliases_help = "pso, swarm",
+            .type = SR_PSO,
+            .implemented = 1,
+            .uses_delta = 1,
+            .is_default = 0,
+        },
+        .aliases = {"ps", "pso", "swarm", NULL},
+        .run = sr_run_pso,
     },
 };
 
@@ -195,9 +216,13 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   if (cfg->max_iters > 0) {
     sr_powell_iter_limit = cfg->max_iters;
     sr_sa_iter_limit = cfg->max_iters;
+    sr_pso_iter_limit = cfg->max_iters;
     if (cfg->max_evals <= 0) {
       sr_amoeba_eval_limit = cfg->max_iters;
     }
+  }
+  if (cfg->max_evals > 0) {
+    sr_pso_eval_limit = cfg->max_evals;
   }
   if (cfg->seed > 0) {
     sa_idum = (long)(cfg->seed > (uint64_t)LONG_MAX ? LONG_MAX : cfg->seed);

@@ -31,6 +31,10 @@ static int test_lookup_by_name(void)
     CLEED_TEST_ASSERT(opt != NULL);
     CLEED_TEST_ASSERT(opt->type == SR_GENETIC);
 
+    opt = sr_optimizer_by_name("ps");
+    CLEED_TEST_ASSERT(opt != NULL);
+    CLEED_TEST_ASSERT(opt->type == SR_PSO);
+
     opt = sr_optimizer_by_name("unknown");
     CLEED_TEST_ASSERT(opt == NULL);
 
