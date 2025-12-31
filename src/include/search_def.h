@@ -175,6 +175,7 @@ struct search_str
                                    input geometry (used to set up the vertex
                                    for sr_amoeba) */
 #define MAX_ITER_AMOEBA 2000    /* max. number of iterations in sr_amoeba */
+#define MAX_ITER_SA     200     /* max. iterations per temperature in sr_sa */
 
 #define MAX_ITER_POWELL 100     /* max. number of iterations in sr_powell */
 #define BRENT_TOLERANCE 2.0e-2  /* tolerance criterion in function brent 

@@ -12,6 +12,7 @@ Changes:
 
 *********************************************************************/
 
+#include "search_optimizer.h"
 #include "search_ver.h"
 
 void search_usage(FILE *output) {
@@ -26,12 +27,11 @@ void search_usage(FILE *output) {
     fprintf(output, "  -d <delta>            : initial displacement\n");
     fprintf(output, "  -h --help             : print help and exit\n");
 	fprintf(output, "  -i <inp_file>         : surface parameter input file\n");
-	fprintf(output, "  -s <search_type>      : can be \n"
-                    "                          'ga' = genetic algorithm\n"
-                    "                          'sa' = simulated annealing\n"
-                    "                          'si' = simplex method (default)\n"
-                    "                          'sx' = simplex - duplicate\n"
-                    "                          'po' = simulated annealing\n");
+    fprintf(output, "  -s <search_type>      : can be \n");
+    sr_optimizer_print_help(output);
+    fprintf(output, "  --max-evals <n>       : limit objective evaluations (simplex).\n");
+    fprintf(output, "  --max-iters <n>       : limit iterations (Powell/annealing).\n");
+    fprintf(output, "  --seed <n>            : seed stochastic optimizers (annealing).\n");
     fprintf(output, "  -v <vertex_file>      : file to read vertex information if resuming search\n");                
     fprintf(output, "  -V --version          : print version and information about this program\n");
     fprintf(output, "\n");

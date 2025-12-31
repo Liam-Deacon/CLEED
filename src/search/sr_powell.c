@@ -458,7 +458,8 @@ static int sr_powell_iteration(sr_powell_run_ctx *ctx)
 
 static int sr_powell_run(sr_powell_run_ctx *ctx, int *iter)
 {
-  for (*iter = 1; *iter <= MAX_ITER_POWELL; (*iter)++) {
+  const int limit = sr_powell_iter_limit > 0 ? sr_powell_iter_limit : MAX_ITER_POWELL;
+  for (*iter = 1; *iter <= limit; (*iter)++) {
     int rc = sr_powell_iteration(ctx);
     if (rc == 0) continue;
     return (rc == 1) ? 0 : rc;

@@ -18,6 +18,7 @@ version 0.1
 #include <string.h>
 #include <math.h>
 #include "search.h"
+#include "search_optimizer.h"
 
 /**********************************************************************/
 
@@ -28,7 +29,8 @@ int main(int argc, char *argv[])
   int i_par;
   int i_atoms;
   int ndim;
-  int search_type;
+  const sr_optimizer_def *optimizer;
+  sr_optimizer_config opt_cfg;
 
   real delta;
 
@@ -62,7 +64,9 @@ int main(int argc, char *argv[])
   (void)snprintf(inp_file, sizeof(inp_file), "%s", "---");
   (void)snprintf(bak_file, sizeof(bak_file), "%s", "---");
 
-  search_type = SR_SIMPLEX;
+  optimizer = sr_optimizer_by_type(SR_SIMPLEX);
+  sr_optimizer_config_init(&opt_cfg);
+  sr_optimizer_config_from_env(&opt_cfg);
 
   if (!argc) {search_usage(STDERR);exit(1);}
   
@@ -135,26 +139,64 @@ int main(int argc, char *argv[])
           #endif
           exit(1);
         }
-        if((strncmp(argv[i_arg], "si", 2) == 0) || 
-           (strncmp(argv[i_arg], "sx", 2) == 0))
-          search_type = SR_SIMPLEX;
-        else if(strncmp(argv[i_arg], "po", 2) == 0)
-          search_type = SR_POWELL;
-        else if(strncmp(argv[i_arg], "sa", 2) == 0)
-          search_type = SR_SIM_ANNEALING;
-        else if(strncmp(argv[i_arg], "ga", 2) == 0)
-          search_type = SR_GENETIC;
-        else
+        optimizer = sr_optimizer_by_name(argv[i_arg]);
+        if (!optimizer)
         {
           #ifdef ERROR
           fprintf(STDERR,
-             "*** error (SEARCH): unknown search type \"%s\" (option -s)\n", 
+             "*** error (SEARCH): unknown search type \"%s\" (option -s)\n",
              argv[i_arg]);
           #endif
           exit(1);
         }
         
       } /* search type */
+
+      if (strcmp(argv[i_arg], "--max-evals") == 0)
+      {
+        i_arg++;
+        if (i_arg < argc) {
+          opt_cfg.max_evals = atoi(argv[i_arg]);
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): max evals value not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--max-iters") == 0)
+      {
+        i_arg++;
+        if (i_arg < argc) {
+          opt_cfg.max_iters = atoi(argv[i_arg]);
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): max iters value not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--seed") == 0)
+      {
+        char *end = NULL;
+        i_arg++;
+        if (i_arg < argc) {
+          opt_cfg.seed = strtoull(argv[i_arg], &end, 10);
+          if (end == argv[i_arg]) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid seed value\n");
+            #endif
+            exit(1);
+          }
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): seed value not given\n");
+          #endif
+          exit(1);
+        }
+      }
       
       /* help */
       if ((strcmp(argv[i_arg], "-h") == 0) || 
@@ -260,58 +302,27 @@ int main(int argc, char *argv[])
 
   fclose(log_stream);
 
+  log_stream = fopen(log_file, "a");
+  if (log_stream == NULL) { OPEN_ERROR(log_file); }
+  fprintf(log_stream, "=> Optimizer: %s\n", optimizer ? optimizer->name : "simplex");
+  sr_optimizer_log_config(log_stream, &opt_cfg);
+  fclose(log_stream);
+
 /***********************************************************************
   Perform the search according to the selected algorithm.
 ***********************************************************************/
 
-  switch(search_type)
+  if (!optimizer) {
+    optimizer = sr_optimizer_by_type(SR_SIMPLEX);
+  }
+  if (!optimizer || sr_optimizer_run(optimizer, &opt_cfg, ndim, delta, bak_file, log_file) != 0)
   {
-/*
-  SIMPLEX METHOD
-*/
-    case(SR_SIMPLEX):
-    {
-      SR_SX(ndim, delta, bak_file, log_file);
-      break;
-    } /* case SR_SIMPLEX */
-
-/*
-  POWELL'S METHOD
-*/
-    case(SR_POWELL):
-    {
-      SR_PO(ndim, bak_file, log_file);
-      break;
-    } /* case SR_POWELL */
-
-/*
-  SIMULATED ANNEALING
-*/
-    case(SR_SIM_ANNEALING):
-    {
-      SR_SA(ndim, delta, bak_file, log_file);
-      break;
-    } /* case SR_SIM_ANNEALING */
-
-/*
-  GENETIC ALGORITHM
-*/
-    case(SR_GENETIC):
-    {
-      SR_NOT_IMPLEMENTED_ERROR("genetic algorithm");
-      break;
-    } /* case SR_GENETIC */
-    
-    default:
-    {
-      #ifdef ERROR
-      fprintf(STDERR,
-             "*** error (SEARCH): unknown search type \"%d\"\n", search_type);
-      #endif
-      exit(1);
-    }
-    
-  }  /* switch */
+    #ifdef ERROR
+    fprintf(STDERR,
+           "*** error (SEARCH): failed to run search type\n");
+    #endif
+    exit(1);
+  }
   
   return 0;
   

@@ -97,6 +97,7 @@ typedef struct sr_amoeba_ctx {
   real ftol;
   real (*funk)(real *);
   int *nfunk;
+  int max_evals;
   real **p;
   real *y;
   real *centroid;
@@ -185,7 +186,7 @@ static int sr_amoeba_step(sr_amoeba_ctx *ctx)
   sr_simplex_extremes(ctx->y, ctx->ndim, &ilo, &ihi, &inhi);
 
   if (sr_amoeba_converged(ctx, ilo, ihi)) return 1;
-  if (*ctx->nfunk >= MAX_ITER_AMOEBA) return -2;
+  if (*ctx->nfunk >= ctx->max_evals) return -2;
 
   sr_simplex_centroid_excluding((const real **)ctx->p, ctx->centroid, ctx->ndim, ihi);
   real fr = sr_amoeba_reflect(ctx, ihi);
@@ -227,6 +228,7 @@ static int sr_amoeba_init(sr_amoeba_ctx *ctx, real **p, real *y, int ndim,
   ctx->ftol = ftol;
   ctx->funk = funk;
   ctx->nfunk = nfunk;
+  ctx->max_evals = sr_amoeba_eval_limit > 0 ? sr_amoeba_eval_limit : MAX_ITER_AMOEBA;
   ctx->p = p;
   ctx->y = y;
   ctx->centroid = NULL;
