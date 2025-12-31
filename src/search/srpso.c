@@ -199,6 +199,21 @@ void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file)
 
   sr_pso_cfg cfg;
   sr_pso_cfg_init(&cfg, ndim, dpos);
+  if (sr_pso_swarm_size > 0) {
+    cfg.swarm_size = sr_pso_swarm_size;
+  }
+  if (sr_pso_inertia > 0.0) {
+    cfg.inertia = sr_pso_inertia;
+  }
+  if (sr_pso_c1 > 0.0) {
+    cfg.c1 = sr_pso_c1;
+  }
+  if (sr_pso_c2 > 0.0) {
+    cfg.c2 = sr_pso_c2;
+  }
+  if (sr_pso_vmax > 0.0) {
+    cfg.v_max = sr_pso_vmax;
+  }
   cfg.max_iters = sr_pso_iter_limit;
   cfg.max_evals = sr_pso_eval_limit;
 

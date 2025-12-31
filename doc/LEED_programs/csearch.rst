@@ -66,6 +66,26 @@ Options
 
   Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
 
+:code:`--pso-swarm <n>`
+
+  Sets the PSO swarm size.
+
+:code:`--pso-inertia <n>`
+
+  Sets the PSO inertia weight.
+
+:code:`--pso-c1 <n>`
+
+  Sets the PSO cognitive coefficient.
+
+:code:`--pso-c2 <n>`
+
+  Sets the PSO social coefficient.
+
+:code:`--pso-vmax <n>`
+
+  Sets the PSO velocity clamp.
+
 :code:`-v <vertex_file>`
                      
   Allows the search to be restarted with the current simplex, provided 
@@ -97,6 +117,21 @@ Environment
 
 :envvar:`CSEARCH_SEED`
   Optional deterministic seed for simulated annealing/PSO (same as :code:`--seed`).
+
+:envvar:`CSEARCH_PSO_SWARM`
+  Optional PSO swarm size (same as :code:`--pso-swarm`).
+
+:envvar:`CSEARCH_PSO_INERTIA`
+  Optional PSO inertia weight (same as :code:`--pso-inertia`).
+
+:envvar:`CSEARCH_PSO_C1`
+  Optional PSO cognitive coefficient (same as :code:`--pso-c1`).
+
+:envvar:`CSEARCH_PSO_C2`
+  Optional PSO social coefficient (same as :code:`--pso-c2`).
+
+:envvar:`CSEARCH_PSO_VMAX`
+  Optional PSO velocity clamp (same as :code:`--pso-vmax`).
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 

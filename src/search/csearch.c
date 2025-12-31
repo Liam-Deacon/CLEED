@@ -197,6 +197,116 @@ int main(int argc, char *argv[])
           exit(1);
         }
       }
+
+      if (strcmp(argv[i_arg], "--pso-swarm") == 0)
+      {
+        char *end = NULL;
+        long parsed = 0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtol(argv[i_arg], &end, 10);
+          if (end == argv[i_arg] || parsed <= 0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid PSO swarm size\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.pso_swarm_size = (int)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): PSO swarm size not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--pso-inertia") == 0)
+      {
+        char *end = NULL;
+        double parsed = 0.0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtod(argv[i_arg], &end);
+          if (end == argv[i_arg] || parsed <= 0.0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid PSO inertia\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.pso_inertia = (real)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): PSO inertia not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--pso-c1") == 0)
+      {
+        char *end = NULL;
+        double parsed = 0.0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtod(argv[i_arg], &end);
+          if (end == argv[i_arg] || parsed <= 0.0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid PSO c1\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.pso_c1 = (real)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): PSO c1 not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--pso-c2") == 0)
+      {
+        char *end = NULL;
+        double parsed = 0.0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtod(argv[i_arg], &end);
+          if (end == argv[i_arg] || parsed <= 0.0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid PSO c2\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.pso_c2 = (real)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): PSO c2 not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--pso-vmax") == 0)
+      {
+        char *end = NULL;
+        double parsed = 0.0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtod(argv[i_arg], &end);
+          if (end == argv[i_arg] || parsed <= 0.0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid PSO vmax\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.pso_vmax = (real)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): PSO vmax not given\n");
+          #endif
+          exit(1);
+        }
+      }
       
       /* help */
       if ((strcmp(argv[i_arg], "-h") == 0) || 
