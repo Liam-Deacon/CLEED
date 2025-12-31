@@ -37,6 +37,10 @@ static int test_lookup_by_name(void)
     CLEED_TEST_ASSERT(opt != NULL);
     CLEED_TEST_ASSERT(opt->type == SR_PSO);
 
+    opt = sr_optimizer_by_name("de");
+    CLEED_TEST_ASSERT(opt != NULL);
+    CLEED_TEST_ASSERT(opt->type == SR_DIFFERENTIAL_EVOLUTION);
+
     opt = sr_optimizer_by_name("unknown");
     CLEED_TEST_ASSERT(opt == NULL);
 

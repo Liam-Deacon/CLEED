@@ -29,9 +29,9 @@ void search_usage(FILE *output) {
 	fprintf(output, "  -i <inp_file>         : surface parameter input file\n");
     fprintf(output, "  -s <search_type>      : can be \n");
     sr_optimizer_print_help(output);
-    fprintf(output, "  --max-evals <n>       : limit objective evaluations (simplex/PSO).\n");
-    fprintf(output, "  --max-iters <n>       : limit iterations (Powell/annealing/PSO).\n");
-    fprintf(output, "  --seed <n>            : seed stochastic optimizers (annealing/PSO).\n");
+    fprintf(output, "  --max-evals <n>       : limit objective evaluations (simplex/PSO/DE).\n");
+    fprintf(output, "  --max-iters <n>       : limit iterations (Powell/annealing/PSO/DE).\n");
+    fprintf(output, "  --seed <n>            : seed stochastic optimizers (annealing/PSO/DE).\n");
     fprintf(output, "  --pso-swarm <n>       : set PSO swarm size.\n");
     fprintf(output, "  --pso-inertia <n>     : set PSO inertia weight.\n");
     fprintf(output, "  --pso-c1 <n>          : set PSO cognitive coefficient.\n");
