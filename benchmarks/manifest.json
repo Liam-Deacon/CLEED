@@ -1,0 +1,13 @@
+{
+  "datasets": [
+    {
+      "name": "csearch_stub",
+      "description": "Minimal stub dataset using the test fixtures.",
+      "input": "../tests/fixtures/csearch_stub/stub.inp",
+      "bulk": "../tests/fixtures/csearch_stub/stub.bul",
+      "control": "../tests/fixtures/csearch_stub/stub.ctr",
+      "delta": 0.1,
+      "extra_files": []
+    }
+  ]
+}

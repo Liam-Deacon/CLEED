@@ -25,6 +25,10 @@ config.status
 doc/_build/
 docs/_build/
 
+# Benchmark output
+benchmarks/out/
+benchmarks/plots/
+
 # Compiled artifacts
 *.o
 *.obj
