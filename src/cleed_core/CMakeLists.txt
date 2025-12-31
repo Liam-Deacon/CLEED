@@ -2,6 +2,7 @@
 
 set(cleed_core_SRCS
     cleed_core.c
+    cleed_curve.c
 )
 
 add_library(cleedCore SHARED ${cleed_core_SRCS})

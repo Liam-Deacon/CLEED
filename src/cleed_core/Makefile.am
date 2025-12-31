@@ -9,6 +9,7 @@ else
 lib_LTLIBRARIES = libcleedcore.la
 endif
 
-libcleedcore_la_SOURCES = cleed_core.c
+libcleedcore_la_SOURCES = cleed_core.c \
+    cleed_curve.c
 
 libcleedcore_a_SOURCES = $(libcleedcore_la_SOURCES)
