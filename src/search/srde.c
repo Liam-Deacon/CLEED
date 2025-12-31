@@ -209,6 +209,18 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
 
   sr_de_cfg cfg;
   sr_de_cfg_init(&cfg, ndim, dpos);
+  if (sr_de_population > 0) {
+    cfg.population = sr_de_population;
+  }
+  if (sr_de_weight > 0.0) {
+    cfg.weight = sr_de_weight;
+  }
+  if (sr_de_crossover > 0.0) {
+    cfg.crossover = sr_de_crossover;
+  }
+  if (sr_de_init_span > 0.0) {
+    cfg.init_span = sr_de_init_span;
+  }
   cfg.max_iters = sr_de_iter_limit;
   cfg.max_evals = sr_de_eval_limit;
 

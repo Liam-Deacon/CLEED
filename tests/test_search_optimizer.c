@@ -60,6 +60,10 @@ static int test_config_from_env(void)
     setenv("CSEARCH_PSO_C1", "1.50", 1);
     setenv("CSEARCH_PSO_C2", "1.60", 1);
     setenv("CSEARCH_PSO_VMAX", "2.00", 1);
+    setenv("CSEARCH_DE_POP", "40", 1);
+    setenv("CSEARCH_DE_WEIGHT", "0.65", 1);
+    setenv("CSEARCH_DE_CR", "0.85", 1);
+    setenv("CSEARCH_DE_SPAN", "1.75", 1);
 
     sr_optimizer_config_from_env(&cfg);
 
@@ -71,6 +75,10 @@ static int test_config_from_env(void)
     CLEED_TEST_ASSERT(fabs(cfg.pso_c1 - (real)1.50) < (real)1e-6);
     CLEED_TEST_ASSERT(fabs(cfg.pso_c2 - (real)1.60) < (real)1e-6);
     CLEED_TEST_ASSERT(fabs(cfg.pso_vmax - (real)2.00) < (real)1e-6);
+    CLEED_TEST_ASSERT(cfg.de_population == 40);
+    CLEED_TEST_ASSERT(fabs(cfg.de_weight - (real)0.65) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_crossover - (real)0.85) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_init_span - (real)1.75) < (real)1e-6);
 
     unsetenv("CSEARCH_MAX_EVALS");
     unsetenv("CSEARCH_MAX_ITERS");
@@ -80,6 +88,10 @@ static int test_config_from_env(void)
     unsetenv("CSEARCH_PSO_C1");
     unsetenv("CSEARCH_PSO_C2");
     unsetenv("CSEARCH_PSO_VMAX");
+    unsetenv("CSEARCH_DE_POP");
+    unsetenv("CSEARCH_DE_WEIGHT");
+    unsetenv("CSEARCH_DE_CR");
+    unsetenv("CSEARCH_DE_SPAN");
 
     return 0;
 }

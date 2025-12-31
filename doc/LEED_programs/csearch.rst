@@ -87,6 +87,22 @@ Options
 
   Sets the PSO velocity clamp.
 
+:code:`--de-pop <n>`
+
+  Sets the DE population size.
+
+:code:`--de-weight <n>`
+
+  Sets the DE weight factor.
+
+:code:`--de-cr <n>`
+
+  Sets the DE crossover rate.
+
+:code:`--de-span <n>`
+
+  Sets the DE initial span.
+
 :code:`-v <vertex_file>`
                      
   Allows the search to be restarted with the current simplex, provided 
@@ -133,6 +149,18 @@ Environment
 
 :envvar:`CSEARCH_PSO_VMAX`
   Optional PSO velocity clamp (same as :code:`--pso-vmax`).
+
+:envvar:`CSEARCH_DE_POP`
+  Optional DE population size (same as :code:`--de-pop`).
+
+:envvar:`CSEARCH_DE_WEIGHT`
+  Optional DE weight factor (same as :code:`--de-weight`).
+
+:envvar:`CSEARCH_DE_CR`
+  Optional DE crossover rate (same as :code:`--de-cr`).
+
+:envvar:`CSEARCH_DE_SPAN`
+  Optional DE initial span (same as :code:`--de-span`).
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 

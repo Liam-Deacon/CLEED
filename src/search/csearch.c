@@ -307,6 +307,94 @@ int main(int argc, char *argv[])
           exit(1);
         }
       }
+
+      if (strcmp(argv[i_arg], "--de-pop") == 0)
+      {
+        char *end = NULL;
+        long parsed = 0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtol(argv[i_arg], &end, 10);
+          if (end == argv[i_arg] || parsed <= 0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid DE population\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.de_population = (int)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): DE population not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--de-weight") == 0)
+      {
+        char *end = NULL;
+        double parsed = 0.0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtod(argv[i_arg], &end);
+          if (end == argv[i_arg] || parsed <= 0.0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid DE weight\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.de_weight = (real)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): DE weight not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--de-cr") == 0)
+      {
+        char *end = NULL;
+        double parsed = 0.0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtod(argv[i_arg], &end);
+          if (end == argv[i_arg] || parsed <= 0.0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid DE crossover rate\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.de_crossover = (real)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): DE crossover not given\n");
+          #endif
+          exit(1);
+        }
+      }
+
+      if (strcmp(argv[i_arg], "--de-span") == 0)
+      {
+        char *end = NULL;
+        double parsed = 0.0;
+        i_arg++;
+        if (i_arg < argc) {
+          parsed = strtod(argv[i_arg], &end);
+          if (end == argv[i_arg] || parsed <= 0.0) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid DE span\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.de_init_span = (real)parsed;
+        } else {
+          #ifdef ERROR
+          fprintf(STDERR,"*** error (SEARCH): DE span not given\n");
+          #endif
+          exit(1);
+        }
+      }
       
       /* help */
       if ((strcmp(argv[i_arg], "-h") == 0) || 

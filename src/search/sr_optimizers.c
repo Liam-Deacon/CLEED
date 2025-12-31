@@ -197,6 +197,10 @@ void sr_optimizer_config_init(sr_optimizer_config *cfg)
   cfg->pso_c1 = (real)0.0;
   cfg->pso_c2 = (real)0.0;
   cfg->pso_vmax = (real)0.0;
+  cfg->de_population = 0;
+  cfg->de_weight = (real)0.0;
+  cfg->de_crossover = (real)0.0;
+  cfg->de_init_span = (real)0.0;
 }
 
 static int sr_optimizer_read_int_env(const char *name, int *out_value)
@@ -249,6 +253,10 @@ void sr_optimizer_config_from_env(sr_optimizer_config *cfg)
   (void)sr_optimizer_read_real_env("CSEARCH_PSO_C1", &cfg->pso_c1);
   (void)sr_optimizer_read_real_env("CSEARCH_PSO_C2", &cfg->pso_c2);
   (void)sr_optimizer_read_real_env("CSEARCH_PSO_VMAX", &cfg->pso_vmax);
+  (void)sr_optimizer_read_int_env("CSEARCH_DE_POP", &cfg->de_population);
+  (void)sr_optimizer_read_real_env("CSEARCH_DE_WEIGHT", &cfg->de_weight);
+  (void)sr_optimizer_read_real_env("CSEARCH_DE_CR", &cfg->de_crossover);
+  (void)sr_optimizer_read_real_env("CSEARCH_DE_SPAN", &cfg->de_init_span);
 }
 
 void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
@@ -289,6 +297,18 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   if (cfg->pso_vmax > 0.0) {
     sr_pso_vmax = cfg->pso_vmax;
   }
+  if (cfg->de_population > 0) {
+    sr_de_population = cfg->de_population;
+  }
+  if (cfg->de_weight > 0.0) {
+    sr_de_weight = cfg->de_weight;
+  }
+  if (cfg->de_crossover > 0.0) {
+    sr_de_crossover = cfg->de_crossover;
+  }
+  if (cfg->de_init_span > 0.0) {
+    sr_de_init_span = cfg->de_init_span;
+  }
 }
 
 void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
@@ -298,7 +318,9 @@ void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
   fprintf(output, "=> Optimizer config:");
   if (cfg->max_evals <= 0 && cfg->max_iters <= 0 && cfg->seed == 0 &&
       cfg->pso_swarm_size <= 0 && cfg->pso_inertia <= 0.0 &&
-      cfg->pso_c1 <= 0.0 && cfg->pso_c2 <= 0.0 && cfg->pso_vmax <= 0.0) {
+      cfg->pso_c1 <= 0.0 && cfg->pso_c2 <= 0.0 && cfg->pso_vmax <= 0.0 &&
+      cfg->de_population <= 0 && cfg->de_weight <= 0.0 &&
+      cfg->de_crossover <= 0.0 && cfg->de_init_span <= 0.0) {
     fprintf(output, " defaults\n");
     return;
   }
@@ -349,6 +371,30 @@ void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
     fprintf(output, " pso_vmax=%.3f", (double)cfg->pso_vmax);
   } else {
     fprintf(output, " pso_vmax=default");
+  }
+
+  if (cfg->de_population > 0) {
+    fprintf(output, " de_pop=%d", cfg->de_population);
+  } else {
+    fprintf(output, " de_pop=default");
+  }
+
+  if (cfg->de_weight > 0.0) {
+    fprintf(output, " de_weight=%.3f", (double)cfg->de_weight);
+  } else {
+    fprintf(output, " de_weight=default");
+  }
+
+  if (cfg->de_crossover > 0.0) {
+    fprintf(output, " de_cr=%.3f", (double)cfg->de_crossover);
+  } else {
+    fprintf(output, " de_cr=default");
+  }
+
+  if (cfg->de_init_span > 0.0) {
+    fprintf(output, " de_span=%.3f", (double)cfg->de_init_span);
+  } else {
+    fprintf(output, " de_span=default");
   }
 
   fprintf(output, "\n");

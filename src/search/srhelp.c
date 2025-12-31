@@ -37,6 +37,10 @@ void search_usage(FILE *output) {
     fprintf(output, "  --pso-c1 <n>          : set PSO cognitive coefficient.\n");
     fprintf(output, "  --pso-c2 <n>          : set PSO social coefficient.\n");
     fprintf(output, "  --pso-vmax <n>        : set PSO velocity clamp.\n");
+    fprintf(output, "  --de-pop <n>          : set DE population size.\n");
+    fprintf(output, "  --de-weight <n>       : set DE weight factor.\n");
+    fprintf(output, "  --de-cr <n>           : set DE crossover rate.\n");
+    fprintf(output, "  --de-span <n>         : set DE initial span.\n");
     fprintf(output, "  -v <vertex_file>      : file to read vertex information if resuming search\n");                
     fprintf(output, "  -V --version          : print version and information about this program\n");
     fprintf(output, "\n");
