@@ -127,13 +127,15 @@ FILE *out_stream;
        e_range += faux = (eng[n_leng-1] - eng[0]);
        norm += faux *= (iv_cur+i_list)->weight;
 
-       if(args->r_type == RP_FACTOR)
-         faux *= cr_rp(eng, e_int, t_int, args->vi);
-       else if (args->r_type == R1_FACTOR)
-         faux *= cr_r1(eng, e_int, t_int);
-       else if (args->r_type == R2_FACTOR)
-         faux *= cr_r2(eng, e_int, t_int);
-       else if (args->r_type == RB_FACTOR)
+      if(args->r_type == RP_FACTOR)
+        faux *= cr_rp(eng, e_int, t_int, args->vi);
+      else if (args->r_type == RS_FACTOR)
+        faux *= cr_rs(eng, e_int, t_int, args->vi);
+      else if (args->r_type == R1_FACTOR)
+        faux *= cr_r1(eng, e_int, t_int);
+      else if (args->r_type == R2_FACTOR)
+        faux *= cr_r2(eng, e_int, t_int);
+      else if (args->r_type == RB_FACTOR)
          faux *= cr_rb(eng, e_int, t_int);
        else 
        {
@@ -215,6 +217,11 @@ FILE *out_stream;
        {
          rfac = cr_rp(eng, e_int, t_int, args->vi);
          strcpy(r_name,"Rp");
+       }
+       else if (args->r_type == RS_FACTOR)
+       {
+         rfac = cr_rs(eng, e_int, t_int, args->vi);
+         strcpy(r_name,"Rs");
        }
        else if (args->r_type == R1_FACTOR)
        {

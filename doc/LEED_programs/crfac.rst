@@ -7,9 +7,9 @@ crfac performs a comparison between(theory) and experimental IV curves.
 The agreement is quantified in terms of the reliability factor (or R factor), 
 which can vary between 0 (perfect fit) and 1 (uncorrelated). For most applications 
 an acceptable R factor is <0.1 for very simple models and <0.3 for complicated 
-structures. The program offers the choice between four different R-factors 
+structures. The program offers the choice between five different R-factors 
 that can be used when minimising a structural search. These are :math:`R_1`,
-:math:`R_2`, :math:`R_p` and :math:`R_B`. The output R-factor value is the 
+:math:`R_2`, :math:`R_p`, :math:`R_s` and :math:`R_B`. The output R-factor value is the 
 optimum achieved by shifting the energy axes of the experimental and theoretical I-V 
 curves with respect to each other. This shift acts as a correction for any non-optimum 
 value of the optical potential in the LEED calculations, which therefore need not be 
@@ -58,6 +58,12 @@ Options
   
   specifies the R-factor type to be calculated. Valid arguments
   are:
+
+  - ``r1``: :math:`R_1`.
+  - ``r2``: :math:`R_2` mean-square displacement.
+  - ``rb``: :math:`R_{B1}` and :math:`R_{B2}`.
+  - ``rp``: Pendry :math:`R_p`.
+  - ``rs``: improved reliability factor :math:`R_s` (Imre et al., 2025), smoother near intensity minima.
   
 :code:`-s <shift1,shift2,shift3>`
 
@@ -73,7 +79,7 @@ Options
 :code:`-v  <optical_potential>`
 
   specifies  the  value of the optical potential :math:`V_i` (in eV)
-  used in the evaluation of Pendry's R-factor (:math:`R_p`). :math:`2V_i` 
+  used in the evaluation of Pendry's and :math:`R_s` factors. :math:`2V_i` 
   determines smallest resolvable features in the IV curves.
   The default is 4 eV, however in situations where the interlayer
   spacings are very small, such as for intermetallic compounds, :math:`V_i` 

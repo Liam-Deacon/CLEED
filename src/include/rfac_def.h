@@ -152,7 +152,7 @@ struct rfmin
  special definitions
 *********************************************************************/
 
-#define N_RFACTORS     6       /* Number of possible R-factors      */
+#define N_RFACTORS     7       /* Number of possible R-factors      */
 
 #define ENG_TOLERANCE  0.1     /* accuracy in comparing energies    */
 #define IND_TOLERANCE  0.02    /* accuracy in comparing indices     */

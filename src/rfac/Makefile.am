@@ -33,6 +33,7 @@ librfac_la_SOURCES =                        \
     crfrmin.c                               \
     crfrb.c                                 \
     crfrp.c                                 \
+    crfrs.c                                 \
     crfr1.c                                 \
     crfr2.c                                 \
     crfsort.c                               \

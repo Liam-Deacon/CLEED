@@ -45,7 +45,7 @@ void usage(FILE *output) {
     fprintf(output, "\n");
     fprintf(output, "\n  --rfactor");
     fprintf(output, "\n  -r <r_factor>: specify a particular R-factor to be used for comparison.");
-    fprintf(output, "\n	  valid arguments: \"r1\", \"r2\", \"rb\", \"rp\".");
+    fprintf(output, "\n	  valid arguments: \"r1\", \"r2\", \"rb\", \"rp\", \"rs\".");
     fprintf(output, "\n	  default: \"rp\".");
     fprintf(output, "\n");
     fprintf(output, "\n  --shift");
@@ -62,7 +62,7 @@ void usage(FILE *output) {
     fprintf(output, "\n  --potential");
     fprintf(output, "\n  -v <potential>");
     fprintf(output, "\n      imaginary part of optical potential (used for smoothing and for ");
-    fprintf(output, "\n      computation of Pendry's R-factor).");
+    fprintf(output, "\n      computation of Pendry's and R_S factors).");
     fprintf(output, "\n	  arguments: floating point number [eV].");
     fprintf(output, "\n	  default: 4.0");
     fprintf(output, "\n");

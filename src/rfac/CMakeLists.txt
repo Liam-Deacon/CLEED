@@ -47,6 +47,7 @@ SET (rfaclib_SRCS
     crfrmin.c
     crfrb.c
     crfrp.c
+    crfrs.c
     crfr1.c
     crfr2.c
     crfsort.c
