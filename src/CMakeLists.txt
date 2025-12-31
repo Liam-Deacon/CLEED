@@ -30,6 +30,8 @@ IF (BUILD_PATT)
 ENDIF()
 ADD_SUBDIRECTORY(rfac)
 ADD_SUBDIRECTORY(search)
+ADD_SUBDIRECTORY(cleed_core)
+ADD_SUBDIRECTORY(cleed_io)
 ADD_SUBDIRECTORY(scripts)
 
 # optional gui elements
