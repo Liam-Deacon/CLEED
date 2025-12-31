@@ -54,21 +54,23 @@ specifies the search algorithm to be used for the structure optimisation. Possib
 'sx' : Simplex algorithm (alternative)
 .br
 'ps' : Particle swarm optimisation
+.br
+'de' : Differential evolution
 .RE
 .IP --max-evals
 .I <n>
 .RS
-limits objective evaluations (simplex/PSO). This overrides the default iteration budget.
+limits objective evaluations (simplex/PSO/DE). This overrides the default iteration budget.
 .RE
 .IP --max-iters
 .I <n>
 .RS
-limits iterations (Powell/annealing/PSO). This overrides the default iteration budget.
+limits iterations (Powell/annealing/PSO/DE). This overrides the default iteration budget.
 .RE
 .IP --seed
 .I <n>
 .RS
-sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
+sets a deterministic seed for stochastic optimizers (simulated annealing/PSO/DE).
 .RE
 .IP --pso-swarm
 .I <n>
@@ -95,6 +97,26 @@ sets the PSO social coefficient.
 .RS
 sets the PSO velocity clamp.
 .RE
+.IP --de-pop
+.I <n>
+.RS
+sets the DE population size.
+.RE
+.IP --de-weight
+.I <n>
+.RS
+sets the DE weight factor.
+.RE
+.IP --de-cr
+.I <n>
+.RS
+sets the DE crossover rate.
+.RE
+.IP --de-span
+.I <n>
+.RS
+sets the DE initial span.
+.RE
 .IP -v
 .I <vertex_file> 
 .RS
@@ -114,11 +136,11 @@ CSEARCH_RFAC: path of the
 .I crfac
  program used for the R factor evaluation. This may simply be 'crfac' if the parent directory of this program is in the system PATH variable.
 .PP
-CSEARCH_MAX_EVALS: optional evaluation budget for simplex/PSO searches (same as --max-evals).
+CSEARCH_MAX_EVALS: optional evaluation budget for simplex/PSO/DE searches (same as --max-evals).
 .PP
-CSEARCH_MAX_ITERS: optional iteration budget for Powell/annealing/PSO searches (same as --max-iters).
+CSEARCH_MAX_ITERS: optional iteration budget for Powell/annealing/PSO/DE searches (same as --max-iters).
 .PP
-CSEARCH_SEED: optional deterministic seed for simulated annealing/PSO (same as --seed).
+CSEARCH_SEED: optional deterministic seed for simulated annealing/PSO/DE (same as --seed).
 .PP
 CSEARCH_PSO_SWARM: optional PSO swarm size (same as --pso-swarm).
 .PP
@@ -129,6 +151,14 @@ CSEARCH_PSO_C1: optional PSO cognitive coefficient (same as --pso-c1).
 CSEARCH_PSO_C2: optional PSO social coefficient (same as --pso-c2).
 .PP
 CSEARCH_PSO_VMAX: optional PSO velocity clamp (same as --pso-vmax).
+.PP
+CSEARCH_DE_POP: optional DE population size (same as --de-pop).
+.PP
+CSEARCH_DE_WEIGHT: optional DE weight factor (same as --de-weight).
+.PP
+CSEARCH_DE_CR: optional DE crossover rate (same as --de-cr).
+.PP
+CSEARCH_DE_SPAN: optional DE initial span (same as --de-span).
 .PP
 CLEED_PHASE: directory path of the phase shift files used in the surface and bulk models. Please refer to 
 .I phsh(1) 

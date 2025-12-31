@@ -50,6 +50,12 @@ extern real sr_pso_inertia;
 extern real sr_pso_c1;
 extern real sr_pso_c2;
 extern real sr_pso_vmax;
+extern int sr_de_eval_limit;
+extern int sr_de_iter_limit;
+extern int sr_de_population;
+extern real sr_de_weight;
+extern real sr_de_crossover;
+extern real sr_de_init_span;
 extern long sa_idum;
 
 /*********************************************************************

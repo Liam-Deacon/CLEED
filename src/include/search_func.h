@@ -140,11 +140,44 @@ void sr_pso_cfg_init(sr_pso_cfg *cfg, int ndim, real dpos);
 int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(real *),
                     real *best, real *best_val, int *evals);
 
+/**
+ * @brief Configuration for differential evolution (DE).
+ */
+typedef struct sr_de_cfg {
+  int population;
+  int max_iters;
+  int max_evals;
+  real weight;
+  real crossover;
+  real init_span;
+  unsigned long long seed;
+} sr_de_cfg;
+
+/**
+ * @brief Initialise DE defaults based on dimensionality and dpos.
+ */
+void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos);
+
+/**
+ * @brief Differential evolution (DE) minimiser.
+ *
+ * @param cfg Configuration (may be NULL for defaults).
+ * @param ndim Dimensionality of the parameter vector.
+ * @param func Objective function.
+ * @param best Output best point (`1..ndim`).
+ * @param best_val Output best function value.
+ * @param evals In/out evaluation counter (may be NULL).
+ * @return 0 on success, non-zero on failure.
+ */
+int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(real *),
+                   real *best, real *best_val, int *evals);
+
 /* Drivers */
 void sr_sa(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_sx(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_po(int ndim, const char *bak_file, const char *log_file);
 void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file);
+void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file);
 
 /* file input|output */

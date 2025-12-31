@@ -108,6 +108,18 @@ else()
 endif()
 add_test(NAME search.pso COMMAND test_search_pso)
 
+add_executable(test_search_de
+    test_search_de.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_de PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_de PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_de PRIVATE search m)
+endif()
+add_test(NAME search.de COMMAND test_search_de)
+
 add_executable(test_search_vertex_stats
     test_search_vertex_stats.c
     $<TARGET_OBJECTS:cleed_test_support>

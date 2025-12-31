@@ -26,6 +26,10 @@ typedef struct sr_optimizer_config {
   real pso_c1;
   real pso_c2;
   real pso_vmax;
+  int de_population;
+  real de_weight;
+  real de_crossover;
+  real de_init_span;
 } sr_optimizer_config;
 
 typedef struct sr_optimizer_def {

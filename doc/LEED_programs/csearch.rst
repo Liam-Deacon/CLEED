@@ -52,19 +52,20 @@ Options
   - :code:`po`: Powell.
   - :code:`sa`: simulated annealing.
   - :code:`ps`: particle swarm optimisation.
+  - :code:`de`: differential evolution.
   - :code:`ga`: genetic algorithm (not implemented).
 
 :code:`--max-evals <n>`
 
-  Limits objective evaluations (simplex/PSO). Overrides the default iteration budget.
+  Limits objective evaluations (simplex/PSO/DE). Overrides the default iteration budget.
 
 :code:`--max-iters <n>`
 
-  Limits iterations (Powell/annealing/PSO). Overrides the default iteration budget.
+  Limits iterations (Powell/annealing/PSO/DE). Overrides the default iteration budget.
 
 :code:`--seed <n>`
 
-  Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
+  Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO/DE).
 
 :code:`--pso-swarm <n>`
 
@@ -85,6 +86,22 @@ Options
 :code:`--pso-vmax <n>`
 
   Sets the PSO velocity clamp.
+
+:code:`--de-pop <n>`
+
+  Sets the DE population size.
+
+:code:`--de-weight <n>`
+
+  Sets the DE weight factor.
+
+:code:`--de-cr <n>`
+
+  Sets the DE crossover rate.
+
+:code:`--de-span <n>`
+
+  Sets the DE initial span.
 
 :code:`-v <vertex_file>`
                      
@@ -110,13 +127,13 @@ Environment
   if the parent directory of this program is in the system :envvar:`PATH` variable.
 
 :envvar:`CSEARCH_MAX_EVALS`
-  Optional evaluation budget for simplex/PSO searches (same as :code:`--max-evals`).
+  Optional evaluation budget for simplex/PSO/DE searches (same as :code:`--max-evals`).
 
 :envvar:`CSEARCH_MAX_ITERS`
-  Optional iteration budget for Powell/annealing/PSO searches (same as :code:`--max-iters`).
+  Optional iteration budget for Powell/annealing/PSO/DE searches (same as :code:`--max-iters`).
 
 :envvar:`CSEARCH_SEED`
-  Optional deterministic seed for simulated annealing/PSO (same as :code:`--seed`).
+  Optional deterministic seed for simulated annealing/PSO/DE (same as :code:`--seed`).
 
 :envvar:`CSEARCH_PSO_SWARM`
   Optional PSO swarm size (same as :code:`--pso-swarm`).
@@ -132,6 +149,18 @@ Environment
 
 :envvar:`CSEARCH_PSO_VMAX`
   Optional PSO velocity clamp (same as :code:`--pso-vmax`).
+
+:envvar:`CSEARCH_DE_POP`
+  Optional DE population size (same as :code:`--de-pop`).
+
+:envvar:`CSEARCH_DE_WEIGHT`
+  Optional DE weight factor (same as :code:`--de-weight`).
+
+:envvar:`CSEARCH_DE_CR`
+  Optional DE crossover rate (same as :code:`--de-cr`).
+
+:envvar:`CSEARCH_DE_SPAN`
+  Optional DE initial span (same as :code:`--de-span`).
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 
