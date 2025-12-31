@@ -53,6 +53,7 @@ FILES.h = $(INCLUDEDIR)/search.h
 SRLIB  =  sr_alloc.o \
           sr_rng.o \
           sr_parse.o \
+          sr_optimizers.o \
           sr_vertex_stats.o \
           sr_amoeba.o \
           sr_amebsa.o \

@@ -40,6 +40,10 @@ extern "C" {
 extern struct sratom_str *sr_atoms;
 extern struct search_str *sr_search;
 extern char *sr_project;
+extern int sr_amoeba_eval_limit;
+extern int sr_powell_iter_limit;
+extern int sr_sa_iter_limit;
+extern long sa_idum;
 
 /*********************************************************************
  End of include file 
