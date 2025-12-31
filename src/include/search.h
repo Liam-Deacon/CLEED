@@ -43,6 +43,13 @@ extern char *sr_project;
 extern int sr_amoeba_eval_limit;
 extern int sr_powell_iter_limit;
 extern int sr_sa_iter_limit;
+extern int sr_pso_eval_limit;
+extern int sr_pso_iter_limit;
+extern int sr_pso_swarm_size;
+extern real sr_pso_inertia;
+extern real sr_pso_c1;
+extern real sr_pso_c2;
+extern real sr_pso_vmax;
 extern long sa_idum;
 
 /*********************************************************************

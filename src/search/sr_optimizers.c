@@ -54,6 +54,13 @@ static int sr_run_ga(int ndim, real dpos, const char *bak_file,
   return -1;
 }
 
+static int sr_run_pso(int ndim, real dpos, const char *bak_file,
+                      const char *log_file)
+{
+  sr_pso(ndim, dpos, bak_file, log_file);
+  return 0;
+}
+
 static const sr_optimizer_entry sr_optimizers[] = {
     {
         .def = {
@@ -111,6 +118,20 @@ static const sr_optimizer_entry sr_optimizers[] = {
         .aliases = {"ga", "genetic", "genetic-algorithm", NULL},
         .run = sr_run_ga,
     },
+    {
+        .def = {
+            .name = "pso",
+            .primary = "ps",
+            .description = "particle swarm optimisation",
+            .aliases_help = "pso, swarm",
+            .type = SR_PSO,
+            .implemented = 1,
+            .uses_delta = 1,
+            .is_default = 0,
+        },
+        .aliases = {"ps", "pso", "swarm", NULL},
+        .run = sr_run_pso,
+    },
 };
 
 static const sr_optimizer_entry *sr_optimizer_entry_by_type(int type)
@@ -150,6 +171,11 @@ void sr_optimizer_config_init(sr_optimizer_config *cfg)
   cfg->max_evals = 0;
   cfg->max_iters = 0;
   cfg->seed = 0;
+  cfg->pso_swarm_size = 0;
+  cfg->pso_inertia = (real)0.0;
+  cfg->pso_c1 = (real)0.0;
+  cfg->pso_c2 = (real)0.0;
+  cfg->pso_vmax = (real)0.0;
 }
 
 static int sr_optimizer_read_int_env(const char *name, int *out_value)
@@ -178,12 +204,30 @@ static int sr_optimizer_read_seed_env(const char *name, uint64_t *out_value)
   return 1;
 }
 
+static int sr_optimizer_read_real_env(const char *name, real *out_value)
+{
+  char *end = NULL;
+  const char *raw = getenv(name);
+  double parsed = 0.0;
+
+  if (!raw || !out_value) return 0;
+  parsed = strtod(raw, &end);
+  if (end == raw || parsed <= 0.0) return 0;
+  *out_value = (real)parsed;
+  return 1;
+}
+
 void sr_optimizer_config_from_env(sr_optimizer_config *cfg)
 {
   if (!cfg) return;
   (void)sr_optimizer_read_int_env("CSEARCH_MAX_EVALS", &cfg->max_evals);
   (void)sr_optimizer_read_int_env("CSEARCH_MAX_ITERS", &cfg->max_iters);
   (void)sr_optimizer_read_seed_env("CSEARCH_SEED", &cfg->seed);
+  (void)sr_optimizer_read_int_env("CSEARCH_PSO_SWARM", &cfg->pso_swarm_size);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_INERTIA", &cfg->pso_inertia);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_C1", &cfg->pso_c1);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_C2", &cfg->pso_c2);
+  (void)sr_optimizer_read_real_env("CSEARCH_PSO_VMAX", &cfg->pso_vmax);
 }
 
 void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
@@ -195,13 +239,32 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   if (cfg->max_iters > 0) {
     sr_powell_iter_limit = cfg->max_iters;
     sr_sa_iter_limit = cfg->max_iters;
+    sr_pso_iter_limit = cfg->max_iters;
     if (cfg->max_evals <= 0) {
       sr_amoeba_eval_limit = cfg->max_iters;
     }
   }
+  if (cfg->max_evals > 0) {
+    sr_pso_eval_limit = cfg->max_evals;
+  }
   if (cfg->seed > 0) {
     sa_idum = (long)(cfg->seed > (uint64_t)LONG_MAX ? LONG_MAX : cfg->seed);
     sa_idum = -sa_idum;
+  }
+  if (cfg->pso_swarm_size > 0) {
+    sr_pso_swarm_size = cfg->pso_swarm_size;
+  }
+  if (cfg->pso_inertia > 0.0) {
+    sr_pso_inertia = cfg->pso_inertia;
+  }
+  if (cfg->pso_c1 > 0.0) {
+    sr_pso_c1 = cfg->pso_c1;
+  }
+  if (cfg->pso_c2 > 0.0) {
+    sr_pso_c2 = cfg->pso_c2;
+  }
+  if (cfg->pso_vmax > 0.0) {
+    sr_pso_vmax = cfg->pso_vmax;
   }
 }
 
@@ -210,7 +273,9 @@ void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
   if (!output || !cfg) return;
 
   fprintf(output, "=> Optimizer config:");
-  if (cfg->max_evals <= 0 && cfg->max_iters <= 0 && cfg->seed == 0) {
+  if (cfg->max_evals <= 0 && cfg->max_iters <= 0 && cfg->seed == 0 &&
+      cfg->pso_swarm_size <= 0 && cfg->pso_inertia <= 0.0 &&
+      cfg->pso_c1 <= 0.0 && cfg->pso_c2 <= 0.0 && cfg->pso_vmax <= 0.0) {
     fprintf(output, " defaults\n");
     return;
   }
@@ -231,6 +296,36 @@ void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
     fprintf(output, " seed=%llu", (unsigned long long)cfg->seed);
   } else {
     fprintf(output, " seed=default");
+  }
+
+  if (cfg->pso_swarm_size > 0) {
+    fprintf(output, " pso_swarm=%d", cfg->pso_swarm_size);
+  } else {
+    fprintf(output, " pso_swarm=default");
+  }
+
+  if (cfg->pso_inertia > 0.0) {
+    fprintf(output, " pso_inertia=%.3f", (double)cfg->pso_inertia);
+  } else {
+    fprintf(output, " pso_inertia=default");
+  }
+
+  if (cfg->pso_c1 > 0.0) {
+    fprintf(output, " pso_c1=%.3f", (double)cfg->pso_c1);
+  } else {
+    fprintf(output, " pso_c1=default");
+  }
+
+  if (cfg->pso_c2 > 0.0) {
+    fprintf(output, " pso_c2=%.3f", (double)cfg->pso_c2);
+  } else {
+    fprintf(output, " pso_c2=default");
+  }
+
+  if (cfg->pso_vmax > 0.0) {
+    fprintf(output, " pso_vmax=%.3f", (double)cfg->pso_vmax);
+  } else {
+    fprintf(output, " pso_vmax=default");
   }
 
   fprintf(output, "\n");
