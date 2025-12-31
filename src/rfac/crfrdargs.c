@@ -55,7 +55,7 @@ struct crargs cr_rdargs (int argc, char **argv)
 
   --rfactor
   -r <r_factor>: specify a particular R-factor to be used for comparison.
-	     valid arguments: "r1", "r2", "rb", "rp".
+	     valid arguments: "r1", "r2", "rb", "rp", "rs".
 	     default: "rp".
 	     program parameter: r_type
 
@@ -219,7 +219,7 @@ structure containing all program parameters:
       {
         /* 
          -r <r_factor>: specify which R-factor should be used for comparison.
-                Valid arguments are: "r1", "r2", "rb", "rp".
+                Valid arguments are: "r1", "r2", "rb", "rp", "rs".
                 default: "rp".
         */
     
@@ -227,6 +227,8 @@ structure containing all program parameters:
         {
           if( !strncasecmp(argv[i],"rp", 2) )
             args.r_type = RP_FACTOR;
+          else if( !strncasecmp(argv[i],"rs", 2) )
+            args.r_type = RS_FACTOR;
           else if( !strncasecmp(argv[i],"r1", 2) )
             args.r_type = R1_FACTOR;
           else if( !strncasecmp(argv[i],"r2", 2) )

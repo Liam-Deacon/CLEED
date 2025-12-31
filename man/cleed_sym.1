@@ -60,6 +60,8 @@ specifies the R factor type to be calculated. Valid arguments are:
 .br
 \'rp\' : calculates the Pendry R factor Rp. This provides the level of agreement on shape of curves, not the intensity by comparing logarithmic derivatives, Rp = [1 over I(E)] * [delta I(E) over delta E], and is the standard in I(V) analysis. The Pendry R factor is problematic with experimental noise as it is sensitive to positions of peaks, not intensity and therefore noisy data will result in extra 'peaks'. The workaround for this is to smooth or average the experimental data using a tool such as 
 .B ftsmooth
+.br
+\'rs\' : calculates the improved reliability factor Rs (Imre et al., 2025), which smooths the Pendry-style Y function at intensity minima.
 .RE
 .IP -s
 .I <shift1,shift2,shift3>

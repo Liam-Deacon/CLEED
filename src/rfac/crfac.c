@@ -86,6 +86,7 @@ struct crargs  args;              /* program parameters from argument list */
 
 #ifdef CONTROL
  if(args.r_type == RP_FACTOR)       fprintf(STDCTR,"Rp = ");
+ else if (args.r_type == RS_FACTOR) fprintf(STDCTR,"Rs = ");
  else if (args.r_type == R1_FACTOR) fprintf(STDCTR,"R1 = ");
  else if (args.r_type == R2_FACTOR) fprintf(STDCTR,"R2 = ");
  else if (args.r_type == RB_FACTOR) fprintf(STDCTR,"Rb1 = ");
@@ -95,6 +96,7 @@ struct crargs  args;              /* program parameters from argument list */
 
  fprintf(STDOUT,"%.6f %.6f %.2f %.2f\t\t#  ", r_min, rr, s_min, e_range);
  if(args.r_type == RP_FACTOR)       fprintf(STDCTR,"Rp  RR  shift  range\n");
+ else if (args.r_type == RS_FACTOR) fprintf(STDCTR,"Rs  RR  shift  range\n");
  else if (args.r_type == R1_FACTOR) fprintf(STDCTR,"R1  RR  shift  range\n");
  else if (args.r_type == R2_FACTOR) fprintf(STDCTR,"R2  RR  shift  range\n");
  else if (args.r_type == RB_FACTOR) fprintf(STDCTR,"Rb1 RR  shift  range\n");

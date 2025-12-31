@@ -120,6 +120,8 @@ OPTIONS
   'rp' : calculates the Pendry R factor $R sub p$. This provides the level of agreement on shape of curves, not the intensity by comparing logarithmic derivatives, $R sub p = {1 over I(E)} * {delta I(E) over delta E}$, and is the standard in I(V) analysis. The Pendry R factor is problematic with experimental noise as it is sensitive to positions of peaks, not intensity and therefore noisy data will result in extra 'peaks'. The workaround for this is to smooth or average the experimental data using a tool such as 
 **ftsmooth**
 
+  'rs' : calculates the improved reliability factor $R sub s$ (Imre et al., 2025), which smooths the Pendry-style Y function at intensity minima.
+
 *-s <shift1,shift2,shift3>*
 
   defines the range (shift1 and shift2) and step width (shift3) of the energy shifts between the experimental and theoretical curves.
@@ -131,7 +133,7 @@ OPTIONS
 
 *-v <optical_potential>*
 
-  specifies the value of the optical potential $V sub i$ (in eV) used in the evaluation of Pendry's R-factor ($R sub p$). $2 V sub i$ determines smallest resolvable features in the IV curves. The default is 4 eV, however in situations where the interlayer spacings are very small, such as for intermetallic compounds, $V sub i$ may need to be increased (but should remain <5eV). 
+  specifies the value of the optical potential $V sub i$ (in eV) used in the evaluation of Pendry's and $R sub s$ factors. $2 V sub i$ determines smallest resolvable features in the IV curves. The default is 4 eV, however in situations where the interlayer spacings are very small, such as for intermetallic compounds, $V sub i$ may need to be increased (but should remain <5eV). 
 
 *-V*
  

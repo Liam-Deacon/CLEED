@@ -148,6 +148,9 @@ Options
     therefore noisy data will result in extra 'peaks'. The workaround for this 
     is to smooth or average the experimental data using a tool such as :ref:`ftsmooth`.
 
+  + :code:`rs` : calculates the improved reliability factor :math:`R_s` (Imre et al., 2025),
+    which smooths the Pendry-style :math:`Y` function at intensity minima.
+
 :code:`-s <shift1,shift2,shift3>`
 
   defines the range (shift1 and shift2) and step width (shift3) of the energy 
@@ -161,7 +164,7 @@ Options
 :code:`-v <optical_potential>`
 
   specifies the value of the optical potential :math:`V_i` (in eV) used in the 
-  evaluation of Pendry's R-factor (:math:`R_p`). :math:`2V_i` determines 
+  evaluation of Pendry's and :math:`R_s` factors. :math:`2V_i` determines 
   smallest resolvable features in the IV curves. The default is 4 eV, however 
   in situations where the interlayer spacings are very small, such as for 
   intermetallic compounds, :math:`V_i` may need to be increased (but 

@@ -119,6 +119,17 @@ else()
 endif()
 add_test(NAME rfac.spline COMMAND test_rfac_spline)
 
+add_executable(test_rfac_rs
+    test_rfac_rs.c
+)
+target_include_directories(test_rfac_rs PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_rfac_rs PRIVATE rfacStatic m)
+else()
+    target_link_libraries(test_rfac_rs PRIVATE rfac m)
+endif()
+add_test(NAME rfac.rs COMMAND test_rfac_rs)
+
 add_executable(fake_csearch_leed
     fakes/fake_csearch_leed.c
 )
