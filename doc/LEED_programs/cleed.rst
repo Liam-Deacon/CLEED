@@ -112,7 +112,10 @@ Mode selection
 :code:`--auto`
 
   Detect symmetry markers (``sr``/``sm``) in the input files and select the
-  appropriate mode (default).
+  appropriate mode (default). Auto-detection checks the bulk file first
+  (``-b``), then the parameter file (``-i``). If no symmetry markers are
+  found or the files are not readable, the calculation falls back to the
+  non-symmetrised mode.
 
 :code:`--sym`
 
@@ -121,6 +124,13 @@ Mode selection
 :code:`--nsym`
 
   Force the non-symmetrised implementation (equivalent to :code:`cleed_nsym`).
+
+Mode precedence
+^^^^^^^^^^^^^^^
+
+1. Command-line flags (``--auto``, ``--sym``, ``--nsym``)
+2. :envvar:`CLEED_SYM` (if set)
+3. Auto-detection (default)
 
 
 .. _cleed_options:

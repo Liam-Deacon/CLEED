@@ -158,7 +158,8 @@ specific features. The most important is the use of environment variables.
  ``CLEED_SYM``
  Controls the symmetry mode and accepts :code:`auto`, :code:`yes`, :code:`no`,
  :code:`true`, :code:`false`, :code:`1`, and :code:`0`. Command-line flags
- override this variable.
+ override this variable; auto-detection checks the bulk file (``-b``) before
+ the parameter file (``-i``).
 
 
 Examples
