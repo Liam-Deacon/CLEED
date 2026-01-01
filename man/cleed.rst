@@ -68,6 +68,7 @@ needs some additional information which is ignored by the vanilla
 it is strongly recommended to test the same input file with both programs in 
 order to check the consistency. The relative intensities of equivalent beams 
 should be identical down to 10 :sup:`-8`.
+Use :code:`--auto`, :code:`--sym`, or :code:`--nsym` to select the symmetry mode.
 
 Syntax
 ======
@@ -153,6 +154,11 @@ specific features. The most important is the use of environment variables.
  for bash and c shells, respectively, before the program is called for the first 
  time. Users of modern Windows operating systems (Win7 and up) may use the 
  ::setx:: command.
+
+ ``CLEED_SYM``
+ Controls the symmetry mode and accepts :code:`auto`, :code:`yes`, :code:`no`,
+ :code:`true`, :code:`false`, :code:`1`, and :code:`0`. Command-line flags
+ override this variable.
 
 
 Examples

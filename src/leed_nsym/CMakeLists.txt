@@ -174,6 +174,7 @@ SET (CPLOBJ ${cleed_nsym_SOURCE_DIR}/cribasfun.c)
 SET (PRGOBJ 
     ${cleed_nsym_SOURCE_DIR}/prgcheck.c 
     ${cleed_nsym_SOURCE_DIR}/lhelp.c
+    ${cleed_nsym_SOURCE_DIR}/cleed_mode.c
 )
 
 IF (WIN32)
@@ -230,6 +231,11 @@ SET (leedlib_SRCS
 )
 
 SET (cleed_nsym_SRCS cleed_nsym.c)
+SET (cleed_SRCS
+    ${cleed_nsym_SOURCE_DIR}/cleed.c
+    ${cleed_nsym_SOURCE_DIR}/cleed_nsym.c
+    ${cleed_sym_SOURCE_DIR}/cleed_sym.c
+)
 
 ###############################################################################
 # INSTALL TARGETS
@@ -251,10 +257,12 @@ IF (WIN32)
     SET (cleed_nsym_SRCS ${cleed_nsym_SRCS} res/windows/cleed_nsym.rc)
     
     ADD_EXECUTABLE(cleed_nsym ${cleed_nsym_SRCS})
+    ADD_EXECUTABLE(cleed ${cleed_SRCS})
 
     TARGET_LINK_LIBRARIES(leed ws2_32 psapi m)
     TARGET_LINK_LIBRARIES(leedStatic ws2_32 psapi m)
     TARGET_LINK_LIBRARIES(cleed_nsym ws2_32 psapi)
+    TARGET_LINK_LIBRARIES(cleed ws2_32 psapi)
     
 ELSE (WIN32)
     
@@ -264,6 +272,8 @@ ELSE (WIN32)
         
             ADD_EXECUTABLE(cleed_nsym MACOSX_BUNDLE ${cleed_nsym_SRCS})
             INSTALL(TARGETS cleed_nsym BUNDLE DESTINATION ../Applications)
+            ADD_EXECUTABLE(cleed MACOSX_BUNDLE ${cleed_SRCS})
+            INSTALL(TARGETS cleed BUNDLE DESTINATION ../Applications)
             
             TARGET_LINK_LIBRARIES(leed m)
             TARGET_LINK_LIBRARIES(leedStatic m)
@@ -271,6 +281,7 @@ ELSE (WIN32)
         ELSE(APPLE)
         
             ADD_EXECUTABLE(cleed_nsym ${cleed_nsym_SRCS})  
+            ADD_EXECUTABLE(cleed ${cleed_SRCS})
             
             TARGET_LINK_LIBRARIES(leed m)
             TARGET_LINK_LIBRARIES(leedStatic m)
@@ -280,27 +291,32 @@ ELSE (WIN32)
     
 ENDIF (WIN32)
 
+TARGET_COMPILE_DEFINITIONS(cleed PRIVATE CLEED_NO_MAIN)
+
 IF (WIN32)
     TARGET_LINK_LIBRARIES (cleed_nsym leedStatic m)
+    TARGET_LINK_LIBRARIES (cleed leedStatic m)
 ELSE()
     TARGET_LINK_LIBRARIES (cleed_nsym leed m)
+    TARGET_LINK_LIBRARIES (cleed leed m)
 ENDIF()
 IF (WITH_OPENCL STREQUAL "ON")
     TARGET_LINK_LIBRARIES(leed ${OPENCL_LIBRARIES})
     TARGET_LINK_LIBRARIES(leedStatic ${OPENCL_LIBRARIES})
     TARGET_LINK_LIBRARIES (cleed_nsym ${OPENCL_LIBRARIES})
+    TARGET_LINK_LIBRARIES (cleed ${OPENCL_LIBRARIES})
 ENDIF (WITH_OPENCL STREQUAL "ON")    
 
 
 IF (WIN32)
-    INSTALL (TARGETS leed cleed_nsym
+    INSTALL (TARGETS leed cleed_nsym cleed
         COMPONENT runtime
         BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin 
         LIBRARY DESTINATION bin
     )
 ELSE (WIN32)
-    INSTALL (TARGETS leed cleed_nsym
+    INSTALL (TARGETS leed cleed_nsym cleed
         COMPONENT runtime
         BUNDLE DESTINATION ../Applications
         RUNTIME DESTINATION bin 

@@ -2,11 +2,15 @@
 # Process this file with automake to produce Makefile.in
 lib_LIBRARIES = libleed.a
 
-bin_PROGRAMS = cleed_nsym
+bin_PROGRAMS = cleed_nsym cleed
 
 cleed_nsym_SOURCES = cleed_nsym.c
 
 cleed_nsym_LTADD = libleed_la
+
+cleed_SOURCES = cleed.c cleed_nsym.c ../leed_sym/cleed_sym.c
+cleed_CPPFLAGS = -DCLEED_NO_MAIN
+cleed_LTADD = libleed_la
 
 if WIN32
 bin_LTLIBRARY = libleed.la
@@ -115,6 +119,7 @@ libsearch_la_SOURCES =              \
 # program objects    
     cribasfun.c                     \
     prgcheck.c                      \
-    lhelp.c
+    lhelp.c                         \
+    cleed_mode.c
     
 libleed_a_SOURCES = $(libleed_la_SOURCES)

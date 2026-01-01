@@ -24,6 +24,16 @@ cleed_nsym \- compare experimental and calculated IV curves
 In this LEED code, fully dynamical scattering theory has been implemented along the lines of algorithms described by Pendry (layer doubling between successive layers of atoms
 
 Both program versions use the same input files, whereby cleed_sym needs some additional information, which is ignored by vanilla cleed (or sometimes cleed_nsym)
+.PP
+The unified
+.B cleed
+binary can select this mode automatically or via
+.B --sym
+and
+.B --nsym
+flags. The
+.B CLEED_SYM
+environment variable can also force the mode.
 
 .SH OPTIONS
 
@@ -102,6 +112,13 @@ This variable has to be set using the
 or 
 .I setenv
 UNIX commands, respectively, before the program is called for the first time.
+.RE
+.PP
+.B CLEED_SYM
+.RS
+Controls the symmetry mode when using
+.B cleed
+and accepts auto/yes/no/true/false/1/0. Command-line flags override this variable.
 .RE
 
 .\" Document here situations in which the program can be used, if there are uses that are not obvious.
