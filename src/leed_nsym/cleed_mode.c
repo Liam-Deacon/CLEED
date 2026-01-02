@@ -88,16 +88,27 @@ static int cleed_is_comment_start(unsigned char c)
 
 static int cleed_is_symmetry_token(const unsigned char *p)
 {
-  if ((p[0] == 's' || p[0] == 'S') &&
-      (p[1] == 'r' || p[1] == 'R' || p[1] == 'm' || p[1] == 'M'))
+  int first;
+  int second;
+
+  if (p[0] == '\0' || p[1] == '\0')
   {
-    if (p[2] == '\0' || p[2] == ':' || isspace(p[2]))
-    {
-      return 1;
-    }
+    return 0;
   }
 
-  return 0;
+  first = tolower(p[0]);
+  if (first != 's')
+  {
+    return 0;
+  }
+
+  second = tolower(p[1]);
+  if (second != 'r' && second != 'm')
+  {
+    return 0;
+  }
+
+  return p[2] == '\0' || p[2] == ':' || isspace(p[2]);
 }
 
 static int cleed_line_has_symmetry(const char *line)

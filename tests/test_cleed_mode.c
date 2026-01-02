@@ -46,7 +46,7 @@ int main(void)
     CLEED_TEST_ASSERT(cleed_parse_mode_value("maybe") == CLEED_MODE_INVALID);
 
     {
-        char path[L_tmpnam];
+        char path[256];
         int has_symmetry = 0;
         CLEED_TEST_ASSERT(write_temp_file("sr: 3 0.0 0.0\n", path, sizeof(path)) == 0);
         CLEED_TEST_ASSERT(cleed_detect_symmetry_file(path, &has_symmetry) == 0);
@@ -55,7 +55,7 @@ int main(void)
     }
 
     {
-        char path[L_tmpnam];
+        char path[256];
         int has_symmetry = 0;
         CLEED_TEST_ASSERT(write_temp_file("sm: 2 0.0 0.0\n", path, sizeof(path)) == 0);
         CLEED_TEST_ASSERT(cleed_detect_symmetry_file(path, &has_symmetry) == 0);
@@ -64,7 +64,7 @@ int main(void)
     }
 
     {
-        char path[L_tmpnam];
+        char path[256];
         int has_symmetry = 1;
         CLEED_TEST_ASSERT(write_temp_file("pb: Ni 0.0 0.0 0.0\n", path, sizeof(path)) == 0);
         CLEED_TEST_ASSERT(cleed_detect_symmetry_file(path, &has_symmetry) == 0);
