@@ -18,7 +18,7 @@ else
 lib_LTLIBRARY = libleed.la
 endif
 
-libsearch_la_SOURCES =              \
+libleed_la_SOURCES =               \
 # basic quantum mechanics functions    
     qmbessm.c                       \
     qmcgc.c                         \

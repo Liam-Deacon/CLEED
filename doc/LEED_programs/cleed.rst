@@ -248,7 +248,7 @@ add :code:`START /B` to the beginning of the command instead of using :code:`&`.
     cleed --nsym -c *.ctr -i *.inp -b *.bul -v *.ver 1>>*.out 2>>*.err &
 
 This will restart :ref:`cleed_nsym` from the last set of vertices and appends 
-output to the :file:`*.out` and :file:`*err` log files.
+output to the :file:`*.out` and :file:`*.err` log files.
     
 .. note::
   In the preceding examples replace any :code:`*.<ext>` with the actual file name of 

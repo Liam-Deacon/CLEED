@@ -81,6 +81,21 @@ static int cleed_should_show_help(int argc, char *argv[])
   return 0;
 }
 
+static int cleed_should_show_version(int argc, char *argv[])
+{
+  int i;
+
+  for (i = 1; i < argc; i++)
+  {
+    if (strcmp(argv[i], "-V") == 0 || strcmp(argv[i], "--version") == 0)
+    {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
 static void cleed_scan_inputs(int argc, char *argv[],
                               const char **par_file,
                               const char **bul_file)
@@ -214,6 +229,7 @@ int main(int argc, char *argv[])
   int mode_set = 0;
   const char *par_file = NULL;
   const char *bul_file = NULL;
+  int show_version = 0;
   int out_argc;
 
   if (cleed_should_show_help(argc, argv))
@@ -222,6 +238,7 @@ int main(int argc, char *argv[])
     return 0;
   }
 
+  show_version = cleed_should_show_version(argc, argv);
   cleed_scan_inputs(argc, argv, &par_file, &bul_file);
 
   if (cleed_collect_mode_flags(argc, argv, &mode, &mode_set) != 0)
@@ -237,6 +254,17 @@ int main(int argc, char *argv[])
   if (mode == CLEED_MODE_AUTO)
   {
     mode = cleed_resolve_auto(par_file, bul_file);
+  }
+
+  if (show_version)
+  {
+    out_argc = cleed_strip_mode_flags(argc, argv);
+    if (mode == CLEED_MODE_SYM)
+    {
+      return cleed_sym_main(out_argc, argv);
+    }
+
+    return cleed_nsym_main(out_argc, argv);
   }
 
   out_argc = cleed_strip_mode_flags(argc, argv);
