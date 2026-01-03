@@ -45,7 +45,7 @@ LD/02.04.14 - added '--help', '-h' & '-V' options for usage and info,
 
 /*======================================================================*/
 
-int main(int argc, char *argv[])
+int cleed_nsym_main(int argc, char *argv[])
 
 /*********************************************************************
  Perform a LEED calculation for anisotropic vibrations a general case
@@ -624,4 +624,11 @@ FILE *res_stream;
   exit(0);
   return(0);
 
-} /* end of main */
+} /* end of cleed_nsym_main */
+
+#ifndef CLEED_NO_MAIN
+int main(int argc, char *argv[])
+{
+  return cleed_nsym_main(argc, argv);
+}
+#endif
