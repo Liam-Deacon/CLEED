@@ -135,7 +135,7 @@ static void cr_rs_integrate(const real *eng, const real *e_y, const real *t_y,
   }
 }
 
-real cr_rs(real *eng, real *e_int, real *t_int, real vi)
+real cr_rs(const real *eng, const real *e_int, const real *t_int, real vi)
 {
   struct cr_rs_arrays arrays = {0};
   const int n_eng = cr_rs_count_points(eng);
