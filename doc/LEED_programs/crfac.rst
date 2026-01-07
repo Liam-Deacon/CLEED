@@ -7,9 +7,9 @@ crfac performs a comparison between(theory) and experimental IV curves.
 The agreement is quantified in terms of the reliability factor (or R factor), 
 which can vary between 0 (perfect fit) and 1 (uncorrelated). For most applications 
 an acceptable R factor is <0.1 for very simple models and <0.3 for complicated 
-structures. The program offers the choice between four different R-factors 
+structures. The program offers the choice between five different R-factors 
 that can be used when minimising a structural search. These are :math:`R_1`,
-:math:`R_2`, :math:`R_p` and :math:`R_B`. The output R-factor value is the 
+:math:`R_2`, :math:`R_p`, :math:`R_s` and :math:`R_B`. The output R-factor value is the 
 optimum achieved by shifting the energy axes of the experimental and theoretical I-V 
 curves with respect to each other. This shift acts as a correction for any non-optimum 
 value of the optical potential in the LEED calculations, which therefore need not be 
@@ -58,6 +58,13 @@ Options
   
   specifies the R-factor type to be calculated. Valid arguments
   are:
+
+  - ``r1``: :math:`R_1`.
+  - ``r2``: :math:`R_2`, the mean-square-displacement factor.
+  - ``rb``: :math:`R_{B1}` and :math:`R_{B2}`.
+  - ``rp``: Pendry :math:`R_p`.
+  - ``rs``: improved reliability factor :math:`R_s`
+    (`Imre et al., 2025 <https://arxiv.org/abs/2511.05448>`_), smoother near intensity minima.
   
 :code:`-s <shift1,shift2,shift3>`
 
@@ -73,7 +80,7 @@ Options
 :code:`-v  <optical_potential>`
 
   specifies  the  value of the optical potential :math:`V_i` (in eV)
-  used in the evaluation of Pendry's R-factor (:math:`R_p`). :math:`2V_i` 
+  used in the evaluation of Pendry's and :math:`R_s` factors. :math:`2V_i` 
   determines smallest resolvable features in the IV curves.
   The default is 4 eV, however in situations where the interlayer
   spacings are very small, such as for intermetallic compounds, :math:`V_i` 
@@ -90,6 +97,32 @@ Options
   plotted. <IV_output_prefix> specifies the base filename to which
   the  letters  'e' (experimental) or 't' (theoretical) as well as
   the number of the pair of curves is appended.
+
+.. _crfac_rs:
+
+Improved :math:`R_s`
+--------------------
+
+The improved reliability factor :math:`R_s` uses the same ratio as Pendry's
+:math:`R_p`, but replaces the :math:`Y` function with a smooth variant
+:math:`Y_s` [Imre2025]_. Using :math:`I(E)` for the intensity and
+:math:`V_i` for the optical potential, the definitions are:
+
+.. math::
+
+   y_1 = \\frac{\\alpha}{V_i^2}\\left(\\frac{I}{I''} - \\frac{(I')^2}{2 (I'')^2}\\right) + \\beta
+
+   y_2 = \\frac{y_1}{\\sqrt{1 + y_1^2}}
+
+   Y_s = \\begin{cases}
+     \\dfrac{I'}{\\sqrt{I^2 + 4 V_i^2 (I')^2 + y_2^2 V_i^4 (I'')^2}}, & I'' > 0 \\text{ and } y_1 > 0 \\\\
+     \\dfrac{I'}{\\sqrt{I^2 + 4 V_i^2 (I')^2}}, & \\text{otherwise}
+   \\end{cases}
+
+   R_s = \\frac{\\int (Y_{\\mathrm{exp}} - Y_{\\mathrm{th}})^2 \\, dE}
+                {\\int (Y_{\\mathrm{exp}}^2 + Y_{\\mathrm{th}}^2) \\, dE}
+
+with :math:`\\alpha = 4` and :math:`\\beta = 0.15`.
 
 Environment
 -----------
@@ -130,3 +163,8 @@ is given by: :math:`RR = (\frac{8 V_i}{\delta E})^{\frac{1}{2}}`, where :math:`V
 is the imaginary component of the optical potential and :math:`\delta E` is the energy 
 range of the data. This provides the error bars, :math:`E = (1 + RR) * R_{\text{min}}`, where
 :math:`R_{\text{min}}` is the minimum R factor for the data.
+
+.. [Imre2025] Alexander M. Imre, Lutz Hammer, Ulrike Diebold, Michele Riva,
+   Michael Schmid, "An improved reliability factor for quantitative low-energy
+   electron diffraction", arXiv:2511.05448 (2025),
+   https://arxiv.org/abs/2511.05448

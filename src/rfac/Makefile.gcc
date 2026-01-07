@@ -71,6 +71,7 @@ CRFACLIB= crfinput.o \
           crfrmin.o \
           crfrb.o \
           crfrp.o \
+          crfrs.o \
           crfr1.o \
           crfr2.o \
           crfsort.o \

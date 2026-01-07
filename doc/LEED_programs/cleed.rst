@@ -171,12 +171,27 @@ Options
   + :code:`rb` : (calculates :math:`R_{B1}` and :math:`R_{B2}`)
 
   + :code:`rp` : calculates the Pendry R factor :math:`R_p`. This provides the level of 
-    agreement on shape of curves, not the intensity by comparing logarithmic 
-    derivatives, :math:`R_p = \frac{1}{I(E)} \times \frac{\delta I(E)}{\delta E}`, and 
-    is the standard in I(V) analysis. The Pendry R factor is problematic with 
+    agreement on shape of curves, not the intensity, by comparing the Pendry-style
+    :math:`Y` function derived from the logarithmic derivative :math:`L(E)`.
+
+    .. math::
+
+       L(E) = \\frac{I'(E)}{I(E)}
+
+       Y_P(E) = \\frac{L}{1 + V_i^2 L^2} = \\frac{I I'}{I^2 + V_i^2 (I')^2}
+
+       R_P = \\frac{\\int (Y_{\\mathrm{exp}} - Y_{\\mathrm{th}})^2 \\, dE}
+                  {\\int (Y_{\\mathrm{exp}}^2 + Y_{\\mathrm{th}}^2) \\, dE}
+
+    The Pendry R factor is problematic with 
     experimental noise as it is sensitive to positions of peaks, not intensity and 
     therefore noisy data will result in extra 'peaks'. The workaround for this 
     is to smooth or average the experimental data using a tool such as :ref:`ftsmooth`.
+
+  + :code:`rs` : calculates the improved reliability factor :math:`R_s`
+    (`Imre et al., 2025 <https://arxiv.org/abs/2511.05448>`_), which smooths the
+    Pendry-style :math:`Y` function at intensity minima. See :ref:`crfac_rs` for the
+    full definition and citation.
 
 :code:`-s <shift1,shift2,shift3>`
 
@@ -191,7 +206,7 @@ Options
 :code:`-v <optical_potential>`
 
   specifies the value of the optical potential :math:`V_i` (in eV) used in the 
-  evaluation of Pendry's R-factor (:math:`R_p`). :math:`2V_i` determines 
+  evaluation of Pendry's and :math:`R_s` factors. :math:`2V_i` determines 
   smallest resolvable features in the IV curves. The default is 4 eV, however 
   in situations where the interlayer spacings are very small, such as for 
   intermetallic compounds, :math:`V_i` may need to be increased (but 
