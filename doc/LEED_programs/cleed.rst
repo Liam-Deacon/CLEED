@@ -158,9 +158,9 @@ Options
     therefore noisy data will result in extra 'peaks'. The workaround for this 
     is to smooth or average the experimental data using a tool such as :ref:`ftsmooth`.
 
-  + :code:`rs` : calculates the improved reliability factor :math:`R_s` (Imre et al., 2025),
-    which smooths the Pendry-style :math:`Y` function at intensity minima.
-    See :ref:`crfac_rs` for the full definition and citation.
+  + :code:`rs` : calculates the improved reliability factor :math:`R_s` (Imre et al., 2025,
+    arXiv:2511.05448), which smooths the Pendry-style :math:`Y` function at intensity
+    minima. See :ref:`crfac_rs` for the full definition and citation.
 
 :code:`-s <shift1,shift2,shift3>`
 
