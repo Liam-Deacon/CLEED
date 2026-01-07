@@ -60,7 +60,7 @@ Options
   are:
 
   - ``r1``: :math:`R_1`.
-  - ``r2``: :math:`R_2` mean-square displacement.
+  - ``r2``: :math:`R_2`, the mean-square-displacement factor.
   - ``rb``: :math:`R_{B1}` and :math:`R_{B2}`.
   - ``rp``: Pendry :math:`R_p`.
   - ``rs``: improved reliability factor :math:`R_s`
