@@ -10,6 +10,12 @@ This page defines the environment variables referenced throughout the manual.
 
    Parent directory of the CLEED distribution.
 
+.. envvar:: CLEED_SYM
+
+   Controls the symmetry mode used by :ref:`cleed`. Accepted values are
+   ``auto``, ``yes``, ``no``, ``true``, ``false``, ``1``, and ``0``.
+   Command-line flags (``--auto``, ``--sym``, ``--nsym``) override this variable.
+
 .. envvar:: PATH
 
    System search path used to locate executables.
@@ -21,7 +27,7 @@ This page defines the environment variables referenced throughout the manual.
 .. envvar:: CSEARCH_LEED
 
    Path to the LEED-IV program executable used by :ref:`csearch` (commonly
-   :ref:`cleed_nsym`).
+   :ref:`cleed` or :ref:`cleed_nsym`).
 
 .. envvar:: CSEARCH_RFAC
 

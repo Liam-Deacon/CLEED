@@ -9,6 +9,18 @@ add_library(cleed_test_support OBJECT
 )
 target_include_directories(cleed_test_support PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
 
+add_executable(test_cleed_mode
+    test_cleed_mode.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_cleed_mode PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_cleed_mode PRIVATE leedStatic m)
+else()
+    target_link_libraries(test_cleed_mode PRIVATE leed m)
+endif()
+add_test(NAME cleed.mode COMMAND test_cleed_mode)
+
 add_executable(test_lattice_read
     test_lattice_read.c
     $<TARGET_OBJECTS:latt_core>
