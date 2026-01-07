@@ -6,6 +6,7 @@
 
 #include "crfac.h"
 
+/* Constants from Imre et al., 2025 (https://arxiv.org/abs/2511.05448). */
 #define RS_ALPHA 4.0
 #define RS_BETA 0.15
 
@@ -61,19 +62,34 @@ static void cr_rs_derivatives(const real *eng, const real *intens, int n,
     return;
   }
 
-  d1[0] = (intens[1] - intens[0]) / (eng[1] - eng[0]);
+  {
+    const real denom = eng[1] - eng[0];
+    d1[0] = IS_EQUAL_REAL(denom, 0.0) ? 0.0 : (intens[1] - intens[0]) / denom;
+  }
   d2[0] = 0.0;
 
   for (int i = 1; i < n - 1; i++) {
     const real h_prev = eng[i] - eng[i - 1];
     const real h_next = eng[i + 1] - eng[i];
-    d1[i] = (intens[i + 1] - intens[i - 1]) / (eng[i + 1] - eng[i - 1]);
+    const real denom = eng[i + 1] - eng[i - 1];
+    const real step_sum = h_prev + h_next;
+    if (IS_EQUAL_REAL(h_prev, 0.0) || IS_EQUAL_REAL(h_next, 0.0) ||
+        IS_EQUAL_REAL(denom, 0.0) || IS_EQUAL_REAL(step_sum, 0.0)) {
+      d1[i] = 0.0;
+      d2[i] = 0.0;
+      continue;
+    }
+    d1[i] = (intens[i + 1] - intens[i - 1]) / denom;
     d2[i] = 2.0 * ((intens[i + 1] - intens[i]) / h_next -
-                   (intens[i] - intens[i - 1]) / h_prev) /
-            (h_prev + h_next);
+                   (intens[i] - intens[i - 1]) / h_prev) / step_sum;
   }
 
-  d1[n - 1] = (intens[n - 1] - intens[n - 2]) / (eng[n - 1] - eng[n - 2]);
+  {
+    const real denom = eng[n - 1] - eng[n - 2];
+    d1[n - 1] = IS_EQUAL_REAL(denom, 0.0)
+                  ? 0.0
+                  : (intens[n - 1] - intens[n - 2]) / denom;
+  }
   d2[n - 1] = 0.0;
 }
 
