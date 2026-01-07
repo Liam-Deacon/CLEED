@@ -68,9 +68,7 @@ static int cleed_option_takes_value(const char *arg)
 
 static int cleed_should_show_help(int argc, char *argv[])
 {
-  int i;
-
-  for (i = 1; i < argc; i++)
+  for (int i = 1; i < argc; i++)
   {
     if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0)
     {
@@ -85,21 +83,27 @@ static void cleed_scan_inputs(int argc, char *argv[],
                               const char **par_file,
                               const char **bul_file)
 {
-  int i;
+  int skip_next = 0;
 
-  for (i = 1; i < argc; i++)
+  for (int i = 1; i < argc; i++)
   {
+    if (skip_next)
+    {
+      skip_next = 0;
+      continue;
+    }
+
     if (strcmp(argv[i], "-i") == 0 && i + 1 < argc)
     {
       *par_file = argv[i + 1];
-      i++;
+      skip_next = 1;
       continue;
     }
 
     if (strcmp(argv[i], "-b") == 0 && i + 1 < argc)
     {
       *bul_file = argv[i + 1];
-      i++;
+      skip_next = 1;
     }
   }
 }
@@ -107,17 +111,23 @@ static void cleed_scan_inputs(int argc, char *argv[],
 static int cleed_collect_mode_flags(int argc, char *argv[],
                                     cleed_mode_t *mode, int *mode_set)
 {
-  int i;
+  int skip_next = 0;
 
-  for (i = 1; i < argc; i++)
+  for (int i = 1; i < argc; i++)
   {
     cleed_mode_t flag_mode;
+
+    if (skip_next)
+    {
+      skip_next = 0;
+      continue;
+    }
 
     if (!cleed_is_mode_flag(argv[i], &flag_mode))
     {
       if (cleed_option_takes_value(argv[i]) && i + 1 < argc)
       {
-        i++;
+        skip_next = 1;
       }
       continue;
     }
@@ -136,26 +146,49 @@ static int cleed_collect_mode_flags(int argc, char *argv[],
   return 0;
 }
 
+#ifdef _MSC_VER
+static const char *cleed_env_value(char **owned)
+{
+  char *value = NULL;
+  size_t value_len = 0;
+
+  if (_dupenv_s(&value, &value_len, "CLEED_SYM") != 0 ||
+      value == NULL || value_len == 0)
+  {
+    free(value);
+    return NULL;
+  }
+
+  *owned = value;
+  return value;
+}
+
+static void cleed_release_env_value(char *value)
+{
+  free(value);
+}
+#else
+static const char *cleed_env_value(char **owned)
+{
+  (void)owned;
+  return getenv("CLEED_SYM");
+}
+
+static void cleed_release_env_value(char *value)
+{
+  (void)value;
+}
+#endif
+
 static int cleed_apply_env_mode(cleed_mode_t *mode)
 {
-#ifdef _MSC_VER
-  char *env_value = NULL;
-  size_t env_len = 0;
-
-  if (_dupenv_s(&env_value, &env_len, "CLEED_SYM") != 0 ||
-      env_value == NULL || env_len == 0)
-  {
-    free(env_value);
-    return 0;
-  }
-#else
-  const char *env_value = getenv("CLEED_SYM");
+  char *owned_value = NULL;
+  const char *env_value = cleed_env_value(&owned_value);
 
   if (env_value == NULL)
   {
     return 0;
   }
-#endif
 
   *mode = cleed_parse_mode_value(env_value);
   if (*mode == CLEED_MODE_INVALID)
@@ -165,15 +198,11 @@ static int cleed_apply_env_mode(cleed_mode_t *mode)
             env_value);
     fprintf(stderr,
             "    expected auto|yes|no|true|false|1|0\n");
-#ifdef _MSC_VER
-    free(env_value);
-#endif
+    cleed_release_env_value(owned_value);
     return 1;
   }
 
-#ifdef _MSC_VER
-  free(env_value);
-#endif
+  cleed_release_env_value(owned_value);
   return 0;
 }
 
@@ -202,11 +231,17 @@ static cleed_mode_t cleed_resolve_auto(const char *par_file,
 static int cleed_strip_mode_flags(int argc, char *argv[])
 {
   int out_argc = 1;
-  int i;
+  int skip_next = 0;
 
-  for (i = 1; i < argc; i++)
+  for (int i = 1; i < argc; i++)
   {
     cleed_mode_t flag_mode;
+
+    if (skip_next)
+    {
+      skip_next = 0;
+      continue;
+    }
 
     if (cleed_is_mode_flag(argv[i], &flag_mode))
     {
@@ -218,7 +253,7 @@ static int cleed_strip_mode_flags(int argc, char *argv[])
     if (cleed_option_takes_value(argv[i]) && i + 1 < argc)
     {
       argv[out_argc++] = argv[i + 1];
-      i++;
+      skip_next = 1;
     }
   }
 

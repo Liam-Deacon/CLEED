@@ -13,26 +13,24 @@
 
 static int cleed_match_value(const char *value, const char *token)
 {
-  size_t i;
-
-  for (i = 0; value[i] != '\0' && token[i] != '\0'; i++)
+  while (*value != '\0' && *token != '\0')
   {
-    if (tolower((unsigned char)value[i]) != tolower((unsigned char)token[i]))
+    if (tolower((unsigned char)*value) != tolower((unsigned char)*token))
     {
       return 0;
     }
+    value++;
+    token++;
   }
 
-  return value[i] == '\0' && token[i] == '\0';
+  return *value == '\0' && *token == '\0';
 }
 
 static int cleed_value_in_list(const char *value,
                                const char *const *list,
                                size_t list_size)
 {
-  size_t i;
-
-  for (i = 0; i < list_size; i++)
+  for (size_t i = 0; i < list_size; i++)
   {
     if (cleed_match_value(value, list[i]))
     {
@@ -124,10 +122,40 @@ static int cleed_line_has_symmetry(const char *line)
   return cleed_is_symmetry_token(p);
 }
 
+static FILE *cleed_open_symmetry_stream(const char *path)
+{
+#ifdef _MSC_VER
+  FILE *stream = NULL;
+
+  if (fopen_s(&stream, path, "r") != 0)
+  {
+    return NULL;
+  }
+
+  return stream;
+#else
+  return fopen(path, "r");
+#endif
+}
+
+static int cleed_scan_symmetry_stream(FILE *stream)
+{
+  char line[512];
+
+  while (fgets(line, sizeof(line), stream) != NULL)
+  {
+    if (cleed_line_has_symmetry(line))
+    {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
 int cleed_detect_symmetry_file(const char *path, int *has_symmetry)
 {
   FILE *stream = NULL;
-  char line[512];
   int found = 0;
 
   if (has_symmetry != NULL)
@@ -140,27 +168,13 @@ int cleed_detect_symmetry_file(const char *path, int *has_symmetry)
     return -1;
   }
 
-#ifdef _MSC_VER
-  if (fopen_s(&stream, path, "r") != 0 || stream == NULL)
-  {
-    return -1;
-  }
-#else
-  stream = fopen(path, "r");
+  stream = cleed_open_symmetry_stream(path);
   if (stream == NULL)
   {
     return -1;
   }
-#endif
 
-  while (fgets(line, sizeof(line), stream) != NULL)
-  {
-    if (cleed_line_has_symmetry(line))
-    {
-      found = 1;
-      break;
-    }
-  }
+  found = cleed_scan_symmetry_stream(stream);
 
   fclose(stream);
 

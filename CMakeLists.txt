@@ -43,6 +43,8 @@ ENDIF()
 ##############################################################################
 
 PROJECT(CLEED)
+SET(CMAKE_C_STANDARD 99)
+SET(CMAKE_C_STANDARD_REQUIRED ON)
 INCLUDE(CTest)
 SET(CPACK_PACKAGE_NAME "CLEED")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Automated Surface Structure determination from LEED-IV curves")
