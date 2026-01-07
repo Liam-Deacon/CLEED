@@ -141,10 +141,19 @@ Options
   + :code:`rb` : (calculates :math:`R_{B1}` and :math:`R_{B2}`)
 
   + :code:`rp` : calculates the Pendry R factor :math:`R_p`. This provides the level of 
-    agreement on shape of curves, not the intensity by comparing the Pendry-style 
-    :math:`Y` function derived from the logarithmic derivative 
-    :math:`L(E) = I'(E)/I(E)`, and is the standard in I(V) analysis. The Pendry 
-    R factor is problematic with 
+    agreement on shape of curves, not the intensity, by comparing the Pendry-style
+    :math:`Y` function derived from the logarithmic derivative :math:`L(E)`.
+
+    .. math::
+
+       L(E) = \\frac{I'(E)}{I(E)}
+
+       Y_P(E) = \\frac{L}{1 + V_i^2 L^2} = \\frac{I I'}{I^2 + V_i^2 (I')^2}
+
+       R_P = \\frac{\\int (Y_{\\mathrm{exp}} - Y_{\\mathrm{th}})^2 \\, dE}
+                  {\\int (Y_{\\mathrm{exp}}^2 + Y_{\\mathrm{th}}^2) \\, dE}
+
+    The Pendry R factor is problematic with 
     experimental noise as it is sensitive to positions of peaks, not intensity and 
     therefore noisy data will result in extra 'peaks'. The workaround for this 
     is to smooth or average the experimental data using a tool such as :ref:`ftsmooth`.
