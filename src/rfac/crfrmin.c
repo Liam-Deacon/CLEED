@@ -29,6 +29,9 @@ GH/12.09.95 - Output of IV curves for the best overlap
 
 #define SHIFT_DE
 
+/**
+ * Format output filenames for individual IV curves.
+ */
 static void cr_format_iv_filename(char *buffer, size_t size,
                                   const char *prefix, int index, char suffix)
 {

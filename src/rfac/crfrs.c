@@ -18,6 +18,9 @@ struct cr_rs_arrays {
   real *t_y;
 };
 
+/**
+ * Compute the smooth Y_s value for a single intensity point.
+ */
 static real cr_rs_y(real intensity, real deriv, real deriv2, real vi)
 {
   const real vi2 = vi * vi;
@@ -48,6 +51,9 @@ static real cr_rs_y(real intensity, real deriv, real deriv2, real vi)
   return denom > 0.0 ? (deriv / denom) : 0.0;
 }
 
+/**
+ * Compute first and second energy derivatives of the intensity curve.
+ */
 static void cr_rs_derivatives(const real *eng, const real *intens, int n,
                               real *d1, real *d2)
 {
@@ -71,6 +77,9 @@ static void cr_rs_derivatives(const real *eng, const real *intens, int n,
   d2[n - 1] = 0.0;
 }
 
+/**
+ * Count energy points until the end-of-list marker.
+ */
 static int cr_rs_count_points(const real *eng)
 {
   int n = 0;
@@ -82,6 +91,9 @@ static int cr_rs_count_points(const real *eng)
   return n;
 }
 
+/**
+ * Release arrays used by the R_s calculation.
+ */
 static void cr_rs_free_arrays(struct cr_rs_arrays *arrays)
 {
   free(arrays->e_d1);
@@ -95,6 +107,9 @@ static void cr_rs_free_arrays(struct cr_rs_arrays *arrays)
   arrays->e_y = arrays->t_y = NULL;
 }
 
+/**
+ * Allocate arrays used by the R_s calculation.
+ */
 static int cr_rs_alloc_arrays(struct cr_rs_arrays *arrays, int n)
 {
   arrays->e_d1 = (real *)malloc(n * sizeof(real));
@@ -113,6 +128,9 @@ static int cr_rs_alloc_arrays(struct cr_rs_arrays *arrays, int n)
   return 1;
 }
 
+/**
+ * Evaluate Y_s values for a full intensity curve.
+ */
 static void cr_rs_fill_y(const real *intens, const real *d1, const real *d2,
                           int n, real vi, real *out_y)
 {
@@ -121,6 +139,9 @@ static void cr_rs_fill_y(const real *intens, const real *d1, const real *d2,
   }
 }
 
+/**
+ * Integrate the numerator and denominator terms of R_s.
+ */
 static void cr_rs_integrate(const real *eng, const real *e_y, const real *t_y,
                             int n, real *rf_sum, real *exp_sum, real *the_sum)
 {
@@ -135,6 +156,9 @@ static void cr_rs_integrate(const real *eng, const real *e_y, const real *t_y,
   }
 }
 
+/**
+ * Compute the improved R_s reliability factor.
+ */
 real cr_rs(const real *eng, const real *e_int, const real *t_int, real vi)
 {
   struct cr_rs_arrays arrays = {0};
