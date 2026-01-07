@@ -78,7 +78,7 @@ Displacement tokens for ``pb``
   optional temperature.
 
 Example (from ``examples/models/nicu/Ni111_Cu.bul``)
-===================================================
+====================================================
 
 .. literalinclude:: ../../examples/models/nicu/Ni111_Cu.bul
    :language: none

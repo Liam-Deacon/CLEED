@@ -26,7 +26,7 @@ Supported keys:
   energy in the theoretical data).
 
 Example (from ``examples/models/nicu/Ni111_Cu.ctr``)
-===================================================
+====================================================
 
 .. literalinclude:: ../../examples/models/nicu/Ni111_Cu.ctr
    :language: none

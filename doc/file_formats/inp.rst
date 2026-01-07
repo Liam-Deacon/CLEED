@@ -103,7 +103,7 @@ Displacement tokens for ``po``
   optional temperature.
 
 Example (from ``examples/models/nio/Ni111_2x2O.inp``)
-====================================================
+=====================================================
 
 .. literalinclude:: ../../examples/models/nio/Ni111_2x2O.inp
    :language: none
