@@ -216,27 +216,27 @@ FILE *out_stream;
        if(args->r_type == RP_FACTOR)
        {
          rfac = cr_rp(eng, e_int, t_int, args->vi);
-         strcpy(r_name,"Rp");
+         snprintf(r_name, sizeof(r_name), "%s", "Rp");
        }
        else if (args->r_type == RS_FACTOR)
        {
          rfac = cr_rs(eng, e_int, t_int, args->vi);
-         strcpy(r_name,"Rs");
+         snprintf(r_name, sizeof(r_name), "%s", "Rs");
        }
        else if (args->r_type == R1_FACTOR)
        {
          rfac = cr_r1(eng, e_int, t_int);
-         strcpy(r_name,"R1");
+         snprintf(r_name, sizeof(r_name), "%s", "R1");
        }
        else if (args->r_type == R2_FACTOR)
        {
          rfac = cr_r2(eng, e_int, t_int);
-         strcpy(r_name,"R2");
+         snprintf(r_name, sizeof(r_name), "%s", "R2");
        }
        else if (args->r_type == RB_FACTOR)
        {
          rfac = cr_rb(eng, e_int, t_int);
-         strcpy(r_name,"Rb");
+         snprintf(r_name, sizeof(r_name), "%s", "Rb");
        }
 
 /* Calculate sum of theor. intensities for normalization */
