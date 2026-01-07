@@ -244,8 +244,11 @@ FILE *out_stream;
        for(i_leng = 0; i_leng < n_leng; i_leng++)
          norm += t_int[i_leng];
 
-       if(i_list < 9) sprintf(linebuffer,"%s.0%dt",args->iv_file, i_list+1);
-       else           sprintf(linebuffer,"%s.%dt", args->iv_file, i_list+1);
+       if (i_list < 9) {
+         snprintf(linebuffer, sizeof(linebuffer), "%s.0%dt", args->iv_file, i_list + 1);
+       } else {
+         snprintf(linebuffer, sizeof(linebuffer), "%s.%dt", args->iv_file, i_list + 1);
+       }
        out_stream = fopen(linebuffer,"w");
 #ifdef CONTROL
        fprintf(STDCTR,"(cr_rmin): write to file %s\n", linebuffer);
@@ -271,8 +274,11 @@ FILE *out_stream;
 
        norm /= faux;
 
-       if(i_list < 9) sprintf(linebuffer,"%s.0%de",args->iv_file, i_list+1);
-       else           sprintf(linebuffer,"%s.%de", args->iv_file, i_list+1);
+       if (i_list < 9) {
+         snprintf(linebuffer, sizeof(linebuffer), "%s.0%de", args->iv_file, i_list + 1);
+       } else {
+         snprintf(linebuffer, sizeof(linebuffer), "%s.%de", args->iv_file, i_list + 1);
+       }
        out_stream = fopen(linebuffer,"w");
 #ifdef CONTROL
        fprintf(STDCTR,"(cr_rmin): write to file %s\n", linebuffer);
