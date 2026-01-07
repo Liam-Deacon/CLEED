@@ -7,6 +7,24 @@
 // cppcheck-suppress missingIncludeSystem
 #include <string.h>
 
+static int test_set_env_value(const char *name, const char *value)
+{
+#ifdef _WIN32
+    return _putenv_s(name, value);
+#else
+    return setenv(name, value, 1);
+#endif
+}
+
+static int test_unset_env_value(const char *name)
+{
+#ifdef _WIN32
+    return _putenv_s(name, "");
+#else
+    return unsetenv(name);
+#endif
+}
+
 static int test_lookup_by_name(void)
 {
     const sr_optimizer_def *opt = NULL;
@@ -42,9 +60,9 @@ static int test_config_from_env(void)
     sr_optimizer_config cfg;
     sr_optimizer_config_init(&cfg);
 
-    setenv("CSEARCH_MAX_EVALS", "123", 1);
-    setenv("CSEARCH_MAX_ITERS", "456", 1);
-    setenv("CSEARCH_SEED", "789", 1);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_EVALS", "123") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_ITERS", "456") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_SEED", "789") == 0);
 
     sr_optimizer_config_from_env(&cfg);
 
@@ -52,9 +70,9 @@ static int test_config_from_env(void)
     CLEED_TEST_ASSERT(cfg.max_iters == 456);
     CLEED_TEST_ASSERT(cfg.seed == 789);
 
-    unsetenv("CSEARCH_MAX_EVALS");
-    unsetenv("CSEARCH_MAX_ITERS");
-    unsetenv("CSEARCH_SEED");
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_SEED") == 0);
 
     return 0;
 }
