@@ -11,6 +11,8 @@
 
 #include "cleed_mode.h"
 
+#define CLEED_SYM_LINE_MAX 512
+
 static int cleed_match_value(const char *value, const char *token)
 {
   while (*value != '\0' && *token != '\0')
@@ -140,7 +142,7 @@ static FILE *cleed_open_symmetry_stream(const char *path)
 
 static int cleed_scan_symmetry_stream(FILE *stream)
 {
-  char line[512];
+  char line[CLEED_SYM_LINE_MAX];
 
   while (fgets(line, sizeof(line), stream) != NULL)
   {
