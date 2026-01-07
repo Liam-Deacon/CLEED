@@ -64,7 +64,7 @@ real cr_rb( real *, real *, real *);            /* Rb1 factor */
 real cr_rp( real *, real *, real *, real );     /* Pendry's R factor */
 real cr_rs( const real *, const real *, const real *, real );     /* R_S factor */
 
-real cr_rmin( struct crivcur *, struct crargs *, real *, real *, real *);
+real cr_rmin( struct crivcur *, const struct crargs *, real *, real *, real *);
 
 
 #endif /* CRFAC_FUNC_H */

@@ -2,7 +2,7 @@
 GH/12.09.95
 file contains function:
 
-   real cr_rmin( struct crivcur *iv_cur, struct crargs *args,
+   real cr_rmin( struct crivcur *iv_cur, const struct crargs *args,
                 real *p_r_min, real *p_s_min, real *p_e_range)
 
  Calculate R factor and find minimum with respect to shift
@@ -42,7 +42,7 @@ static void cr_format_iv_filename(char *buffer, size_t size,
   }
 }
 
-real cr_rmin( struct crivcur *iv_cur, struct crargs *args,
+real cr_rmin( struct crivcur *iv_cur, const struct crargs *args,
               real *p_r_min, real *p_s_min, real *p_e_range)
 
 /********************************************************************
