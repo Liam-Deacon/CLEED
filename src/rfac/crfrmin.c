@@ -29,6 +29,16 @@ GH/12.09.95 - Output of IV curves for the best overlap
 
 #define SHIFT_DE
 
+static void cr_format_iv_filename(char *buffer, size_t size,
+                                  const char *prefix, int index, char suffix)
+{
+  if (index < 9) {
+    snprintf(buffer, size, "%s.0%d%c", prefix, index + 1, suffix);
+  } else {
+    snprintf(buffer, size, "%s.%d%c", prefix, index + 1, suffix);
+  }
+}
+
 real cr_rmin( struct crivcur *iv_cur, struct crargs *args,
               real *p_r_min, real *p_s_min, real *p_e_range)
 
@@ -244,11 +254,8 @@ FILE *out_stream;
        for(i_leng = 0; i_leng < n_leng; i_leng++)
          norm += t_int[i_leng];
 
-       if (i_list < 9) {
-         snprintf(linebuffer, sizeof(linebuffer), "%s.0%dt", args->iv_file, i_list + 1);
-       } else {
-         snprintf(linebuffer, sizeof(linebuffer), "%s.%dt", args->iv_file, i_list + 1);
-       }
+       cr_format_iv_filename(linebuffer, sizeof(linebuffer),
+                             args->iv_file, i_list, 't');
        out_stream = fopen(linebuffer,"w");
 #ifdef CONTROL
        fprintf(STDCTR,"(cr_rmin): write to file %s\n", linebuffer);
@@ -274,11 +281,8 @@ FILE *out_stream;
 
        norm /= faux;
 
-       if (i_list < 9) {
-         snprintf(linebuffer, sizeof(linebuffer), "%s.0%de", args->iv_file, i_list + 1);
-       } else {
-         snprintf(linebuffer, sizeof(linebuffer), "%s.%de", args->iv_file, i_list + 1);
-       }
+       cr_format_iv_filename(linebuffer, sizeof(linebuffer),
+                             args->iv_file, i_list, 'e');
        out_stream = fopen(linebuffer,"w");
 #ifdef CONTROL
        fprintf(STDCTR,"(cr_rmin): write to file %s\n", linebuffer);
