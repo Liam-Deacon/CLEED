@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="360" viewBox="0 0 560 360">
+  <rect width="560" height="360" fill="#ffffff"/>
+  <g stroke="#2f3b4a" stroke-width="2" fill="none">
+    <rect x="140" y="70" width="200" height="200"/>
+    <rect x="220" y="30" width="200" height="200"/>
+    <line x1="140" y1="70" x2="220" y2="30"/>
+    <line x1="340" y1="70" x2="420" y2="30"/>
+    <line x1="140" y1="270" x2="220" y2="230"/>
+    <line x1="340" y1="270" x2="420" y2="230"/>
+  </g>
+  <g fill="#4f83ff" stroke="#1b2a3a" stroke-width="1">
+    <circle cx="140" cy="70" r="6"/>
+    <circle cx="340" cy="70" r="6"/>
+    <circle cx="140" cy="270" r="6"/>
+    <circle cx="340" cy="270" r="6"/>
+    <circle cx="220" cy="30" r="6"/>
+    <circle cx="420" cy="30" r="6"/>
+    <circle cx="220" cy="230" r="6"/>
+    <circle cx="420" cy="230" r="6"/>
+    <circle cx="280" cy="150" r="6"/>
+  </g>
+  <g stroke="#2f3b4a" stroke-width="2">
+    <line x1="140" y1="300" x2="240" y2="300"/>
+    <line x1="140" y1="300" x2="140" y2="240"/>
+    <line x1="140" y1="300" x2="190" y2="260"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="14" fill="#1b2a3a">
+    <text x="248" y="305">a1</text>
+    <text x="120" y="235">a2</text>
+    <text x="190" y="250">a3</text>
+    <text x="40" y="40">Schematic fcc unit cell (Ni/Cu example)</text>
+  </g>
+</svg>

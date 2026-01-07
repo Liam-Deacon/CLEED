@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="360" viewBox="0 0 560 360">
+  <rect width="560" height="360" fill="#ffffff"/>
+  <g font-family="Arial, sans-serif" font-size="14" fill="#1b2a3a">
+    <text x="40" y="40">Schematic Ni(111) slab (side view)</text>
+  </g>
+  <g fill="#7a8da6" stroke="#1b2a3a" stroke-width="1">
+    <circle cx="140" cy="110" r="10"/>
+    <circle cx="200" cy="110" r="10"/>
+    <circle cx="260" cy="110" r="10"/>
+    <circle cx="170" cy="150" r="10"/>
+    <circle cx="230" cy="150" r="10"/>
+    <circle cx="290" cy="150" r="10"/>
+    <circle cx="140" cy="190" r="10"/>
+    <circle cx="200" cy="190" r="10"/>
+    <circle cx="260" cy="190" r="10"/>
+    <circle cx="170" cy="230" r="10"/>
+    <circle cx="230" cy="230" r="10"/>
+    <circle cx="290" cy="230" r="10"/>
+  </g>
+  <g stroke="#1b2a3a" stroke-width="2">
+    <line x1="360" y1="240" x2="360" y2="120"/>
+    <polygon points="360,110 354,122 366,122" fill="#1b2a3a"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#1b2a3a">
+    <text x="372" y="150">surface normal</text>
+    <text x="372" y="168">(111)</text>
+  </g>
+</svg>
