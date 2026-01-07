@@ -63,7 +63,8 @@ Options
   - ``r2``: :math:`R_2` mean-square displacement.
   - ``rb``: :math:`R_{B1}` and :math:`R_{B2}`.
   - ``rp``: Pendry :math:`R_p`.
-  - ``rs``: improved reliability factor :math:`R_s` (Imre et al., 2025 [Imre2025]_), smoother near intensity minima.
+  - ``rs``: improved reliability factor :math:`R_s`
+    (`Imre et al., 2025 <https://arxiv.org/abs/2511.05448>`_), smoother near intensity minima.
   
 :code:`-s <shift1,shift2,shift3>`
 
