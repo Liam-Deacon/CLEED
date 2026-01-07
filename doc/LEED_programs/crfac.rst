@@ -63,7 +63,7 @@ Options
   - ``r2``: :math:`R_2` mean-square displacement.
   - ``rb``: :math:`R_{B1}` and :math:`R_{B2}`.
   - ``rp``: Pendry :math:`R_p`.
-  - ``rs``: improved reliability factor :math:`R_s` (Imre et al., 2025), smoother near intensity minima.
+  - ``rs``: improved reliability factor :math:`R_s` (Imre et al., 2025 [Imre2025]_), smoother near intensity minima.
   
 :code:`-s <shift1,shift2,shift3>`
 
@@ -96,6 +96,32 @@ Options
   plotted. <IV_output_prefix> specifies the base filename to which
   the  letters  'e' (experimental) or 't' (theoretical) as well as
   the number of the pair of curves is appended.
+
+.. _crfac_rs:
+
+Improved :math:`R_s`
+--------------------
+
+The improved reliability factor :math:`R_s` uses the same ratio as Pendry's
+:math:`R_p`, but replaces the :math:`Y` function with a smooth variant
+:math:`Y_s` [Imre2025]_. Using :math:`I(E)` for the intensity and
+:math:`V_i` for the optical potential, the definitions are:
+
+.. math::
+
+   y_1 = \\frac{\\alpha}{V_i^2}\\left(\\frac{I}{I''} - \\frac{(I')^2}{2 (I'')^2}\\right) + \\beta
+
+   y_2 = \\frac{y_1}{\\sqrt{1 + y_1^2}}
+
+   Y_s = \\begin{cases}
+     \\dfrac{I'}{\\sqrt{I^2 + 4 V_i^2 (I')^2 + y_2^2 V_i^4 (I'')^2}}, & I'' > 0 \\text{ and } y_1 > 0 \\\\
+     \\dfrac{I'}{\\sqrt{I^2 + 4 V_i^2 (I')^2}}, & \\text{otherwise}
+   \\end{cases}
+
+   R_s = \\frac{\\int (Y_{\\mathrm{exp}} - Y_{\\mathrm{th}})^2 \\, dE}
+                {\\int (Y_{\\mathrm{exp}}^2 + Y_{\\mathrm{th}}^2) \\, dE}
+
+with :math:`\\alpha = 4` and :math:`\\beta = 0.15`.
 
 Environment
 -----------
@@ -136,3 +162,8 @@ is given by: :math:`RR = (\frac{8 V_i}{\delta E})^{\frac{1}{2}}`, where :math:`V
 is the imaginary component of the optical potential and :math:`\delta E` is the energy 
 range of the data. This provides the error bars, :math:`E = (1 + RR) * R_{\text{min}}`, where
 :math:`R_{\text{min}}` is the minimum R factor for the data.
+
+.. [Imre2025] Alexander M. Imre, Lutz Hammer, Ulrike Diebold, Michele Riva,
+   Michael Schmid, "An improved reliability factor for quantitative low-energy
+   electron diffraction", arXiv:2511.05448 (2025),
+   https://arxiv.org/abs/2511.05448

@@ -141,15 +141,17 @@ Options
   + :code:`rb` : (calculates :math:`R_{B1}` and :math:`R_{B2}`)
 
   + :code:`rp` : calculates the Pendry R factor :math:`R_p`. This provides the level of 
-    agreement on shape of curves, not the intensity by comparing logarithmic 
-    derivatives, :math:`R_p = \frac{1}{I(E)} \times \frac{\delta I(E)}{\delta E}`, and 
-    is the standard in I(V) analysis. The Pendry R factor is problematic with 
+    agreement on shape of curves, not the intensity by comparing the Pendry-style 
+    :math:`Y` function derived from the logarithmic derivative 
+    :math:`L(E) = I'(E)/I(E)`, and is the standard in I(V) analysis. The Pendry 
+    R factor is problematic with 
     experimental noise as it is sensitive to positions of peaks, not intensity and 
     therefore noisy data will result in extra 'peaks'. The workaround for this 
     is to smooth or average the experimental data using a tool such as :ref:`ftsmooth`.
 
   + :code:`rs` : calculates the improved reliability factor :math:`R_s` (Imre et al., 2025),
     which smooths the Pendry-style :math:`Y` function at intensity minima.
+    See :ref:`crfac_rs` for the full definition and citation.
 
 :code:`-s <shift1,shift2,shift3>`
 

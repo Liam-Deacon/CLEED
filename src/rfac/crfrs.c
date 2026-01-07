@@ -1,19 +1,22 @@
-/********************************************************************
-GH/29.08.95
-file contains function:
-
-   real cr_rs( real *eng, real *e_int, real *t_int, real vi)
-
-Calculate R_S reliability factor (Imre et al., 2025)
-
-********************************************************************/
+/* R_S reliability factor (Imre et al., 2025). */
+// cppcheck-suppress missingIncludeSystem
 #include <math.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 
 #include "crfac.h"
 
 #define RS_ALPHA 4.0
 #define RS_BETA 0.15
+
+struct cr_rs_arrays {
+  real *e_d1;
+  real *e_d2;
+  real *t_d1;
+  real *t_d2;
+  real *e_y;
+  real *t_y;
+};
 
 static real cr_rs_y(real intensity, real deriv, real deriv2, real vi)
 {
@@ -48,8 +51,6 @@ static real cr_rs_y(real intensity, real deriv, real deriv2, real vi)
 static void cr_rs_derivatives(const real *eng, const real *intens, int n,
                               real *d1, real *d2)
 {
-  int i;
-
   if (n <= 1) {
     return;
   }
@@ -57,7 +58,7 @@ static void cr_rs_derivatives(const real *eng, const real *intens, int n,
   d1[0] = (intens[1] - intens[0]) / (eng[1] - eng[0]);
   d2[0] = 0.0;
 
-  for (i = 1; i < n - 1; i++) {
+  for (int i = 1; i < n - 1; i++) {
     const real h_prev = eng[i] - eng[i - 1];
     const real h_next = eng[i + 1] - eng[i];
     d1[i] = (intens[i + 1] - intens[i - 1]) / (eng[i + 1] - eng[i - 1]);
@@ -70,70 +71,93 @@ static void cr_rs_derivatives(const real *eng, const real *intens, int n,
   d2[n - 1] = 0.0;
 }
 
+static int cr_rs_count_points(const real *eng)
+{
+  int n = 0;
+
+  while (!IS_EQUAL_REAL(eng[n], F_END_OF_LIST)) {
+    n++;
+  }
+
+  return n;
+}
+
+static void cr_rs_free_arrays(struct cr_rs_arrays *arrays)
+{
+  free(arrays->e_d1);
+  free(arrays->e_d2);
+  free(arrays->t_d1);
+  free(arrays->t_d2);
+  free(arrays->e_y);
+  free(arrays->t_y);
+  arrays->e_d1 = arrays->e_d2 = NULL;
+  arrays->t_d1 = arrays->t_d2 = NULL;
+  arrays->e_y = arrays->t_y = NULL;
+}
+
+static int cr_rs_alloc_arrays(struct cr_rs_arrays *arrays, int n)
+{
+  arrays->e_d1 = (real *)malloc(n * sizeof(real));
+  arrays->e_d2 = (real *)malloc(n * sizeof(real));
+  arrays->t_d1 = (real *)malloc(n * sizeof(real));
+  arrays->t_d2 = (real *)malloc(n * sizeof(real));
+  arrays->e_y = (real *)malloc(n * sizeof(real));
+  arrays->t_y = (real *)malloc(n * sizeof(real));
+
+  if (!arrays->e_d1 || !arrays->e_d2 || !arrays->t_d1 || !arrays->t_d2 ||
+      !arrays->e_y || !arrays->t_y) {
+    cr_rs_free_arrays(arrays);
+    return 0;
+  }
+
+  return 1;
+}
+
+static void cr_rs_fill_y(const real *intens, const real *d1, const real *d2,
+                          int n, real vi, real *out_y)
+{
+  for (int i = 0; i < n; i++) {
+    out_y[i] = cr_rs_y(intens[i], d1[i], d2[i], vi);
+  }
+}
+
+static void cr_rs_integrate(const real *eng, const real *e_y, const real *t_y,
+                            int n, real *rf_sum, real *exp_sum, real *the_sum)
+{
+  for (int i = 1; i < n; i++) {
+    const real e_step = eng[i] - eng[i - 1];
+    const real y_exp = 0.5 * (e_y[i] + e_y[i - 1]);
+    const real y_the = 0.5 * (t_y[i] + t_y[i - 1]);
+
+    *rf_sum += (y_the - y_exp) * (y_the - y_exp) * e_step;
+    *exp_sum += y_exp * y_exp * e_step;
+    *the_sum += y_the * y_the * e_step;
+  }
+}
+
 real cr_rs(real *eng, real *e_int, real *t_int, real vi)
 {
-  int i_eng;
-  int n_eng;
+  struct cr_rs_arrays arrays = {0};
+  const int n_eng = cr_rs_count_points(eng);
   real rf_sum = 0.0;
   real exp_y_sum = 0.0;
   real the_y_sum = 0.0;
 
-  real *e_d1 = NULL;
-  real *e_d2 = NULL;
-  real *t_d1 = NULL;
-  real *t_d2 = NULL;
-  real *e_y = NULL;
-  real *t_y = NULL;
-
-  for (i_eng = 0; !IS_EQUAL_REAL(eng[i_eng], F_END_OF_LIST); i_eng++) {
-    ;
-  }
-  n_eng = i_eng;
   if (n_eng < 2) {
     return F_FAIL;
   }
 
-  e_d1 = (real *)malloc(n_eng * sizeof(real));
-  e_d2 = (real *)malloc(n_eng * sizeof(real));
-  t_d1 = (real *)malloc(n_eng * sizeof(real));
-  t_d2 = (real *)malloc(n_eng * sizeof(real));
-  e_y = (real *)malloc(n_eng * sizeof(real));
-  t_y = (real *)malloc(n_eng * sizeof(real));
-
-  if (!e_d1 || !e_d2 || !t_d1 || !t_d2 || !e_y || !t_y) {
-    free(e_d1);
-    free(e_d2);
-    free(t_d1);
-    free(t_d2);
-    free(e_y);
-    free(t_y);
+  if (!cr_rs_alloc_arrays(&arrays, n_eng)) {
     return F_FAIL;
   }
 
-  cr_rs_derivatives(eng, e_int, n_eng, e_d1, e_d2);
-  cr_rs_derivatives(eng, t_int, n_eng, t_d1, t_d2);
-
-  for (i_eng = 0; i_eng < n_eng; i_eng++) {
-    e_y[i_eng] = cr_rs_y(e_int[i_eng], e_d1[i_eng], e_d2[i_eng], vi);
-    t_y[i_eng] = cr_rs_y(t_int[i_eng], t_d1[i_eng], t_d2[i_eng], vi);
-  }
-
-  for (i_eng = 1; i_eng < n_eng; i_eng++) {
-    const real e_step = eng[i_eng] - eng[i_eng - 1];
-    const real y_exp = 0.5 * (e_y[i_eng] + e_y[i_eng - 1]);
-    const real y_the = 0.5 * (t_y[i_eng] + t_y[i_eng - 1]);
-
-    rf_sum += (y_the - y_exp) * (y_the - y_exp) * e_step;
-    exp_y_sum += y_exp * y_exp * e_step;
-    the_y_sum += y_the * y_the * e_step;
-  }
-
-  free(e_d1);
-  free(e_d2);
-  free(t_d1);
-  free(t_d2);
-  free(e_y);
-  free(t_y);
+  cr_rs_derivatives(eng, e_int, n_eng, arrays.e_d1, arrays.e_d2);
+  cr_rs_derivatives(eng, t_int, n_eng, arrays.t_d1, arrays.t_d2);
+  cr_rs_fill_y(e_int, arrays.e_d1, arrays.e_d2, n_eng, vi, arrays.e_y);
+  cr_rs_fill_y(t_int, arrays.t_d1, arrays.t_d2, n_eng, vi, arrays.t_y);
+  cr_rs_integrate(eng, arrays.e_y, arrays.t_y, n_eng,
+                  &rf_sum, &exp_y_sum, &the_y_sum);
+  cr_rs_free_arrays(&arrays);
 
   if (IS_EQUAL_REAL(exp_y_sum + the_y_sum, 0.0)) {
     return F_FAIL;
