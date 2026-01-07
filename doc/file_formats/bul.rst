@@ -77,6 +77,19 @@ Displacement tokens for ``pb``
 - ``dmt <theta_D> <mass> [temperature]``: Debye temperature, atomic mass, and
   optional temperature.
 
+Structure overview (schematic)
+==============================
+
+.. figure:: /_static/figures/ni111_unit_cell.svg
+   :alt: Schematic fcc unit cell for the Ni111_Cu bulk example.
+   :width: 70%
+
+   Schematic fcc unit cell aligned with the Ni111_Cu bulk lattice in
+   :ref:`bul_example_nicu`. See `Nickel`_, `Copper`_, `FCC lattice`_, and
+   `Miller index`_ for background on the (111) stacking.
+
+.. _bul_example_nicu:
+
 Example (from ``examples/models/nicu/Ni111_Cu.bul``)
 ====================================================
 
@@ -98,6 +111,11 @@ Minimal template
    vr: -8.0
    vi: 4.0
    pb: X 0.000 0.000 0.000 dr1 0.050
+
+.. _Nickel: https://en.wikipedia.org/wiki/Nickel
+.. _Copper: https://en.wikipedia.org/wiki/Copper
+.. _FCC lattice: https://en.wikipedia.org/wiki/Face-centered_cubic
+.. _Miller index: https://en.wikipedia.org/wiki/Miller_index
    ei: 50.0
    ef: 300.0
    es: 5.0

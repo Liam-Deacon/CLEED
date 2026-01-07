@@ -102,6 +102,27 @@ Displacement tokens for ``po``
 - ``dmt <theta_D> <mass> [temperature]``: Debye temperature, atomic mass, and
   optional temperature.
 
+Surface and overlayer overview (schematic)
+==========================================
+
+.. figure:: /_static/figures/ni111_surface_slab.svg
+   :alt: Schematic Ni(111) slab used by the Ni111_2x2O example.
+   :width: 70%
+
+   Side-view schematic of the Ni(111) slab referenced by
+   :ref:`inp_example_nio` and paired with the bulk input in
+   :ref:`bul_example_nicu`. See `Nickel`_ and `Miller index`_ for context.
+
+.. figure:: /_static/figures/ni111_2x2o_overlayer.svg
+   :alt: Schematic 2x2 oxygen overlayer for Ni111_2x2O.
+   :width: 70%
+
+   Top-view schematic of a 2x2 O overlayer on Ni(111), matching the notation
+   used in :ref:`inp_example_nio`. See `Oxygen`_ and `Adsorption`_ for
+   background on surface ordering.
+
+.. _inp_example_nio:
+
 Example (from ``examples/models/nio/Ni111_2x2O.inp``)
 =====================================================
 
@@ -124,3 +145,8 @@ Minimal template
    zr: 1.00 6.00
    sz: 1
    sr: 3 0.0 0.0
+
+.. _Nickel: https://en.wikipedia.org/wiki/Nickel
+.. _Oxygen: https://en.wikipedia.org/wiki/Oxygen
+.. _Miller index: https://en.wikipedia.org/wiki/Miller_index
+.. _Adsorption: https://en.wikipedia.org/wiki/Adsorption
