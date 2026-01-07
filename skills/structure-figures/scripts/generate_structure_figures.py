@@ -151,7 +151,11 @@ def main() -> int:
 
     out_dir.mkdir(parents=True, exist_ok=True)
     for name, content in FIGURES.items():
-        (out_dir / name).write_text(content, encoding="utf-8")
+        try:
+            (out_dir / name).write_text(content, encoding="utf-8")
+        except OSError as exc:
+            print(f"Error writing {out_dir / name}: {exc}", file=sys.stderr)
+            return 1
     return 0
 
 

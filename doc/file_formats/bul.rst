@@ -111,11 +111,6 @@ Minimal template
    vr: -8.0
    vi: 4.0
    pb: X 0.000 0.000 0.000 dr1 0.050
-
-.. _Nickel: https://en.wikipedia.org/wiki/Nickel
-.. _Copper: https://en.wikipedia.org/wiki/Copper
-.. _FCC lattice: https://en.wikipedia.org/wiki/Face-centered_cubic
-.. _Miller index: https://en.wikipedia.org/wiki/Miller_index
    ei: 50.0
    ef: 300.0
    es: 5.0
@@ -123,3 +118,8 @@ Minimal template
    ip: 0.0
    ep: 1.e-2
    lm: 8
+
+.. _Nickel: https://en.wikipedia.org/wiki/Nickel
+.. _Copper: https://en.wikipedia.org/wiki/Copper
+.. _FCC lattice: https://en.wikipedia.org/wiki/Face-centered_cubic
+.. _Miller index: https://en.wikipedia.org/wiki/Miller_index
