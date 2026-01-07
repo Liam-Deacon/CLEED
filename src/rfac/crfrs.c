@@ -6,7 +6,13 @@
 
 #include "crfac.h"
 
-/* Constants from Imre et al., 2025 (https://arxiv.org/abs/2511.05448). */
+/* Tuning constants for the R_S reliability factor (Imre et al., 2025:
+ * https://arxiv.org/abs/2511.05448). These are dimensionless parameters used
+ * in the Y_s smoothing term; they assume the input energies and derivatives
+ * are consistently scaled (e.g., energies in eV, derivatives w.r.t. energy).
+ * If alternate scaling or data domains are needed, consider exposing these
+ * as configurable parameters.
+ */
 #define RS_ALPHA 4.0
 #define RS_BETA 0.15
 
