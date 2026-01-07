@@ -126,7 +126,7 @@ static int cleed_line_has_symmetry(const char *line)
 
 int cleed_detect_symmetry_file(const char *path, int *has_symmetry)
 {
-  FILE *stream;
+  FILE *stream = NULL;
   char line[512];
   int found = 0;
 
@@ -140,11 +140,18 @@ int cleed_detect_symmetry_file(const char *path, int *has_symmetry)
     return -1;
   }
 
+#ifdef _MSC_VER
+  if (fopen_s(&stream, path, "r") != 0 || stream == NULL)
+  {
+    return -1;
+  }
+#else
   stream = fopen(path, "r");
   if (stream == NULL)
   {
     return -1;
   }
+#endif
 
   while (fgets(line, sizeof(line), stream) != NULL)
   {

@@ -12,6 +12,22 @@
 
 #define CLEED_TEST_PATH_SIZE 512
 
+static int cleed_copy_path(char *path, size_t path_size, const char *source)
+{
+    int written;
+
+    if (path_size == 0) {
+        return -1;
+    }
+
+    written = snprintf(path, path_size, "%s", source);
+    if (written < 0 || (size_t)written >= path_size) {
+        return -1;
+    }
+
+    return 0;
+}
+
 static int write_temp_file(const char *contents, char *path, size_t path_size)
 {
 #ifdef _WIN32
@@ -24,11 +40,10 @@ static int write_temp_file(const char *contents, char *path, size_t path_size)
     if (GetTempFileNameA(temp_path, "cld", 0, temp_file) == 0) {
         return -1;
     }
-    if (strlen(temp_file) + 1 > path_size) {
+    if (cleed_copy_path(path, path_size, temp_file) != 0) {
         DeleteFileA(temp_file);
         return -1;
     }
-    strcpy(path, temp_file);
 #else
     char template_path[] = "/tmp/cleed_mode_XXXXXX";
     int fd = mkstemp(template_path);
@@ -36,10 +51,10 @@ static int write_temp_file(const char *contents, char *path, size_t path_size)
         return -1;
     }
     close(fd);
-    if (strlen(template_path) + 1 > path_size) {
+    if (cleed_copy_path(path, path_size, template_path) != 0) {
+        unlink(template_path);
         return -1;
     }
-    strcpy(path, template_path);
 #endif
     return cleed_test_write_text_file(path, contents);
 }
