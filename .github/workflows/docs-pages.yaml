@@ -53,6 +53,25 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Check GitHub Pages is enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Check if GitHub Pages is enabled with workflow build type
+          PAGES_INFO=$(gh api repos/${{ github.repository }}/pages 2>&1) || {
+            echo "::error::GitHub Pages is not enabled for this repository."
+            echo "::error::To fix: Go to Settings > Pages > Source and select 'GitHub Actions'"
+            echo "::error::Or run: gh api repos/${{ github.repository }}/pages -X POST -f build_type='workflow'"
+            exit 1
+          }
+          BUILD_TYPE=$(echo "$PAGES_INFO" | jq -r '.build_type // empty')
+          if [ "$BUILD_TYPE" != "workflow" ]; then
+            echo "::error::GitHub Pages build type is '$BUILD_TYPE', expected 'workflow'."
+            echo "::error::To fix: Go to Settings > Pages > Source and select 'GitHub Actions'"
+            exit 1
+          fi
+          echo "✓ GitHub Pages is enabled with workflow build type"
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
