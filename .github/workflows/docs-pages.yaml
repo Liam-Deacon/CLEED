@@ -58,12 +58,25 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # Check if GitHub Pages is enabled with workflow build type
-          PAGES_INFO=$(gh api repos/${{ github.repository }}/pages 2>&1) || {
-            echo "::error::GitHub Pages is not enabled for this repository."
-            echo "::error::To fix: Go to Settings > Pages > Source and select 'GitHub Actions'"
-            echo "::error::Or run: gh api repos/${{ github.repository }}/pages -X POST -f build_type='workflow'"
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "::error::jq is not available on this runner"
             exit 1
-          }
+          fi
+
+          # Use gh api with jq to avoid cryptic failures
+          if ! PAGES_INFO=$(gh api repos/${{ github.repository }}/pages --jq '.' 2>/dev/null); then
+            # Check if it's specifically a 404 (Pages not configured) vs other errors
+            if gh api repos/${{ github.repository }}/pages 2>&1 | grep -q "Not Found"; then
+              echo "::error::GitHub Pages is not enabled for this repository."
+              echo "::error::To fix: Go to Settings > Pages > Source and select 'GitHub Actions'"
+              echo "::error::Or run: gh api repos/${{ github.repository }}/pages -X POST -f build_type='workflow'"
+              exit 1
+            else
+              echo "::error::Failed to check GitHub Pages status. This may be a transient API error."
+              exit 1
+            fi
+          fi
+
           BUILD_TYPE=$(echo "$PAGES_INFO" | jq -r '.build_type // empty')
           if [ "$BUILD_TYPE" != "workflow" ]; then
             echo "::error::GitHub Pages build type is '$BUILD_TYPE', expected 'workflow'."
