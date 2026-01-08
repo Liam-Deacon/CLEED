@@ -181,6 +181,6 @@ jobs:
           draft: ${{ steps.flags.outputs.draft }}
           body: |
             ## Docker image
-            `ghcr.io/${{ github.repository_owner }}/cleed:${{ steps.flags.outputs.version }}`
+            `ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ steps.flags.outputs.version }}`
           files: dist/**/*
           generate_release_notes: true
