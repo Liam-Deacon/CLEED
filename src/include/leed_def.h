@@ -401,8 +401,8 @@ typedef leed_eng_t leed_energy_t;
 
 /** @} */ /* end of leed_energy group */
 
-#endif /* LEED_DEF_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* LEED_DEF_H */

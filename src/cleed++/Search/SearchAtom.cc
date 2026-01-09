@@ -55,7 +55,7 @@ inline int SearchAtom::getType() const {
 }
 
 inline std::size_t SearchAtom::getNumberOfEquivalentAtoms() const {
-  return this->n_ref;
+  return this->nref;
 }
 
 inline std::size_t SearchAtom::getReferenceToSymmetryEquivalentAtom() const {
@@ -87,19 +87,19 @@ inline double SearchAtom::getDeltaR() const {
 }
 
 inline std::vector<double> SearchAtom::getXShifts() {
-  return std::vector<double>(this->x_par, this->x_par + this->n_ref);
+  return std::vector<double>(this->x_par, this->x_par + this->nref);
 }
 
 inline std::vector<double> SearchAtom::getYShifts() {
-  return std::vector<double>(this->y_par, this->y_par + this->n_ref);
+  return std::vector<double>(this->y_par, this->y_par + this->nref);
 }
 
 std::vector<double> SearchAtom::getZShifts() {
-  return std::vector<double>(this->z_par, this->z_par + this->n_ref);
+  return std::vector<double>(this->z_par, this->z_par + this->nref);
 }
 
 std::vector<double> SearchAtom::getDeltaRShifts() {
-  return std::vector<double>(this->dr_par, this->dr_par + this->n_ref);
+  return std::vector<double>(this->dr_par, this->dr_par + this->nref);
 }
 
 std::vector<double> SearchAtom::getPosition() const {
@@ -113,23 +113,25 @@ inline void SearchAtom::setType(int type) {
 }
 
 inline void SearchAtom::setNumberOfEquivelentAtoms(std::size_t ref) {
-  this->ref = ref;
+  this->nref = ref;
 }
 
 inline void SearchAtom::setReferenceToSymmetryEquivalentAtom(std::size_t n_ref) {
-  this->n_ref = n_ref;
+  this->ref = n_ref;
 }
 
 inline void SearchAtom::setAtomName(const char *name) {
-  std::strncpy(this->name, name, STRSZ);
+  std::strncpy(this->name, name, STRSZ - 1);
+  this->name[STRSZ - 1] = '\0';
 }
 
 inline void SearchAtom::setAtomName(const std::string &name) {
-  std::strncpy(this->name, name.c_str(), STRSZ);
+  std::strncpy(this->name, name.c_str(), STRSZ - 1);
+  this->name[STRSZ - 1] = '\0';
 }
 
 inline void SearchAtom::setMinimumRadius(double r_min) {
-  this->dr = r_min;
+  this->r_min = r_min;
 }
 
 inline void SearchAtom::setXPosition(double x_pos) {

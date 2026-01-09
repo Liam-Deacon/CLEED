@@ -30,7 +30,7 @@
 
 namespace cleed {
 
-  class LEEDAtom : public leed_atom {
+  class LEEDAtom : public leed_atom_t {
 
     public:
       LEEDAtom();
@@ -45,8 +45,8 @@ namespace cleed {
 
       /* getters */
       std::size_t getLayerNumber();
-      leed_structure getStructureType();
-      leed_matrix_diag getMatrixType();
+      int getStructureType();
+      int getMatrixType();
       real getDebyeWallerFactor();
 
       virtual double getXPosition() const;
@@ -56,8 +56,8 @@ namespace cleed {
 
       /* setters */
       LEEDAtom& setLayerNumber(std::size_t number);
-      LEEDAtom& setMatrixType(leed_matrix_diag type);
-      LEEDAtom& setStructureType(leed_structure structure);
+      LEEDAtom& setMatrixType(int type);
+      LEEDAtom& setStructureType(int structure);
       LEEDAtom& setDebyeWallerFactor(real dwf);
 
       virtual LEEDAtom& setXPosition(double x_pos);

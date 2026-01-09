@@ -31,6 +31,9 @@ extern "C" {
  * @{
  */
 
+#include "gh_stddef.h"
+#include "real.h"
+
 /*********************************************************************
  structures and types 
 *********************************************************************/
@@ -62,6 +65,8 @@ struct sratom_str
  real *z_par;     /**< Coefficients used to determine shifts in z */
  real *dr_par;    /**< Coefficients used to determine shifts in dr */
 };
+
+typedef struct sratom_str search_atom;
 
 /**
  * @brief Global search configuration structure.
@@ -107,6 +112,9 @@ struct search_str
  char rf_type[16];     /**< R factor type string (e.g., "rp" for Pendry) */
  real rf_range;        /**< Shift range for R factor (eV) */
 };
+
+typedef struct search_str search;
+typedef int search_method;
 
 /** @} */ /* end of search_config group */
 

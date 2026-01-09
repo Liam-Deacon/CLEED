@@ -43,6 +43,7 @@ SET (latt_CORE_SRCS
     basis.c
     coord.c
     lattice.c
+    latt_streams.c
 )
 
 SET (latt_APP_SRCS

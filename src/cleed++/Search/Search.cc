@@ -76,7 +76,7 @@ inline double Search::getMaximumZ() const {
 }
 
 vector<double> Search::getBasis() const {
-
+  return vector<double>();
 }
 
 // angle-related
@@ -110,24 +110,27 @@ inline size_t Search::getNumberOfRotationalSymmetries() const {
 }
 
 vector<double> Search::getRotationalAxis() const {
-
+  return vector<double>(this->c_search.rot_axis,
+                        this->c_search.rot_axis + 3);
 }
 
 vector<double> Search::getMirrorPlanePoint() const {
-
+  return vector<double>(this->c_search.mir_point,
+                        this->c_search.mir_point + 3);
 }
 
 vector<double> Search::getMirrorPlaneDirection() const {
-
+  return vector<double>(this->c_search.mir_dir,
+                        this->c_search.mir_dir + 3);
 }
 
 // R-factor
 inline string Search::getRFactorType() const {
-  return string(this->c_search.rfac_type);
+  return string(this->c_search.rf_type);
 }
 
 inline double Search::getRFactorShiftRange() const {
-  return this->c_search.rfac_range;
+  return this->c_search.rf_range;
 }
 
 inline const RFactor *Search::getRFactor() const {
@@ -199,7 +202,7 @@ inline void Search::setZOnlySearch(bool z_only) {
 }
 
 inline void Search::setNumberOfRotationalSymmetries(size_t n_rot) {
-  //this->c_search.rot_deg = n_rot;
+  this->c_search.rot_deg = n_rot;
 }
 
 void Search::setRotationalAxis(vector<double> rot_axis) {
@@ -218,15 +221,18 @@ void Search::setMirrorPlaneDirection(vector<double> mir_dir) {
 
 // R-factor
 inline void Search::setRFactorType(const string &type) {
-  std::strncpy(this->c_search.rfac_type, type.c_str(), 16);
+  std::strncpy(this->c_search.rf_type, type.c_str(), sizeof(this->c_search.rf_type) - 1);
+  this->c_search.rf_type[sizeof(this->c_search.rf_type) - 1] = '\0';
 }
 
 inline void Search::setRFactorType(const char *type) {
-  std::strncpy(this->c_search.rfac_type, type, 16);
+  if (type == nullptr) return;
+  std::strncpy(this->c_search.rf_type, type, sizeof(this->c_search.rf_type) - 1);
+  this->c_search.rf_type[sizeof(this->c_search.rf_type) - 1] = '\0';
 }
 
 inline void Search::setRFactorShiftRange(double range) {
-  this->c_search.rfac_range = range;
+  this->c_search.rf_range = range;
 }
 
 inline void Search::setRFactor(const RFactor &rfac) {

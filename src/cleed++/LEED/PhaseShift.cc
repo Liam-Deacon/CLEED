@@ -30,16 +30,44 @@ PhaseShift::PhaseShift()
 {
   // initialise variables
   this->energy = this->pshift = nullptr;
+  this->input_file = nullptr;
+  this->neng = 0;
 }
 
-PhaseShift::PhaseShift(const leed_phase *phsh_ptr) {
+PhaseShift::PhaseShift(const leed_phs_t *phsh_ptr) {
   // initialise variables
   this->energy = this->pshift = nullptr;
+  this->input_file = nullptr;
+  this->neng = 0;
 
-  std::copy(phsh_ptr->energy, phsh_ptr->energy+phsh_ptr->n_eng,
-            this->energy);
-  std::copy(phsh_ptr->pshift, phsh_ptr->pshift+phsh_ptr->n_eng,
-            this->pshift);
+  if (phsh_ptr == nullptr) return;
+
+  this->lmax = phsh_ptr->lmax;
+  this->t_type = phsh_ptr->t_type;
+  this->eng_max = phsh_ptr->eng_max;
+  this->eng_min = phsh_ptr->eng_min;
+  std::copy(phsh_ptr->dr, phsh_ptr->dr + 4, this->dr);
+
+  if (phsh_ptr->input_file != nullptr) {
+    size_t len = std::strlen(phsh_ptr->input_file);
+    this->input_file = static_cast<char*>(std::calloc(len + 1, sizeof(char)));
+    if (this->input_file != nullptr) {
+      std::strncpy(this->input_file, phsh_ptr->input_file, len);
+    }
+  }
+
+  if (phsh_ptr->neng > 0 && phsh_ptr->energy != nullptr &&
+      phsh_ptr->pshift != nullptr) {
+    this->energy = static_cast<real*>(std::calloc(phsh_ptr->neng, sizeof(real)));
+    this->pshift = static_cast<real*>(std::calloc(phsh_ptr->neng, sizeof(real)));
+    if (this->energy != nullptr && this->pshift != nullptr) {
+      std::copy(phsh_ptr->energy, phsh_ptr->energy + phsh_ptr->neng,
+                this->energy);
+      std::copy(phsh_ptr->pshift, phsh_ptr->pshift + phsh_ptr->neng,
+                this->pshift);
+      this->neng = phsh_ptr->neng;
+    }
+  }
 }
 
 PhaseShift::PhaseShift(const std::string &inputFile) {
@@ -71,6 +99,9 @@ PhaseShift::~PhaseShift() {
   if (this->pshift != nullptr) {
     std::free(static_cast<void*>(this->pshift));
   }
+  if (this->input_file != nullptr) {
+    std::free(static_cast<void*>(this->input_file));
+  }
 }
 
 // getters
@@ -78,7 +109,7 @@ inline int PhaseShift::getLmax() const {
   return (this->lmax);
 }
 
-inline leed_matrix_diag PhaseShift::getMatrixType() const {
+inline int PhaseShift::getMatrixType() const {
   return (this->t_type);
 }
 
@@ -106,7 +137,7 @@ inline std::vector<real> PhaseShift::getDeltaRList() {
 }
 */
 inline std::size_t PhaseShift::getNumberOfEnergies() const {
-  return (this->n_eng);
+  return (this->neng);
 }
 
 // setters
@@ -117,7 +148,7 @@ inline PhaseShift& PhaseShift::setLmax(int lmax) {
   return *this;
 }
 
-inline PhaseShift& PhaseShift::setMatrixType(leed_matrix_diag type) {
+inline PhaseShift& PhaseShift::setMatrixType(int type) {
   this->t_type = type;
   return *this;
 }
@@ -133,12 +164,27 @@ inline PhaseShift& PhaseShift::setMinEnergy(real Emin) {
 }
 
 inline PhaseShift& PhaseShift::setInputFile(const std::string &filepath) {
-  std::strncpy(this->input_file, filepath.c_str(), sizeof(this->input_file)-1);
+  if (this->input_file != nullptr) {
+    std::free(static_cast<void*>(this->input_file));
+  }
+  this->input_file = static_cast<char*>(std::calloc(filepath.size() + 1, 1));
+  if (this->input_file != nullptr) {
+    std::strncpy(this->input_file, filepath.c_str(), filepath.size());
+  }
   return *this;
 }
 
 inline PhaseShift& PhaseShift::setInputFile(const char *filepath) {
-  std::strncpy(this->input_file, filepath, sizeof(this->input_file)-1);
+  if (this->input_file != nullptr) {
+    std::free(static_cast<void*>(this->input_file));
+  }
+  if (filepath != nullptr) {
+    size_t len = std::strlen(filepath);
+    this->input_file = static_cast<char*>(std::calloc(len + 1, 1));
+    if (this->input_file != nullptr) {
+      std::strncpy(this->input_file, filepath, len);
+    }
+  }
   return *this;
 }
 
@@ -155,7 +201,7 @@ PhaseShift& PhaseShift::setData(const real *energies_ptr,
     this->pshift = static_cast<real*>(std::calloc(n, sizeof(real)));
     std::copy(energies_ptr, energies_ptr + n, this->energy);
     std::copy(phaseshifts_ptr, phaseshifts_ptr + n, this->pshift);
-    this->n_eng = n;
+    this->neng = n;
   } catch (...) {
     //!TODO
   }
@@ -175,6 +221,7 @@ PhaseShift& PhaseShift::setData(const std::vector<real> energies,
   this->pshift = static_cast<real*>(std::calloc(n, sizeof(real)));
   std::copy(energies.begin(), energies.end(), this->energy);
   std::copy(phaseshifts.begin(), phaseshifts.end(), this->pshift);
+  this->neng = n;
 
   return *this;
 }

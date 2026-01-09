@@ -268,7 +268,7 @@ inline double IVCurve::getMaximumIntensity() const {
   return this->iv_ptr->max_int;
 }
 
-inline const rfac_iv *IVCurve::get_rfac_iv_ptr() const {
+const rfac_iv *IVCurve::get_rfac_iv_ptr() const {
   return this->iv_ptr;
 }
 
