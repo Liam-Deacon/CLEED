@@ -84,6 +84,30 @@ static real sr_parse_positive_real(const char *value, const char *invalid_msg)
   return (real)parsed;
 }
 
+static int sr_parse_required_positive_int(int argc, char *argv[], int *i_arg,
+                                          const char *missing_msg,
+                                          const char *invalid_msg)
+{
+  const char *value = sr_consume_arg(argc, argv, i_arg, missing_msg);
+  return sr_parse_positive_int(value, invalid_msg);
+}
+
+static uint64_t sr_parse_required_seed(int argc, char *argv[], int *i_arg,
+                                       const char *missing_msg,
+                                       const char *invalid_msg)
+{
+  const char *value = sr_consume_arg(argc, argv, i_arg, missing_msg);
+  return sr_parse_seed(value, invalid_msg);
+}
+
+static real sr_parse_required_positive_real(int argc, char *argv[], int *i_arg,
+                                            const char *missing_msg,
+                                            const char *invalid_msg)
+{
+  const char *value = sr_consume_arg(argc, argv, i_arg, missing_msg);
+  return sr_parse_positive_real(value, invalid_msg);
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -196,97 +220,97 @@ int main(int argc, char *argv[])
     }
 
     if (strcmp(argv[i_arg], "--max-evals") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): max evals value not given\n");
-      opt_cfg.max_evals = sr_parse_positive_int(value,
+      opt_cfg.max_evals = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): max evals value not given\n",
           "*** error (SEARCH): invalid max evals value\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--max-iters") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): max iters value not given\n");
-      opt_cfg.max_iters = sr_parse_positive_int(value,
+      opt_cfg.max_iters = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): max iters value not given\n",
           "*** error (SEARCH): invalid max iters value\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--seed") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): seed value not given\n");
-      opt_cfg.seed = sr_parse_seed(value,
+      opt_cfg.seed = sr_parse_required_seed(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): seed value not given\n",
           "*** error (SEARCH): invalid seed value\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--pso-swarm") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): PSO swarm size not given\n");
-      opt_cfg.pso_swarm_size = sr_parse_positive_int(value,
+      opt_cfg.pso_swarm_size = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO swarm size not given\n",
           "*** error (SEARCH): invalid PSO swarm size\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--pso-inertia") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): PSO inertia not given\n");
-      opt_cfg.pso_inertia = sr_parse_positive_real(value,
+      opt_cfg.pso_inertia = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO inertia not given\n",
           "*** error (SEARCH): invalid PSO inertia\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--pso-c1") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): PSO c1 not given\n");
-      opt_cfg.pso_c1 = sr_parse_positive_real(value,
+      opt_cfg.pso_c1 = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO c1 not given\n",
           "*** error (SEARCH): invalid PSO c1\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--pso-c2") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): PSO c2 not given\n");
-      opt_cfg.pso_c2 = sr_parse_positive_real(value,
+      opt_cfg.pso_c2 = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO c2 not given\n",
           "*** error (SEARCH): invalid PSO c2\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--pso-vmax") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): PSO vmax not given\n");
-      opt_cfg.pso_vmax = sr_parse_positive_real(value,
+      opt_cfg.pso_vmax = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO vmax not given\n",
           "*** error (SEARCH): invalid PSO vmax\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--de-pop") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): DE population not given\n");
-      opt_cfg.de_population = sr_parse_positive_int(value,
+      opt_cfg.de_population = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE population not given\n",
           "*** error (SEARCH): invalid DE population\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--de-weight") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): DE weight not given\n");
-      opt_cfg.de_weight = sr_parse_positive_real(value,
+      opt_cfg.de_weight = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE weight not given\n",
           "*** error (SEARCH): invalid DE weight\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--de-cr") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): DE crossover not given\n");
-      opt_cfg.de_crossover = sr_parse_positive_real(value,
+      opt_cfg.de_crossover = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE crossover not given\n",
           "*** error (SEARCH): invalid DE crossover rate\n");
       continue;
     }
 
     if (strcmp(argv[i_arg], "--de-span") == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): DE span not given\n");
-      opt_cfg.de_init_span = sr_parse_positive_real(value,
+      opt_cfg.de_init_span = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE span not given\n",
           "*** error (SEARCH): invalid DE span\n");
       continue;
     }

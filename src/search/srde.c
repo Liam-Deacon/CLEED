@@ -18,8 +18,6 @@
  ***********************************************************************/
 
 // cppcheck-suppress missingIncludeSystem
-#include <math.h>
-// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
 // cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
@@ -27,6 +25,20 @@
 #include "search.h"
 #include "sr_alloc.h"
 #include "sr_rng.h"
+
+typedef struct sr_de_state {
+  sr_rng rng;
+  int pop;
+  int ndim;
+  int max_iters;
+  int max_evals;
+  real weight;
+  real crossover;
+  real span;
+  real **pop_vec;
+  real *scores;
+  real *trial;
+} sr_de_state;
 
 /*===========================================================================*/
 /* Internal helper functions                                                 */
@@ -73,22 +85,29 @@ static real sr_de_rand_span(sr_rng *rng, real span)
  * @param c    Output: third randomly selected index.
  * @return 0 on success, -1 on invalid parameters.
  */
+static int sr_de_pick_index(sr_rng *rng, int pop, int skip, int exclude1,
+                            int exclude2)
+{
+  int idx = 0;
+
+  do {
+    idx = 1 + (int)(sr_rng_uniform01(rng) * pop);
+  } while (idx == skip || idx == exclude1 || idx == exclude2);
+
+  return idx;
+}
+
 static int sr_de_pick_indices(sr_rng *rng, int pop, int skip,
                               int *a, int *b, int *c)
 {
   if (!rng || !a || !b || !c || pop < 4) return -1;
 
-  do {
-    *a = 1 + (int)(sr_rng_uniform01(rng) * pop);
-  } while (*a == skip);
+  const int excluded = (skip >= 1 && skip <= pop) ? 1 : 0;
+  if (pop - excluded < 3) return -1;
 
-  do {
-    *b = 1 + (int)(sr_rng_uniform01(rng) * pop);
-  } while (*b == skip || *b == *a);
-
-  do {
-    *c = 1 + (int)(sr_rng_uniform01(rng) * pop);
-  } while (*c == skip || *c == *a || *c == *b);
+  *a = sr_de_pick_index(rng, pop, skip, 0, 0);
+  *b = sr_de_pick_index(rng, pop, skip, *a, 0);
+  *c = sr_de_pick_index(rng, pop, skip, *a, *b);
 
   return 0;
 }
@@ -146,21 +165,34 @@ static void sr_de_copy_vector(real *dest, const real *src, int ndim)
  * @param evals    In/out evaluation counter.
  * @return 0 on success, -1 on invalid parameters.
  */
-static int sr_de_init_population(sr_rng *rng, int pop, int ndim, real span,
-                                 real **pop_vec, real *scores, real *best,
-                                 real *best_val, real (*func)(const real *), int *evals)
+static int sr_de_init_population(sr_de_state *state, real *best, real *best_val,
+                                 real (*func)(const real *), int *evals)
 {
-  if (!rng || !pop_vec || !scores || !best || !best_val || !func) return -1;
+  if (!state || !best || !best_val || !func) return -1;
 
-  *best_val = 0.0;
-  for (int i = 1; i <= pop; i++) {
+  sr_rng *rng = &state->rng;
+  const int pop = state->pop;
+  const int ndim = state->ndim;
+  const real span = state->span;
+  real **pop_vec = state->pop_vec;
+  real *scores = state->scores;
+
+  for (int j = 1; j <= ndim; j++) {
+    pop_vec[1][j] = sr_de_rand_span(rng, span);
+  }
+  scores[1] = (*func)(pop_vec[1]);
+  if (evals) (*evals)++;
+  *best_val = scores[1];
+  sr_de_copy_vector(best, pop_vec[1], ndim);
+
+  for (int i = 2; i <= pop; i++) {
     for (int j = 1; j <= ndim; j++) {
       pop_vec[i][j] = sr_de_rand_span(rng, span);
     }
     scores[i] = (*func)(pop_vec[i]);
     if (evals) (*evals)++;
 
-    if (i == 1 || scores[i] < *best_val) {
+    if (scores[i] < *best_val) {
       *best_val = scores[i];
       sr_de_copy_vector(best, pop_vec[i], ndim);
     }
@@ -186,12 +218,21 @@ static int sr_de_init_population(sr_rng *rng, int pop, int ndim, real span,
  * @param ndim    Number of dimensions.
  * @param trial   Output: trial vector.
  */
-static void sr_de_create_trial(sr_rng *rng, real **pop_vec, int target,
-                               int a, int b, int c, real weight, real cr,
-                               int ndim, real *trial)
+static void sr_de_create_trial(sr_de_state *state, int target,
+                               int a, int b, int c)
 {
+  if (!state) return;
+
+  sr_rng *rng = &state->rng;
+  real **pop_vec = state->pop_vec;
+  const int ndim = state->ndim;
+  const real weight = state->weight;
+  const real cr = state->crossover;
+  real *trial = state->trial;
+
   int j_rand = 1 + (int)(sr_rng_uniform01(rng) * ndim);
   if (j_rand < 1) j_rand = 1;
+  if (j_rand > ndim) j_rand = ndim;
 
   for (int j = 1; j <= ndim; j++) {
     const real r = (real)sr_rng_uniform01(rng);
@@ -284,6 +325,95 @@ static const sr_de_cfg *sr_de_get_effective_cfg(const sr_de_cfg *cfg,
   return cfg;
 }
 
+static int sr_de_resolve_cfg(const sr_de_cfg *cfg, int ndim,
+                             sr_de_cfg *resolved)
+{
+  if (!resolved || ndim <= 0) return -1;
+
+  sr_de_cfg defaults;
+  const sr_de_cfg *src = sr_de_get_effective_cfg(cfg, &defaults, ndim);
+
+  resolved->population = (src->population > 0) ? src->population
+                                               : sr_de_default_population(ndim);
+  if (resolved->population < 4) return -1;
+
+  resolved->max_iters = (src->max_iters > 0) ? src->max_iters : MAX_ITER_DE;
+  resolved->max_evals = (src->max_evals > 0) ? src->max_evals : MAX_EVAL_DE;
+
+  resolved->weight = src->weight;
+  if (resolved->weight <= (real)0.0) {
+    resolved->weight = (real)0.8;
+  }
+  if (resolved->weight > (real)2.0) {
+    resolved->weight = (real)2.0;
+  }
+
+  resolved->crossover = src->crossover;
+  if (resolved->crossover < (real)0.0) {
+    resolved->crossover = (real)0.0;
+  }
+  if (resolved->crossover > (real)1.0) {
+    resolved->crossover = (real)1.0;
+  }
+
+  resolved->init_span = (src->init_span > (real)0.0) ? src->init_span : (real)1.0;
+  resolved->seed = (src->seed > 0) ? src->seed : 1ULL;
+
+  return 0;
+}
+
+static int sr_de_run_generation(sr_de_state *state, real (*func)(const real *),
+                                real *best, real *best_val, int *evals)
+{
+  if (!state || !func || !best || !best_val || !evals) return -1;
+
+  for (int i = 1; i <= state->pop && *evals < state->max_evals; i++) {
+    int a, b, c;
+    if (sr_de_pick_indices(&state->rng, state->pop, i, &a, &b, &c) != 0) {
+      return -1;
+    }
+
+    sr_de_create_trial(state, i, a, b, c);
+
+    const real trial_val = (*func)(state->trial);
+    (*evals)++;
+
+    sr_de_selection(state->pop_vec, state->scores, i, state->trial,
+                    trial_val, best, best_val, state->ndim);
+  }
+
+  return 0;
+}
+
+static int sr_de_run(sr_de_state *state, real (*func)(const real *), real *best,
+                     real *best_val, int *evals)
+{
+  if (!state || !func || !best || !best_val) return -1;
+
+  int local_evals = 0;
+  if (sr_de_init_population(state, best, best_val, func, &local_evals) != 0) {
+    return -1;
+  }
+
+  for (int iter = 0;
+       iter < state->max_iters && local_evals < state->max_evals;
+       iter++) {
+    if (sr_de_run_generation(state, func, best, best_val, &local_evals) != 0) {
+      return -1;
+    }
+
+    if (*best_val >= (real)0.0 && *best_val <= R_TOLERANCE) {
+      break;
+    }
+  }
+
+  if (evals) {
+    *evals = local_evals;
+  }
+
+  return 0;
+}
+
 /*===========================================================================*/
 /* Public API                                                                */
 /*===========================================================================*/
@@ -293,8 +423,8 @@ static const sr_de_cfg *sr_de_get_effective_cfg(const sr_de_cfg *cfg,
  *
  * Sets up default hyperparameters suitable for LEED optimization:
  * - Population: 10 × ndim (minimum 20)
- * - Differential weight (F): 0.8
- * - Crossover probability (CR): 0.9
+ * - Differential weight (F): 0.8 (clamped to (0, 2])
+ * - Crossover probability (CR): 0.9 (clamped to [0, 1])
  * - Initial span: dpos or 1.0
  *
  * @param cfg   Pointer to configuration structure to initialize.
@@ -311,6 +441,10 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos)
   cfg->crossover = (real)0.9;
   cfg->init_span = (dpos > 0.0) ? dpos : (real)1.0;
   cfg->seed = 0;
+  if (cfg->weight <= (real)0.0) cfg->weight = (real)0.8;
+  if (cfg->weight > (real)2.0) cfg->weight = (real)2.0;
+  if (cfg->crossover < (real)0.0) cfg->crossover = (real)0.0;
+  if (cfg->crossover > (real)1.0) cfg->crossover = (real)1.0;
 }
 
 /**
@@ -345,72 +479,37 @@ int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
     return -1;
   }
 
-  /* Apply defaults if no config provided */
-  sr_de_cfg defaults;
-  cfg = sr_de_get_effective_cfg(cfg, &defaults, ndim);
-
-  /* Extract and validate parameters */
-  int pop = (cfg->population > 0) ? cfg->population : sr_de_default_population(ndim);
-  if (pop < 4) {
+  sr_de_cfg effective_cfg;
+  if (sr_de_resolve_cfg(cfg, ndim, &effective_cfg) != 0) {
     return -1;
   }
-
-  const int max_iters = (cfg->max_iters > 0) ? cfg->max_iters : MAX_ITER_DE;
-  const int max_evals = (cfg->max_evals > 0) ? cfg->max_evals : MAX_EVAL_DE;
-  real weight = (cfg->weight > 0.0) ? cfg->weight : (real)0.8;
-  real cr = (cfg->crossover > 0.0) ? cfg->crossover : (real)0.9;
-  if (cr > (real)1.0) {
-    cr = (real)1.0;
-  }
-  const real span = (cfg->init_span > 0.0) ? cfg->init_span : (real)1.0;
 
   /* Initialize RNG */
-  sr_rng rng;
-  const uint64_t seed = (cfg->seed > 0) ? cfg->seed : 1ULL;
-  sr_rng_seed(&rng, (uint64_t)seed);
+  sr_de_state state;
+  state.pop = effective_cfg.population;
+  state.ndim = ndim;
+  state.max_iters = effective_cfg.max_iters;
+  state.max_evals = effective_cfg.max_evals;
+  state.weight = effective_cfg.weight;
+  state.crossover = effective_cfg.crossover;
+  state.span = effective_cfg.init_span;
+  state.pop_vec = NULL;
+  state.scores = NULL;
+  state.trial = NULL;
+  sr_rng_seed(&state.rng, (uint64_t)effective_cfg.seed);
 
   /* Allocate working memory */
-  real **pop_vec = NULL;
-  real *scores = NULL;
-  real *trial = NULL;
-  if (sr_de_alloc_memory(pop, ndim, &pop_vec, &scores, &trial) != 0) {
+  if (sr_de_alloc_memory(state.pop, state.ndim, &state.pop_vec,
+                         &state.scores, &state.trial) != 0) {
     return -1;
   }
 
-  /* Initialize population */
-  int local_evals = 0;
-  if (sr_de_init_population(&rng, pop, ndim, span, pop_vec, scores, best,
-                            best_val, func, &local_evals) != 0) {
-    sr_de_free_memory(pop_vec, scores, trial);
+  if (sr_de_run(&state, func, best, best_val, evals) != 0) {
+    sr_de_free_memory(state.pop_vec, state.scores, state.trial);
     return -1;
   }
 
-  /* Main evolution loop */
-  for (int iter = 0; iter < max_iters && local_evals < max_evals; iter++) {
-    for (int i = 1; i <= pop && local_evals < max_evals; i++) {
-      int a, b, c;
-      if (sr_de_pick_indices(&rng, pop, i, &a, &b, &c) != 0) {
-        sr_de_free_memory(pop_vec, scores, trial);
-        return -1;
-      }
-
-      sr_de_create_trial(&rng, pop_vec, i, a, b, c, weight, cr, ndim, trial);
-
-      const real trial_val = (*func)(trial);
-      local_evals++;
-
-      sr_de_selection(pop_vec, scores, i, trial, trial_val, best, best_val, ndim);
-    }
-
-    /* Early termination on convergence */
-    if (*best_val <= R_TOLERANCE) {
-      break;
-    }
-  }
-
-  if (evals) *evals = local_evals;
-
-  sr_de_free_memory(pop_vec, scores, trial);
+  sr_de_free_memory(state.pop_vec, state.scores, state.trial);
   return 0;
 }
 
@@ -479,10 +578,8 @@ static void sr_de_build_config(sr_de_cfg *cfg, int ndim, real dpos)
   cfg->max_iters = sr_de_iter_limit;
   cfg->max_evals = sr_de_eval_limit;
 
-  if (sa_idum < 0) {
-    cfg->seed = (uint64_t)(-sa_idum);
-  } else if (sa_idum > 0) {
-    cfg->seed = (uint64_t)sa_idum;
+  if (sa_idum != 0) {
+    cfg->seed = (uint64_t)(sa_idum < 0 ? -sa_idum : sa_idum);
   }
 }
 
@@ -505,6 +602,11 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
   /* Build configuration from globals */
   sr_de_cfg cfg;
   sr_de_build_config(&cfg, ndim, dpos);
+  sr_de_cfg effective_cfg;
+  if (sr_de_resolve_cfg(&cfg, ndim, &effective_cfg) != 0) {
+    fprintf(STDERR, "*** error (sr_de): invalid configuration\n");
+    exit(1);
+  }
 
   /* Allocate result vector */
   real *best = sr_alloc_vector((size_t)ndim);
@@ -520,13 +622,14 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
     OPEN_ERROR(log_file);
     exit(1);  /* Ensure exit if OPEN_ERROR doesn't */
   }
-  sr_de_log_config(log_stream, &cfg);
+  sr_de_log_config(log_stream, &effective_cfg);
   fclose(log_stream);
 
   /* Run optimization */
   real best_val = 0.0;
   int evals = 0;
-  if (sr_de_optimize(&cfg, ndim, (real (*)(const real *))sr_evalrf, best, &best_val, &evals) != 0) {
+  if (sr_de_optimize(&effective_cfg, ndim, (real (*)(const real *))sr_evalrf,
+                     best, &best_val, &evals) != 0) {
     sr_free_vector(best);
     fprintf(STDERR, "*** error (sr_de): optimisation failed\n");
     exit(1);

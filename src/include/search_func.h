@@ -178,17 +178,26 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
  * @brief Configuration for differential evolution (DE).
  */
 typedef struct sr_de_cfg {
+  // cppcheck-suppress unusedStructMember
   int population;
+  // cppcheck-suppress unusedStructMember
   int max_iters;
+  // cppcheck-suppress unusedStructMember
   int max_evals;
+  // cppcheck-suppress unusedStructMember
   real weight;
+  // cppcheck-suppress unusedStructMember
   real crossover;
+  // cppcheck-suppress unusedStructMember
   real init_span;
+  // cppcheck-suppress unusedStructMember
   uint64_t seed;  /**< RNG seed (0 = use default) */
 } sr_de_cfg;
 
 /**
  * @brief Initialise DE defaults based on dimensionality and dpos.
+ *
+ * Weight (F) is clamped to (0, 2] and crossover (CR) to [0, 1].
  */
 void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos);
 
