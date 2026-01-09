@@ -122,4 +122,18 @@ void rf_info()
     printf("Contact: %s\n", PROG_MAINTAINER);
 }
 
+void rfac_help(FILE *output)
+{
+    rf_help(output);
+}
+
+void rfac_info(void)
+{
+    printf("%s - version %s (%s)\n", RFAC, RFAC_VERSION, RFAC_PLAT);
+    printf("%s\n", RFAC_SHORTDESC);
+    printf("%s\n", RFAC_COPYRIGHT);
+    printf("%s\n", RFAC_LICENSE);
+    printf("Contact: %s\n", RFAC_MAINTAINER);
+}
+
 /********************************************************************/
