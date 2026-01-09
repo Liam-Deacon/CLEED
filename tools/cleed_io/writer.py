@@ -1,4 +1,3 @@
-import numpy as np
 from ase import Atoms
 
 def format_vector(label, v):

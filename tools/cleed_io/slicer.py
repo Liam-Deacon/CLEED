@@ -1,8 +1,7 @@
 import numpy as np
 from ase import Atoms
-from ase.geometry import cell_to_cellpar
 
-def align_surface(atoms: Atoms, vacuum_direction='z', tolerance=1e-3) -> Atoms:
+def align_surface(atoms: Atoms) -> Atoms:
     """
     Aligns the atoms object such that the periodic surface vectors (a, b)
     lie in the xy-plane (z=0) and the surface normal points along +z.
@@ -13,8 +12,6 @@ def align_surface(atoms: Atoms, vacuum_direction='z', tolerance=1e-3) -> Atoms:
     # For a standard slab, we assume c is the vacuum direction.
     
     cell = atoms.get_cell()
-    pbc = atoms.get_pbc()
-    
     # We assume standard ASE slab convention: 3rd vector is out-of-plane
     # Check if we need to rotate.
     

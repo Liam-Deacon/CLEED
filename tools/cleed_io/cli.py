@@ -1,6 +1,5 @@
 import argparse
 import sys
-import os
 from ase.io import read, write
 from cleed_io.slicer import slice_slab
 from cleed_io.writer import write_bul, write_inp
