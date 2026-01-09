@@ -195,16 +195,15 @@ void sr_optimizer_config_from_env(sr_optimizer_config *cfg)
 void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
 {
   if (!cfg) return;
-  if (cfg->max_evals > 0) {
-    sr_amoeba_eval_limit = cfg->max_evals;
-  }
+  sr_amoeba_eval_limit = (cfg->max_evals > 0) ? cfg->max_evals : MAX_ITER_AMOEBA;
   if (cfg->max_iters > 0) {
     sr_powell_iter_limit = cfg->max_iters;
     sr_sa_iter_limit = cfg->max_iters;
+  } else {
+    sr_powell_iter_limit = MAX_ITER_POWELL;
+    sr_sa_iter_limit = MAX_ITER_SA;
   }
-  if (cfg->seed > 0) {
-    sa_idum = cfg->seed;
-  }
+  sa_idum = (cfg->seed > 0) ? cfg->seed : 0;
 }
 
 static int sr_optimizer_config_is_default(const sr_optimizer_config *cfg)
