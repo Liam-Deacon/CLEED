@@ -57,24 +57,32 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Check if jq is available
+          # Check if required tools are available
           if ! command -v jq >/dev/null 2>&1; then
             echo "::error::jq is not available on this runner"
             exit 1
           fi
+          if ! command -v gh >/dev/null 2>&1; then
+            echo "::error::gh CLI is not available on this runner"
+            exit 1
+          fi
 
           # Check if GitHub Pages is enabled with workflow build type
-          if ! PAGES_INFO=$(gh api repos/${{ github.repository }}/pages 2>/dev/null); then
+          # Capture both stdout and stderr, and exit status in one call
+          PAGES_INFO=$(gh api repos/${{ github.repository }}/pages 2>&1)
+          API_EXIT_CODE=$?
+
+          if [ $API_EXIT_CODE -ne 0 ]; then
             # Check if it's specifically a 404 (Pages not configured) vs other errors
-            API_ERROR=$(gh api repos/${{ github.repository }}/pages 2>&1)
-            if echo "$API_ERROR" | grep -q "Not Found\|HTTP 404"; then
+            # Note: This pattern matching depends on GitHub's current error text format
+            if echo "$PAGES_INFO" | grep -q "Not Found\|HTTP 404"; then
               echo "::error::GitHub Pages is not enabled for this repository."
               echo "::error::To fix: Go to Settings > Pages > Source and select 'GitHub Actions'"
               echo "::error::Or run: gh api repos/${{ github.repository }}/pages -X POST -f build_type='workflow'"
               exit 1
             else
               echo "::error::Failed to check GitHub Pages status. This may be a transient API error:"
-              echo "::error::$API_ERROR"
+              echo "::error::$PAGES_INFO"
               exit 1
             fi
           fi
