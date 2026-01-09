@@ -148,7 +148,7 @@ static void sr_de_copy_vector(real *dest, const real *src, int ndim)
  */
 static int sr_de_init_population(sr_rng *rng, int pop, int ndim, real span,
                                  real **pop_vec, real *scores, real *best,
-                                 real *best_val, real (*func)(real *), int *evals)
+                                 real *best_val, real (*func)(const real *), int *evals)
 {
   if (!rng || !pop_vec || !scores || !best || !best_val || !func) return -1;
 
@@ -338,7 +338,7 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos)
  * @param evals    Output: total number of function evaluations (may be NULL).
  * @return 0 on success, -1 on failure.
  */
-int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(real *),
+int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
                    real *best, real *best_val, int *evals)
 {
   if (!func || !best || !best_val || ndim <= 0) {
@@ -366,7 +366,7 @@ int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(real *),
 
   /* Initialize RNG */
   sr_rng rng;
-  const unsigned long long seed = (cfg->seed > 0) ? cfg->seed : 1ULL;
+  const uint64_t seed = (cfg->seed > 0) ? cfg->seed : 1ULL;
   sr_rng_seed(&rng, (uint64_t)seed);
 
   /* Allocate working memory */
@@ -480,9 +480,9 @@ static void sr_de_build_config(sr_de_cfg *cfg, int ndim, real dpos)
   cfg->max_evals = sr_de_eval_limit;
 
   if (sa_idum < 0) {
-    cfg->seed = (unsigned long long)(-sa_idum);
+    cfg->seed = (uint64_t)(-sa_idum);
   } else if (sa_idum > 0) {
-    cfg->seed = (unsigned long long)sa_idum;
+    cfg->seed = (uint64_t)sa_idum;
   }
 }
 
@@ -518,6 +518,7 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
   if (log_stream == NULL) {
     sr_free_vector(best);
     OPEN_ERROR(log_file);
+    exit(1);  /* Ensure exit if OPEN_ERROR doesn't */
   }
   sr_de_log_config(log_stream, &cfg);
   fclose(log_stream);
@@ -525,7 +526,7 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
   /* Run optimization */
   real best_val = 0.0;
   int evals = 0;
-  if (sr_de_optimize(&cfg, ndim, sr_evalrf, best, &best_val, &evals) != 0) {
+  if (sr_de_optimize(&cfg, ndim, (real (*)(const real *))sr_evalrf, best, &best_val, &evals) != 0) {
     sr_free_vector(best);
     fprintf(STDERR, "*** error (sr_de): optimisation failed\n");
     exit(1);
@@ -536,6 +537,7 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
   if (log_stream == NULL) {
     sr_free_vector(best);
     OPEN_ERROR(log_file);
+    exit(1);  /* Ensure exit if OPEN_ERROR doesn't */
   }
   sr_de_log_results(log_stream, ndim, evals, best, best_val);
   fclose(log_stream);

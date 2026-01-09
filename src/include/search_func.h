@@ -184,7 +184,7 @@ typedef struct sr_de_cfg {
   real weight;
   real crossover;
   real init_span;
-  unsigned long long seed;
+  uint64_t seed;  /**< RNG seed (0 = use default) */
 } sr_de_cfg;
 
 /**
@@ -203,7 +203,7 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos);
  * @param evals In/out evaluation counter (may be NULL).
  * @return 0 on success, non-zero on failure.
  */
-int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(real *),
+int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
                    real *best, real *best_val, int *evals);
 
 /* Drivers */

@@ -7,7 +7,7 @@
 
 #include "test_support.h"
 
-static real quadratic_2d(real *x)
+static real quadratic_2d(const real *x)
 {
     const real dx = x[1] - (real)1.0;
     const real dy = x[2] + (real)2.0;
