@@ -12,6 +12,8 @@
 #include <string.h>
 // cppcheck-suppress missingIncludeSystem
 #include <strings.h>
+// cppcheck-suppress missingIncludeSystem
+#include <errno.h>
 
 #include "search.h"
 #include "search_optimizer.h"
@@ -162,8 +164,9 @@ static int sr_optimizer_read_int_env(const char *name, int *out_value)
   if (!raw || !out_value) {
     return 0;
   }
+  errno = 0;
   parsed = strtol(raw, &end, 10);
-  if (end == raw || parsed <= 0 || parsed > INT_MAX) {
+  if (end == raw || errno == ERANGE || parsed <= 0 || parsed > INT_MAX) {
     return 0;
   }
   *out_value = (int)parsed;
