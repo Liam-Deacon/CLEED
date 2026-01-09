@@ -48,6 +48,28 @@ Options
   Specifies the search algorithm to be used for the structure
   optimisation. Possible arguments are:
 
+  - :code:`si` / :code:`sx`: simplex (default).
+  - :code:`po`: Powell.
+  - :code:`sa`: simulated annealing.
+  - :code:`ga`: genetic algorithm (not implemented).
+
+:code:`--max-evals <n>`
+
+  Limits objective evaluations (simplex). Overrides the default iteration budget.
+
+:code:`--max-iters <n>`
+
+  Limits iterations (Powell/annealing). Overrides the default iteration budget.
+
+:code:`--seed <n>`
+
+  Sets a deterministic seed for stochastic optimizers (simulated annealing).
+
+.. note::
+   Seeds are parsed as unsigned 64-bit integers. A value of 0 selects the
+   built-in default used by the deterministic annealing RNG; non-zero seeds
+   reproduce runs across platforms.
+
 :code:`-v <vertex_file>`
                      
   Allows the search to be restarted with the current simplex, provided 
@@ -70,6 +92,18 @@ Environment
 :envvar:`CSEARCH_RFAC`
   Path of the crfac program  used  for the R factor evaluation. This may simply be 'crfac'
   if the parent directory of this program is in the system :envvar:`PATH` variable.
+
+:envvar:`CSEARCH_MAX_EVALS`
+  Optional evaluation budget for simplex searches (same as :code:`--max-evals`).
+
+:envvar:`CSEARCH_MAX_ITERS`
+  Optional iteration budget for Powell/annealing searches (same as :code:`--max-iters`).
+
+:envvar:`CSEARCH_SEED`
+  Optional deterministic seed for simulated annealing (same as :code:`--seed`).
+
+  A value of 0 uses the built-in default seed for the deterministic annealing
+  RNG. Non-zero values are parsed as unsigned 64-bit integers.
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 
