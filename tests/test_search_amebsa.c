@@ -9,7 +9,10 @@
 
 #include "test_support.h"
 
-extern long sa_idum;
+// cppcheck-suppress missingIncludeSystem
+#include <stdint.h>
+
+extern uint64_t sa_idum;
 
 static real quadratic_2d(real *x)
 {
@@ -40,7 +43,7 @@ typedef struct amebsa_result {
     int used;
 } amebsa_result;
 
-static int run_amebsa_once(real temptr, long seed, amebsa_result *out)
+static int run_amebsa_once(real temptr, uint64_t seed, amebsa_result *out)
 {
     const int ndim = 2;
     const int mpts = ndim + 1;
@@ -108,8 +111,8 @@ static int run_amebsa_once(real temptr, long seed, amebsa_result *out)
 static int test_reproducible_with_fixed_seed(void)
 {
     amebsa_result r1, r2;
-    if (run_amebsa_once((real)1.0, -12345, &r1) != 0) return 1;
-    if (run_amebsa_once((real)1.0, -12345, &r2) != 0) return 1;
+    if (run_amebsa_once((real)1.0, 12345U, &r1) != 0) return 1;
+    if (run_amebsa_once((real)1.0, 12345U, &r2) != 0) return 1;
 
     CLEED_TEST_ASSERT_NEAR(r1.yb, r2.yb, AMEBSA_DETERMINISM_TOL);
     CLEED_TEST_ASSERT_NEAR(r1.pb1, r2.pb1, AMEBSA_DETERMINISM_TOL);
@@ -122,8 +125,8 @@ static int test_reproducible_with_fixed_seed(void)
 static int test_zero_temperature_seed_independent(void)
 {
     amebsa_result r1, r2;
-    if (run_amebsa_once((real)0.0, -1, &r1) != 0) return 1;
-    if (run_amebsa_once((real)0.0, -999, &r2) != 0) return 1;
+    if (run_amebsa_once((real)0.0, 1U, &r1) != 0) return 1;
+    if (run_amebsa_once((real)0.0, 999U, &r2) != 0) return 1;
 
     CLEED_TEST_ASSERT_NEAR(r1.yb, r2.yb, AMEBSA_DETERMINISM_TOL);
     CLEED_TEST_ASSERT_NEAR(r1.pb1, r2.pb1, AMEBSA_DETERMINISM_TOL);
