@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
   if (!optimizer) {
     optimizer = sr_optimizer_by_type(SR_SIMPLEX);
   }
-  if (!optimizer || sr_optimizer_run(optimizer, &opt_cfg, ndim, delta, bak_file, log_file) != 0)
+  if (sr_optimizer_run(optimizer, &opt_cfg, ndim, delta, bak_file, log_file) != 0)
   {
     #ifdef ERROR
     fprintf(STDERR,

@@ -28,6 +28,7 @@ typedef struct sr_optimizer_entry {
 static int sr_run_simplex(int ndim, real dpos, const char *bak_file,
                           const char *log_file)
 {
+  (void)dpos;
   SR_SX(ndim, dpos, bak_file, log_file);
   return 0;
 }
@@ -178,6 +179,7 @@ static int sr_optimizer_read_seed_env(const char *name, uint64_t *out_value)
 
   if (!raw || !out_value) return 0;
   parsed = strtoull(raw, &end, 10);
+  /* CSEARCH_SEED=0 means "use the default seed", so ignore it here. */
   if (end == raw || parsed == 0) return 0;
   *out_value = (uint64_t)parsed;
   return 1;
