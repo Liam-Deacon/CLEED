@@ -41,7 +41,10 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/vcpkg
-        key: ${{ runner.os }}-vcpkg-${{ hashFiles('.github/workflows/cmake-build.yaml') }}
+        # Cache key depends on vcpkg inputs (manifest/config) instead of the workflow file
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg*.json', 'vcpkg-configuration.json') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
 
     - name: Install build dependencies (Windows via vcpkg)
       if: runner.os == 'Windows' && steps.cache-vcpkg.outputs.cache-hit != 'true'
