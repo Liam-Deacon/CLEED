@@ -17,6 +17,7 @@ extern "C" {
 #define SEARCH_FUNC_H
 
 #include <stdio.h>
+#include <stdint.h>
 
 /**
  * @file search_func.h
@@ -118,7 +119,7 @@ typedef struct sr_pso_cfg {
   real c1;
   real c2;
   real v_max;
-  unsigned long long seed;
+  uint64_t seed;
 } sr_pso_cfg;
 
 /**

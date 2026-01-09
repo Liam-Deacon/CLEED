@@ -221,8 +221,9 @@ static int sr_optimizer_read_real_env(const char *name, real *out_value)
   double parsed = 0.0;
 
   if (!raw || !out_value) return 0;
+  errno = 0;
   parsed = strtod(raw, &end);
-  if (end == raw || parsed <= 0.0) return 0;
+  if (end == raw || errno == ERANGE || parsed <= 0.0) return 0;
   *out_value = (real)parsed;
   return 1;
 }
@@ -251,6 +252,7 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   } else {
     sr_powell_iter_limit = MAX_ITER_POWELL;
     sr_sa_iter_limit = MAX_ITER_SA;
+    sr_pso_iter_limit = MAX_ITER_PSO;
   }
   if (cfg->max_evals > 0) {
     sr_pso_eval_limit = cfg->max_evals;
