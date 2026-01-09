@@ -105,7 +105,7 @@ def main() -> int:
     phsh = resolve_phsh(args.phsh)
     if shutil.which(phsh) is None and not Path(phsh).exists():
         parser.error(
-            f\"phsh.py not found (searched for '{args.phsh}'); install phaseshifts or pass --phsh\"
+            f"phsh.py not found (searched for '{args.phsh}'); install phaseshifts or pass --phsh"
         )
     cmd = [phsh, "-g", "-b", str(bulk), "-i", str(slab), "-f", args.format]
     if args.lmax is not None:
@@ -119,7 +119,7 @@ def main() -> int:
     try:
         subprocess.run(cmd, check=True, env=env)
     except FileNotFoundError as exc:
-        print(f\"Failed to execute {phsh}: {exc}\", file=sys.stderr)
+        print(f"Failed to execute {phsh}: {exc}", file=sys.stderr)
         return 127
     except subprocess.CalledProcessError as exc:
         return exc.returncode
