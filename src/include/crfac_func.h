@@ -13,7 +13,7 @@ extern "C" {
 
 /* low level input */
 int    bgets( char *, long, long, char *); /* get string from buffer */
-char * file2buffer( char *);               /* copy file to buffer */ 
+char * file2buffer(const char *);          /* copy file to buffer */ 
 
 /* count lines (all in file rflines.c) */
 int   rf_lines( char *);                   /* count lines */

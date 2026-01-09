@@ -125,7 +125,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     /* Read number of beams and allocate memory for list beam */
     if(strncmp(line_buffer+1, "bn", 2) == 0)
     {
-      CLEED_SSCANF(line_buffer+3, "%u", &n_beam);
+      CLEED_SSCANF(line_buffer+3, "%zu", &n_beam);
       CLEED_ALLOC_CHECK(beam = (rfac_spot *) 
                                   calloc(n_beam+1, sizeof(rfac_spot)));
       
@@ -140,7 +140,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
         exit(ENOMEM);
       }
 
-      CLEED_SSCANF(line_buffer+3, "%u", &i_beam);
+      CLEED_SSCANF(line_buffer+3, "%zu", &i_beam);
       if(i_beam < n_beam)
       {
         sprintf(fmt_buffer, "%%d %%%sf %%%sf", CLEED_REAL_FMT, CLEED_REAL_FMT);
@@ -150,12 +150,12 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
                      &beam[i_beam].index2 );
         i_read ++;
 
-        CONTROL_MSG(CONTROL, "\t%d:\t(%5.2f,%5.2f)\n",
+        CONTROL_MSG(CONTROL, "\t%zu:\t(%5.2f,%5.2f)\n",
                 i_beam, beam[i_beam].index1, beam[i_beam].index2 );
       }
       else
       {
-        ERROR_MSG("beam index exceeds limit (%d/%d)\n", i_beam, n_beam);
+        ERROR_MSG("beam index exceeds limit (%zu/%zu)\n", i_beam, n_beam);
         exit(ENOMEM);
       }
       
@@ -164,7 +164,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     /* Read number of energies */
     if(strncmp(line_buffer+1, "en", 2) == 0)
     {
-      CLEED_SSCANF(line_buffer+3, "%u", &n_eng);
+      CLEED_SSCANF(line_buffer+3, "%zu", &n_eng);
     } /* en */
 
     /* Read next line */
@@ -182,7 +182,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
 
   if (i_read != n_beam)
   {
-    ERROR_MSG("numbers of beams do not match (read: %d/n_beam: %d)\n",
+    ERROR_MSG("numbers of beams do not match (read: %zu/n_beam: %zu)\n",
               i_read, n_beam);
     exit(EINVAL);
   }
@@ -190,7 +190,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
   /* Changed 12.10.00: if( (lines = rfac_nclines(buffer+offs) ) != n_eng) */
   if( (lines = rfac_nclines(buffer+data_offs) ) != n_eng)
   {
-    ERROR_MSG("numbers of energies do not match (lines: %d/n_eng: %d)\n",
+    ERROR_MSG("numbers of energies do not match (lines: %zu/n_eng: %zu)\n",
               lines, n_eng);
     exit(EINVAL);
   }
@@ -217,7 +217,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     CLEED_ALLOC_CHECK(line_buffer = (char *)calloc(buffer_len, sizeof(char)));
 
   CONTROL_MSG(CONTROL, "start reading intensities.\n");
-  CONTROL_MSG(CONTROL, "%d bytes for line_buffer.\n", n_beam*LENGTH_OF_NUMBER);
+  CONTROL_MSG(CONTROL, "%zu bytes for line_buffer.\n", n_beam*LENGTH_OF_NUMBER);
 
   /* preset some values */
   iv->sort = true;              /* reset sort flag */
@@ -234,7 +234,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
   {
     if(line_buffer[0] != '#')      /* no comment */
     {
-      CONTROL_MSG(CONTROL, "i_eng = %d ", i_eng);
+      CONTROL_MSG(CONTROL, "i_eng = %zu ", i_eng);
 
       /* Read energy first, then intensities. */
       i_str = 0;
@@ -309,7 +309,7 @@ rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     
   }  /* for i_eng */
 
-  CONTROL_MSG(CONTROL, "1st/last eng(%d): %.1f/%.1f ",
+  CONTROL_MSG(CONTROL, "1st/last eng(%zu): %.1f/%.1f ",
               i_eng, list[0].energy, list[i_eng-1].energy);
 
   /* Write all available information to structure iv_cur */

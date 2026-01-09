@@ -16,7 +16,7 @@ extern "C" {
  *********************************************************************/
 
 int bgets(char *buffer, long offset, long max, char *string);
-char *file2buffer(char *filename);
+char *file2buffer(const char *filename);
 
 rfac_args *rfac_rdargs(int argc, char **argv);
 

@@ -48,12 +48,24 @@ void rf_help(FILE *output)
  Print a short program description explaining all arguments.
 */
 {
-    if (file_content(getenv("RF_HELP_FILE")) != NULL)
-        strcpy(line_buffer, file_content(getenv("RF_HELP_FILE")));
+    char *help_text = NULL;
+    const char *help_file = getenv("RF_HELP_FILE");
+
+    if (help_file != NULL)
+        help_text = file_content(help_file);
+
+    if (help_text != NULL)
+    {
+        strncpy(line_buffer, help_text, sizeof(line_buffer) - 1);
+        line_buffer[sizeof(line_buffer) - 1] = '\0';
+        free(help_text);
+    }
     else
-        strcpy(line_buffer, ""); 
-        
-    if (line_buffer == NULL || strcmp(line_buffer, "") == 0) /* file not found */
+    {
+        line_buffer[0] = '\0';
+    }
+
+    if (line_buffer[0] == '\0') /* file not found */
     {
         /* use hard-coded help */
         fprintf(output, "SYNTAX:");

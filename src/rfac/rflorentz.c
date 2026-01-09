@@ -104,7 +104,7 @@ int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi)
     faux = vi * (real)sqrt(1./EPSILON - 1.);
     n_range = (size_t)(faux / e_step);
 
-    CONTROL_MSG(CONTROL, "e_step: %.1f n_range: %d\n", e_step, n_range);
+    CONTROL_MSG(CONTROL, "e_step: %.1f n_range: %zu\n", e_step, n_range);
 
     for (i = 0; i < n_range; i ++)
     {

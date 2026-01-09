@@ -387,7 +387,7 @@ BasicElement::~BasicElement() {
 }
 
 inline bool BasicElement::operator!() {
-  return (this != nullptr);
+  return (Z == 0);
 }
 
 BasicElement &BasicElement::operator=(std::string id) {

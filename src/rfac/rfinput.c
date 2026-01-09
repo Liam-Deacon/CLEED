@@ -100,7 +100,7 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
 
   n_cur = rfac_nclines(ctr_buffer);
 
-  CONTROL_MSG(CONTROL_X, "n_cur = %d\n", n_cur);
+  CONTROL_MSG(CONTROL_X, "n_cur = %zu\n", n_cur);
 
   cur_list = (rfac_ivcur*) calloc(n_cur+1, sizeof(rfac_ivcur));
 
@@ -209,7 +209,7 @@ rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file)
       *   increment i_cur and reset lists;
       */
      CONTROL_MSG(CONTROL,
-            "%d of %d: ti: %s, ef: %s, e0: %.1f id: %d, wt: %.1f, \n",
+            "%zu of %zu: ti: %s, ef: %s, e0: %.1f id: %d, wt: %.1f, \n",
             i_cur+1, n_cur, index_list, exp_file,
             cur_list[i_cur].eng_0, cur_list[i_cur].group_id,
             cur_list[i_cur].weight);

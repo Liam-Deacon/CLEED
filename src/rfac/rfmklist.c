@@ -111,7 +111,7 @@ size_t rfac_mklist(real *eng, real *e_int, real *t_int,
     t_int[n_eng] = (real) F_END_OF_LIST;
 
     #ifdef CONTROL
-    fprintf(STDCTR, "(cr_mklist): (exp) n_eng: %d\n", n_eng);
+    fprintf(STDCTR, "(cr_mklist): (exp) n_eng: %zu\n", n_eng);
     #endif
 
   } /* Higher density of energy points in expt. list */
@@ -149,7 +149,7 @@ size_t rfac_mklist(real *eng, real *e_int, real *t_int,
     t_int[n_eng] = (real) F_END_OF_LIST;
 
     #ifdef CONTROL
-    fprintf(STDCTR, "(cr_mklist): (the) n_eng: %d\n", n_eng);
+    fprintf(STDCTR, "(cr_mklist): (the) n_eng: %zu\n", n_eng);
     #endif
 
   } /* Higher density of energy points in theor. list */

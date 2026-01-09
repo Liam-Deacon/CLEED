@@ -79,7 +79,7 @@ size_t rfac_mklide(real *eng, real *e_int, real *t_int,
       (exp_list[i_elo].energy < (the_list[i_elo].energy - shift));
       i_elo ++)
   { ; }
-  fprintf(stderr, "%i \n ", i_elo);
+  fprintf(stderr, "%zu \n ", i_elo);
   exit(0);
 
   /* Return zero if no overlap */
@@ -101,7 +101,7 @@ size_t rfac_mklide(real *eng, real *e_int, real *t_int,
   /* terminate lists */
   eng[n_eng] = e_int[n_eng] = t_int[n_eng] = (real) F_END_OF_LIST;
 
-  CONTROL_MSG(CONTROL, "(exp) n_eng: %d\n", n_eng);
+  CONTROL_MSG(CONTROL, "(exp) n_eng: %zu\n", n_eng);
  
 #if WRITE
   str_e_int = fopen("rfmklist.exp", "w");

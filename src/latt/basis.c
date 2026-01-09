@@ -68,7 +68,7 @@ void basis_copy(basis_t *dst, const basis_t *src)
 
 size_t basis_get_allocated_size(const basis_t *basis)
 {
-	return (sizeof(basis)/sizeof(basis_t));
+  return basis ? 1u : 0u;
 }
 
 void basis_get_vectors(const basis_t *basis, coord_t *a1, 

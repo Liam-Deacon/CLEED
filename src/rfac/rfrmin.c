@@ -85,7 +85,7 @@ static size_t rfac_ivcur_get_n_leng(const rfac_ivcur *iv_cur, real de) {
 #endif
         iv_cur[i].group_id != END_OF_GROUP_ID; i++)
   {
-    fprintf(stderr, "i=%i\n", i);
+    fprintf(stderr, "i=%zu\n", i);
 #if SHIFT_DE
     e_range = rfac_iv_get_energy_range(iv_cur[i].experimental);
     n_leng = MAX(n_leng, (size_t)abs((int)(e_range/de)));
@@ -109,8 +109,8 @@ static size_t rfac_ivcur_get_n_leng(const rfac_ivcur *iv_cur, real de) {
 static inline real rfac_ivcur_get_overlap(const rfac_ivcur *iv_cur) {
   real overlap = 0.;
 #if SHIFT_DE
-  overlap =  MIN(iv_cur->experimental->last_eng, iv_cur->theory->last_eng) -
-             MAX(iv_cur->experimental->first_eng, iv_cur->theory->first_eng);
+  overlap = (MIN(iv_cur->experimental->last_eng, iv_cur->theory->last_eng)) -
+            (MAX(iv_cur->experimental->first_eng, iv_cur->theory->first_eng));
 #endif
   return overlap;
 }
@@ -300,9 +300,9 @@ void rfac_ivcur_write(const char *iv_file_prefix,
 
         /* prepare file prefix */
         if(i_curve < 9)
-          sprintf(buffer, "%s.0%d", iv_file_prefix, i_curve+1);
+          sprintf(buffer, "%s.0%zu", iv_file_prefix, i_curve+1);
         else
-          sprintf(buffer, "%s0%d", iv_file_prefix, i_curve+1);
+          sprintf(buffer, "%s0%zu", iv_file_prefix, i_curve+1);
 
         /* write theoretical IV output */
         sprintf(filename, "%st", buffer);
@@ -343,7 +343,7 @@ void rfac_iv_print_list(const real *eng, const real *t_int, const real *e_int) {
   if (!eng || !t_int || !e_int) return; /* input contains NULL(s) */
 
   for (size_t i=0; eng[i] != F_END_OF_LIST; i++) {
-    fprintf(stderr, "%d %f %f %f\n", i, eng[i], t_int[i], e_int[i]);
+    fprintf(stderr, "%zu %f %f %f\n", i, eng[i], t_int[i], e_int[i]);
   }
 }
 
@@ -383,7 +383,7 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
   CLEED_ALLOC_CHECK(e_int = (real *) calloc(n_leng, sizeof(real)));
   CLEED_ALLOC_CHECK(t_int = (real *) calloc(n_leng, sizeof(real)));
 
-  CONTROL_MSG(CONTROL, "start of function, n_list = %d, n_leng = %d\n",
+  CONTROL_MSG(CONTROL, "start of function, n_list = %zu, n_leng = %zu\n",
               n_list, n_leng);
 
   /* Scan through shift and find minimum R factor */
@@ -414,7 +414,7 @@ real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
        rfac += faux;
      }
      else
-       WARNING_MSG("No overlap in IV curve No.%d for shift %.1f eV\n",
+       WARNING_MSG("No overlap in IV curve No.%zu for shift %.1f eV\n",
                    i_list, shift);
 
     }  /* for i_list */

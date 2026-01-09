@@ -25,15 +25,10 @@ using namespace cleed;
 
 Atom::Atom() : x(0.), y(0.), z(0.) {}
 
-Atom::Atom(double x, double y, double z) {
-  setXPosition(x);
-  setYPosition(y);
-  setZPosition(z);
-}
+Atom::Atom(double x, double y, double z) : x(x), y(y), z(z) {}
 
-Atom::Atom(std::vector<double> pos) {
-  setPosition(pos);
-}
+Atom::Atom(std::vector<double> pos)
+  : x(pos.at(0)), y(pos.at(1)), z(pos.at(2)) {}
 
 Atom::~Atom() {
 

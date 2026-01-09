@@ -72,7 +72,7 @@ rfac_iv *rfac_iv_read(const char *filename)
   lines = rfac_nclines(buffer);
 
   CONTROL_MSG(CONTROL_X, "file content:\n%s\n", buffer);
-  CONTROL_MSG(CONTROL_X, "lines = %d\n", lines);
+  CONTROL_MSG(CONTROL_X, "lines = %zu\n", lines);
 
   if (iv->data != NULL) free(iv->data);
   CLEED_ALLOC_CHECK(iv->data = (rfac_iv_data *) 
@@ -111,7 +111,7 @@ rfac_iv *rfac_iv_read(const char *filename)
                        iv->data[i-2].energy)) >  ENG_TOLERANCE ) )
         {
           iv->equidist = 0;
-          WARNING_MSG("\"%s\" is not equidistant (No:%d)\n", filename, i-1);
+          WARNING_MSG("\"%s\" is not equidistant (No:%zu)\n", filename, i-1);
         }
 
         /* increment i */
@@ -130,7 +130,7 @@ rfac_iv *rfac_iv_read(const char *filename)
   }
   else
   {
-    CONTROL_MSG(CONTROL, "last pair(%d): %f %f\n",
+    CONTROL_MSG(CONTROL, "last pair(%zu): %f %f\n",
                  i-1, iv->data[i-1].energy, iv->data[i-1].intens);
   }
 

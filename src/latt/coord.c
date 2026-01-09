@@ -21,7 +21,7 @@ void coord_free(coord_t *pos)
 
 size_t coord_get_allocated_size(const coord_t *pos)
 {
-  return (sizeof(pos)/sizeof(coord_t));
+  return pos ? 1u : 0u;
 }
 
 void coord_copy(coord_t *dst, const coord_t *src)

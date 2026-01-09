@@ -74,7 +74,7 @@ size_t rfac_get_number_of_angles(const char *control_filename)
   {
     if (!strncasecmp(linebuffer, "sa:", 3))
     {
-      if (sscanf(linebuffer+3, " %u", &sa) < 1)
+      if (sscanf(linebuffer+3, " %zu", &sa) < 1)
       {
         ERROR_MSG("could not read value from '%s'", linebuffer);
       }

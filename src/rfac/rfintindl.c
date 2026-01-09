@@ -104,24 +104,27 @@ void rfac_intindl(char *command_line, rfac_spot *beam, size_t n_beam)
     }
 
     /* check compatibility with input indices and clear scale. */
-    for (j=0; ( ( cleed_real_fabs( (beam+j)->index1 - test1) +
-                cleed_real_fabs( (beam+j)->index2 - test2) ) > IND_TOLERANCE) 
-	                && (j < n_beam); j++);
+    for (j = 0; j < n_beam; j++)
     {
-      if (j < n_beam)
+      if ( ( cleed_real_fabs( (beam+j)->index1 - test1) +
+             cleed_real_fabs( (beam+j)->index2 - test2) ) <= IND_TOLERANCE)
       {
-        (beam+j)->f_val1 = scale;
-        #ifdef PRINT  /* control output, if required */
-        printf(">rfac_intindl: beam:(%5.2f,%5.2f) scale: %5.2f\n",
-               (beam+j)->index1, (beam+j)->index2, (beam+j)->f_val1);
-        #endif
+        break;
       }
-      else if(test1 > (real) F_END_OF_LIST)
-        printf(">rfac_intindl: Could not find (%5.2f,%5.2f) in input file\n",
-               test1, test2);
-      else
-        printf(">rfac_intindl: Error in commandline\n");
     }
+    if (j < n_beam)
+    {
+      (beam+j)->f_val1 = scale;
+      #ifdef PRINT  /* control output, if required */
+      printf(">rfac_intindl: beam:(%5.2f,%5.2f) scale: %5.2f\n",
+             (beam+j)->index1, (beam+j)->index2, (beam+j)->f_val1);
+      #endif
+    }
+    else if(test1 > (real) F_END_OF_LIST)
+      printf(">rfac_intindl: Could not find (%5.2f,%5.2f) in input file\n",
+             test1, test2);
+    else
+      printf(">rfac_intindl: Error in commandline\n");
 
     /* reset scale and test1/2 for next beam */
     test1 = (real) F_END_OF_LIST;

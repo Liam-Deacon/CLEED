@@ -25,12 +25,13 @@
 using namespace cleed;
 using std::size_t;
 
-/*
+#if 0
 RFactor::RFactor(const string &control_filepath, const string &theory_filepath) {
   this->args = RFactorArgs(control_filepath, theory_filepath);
   this->updateIVs(control_filepath, theory_filepath);
   this->calculateRFactor();
-} /*
+}
+#endif
 
 /* operators */
 inline bool RFactor::operator==(const RFactor &other) const {
