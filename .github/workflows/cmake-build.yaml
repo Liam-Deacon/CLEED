@@ -53,7 +53,7 @@ jobs:
       run: |
         git clone --depth 1 --branch ${{ env.VCPKG_REF }} https://github.com/microsoft/vcpkg "$env:GITHUB_WORKSPACE/vcpkg"
         & "$env:GITHUB_WORKSPACE/vcpkg/bootstrap-vcpkg.bat"
-        & "$env:GITHUB_WORKSPACE/vcpkg/vcpkg.exe" install --manifest-root "$env:GITHUB_WORKSPACE" --triplet x64-windows
+        & "$env:GITHUB_WORKSPACE/vcpkg/vcpkg.exe" install --triplet x64-windows
 
     - name: Configure CMake (Linux/macOS)
       if: runner.os != 'Windows'
