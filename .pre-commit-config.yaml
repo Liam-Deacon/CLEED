@@ -33,3 +33,10 @@ repos:
           - "--suppress=missingIncludeSystem"
           - "--error-exitcode=0"
         files: ^(src/latt|tests).*\.(c|h|cc|cpp)$
+
+  - repo: https://github.com/terryyin/lizard
+    rev: v1.17.13
+    hooks:
+      - id: lizard
+        args: ["--languages", "c,cpp,python"]
+
