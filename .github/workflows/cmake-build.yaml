@@ -8,6 +8,7 @@ on:
 
 env:
   BUILD_TYPE: Release
+  VCPKG_REF: '2024.04.26'
 
 jobs:
   build:
@@ -42,15 +43,15 @@ jobs:
       with:
         path: ${{ github.workspace }}/vcpkg
         # Cache key depends on vcpkg inputs (manifest/config) instead of the workflow file
-        key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg*.json', 'vcpkg-configuration.json') }}
+        key: ${{ runner.os }}-vcpkg-tiff-${{ hashFiles('vcpkg*.json', 'vcpkg-configuration.json') }}
         restore-keys: |
-          ${{ runner.os }}-vcpkg-
+          ${{ runner.os }}-vcpkg-tiff-
 
     - name: Install build dependencies (Windows via vcpkg)
       if: runner.os == 'Windows' && steps.cache-vcpkg.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        git clone https://github.com/microsoft/vcpkg "$env:GITHUB_WORKSPACE/vcpkg"
+        git clone --depth 1 --branch ${{ env.VCPKG_REF }} https://github.com/microsoft/vcpkg "$env:GITHUB_WORKSPACE/vcpkg"
         & "$env:GITHUB_WORKSPACE/vcpkg/bootstrap-vcpkg.bat"
         & "$env:GITHUB_WORKSPACE/vcpkg/vcpkg.exe" install tiff:x64-windows
 
