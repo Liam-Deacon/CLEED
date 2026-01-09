@@ -209,10 +209,7 @@ void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file)
   }
   cfg.max_iters = sr_pso_iter_limit;
   cfg.max_evals = sr_pso_eval_limit;
-
-  if (sa_idum > 0) {
-    cfg.seed = (unsigned long long)sa_idum;
-  }
+  cfg.seed = sr_optimizer_get_seed();
 
   real *best = sr_alloc_vector((size_t)ndim);
   if (!best) {

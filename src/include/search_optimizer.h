@@ -72,6 +72,7 @@ int sr_parse_real_arg(const char *val, real *out);
 int sr_parse_seed_arg(const char *val, uint64_t *out);
 void sr_optimizer_log_results(FILE *log_stream, const char *name, int ndim,
                               int evals, const real *best, real best_val);
+uint64_t sr_optimizer_get_seed(void);
 
 #ifdef __cplusplus
 }
