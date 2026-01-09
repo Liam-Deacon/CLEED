@@ -1,0 +1,7 @@
+{
+  "name": "cleed",
+  "version-string": "0.0.0",
+  "dependencies": [
+    "tiff"
+  ]
+}
