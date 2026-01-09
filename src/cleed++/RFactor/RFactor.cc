@@ -61,6 +61,9 @@ void RFactor::calculateRFactor() {
 void RFactor::updateIVs(const string &control_filepath, const string &theory_filepath) {
   rfac_ivcur *ivcur_ptr = ::rfac_ivcur_read( control_filepath.c_str(),
                                              theory_filepath.c_str()  );
+  if (!ivcur_ptr) {
+    return;
+  }
   size_t n = 0;
   while (ivcur_ptr[n].group_id != END_OF_GROUP_ID) {n++;}
   //this->iv_datasets.assign(ivcur_ptr, ivcur_ptr+n);

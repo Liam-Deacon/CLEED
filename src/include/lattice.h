@@ -138,6 +138,7 @@ miller_hkl_t *lattice_get_miller_hkl(const lattice_t *lat);
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
 
+#ifndef CLEED_DISABLE_LEGACY_CPP
 namespace cleed {
 
 class Lattice {
@@ -152,6 +153,7 @@ class Lattice {
 
 
 } /* namespace cleed */
+#endif /* CLEED_DISABLE_LEGACY_CPP */
 
 #endif /* ifdef */
                                         

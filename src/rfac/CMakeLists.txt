@@ -36,6 +36,7 @@ SET (rfaclib_SRCS
     rflines.c
     rfctr2out.c
     rfversion.c
+    rfac_compat.c
     crfinput.c
     crfintindl.c
     crflorentz.c

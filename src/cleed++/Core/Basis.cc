@@ -28,10 +28,16 @@ Basis::Basis()
   this->basis_ptr = ::basis_init();
 }
 
-Basis::Basis(const basis *a)
+Basis::Basis(const basis_t *a)
 {
   this->basis_ptr = ::basis_init();
   ::basis_copy(this->basis_ptr, a);
+}
+
+Basis::Basis(const Basis &a)
+{
+  this->basis_ptr = ::basis_init();
+  ::basis_copy(this->basis_ptr, a.basis_ptr);
 }
 
 Basis::~Basis()
@@ -41,19 +47,19 @@ Basis::~Basis()
 
 inline Basis& Basis::setA1(const Coordinate &a1)
 {
-  ::coord_copy(&this->basis_ptr->a[0], const_cast<coord*>(a1.pos));
+  ::coord_copy(&this->basis_ptr->a[0], const_cast<coord_t*>(a1.pos));
   return *this;
 }
 
 inline Basis& Basis::setA2(const Coordinate &a2)
 {
-  ::coord_copy(&this->basis_ptr->a[1], const_cast<coord*>(a2.pos));
+  ::coord_copy(&this->basis_ptr->a[1], const_cast<coord_t*>(a2.pos));
   return *this;
 }
 
 inline Basis& Basis::setA3(const Coordinate &a3)
 {
-  ::coord_copy(&this->basis_ptr->a[2], const_cast<coord*>(a3.pos));
+  ::coord_copy(&this->basis_ptr->a[2], const_cast<coord_t*>(a3.pos));
   return *this;
 }
 
@@ -72,6 +78,7 @@ inline Basis& Basis::setA2(double a2_x, double a2_y, double a2_z)
 inline Basis& Basis::setA3(double a3_x, double a3_y, double a3_z)
 {
   ::coord_set(&this->basis_ptr->a[2], a3_x, a3_y, a3_z);
+  return *this;
 }
 
 Basis& Basis::setBasis(
@@ -85,13 +92,16 @@ Basis& Basis::setBasis(
 
 Basis& Basis::setBasis(const Basis &basis)
 {
-  this->basis_ptr = basis.basis_ptr;
+  ::basis_copy(this->basis_ptr, basis.basis_ptr);
   return *this;
 }
 
 Basis& Basis::setBasis(const Basis *basis)
 {
-  this->basis_ptr = basis->basis_ptr;
+  if (!basis) {
+    return *this;
+  }
+  ::basis_copy(this->basis_ptr, basis->basis_ptr);
   return *this;
 }
 
@@ -119,4 +129,3 @@ const Coordinate Basis::getA3() const
                  this->basis_ptr->a[2].z);
   return xyz;
 }
-

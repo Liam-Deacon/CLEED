@@ -30,12 +30,12 @@
 
 namespace cleed {
 
-  class Coordinate : public coord {
+  class Coordinate {
     public:
       Coordinate();
       Coordinate(double x, double y, double z);
       Coordinate(const Coordinate &position);
-      explicit Coordinate(const coord *position);
+      explicit Coordinate(const coord_t *position);
       ~Coordinate();
 
       friend std::ostream& operator<<(std::ostream& out, const Coordinate& pos);
@@ -46,19 +46,19 @@ namespace cleed {
       Coordinate& setZ(double z);
       Coordinate& setCoordinate(double x, double y, double z);
       Coordinate& setCoordinate(const Coordinate &position);
-      Coordinate& setCoordinate(const coord *position);
+      Coordinate& setCoordinate(const coord_t *position);
 
       // getters
-      double getMagnitude();
-      double getX();
-      double getY();
-      double getZ();
-      const coord *get_coord();
+      double getMagnitude() const;
+      double getX() const;
+      double getY() const;
+      double getZ() const;
+      const coord_t *get_coord() const;
 
       // other methods
       void print(FILE *f = stdout);
     public:
-      coord *pos;
+      coord_t *pos;
   };
 
 } /* namespace cleed */
