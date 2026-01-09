@@ -4,14 +4,14 @@
  *  Core library entry points for CLEED.
  *********************************************************************/
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 #ifndef CLEED_CORE_H
 #define CLEED_CORE_H
 
 #include <stddef.h>
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
 
 /**
  * @brief In-memory LEED curve representation.
@@ -61,8 +61,8 @@ double cleed_curve_interp(const cleed_curve *curve, double energy);
  */
 const char *cleed_core_version(void);
 
-#endif /* CLEED_CORE_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* CLEED_CORE_H */
