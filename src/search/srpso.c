@@ -30,9 +30,9 @@ void sr_pso_cfg_init(sr_pso_cfg *cfg, int ndim, real dpos)
   cfg->swarm_size = sr_pso_default_swarm_size(ndim);
   cfg->max_iters = 0;
   cfg->max_evals = 0;
-  cfg->inertia = (real)0.729;
-  cfg->c1 = (real)1.49445;
-  cfg->c2 = (real)1.49445;
+  cfg->inertia = SR_PSO_DEFAULT_INERTIA;
+  cfg->c1 = SR_PSO_DEFAULT_C1;
+  cfg->c2 = SR_PSO_DEFAULT_C2;
   cfg->v_max = (dpos > 0.0) ? dpos : (real)1.0;
   cfg->seed = 0;
 }
