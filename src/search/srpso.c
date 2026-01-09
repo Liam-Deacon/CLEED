@@ -176,6 +176,22 @@ static void sr_pso_get_params(const sr_pso_cfg *cfg, int ndim, int *swarm_size,
   *seed = (cfg->seed > 0) ? cfg->seed : 1ULL;
 }
 
+static int sr_pso_validate(const void *func, const void *best, const void *best_val, int ndim)
+{
+  if (!func || !best || !best_val || ndim <= 0) return -1;
+  return 0;
+}
+
+static void sr_pso_run(sr_pso_swarm *s, const sr_pso_cfg *cfg, sr_rng *rng,
+                       real (*func)(const real *), real *best_val,
+                       int *local_evals, int max_iters, int max_evals)
+{
+  for (int iter = 1; iter <= max_iters && *local_evals < max_evals; iter++) {
+    sr_pso_iterate_swarm(s, cfg, rng, func, best_val, local_evals, max_evals);
+    if (*best_val <= R_TOLERANCE) break;
+  }
+}
+
 int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
                     real *best, real *best_val, int *evals)
 {
@@ -184,7 +200,8 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
   real v_max;
   uint64_t seed;
 
-  if (!func || !best || !best_val || ndim <= 0) return -1;
+  if (sr_pso_validate(func, best, best_val, ndim) != 0) return -1;
+
   if (!cfg) {
     sr_pso_cfg_init(&defaults, ndim, (real)1.0);
     cfg = &defaults;
@@ -204,10 +221,7 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
     return -1;
   }
 
-  for (int iter = 1; iter <= max_iters && local_evals < max_evals; iter++) {
-    sr_pso_iterate_swarm(&s, cfg, &rng, func, best_val, &local_evals, max_evals);
-    if (*best_val <= R_TOLERANCE) break;
-  }
+  sr_pso_run(&s, cfg, &rng, func, best_val, &local_evals, max_iters, max_evals);
 
   for (int j = 1; j <= ndim; j++) best[j] = s.gbest[j];
   if (evals) *evals = local_evals;
