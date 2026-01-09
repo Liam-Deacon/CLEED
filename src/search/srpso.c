@@ -20,7 +20,7 @@
 
 static int sr_pso_default_swarm_size(int ndim)
 {
-  const int base = 5 * ndim;
+  const int base = 10 * ndim;
   return (base < 10) ? 10 : base;
 }
 
@@ -30,9 +30,9 @@ void sr_pso_cfg_init(sr_pso_cfg *cfg, int ndim, real dpos)
   cfg->swarm_size = sr_pso_default_swarm_size(ndim);
   cfg->max_iters = 0;
   cfg->max_evals = 0;
-  cfg->inertia = (real)0.72;
-  cfg->c1 = (real)1.49;
-  cfg->c2 = (real)1.49;
+  cfg->inertia = (real)0.729;
+  cfg->c1 = (real)1.49445;
+  cfg->c2 = (real)1.49445;
   cfg->v_max = (dpos > 0.0) ? dpos : (real)1.0;
   cfg->seed = 0;
 }
@@ -53,6 +53,29 @@ typedef struct sr_pso_swarm {
   real *gbest;
 } sr_pso_swarm;
 
+static void sr_pso_init_particle(sr_pso_swarm *s, int i, sr_rng *rng, real span,
+                                 real (*func)(real *), real *gbest_val, int *evals)
+{
+  for (int j = 1; j <= s->ndim; j++) {
+    s->pos[i][j] = sr_pso_rand_span(rng, span);
+    s->vel[i][j] = sr_pso_rand_span(rng, span);
+  }
+
+  s->pbest_val[i] = (*func)(s->pos[i]);
+  if (evals) (*evals)++;
+
+  for (int j = 1; j <= s->ndim; j++) {
+    s->pbest[i][j] = s->pos[i][j];
+  }
+
+  if (i == 1 || s->pbest_val[i] < *gbest_val) {
+    *gbest_val = s->pbest_val[i];
+    for (int j = 1; j <= s->ndim; j++) {
+      s->gbest[j] = s->pos[i][j];
+    }
+  }
+}
+
 static int sr_pso_init_swarm(sr_rng *rng, real span, sr_pso_swarm *s,
                              real *gbest_val, real (*func)(real *), int *evals)
 {
@@ -62,24 +85,7 @@ static int sr_pso_init_swarm(sr_rng *rng, real span, sr_pso_swarm *s,
 
   *gbest_val = 0.0;
   for (int i = 1; i <= s->size; i++) {
-    for (int j = 1; j <= s->ndim; j++) {
-      s->pos[i][j] = sr_pso_rand_span(rng, span);
-      s->vel[i][j] = sr_pso_rand_span(rng, span);
-    }
-
-    s->pbest_val[i] = (*func)(s->pos[i]);
-    if (evals) (*evals)++;
-
-    for (int j = 1; j <= s->ndim; j++) {
-      s->pbest[i][j] = s->pos[i][j];
-    }
-
-    if (i == 1 || s->pbest_val[i] < *gbest_val) {
-      *gbest_val = s->pbest_val[i];
-      for (int j = 1; j <= s->ndim; j++) {
-        s->gbest[j] = s->pos[i][j];
-      }
-    }
+    sr_pso_init_particle(s, i, rng, span, func, gbest_val, evals);
   }
 
   return 0;
@@ -99,6 +105,12 @@ static int sr_pso_alloc_swarm(sr_pso_swarm *s, int swarm, int ndim)
 {
   s->size = swarm;
   s->ndim = ndim;
+  s->pos = NULL;
+  s->vel = NULL;
+  s->pbest = NULL;
+  s->pbest_val = NULL;
+  s->gbest = NULL;
+
   s->pos = sr_alloc_matrix((size_t)swarm, (size_t)ndim);
   s->vel = sr_alloc_matrix((size_t)swarm, (size_t)ndim);
   s->pbest = sr_alloc_matrix((size_t)swarm, (size_t)ndim);
