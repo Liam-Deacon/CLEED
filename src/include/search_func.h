@@ -17,6 +17,7 @@ extern "C" {
 #define SEARCH_FUNC_H
 
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdint.h>
 
 /**
@@ -112,13 +113,17 @@ int sr_powell(real *p, real **xi, int n, real ftol, int *iter, real *fret,
  * @brief Configuration for particle swarm optimisation (PSO).
  */
 typedef struct sr_pso_cfg {
+  // cppcheck-suppress unusedStructMember
   int swarm_size;
+  // cppcheck-suppress unusedStructMember
   int max_iters;
+  // cppcheck-suppress unusedStructMember
   int max_evals;
   real inertia;
   real c1;
   real c2;
   real v_max;
+  // cppcheck-suppress unusedStructMember
   uint64_t seed;
 } sr_pso_cfg;
 
