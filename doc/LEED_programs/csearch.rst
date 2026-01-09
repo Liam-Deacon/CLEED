@@ -65,6 +65,11 @@ Options
 
   Sets a deterministic seed for stochastic optimizers (simulated annealing).
 
+.. note::
+   Seeds are parsed as unsigned 64-bit integers. A value of 0 selects the
+   built-in default used by the deterministic annealing RNG; non-zero seeds
+   reproduce runs across platforms.
+
 :code:`-v <vertex_file>`
                      
   Allows the search to be restarted with the current simplex, provided 
@@ -96,6 +101,9 @@ Environment
 
 :envvar:`CSEARCH_SEED`
   Optional deterministic seed for simulated annealing (same as :code:`--seed`).
+
+  A value of 0 uses the built-in default seed for the deterministic annealing
+  RNG. Non-zero values are parsed as unsigned 64-bit integers.
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 

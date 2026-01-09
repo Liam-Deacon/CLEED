@@ -40,6 +40,9 @@ This page defines the environment variables referenced throughout the manual.
 
    Optional deterministic seed for stochastic optimizers (same as ``--seed``).
 
+   Seeds are parsed as unsigned 64-bit integers. A value of 0 uses the built-in
+   default seed for the annealing RNG.
+
 .. envvar:: RF_HELP_FILE
 
    Path to a help file shown when :ref:`crfac` is invoked with ``-h``.

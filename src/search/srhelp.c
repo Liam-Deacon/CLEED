@@ -31,7 +31,7 @@ void search_usage(FILE *output) {
     sr_optimizer_print_help(output);
     fprintf(output, "  --max-evals <n>       : limit objective evaluations (simplex).\n");
     fprintf(output, "  --max-iters <n>       : limit iterations (Powell/annealing).\n");
-    fprintf(output, "  --seed <n>            : seed stochastic optimizers (annealing).\n");
+    fprintf(output, "  --seed <n>            : seed stochastic optimizers (annealing, 0=default).\n");
     fprintf(output, "  -v <vertex_file>      : file to read vertex information if resuming search\n");                
     fprintf(output, "  -V --version          : print version and information about this program\n");
     fprintf(output, "\n");
