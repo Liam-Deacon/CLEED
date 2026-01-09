@@ -35,8 +35,16 @@ jobs:
       run: |
         brew install libtiff
 
-    - name: Install build dependencies (Windows via vcpkg)
+    - name: Cache vcpkg (Windows)
       if: runner.os == 'Windows'
+      id: cache-vcpkg
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/vcpkg
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('.github/workflows/cmake-build.yaml') }}
+
+    - name: Install build dependencies (Windows via vcpkg)
+      if: runner.os == 'Windows' && steps.cache-vcpkg.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
         git clone https://github.com/microsoft/vcpkg "$env:GITHUB_WORKSPACE/vcpkg"
