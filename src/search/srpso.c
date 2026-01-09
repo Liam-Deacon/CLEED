@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "search.h"
+#include "search_optimizer.h"
 #include "sr_alloc.h"
 #include "sr_rng.h"
 
@@ -185,19 +186,6 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(real *),
   return 0;
 }
 
-static void sr_pso_log_results(FILE *log_stream, int ndim, int evals,
-                               const real *best, real best_val)
-{
-  fprintf(log_stream, "\n=> No. of function evaluations in sr_pso: %3d\n", evals);
-  fprintf(log_stream, "=> Best parameter set:\n");
-  for (int j = 1; j <= ndim; j++) {
-    fprintf(log_stream, "%.6f ", (double)best[j]);
-  }
-  fprintf(log_stream, "\n");
-  fprintf(log_stream, "=> Best function value:\n");
-  fprintf(log_stream, "rmin = %.6f\n", (double)best_val);
-}
-
 void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file)
 {
   (void)bak_file;
@@ -257,7 +245,7 @@ void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file)
     sr_free_vector(best);
     OPEN_ERROR(log_file);
   }
-  sr_pso_log_results(log_stream, ndim, evals, best, best_val);
+  sr_optimizer_log_results(log_stream, "sr_pso", ndim, evals, best, best_val);
   fclose(log_stream);
 
   sr_free_vector(best);
