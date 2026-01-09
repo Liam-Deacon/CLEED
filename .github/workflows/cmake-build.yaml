@@ -8,7 +8,7 @@ on:
 
 env:
   BUILD_TYPE: Release
-  VCPKG_REF: '2024.04.26'
+  VCPKG_REF: '2025.12.12'
 
 jobs:
   build:
