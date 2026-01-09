@@ -26,6 +26,8 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 #include <stdlib.h>
 // cppcheck-suppress missingIncludeSystem
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
+#include <stdint.h>
 
 #include "search.h"
 #include "sr_simplex.h"
@@ -40,7 +42,7 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 
 /**********************************************************************/
 
-long sa_idum = -1;                /* seed for random number generator */
+uint64_t sa_idum = 0;             /* seed for random number generator */
 
 static FILE *sr_sa_open_log_append(const char *log_file)
 {

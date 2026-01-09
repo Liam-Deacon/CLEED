@@ -207,8 +207,7 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
     }
   }
   if (cfg->seed > 0) {
-    sa_idum = (long)(cfg->seed > (uint64_t)LONG_MAX ? LONG_MAX : cfg->seed);
-    sa_idum = -sa_idum;
+    sa_idum = cfg->seed;
   }
 }
 

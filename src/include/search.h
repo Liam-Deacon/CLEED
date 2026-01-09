@@ -16,6 +16,8 @@ extern "C" {
 *********************************************************************/
 
 #include "gh_stddef.h"
+// cppcheck-suppress missingIncludeSystem
+#include <stdint.h>
 
 #define REAL_IS_DOUBLE
 #include "real.h"
@@ -43,7 +45,7 @@ extern char *sr_project;
 extern int sr_amoeba_eval_limit;
 extern int sr_powell_iter_limit;
 extern int sr_sa_iter_limit;
-extern long sa_idum;
+extern uint64_t sa_idum;
 
 /*********************************************************************
  End of include file 

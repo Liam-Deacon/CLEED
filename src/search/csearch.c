@@ -18,6 +18,8 @@ version 0.1
 #include <string.h>
 // cppcheck-suppress missingIncludeSystem
 #include <limits.h>
+// cppcheck-suppress missingIncludeSystem
+#include <errno.h>
 #include <math.h>
 #include "search.h"
 #include "search_optimizer.h"
@@ -203,8 +205,9 @@ int main(int argc, char *argv[])
         char *end = NULL;
         i_arg++;
         if (i_arg < argc) {
+          errno = 0;
           opt_cfg.seed = strtoull(argv[i_arg], &end, 10);
-          if (end == argv[i_arg]) {
+          if (end == argv[i_arg] || errno == ERANGE) {
             #ifdef ERROR
             fprintf(STDERR,"*** error (SEARCH): invalid seed value\n");
             #endif
