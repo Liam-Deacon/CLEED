@@ -11,6 +11,22 @@ extern "C" {
 #ifndef RFAC_FUNC_H
 #define RFAC_FUNC_H
 
+#include "rfac_def.h"
+
+rfac_args *rfac_rdargs(int argc, char **argv);
+rfac_ivcur *rfac_ivcur_read(const char *control_file, const char *theory_file);
+rfac_iv *rfac_iv_read(const char *filename);
+rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur, char *buffer, char *indices);
+rfac_iv *rfac_iv_alloc(size_t n_eng);
+void rfac_iv_free(rfac_iv *iv);
+void rfac_iv_copy(rfac_iv *dest, const rfac_iv *src);
+int rfac_iv_sort(rfac_iv *iv);
+int rfac_iv_spline(rfac_iv *iv);
+int rfac_iv_lorentz_smooth(rfac_iv *iv, real vi);
+void rfac_ivcur_free_all(rfac_ivcur *ivcur);
+real rfac_rmin(rfac_ivcur *iv_cur, rfac_args *args,
+               real *r_min_ptr, real *rr_ptr, real *shift_ptr);
+
 int    bgets( char *, long, long, char *); /* get string from buffer */
 char * file2buffer( char *);               /* copy file to buffer */ 
 struct rfargs rf_rdargs (int, char * *);   /* read argument list */

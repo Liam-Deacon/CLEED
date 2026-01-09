@@ -13,13 +13,18 @@ GH/10.08.95 - Create (copy from rfdefines.h and rftypes.h)
 
 *********************************************************************/
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 #ifndef RFAC_DEF_H
 #define RFAC_DEF_H
 
+#include <stddef.h>
+#include <stdbool.h>
+#include <stdio.h>
+
+#include "real.h"
+
+#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+extern "C" {
+#endif
 /*********************************************************************
  structures and types 
 *********************************************************************/
@@ -78,6 +83,66 @@ struct rfspot
  int i_val1;        /* arbitrary use */
  int i_val2;        /* arbitrary use */
 };
+
+typedef struct rfspot rfac_spot;
+typedef struct rfrfac rfac;
+
+typedef enum {
+  RP_FACTOR = 1,
+  R1_FACTOR = 2,
+  R2_FACTOR = 3,
+  RB_FACTOR = 4
+} rfactor_type;
+
+#ifndef END_OF_GROUP_ID
+#define END_OF_GROUP_ID -1
+#endif
+
+typedef struct rfac_iv_data
+{
+  real energy;
+  real intens;
+  real deriv2;
+} rfac_iv_data;
+
+typedef struct rfac_iv
+{
+  rfac_iv_data *data;
+  size_t n_eng;
+  bool equidist;
+  bool sort;
+  bool smooth;
+  bool spline;
+  real first_eng;
+  real last_eng;
+  real max_int;
+} rfac_iv;
+
+typedef struct rfac_ivcur
+{
+  int group_id;
+  real eng_0;
+  rfac_spot spot_id;
+  rfac_iv *theory;
+  rfac_iv *experimental;
+  real overlap;
+  rfac rfac;
+  real weight;
+} rfac_ivcur;
+
+typedef struct rfac_args
+{
+  char ctr_file[FILENAME_MAX];
+  char the_file[FILENAME_MAX];
+  char out_file[FILENAME_MAX];
+  char iv_file[FILENAME_MAX];
+  rfactor_type r_type;
+  real s_ini;
+  real s_fin;
+  real s_step;
+  real vi;
+  bool all_groups;
+} rfac_args;
 
 struct rfivcur 
 {
@@ -183,8 +248,8 @@ struct rfmin
 /*********************************************************************
  End of include file
 *********************************************************************/
-#endif /* RFAC_DEF_H */
-
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif
+
+#endif /* RFAC_DEF_H */

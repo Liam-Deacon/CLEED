@@ -15,6 +15,9 @@
  * 
  */
 
+#include <algorithm>
+#include <cmath>
+
 #include <Core/Element.hh>
 
 using namespace cleed;
@@ -59,27 +62,27 @@ const std::map<int, std::string> Element::SERIES = {
         {10, "Actinides"}
 };
 
-static const std::map<int, char> Element::PERIODS = {
+const std::map<int, std::string> Element::DESCRIPTIONS = {};
 
-};
-
-static const std::vector<char> Element::BLOCKS = {
-
-};
-
-static const std::map<int, std::string> Element::SERIES = {
-
-};
-
-static const std::map<int, std::tuple<std::string, std::string>> Element::GROUPS = {
-};
-
-static const std::map<int, std::string> Element::DESCRIPTIONS = {
-
-};
-
-Element::Element(int Z, const std::string &symbol, const std::string &name) {
-
+Element::Element(int Z, const std::string &symbol, const std::string &name)
+  : BasicElement(Z)
+{
+  setSymbol(symbol);
+  setName(name);
+  group = 0;
+  period = 0;
+  block = '\0';
+  series = 0;
+  molarMass = 0.0;
+  electronegativity = 0.0;
+  electronAffinity = 0.0;
+  covalentRadius = 0.0;
+  atomicRadius = 0.0;
+  vdwRadius = 0.0;
+  boilingPoint = 0.0;
+  meltingPoint = 0.0;
+  density = 0.0;
+  relativeAbundance = 0.0;
 }
 
 Element::~Element() {
@@ -139,76 +142,108 @@ inline double Element::getDensity() const {
 }
 
 inline const std::string &Element::getElectronConfiguration() const {
-  return const_cast<std::string&>(electronConfig);
+  return electronConfig;
 }
 
-inline std::string &Element::getOxidationStates() const {
+inline const std::string &Element::getOxidationStates() const {
   return oxidationStates;
 }
 
-inline std::vector<double> &Element::getIonisationEnergies() const {
+inline const std::vector<double> &Element::getIonisationEnergies() const {
   return ionisationEnergies;
 }
 
 inline const std::string &Element::getDescription() const {
-  return const_cast<std::string&>(description);
+  return description;
 }
 
 inline Element &Element::setGroup(int group) {
-  this->group = (group > 0 && group <= GROUPS.size()) ? group :
-    throw(invalidElementException("invalid chemical group: " +
-                                  std::string(group)));
+  if (GROUPS.find(group) == GROUPS.end()) {
+    throw invalidElementException(
+        ("invalid chemical group: " + std::to_string(group)).c_str());
+  }
+  this->group = group;
   return *this;
 }
 
 Element &Element::setGroup(const std::string &group) {
-  this->group = (group > 0 && group <= GROUPS.size()) ? group :
-    throw(invalidElementException("invalid chemical group: " + group));
+  for (const auto &entry : GROUPS) {
+    if (std::get<0>(entry.second) == group) {
+      this->group = entry.first;
+      return *this;
+    }
+  }
+  throw invalidElementException(("invalid chemical group: " + group).c_str());
   return *this;
 }
 
 Element &Element::setPeriod(int period) {
-  this->period = (PERIODS[period] > 0) ? PERIODS[period] :
-      throw(invalidElementException("invalid chemical period: " + period));
-    return *this;
+  if (PERIODS.find(period) == PERIODS.end()) {
+    throw invalidElementException(
+        ("invalid chemical period: " + std::to_string(period)).c_str());
+  }
+  this->period = period;
+  return *this;
 }
 
 Element &Element::setPeriod(const std::string &period) {
-  this->period = (PERIODS[period] > 0) ? PERIODS[period] :
-    throw(invalidElementException("invalid chemical period: " + period));
+  if (period.size() == 1) {
+    char symbol = period[0];
+    for (const auto &entry : PERIODS) {
+      if (entry.second == symbol) {
+        this->period = entry.first;
+        return *this;
+      }
+    }
+  }
+  throw invalidElementException(("invalid chemical period: " + period).c_str());
   return *this;
 }
 
 Element &Element::setBlock(int block) {
-  this->block = (BLOCKS[block] > 0) ? BLOCKS[block] :
-    throw(invalidElementException("invalid chemistry block: " +
-                                  std::string(block)));
+  if (block < 0 || static_cast<size_t>(block) >= BLOCKS.size()) {
+    throw invalidElementException(
+        ("invalid chemistry block: " + std::to_string(block)).c_str());
+  }
+  this->block = BLOCKS[static_cast<size_t>(block)];
   return *this;
 }
 
 Element &Element::setBlock(char block) {
-  this->block = (BLOCKS[block] > 0) ? BLOCKS[block] :
-      throw(invalidElementException("invalid chemistry block: " +
-                                    std::string(block)));
-    return *this;
+  if (std::find(BLOCKS.begin(), BLOCKS.end(), block) == BLOCKS.end()) {
+    throw invalidElementException(
+        ("invalid chemistry block: " + std::string(1, block)).c_str());
+  }
+  this->block = block;
+  return *this;
 }
 
 Element &Element::setSeries(int series) {
-  this->series = (SERIES[series] > 0) ? SERIES[series] :
-      throw(invalidElementException("invalid chemical series: " +
-                                    std::string(series)));
+  if (SERIES.find(series) == SERIES.end()) {
+    throw invalidElementException(
+        ("invalid chemical series: " + std::to_string(series)).c_str());
+  }
+  this->series = series;
   return *this;
 }
 
 Element &Element::setSeries(const std::string &series) {
-  this->series = (SERIES[series] > 0) ? SERIES[series] :
-      throw(invalidElementException("invalid chemical series: " + series));
+  for (const auto &entry : SERIES) {
+    if (entry.second == series) {
+      this->series = entry.first;
+      return *this;
+    }
+  }
+  throw invalidElementException(("invalid chemical series: " + series).c_str());
   return *this;
 }
 
 Element &Element::setMolarMass(double mass) {
-  this->molarMass = (mass > 0.) ? mass :
-    throw(invalidElementException("invalid molar mass: " + std::string(mass)));
+  if (mass <= 0.) {
+    throw invalidElementException(
+        ("invalid molar mass: " + std::to_string(mass)).c_str());
+  }
+  this->molarMass = mass;
   return *this;
 }
 
@@ -223,50 +258,63 @@ Element &Element::setElectronAffinity(double electronAffinity) {
 }
 
 Element &Element::setCovalentRadius(double covalentRadius) {
-  this->covalentRadius = (covalentRadius > 0.) ? covalentRadius :
-    throw(invalidElementException("invalid covalent radius: " +
-                                  std::string(covalentRadius)));
+  if (covalentRadius <= 0.) {
+    throw invalidElementException(
+        ("invalid covalent radius: " + std::to_string(covalentRadius)).c_str());
+  }
+  this->covalentRadius = covalentRadius;
   return *this;
 }
 
 Element &Element::setAtomicRadius(double atomicRadius) {
-  this->atomicRadius = (atomicRadius > 0.) ? atomicRadius :
-    throw(invalidElementException("invalid atomic radius: " +
-                                  std::string(atomicRadius)));
+  if (atomicRadius <= 0.) {
+    throw invalidElementException(
+        ("invalid atomic radius: " + std::to_string(atomicRadius)).c_str());
+  }
+  this->atomicRadius = atomicRadius;
   return *this;
 }
 
 Element &Element::setVanDerWaalsRadius(double vdwRadius) {
-  this->vdwRadius = (vdwRadius > 0.) ? vdwRadius :
-    throw(invalidElementException("invalid van der Waals radius: " +
-                                  std::string(vdwRadius)));
+  if (vdwRadius <= 0.) {
+    throw invalidElementException(
+        ("invalid van der Waals radius: " + std::to_string(vdwRadius)).c_str());
+  }
+  this->vdwRadius = vdwRadius;
   return *this;
 }
 
 Element &Element::setBoilingPoint(double tboil) {
-  this->boilingPoint = (tboil > 0.) ? tboil : abs(tboil);
+  this->boilingPoint = (tboil > 0.) ? tboil : std::abs(tboil);
+  return *this;
 }
 
 Element &Element::setMeltingPoint(double tmelt) {
-  this->meltingPoint = (tmelt > 0.) ? tmelt : abs(tmelt);
+  this->meltingPoint = (tmelt > 0.) ? tmelt : std::abs(tmelt);
+  return *this;
 }
 
 Element &Element::setDensity(double density) {
- this->density = density;
+  this->density = density;
+  return *this;
 }
 
 Element &Element::setElectronConfiguration(const std::string &config) {
-
+  electronConfig = config;
+  return *this;
 }
 
 Element &Element::setOxidationStates(const std::string &oxidationStates) {
-
+  this->oxidationStates = oxidationStates;
+  return *this;
 }
 
 Element &Element::setIonisationEnergies(const std::vector<double> &ionEnergies) {
-
+  ionisationEnergies = ionEnergies;
+  return *this;
 }
 
 Element &Element::setDescription(const std::string &description) {
-
+  this->description = description;
+  return *this;
 }

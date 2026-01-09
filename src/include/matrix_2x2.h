@@ -39,6 +39,7 @@ matrix_2x2_t *matrix_2x2_copy(matrix_2x2_t *mat);
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
 
+#ifndef CLEED_DISABLE_LEGACY_CPP
 namespace cleed {
 
 class Matrix2x2 {
@@ -61,6 +62,7 @@ class Matrix2x2 {
 };
 
 } /* namespace cleed */
+#endif /* CLEED_DISABLE_LEGACY_CPP */
 
 #endif /* __cplusplus */
 

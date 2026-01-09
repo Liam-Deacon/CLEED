@@ -53,8 +53,8 @@ class Element : public BasicElement {
     double getMeltingPoint() const;
     double getDensity() const;
     const std::string &getElectronConfiguration() const;
-    std::string &getOxidationStates() const;
-    std::vector<double> &getIonisationEnergies() const;
+    const std::string &getOxidationStates() const;
+    const std::vector<double> &getIonisationEnergies() const;
     const std::string &getDescription() const;
 
     Element &setGroup(int group);
@@ -94,7 +94,7 @@ class Element : public BasicElement {
     double meltingPoint;
     double density;
     double relativeAbundance;
-    std::string eletronConfig;
+    std::string electronConfig;
     std::string oxidationStates;
     std::vector<double> ionisationEnergies;
     std::string description;

@@ -15,6 +15,7 @@ typedef struct
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
 
+#ifndef CLEED_DISABLE_LEGACY_CPP
 namespace cleed {
 
 class MillerIndex {
@@ -37,10 +38,10 @@ class MillerIndex {
 }; /* class MillerIndex */
 
 } /* namespace cleed */
+#endif /* CLEED_DISABLE_LEGACY_CPP */
 
 #endif /* __cplusplus */
 
 #endif /* MILLER_INDEX_H */
-
 
 

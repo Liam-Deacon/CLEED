@@ -34,10 +34,10 @@ namespace cleed {
 /*!
  * \brief C++ class for #basis and its associated functions.
  */
-class Basis : public basis {
+class Basis {
   public:
     Basis();
-    Basis(const basis *a);
+    Basis(const basis_t *a);
     Basis(const Basis &a);
     ~Basis();
 
@@ -64,7 +64,7 @@ class Basis : public basis {
     void rotate(double alpha, double beta, double gamma);
 
     private:
-      basis *basis_ptr;
+      basis_t *basis_ptr;
 };
 
 

@@ -36,7 +36,7 @@ Coordinate::Coordinate(const Coordinate &position)
   ::coord_copy(this->pos, position.pos);
 }
 
-Coordinate::Coordinate(const coord *position)
+Coordinate::Coordinate(const coord_t *position)
 {
   this->pos = ::coord_init();
   ::coord_copy(this->pos, position);
@@ -78,7 +78,7 @@ inline Coordinate& Coordinate::setCoordinate(const Coordinate &position)
   return *this;
 }
 
-inline Coordinate& Coordinate::setCoordinate(const coord *position)
+inline Coordinate& Coordinate::setCoordinate(const coord_t *position)
 {
   if (!position) {
     return *this;
@@ -88,27 +88,27 @@ inline Coordinate& Coordinate::setCoordinate(const coord *position)
 }
     
 /* getters */
-inline double Coordinate::getMagnitude()
+inline double Coordinate::getMagnitude() const
 {
   return (coord_get_magnitude(this->pos));
 }
 
-inline double Coordinate::getX()
+inline double Coordinate::getX() const
 {
   return (coord_get_x(this->pos));
 }
 
-inline double Coordinate::getY()
+inline double Coordinate::getY() const
 {
   return (coord_get_y(this->pos));
 }
 
-inline double Coordinate::getZ()
+inline double Coordinate::getZ() const
 {
   return (coord_get_z(this->pos));
 }
 
-inline const coord *Coordinate::get_coord()
+inline const coord_t *Coordinate::get_coord() const
 {
   return this->pos;
 }
@@ -122,6 +122,6 @@ inline void Coordinate::print(FILE *f)
 std::ostream& operator<<(std::ostream &out, const Coordinate &pos)
 {
   const std::string &delim = std::string(", ");
-  out << pos.x << delim << pos.y << delim << pos.z;
+  out << pos.getX() << delim << pos.getY() << delim << pos.getZ();
   return out;
 }
