@@ -465,11 +465,10 @@ int sr_parse_seed_arg(const char *val, uint64_t *out)
 void sr_optimizer_log_results(FILE *log_stream, const char *name, int ndim,
                               int evals, const real *best, real best_val)
 {
-  int j;
   if (!log_stream || !name || !best) return;
   fprintf(log_stream, "\n=> No. of function evaluations in %s: %3d\n", name, evals);
   fprintf(log_stream, "=> Best parameter set:\n");
-  for (j = 1; j <= ndim; j++) {
+  for (int j = 1; j <= ndim; j++) {
     fprintf(log_stream, "%.6f ", (double)best[j]);
   }
   fprintf(log_stream, "\n");

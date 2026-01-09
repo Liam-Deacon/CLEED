@@ -112,7 +112,7 @@ static int sr_pso_alloc_swarm(sr_pso_swarm *s, int swarm, int ndim)
   return 0;
 }
 
-static void sr_pso_update_particle(sr_pso_swarm *s, int i, sr_rng *rng,
+static void sr_pso_update_particle(const sr_pso_swarm *s, int i, sr_rng *rng,
                                    real inertia, real c1, real c2, real v_max)
 {
   for (int j = 1; j <= s->ndim; j++) {
@@ -127,6 +127,30 @@ static void sr_pso_update_particle(sr_pso_swarm *s, int i, sr_rng *rng,
 
     s->vel[i][j] = v;
     s->pos[i][j] += v;
+  }
+}
+
+static void sr_pso_update_best(sr_pso_swarm *s, int i, real f, real *best_val)
+{
+  if (f < s->pbest_val[i]) {
+    s->pbest_val[i] = f;
+    for (int j = 1; j <= s->ndim; j++) s->pbest[i][j] = s->pos[i][j];
+    if (f < *best_val) {
+      *best_val = f;
+      for (int j = 1; j <= s->ndim; j++) s->gbest[j] = s->pos[i][j];
+    }
+  }
+}
+
+static void sr_pso_iterate_swarm(sr_pso_swarm *s, const sr_pso_cfg *cfg,
+                                 sr_rng *rng, real (*func)(real *),
+                                 real *best_val, int *local_evals, int max_evals)
+{
+  for (int i = 1; i <= s->size && *local_evals < max_evals; i++) {
+    sr_pso_update_particle(s, i, rng, cfg->inertia, cfg->c1, cfg->c2, cfg->v_max);
+    const real f = (*func)(s->pos[i]);
+    (*local_evals)++;
+    sr_pso_update_best(s, i, f, best_val);
   }
 }
 
@@ -158,19 +182,7 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(real *),
   }
 
   for (int iter = 1; iter <= max_iters && local_evals < max_evals; iter++) {
-    for (int i = 1; i <= s.size && local_evals < max_evals; i++) {
-      sr_pso_update_particle(&s, i, &rng, cfg->inertia, cfg->c1, cfg->c2, v_max);
-      const real f = (*func)(s.pos[i]);
-      local_evals++;
-      if (f < s.pbest_val[i]) {
-        s.pbest_val[i] = f;
-        for (int j = 1; j <= s.ndim; j++) s.pbest[i][j] = s.pos[i][j];
-        if (f < *best_val) {
-          *best_val = f;
-          for (int j = 1; j <= s.ndim; j++) s.gbest[j] = s.pos[i][j];
-        }
-      }
-    }
+    sr_pso_iterate_swarm(&s, cfg, &rng, func, best_val, &local_evals, max_evals);
     if (*best_val <= R_TOLERANCE) break;
   }
 
