@@ -4,12 +4,12 @@
  *  Optimizer registry + configuration helpers for SEARCH (csearch).
  *********************************************************************/
 
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
-extern "C" {
-#endif
-
 #ifndef SEARCH_OPTIMIZER_H
 #define SEARCH_OPTIMIZER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stddef.h>
 #include <stdint.h>
@@ -48,8 +48,8 @@ int sr_optimizer_run(const sr_optimizer_def *opt, const sr_optimizer_config *cfg
                      const char *log_file);
 void sr_optimizer_print_help(FILE *output);
 
-#endif /* SEARCH_OPTIMIZER_H */
-
-#ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
+#ifdef __cplusplus
 }
 #endif
+
+#endif /* SEARCH_OPTIMIZER_H */

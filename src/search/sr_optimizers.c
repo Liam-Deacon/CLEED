@@ -133,11 +133,10 @@ static int sr_optimizer_matches(const char *name,
   }
   for (i = 0; entry->aliases[i] != NULL; i++) {
     const char *alias = entry->aliases[i];
-    size_t len = strlen(alias);
-    if (len == 0) {
+    if (alias[0] == '\0') {
       continue;
     }
-    if (strncasecmp(name, alias, len) == 0) {
+    if (strcasecmp(name, alias) == 0) {
       return 1;
     }
   }
@@ -158,9 +157,13 @@ static int sr_optimizer_read_int_env(const char *name, int *out_value)
   const char *raw = getenv(name);
   long parsed = 0;
 
-  if (!raw || !out_value) return 0;
+  if (!raw || !out_value) {
+    return 0;
+  }
   parsed = strtol(raw, &end, 10);
-  if (end == raw || parsed <= 0) return 0;
+  if (end == raw || parsed <= 0 || parsed > INT_MAX) {
+    return 0;
+  }
   *out_value = (int)parsed;
   return 1;
 }

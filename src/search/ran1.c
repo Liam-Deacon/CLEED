@@ -19,7 +19,7 @@ LD/29.06.2014 - Creation of open source version of ran1 function
  *
  * This implementation uses the xorshift64* algorithm (Vigna 2016), which
  * provides better statistical properties and portability compared to libc
- * rand(). The state is thread-local to avoid issues in multi-threaded use.
+ * rand(). The state is module-static (not thread-safe without external sync).
  */
 static uint64_t ran1_state = 0;
 
@@ -58,11 +58,13 @@ real ran1(long *idum)
         /* Warm up the generator */
         (void)ran1_next64();
         /* Convention: set idum positive after initialization */
-        if (*idum < 0) *idum = -(*idum);
+        if (*idum < 0) {
+            *idum = -(*idum);
+        }
     }
 
-    /* Produce a random number in (0.0, 1.0) */
+    /* Produce a random number in (0.0, 1.0) exclusive */
     uint64_t u = ran1_next64();
-    /* Use upper 53 bits for best quality, scale to [0, 1) */
-    return (real)((u >> 11) * (1.0 / 9007199254740992.0));
+    /* Map [0, 2^53-1] -> [1, 2^53] -> (0, 1) exclusive of endpoints */
+    return (real)(((u >> 11) + 1) * (1.0 / 9007199254740994.0));
 }

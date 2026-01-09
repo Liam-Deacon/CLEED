@@ -16,6 +16,7 @@ version 0.1
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <math.h>
 #include "search.h"
 #include "search_optimizer.h"
@@ -152,11 +153,20 @@ int main(int argc, char *argv[])
         
       } /* search type */
 
-      if (strcmp(argv[i_arg], "--max-evals") == 0)
+      else if (strcmp(argv[i_arg], "--max-evals") == 0)
       {
+        char *end = NULL;
+        long val;
         i_arg++;
         if (i_arg < argc) {
-          opt_cfg.max_evals = atoi(argv[i_arg]);
+          val = strtol(argv[i_arg], &end, 10);
+          if (end == argv[i_arg] || val <= 0 || val > INT_MAX) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid max evals value\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.max_evals = (int)val;
         } else {
           #ifdef ERROR
           fprintf(STDERR,"*** error (SEARCH): max evals value not given\n");
@@ -165,11 +175,20 @@ int main(int argc, char *argv[])
         }
       }
 
-      if (strcmp(argv[i_arg], "--max-iters") == 0)
+      else if (strcmp(argv[i_arg], "--max-iters") == 0)
       {
+        char *end = NULL;
+        long val;
         i_arg++;
         if (i_arg < argc) {
-          opt_cfg.max_iters = atoi(argv[i_arg]);
+          val = strtol(argv[i_arg], &end, 10);
+          if (end == argv[i_arg] || val <= 0 || val > INT_MAX) {
+            #ifdef ERROR
+            fprintf(STDERR,"*** error (SEARCH): invalid max iters value\n");
+            #endif
+            exit(1);
+          }
+          opt_cfg.max_iters = (int)val;
         } else {
           #ifdef ERROR
           fprintf(STDERR,"*** error (SEARCH): max iters value not given\n");
@@ -178,7 +197,7 @@ int main(int argc, char *argv[])
         }
       }
 
-      if (strcmp(argv[i_arg], "--seed") == 0)
+      else if (strcmp(argv[i_arg], "--seed") == 0)
       {
         char *end = NULL;
         i_arg++;
@@ -199,7 +218,7 @@ int main(int argc, char *argv[])
       }
       
       /* help */
-      if ((strcmp(argv[i_arg], "-h") == 0) || 
+      else if ((strcmp(argv[i_arg], "-h") == 0) || 
           (strcmp(argv[i_arg], "--help") == 0))
       {
         search_usage(STDOUT);
@@ -207,7 +226,7 @@ int main(int argc, char *argv[])
       }
       
       /* version information */
-      if ((strcmp(argv[i_arg], "-V") == 0) ||
+      else if ((strcmp(argv[i_arg], "-V") == 0) ||
            (strcmp(argv[i_arg], "--version") == 0))
       {
         search_info();
