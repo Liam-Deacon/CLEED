@@ -79,8 +79,13 @@ static int sr_pso_init_swarm(sr_rng *rng, int swarm, int ndim, real span,
 int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(real *),
                     real *best, real *best_val, int *evals)
 {
-  if (!cfg || !func || !best || !best_val || ndim <= 0) {
+  sr_pso_cfg defaults;
+  if (!func || !best || !best_val || ndim <= 0) {
     return -1;
+  }
+  if (!cfg) {
+    sr_pso_cfg_init(&defaults, ndim, (real)1.0);
+    cfg = &defaults;
   }
 
   const int swarm = (cfg->swarm_size > 0) ? cfg->swarm_size : sr_pso_default_swarm_size(ndim);

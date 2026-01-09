@@ -67,6 +67,10 @@ int sr_optimizer_run(const sr_optimizer_def *opt, const sr_optimizer_config *cfg
                      const char *log_file);
 void sr_optimizer_print_help(FILE *output);
 
+int sr_parse_int_arg(const char *val, int *out);
+int sr_parse_real_arg(const char *val, real *out);
+int sr_parse_seed_arg(const char *val, uint64_t *out);
+
 #ifdef __cplusplus
 }
 #endif

@@ -426,3 +426,36 @@ void sr_optimizer_print_help(FILE *output)
     fprintf(output, "\n");
   }
 }
+
+int sr_parse_int_arg(const char *val, int *out)
+{
+  char *end = NULL;
+  long parsed;
+  if (!val || !out) return 0;
+  parsed = strtol(val, &end, 10);
+  if (end == val || parsed <= 0 || parsed > INT_MAX) return 0;
+  *out = (int)parsed;
+  return 1;
+}
+
+int sr_parse_real_arg(const char *val, real *out)
+{
+  char *end = NULL;
+  double parsed;
+  if (!val || !out) return 0;
+  parsed = strtod(val, &end);
+  if (end == val || parsed <= 0.0) return 0;
+  *out = (real)parsed;
+  return 1;
+}
+
+int sr_parse_seed_arg(const char *val, uint64_t *out)
+{
+  char *end = NULL;
+  unsigned long long parsed;
+  if (!val || !out) return 0;
+  parsed = strtoull(val, &end, 10);
+  if (end == val) return 0;
+  *out = (uint64_t)parsed;
+  return 1;
+}
