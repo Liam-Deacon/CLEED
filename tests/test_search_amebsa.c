@@ -111,8 +111,8 @@ static int run_amebsa_once(real temptr, uint64_t seed, amebsa_result *out)
 static int test_reproducible_with_fixed_seed(void)
 {
     amebsa_result r1, r2;
-    if (run_amebsa_once((real)1.0, 12345U, &r1) != 0) return 1;
-    if (run_amebsa_once((real)1.0, 12345U, &r2) != 0) return 1;
+    if (run_amebsa_once(1.0, 12345U, &r1) != 0) return 1;
+    if (run_amebsa_once(1.0, 12345U, &r2) != 0) return 1;
 
     CLEED_TEST_ASSERT_NEAR(r1.yb, r2.yb, AMEBSA_DETERMINISM_TOL);
     CLEED_TEST_ASSERT_NEAR(r1.pb1, r2.pb1, AMEBSA_DETERMINISM_TOL);
@@ -125,8 +125,8 @@ static int test_reproducible_with_fixed_seed(void)
 static int test_zero_temperature_seed_independent(void)
 {
     amebsa_result r1, r2;
-    if (run_amebsa_once((real)0.0, 1U, &r1) != 0) return 1;
-    if (run_amebsa_once((real)0.0, 999U, &r2) != 0) return 1;
+    if (run_amebsa_once(0.0, 1U, &r1) != 0) return 1;
+    if (run_amebsa_once(0.0, 999U, &r2) != 0) return 1;
 
     CLEED_TEST_ASSERT_NEAR(r1.yb, r2.yb, AMEBSA_DETERMINISM_TOL);
     CLEED_TEST_ASSERT_NEAR(r1.pb1, r2.pb1, AMEBSA_DETERMINISM_TOL);
