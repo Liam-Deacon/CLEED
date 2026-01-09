@@ -54,7 +54,7 @@ typedef struct sr_pso_swarm {
 } sr_pso_swarm;
 
 static void sr_pso_init_particle(sr_pso_swarm *s, int i, sr_rng *rng, real span,
-                                 real (*func)(real *), real *gbest_val, int *evals)
+                                 real (*func)(const real *), real *gbest_val, int *evals)
 {
   for (int j = 1; j <= s->ndim; j++) {
     s->pos[i][j] = sr_pso_rand_span(rng, span);
@@ -77,7 +77,7 @@ static void sr_pso_init_particle(sr_pso_swarm *s, int i, sr_rng *rng, real span,
 }
 
 static int sr_pso_init_swarm(sr_rng *rng, real span, sr_pso_swarm *s,
-                             real *gbest_val, real (*func)(real *), int *evals)
+                             real *gbest_val, real (*func)(const real *), int *evals)
 {
   if (!rng || !s || !gbest_val || !func) {
     return -1;
@@ -155,7 +155,7 @@ static void sr_pso_update_best(sr_pso_swarm *s, int i, real f, real *best_val)
 }
 
 static void sr_pso_iterate_swarm(sr_pso_swarm *s, const sr_pso_cfg *cfg,
-                                 sr_rng *rng, real (*func)(real *),
+                                 sr_rng *rng, real (*func)(const real *),
                                  real *best_val, int *local_evals, int max_evals)
 {
   for (int i = 1; i <= s->size && *local_evals < max_evals; i++) {
@@ -166,23 +166,34 @@ static void sr_pso_iterate_swarm(sr_pso_swarm *s, const sr_pso_cfg *cfg,
   }
 }
 
-int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(real *),
+static void sr_pso_get_params(const sr_pso_cfg *cfg, int ndim, int *swarm_size,
+                              int *max_iters, int *max_evals, real *v_max, uint64_t *seed)
+{
+  *swarm_size = (cfg->swarm_size > 0) ? cfg->swarm_size : sr_pso_default_swarm_size(ndim);
+  *max_iters = (cfg->max_iters > 0) ? cfg->max_iters : MAX_ITER_PSO;
+  *max_evals = (cfg->max_evals > 0) ? cfg->max_evals : MAX_EVAL_PSO;
+  *v_max = (cfg->v_max > 0.0) ? cfg->v_max : (real)1.0;
+  *seed = (cfg->seed > 0) ? cfg->seed : 1ULL;
+}
+
+int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
                     real *best, real *best_val, int *evals)
 {
   sr_pso_cfg defaults;
+  int swarm_size, max_iters, max_evals;
+  real v_max;
+  uint64_t seed;
+
   if (!func || !best || !best_val || ndim <= 0) return -1;
   if (!cfg) {
     sr_pso_cfg_init(&defaults, ndim, (real)1.0);
     cfg = &defaults;
   }
 
-  const int swarm_size = (cfg->swarm_size > 0) ? cfg->swarm_size : sr_pso_default_swarm_size(ndim);
-  const int max_iters = (cfg->max_iters > 0) ? cfg->max_iters : MAX_ITER_PSO;
-  const int max_evals = (cfg->max_evals > 0) ? cfg->max_evals : MAX_EVAL_PSO;
-  const real v_max = (cfg->v_max > 0.0) ? cfg->v_max : (real)1.0;
+  sr_pso_get_params(cfg, ndim, &swarm_size, &max_iters, &max_evals, &v_max, &seed);
 
   sr_rng rng;
-  sr_rng_seed(&rng, (cfg->seed > 0) ? cfg->seed : 1ULL);
+  sr_rng_seed(&rng, seed);
 
   sr_pso_swarm s;
   if (sr_pso_alloc_swarm(&s, swarm_size, ndim) != 0) return -1;
@@ -245,7 +256,7 @@ void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file)
   real best_val = 0.0;
   int evals = 0;
 
-  if (sr_pso_optimize(&cfg, ndim, sr_evalrf, best, &best_val, &evals) != 0) {
+  if (sr_pso_optimize(&cfg, ndim, (real (*)(const real *))sr_evalrf, best, &best_val, &evals) != 0) {
     sr_free_vector(best);
     fprintf(STDERR, "*** error (sr_pso): optimisation failed\n");
     exit(1);
