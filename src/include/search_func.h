@@ -171,7 +171,7 @@ void sr_pso_cfg_init(sr_pso_cfg *cfg, int ndim, real dpos);
  * @param evals In/out evaluation counter (may be NULL).
  * @return 0 on success, non-zero on failure.
  */
-int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(real *),
+int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
                     real *best, real *best_val, int *evals);
 
 /* Drivers */

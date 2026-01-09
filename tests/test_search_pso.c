@@ -27,14 +27,14 @@ static int run_pso_regression(void)
     real best_val = 0.0;
     int evals = 0;
 
-    if (sr_pso_optimize(&cfg, ndim, (real (*)(real *))quadratic_2d, best, &best_val, &evals) != 0) {
+    if (sr_pso_optimize(&cfg, ndim, quadratic_2d, best, &best_val, &evals) != 0) {
         fprintf(stderr, "sr_pso_optimize failed\n");
         return 1;
     }
 
     const real tol = 0.2;
     if (fabs(best[1] - 1.0) > tol || fabs(best[2] + 2.0) > tol) {
-        fprintf(stderr, "unexpected optimum: (%g, %g)\n", (double)best[1], (double)best[2]);
+        fprintf(stderr, "unexpected optimum: (%g, %g)\n", best[1], best[2]);
         return 1;
     }
     CLEED_TEST_ASSERT(best_val >= 0.0);
