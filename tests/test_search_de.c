@@ -9,8 +9,8 @@
 
 static real quadratic_2d(const real *x)
 {
-    const real dx = x[1] - (real)1.0;
-    const real dy = x[2] + (real)2.0;
+    const real dx = x[1] - 1.0;
+    const real dy = x[2] + 2.0;
     return (dx * dx) + (dy * dy);
 }
 
@@ -18,7 +18,7 @@ static int run_de_regression(void)
 {
     const int ndim = 2;
     sr_de_cfg cfg;
-    sr_de_cfg_init(&cfg, ndim, (real)1.0);
+    sr_de_cfg_init(&cfg, ndim, 1.0);
     cfg.population = 24;
     cfg.max_evals = 3000;
     cfg.seed = 42;
@@ -32,8 +32,8 @@ static int run_de_regression(void)
         return 1;
     }
 
-    const real tol = (real)0.25;
-    if (fabs(best[1] - (real)1.0) > tol || fabs(best[2] + (real)2.0) > tol) {
+    const real tol = 0.25;
+    if (fabs(best[1] - 1.0) > tol || fabs(best[2] + 2.0) > tol) {
         fprintf(stderr, "unexpected optimum: (%g, %g)\n", (double)best[1], (double)best[2]);
         return 1;
     }

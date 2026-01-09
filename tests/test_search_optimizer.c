@@ -175,14 +175,14 @@ static int test_config_from_env_pso(void)
     CLEED_TEST_ASSERT(cfg.max_iters == 456);
     CLEED_TEST_ASSERT(cfg.seed == 789);
     CLEED_TEST_ASSERT(cfg.pso_swarm_size == 32);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_inertia - (real)0.73) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_c1 - (real)1.50) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_c2 - (real)1.60) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_vmax - (real)2.00) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_inertia - 0.73) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_c1 - 1.50) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_c2 - 1.60) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_vmax - 2.00) < 1e-6);
     CLEED_TEST_ASSERT(cfg.de_population == 40);
-    CLEED_TEST_ASSERT(fabs(cfg.de_weight - (real)0.65) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.de_crossover - (real)0.85) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.de_init_span - (real)1.75) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_weight - 0.65) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_crossover - 0.85) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_init_span - 1.75) < 1e-6);
 
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
@@ -270,15 +270,15 @@ static int test_config_apply(void)
     cfg.max_iters = 123;
     cfg.max_evals = 456;
     cfg.de_population = 40;
-    cfg.de_weight = (real)0.65;
-    cfg.de_crossover = (real)0.85;
-    cfg.de_init_span = (real)1.75;
+    cfg.de_weight = 0.65;
+    cfg.de_crossover = 0.85;
+    cfg.de_init_span = 1.75;
     sr_optimizer_config_apply(&cfg);
 
     CLEED_TEST_ASSERT(sr_de_population == 40);
-    CLEED_TEST_ASSERT(fabs(sr_de_weight - (real)0.65) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(sr_de_crossover - (real)0.85) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(sr_de_init_span - (real)1.75) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(sr_de_weight - 0.65) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(sr_de_crossover - 0.85) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(sr_de_init_span - 1.75) < 1e-6);
     CLEED_TEST_ASSERT(sr_de_iter_limit == 123);
     CLEED_TEST_ASSERT(sr_de_eval_limit == 456);
 

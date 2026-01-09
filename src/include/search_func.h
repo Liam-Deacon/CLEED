@@ -179,19 +179,19 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
  */
 typedef struct sr_de_cfg {
   // cppcheck-suppress unusedStructMember
-  int population;
+  int population; /**< Population size (default: 10*ndim, min: 20, range: >0) */
   // cppcheck-suppress unusedStructMember
-  int max_iters;
+  int max_iters;  /**< Maximum iterations (default: 0/optimiser default, range: >=0) */
   // cppcheck-suppress unusedStructMember
-  int max_evals;
+  int max_evals;  /**< Maximum evaluations (default: 0/optimiser default, range: >=0) */
   // cppcheck-suppress unusedStructMember
-  real weight;
+  real weight;    /**< Differential weight F (default: 0.8, range: (0, 2]) */
   // cppcheck-suppress unusedStructMember
-  real crossover;
+  real crossover; /**< Crossover probability CR (default: 0.9, range: [0, 1]) */
   // cppcheck-suppress unusedStructMember
-  real init_span;
+  real init_span; /**< Initial span per dimension (default: dpos or 1.0, range: >0) */
   // cppcheck-suppress unusedStructMember
-  uint64_t seed;  /**< RNG seed (0 = use default) */
+  uint64_t seed;  /**< RNG seed (0 = use internal default) */
 } sr_de_cfg;
 
 /**

@@ -40,6 +40,14 @@ typedef struct sr_de_state {
   real *trial;
 } sr_de_state;
 
+typedef struct sr_de_selection_ctx {
+  real **pop_vec;
+  real *scores;
+  real *best;
+  real *best_val;
+  int ndim;
+} sr_de_selection_ctx;
+
 /*===========================================================================*/
 /* Internal helper functions                                                 */
 /*===========================================================================*/
@@ -249,23 +257,20 @@ static void sr_de_create_trial(sr_de_state *state, int target,
 /**
  * @brief Perform selection: replace target if trial is at least as good.
  *
- * @param pop_vec   Population matrix.
- * @param scores    Objective values array.
+ * @param ctx       Selection context (population, scores, best trackers).
  * @param target    Index of the target vector.
  * @param trial     Trial vector.
  * @param trial_val Objective value of the trial vector.
- * @param best      Global best solution vector.
- * @param best_val  Global best objective value.
- * @param ndim      Number of dimensions.
  */
-static void sr_de_selection(real **pop_vec, real *scores, int target,
-                            const real *trial, real trial_val,
-                            real *best, real *best_val, int ndim)
+static void sr_de_selection(sr_de_selection_ctx *ctx, int target,
+                            const real *trial, real trial_val)
 {
-  if (trial_val <= scores[target]) {
-    scores[target] = trial_val;
-    sr_de_copy_vector(pop_vec[target], trial, ndim);
-    sr_de_update_best(trial, trial_val, best, best_val, ndim);
+  if (!ctx || !trial) return;
+
+  if (trial_val <= ctx->scores[target]) {
+    ctx->scores[target] = trial_val;
+    sr_de_copy_vector(ctx->pop_vec[target], trial, ctx->ndim);
+    sr_de_update_best(trial, trial_val, ctx->best, ctx->best_val, ctx->ndim);
   }
 }
 
@@ -357,7 +362,7 @@ static int sr_de_resolve_cfg(const sr_de_cfg *cfg, int ndim,
   }
 
   resolved->init_span = (src->init_span > (real)0.0) ? src->init_span : (real)1.0;
-  resolved->seed = (src->seed > 0) ? src->seed : 1ULL;
+  resolved->seed = src->seed;
 
   return 0;
 }
@@ -367,8 +372,17 @@ static int sr_de_run_generation(sr_de_state *state, real (*func)(const real *),
 {
   if (!state || !func || !best || !best_val || !evals) return -1;
 
+  sr_de_selection_ctx select_ctx;
+  select_ctx.pop_vec = state->pop_vec;
+  select_ctx.scores = state->scores;
+  select_ctx.best = best;
+  select_ctx.best_val = best_val;
+  select_ctx.ndim = state->ndim;
+
   for (int i = 1; i <= state->pop && *evals < state->max_evals; i++) {
-    int a, b, c;
+    int a = 0;
+    int b = 0;
+    int c = 0;
     if (sr_de_pick_indices(&state->rng, state->pop, i, &a, &b, &c) != 0) {
       return -1;
     }
@@ -378,8 +392,7 @@ static int sr_de_run_generation(sr_de_state *state, real (*func)(const real *),
     const real trial_val = (*func)(state->trial);
     (*evals)++;
 
-    sr_de_selection(state->pop_vec, state->scores, i, state->trial,
-                    trial_val, best, best_val, state->ndim);
+    sr_de_selection(&select_ctx, i, state->trial, trial_val);
   }
 
   return 0;
