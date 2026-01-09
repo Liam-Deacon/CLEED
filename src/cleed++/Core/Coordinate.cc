@@ -74,13 +74,16 @@ inline Coordinate& Coordinate::setCoordinate(double x, double y, double z)
 
 inline Coordinate& Coordinate::setCoordinate(const Coordinate &position)
 {
-  this->pos = position.pos;
+  ::coord_copy(this->pos, position.pos);
   return *this;
 }
 
 inline Coordinate& Coordinate::setCoordinate(const coord *position)
 {
-  pos = (coord*) position;
+  if (!position) {
+    return *this;
+  }
+  ::coord_copy(this->pos, position);
   return *this;
 }
     
@@ -107,7 +110,7 @@ inline double Coordinate::getZ()
 
 inline const coord *Coordinate::get_coord()
 {
-  return ((const coord*) this->pos);
+  return this->pos;
 }
 
 /* other methods */

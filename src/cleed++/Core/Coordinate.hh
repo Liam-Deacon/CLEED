@@ -35,7 +35,7 @@ namespace cleed {
       Coordinate();
       Coordinate(double x, double y, double z);
       Coordinate(const Coordinate &position);
-      Coordinate(const coord *position);
+      explicit Coordinate(const coord *position);
       ~Coordinate();
 
       friend std::ostream& operator<<(std::ostream& out, const Coordinate& pos);

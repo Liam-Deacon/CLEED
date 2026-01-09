@@ -17,10 +17,8 @@
 #ifndef MILLER_INDEX_HH
 #define MILLER_INDEX_HH
 
+#include <ostream>
 #include <string>
-#include <ofstream>
-
-#include "miller_hkl.h"
 
 
 namespace cleed {
@@ -32,8 +30,6 @@ class MillerIndex {
 public: 
 
   MillerIndex(double h, double k, double l);
-  MillerIndex(const miller_hkl *hkl);
-
   ~MillerIndex();
 
   // operators
@@ -44,7 +40,7 @@ public:
   double getMillerK() const;
   double getMillerL() const;
   void getMillerIndices(double &h, double &k, double &l) const;
-  const std::string &getMillerIndicesAsString() const;
+  std::string getMillerIndicesAsString() const;
 
   // setters
   MillerIndex &setMillerH(double h);
@@ -56,8 +52,8 @@ private:
   double h;
   double k;
   double l;
-} /* class MillerIndex */
+}; /* class MillerIndex */
 
-} /* namespace cleed /*
+} /* namespace cleed */
 
-#endif /* MILLER_INDEX_HH /*
+#endif /* MILLER_INDEX_HH */

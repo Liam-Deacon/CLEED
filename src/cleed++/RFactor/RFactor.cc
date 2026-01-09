@@ -34,7 +34,14 @@ RFactor::RFactor(const string &control_filepath, const string &theory_filepath) 
 
 /* operators */
 inline bool RFactor::operator==(const RFactor &other) const {
-  return (*this == other);
+  if (this == &other) {
+    return true;
+  }
+  return rfactor == other.rfactor &&
+         relativeError == other.relativeError &&
+         iRatio == other.iRatio &&
+         energyShift == other.energyShift &&
+         energyRange == other.energyRange;
 }
 
 inline bool RFactor::operator!=(const RFactor &other) const {
@@ -55,7 +62,7 @@ void RFactor::updateIVs(const string &control_filepath, const string &theory_fil
   rfac_ivcur *ivcur_ptr = ::rfac_ivcur_read( control_filepath.c_str(),
                                              theory_filepath.c_str()  );
   size_t n = 0;
-  while (ivcur_ptr[n].group_id == END_OF_GROUP_ID) {n++;}
+  while (ivcur_ptr[n].group_id != END_OF_GROUP_ID) {n++;}
   //this->iv_datasets.assign(ivcur_ptr, ivcur_ptr+n);
 
   // free memory

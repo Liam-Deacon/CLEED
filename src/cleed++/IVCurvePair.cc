@@ -23,13 +23,20 @@ using namespace cleed;
 
 IVCurvePair::IVCurvePair(const IVCurvePair &other) {
   this->iv_pair = new rfac_ivcur;
-  std::copy(other.iv_pair, other.iv_pair + sizeof(rfac_ivcur), this->iv_pair);
+  if (other.iv_pair) {
+    *this->iv_pair = *other.iv_pair;
+  } else {
+    *this->iv_pair = {};
+  }
 }
 
 IVCurvePair::IVCurvePair(const rfac_ivcur *ivcur_ptr) {
   this->iv_pair = new rfac_ivcur;
-  if (ivcur_ptr)
-    std::copy(ivcur_ptr, ivcur_ptr + sizeof(rfac_ivcur), this->iv_pair);
+  if (ivcur_ptr) {
+    *this->iv_pair = *ivcur_ptr;
+  } else {
+    *this->iv_pair = {};
+  }
 }
 
 IVCurvePair::IVCurvePair(const IVCurve &theory, const IVCurve &experimental) {
@@ -75,7 +82,7 @@ int IVCurvePair::getGroupID() const {
 }
 
 const rfac_ivcur *IVCurvePair::getIVPairPtr() const {
-  return const_cast<rfac_ivcur *>(this->iv_pair);
+  return this->iv_pair;
 }
 
 // setters
@@ -99,15 +106,18 @@ IVCurvePair& IVCurvePair::setSpotID(const rfac_spot *spot) {
 }
 
 IVCurvePair& IVCurvePair::setTheoryIVCurve(const IVCurve &theory) {
-  //!TODO:
-  const rfac_iv *iv = theory.get_rfac_iv_ptr();
-  std::copy(iv, iv + sizeof(rfac_iv), this->iv_pair->theory);
+  if (!this->iv_pair) {
+    return *this;
+  }
+  this->iv_pair->theory = const_cast<rfac_iv *>(theory.get_rfac_iv_ptr());
   return *this;
 }
 
 IVCurvePair& IVCurvePair::setExperimentalIVCurve(const IVCurve &experimental) {
-  //!TODO:
-  const rfac_iv *iv = experimental.get_rfac_iv_ptr();
-  std::copy(iv, iv + sizeof(rfac_iv), this->iv_pair->experimental);
+  if (!this->iv_pair) {
+    return *this;
+  }
+  this->iv_pair->experimental =
+      const_cast<rfac_iv *>(experimental.get_rfac_iv_ptr());
   return *this;
 }
