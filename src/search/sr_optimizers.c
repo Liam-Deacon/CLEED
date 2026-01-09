@@ -202,9 +202,6 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   if (cfg->max_iters > 0) {
     sr_powell_iter_limit = cfg->max_iters;
     sr_sa_iter_limit = cfg->max_iters;
-    if (cfg->max_evals <= 0) {
-      sr_amoeba_eval_limit = cfg->max_iters;
-    }
   }
   if (cfg->seed > 0) {
     sa_idum = cfg->seed;

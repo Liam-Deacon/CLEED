@@ -13,6 +13,8 @@ LD/29.06.2014 - Creation of open source version of ran1 function
 ***********************************************************************/
 #include "real.h"
 // cppcheck-suppress missingIncludeSystem
+#include <limits.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdint.h>
 
 /**
@@ -54,13 +56,21 @@ real ran1(long *idum)
     /* Initialize or reseed when idum is negative or state is zero */
     if (*idum < 0 || ran1_state == 0) {
         /* Use absolute value of idum as seed; ensure non-zero state */
-        uint64_t seed = (uint64_t)(*idum < 0 ? -(*idum) : *idum);
+        uint64_t seed = (uint64_t)(*idum);
+        if (*idum < 0) {
+            /* Avoid signed overflow when idum == LONG_MIN. */
+            seed = (uint64_t)(0 - seed);
+        }
         ran1_state = (seed == 0) ? UINT64_C(0x853c49e6748fea9b) : seed;
         /* Warm up the generator */
         (void)ran1_next64();
         /* Convention: set idum positive after initialization */
         if (*idum < 0) {
-            *idum = -(*idum);
+            if (*idum == LONG_MIN) {
+                *idum = LONG_MAX;
+            } else {
+                *idum = -(*idum);
+            }
         }
     }
 

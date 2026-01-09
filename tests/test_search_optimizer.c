@@ -3,6 +3,8 @@
 #include "test_support.h"
 
 // cppcheck-suppress missingIncludeSystem
+#include <inttypes.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
 // cppcheck-suppress missingIncludeSystem
 #include <string.h>
@@ -77,12 +79,85 @@ static int test_config_from_env(void)
     return 0;
 }
 
+static int test_config_apply(void)
+{
+    const int orig_amoeba = sr_amoeba_eval_limit;
+    const int orig_powell = sr_powell_iter_limit;
+    const int orig_sa = sr_sa_iter_limit;
+    const uint64_t orig_seed = sa_idum;
+    sr_optimizer_config cfg;
+
+    sr_amoeba_eval_limit = orig_amoeba;
+    sr_powell_iter_limit = orig_powell;
+    sr_sa_iter_limit = orig_sa;
+    sa_idum = orig_seed;
+
+    memset(&cfg, 0, sizeof(cfg));
+    cfg.max_evals = 1234;
+    sr_optimizer_config_apply(&cfg);
+
+    CLEED_TEST_ASSERT(sr_amoeba_eval_limit == 1234);
+    CLEED_TEST_ASSERT(sr_powell_iter_limit == orig_powell);
+    CLEED_TEST_ASSERT(sr_sa_iter_limit == orig_sa);
+    CLEED_TEST_ASSERT(sa_idum == orig_seed);
+
+    sr_amoeba_eval_limit = orig_amoeba;
+    sr_powell_iter_limit = orig_powell;
+    sr_sa_iter_limit = orig_sa;
+    sa_idum = orig_seed;
+
+    memset(&cfg, 0, sizeof(cfg));
+    cfg.max_iters = 456;
+    sr_optimizer_config_apply(&cfg);
+
+    CLEED_TEST_ASSERT(sr_powell_iter_limit == 456);
+    CLEED_TEST_ASSERT(sr_sa_iter_limit == 456);
+    CLEED_TEST_ASSERT(sr_amoeba_eval_limit == orig_amoeba);
+    CLEED_TEST_ASSERT(sa_idum == orig_seed);
+
+    sr_amoeba_eval_limit = orig_amoeba;
+    sr_powell_iter_limit = orig_powell;
+    sr_sa_iter_limit = orig_sa;
+    sa_idum = orig_seed;
+
+    memset(&cfg, 0, sizeof(cfg));
+    cfg.max_evals = 789;
+    cfg.max_iters = 321;
+    sr_optimizer_config_apply(&cfg);
+
+    CLEED_TEST_ASSERT(sr_amoeba_eval_limit == 789);
+    CLEED_TEST_ASSERT(sr_powell_iter_limit == 321);
+    CLEED_TEST_ASSERT(sr_sa_iter_limit == 321);
+    CLEED_TEST_ASSERT(sa_idum == orig_seed);
+
+    sr_amoeba_eval_limit = orig_amoeba;
+    sr_powell_iter_limit = orig_powell;
+    sr_sa_iter_limit = orig_sa;
+    sa_idum = orig_seed;
+
+    memset(&cfg, 0, sizeof(cfg));
+    cfg.seed = UINT64_C(0x123456789);
+    sr_optimizer_config_apply(&cfg);
+
+    CLEED_TEST_ASSERT(sa_idum == cfg.seed);
+
+    sr_amoeba_eval_limit = orig_amoeba;
+    sr_powell_iter_limit = orig_powell;
+    sr_sa_iter_limit = orig_sa;
+    sa_idum = orig_seed;
+
+    return 0;
+}
+
 int main(void)
 {
     if (test_lookup_by_name() != 0) {
         return 1;
     }
     if (test_config_from_env() != 0) {
+        return 1;
+    }
+    if (test_config_apply() != 0) {
         return 1;
     }
     return 0;
