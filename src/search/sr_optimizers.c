@@ -180,9 +180,10 @@ static int sr_optimizer_read_seed_env(const char *name, uint64_t *out_value)
   unsigned long long parsed = 0;
 
   if (!raw || !out_value) return 0;
+  errno = 0;
   parsed = strtoull(raw, &end, 10);
   /* CSEARCH_SEED=0 means "use the default seed", so ignore it here. */
-  if (end == raw || parsed == 0) return 0;
+  if (end == raw || errno == ERANGE || parsed == 0) return 0;
   *out_value = (uint64_t)parsed;
   return 1;
 }

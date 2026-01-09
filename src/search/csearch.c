@@ -30,7 +30,9 @@ static const char *sr_consume_arg(int argc, char *argv[], int *i_arg,
                                   const char *missing_msg)
 {
   (*i_arg)++;
-  if (*i_arg < argc) return argv[*i_arg];
+  if (*i_arg < argc) {
+    return argv[*i_arg];
+  }
 #ifdef ERROR
   fprintf(STDERR,"%s", missing_msg);
 #endif
@@ -130,32 +132,44 @@ int main(int argc, char *argv[])
 
     /* Read initial displacement */
     if (strncmp(argv[i_arg], "-d", 2) == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): initial displacement value not given\n");
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): initial displacement value not given\n");
+      }
       delta = (real)atof(value);
       continue;
     }
 
     /* Read parameter input file */
     if (strncmp(argv[i_arg], "-i", 2) == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): no input file specified\n");
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): no input file specified\n");
+      }
       (void)snprintf(inp_file, sizeof(inp_file), "%s", value);
       continue;
     }
 
     /* Read vertex file */
     if (strncmp(argv[i_arg], "-v", 2) == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): no vertex file specified\n");
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): no vertex file specified\n");
+      }
       (void)snprintf(bak_file, sizeof(bak_file), "%s", value);
       continue;
     }
 
     /* Read search type */
     if (strncmp(argv[i_arg], "-s", 2) == 0) {
-      const char *value = sr_consume_arg(argc, argv, &i_arg,
-          "*** error (SEARCH): no search algorithm specified\n");
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): no search algorithm specified\n");
+      }
       optimizer = sr_optimizer_by_name(value);
       if (!optimizer) {
         #ifdef ERROR
