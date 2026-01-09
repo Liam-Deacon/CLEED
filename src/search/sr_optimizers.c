@@ -119,8 +119,7 @@ static const sr_optimizer_entry sr_optimizers[] = {
 
 static const sr_optimizer_entry *sr_optimizer_entry_by_type(int type)
 {
-  size_t i;
-  for (i = 0; i < sr_optimizer_count(); i++) {
+  for (size_t i = 0; i < sr_optimizer_count(); i++) {
     if (sr_optimizers[i].def.type == type) {
       return &sr_optimizers[i];
     }
@@ -131,11 +130,10 @@ static const sr_optimizer_entry *sr_optimizer_entry_by_type(int type)
 static int sr_optimizer_matches(const char *name,
                                 const sr_optimizer_entry *entry)
 {
-  size_t i;
   if (!name || !entry) {
     return 0;
   }
-  for (i = 0; entry->aliases[i] != NULL; i++) {
+  for (size_t i = 0; entry->aliases[i] != NULL; i++) {
     const char *alias = entry->aliases[i];
     if (alias[0] == '\0') {
       continue;

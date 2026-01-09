@@ -26,6 +26,46 @@ version 0.1
 
 /**********************************************************************/
 
+static const char *sr_consume_arg(int argc, char *argv[], int *i_arg,
+                                  const char *missing_msg)
+{
+  (*i_arg)++;
+  if (*i_arg < argc) return argv[*i_arg];
+#ifdef ERROR
+  fprintf(STDERR,"%s", missing_msg);
+#endif
+  exit(1);
+}
+
+static int sr_parse_positive_int(const char *value, const char *invalid_msg)
+{
+  char *end = NULL;
+  long parsed = strtol(value, &end, 10);
+  if (end == value || parsed <= 0 || parsed > INT_MAX) {
+#ifdef ERROR
+    fprintf(STDERR,"%s", invalid_msg);
+#endif
+    exit(1);
+  }
+  return (int)parsed;
+}
+
+static uint64_t sr_parse_seed(const char *value, const char *invalid_msg)
+{
+  char *end = NULL;
+  unsigned long long parsed;
+
+  errno = 0;
+  parsed = strtoull(value, &end, 10);
+  if (end == value || errno == ERANGE) {
+#ifdef ERROR
+    fprintf(STDERR,"%s", invalid_msg);
+#endif
+    exit(1);
+  }
+  return (uint64_t)parsed;
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -76,7 +116,7 @@ int main(int argc, char *argv[])
   
   for (i_arg = 1; i_arg < argc; i_arg++)
   {
-    if(*argv[i_arg] != '-')
+    if (argv[i_arg][0] != '-')
     {
       #ifdef ERROR
       fprintf(STDERR,"*** error (SEARCH):\tsyntax error:\n");
@@ -84,160 +124,84 @@ int main(int argc, char *argv[])
       #endif
       exit(1);
     }
-    else
-    {
 
-      /* Read initial displacement */
-      if(strncmp(argv[i_arg], "-d", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg < argc)
-          delta = (real)atof(argv[i_arg]);
-        else 
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): initial displacement value not given\n");
-          #endif
-          exit(1);
-        }
-      }
+    /* Read initial displacement */
+    if (strncmp(argv[i_arg], "-d", 2) == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): initial displacement value not given\n");
+      delta = (real)atof(value);
+      continue;
+    }
 
-      /* Read parameter input file */
-      if(strncmp(argv[i_arg], "-i", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg < argc)
-            (void)snprintf(inp_file, sizeof(inp_file), "%s", argv[i_arg]);
-        else 
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): no input file specified\n");
-          #endif
-          exit(1);
-        }
-      }
+    /* Read parameter input file */
+    if (strncmp(argv[i_arg], "-i", 2) == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): no input file specified\n");
+      (void)snprintf(inp_file, sizeof(inp_file), "%s", value);
+      continue;
+    }
 
-      /* Read vertex file */
-      if(strncmp(argv[i_arg], "-v", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg < argc)
-            (void)snprintf(bak_file, sizeof(bak_file), "%s", argv[i_arg]);
-        else
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): no vertex file specified\n");
-          #endif
-          exit(1);
-        }
-      }
+    /* Read vertex file */
+    if (strncmp(argv[i_arg], "-v", 2) == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): no vertex file specified\n");
+      (void)snprintf(bak_file, sizeof(bak_file), "%s", value);
+      continue;
+    }
 
-      /* Read search type */
-      if(strncmp(argv[i_arg], "-s", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg >= argc) 
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): no search algorithm specified\n");
-          #endif
-          exit(1);
-        }
-        optimizer = sr_optimizer_by_name(argv[i_arg]);
-        if (!optimizer)
-        {
-          #ifdef ERROR
-          fprintf(STDERR,
-             "*** error (SEARCH): unknown search type \"%s\" (option -s)\n",
-             argv[i_arg]);
-          #endif
-          exit(1);
-        }
-        
-      } /* search type */
+    /* Read search type */
+    if (strncmp(argv[i_arg], "-s", 2) == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): no search algorithm specified\n");
+      optimizer = sr_optimizer_by_name(value);
+      if (!optimizer) {
+        #ifdef ERROR
+        fprintf(STDERR,
+           "*** error (SEARCH): unknown search type \"%s\" (option -s)\n",
+           value);
+        #endif
+        exit(1);
+      }
+      continue;
+    }
 
-      else if (strcmp(argv[i_arg], "--max-evals") == 0)
-      {
-        char *end = NULL;
-        long val;
-        i_arg++;
-        if (i_arg < argc) {
-          val = strtol(argv[i_arg], &end, 10);
-          if (end == argv[i_arg] || val <= 0 || val > INT_MAX) {
-            #ifdef ERROR
-            fprintf(STDERR,"*** error (SEARCH): invalid max evals value\n");
-            #endif
-            exit(1);
-          }
-          opt_cfg.max_evals = (int)val;
-        } else {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): max evals value not given\n");
-          #endif
-          exit(1);
-        }
-      }
+    if (strcmp(argv[i_arg], "--max-evals") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): max evals value not given\n");
+      opt_cfg.max_evals = sr_parse_positive_int(value,
+          "*** error (SEARCH): invalid max evals value\n");
+      continue;
+    }
 
-      else if (strcmp(argv[i_arg], "--max-iters") == 0)
-      {
-        char *end = NULL;
-        long val;
-        i_arg++;
-        if (i_arg < argc) {
-          val = strtol(argv[i_arg], &end, 10);
-          if (end == argv[i_arg] || val <= 0 || val > INT_MAX) {
-            #ifdef ERROR
-            fprintf(STDERR,"*** error (SEARCH): invalid max iters value\n");
-            #endif
-            exit(1);
-          }
-          opt_cfg.max_iters = (int)val;
-        } else {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): max iters value not given\n");
-          #endif
-          exit(1);
-        }
-      }
+    if (strcmp(argv[i_arg], "--max-iters") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): max iters value not given\n");
+      opt_cfg.max_iters = sr_parse_positive_int(value,
+          "*** error (SEARCH): invalid max iters value\n");
+      continue;
+    }
 
-      else if (strcmp(argv[i_arg], "--seed") == 0)
-      {
-        char *end = NULL;
-        i_arg++;
-        if (i_arg < argc) {
-          errno = 0;
-          opt_cfg.seed = strtoull(argv[i_arg], &end, 10);
-          if (end == argv[i_arg] || errno == ERANGE) {
-            #ifdef ERROR
-            fprintf(STDERR,"*** error (SEARCH): invalid seed value\n");
-            #endif
-            exit(1);
-          }
-        } else {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): seed value not given\n");
-          #endif
-          exit(1);
-        }
-      }
-      
-      /* help */
-      else if ((strcmp(argv[i_arg], "-h") == 0) || 
-          (strcmp(argv[i_arg], "--help") == 0))
-      {
-        search_usage(STDOUT);
-        exit(0);
-      }
-      
-      /* version information */
-      else if ((strcmp(argv[i_arg], "-V") == 0) ||
-           (strcmp(argv[i_arg], "--version") == 0))
-      {
-        search_info();
-        exit(0);
-      }
+    if (strcmp(argv[i_arg], "--seed") == 0) {
+      const char *value = sr_consume_arg(argc, argv, &i_arg,
+          "*** error (SEARCH): seed value not given\n");
+      opt_cfg.seed = sr_parse_seed(value,
+          "*** error (SEARCH): invalid seed value\n");
+      continue;
+    }
 
-    } /* else */
+    /* help */
+    if ((strcmp(argv[i_arg], "-h") == 0) ||
+        (strcmp(argv[i_arg], "--help") == 0)) {
+      search_usage(STDOUT);
+      exit(0);
+    }
+
+    /* version information */
+    if ((strcmp(argv[i_arg], "-V") == 0) ||
+        (strcmp(argv[i_arg], "--version") == 0)) {
+      search_info();
+      exit(0);
+    }
   
   }  /* for i_arg */
 
