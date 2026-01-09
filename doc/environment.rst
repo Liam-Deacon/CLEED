@@ -49,6 +49,26 @@ This page defines the environment variables referenced throughout the manual.
    Seeds are parsed as unsigned 64-bit integers. A value of 0 uses the built-in
    default seed for the annealing RNG.
 
+.. envvar:: CSEARCH_PSO_SWARM
+
+   Optional PSO swarm size (same as ``--pso-swarm``).
+
+.. envvar:: CSEARCH_PSO_INERTIA
+
+   Optional PSO inertia weight (same as ``--pso-inertia``).
+
+.. envvar:: CSEARCH_PSO_C1
+
+   Optional PSO cognitive coefficient (same as ``--pso-c1``).
+
+.. envvar:: CSEARCH_PSO_C2
+
+   Optional PSO social coefficient (same as ``--pso-c2``).
+
+.. envvar:: CSEARCH_PSO_VMAX
+
+   Optional PSO velocity clamp (same as ``--pso-vmax``).
+
 .. envvar:: RF_HELP_FILE
 
    Path to a help file shown when :ref:`crfac` is invoked with ``-h``.
