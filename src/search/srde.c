@@ -87,8 +87,14 @@ static int sr_de_init_population(sr_rng *rng, int pop, int ndim, real span,
 int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(real *),
                    real *best, real *best_val, int *evals)
 {
-  if (!cfg || !func || !best || !best_val || ndim <= 0) {
+  if (!func || !best || !best_val || ndim <= 0) {
     return -1;
+  }
+
+  sr_de_cfg defaults;
+  if (!cfg) {
+    sr_de_cfg_init(&defaults, ndim, (real)1.0);
+    cfg = &defaults;
   }
 
   int pop = (cfg->population > 0) ? cfg->population : sr_de_default_population(ndim);

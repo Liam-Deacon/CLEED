@@ -106,6 +106,14 @@ static int test_lookup_by_name(void)
     CLEED_TEST_ASSERT(opt != NULL);
     CLEED_TEST_ASSERT(opt->type == SR_DIFFERENTIAL_EVOLUTION);
 
+    opt = sr_optimizer_by_name("differential");
+    CLEED_TEST_ASSERT(opt != NULL);
+    CLEED_TEST_ASSERT(opt->type == SR_DIFFERENTIAL_EVOLUTION);
+
+    opt = sr_optimizer_by_name("differential-evolution");
+    CLEED_TEST_ASSERT(opt != NULL);
+    CLEED_TEST_ASSERT(opt->type == SR_DIFFERENTIAL_EVOLUTION);
+
     opt = sr_optimizer_by_name("unknown");
     CLEED_TEST_ASSERT(opt == NULL);
 
@@ -254,6 +262,25 @@ static int test_config_apply(void)
     sr_optimizer_config_apply(&cfg);
 
     CLEED_TEST_ASSERT(sa_idum == cfg.seed);
+
+    /* verify that sr_optimizer_config_apply propagates DE config into globals */
+    test_restore_globals(1, 2, 3, UINT64_C(55));
+
+    memset(&cfg, 0, sizeof(cfg));
+    cfg.max_iters = 123;
+    cfg.max_evals = 456;
+    cfg.de_population = 40;
+    cfg.de_weight = (real)0.65;
+    cfg.de_crossover = (real)0.85;
+    cfg.de_init_span = (real)1.75;
+    sr_optimizer_config_apply(&cfg);
+
+    CLEED_TEST_ASSERT(sr_de_population == 40);
+    CLEED_TEST_ASSERT(fabs(sr_de_weight - (real)0.65) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(sr_de_crossover - (real)0.85) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(sr_de_init_span - (real)1.75) < (real)1e-6);
+    CLEED_TEST_ASSERT(sr_de_iter_limit == 123);
+    CLEED_TEST_ASSERT(sr_de_eval_limit == 456);
 
     test_restore_globals(orig_amoeba, orig_powell, orig_sa, orig_seed);
 
