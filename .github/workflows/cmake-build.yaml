@@ -9,6 +9,7 @@ on:
 env:
   BUILD_TYPE: Release
   VCPKG_REF: '2025.12.12'
+  VCPKG_TRIPLET: x64-windows
 
 jobs:
   build:
@@ -41,11 +42,13 @@ jobs:
       id: cache-vcpkg
       uses: actions/cache@v4
       with:
-        path: ${{ github.workspace }}/vcpkg
+        path: |
+          ${{ github.workspace }}/vcpkg
+          ${{ github.workspace }}/vcpkg_installed
         # Cache key depends on vcpkg inputs (manifest/config) instead of the workflow file
-        key: ${{ runner.os }}-vcpkg-tiff-${{ hashFiles('vcpkg*.json', 'vcpkg-configuration.json') }}
+        key: ${{ runner.os }}-vcpkg-${{ env.VCPKG_REF }}-${{ env.VCPKG_TRIPLET }}-${{ hashFiles('**/vcpkg*.json', '**/vcpkg-configuration.json') }}
         restore-keys: |
-          ${{ runner.os }}-vcpkg-tiff-
+          ${{ runner.os }}-vcpkg-${{ env.VCPKG_REF }}-${{ env.VCPKG_TRIPLET }}-
 
     - name: Install build dependencies (Windows via vcpkg)
       if: runner.os == 'Windows' && steps.cache-vcpkg.outputs.cache-hit != 'true'
@@ -56,7 +59,7 @@ jobs:
           git clone --depth 1 --branch ${{ env.VCPKG_REF }} https://github.com/microsoft/vcpkg $vcpkgRoot
         }
         & "$vcpkgRoot/bootstrap-vcpkg.bat"
-        & "$vcpkgRoot/vcpkg.exe" install --triplet x64-windows
+        & "$vcpkgRoot/vcpkg.exe" install --triplet ${{ env.VCPKG_TRIPLET }}
 
     - name: Configure CMake (Linux/macOS)
       if: runner.os != 'Windows'
@@ -75,7 +78,7 @@ jobs:
         cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build
         -A x64
         -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-        -DVCPKG_TARGET_TRIPLET=x64-windows
+        -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_TRIPLET }}
         -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
         -DWITH_QT=OFF
         -DWITH_OPENCL=OFF
