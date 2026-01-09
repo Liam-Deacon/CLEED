@@ -56,10 +56,10 @@ real ran1(long *idum)
     /* Initialize or reseed when idum is negative or state is zero */
     if (*idum < 0 || ran1_state == 0) {
         /* Use absolute value of idum as seed; ensure non-zero state */
-        uint64_t seed = (uint64_t)(*idum);
+        uint64_t seed = *idum;
         if (*idum < 0) {
             /* Avoid signed overflow when idum == LONG_MIN. */
-            seed = (uint64_t)(0 - seed);
+            seed = 0 - seed;
         }
         ran1_state = (seed == 0) ? UINT64_C(0x853c49e6748fea9b) : seed;
         /* Warm up the generator */
