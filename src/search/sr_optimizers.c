@@ -28,7 +28,6 @@ typedef struct sr_optimizer_entry {
 static int sr_run_simplex(int ndim, real dpos, const char *bak_file,
                           const char *log_file)
 {
-  (void)dpos;
   SR_SX(ndim, dpos, bak_file, log_file);
   return 0;
 }

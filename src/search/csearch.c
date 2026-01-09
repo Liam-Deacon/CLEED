@@ -40,8 +40,11 @@ static const char *sr_consume_arg(int argc, char *argv[], int *i_arg,
 static int sr_parse_positive_int(const char *value, const char *invalid_msg)
 {
   char *end = NULL;
-  long parsed = strtol(value, &end, 10);
-  if (end == value || parsed <= 0 || parsed > INT_MAX) {
+  long parsed;
+
+  errno = 0;
+  parsed = strtol(value, &end, 10);
+  if (end == value || errno == ERANGE || parsed <= 0 || parsed > INT_MAX) {
 #ifdef ERROR
     fprintf(STDERR,"%s", invalid_msg);
 #endif

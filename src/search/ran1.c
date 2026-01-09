@@ -4,8 +4,8 @@ file contains function:
 
   real ran1(long *idum)
 
- random number generator of Park and Miller using minstd
- function from GSL
+ xorshift64* pseudorandom number generator with a 64-bit state
+ stored in ran1_state (seeded via the idum input).
 
  Changes:
 LD/29.06.2014 - Creation of open source version of ran1 function

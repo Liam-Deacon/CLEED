@@ -79,6 +79,65 @@ static int test_config_from_env(void)
     return 0;
 }
 
+static int test_config_from_env_invalid_values(void)
+{
+    sr_optimizer_config cfg;
+    sr_optimizer_config_init(&cfg);
+
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_EVALS", "nope") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_ITERS", "n/a") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_SEED", "oops") == 0);
+
+    sr_optimizer_config_from_env(&cfg);
+
+    CLEED_TEST_ASSERT(cfg.max_evals == 0);
+    CLEED_TEST_ASSERT(cfg.max_iters == 0);
+    CLEED_TEST_ASSERT(cfg.seed == 0);
+
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_SEED") == 0);
+
+    return 0;
+}
+
+static int test_config_from_env_edge_values(void)
+{
+    sr_optimizer_config cfg;
+    sr_optimizer_config_init(&cfg);
+
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_EVALS", "-5") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_ITERS", "-10") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_SEED", "0") == 0);
+
+    sr_optimizer_config_from_env(&cfg);
+
+    CLEED_TEST_ASSERT(cfg.max_evals == 0);
+    CLEED_TEST_ASSERT(cfg.max_iters == 0);
+    CLEED_TEST_ASSERT(cfg.seed == 0);
+
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_SEED") == 0);
+
+    sr_optimizer_config_init(&cfg);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_EVALS", "9999999999") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_ITERS", "9999999999") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_SEED", "18446744073709551615") == 0);
+
+    sr_optimizer_config_from_env(&cfg);
+
+    CLEED_TEST_ASSERT(cfg.max_evals == 0);
+    CLEED_TEST_ASSERT(cfg.max_iters == 0);
+    CLEED_TEST_ASSERT(cfg.seed == UINT64_MAX);
+
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_SEED") == 0);
+
+    return 0;
+}
+
 static int test_config_apply(void)
 {
     const int orig_amoeba = sr_amoeba_eval_limit;
@@ -86,11 +145,6 @@ static int test_config_apply(void)
     const int orig_sa = sr_sa_iter_limit;
     const uint64_t orig_seed = sa_idum;
     sr_optimizer_config cfg;
-
-    sr_amoeba_eval_limit = orig_amoeba;
-    sr_powell_iter_limit = orig_powell;
-    sr_sa_iter_limit = orig_sa;
-    sa_idum = orig_seed;
 
     memset(&cfg, 0, sizeof(cfg));
     cfg.max_evals = 1234;
@@ -155,6 +209,12 @@ int main(void)
         return 1;
     }
     if (test_config_from_env() != 0) {
+        return 1;
+    }
+    if (test_config_from_env_invalid_values() != 0) {
+        return 1;
+    }
+    if (test_config_from_env_edge_values() != 0) {
         return 1;
     }
     if (test_config_apply() != 0) {
