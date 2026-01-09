@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cleed"
+version = "0.0.0"
+description = "Computational Low Energy Electron Diffraction (CLEED) tooling"
+readme = "Readme.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE.txt" }
+authors = [
+  { name = "Liam Deacon", email = "liam.deacon@diamond.ac.uk" }
+]
+keywords = ["LEED", "diffraction", "surface"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+phaseshifts = ["phaseshifts"]
+
+[project.scripts]
+cleed = "cleed.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "python"}
+
+[tool.setuptools.packages.find]
+where = ["python"]

@@ -18,6 +18,7 @@ Contents:
    introduction
    background
    environment
+   python_package
    file_formats
    LEED_programs
    aux_programs
