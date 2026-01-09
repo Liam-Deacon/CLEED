@@ -27,34 +27,41 @@ static int test_unset_env_value(const char *name)
 #endif
 }
 
-static void test_set_env_triplet(const char *evals, const char *iters, const char *seed)
+static int test_set_env_triplet(const char *evals, const char *iters, const char *seed)
 {
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_EVALS", evals) == 0);
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_MAX_ITERS", iters) == 0);
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_SEED", seed) == 0);
+    return 0;
 }
 
-static void test_unset_env_triplet(void)
+static int test_unset_env_triplet(void)
 {
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_SEED") == 0);
+    return 0;
 }
 
-static void test_assert_env_config(const char *evals, const char *iters, const char *seed,
-                                   int expected_evals, int expected_iters, uint64_t expected_seed)
+static int test_assert_env_config(const char *evals, const char *iters, const char *seed,
+                                  int expected_evals, int expected_iters, uint64_t expected_seed)
 {
     sr_optimizer_config cfg;
     sr_optimizer_config_init(&cfg);
 
-    test_set_env_triplet(evals, iters, seed);
+    if (test_set_env_triplet(evals, iters, seed) != 0) {
+        return 1;
+    }
     sr_optimizer_config_from_env(&cfg);
 
     CLEED_TEST_ASSERT(cfg.max_evals == expected_evals);
     CLEED_TEST_ASSERT(cfg.max_iters == expected_iters);
     CLEED_TEST_ASSERT(cfg.seed == expected_seed);
 
-    test_unset_env_triplet();
+    if (test_unset_env_triplet() != 0) {
+        return 1;
+    }
+    return 0;
 }
 
 static void test_restore_globals(int amoeba, int powell, int sa, uint64_t seed)
@@ -97,23 +104,31 @@ static int test_lookup_by_name(void)
 
 static int test_config_from_env(void)
 {
-    test_assert_env_config("123", "456", "789", 123, 456, 789);
+    if (test_assert_env_config("123", "456", "789", 123, 456, 789) != 0) {
+        return 1;
+    }
 
     return 0;
 }
 
 static int test_config_from_env_invalid_values(void)
 {
-    test_assert_env_config("nope", "n/a", "oops", 0, 0, 0);
+    if (test_assert_env_config("nope", "n/a", "oops", 0, 0, 0) != 0) {
+        return 1;
+    }
 
     return 0;
 }
 
 static int test_config_from_env_edge_values(void)
 {
-    test_assert_env_config("-5", "-10", "0", 0, 0, 0);
-    test_assert_env_config("9999999999", "9999999999", "18446744073709551615",
-                           0, 0, UINT64_MAX);
+    if (test_assert_env_config("-5", "-10", "0", 0, 0, 0) != 0) {
+        return 1;
+    }
+    if (test_assert_env_config("9999999999", "9999999999", "18446744073709551615",
+                               0, 0, UINT64_MAX) != 0) {
+        return 1;
+    }
 
     return 0;
 }
