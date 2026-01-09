@@ -20,18 +20,17 @@
 
 #ifdef __cplusplus /* use C linkage if this is a C++ compiler */
 
-#include "cleed_real.h"
 #include "leed_def.h"
 #include <vector>
 #include <string>
 
 namespace cleed {
 
-class PhaseShift : public leed_phase {
+class PhaseShift : public leed_phs_t {
 
   public:
     PhaseShift();
-    PhaseShift(const leed_phase *phsh_ptr);
+    PhaseShift(const leed_phs_t *phsh_ptr);
     PhaseShift(const std::string &inputFile);
     ~PhaseShift();
 
@@ -41,7 +40,7 @@ class PhaseShift : public leed_phase {
 
     /* getters */
     int getLmax() const;
-    leed_matrix_diag getMatrixType() const;
+    int getMatrixType() const;
     real getMaxEnergy() const;
     real getMinEnergy() const;
     std::vector<real> getEnergyList() const;
@@ -51,7 +50,7 @@ class PhaseShift : public leed_phase {
 
     /* setters */
     PhaseShift& setLmax(int lmax);
-    PhaseShift& setMatrixType(leed_matrix_diag Type);
+    PhaseShift& setMatrixType(int Type);
     PhaseShift& setMaxEnergy(real Emax);
     PhaseShift& setMinEnergy(real Emin);
     PhaseShift& setInputFile(const std::string &filepath);

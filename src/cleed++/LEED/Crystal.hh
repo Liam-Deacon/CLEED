@@ -33,19 +33,19 @@ using std::vector;
 
 namespace cleed {
 
-class Crystal : public leed_crystal {
+class Crystal : public leed_cryst_t {
   public:
     /* constructors and destructor */
     Crystal();
-    Crystal(const leed_crystal *crystal_ptr);
+    Crystal(const leed_cryst_t *crystal_ptr);
     Crystal(const Crystal &crystal);
     ~Crystal();
 
     /* operators */
     bool operator==(const Crystal &other) const;
     bool operator!=(const Crystal &other) const;
-    bool operator==(const leed_crystal *other) const;
-    bool operator!=(const leed_crystal *other) const;
+    bool operator==(const leed_cryst_t *other) const;
+    bool operator!=(const leed_cryst_t *other) const;
     friend std::ostream& operator<<(std::ostream& out, const Crystal& xstal);
 
     /* getters */
@@ -59,7 +59,7 @@ class Crystal : public leed_crystal {
     size_t getNumberOfMirrorPlanes() const;
     const real *getMirrorPlaneGeometryPtr() const;
     vector<double> &getMirrorPlaneGeometry() const;
-    leed_mirror_sym getMirrorSymmetry() const;
+    int getMirrorSymmetry() const;
     const real *getAngleAlphaDegreesPtr() const;
     vector<double> &getAngleAlphaDegrees() const;
 
@@ -69,8 +69,8 @@ class Crystal : public leed_crystal {
     double getSuperstructureRelativeUnitCellArea() const;
 
     size_t getNumberOfLayers() const;
-    const leed_layer *getLayersPtr() const;
-    vector<leed_layer> &getLayers() const;
+    const leed_layer_t *getLayersPtr() const;
+    vector<leed_layer_t> &getLayers() const;
     double getMinimumInterlayerDistance() const;
     size_t getNumberOfAtoms() const;
     size_t getNumberOfTypes() const;
@@ -89,7 +89,7 @@ class Crystal : public leed_crystal {
     void setNumberOfMirrorPlanes(size_t n_mir);
     void setMirrorPlaneGeometry(vector<double> m_plane);
     void setMirrorPlaneGeometry(double *m_plane, size_t n);
-    void setMirrorSymmetry(leed_mirror_sym symmetry);
+    void setMirrorSymmetry(int symmetry);
     void setAngleAlphaDegrees(vector<double> alpha);
     void setAngleAlphaDegrees(double *alpha, size_t n);
 
@@ -99,8 +99,8 @@ class Crystal : public leed_crystal {
     void setSuperstructureRelativeUnitCellArea(double rel_area);
 
     void setNumberOfLayers(size_t n_layers);
-    void setLayers(vector<leed_layer> layers);
-    void setLayers(leed_layer *layers, size_t n_layers);
+    void setLayers(vector<leed_layer_t> layers);
+    void setLayers(leed_layer_t *layers, size_t n_layers);
     void setMinimumInterlayerDistance(double d_min);
     void setNumberOfAtoms(size_t n_atoms);
     void setNumberOfTypes(size_t n_types);

@@ -24,18 +24,18 @@ using namespace cleed;
 
 Layer::Layer() {
   this->atoms = nullptr;
-  this->n_atoms = 0;
+  this->natoms = 0;
   this->no_of_layer = 0;
   this->periodic = 0;
   this->rel_area = 0;
 }
 
-Layer::Layer(const leed_layer *layer) {
+Layer::Layer(const leed_layer_t *layer) {
   if (layer->atoms != nullptr) {
-    this->atoms = static_cast<leed_atom*>
-      (std::calloc(layer->n_atoms, sizeof(leed_atom)));
+    this->atoms = static_cast<leed_atom_t*>
+      (std::calloc(layer->natoms, sizeof(leed_atom_t)));
 
-    std::copy(layer->atoms, layer->atoms+layer->n_atoms, this->atoms);
+    std::copy(layer->atoms, layer->atoms+layer->natoms, this->atoms);
   }
 }
 
@@ -55,10 +55,10 @@ inline std::size_t Layer::getLayerNumber() {
 }
 
 inline std::size_t Layer::getNumberOfAtoms() {
-  return (this->n_atoms);
+  return (this->natoms);
 }
 
-inline leed_structure Layer::getLayerType() {
+inline int Layer::getLayerType() {
   return (this->bulk_over);
 }
 
@@ -76,7 +76,10 @@ std::vector<real> Layer::getA2() {
 }
 
 std::vector< std::vector<real> > Layer::getBasis() {
-  //!TODO std::vector< std::vector <double> > a(3, std::vector<double>(3));
+  std::vector< std::vector<real> > basis;
+  basis.push_back(getA1());
+  basis.push_back(getA2());
+  return basis;
 }
 
 inline real Layer::getRelativeArea() {
@@ -84,20 +87,20 @@ inline real Layer::getRelativeArea() {
 }
 
 std::vector< std::vector<real> > Layer::getRegistryShift() {
-
+  return std::vector< std::vector<real> >();
 }
 
 std::vector< std::vector<real> > Layer::getVectorFromLast() {
-
+  return std::vector< std::vector<real> >();
 }
 
 std::vector< std::vector<real> > Layer::getVectorToNext() {
-
+  return std::vector< std::vector<real> >();
 }
 
 std::vector<Atom> Layer::getAtomList() {
   std::vector<Atom> atoms;
-  for(std::size_t i=0; i < this->n_atoms; i++) {
+  for(std::size_t i=0; i < this->natoms; i++) {
     //atoms.push_back(Atom(&this->atoms[i]));
   }
   return (atoms);
@@ -114,7 +117,7 @@ inline Layer& Layer::setLayerNumbers(std::size_t number) {
   return *this;
 }
 
-inline Layer& Layer::setLayerType(leed_structure type) {
+inline Layer& Layer::setLayerType(int type) {
   this->bulk_over = type;
   return *this;
 }
@@ -137,32 +140,25 @@ inline Layer& Layer::setRelativeArea(real area) {
 }
 
 Layer& Layer::setAtoms(std::vector<Atom> atomList) {
-  std::size_t n = atomList.size();
-  if (n > 0) {
-    // allocate new atom array and copy data
-    if (this->atoms != nullptr) {
-      std::free(this->atoms);
-    }
-    this->atoms = static_cast<leed_atom*>(std::calloc(n, sizeof(leed_atom)));
-    std::copy(atoms, atoms + (n*sizeof(leed_atom)), this->atoms);
-  }
+  (void)atomList;
   return *this;
 }
 
-Layer& Layer::setAtoms(const leed_atom *atoms, std::size_t n) {
+Layer& Layer::setAtoms(const leed_atom_t *atoms, std::size_t n) {
   if (n == 0 || atoms == nullptr) return *this; // no data
 
   // allocate new atom array and copy data
   if (this->atoms != nullptr) {
     std::free(this->atoms);
   }
-  this->atoms = static_cast<leed_atom*>(std::calloc(n, sizeof(leed_atom)));
-  std::copy(atoms, atoms + (n*sizeof(leed_atom)), this->atoms);
+  this->atoms = static_cast<leed_atom_t*>(std::calloc(n, sizeof(leed_atom_t)));
+  std::copy(atoms, atoms + n, this->atoms);
+  this->natoms = n;
 
   return *this;
 }
 
-Layer& Layer::setAtom(leed_atom *atom, int index) {
+Layer& Layer::setAtom(leed_atom_t *atom, int index) {
   std::size_t n_atoms = this->getNumberOfAtoms();
 
   // check for out of bounds
@@ -172,16 +168,15 @@ Layer& Layer::setAtom(leed_atom *atom, int index) {
 
   // access array elements in NumPy style
   if (index < 0) {
-    std::copy(atom, atom + sizeof(leed_atom), &this->atoms[n_atoms - index]);
+    std::copy(atom, atom + 1, &this->atoms[n_atoms - index]);
   } else {
-    std::copy(atom, atom + sizeof(leed_atom), &this->atoms[index]);
+    std::copy(atom, atom + 1, &this->atoms[index]);
   }
   return *this;
 }
 
 Layer& Layer::setAtom(LEEDAtom &atom, int index) {
   //! potentially dangerous cast:
-  this->setAtom(reinterpret_cast<leed_atom*>(&atom), index);
+  this->setAtom(static_cast<leed_atom_t*>(&atom), index);
   return *this;
 }
-

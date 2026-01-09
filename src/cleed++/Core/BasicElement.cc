@@ -390,6 +390,16 @@ inline bool BasicElement::operator!() {
   return (this != nullptr);
 }
 
+BasicElement &BasicElement::operator=(std::string id) {
+  if (NAMES.find(id) != NAMES.end()) {
+    return setAtomicNumber(NAMES[id]);
+  }
+  if (SYMBOLS.find(id) != SYMBOLS.end()) {
+    return setAtomicNumber(SYMBOLS[id]);
+  }
+  throw invalidElementException("Element name is not valid");
+}
+
 BasicElement &BasicElement::operator=(int Z) {
   return setAtomicNumber(Z);
 }
@@ -417,19 +427,19 @@ inline bool BasicElement::operator==(const std::string &element) {
 }
 
 inline bool BasicElement::operator!=(const BasicElement &other) {
-  return (this->getAtomicNumber() >= other.Z);
+  return !(*this == other);
 }
 
 inline bool BasicElement::operator!=(const std::string &element) {
-  return !(Z == BasicElement::NAMES[element] );
+  return !(*this == element);
 }
 
 inline bool BasicElement::operator<(const BasicElement &other) {
-  (this->getAtomicNumber() < other.Z);
+  return (this->getAtomicNumber() < other.Z);
 }
 
 inline bool BasicElement::operator>(const BasicElement &other) {
-  (this->getAtomicNumber() > other.Z);
+  return (this->getAtomicNumber() > other.Z);
 }
 
 inline bool BasicElement::operator<=(const BasicElement &other) {

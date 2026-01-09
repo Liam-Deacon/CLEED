@@ -42,8 +42,11 @@ ADD_LIBRARY(cleedplusplusStatic STATIC ${cleedlib_SRCS})
 SET_TARGET_PROPERTIES(cleedplusplus PROPERTIES OUTPUT_NAME cleed++)
 SET_TARGET_PROPERTIES(cleedplusplusStatic PROPERTIES OUTPUT_NAME cleed++)
 
-TARGET_LINK_LIBRARIES(cleedplusplus m)
-TARGET_LINK_LIBRARIES(cleedplusplusStatic m)
+TARGET_SOURCES(cleedplusplus PRIVATE $<TARGET_OBJECTS:latt_core>)
+TARGET_SOURCES(cleedplusplusStatic PRIVATE $<TARGET_OBJECTS:latt_core>)
+
+TARGET_LINK_LIBRARIES(cleedplusplus rfac m)
+TARGET_LINK_LIBRARIES(cleedplusplusStatic rfacStatic m)
 TARGET_LINK_LIBRARIES(cleedplusplus m)
 
 TARGET_COMPILE_DEFINITIONS(cleedplusplus PUBLIC CLEED_DISABLE_LEGACY_CPP)

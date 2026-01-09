@@ -30,10 +30,10 @@ using namespace std;
 
 namespace cleed {
 
-class Layer : public leed_layer {
+class Layer : public leed_layer_t {
   public:
     Layer();
-    Layer(const leed_layer *layer);
+    Layer(const leed_layer_t *layer);
     ~Layer();
 
     /* operators */
@@ -43,7 +43,7 @@ class Layer : public leed_layer {
     bool isPeriodic();
     std::size_t getLayerNumber();
     std::size_t getNumberOfAtoms();
-    leed_structure getLayerType();
+    int getLayerType();
     std::vector<real> getA1();
     std::vector<real> getA2();
     std::vector< std::vector<real> > getBasis();
@@ -56,13 +56,13 @@ class Layer : public leed_layer {
     /* setters */
     Layer& setPeriodic(bool periodic);
     Layer& setLayerNumbers(std::size_t number);
-    Layer& setLayerType(leed_structure type);
+    Layer& setLayerType(int type);
     Layer& setA1(real a1x, real a1y);
     Layer& setA2(real a2x, real a2y);
     Layer& setRelativeArea(real area);
     Layer& setAtoms(std::vector<Atom> atomList);
-    Layer& setAtoms(const leed_atom *atoms, std::size_t n);
-    Layer& setAtom(leed_atom *atom, int index);
+    Layer& setAtoms(const leed_atom_t *atoms, std::size_t n);
+    Layer& setAtom(leed_atom_t *atom, int index);
     Layer& setAtom(LEEDAtom &atom, int index);
 
 };
