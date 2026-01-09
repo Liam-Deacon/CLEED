@@ -27,6 +27,16 @@ typedef struct sr_optimizer_config {
   int max_iters;
   // cppcheck-suppress unusedStructMember
   uint64_t seed;
+  // cppcheck-suppress unusedStructMember
+  int pso_swarm_size;
+  // cppcheck-suppress unusedStructMember
+  real pso_inertia;
+  // cppcheck-suppress unusedStructMember
+  real pso_c1;
+  // cppcheck-suppress unusedStructMember
+  real pso_c2;
+  // cppcheck-suppress unusedStructMember
+  real pso_vmax;
 } sr_optimizer_config;
 
 typedef struct sr_optimizer_def {
@@ -61,6 +71,13 @@ int sr_optimizer_run(const sr_optimizer_def *opt, const sr_optimizer_config *cfg
                      int ndim, real dpos, const char *bak_file,
                      const char *log_file);
 void sr_optimizer_print_help(FILE *output);
+
+int sr_parse_int_arg(const char *val, int *out);
+int sr_parse_real_arg(const char *val, real *out);
+int sr_parse_seed_arg(const char *val, uint64_t *out);
+void sr_optimizer_log_results(FILE *log_stream, const char *name, int ndim,
+                              int evals, const real *best, real best_val);
+uint64_t sr_optimizer_get_seed(void);
 
 #ifdef __cplusplus
 }

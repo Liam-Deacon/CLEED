@@ -39,6 +39,7 @@ SET (searchlib_SRCS
 	    sr_parse.c
 	    sr_optimizers.c
 	    sr_simplex.c
+	    srpso.c
 	    sr_vertex_stats.c
 	    sr_amoeba.c
 	    sr_amebsa.c
