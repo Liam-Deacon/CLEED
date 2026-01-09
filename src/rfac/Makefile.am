@@ -22,6 +22,25 @@ librfac_la_SOURCES =                        \
     rflines.c                               \
     rfctr2out.c                             \
     rfversion.c                             \
+    rfac.c                                  \
+    rfac_ivcur.c                            \
+    rfgetsa.c                               \
+    rfinput.c                               \
+    rfintindl.c                             \
+    rflorentz.c                             \
+    rfmklide.c                              \
+    rfmklist.c                              \
+    rfr1.c                                  \
+    rfr2.c                                  \
+    rfrb.c                                  \
+    rfrp.c                                  \
+    rfrdargs.c                              \
+    rfrdcleed.c                             \
+    rfrdexpt.c                              \
+    rfrmin.c                                \
+    rfsort.c                                \
+    rfspline.c                              \
+    rfsplint.c                              \
     crfinput.c                              \
     crfintindl.c                            \
     crflorentz.c                            \
