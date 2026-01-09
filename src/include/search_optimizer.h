@@ -11,26 +11,40 @@
 extern "C" {
 #endif
 
+// cppcheck-suppress missingIncludeSystem
 #include <stddef.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdint.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdio.h>
 
 #include "real.h"
 
 typedef struct sr_optimizer_config {
+  // cppcheck-suppress unusedStructMember
   int max_evals;
+  // cppcheck-suppress unusedStructMember
   int max_iters;
+  // cppcheck-suppress unusedStructMember
   uint64_t seed;
 } sr_optimizer_config;
 
 typedef struct sr_optimizer_def {
+  // cppcheck-suppress unusedStructMember
   const char *name;
+  // cppcheck-suppress unusedStructMember
   const char *primary;
+  // cppcheck-suppress unusedStructMember
   const char *description;
+  // cppcheck-suppress unusedStructMember
   const char *aliases_help;
+  // cppcheck-suppress unusedStructMember
   int type;
+  // cppcheck-suppress unusedStructMember
   int implemented;
+  // cppcheck-suppress unusedStructMember
   int uses_delta;
+  // cppcheck-suppress unusedStructMember
   int is_default;
 } sr_optimizer_def;
 

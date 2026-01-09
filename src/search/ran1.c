@@ -12,6 +12,7 @@ LD/29.06.2014 - Creation of open source version of ran1 function
 2026-01-09    - Replace rand()/srand() with portable xorshift64 algorithm
 ***********************************************************************/
 #include "real.h"
+// cppcheck-suppress missingIncludeSystem
 #include <stdint.h>
 
 /**

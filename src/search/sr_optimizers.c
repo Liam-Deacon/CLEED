@@ -4,9 +4,13 @@
  *  Optimizer registry + configuration helpers for SEARCH (csearch).
  *********************************************************************/
 
+// cppcheck-suppress missingIncludeSystem
 #include <limits.h>
+// cppcheck-suppress missingIncludeSystem
 #include <stdlib.h>
+// cppcheck-suppress missingIncludeSystem
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
 #include <strings.h>
 
 #include "search.h"
@@ -208,33 +212,49 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   }
 }
 
+static int sr_optimizer_config_is_default(const sr_optimizer_config *cfg)
+{
+  if (!cfg) return 1;
+  if (cfg->max_evals > 0) return 0;
+  if (cfg->max_iters > 0) return 0;
+  if (cfg->seed != 0) return 0;
+  return 1;
+}
+
+static void sr_optimizer_log_int(FILE *output, const char *label, int value)
+{
+  if (!output || !label) return;
+  if (value > 0) {
+    fprintf(output, " %s=%d", label, value);
+  } else {
+    fprintf(output, " %s=default", label);
+  }
+}
+
+static void sr_optimizer_log_seed(FILE *output, const char *label, uint64_t value)
+{
+  if (!output || !label) return;
+  if (value > 0) {
+    fprintf(output, " %s=%llu", label, (unsigned long long)value);
+  } else {
+    fprintf(output, " %s=default", label);
+  }
+}
+
 void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
 {
-  if (!output || !cfg) return;
+  if (!output) return;
+  if (!cfg) return;
 
   fprintf(output, "=> Optimizer config:");
-  if (cfg->max_evals <= 0 && cfg->max_iters <= 0 && cfg->seed == 0) {
+  if (sr_optimizer_config_is_default(cfg)) {
     fprintf(output, " defaults\n");
     return;
   }
 
-  if (cfg->max_evals > 0) {
-    fprintf(output, " max_evals=%d", cfg->max_evals);
-  } else {
-    fprintf(output, " max_evals=default");
-  }
-
-  if (cfg->max_iters > 0) {
-    fprintf(output, " max_iters=%d", cfg->max_iters);
-  } else {
-    fprintf(output, " max_iters=default");
-  }
-
-  if (cfg->seed > 0) {
-    fprintf(output, " seed=%llu", (unsigned long long)cfg->seed);
-  } else {
-    fprintf(output, " seed=default");
-  }
+  sr_optimizer_log_int(output, "max_evals", cfg->max_evals);
+  sr_optimizer_log_int(output, "max_iters", cfg->max_iters);
+  sr_optimizer_log_seed(output, "seed", cfg->seed);
 
   fprintf(output, "\n");
 }
