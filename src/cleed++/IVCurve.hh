@@ -71,8 +71,10 @@ namespace cleed {
       friend std::ostream& operator<<(std::ostream& out, const IVCurve& iv);
 
       /* setters */
-      IVCurve &setIVData(const rfac_iv_data &iv_data, size_t n);
-      IVCurve &setIVData(vector<real> x, vector<real> y, vector<real> deriv2);
+      IVCurve &setIVData(const rfac_iv_data *iv_data, size_t n);
+      IVCurve &setIVData(const vector<real> &x,
+                         const vector<real> &y,
+                         const vector<real> &deriv2);
 
       IVCurve &sort();
       IVCurve &smooth(double vi=4.0);

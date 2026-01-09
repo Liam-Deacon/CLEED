@@ -39,7 +39,9 @@ IVCurve::IVCurve(const rfac_iv &iv) {
 IVCurve::IVCurve(const string &ivFilePath) {
   this->iv_ptr = new rfac_iv;
   rfac_iv *iv = rfac_iv_read(ivFilePath.c_str());
-  rfac_iv_copy(this->iv_ptr, iv);
+  if (iv) {
+    rfac_iv_copy(this->iv_ptr, iv);
+  }
 }
 
 IVCurve::IVCurve(const IVCurve &ivCurve) {
@@ -59,29 +61,63 @@ IVCurve& IVCurve::operator=(const IVCurve &other) {
 }
 
 bool IVCurve::operator!=(const IVCurve &other) const {
-    return !(*this == other);
+  return !(*this == other);
 }
 
 bool IVCurve::operator==(const IVCurve &other) const {
-    return (*this == other);
+  if (this == &other) {
+    return true;
+  }
+  if (!this->iv_ptr || !other.iv_ptr) {
+    return this->iv_ptr == other.iv_ptr;
+  }
+  if (this->iv_ptr->n_eng != other.iv_ptr->n_eng) {
+    return false;
+  }
+  if (!this->iv_ptr->data || !other.iv_ptr->data) {
+    return this->iv_ptr->data == other.iv_ptr->data;
+  }
+  if (this->iv_ptr->equidist != other.iv_ptr->equidist ||
+      this->iv_ptr->sort != other.iv_ptr->sort ||
+      this->iv_ptr->smooth != other.iv_ptr->smooth ||
+      this->iv_ptr->spline != other.iv_ptr->spline) {
+    return false;
+  }
+
+  for (std::size_t i = 0; i < this->iv_ptr->n_eng; i++) {
+    if (this->iv_ptr->data[i].energy != other.iv_ptr->data[i].energy ||
+        this->iv_ptr->data[i].intens != other.iv_ptr->data[i].intens ||
+        this->iv_ptr->data[i].deriv2 != other.iv_ptr->data[i].deriv2) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /* setters */
-IVCurve& IVCurve::setIVData(const rfac_iv_data &iv_data, size_t n) {
-  if (! &iv_data)
+IVCurve& IVCurve::setIVData(const rfac_iv_data *iv_data, size_t n) {
+  if (!iv_data || n == 0)
     return *this;
+
+  if (!this->iv_ptr) {
+    this->iv_ptr = new rfac_iv;
+  }
 
   delete [] this->iv_ptr->data;
 
   this->iv_ptr->data = new rfac_iv_data[n];
   this->iv_ptr->n_eng = n;
 
-  std::copy(&iv_data, &iv_data + n*sizeof(rfac_iv_data), this->iv_ptr->data);
+  std::copy(iv_data, iv_data + n, this->iv_ptr->data);
+  this->iv_ptr->first_eng = this->iv_ptr->data[0].energy;
+  this->iv_ptr->last_eng = this->iv_ptr->data[n - 1].energy;
   return *this;
 }
 
-IVCurve& IVCurve::setIVData(vector<real> x, vector<real> y, vector<real> deriv2) {
-  std::size_t n = ( x.size() < y.size() ) ? x.size() : y.size();
+IVCurve& IVCurve::setIVData(const vector<real> &x,
+                            const vector<real> &y,
+                            const vector<real> &deriv2) {
+  std::size_t n = (x.size() < y.size()) ? x.size() : y.size();
 
   rfac_iv_data *data = new rfac_iv_data[n];
   for (std::size_t i=0; i < n; i++ ) {
@@ -103,6 +139,11 @@ IVCurve& IVCurve::setIVData(vector<real> x, vector<real> y, vector<real> deriv2)
     delete[] this->iv_ptr->data;
 
   this->iv_ptr->data = data;
+  this->iv_ptr->n_eng = n;
+  if (n > 0) {
+    this->iv_ptr->first_eng = data[0].energy;
+    this->iv_ptr->last_eng = data[n - 1].energy;
+  }
   return *this;
 }
 
@@ -138,7 +179,6 @@ inline IVCurve& IVCurve::setMaximumIntensity(double maxI) {
 
 void IVCurve::writeIVData(const string &ivFilePath) {
   std::ofstream write ( ivFilePath.c_str() );
-  double energy, intensity;
 
   if ( write.is_open() ) {
 
@@ -159,8 +199,8 @@ void IVCurve::writeIVData(const string &ivFilePath) {
     /* write IV data */
     for (std::size_t i=0; i < iv_ptr->n_eng; i++)
     {
-      energy = iv_ptr->data[i].energy;
-      intensity = iv_ptr->data[i].intens;
+      double energy = iv_ptr->data[i].energy;
+      double intensity = iv_ptr->data[i].intens;
 
       write << energy << " " << intensity << std::endl;
     }
@@ -171,10 +211,19 @@ void IVCurve::writeIVData(const string &ivFilePath) {
 
 /* getters */
 const rfac_iv_data *IVCurve::getRfacIVData() const {
-  return const_cast<rfac_iv_data*>(this->iv_ptr->data);
+  if (!this->iv_ptr) {
+    return nullptr;
+  }
+  return this->iv_ptr->data;
 }
 
 void IVCurve::getIVData(vector<real> &x, vector<real> &y, vector<real> &deriv2) const {
+  if (!this->iv_ptr || !this->iv_ptr->data) {
+    x.clear();
+    y.clear();
+    deriv2.clear();
+    return;
+  }
   std::size_t n = this->iv_ptr->n_eng;
   rfac_iv_data *data = this->iv_ptr->data;
 
@@ -220,7 +269,7 @@ inline double IVCurve::getMaximumIntensity() const {
 }
 
 inline const rfac_iv *IVCurve::get_rfac_iv_ptr() const {
-  return const_cast<rfac_iv*>(this->iv_ptr);
+  return this->iv_ptr;
 }
 
 inline void IVCurve::readIVData(const string &ivFilePath) {

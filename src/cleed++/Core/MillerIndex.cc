@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "MillerIndex.hh"
 
 using namespace cleed;
@@ -10,11 +12,6 @@ MillerIndex::MillerIndex(
   this->k = k;
   this->l = l;
 }
-
-MillerIndex::MillerIndex(const miller_hkl *hkl) {
-
-}
-
 
 MillerIndex::~MillerIndex() {
 
@@ -60,12 +57,12 @@ void MillerIndex::getMillerIndices(double &h, double &k, double &l) const {
   l = this->getMillerL();
 }
 
-const std::string &MillerIndex::getMillerIndicesAsString() const {
-  const string s = "(" + this->h + ", " + this->getMillerK() + ", " + this->getMillerL() + ")";
-  return 
+std::string MillerIndex::getMillerIndicesAsString() const {
+  std::ostringstream stream;
+  stream << "(" << this->h << ", " << this->k << ", " << this->l << ")";
+  return stream.str();
 }
 
 std::ostream & operator << (std::ostream &os, MillerIndex const &hkl) { 
   return os << hkl.getMillerIndicesAsString();
 }
- 

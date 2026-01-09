@@ -28,14 +28,13 @@ using namespace cleed;
 /* constructors & destructor */
 RFactorArgs::RFactorArgs(int argc, char *argv[]) {
   rfac_args *args_c_ptr = rfac_rdargs(argc, argv);
-  try {
-    std::copy(args_c_ptr, args_c_ptr+1, &this->c_args);
-    std::free(args_c_ptr);
-  }
-  catch (...) {
+  if (!args_c_ptr) {
     std::cerr << "Unable to allocate args_ptr\n";
-    if (args_c_ptr != nullptr) std::free(args_c_ptr);
+    this->c_args = {};
+    return;
   }
+  std::copy(args_c_ptr, args_c_ptr + 1, &this->c_args);
+  std::free(args_c_ptr);
 
 
 }
@@ -72,14 +71,17 @@ RFactorArgs::~RFactorArgs() {
 /* operators */
 RFactorArgs &RFactorArgs::operator=(const RFactorArgs &other) {
   if (this != &other) {
-    std::copy(&other.c_args, &other.c_args + sizeof(rfac_args), &this->c_args);
+    this->c_args = other.c_args;
   }
   return *this;
 }
 
 RFactorArgs &RFactorArgs::operator=(const rfac_args *args_ptr) {
+  if (!args_ptr) {
+    return *this;
+  }
   if (&this->c_args != args_ptr) {
-    std::copy(args_ptr, args_ptr+sizeof(rfac_args), &this->c_args);
+    this->c_args = *args_ptr;
   }
   return *this;
 }
