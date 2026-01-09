@@ -154,15 +154,23 @@ static void sr_pso_update_best(sr_pso_swarm *s, int i, real f, real *best_val)
   }
 }
 
-static void sr_pso_iterate_swarm(sr_pso_swarm *s, const sr_pso_cfg *cfg,
-                                 sr_rng *rng, real (*func)(const real *),
-                                 real *best_val, int *local_evals, int max_evals)
+typedef struct sr_pso_ctx {
+  const sr_pso_cfg *cfg;
+  sr_rng *rng;
+  real (*func)(const real *);
+  int max_iters;
+  int max_evals;
+  int *local_evals;
+  real *best_val;
+} sr_pso_ctx;
+
+static void sr_pso_iterate_swarm(sr_pso_swarm *s, sr_pso_ctx *ctx)
 {
-  for (int i = 1; i <= s->size && *local_evals < max_evals; i++) {
-    sr_pso_update_particle(s, i, rng, cfg->inertia, cfg->c1, cfg->c2, cfg->v_max);
-    const real f = (*func)(s->pos[i]);
-    (*local_evals)++;
-    sr_pso_update_best(s, i, f, best_val);
+  for (int i = 1; i <= s->size && *ctx->local_evals < ctx->max_evals; i++) {
+    sr_pso_update_particle(s, i, ctx->rng, ctx->cfg->inertia, ctx->cfg->c1, ctx->cfg->c2, ctx->cfg->v_max);
+    const real f = (*ctx->func)(s->pos[i]);
+    (*ctx->local_evals)++;
+    sr_pso_update_best(s, i, f, ctx->best_val);
   }
 }
 
@@ -182,13 +190,11 @@ static int sr_pso_validate(const void *func, const void *best, const void *best_
   return 0;
 }
 
-static void sr_pso_run(sr_pso_swarm *s, const sr_pso_cfg *cfg, sr_rng *rng,
-                       real (*func)(const real *), real *best_val,
-                       int *local_evals, int max_iters, int max_evals)
+static void sr_pso_run(sr_pso_swarm *s, sr_pso_ctx *ctx)
 {
-  for (int iter = 1; iter <= max_iters && *local_evals < max_evals; iter++) {
-    sr_pso_iterate_swarm(s, cfg, rng, func, best_val, local_evals, max_evals);
-    if (*best_val <= R_TOLERANCE) break;
+  for (int iter = 1; iter <= ctx->max_iters && *ctx->local_evals < ctx->max_evals; iter++) {
+    sr_pso_iterate_swarm(s, ctx);
+    if (*ctx->best_val <= R_TOLERANCE) break;
   }
 }
 
@@ -196,7 +202,9 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
                     real *best, real *best_val, int *evals)
 {
   sr_pso_cfg defaults;
-  int swarm_size, max_iters, max_evals;
+  int swarm_size;
+  int max_iters;
+  int max_evals;
   real v_max;
   uint64_t seed;
 
@@ -221,7 +229,17 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
     return -1;
   }
 
-  sr_pso_run(&s, cfg, &rng, func, best_val, &local_evals, max_iters, max_evals);
+  sr_pso_ctx ctx = {
+    .cfg = cfg,
+    .rng = &rng,
+    .func = func,
+    .max_iters = max_iters,
+    .max_evals = max_evals,
+    .local_evals = &local_evals,
+    .best_val = best_val
+  };
+
+  sr_pso_run(&s, &ctx);
 
   for (int j = 1; j <= ndim; j++) best[j] = s.gbest[j];
   if (evals) *evals = local_evals;
