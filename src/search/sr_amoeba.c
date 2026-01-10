@@ -105,7 +105,7 @@ typedef struct sr_amoeba_ctx {
   real *trial2;
 } sr_amoeba_ctx;
 
-static real sr_amoeba_eval(sr_amoeba_ctx *ctx, real *x)
+static real sr_amoeba_eval(sr_amoeba_ctx *ctx, const real *x)
 {
   real v = ctx->funk(x);
   (*ctx->nfunk)++;
