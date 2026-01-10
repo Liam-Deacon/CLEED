@@ -348,7 +348,7 @@ real sr_evalrf(const real *);
 /**
  * @brief Write input file for LEED calculation.
  * @param par Parameter vector.
- * @param n_par Number of parameters.
+ * @param i_call Calculation iteration count.
  * @param filename Output filename.
  * @return 0 on success.
  */
@@ -357,7 +357,7 @@ int  sr_mkinp(const real *, int, char *);
 /**
  * @brief Write input file for LEED calculation with mirror symmetry.
  * @param par Parameter vector.
- * @param n_par Number of parameters.
+ * @param i_call Calculation iteration count.
  * @param filename Output filename.
  * @return 0 on success.
  */
