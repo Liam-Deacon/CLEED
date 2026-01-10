@@ -6,9 +6,6 @@ on:
       - "v*"
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 env:
   BUILD_TYPE: Release
   VCPKG_VERSION: 2025.12.12
@@ -17,13 +14,20 @@ jobs:
   build-packages:
     name: Package (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-22.04, macos-14, windows-2022]
 
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.x"
 
       - name: Source compliance guard
         run: python tools/check_nr_free.py
@@ -42,7 +46,7 @@ jobs:
 
       - name: Cache vcpkg (Windows)
         if: runner.os == 'Windows'
-        uses: actions/cache@v5.0.1
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: ${{ github.workspace }}/vcpkg
           key: vcpkg-${{ runner.os }}-x64-windows-${{ env.VCPKG_VERSION }}
@@ -105,9 +109,10 @@ jobs:
         if: runner.os == 'Linux'
         working-directory: ${{ github.workspace }}/build
         run: |
+          set -euo pipefail
           cpack -C "${BUILD_TYPE}" -G TGZ
-          cpack -C "${BUILD_TYPE}" -G DEB || true
-          cpack -C "${BUILD_TYPE}" -G RPM || true
+          cpack -C "${BUILD_TYPE}" -G DEB
+          cpack -C "${BUILD_TYPE}" -G RPM
 
       - name: Package (macOS)
         if: runner.os == 'macOS'
@@ -124,7 +129,7 @@ jobs:
           cpack -C $env:BUILD_TYPE -G NSIS
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6.0.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: packages-${{ matrix.os }}
           path: |
@@ -139,9 +144,11 @@ jobs:
     name: Publish GitHub Release
     runs-on: ubuntu-latest
     needs: build-packages
+    permissions:
+      contents: write
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v7.0.0
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           path: dist
 
@@ -174,7 +181,7 @@ jobs:
           } >> "${GITHUB_OUTPUT}"
 
       - name: Publish
-        uses: softprops/action-gh-release@v2.5.0
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
         with:
           name: ${{ steps.flags.outputs.version }}
           prerelease: ${{ steps.flags.outputs.prerelease }}

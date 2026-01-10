@@ -1,51 +1,148 @@
 name-template: "v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 change-template: "- $TITLE (#$NUMBER) @$AUTHOR"
+change-title-escapes: '\<*_&@'
 no-changes-template: "- No changes"
 sort-direction: ascending
 
+# Categories for organizing changelog entries
 categories:
-  - title: "Breaking changes"
+  - title: "Breaking Changes"
     labels:
       - "breaking"
-  - title: "Features"
+      - "bump-major"
+      - "major"
+  - title: "New Features"
     labels:
       - "feature"
       - "enhancement"
-  - title: "Bug fixes"
+      - "bump-minor"
+      - "minor"
+  - title: "Bug Fixes"
     labels:
       - "bug"
       - "fix"
+      - "bugfix"
+      - "bump-patch"
+      - "patch"
+  - title: "Performance"
+    labels:
+      - "performance"
+      - "perf"
   - title: "Documentation"
     labels:
       - "documentation"
       - "docs"
+  - title: "Build & CI"
+    labels:
+      - "ci"
+      - "build"
+      - "infrastructure"
+  - title: "Dependencies"
+    labels:
+      - "dependencies"
+      - "deps"
   - title: "Maintenance"
     labels:
       - "chore"
-      - "ci"
-      - "build"
+      - "maintenance"
+      - "refactor"
 
+# Exclude certain labels from changelog
+exclude-labels:
+  - "skip-changelog"
+  - "skip-release"
+  - "wontfix"
+  - "duplicate"
+  - "invalid"
+
+# Exclude contributors (bots)
+exclude-contributors:
+  - "dependabot"
+  - "dependabot[bot]"
+  - "github-actions[bot]"
+
+# Labels that trigger version bumps
 version-resolver:
   major:
     labels:
+      - "bump-major"
       - "major"
       - "breaking"
   minor:
     labels:
+      - "bump-minor"
       - "minor"
       - "feature"
       - "enhancement"
   patch:
     labels:
+      - "bump-patch"
       - "patch"
       - "bug"
       - "fix"
+      - "bugfix"
   default: patch
 
+# Autolabeler based on file paths and branch names (consolidated)
+autolabeler:
+  - label: "documentation"
+    files:
+      - "*.md"
+      - "doc/**/*"
+      - "docs/**/*"
+    branch:
+      - "/^doc(s)?\\/.*/'"
+  - label: "ci"
+    files:
+      - ".github/**/*"
+  - label: "build"
+    files:
+      - "CMakeLists.txt"
+      - "CMakeModules/**/*"
+      - "Makefile*"
+      - "configure*"
+  - label: "feature"
+    branch:
+      - "/^feat(ure)?\\/.*/'"
+  - label: "fix"
+    branch:
+      - "/^fix\\/.*/'"
+      - "/^bugfix\\/.*/'"
+  - label: "chore"
+    branch:
+      - "/^chore\\/.*/'"
+
+# Release template
 template: |
   ## Summary
+
   $CHANGES
 
+  ## Installation
+
+  ### Binary Downloads
+  Download the appropriate package for your platform from the assets below:
+
+  | Platform | Architecture | Package |
+  |----------|--------------|---------|
+  | Linux | x86_64 | `.deb`, `.rpm`, `.tar.gz` |
+  | Linux | arm64 | `.deb`, `.rpm`, `.tar.gz` |
+  | macOS | Intel (x86_64) | `.dmg`, `.tar.gz` |
+  | macOS | Apple Silicon (arm64) | `.dmg`, `.tar.gz` |
+  | Windows | x86_64 | `.exe` (installer), `.zip` |
+
+  ### Docker
+  ```bash
+  docker pull ghcr.io/$OWNER/cleed:$RESOLVED_VERSION
+  ```
+
+  ### Homebrew (macOS)
+  ```bash
+  brew tap Liam-Deacon/tap
+  brew install cleed
+  ```
+
   ## Contributors
+
   $CONTRIBUTORS

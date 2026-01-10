@@ -25,9 +25,13 @@ jobs:
         id: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_TAG: ${{ inputs.tag }}
+          REPO: ${{ github.repository }}
         run: |
-          if [[ -n "${{ inputs.tag }}" ]]; then
-            tag="${{ inputs.tag }}"
+          set -euo pipefail
+
+          if [[ -n "${INPUT_TAG:-}" ]]; then
+            tag="${INPUT_TAG}"
           else
             tag="${GITHUB_REF_NAME}"
           fi
@@ -35,7 +39,7 @@ jobs:
           version="${tag#v}"
           
           # Get source tarball URL and calculate SHA256
-          tarball_url="https://github.com/${{ github.repository }}/archive/refs/tags/${tag}.tar.gz"
+          tarball_url="https://github.com/${REPO}/archive/refs/tags/${tag}.tar.gz"
           sha256=$(curl -sL "${tarball_url}" | sha256sum | cut -d' ' -f1)
           
           echo "version=${version}" >> "$GITHUB_OUTPUT"
@@ -43,13 +47,15 @@ jobs:
           echo "tarball_url=${tarball_url}" >> "$GITHUB_OUTPUT"
 
       - name: Generate formula
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          SHA256: ${{ steps.release.outputs.sha256 }}
         run: |
-          version="${{ steps.release.outputs.version }}"
-          sha256="${{ steps.release.outputs.sha256 }}"
-          
+          set -euo pipefail
+
           # Read template and substitute placeholders
-          sed -e "s/__VERSION__/${version}/g" \
-              -e "s/__SHA256__/${sha256}/g" \
+          sed -e "s/__VERSION__/${VERSION}/g" \
+              -e "s/__SHA256__/${SHA256}/g" \
               packaging/homebrew/cleed.rb.template > cleed.rb
           
           cat cleed.rb
@@ -58,11 +64,14 @@ jobs:
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         env:
           TAP_REPO_TOKEN: ${{ secrets.TAP_REPO_TOKEN }}
+          VERSION: ${{ steps.release.outputs.version }}
         run: |
+          set -euo pipefail
+
           # This requires a PAT with write access to the tap repository
           # Store it as TAP_REPO_TOKEN in repository secrets
           
-          if [[ -z "${TAP_REPO_TOKEN}" ]]; then
+          if [[ -z "${TAP_REPO_TOKEN:-}" ]]; then
             echo "::warning::TAP_REPO_TOKEN not set - skipping tap update"
             echo "To enable automatic tap updates:"
             echo "1. Create a PAT with repo scope"
@@ -85,7 +94,7 @@ jobs:
             echo "No changes to formula"
           else
             git add Formula/cleed.rb
-            git commit -m "Update cleed to ${{ steps.release.outputs.version }}"
+            git commit -m "Update cleed to ${VERSION}"
             git push
             echo "Formula updated successfully"
           fi

@@ -73,7 +73,8 @@ class Cleed < Formula
   end
 
   test do
-    # Basic smoke test - check that main executable runs
-    assert_match "cleed", shell_output("#{bin}/cleed_nsym -h 2>&1", 0)
+    # Basic smoke test - check that main executable runs and shows usage
+    output = shell_output("#{bin}/cleed_nsym -h 2>&1", 0)
+    assert_match(/usage|cleed|CLEED/i, output)
   end
 end

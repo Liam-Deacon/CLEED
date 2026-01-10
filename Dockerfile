@@ -20,8 +20,25 @@ RUN cmake -S . -B build -G Ninja \
     -DINSTALL_DOC=OFF \
     -DBUILD_TESTING=OFF
 
-RUN cmake --build build --parallel && \
+RUN cmake --build build --parallel="$(nproc)" && \
     cmake --install build --prefix /opt/cleed
+
+FROM ubuntu:22.04 AS development
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    ninja-build \
+    libtiff-dev \
+    libpng-dev \
+    zlib1g-dev \
+    gdb \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN useradd --system --uid 1000 --create-home --home-dir /home/cleed --shell /usr/sbin/nologin cleed
+
+USER cleed
+WORKDIR /home/cleed
 
 FROM ubuntu:22.04
 
@@ -33,7 +50,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=build /opt/cleed/ /usr/local/
 
-RUN useradd --system --uid 1000 --create-home --home-dir /home/cleed cleed \
+# Update library cache instead of using LD_LIBRARY_PATH
+RUN ldconfig
+
+RUN useradd --system --uid 1000 --create-home --home-dir /home/cleed --shell /usr/sbin/nologin cleed \
     && chown -R cleed:cleed /usr/local
 
 USER cleed

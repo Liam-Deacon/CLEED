@@ -76,7 +76,7 @@ copyright = u'2014, Georg Held, Liam Deacon & collaborators'
 # Read version from VERSION file (single source of truth)
 _version_file = os.path.join(os.path.dirname(__file__), '..', 'VERSION')
 if os.path.exists(_version_file):
-    with open(_version_file, 'r') as f:
+    with open(_version_file) as f:
         _full_version = f.read().strip()
     # Parse major.minor.patch
     _version_parts = _full_version.split('.')
