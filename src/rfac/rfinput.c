@@ -36,7 +36,7 @@
  * The following symbols can be used to specify the files to be read
  * from:
  * e0: energy of beam appearance.
- * ef: experimental input file (format: <energy> <intensity>).
+ * ef: experimental input file (format: \<energy\> \<intensity\>).
  *      (ei: spots used from current experimental input file.)
  *       ti: spots used from current theoretical input file.
  * id: group ID

@@ -44,7 +44,7 @@ static const size_t LENGTH_OF_NUMBER = 15 ;  /* characters per intensity in inpu
  * <number of energies ("#en" followed by an integer number) >
  * <number of beams    ("#bn" followed by an integer number) >
  * <beam indices       ("#bi" followed by an integer and two real numbers) >
- * <energy> <intensity> <intensity> ..... (all in one line)
+ * \<energy\> \<intensity\> \<intensity\> ..... (all in one line)
  *
  * \warning The number of beams must appear before the the first beam
  * index is read.
@@ -59,7 +59,7 @@ static const size_t LENGTH_OF_NUMBER = 15 ;  /* characters per intensity in inpu
  * \param buffer file buffer containing theoretical input.
  *
  * \param index_list command line for interpreter rfac_intindl() . Syntax:
- * (<index1>,<index2>) {*<scale> +/- (<index1>,<index2>)*<scale>}
+ * (\<index1\>,\<index2\>) {*\<scale\> +/- (\<index1\>,\<index2\>)*\<scale\>}
  *
  * \return pointer to the IV curve (#rfac_iv). The list is
  * terminated by a pair of negative values.

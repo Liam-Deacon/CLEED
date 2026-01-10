@@ -34,8 +34,8 @@
  * \f$ norm_te = \sqrt( S|It|^2 / S|Ie|^2) \f$
  *
  * \note Normalisation is changed with respect to common use. Instead of
- * \f$ S {(I_t)}^2 \f$ it is now \f$ S {(I_t - <I_t>)}^2 \f$,
- * where \f$ <I_t> = \frac{(S I_t)}{dE} \f$ .
+ * \f$ S {(I_t)}^2 \f$ it is now \f$ S {(I_t - \<I_t\>)}^2 \f$,
+ * where \f$ \<I_t\> = \frac{(S I_t)}{dE} \f$ .
  *
  * \param[in] eng pointer to list of energy values.
  * \param[in] e_int pointer to list of experimental intensity values.
@@ -70,7 +70,7 @@ real rfac_r2(const real *eng, const real *e_int, const real *t_int)
   the_avg =  the_avg / ( (real)n_eng );
   norm_te = cleed_real_sqrt(the_sq_sum/exp_sq_sum);
 
-  CONTROL_MSG(CONTROL, "<It>: %e\n", (float)the_avg);
+  CONTROL_MSG(CONTROL, "\<It\>: %e\n", (float)the_avg);
   CONTROL_MSG(CONTROL, "norm: %f \n", (float)norm_te);
 
   /* compute R-factor (rfac_sum) and normalisation factor (norm_sum) */
