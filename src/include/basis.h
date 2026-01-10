@@ -73,8 +73,9 @@
 extern "C" {
 #endif
 
-/*! \struct basis_t
- *  \brief structure for the three basis vectors a1, a2, & a3. */
+/**
+ * @brief Structure for the three basis vectors a1, a2, & a3.
+ */
 typedef struct {
   coord_t a[3];
 } basis_t; 

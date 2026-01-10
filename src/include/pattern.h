@@ -12,8 +12,8 @@
   extern "C" {
 #endif
 
-/*! \struct pattern_t
- *  \brief Structure containing information needed for LEED pattern generation.
+/**
+ * @brief Structure containing information needed for LEED pattern generation.
  */
 typedef struct pattern_t 
 {

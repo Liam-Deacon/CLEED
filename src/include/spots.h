@@ -23,7 +23,8 @@
 #endif
 
 /* shapes */
-/*! \enum patt_shape_t 
+/**
+ * @brief Shape types for LEED pattern spots.
  */
 typedef enum {
   PATT_CIRCLE,          /*!< circle shape */
@@ -36,7 +37,8 @@ typedef enum {
 } patt_shape_t;
 
 /* stroke styles */
-/*! \enum patt_stroke_t
+/**
+ * @brief Stroke styles for LEED pattern spots.
  */
 typedef enum {
   PATT_SOLID_STROKE,    /*!< solid stroke */
@@ -46,8 +48,8 @@ typedef enum {
   PATT_NO_STROKE        /*!< no stroke */
 } patt_stroke_t;
 
-/*! \struct spot_t
- *  \brief LEED spot structure.
+/**
+ * @brief LEED spot structure.
  */
 typedef struct spot_t
 {
@@ -57,10 +59,10 @@ typedef struct spot_t
   double y;             /*!< y position of spot */
 } spot_t;
 
-/*! \struct spots_t
- *  \brief LEED spot list structure.
+/**
+ * @brief LEED spot list structure.
  *
- * List structure for LEED spots. Contains members to control drawing 
+ * List structure for LEED spots. Contains members to control drawing
  * of spots group.
  */
 typedef struct spots_t

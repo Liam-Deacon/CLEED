@@ -155,8 +155,9 @@ extern "C" {
 /*********************************************************************
   struct atom_str contains all properties of a single atom
 *********************************************************************/
-/*! \struct leed_atom_t
- *  \brief contains all properties of a single atom */
+/**
+ * @brief Contains all properties of a single atom.
+ */
 typedef struct atom_str
 {
  int  layer;      /*!< number of layer where the atom belongs to */
@@ -169,8 +170,9 @@ typedef struct atom_str
 /*********************************************************************
   struct layer_str contains all properties of a single layer
 *********************************************************************/
-/*! \struct leed_layer_t
- *  \brief contains all properties of a single layer. */
+/**
+ * @brief Contains all properties of a single layer.
+ */
 typedef struct layer_str
 {
  int  no_of_layer;       /*!< number of layer in array */
@@ -198,8 +200,9 @@ typedef struct layer_str
 /*********************************************************************
   struct cryst_str contains all crystal specific program parameters
 *********************************************************************/
-/*! \struct leed_cryst_t
- *  \brief contains all crystal specific program parameters. */
+/**
+ * @brief Contains all crystal specific program parameters.
+ */
 typedef struct cryst_str
 {
 
@@ -277,8 +280,9 @@ typedef struct cryst_str
 /*********************************************************************
   struct phs_str contains all parameters concerning the phase shifts
 *********************************************************************/
-/*! \struct leed_phs_t
- *  \brief contains all crystal specific program parameters. */
+/**
+ * @brief Contains all crystal specific program parameters.
+ */
 typedef struct phs_str
 {
  int  lmax;           /*!< maximum angular momentum quantum number */
@@ -305,8 +309,9 @@ typedef struct phs_str
 /*********************************************************************
   struct beam_str contains all parameters of a specific beam in k-space.
 *********************************************************************/
-/*! \struct leed_beam_t
- *  \brief contains all parameters of a specific beam in k-space. */
+/**
+ * @brief Contains all parameters of a specific beam in k-space.
+ */
 typedef struct beam_str 
 {
  real ind_1;     /*!< h beam index in (1x1) basis A (real) */
@@ -353,10 +358,10 @@ typedef struct beam_str
   struct var_str contains all parameters that change during the energy 
   loop and the parameters controlling them.
 *********************************************************************/
-/*! \struct leed_var_t
- *  
- * contains all parameters that change during the energy 
- * loop and the parameters controlling them. */
+/**
+ * @brief Contains all parameters that change during the energy
+ *        loop and the parameters controlling them.
+ */
 typedef struct var_str 
 {
  real eng_r;    /*!< current energy in crystal (real  part) */
@@ -380,9 +385,10 @@ typedef struct var_str
 /*********************************************************************
   struct eng_str contains the parameters that control the energy loop.
 *********************************************************************/
-/*! \struct leed_energy_t
- *  \brief contains the parameters that control the energy loop. */
-typedef struct eng_str  /*!< contains all parameters that change during the 
+/**
+ * @brief Contains the parameters that control the energy loop.
+ */
+typedef struct eng_str  /**< contains all parameters that change during the 
                          *   energy loop and the parameters controlling them */
 {
  real ini;      /*!< initial energy */

@@ -9,13 +9,8 @@ extern "C" {
 #define NUM_COLORS 6
 #define NUM_GRAYS 9
 
-/*! \struct patt_color_rgb_t
- *  \brief RGB color structure.
- *
- *
- *
- *
- *
+/**
+ * @brief RGB color structure.
  */
 typedef struct patt_color_rgb_t
 {
