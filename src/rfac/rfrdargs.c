@@ -39,13 +39,13 @@
  * valid arguments:
  *
  * --print
- * -a &lt;flag&gt;: specify which group ID's appear in output.
+ * -a FLAG: specify which group ID's appear in output.
  *      arguments: "al(l)", "av(erage)".
  *      default: "average".
  *      program parameter: all_groups
  *
  * --control
- * -c &lt;filename&gt;: specify control file for averaging and assigning
+ * -c FILENAME: specify control file for averaging and assigning
  *      data input.
  *      program parameter: ctrfile
  *
@@ -53,37 +53,37 @@
  * -h:        Print help file.
  *
  * --output
- * -o &lt;output file&gt;: specify a file name for the r factor output to be
+ * -o OUTPUT_FILE: specify a file name for the r factor output to be
  *            written to.
- *      valid arguments: "stdout" / "-", "single", &lt;file name&gt;.
+ *      valid arguments: "stdout" / "-", "single", FILENAME.
  *      default: "stdout".
  *
  * --rfactor
- * -r &lt;r_factor&gt;: specify a particular R-factor to be used for comparison.
+ * -r RFACTOR: specify a particular R-factor to be used for comparison.
  *      valid arguments: "r1", "r2", "rb", "rp".
  *      default: "rp".
  *      program parameter: r_type
  *
  * --shift
- * -s &lt;shift&gt;: specify an energy range for shifting experimental and
+ * -s SHIFT: specify an energy range for shifting experimental and
  *      theoretical data with respect to each other (Ee = Et + shift).
- *      1-3 arguments: &lt;first shift&gt;{,&lt;last shift&gt;,&lt;step&gt;}
+ *      1-3 arguments: FIRST_SHIFT{,LAST_SHIFT,STEP}
  *            default: -10, 10, 0.5;
  *      program parameters: s_ini, s_fin, s_step.
  *
  * --theory
- * -t &lt;filename&gt;: specify theoretical input file (outside control file)
+ * -t FILENAME: specify theoretical input file (outside control file)
  *            program parameter: thefile.
  *
  * --potential
- * -v &lt;potential&gt;: imaginary part of optical potential (used for
+ * -v POTENTIAL: imaginary part of optical potential (used for
  *            smoothing and for computation of Pendry's R-factor).
  *      arguments: floating point number [eV].
  *      default: 4.0
  *      program parameter: vi
  *
  * --write
- * -w &lt;filename&gt;: specify file name for iv curves output.
+ * -w FILENAME: specify file name for iv curves output.
  *            program parameter: iv_file.
  *
  *
@@ -127,7 +127,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--print"))
       {
         /* 
-         -a &lt;flag&gt;: specify which group ID's appear in output.
+         -a FLAG: specify which group ID's appear in output.
                     arguments: "al(l)", "av(erage)".
                     default: "all".
         */
@@ -157,7 +157,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--control"))
       {
         /* 
-         -c &lt;filename&gt;: specify control file for averaging and assigning
+         -c FILENAME: specify control file for averaging and assigning
                 data input.
         */
     
@@ -185,9 +185,9 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output"))
       {
         /* 
-           -o &lt;output file&gt;: specify a file name for the r factor output to be
+           -o OUTPUT_FILE: specify a file name for the r factor output to be
                      written to.
-                 valid arguments: "stdout", "single", &lt;file name&gt;.
+                 valid arguments: "stdout", "single", FILENAME.
                  default: "stdout".
         */
         if (++i < argc)
@@ -205,7 +205,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--rfactor"))
       {
         /* 
-         -r &lt;r_factor&gt;: specify which R-factor should be used for comparison.
+         -r RFACTOR: specify which R-factor should be used for comparison.
                 Valid arguments are: "r1", "r2", "rb", "rp".
                 default: "rp".
         */
@@ -236,9 +236,9 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--shift"))
       {
         /* 
-         -s &lt;shift&gt;: specify an energy range for shifting experimental and 
+         -s SHIFT: specify an energy range for shifting experimental and 
                  theoretical data with respect to each other.
-                 1-3 arguments: &lt;first shift&gt;{,&lt;last shift&gt;,&lt;step&gt;}
+                 1-3 arguments: FIRST_SHIFT{,LAST_SHIFT,STEP}
         */
     
         if (++i < argc)
@@ -283,7 +283,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--theory"))
       {
         /*
-          -t &lt;filename&gt;: specify theoretical input file
+          -t FILENAME: specify theoretical input file
         */
      
         if (++i < argc)
@@ -302,7 +302,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--potential"))
       {
         /* 
-           -v &lt;potential&gt;: imaginary part of optical potential (used for
+           -v POTENTIAL: imaginary part of optical potential (used for
                      smoothing and for computation of Pendry's R-factor).
                      arguments: floating point number [eV].
                      default: 4.0
@@ -321,7 +321,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       else if (!strcmp(argv[i], "-w") || !strcmp(argv[i], "--write"))
       {
         /*
-         -w &lt;filename&gt;: specify file name for IV curves
+         -w FILENAME: specify file name for IV curves
         */
         if (++i < argc)
         {
