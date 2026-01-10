@@ -237,7 +237,7 @@ void rfac_ivcur_free_all(rfac_ivcur *ivcur)
  *
  * \return integer representing success of function.
  * \retval #RFAC_SUCCESS on successful completion.
- * \retval #RFAC_ALLOC_ERROR if memory cannot be allocated for \p x or \p fx
+ * \retval #RFAC_ALLOCATION_ERROR if memory cannot be allocated for \p x or \p fx
  *
  * \warning memory will be reallocated if \p x or \p fx are not \c NULL when
  * passed to the function.
