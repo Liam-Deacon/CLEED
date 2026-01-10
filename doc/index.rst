@@ -15,6 +15,7 @@ Contents:
    :glob:
    
    introduction
+   start_here
    background
    manual/index
    environment
@@ -22,6 +23,8 @@ Contents:
    LEED_programs
    aux_programs
    downloads
+   troubleshooting
+   references
    changelog
    FAQ
    authors
