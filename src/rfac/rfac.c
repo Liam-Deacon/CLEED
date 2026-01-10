@@ -227,7 +227,7 @@ void rfac_ivcur_free_all(rfac_ivcur *ivcur)
 }
 
 /*!
- * Converts @rfac_iv::data of \p iv into arrays of \p x and \p fx
+ * Converts #rfac_iv::data of \p iv into arrays of \p x and \p fx
  *
  * \param[in] iv \c struct containing IV data to convert.
  * \param[out] x pointer to array of energy values.
