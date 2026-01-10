@@ -288,7 +288,7 @@ void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file)
   real best_val = 0.0;
   int evals = 0;
 
-  if (sr_pso_optimize(&cfg, ndim, (real (*)(const real *))sr_evalrf, best, &best_val, &evals) != 0) {
+  if (sr_pso_optimize(&cfg, ndim, sr_evalrf, best, &best_val, &evals) != 0) {
     sr_free_vector(best);
     fprintf(STDERR, "*** error (sr_pso): optimisation failed\n");
     exit(1);

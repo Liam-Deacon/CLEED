@@ -69,6 +69,66 @@ tuned for LEED optimisation: :math:`\omega = 0.729`, :math:`c_1 = c_2 = 1.494`.
   *Proceedings of IEEE CEC 1998*, 69–73.
   `doi:10.1109/ICEC.1998.699146 <https://doi.org/10.1109/ICEC.1998.699146>`_
 
+.. _csearch_de:
+
+Differential Evolution (DE)
+---------------------------
+
+Differential Evolution is a population-based stochastic optimizer that
+evolves candidate solutions using vector differences. The implementation
+uses the classic DE/rand/1/bin variant.
+
+**Algorithm (Storn & Price, 1997)**
+
+For each target vector :math:`\mathbf{x}_i` in the population:
+
+1. **Mutation:** Generate a mutant vector by combining three randomly
+   selected distinct individuals :math:`a`, :math:`b`, :math:`c`:
+
+   .. math::
+
+      \mathbf{v}_i = \mathbf{x}_a + F (\mathbf{x}_b - \mathbf{x}_c)
+
+   where :math:`F \in (0, 2]` is the differential weight (scaling factor).
+
+2. **Crossover:** Create a trial vector :math:`\mathbf{u}_i` using binomial
+   crossover:
+
+   .. math::
+
+      u_{i,j} = \begin{cases}
+        v_{i,j} & \text{if } r_j < CR \text{ or } j = j_{\text{rand}} \\
+        x_{i,j} & \text{otherwise}
+      \end{cases}
+
+   where :math:`CR \in [0, 1]` is the crossover probability and
+   :math:`j_{\text{rand}}` ensures at least one component comes from the
+   mutant.
+
+3. **Selection:** Replace the target if the trial is at least as good:
+
+   .. math::
+
+      \mathbf{x}_i^{(t+1)} = \begin{cases}
+        \mathbf{u}_i & \text{if } f(\mathbf{u}_i) \le f(\mathbf{x}_i^{(t)}) \\
+        \mathbf{x}_i^{(t)} & \text{otherwise}
+      \end{cases}
+
+The implementation uses defaults tuned for LEED optimisation:
+:math:`F = 0.8`, :math:`CR = 0.9`, population size = 10×ndim (minimum 20).
+
+**References:**
+
+- Storn, R., & Price, K. (1997). Differential Evolution – A Simple and
+  Efficient Heuristic for Global Optimization over Continuous Spaces.
+  *Journal of Global Optimization*, 11, 341–359.
+  `doi:10.1023/A:1008202821328 <https://doi.org/10.1023/A:1008202821328>`_
+
+- Storn, R., & Price, K. (1995). Differential Evolution—A Simple and
+  Efficient Adaptive Scheme for Global Optimization over Continuous
+  Spaces. International Computer Science Institute, Berkeley, CA,
+  Technical Report TR-95-012.
+
 .. _csearch_syntax:
 
 Syntax
@@ -102,19 +162,20 @@ Options
   - :code:`po`: Powell.
   - :code:`sa`: simulated annealing.
   - :code:`ps`: particle swarm optimisation.
+  - :code:`de`: differential evolution.
   - :code:`ga`: genetic algorithm (not implemented).
 
 :code:`--max-evals <n>`
 
-  Limits objective evaluations (simplex/PSO). Overrides the default iteration budget.
+  Limits objective evaluations (simplex/PSO/DE). Overrides the default iteration budget.
 
 :code:`--max-iters <n>`
 
-  Limits iterations (Powell/annealing/PSO). Overrides the default iteration budget.
+  Limits iterations (Powell/annealing/PSO/DE). Overrides the default iteration budget.
 
 :code:`--seed <n>`
 
-  Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO).
+  Sets a deterministic seed for stochastic optimizers (simulated annealing/PSO/DE).
 
 .. note::
    Seeds are parsed as unsigned 64-bit integers. A value of 0 selects the
@@ -141,6 +202,22 @@ Options
 
   Sets the PSO velocity clamp. Default: dpos (initial displacement). Recommended range: 0.1–5.0.
 
+:code:`--de-pop <n>`
+
+  Sets the DE population size. Default: 10×ndim (minimum 20). Recommended range: 20–200.
+
+:code:`--de-weight <n>`
+
+  Sets the DE differential weight (scaling factor F). Default: 0.8. Recommended range: 0.4–1.0.
+
+:code:`--de-cr <n>`
+
+  Sets the DE crossover probability. Default: 0.9. Recommended range: 0.5–1.0.
+
+:code:`--de-span <n>`
+
+  Sets the DE initial search span for population initialization. Default: dpos (initial displacement). Recommended range: 0.5–5.0.
+
 :code:`-v <vertex_file>`
                      
   Allows the search to be restarted with the current simplex, provided 
@@ -165,13 +242,13 @@ Environment
   if the parent directory of this program is in the system :envvar:`PATH` variable.
 
 :envvar:`CSEARCH_MAX_EVALS`
-  Optional evaluation budget for simplex/PSO searches (same as :code:`--max-evals`).
+  Optional evaluation budget for simplex/PSO/DE searches (same as :code:`--max-evals`).
 
 :envvar:`CSEARCH_MAX_ITERS`
-  Optional iteration budget for Powell/annealing/PSO searches (same as :code:`--max-iters`).
+  Optional iteration budget for Powell/annealing/PSO/DE searches (same as :code:`--max-iters`).
 
 :envvar:`CSEARCH_SEED`
-  Optional deterministic seed for simulated annealing/PSO (same as :code:`--seed`).
+  Optional deterministic seed for simulated annealing/PSO/DE (same as :code:`--seed`).
 
   A value of 0 uses the built-in default seed for the deterministic annealing
   RNG. Non-zero values are parsed as unsigned 64-bit integers.
@@ -190,6 +267,18 @@ Environment
 
 :envvar:`CSEARCH_PSO_VMAX`
   Optional PSO velocity clamp (same as :code:`--pso-vmax`).
+
+:envvar:`CSEARCH_DE_POP`
+  Optional DE population size (same as :code:`--de-pop`).
+
+:envvar:`CSEARCH_DE_WEIGHT`
+  Optional DE weight factor (same as :code:`--de-weight`).
+
+:envvar:`CSEARCH_DE_CR`
+  Optional DE crossover rate (same as :code:`--de-cr`).
+
+:envvar:`CSEARCH_DE_SPAN`
+  Optional DE initial span (same as :code:`--de-span`).
 
 :envvar:`CLEED_PHASE`
   Directory path of the phase shift files used in  the  surface and bulk models. 

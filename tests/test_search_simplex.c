@@ -4,7 +4,7 @@
 
 static int g_ndim = 0;
 
-static real test_obj(real *x)
+static real test_obj(const real *x)
 {
   real sum = 0.0;
   for (int j = 1; j <= g_ndim; j++) {
@@ -80,4 +80,3 @@ int main(void)
   if (test_extremes_and_centroid() != 0) return 1;
   return 0;
 }
-

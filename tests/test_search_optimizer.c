@@ -102,6 +102,18 @@ static int test_lookup_by_name(void)
     CLEED_TEST_ASSERT(opt != NULL);
     CLEED_TEST_ASSERT(opt->type == SR_PSO);
 
+    opt = sr_optimizer_by_name("de");
+    CLEED_TEST_ASSERT(opt != NULL);
+    CLEED_TEST_ASSERT(opt->type == SR_DIFFERENTIAL_EVOLUTION);
+
+    opt = sr_optimizer_by_name("differential");
+    CLEED_TEST_ASSERT(opt != NULL);
+    CLEED_TEST_ASSERT(opt->type == SR_DIFFERENTIAL_EVOLUTION);
+
+    opt = sr_optimizer_by_name("differential-evolution");
+    CLEED_TEST_ASSERT(opt != NULL);
+    CLEED_TEST_ASSERT(opt->type == SR_DIFFERENTIAL_EVOLUTION);
+
     opt = sr_optimizer_by_name("unknown");
     CLEED_TEST_ASSERT(opt == NULL);
 
@@ -152,6 +164,10 @@ static int test_config_from_env_pso(void)
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_PSO_C1", "1.50") == 0);
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_PSO_C2", "1.60") == 0);
     CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_PSO_VMAX", "2.00") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_POP", "40") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_WEIGHT", "0.65") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_CR", "0.85") == 0);
+    CLEED_TEST_ASSERT(test_set_env_value("CSEARCH_DE_SPAN", "1.75") == 0);
 
     sr_optimizer_config_from_env(&cfg);
 
@@ -159,10 +175,14 @@ static int test_config_from_env_pso(void)
     CLEED_TEST_ASSERT(cfg.max_iters == 456);
     CLEED_TEST_ASSERT(cfg.seed == 789);
     CLEED_TEST_ASSERT(cfg.pso_swarm_size == 32);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_inertia - (real)0.73) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_c1 - (real)1.50) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_c2 - (real)1.60) < (real)1e-6);
-    CLEED_TEST_ASSERT(fabs(cfg.pso_vmax - (real)2.00) < (real)1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_inertia - 0.73) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_c1 - 1.50) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_c2 - 1.60) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.pso_vmax - 2.00) < 1e-6);
+    CLEED_TEST_ASSERT(cfg.de_population == 40);
+    CLEED_TEST_ASSERT(fabs(cfg.de_weight - 0.65) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_crossover - 0.85) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(cfg.de_init_span - 1.75) < 1e-6);
 
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_EVALS") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_MAX_ITERS") == 0);
@@ -172,6 +192,10 @@ static int test_config_from_env_pso(void)
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_PSO_C1") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_PSO_C2") == 0);
     CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_PSO_VMAX") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_POP") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_WEIGHT") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_CR") == 0);
+    CLEED_TEST_ASSERT(test_unset_env_value("CSEARCH_DE_SPAN") == 0);
 
     return 0;
 }
@@ -238,6 +262,25 @@ static int test_config_apply(void)
     sr_optimizer_config_apply(&cfg);
 
     CLEED_TEST_ASSERT(sa_idum == cfg.seed);
+
+    /* verify that sr_optimizer_config_apply propagates DE config into globals */
+    test_restore_globals(1, 2, 3, UINT64_C(55));
+
+    memset(&cfg, 0, sizeof(cfg));
+    cfg.max_iters = 123;
+    cfg.max_evals = 456;
+    cfg.de_population = 40;
+    cfg.de_weight = 0.65;
+    cfg.de_crossover = 0.85;
+    cfg.de_init_span = 1.75;
+    sr_optimizer_config_apply(&cfg);
+
+    CLEED_TEST_ASSERT(sr_de_population == 40);
+    CLEED_TEST_ASSERT(fabs(sr_de_weight - 0.65) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(sr_de_crossover - 0.85) < 1e-6);
+    CLEED_TEST_ASSERT(fabs(sr_de_init_span - 1.75) < 1e-6);
+    CLEED_TEST_ASSERT(sr_de_iter_limit == 123);
+    CLEED_TEST_ASSERT(sr_de_eval_limit == 456);
 
     test_restore_globals(orig_amoeba, orig_powell, orig_sa, orig_seed);
 

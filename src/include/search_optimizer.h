@@ -37,6 +37,14 @@ typedef struct sr_optimizer_config {
   real pso_c2;
   // cppcheck-suppress unusedStructMember
   real pso_vmax;
+  // cppcheck-suppress unusedStructMember
+  int de_population;
+  // cppcheck-suppress unusedStructMember
+  real de_weight;
+  // cppcheck-suppress unusedStructMember
+  real de_crossover;
+  // cppcheck-suppress unusedStructMember
+  real de_init_span;
 } sr_optimizer_config;
 
 typedef struct sr_optimizer_def {

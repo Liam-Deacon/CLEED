@@ -32,6 +32,9 @@ LD/01.07.2014 - Update for compatibility with the GNU Scientific Library
 #include "search.h"
 #include "copy_file.h"
 
+real sr_ckgeo_gsl(const gsl_vector *par);
+int sr_mkinp_mir_gsl(gsl_vector *par, int i_call, char *filename);
+
 #define CONTROL
 #define ERROR
 
@@ -128,7 +131,7 @@ char *new_path;
    fprintf(STDCTR,"(sr_evalrf_gsl %d) SHORTCUT:", n_eval);
  #endif
 
- rgeo = sr_ckgeo( par );
+ rgeo = sr_ckgeo_gsl(par);
 
  #ifdef CONTROL
    #ifdef SHORTCUT
@@ -181,7 +184,7 @@ char *new_path;
 ***********************************************************************/
 
  n_calc ++;
- sr_mkinp_mir(par, n_calc, par_file);
+ sr_mkinp_mir_gsl(par, n_calc, par_file);
 
 #ifdef SHORTCUT
 
@@ -378,8 +381,6 @@ char *new_path;
 
  return (rfac + rgeo);
 }
-
-
 
 
 

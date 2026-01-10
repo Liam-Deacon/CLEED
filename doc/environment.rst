@@ -69,6 +69,22 @@ This page defines the environment variables referenced throughout the manual.
 
    Optional PSO velocity clamp (same as ``--pso-vmax``).
 
+.. envvar:: CSEARCH_DE_POP
+
+   Optional DE population size (same as ``--de-pop``).
+
+.. envvar:: CSEARCH_DE_WEIGHT
+
+   Optional DE mutation weight factor (same as ``--de-weight``).
+
+.. envvar:: CSEARCH_DE_CR
+
+   Optional DE crossover probability (same as ``--de-cr``).
+
+.. envvar:: CSEARCH_DE_SPAN
+
+   Optional DE initial parameter span (same as ``--de-span``).
+
 .. envvar:: RF_HELP_FILE
 
    Path to a help file shown when :ref:`crfac` is invoked with ``-h``.

@@ -14,7 +14,7 @@
 
 extern uint64_t sa_idum;
 
-static real quadratic_2d(real *x)
+static real quadratic_2d(const real *x)
 {
     const real dx = x[1] - 1.0;
     const real dy = x[2] + 2.0;

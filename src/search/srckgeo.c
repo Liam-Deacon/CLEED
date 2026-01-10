@@ -31,7 +31,7 @@ extern struct sratom_str *sr_atoms;
 extern struct search_str *sr_search;
 extern char *sr_project;
 
-real sr_ckgeo(real *par)
+real sr_ckgeo(const real *par)
 
 /***********************************************************************
 

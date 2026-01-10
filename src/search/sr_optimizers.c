@@ -67,6 +67,13 @@ static int sr_run_pso(int ndim, real dpos, const char *bak_file,
   return 0;
 }
 
+static int sr_run_de(int ndim, real dpos, const char *bak_file,
+                     const char *log_file)
+{
+  sr_de(ndim, dpos, bak_file, log_file);
+  return 0;
+}
+
 static const sr_optimizer_entry sr_optimizers[] = {
     {
         .def = {
@@ -138,6 +145,20 @@ static const sr_optimizer_entry sr_optimizers[] = {
         .aliases = {"ps", "pso", "swarm", NULL},
         .run = sr_run_pso,
     },
+    {
+        .def = {
+            .name = "differential evolution",
+            .primary = "de",
+            .description = "differential evolution",
+            .aliases_help = "de, differential",
+            .type = SR_DIFFERENTIAL_EVOLUTION,
+            .implemented = 1,
+            .uses_delta = 1,
+            .is_default = 0,
+        },
+        .aliases = {"de", "differential", "differential-evolution", NULL},
+        .run = sr_run_de,
+    },
 };
 
 static const sr_optimizer_entry *sr_optimizer_entry_by_type(int type)
@@ -179,6 +200,10 @@ void sr_optimizer_config_init(sr_optimizer_config *cfg)
   cfg->pso_c1 = (real)0.0;
   cfg->pso_c2 = (real)0.0;
   cfg->pso_vmax = (real)0.0;
+  cfg->de_population = 0;
+  cfg->de_weight = (real)0.0;
+  cfg->de_crossover = (real)0.0;
+  cfg->de_init_span = (real)0.0;
 }
 
 static int sr_optimizer_read_int_env(const char *name, int *out_value)
@@ -239,6 +264,10 @@ void sr_optimizer_config_from_env(sr_optimizer_config *cfg)
   (void)sr_optimizer_read_real_env("CSEARCH_PSO_C1", &cfg->pso_c1);
   (void)sr_optimizer_read_real_env("CSEARCH_PSO_C2", &cfg->pso_c2);
   (void)sr_optimizer_read_real_env("CSEARCH_PSO_VMAX", &cfg->pso_vmax);
+  (void)sr_optimizer_read_int_env("CSEARCH_DE_POP", &cfg->de_population);
+  (void)sr_optimizer_read_real_env("CSEARCH_DE_WEIGHT", &cfg->de_weight);
+  (void)sr_optimizer_read_real_env("CSEARCH_DE_CR", &cfg->de_crossover);
+  (void)sr_optimizer_read_real_env("CSEARCH_DE_SPAN", &cfg->de_init_span);
 }
 
 void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
@@ -249,13 +278,19 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
     sr_powell_iter_limit = cfg->max_iters;
     sr_sa_iter_limit = cfg->max_iters;
     sr_pso_iter_limit = cfg->max_iters;
+    sr_de_iter_limit = cfg->max_iters;
   } else {
     sr_powell_iter_limit = MAX_ITER_POWELL;
     sr_sa_iter_limit = MAX_ITER_SA;
     sr_pso_iter_limit = MAX_ITER_PSO;
+    sr_de_iter_limit = MAX_ITER_DE;
   }
   if (cfg->max_evals > 0) {
     sr_pso_eval_limit = cfg->max_evals;
+    sr_de_eval_limit = cfg->max_evals;
+  } else {
+    sr_pso_eval_limit = MAX_EVAL_PSO;
+    sr_de_eval_limit = MAX_EVAL_DE;
   }
   sa_idum = (cfg->seed > 0) ? cfg->seed : 0;
   if (cfg->pso_swarm_size > 0) {
@@ -272,6 +307,18 @@ void sr_optimizer_config_apply(const sr_optimizer_config *cfg)
   }
   if (cfg->pso_vmax > 0.0) {
     sr_pso_vmax = cfg->pso_vmax;
+  }
+  if (cfg->de_population > 0) {
+    sr_de_population = cfg->de_population;
+  }
+  if (cfg->de_weight > 0.0) {
+    sr_de_weight = cfg->de_weight;
+  }
+  if (cfg->de_crossover > 0.0) {
+    sr_de_crossover = cfg->de_crossover;
+  }
+  if (cfg->de_init_span > 0.0) {
+    sr_de_init_span = cfg->de_init_span;
   }
 }
 
@@ -347,6 +394,30 @@ void sr_optimizer_log_config(FILE *output, const sr_optimizer_config *cfg)
     fprintf(output, " pso_vmax=%.3f", (double)cfg->pso_vmax);
   } else {
     fprintf(output, " pso_vmax=default");
+  }
+
+  if (cfg->de_population > 0) {
+    fprintf(output, " de_pop=%d", cfg->de_population);
+  } else {
+    fprintf(output, " de_pop=default");
+  }
+
+  if (cfg->de_weight > 0.0) {
+    fprintf(output, " de_weight=%.3f", (double)cfg->de_weight);
+  } else {
+    fprintf(output, " de_weight=default");
+  }
+
+  if (cfg->de_crossover > 0.0) {
+    fprintf(output, " de_cr=%.3f", (double)cfg->de_crossover);
+  } else {
+    fprintf(output, " de_cr=default");
+  }
+
+  if (cfg->de_init_span > 0.0) {
+    fprintf(output, " de_span=%.3f", (double)cfg->de_init_span);
+  } else {
+    fprintf(output, " de_span=default");
   }
 
   fprintf(output, "\n");
