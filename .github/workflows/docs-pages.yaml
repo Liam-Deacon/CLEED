@@ -38,6 +38,7 @@ jobs:
       - name: Generate API documentation with Doxygen
         run: |
           cd doc
+          mkdir -p _build/doxygen
           doxygen doxyfile.conf
 
       - name: Build docs with Sphinx
