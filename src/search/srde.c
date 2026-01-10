@@ -591,31 +591,6 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos)
   cfg->seed = 0;
 }
 
-/**
- * @brief Run the DE/rand/1/bin optimization algorithm.
- *
- * Performs Differential Evolution optimization to minimize the given
- * objective function. The algorithm evolves a population of candidate
- * solutions using mutation, crossover, and selection operators.
- *
- * @par Algorithm Steps:
- * 1. Initialize population randomly within [-init_span, +init_span]
- * 2. For each generation:
- *    - For each target vector x_i:
- *      - Select three distinct random vectors x_a, x_b, x_c
- *      - Create mutant: v = x_a + F × (x_b - x_c)
- *      - Create trial vector using binomial crossover
- *      - If f(trial) ≤ f(x_i), replace x_i with trial
- * 3. Continue until max iterations, max evaluations, or convergence
- *
- * @param cfg      Configuration structure (NULL for defaults).
- * @param ndim     Number of dimensions.
- * @param func     Objective function to minimize (1-indexed arrays).
- * @param best     Output: best solution vector found.
- * @param best_val Output: best objective value found.
- * @param evals    Output: total number of function evaluations (may be NULL).
- * @return 0 on success, -1 on failure.
- */
 int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
                    real *best, real *best_val, int *evals)
 {
