@@ -7,7 +7,7 @@ sphinx-rtd-theme>=2.0,<4
 
 # API documentation integration (Doxygen XML -> Sphinx)
 breathe>=4.35
-exhale>=0.3
+# NOTE: exhale removed - causes 40+ min builds and compatibility issues
 
 # Scientific documentation extensions
 sphinxcontrib-bibtex>=2.6

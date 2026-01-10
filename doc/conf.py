@@ -37,7 +37,8 @@ extensions = [
     'sphinx.ext.graphviz',
     # API documentation from Doxygen
     'breathe',
-    'exhale',
+    # NOTE: exhale removed due to extremely slow builds (40+ min) and
+    # compatibility issues with C codebases. Use Breathe directives directly.
     # Scientific documentation
     'sphinxcontrib.bibtex',
     'sphinxcontrib.mermaid',
@@ -123,31 +124,12 @@ breathe_default_project = "CLEED"
 breathe_default_members = ('members', 'undoc-members')
 
 
-# -- Exhale Configuration -------------------------------------------------
-# Auto-generate API documentation structure from Doxygen XML
-
-exhale_args = {
-    # Required arguments
-    "containmentFolder": "./api/generated",
-    "rootFileName": "library_root.rst",
-    "rootFileTitle": "C API Reference",
-    "doxygenStripFromPath": "../src",
-    # Optional arguments for better organization
-    "createTreeView": False,  # Disable for faster builds
-    "exhaleExecutesDoxygen": False,  # We run Doxygen separately
-    "exhaleDoxygenStdin": "",
-    # File generation control
-    "fullToctreeMaxDepth": 2,
-    "listingExclude": [r".*_test\..*"],
-}
-
-
 # -- BibTeX Configuration -------------------------------------------------
 # Scientific references and citations
 
 bibtex_bibfiles = ['references.bib']
 bibtex_default_style = 'unsrt'
-bibtex_reference_style = 'author_year'
+bibtex_reference_style = 'label'  # Use citation keys as labels to avoid duplicates
 
 
 # -- Mermaid Configuration ------------------------------------------------

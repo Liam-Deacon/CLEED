@@ -1,6 +1,0 @@
-===============
-C API Reference
-===============
-
-.. include:: unabridged_api.rst.include
-
