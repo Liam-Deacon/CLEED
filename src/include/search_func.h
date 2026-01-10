@@ -233,6 +233,8 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos);
 int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
                    real *best, real *best_val, int *evals);
 
+/** @} */ /* end of search_algos group */
+
 /**
  * @defgroup search_eval Evaluation Interface
  * @ingroup search_core
