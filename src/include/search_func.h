@@ -372,7 +372,7 @@ int  sr_rdinp(const char *);
 
 /**
  * @brief Read vertex (simplex) from file.
- * @param filename Input filename.
+ * @param ver_file Input filename.
  * @param y Function values array.
  * @param p Vertex matrix.
  * @param ndim Number of dimensions.
