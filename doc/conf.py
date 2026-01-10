@@ -403,6 +403,48 @@ intersphinx_mapping = {
 }
 
 
+# -- Nitpick Configuration ------------------------------------------------
+# Ignore warnings about missing references for C standard library types
+# and project-specific macros that Doxygen doesn't document
+
+nitpick_ignore = [
+    # C standard library types
+    ("cpp:identifier", "size_t"),
+    ("cpp:identifier", "uint64_t"),
+    ("cpp:identifier", "uint32_t"),
+    ("cpp:identifier", "int64_t"),
+    ("cpp:identifier", "int32_t"),
+    ("cpp:identifier", "FILE"),
+    ("cpp:identifier", "va_list"),
+    ("cpp:identifier", "u_short"),
+    ("cpp:identifier", "FILETIME"),
+    # Project macros (defined in headers)
+    ("cpp:identifier", "STRSZ"),
+    ("cpp:identifier", "STRSIZE"),
+    ("cpp:identifier", "MAX_INPUT_FILES"),
+    ("cpp:identifier", "PATH_MAX"),
+    ("cpp:identifier", "NUM_COLORS"),
+    ("cpp:identifier", "NUM_GRAYS"),
+    ("cpp:identifier", "NUM_SUBS"),
+    ("cpp:identifier", "INP_MAX"),
+    ("cpp:identifier", "VAR_MAX"),
+    ("cpp:identifier", "VFF_DEP_IEEEORDER"),
+    ("cpp:identifier", "VFF_DEP_NSORDER"),
+    ("cpp:identifier", "VFF_DEP_DECORDER"),
+    ("cpp:identifier", "sr_optimizer_run_fn"),
+]
+
+# Use regex patterns for common patterns (catches more variations)
+nitpick_ignore_regex = [
+    # Ignore all doxygen group references
+    (r"ref\.ref", r"group__.*"),
+    (r"ref\.ref", r".*_8h"),
+    # Ignore document references to manual chapters not yet created
+    (r"ref\.doc", r"ch\d+.*"),
+    (r"ref\.doc", r"\.\./part-\d+/ch\d+.*"),
+]
+
+
 # -- Suppress warnings for missing Doxygen XML ----------------------------
 # This allows building docs even when Doxygen hasn't been run
 
