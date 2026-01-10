@@ -84,7 +84,7 @@ release = '0.1.0-dev'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build', 'api/generated']
+exclude_patterns = ['_build']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -407,14 +407,24 @@ intersphinx_mapping = {
 # This allows building docs even when Doxygen hasn't been run
 
 def setup(app):
-    """Suppress warnings when Doxygen XML is not available."""
+    """Emit warning when Doxygen XML is not available."""
     import os
+    import logging
+    
+    logger = logging.getLogger(__name__)
     doxygen_xml_path = os.path.join(os.path.dirname(__file__), '_build/doxygen/xml')
-    if not os.path.exists(doxygen_xml_path):
-        # Create a placeholder to prevent Breathe errors
+    index_xml = os.path.join(doxygen_xml_path, 'index.xml')
+    
+    if not os.path.exists(index_xml):
+        logger.warning(
+            "Doxygen XML not found at '%s'. "
+            "API documentation will be incomplete. "
+            "Run 'doxygen doxyfile.conf' in the doc/ directory to generate it.",
+            doxygen_xml_path
+        )
+        # Create minimal placeholder to prevent Breathe from failing completely
         os.makedirs(doxygen_xml_path, exist_ok=True)
-        # Create minimal index.xml if it doesn't exist
-        index_xml = os.path.join(doxygen_xml_path, 'index.xml')
-        if not os.path.exists(index_xml):
-            with open(index_xml, 'w') as f:
-                f.write('<?xml version="1.0" encoding="UTF-8"?>\n<doxygenindex></doxygenindex>\n')
+        with open(index_xml, 'w') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            f.write('<!-- Placeholder: Doxygen XML not generated. Run doxygen first. -->\n')
+            f.write('<doxygenindex></doxygenindex>\n')

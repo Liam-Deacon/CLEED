@@ -34,16 +34,18 @@ endif()
 
 # Doxygen target for generating XML output
 if(DOXYGEN_FOUND)
+    # Use the configured file from the binary tree if available
+    if(EXISTS "${PROJECT_BINARY_DIR}/doc/doxyfile.conf")
+        set(_DOXYGEN_CONFIG "${PROJECT_BINARY_DIR}/doc/doxyfile.conf")
+    else()
+        set(_DOXYGEN_CONFIG "${PROJECT_SOURCE_DIR}/doc/doxyfile.conf")
+    endif()
+
     add_custom_target(doxygen
-        COMMAND ${DOXYGEN_EXECUTABLE} "${PROJECT_SOURCE_DIR}/doc/doxyfile.conf"
+        COMMAND ${DOXYGEN_EXECUTABLE} "${_DOXYGEN_CONFIG}"
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/doc"
         COMMENT "Generating API documentation with Doxygen (XML output for Breathe)"
         VERBATIM
-    )
-
-    # Create output directory for Doxygen
-    add_custom_command(TARGET doxygen PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/doc/_build/doxygen"
     )
 else()
     message(STATUS "Doxygen not found - API documentation will not be generated")

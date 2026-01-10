@@ -305,7 +305,7 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file);
  */
 void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file);
 
-/** @} */ /* end of search_algos group */
+/** @} */ /* end of search_eval group */
 
 /**
  * @defgroup search_io File I/O and Geometry
