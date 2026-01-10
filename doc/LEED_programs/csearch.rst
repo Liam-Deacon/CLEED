@@ -124,6 +124,11 @@ The implementation uses defaults tuned for LEED optimisation:
   *Journal of Global Optimization*, 11, 341–359.
   `doi:10.1023/A:1008202821328 <https://doi.org/10.1023/A:1008202821328>`_
 
+- Storn, R., & Price, K. (1995). Differential Evolution—A Simple and
+  Efficient Adaptive Scheme for Global Optimization over Continuous
+  Spaces. International Computer Science Institute, Berkeley, CA,
+  Technical Report TR-95-012.
+
 .. _csearch_syntax:
 
 Syntax

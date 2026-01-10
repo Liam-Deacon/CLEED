@@ -27,6 +27,25 @@ csearch is a computer program written in C which performs structure optimisation
 .I crfac
 , in order to calculate an R factor value for the current parameter set.
 
+.SH DIFFERENTIAL EVOLUTION
+
+The DE/rand/1/bin variant uses mutation, binomial crossover, and selection. For
+each target vector x_i, mutation builds:
+.PP
+v_i = x_r1 + F (x_r2 - x_r3)
+.PP
+Binomial crossover forms the trial vector:
+.PP
+u_{i,j} = v_{i,j} if r_j < CR or j = j_rand, otherwise x_{i,j}
+.PP
+Selection replaces x_i if f(u_i) <= f(x_i).
+.PP
+References: Storn, R., Price, K. (1997). Differential Evolution - A Simple and
+Efficient Heuristic for Global Optimization over Continuous Spaces. Journal of
+Global Optimization 11, 341-359. DOI: 10.1023/A:1008202821328. Storn, R., Price,
+K. (1995). Differential Evolution - A Simple and Efficient Adaptive Scheme for
+Global Optimization over Continuous Spaces. ICSI Technical Report TR-95-012.
+
 .SH OPTIONS
 
 .IP -i
