@@ -33,7 +33,7 @@ extern struct search_str *sr_search;
 
 char line_buffer[STRSZ];
 
-int sr_mkinp(real *par, int i_call, char *filename)
+int sr_mkinp(const real *par, int i_call, char *filename)
 
 /***********************************************************************
  - Set up inputfile for IV program

@@ -131,7 +131,7 @@ char *new_path;
    fprintf(STDCTR, "(sr_evalrf %d) SHORTCUT:", n_eval);
  #endif
 
- rgeo = sr_ckgeo((real *)par);
+ rgeo = sr_ckgeo(par);
 
  #ifdef CONTROL
    #ifdef SHORTCUT
@@ -184,7 +184,7 @@ char *new_path;
 ***********************************************************************/
 
  n_calc ++;
- sr_mkinp_mir((real *)par, n_calc, par_file);
+ sr_mkinp_mir(par, n_calc, par_file);
 
 #ifdef SHORTCUT
 
@@ -379,7 +379,6 @@ char *new_path;
 
  return (rfac + rgeo);
 }
-
 
 
 

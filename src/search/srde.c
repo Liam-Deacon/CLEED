@@ -582,10 +582,6 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos)
   cfg->conv_tol = (real)R_TOLERANCE;
   cfg->conv_mode = SR_DE_CONV_NONNEG;
   cfg->seed = 0;
-  if (cfg->weight <= (real)0.0) cfg->weight = (real)0.8;
-  if (cfg->weight > (real)2.0) cfg->weight = (real)2.0;
-  if (cfg->crossover < (real)0.0) cfg->crossover = (real)0.0;
-  if (cfg->crossover > (real)1.0) cfg->crossover = (real)1.0;
 }
 
 /**

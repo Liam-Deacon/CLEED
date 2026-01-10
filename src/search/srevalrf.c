@@ -132,7 +132,7 @@ FILE *io_stream, *log_stream;
  fprintf(STDCTR,"(sr_evalrf %d) SHORTCUT:", n_eval);
 #endif
 
- rgeo = sr_ckgeo((real *)par);
+ rgeo = sr_ckgeo(par);
 
 #ifdef CONTROL
 #ifdef SHORTCUT
@@ -177,7 +177,7 @@ FILE *io_stream, *log_stream;
 ***********************************************************************/
 
  n_calc ++;
- sr_mkinp((real *)par, n_calc, par_file);
+ sr_mkinp(par, n_calc, par_file);
 
 #ifdef SHORTCUT
 

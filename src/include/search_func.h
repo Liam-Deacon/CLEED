@@ -235,10 +235,11 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file);
 
 /* file input|output */
-real sr_ckgeo(real *);
+real sr_ckgeo(const real *);
 int  sr_ckrot(struct sratom_str *, struct search_str *);
 real sr_evalrf(const real *);
-int  sr_mkinp(real *, int, char *);
+int  sr_mkinp(const real *, int, char *);
+int  sr_mkinp_mir(const real *, int, char *);
 int  sr_rdinp(const char *);
 int  sr_rdver(const char *, real *, real **, int);
 
