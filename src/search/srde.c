@@ -35,6 +35,8 @@ typedef struct sr_de_state {
   real weight;
   real crossover;
   real span;
+  real conv_tol;
+  sr_de_conv_mode conv_mode;
   real **pop_vec;
   real *scores;
   real *trial;
@@ -77,6 +79,11 @@ static real sr_de_rand_span(sr_rng *rng, real span)
 {
   const real u = (real)sr_rng_uniform01(rng);
   return (u * (real)2.0 - (real)1.0) * span;
+}
+
+static real sr_de_abs(real value)
+{
+  return (value < (real)0.0) ? -value : value;
 }
 
 /**
@@ -173,36 +180,44 @@ static void sr_de_copy_vector(real *dest, const real *src, int ndim)
  * @param evals    In/out evaluation counter.
  * @return 0 on success, -1 on invalid parameters.
  */
+static void sr_de_fill_vector(sr_de_state *state, real *dest)
+{
+  const int ndim = state->ndim;
+  const real span = state->span;
+
+  for (int j = 1; j <= ndim; j++) {
+    dest[j] = sr_de_rand_span(&state->rng, span);
+  }
+}
+
+static real sr_de_eval_vector(real (*func)(const real *), const real *vec,
+                              int *evals)
+{
+  const real value = (*func)(vec);
+  if (evals) (*evals)++;
+  return value;
+}
+
 static int sr_de_init_population(sr_de_state *state, real *best, real *best_val,
                                  real (*func)(const real *), int *evals)
 {
   if (!state || !best || !best_val || !func) return -1;
 
-  sr_rng *rng = &state->rng;
   const int pop = state->pop;
   const int ndim = state->ndim;
-  const real span = state->span;
-  real **pop_vec = state->pop_vec;
-  real *scores = state->scores;
 
-  for (int j = 1; j <= ndim; j++) {
-    pop_vec[1][j] = sr_de_rand_span(rng, span);
-  }
-  scores[1] = (*func)(pop_vec[1]);
-  if (evals) (*evals)++;
-  *best_val = scores[1];
-  sr_de_copy_vector(best, pop_vec[1], ndim);
+  sr_de_fill_vector(state, state->pop_vec[1]);
+  state->scores[1] = sr_de_eval_vector(func, state->pop_vec[1], evals);
+  *best_val = state->scores[1];
+  sr_de_copy_vector(best, state->pop_vec[1], ndim);
 
   for (int i = 2; i <= pop; i++) {
-    for (int j = 1; j <= ndim; j++) {
-      pop_vec[i][j] = sr_de_rand_span(rng, span);
-    }
-    scores[i] = (*func)(pop_vec[i]);
-    if (evals) (*evals)++;
+    sr_de_fill_vector(state, state->pop_vec[i]);
+    state->scores[i] = sr_de_eval_vector(func, state->pop_vec[i], evals);
 
-    if (scores[i] < *best_val) {
-      *best_val = scores[i];
-      sr_de_copy_vector(best, pop_vec[i], ndim);
+    if (state->scores[i] < *best_val) {
+      *best_val = state->scores[i];
+      sr_de_copy_vector(best, state->pop_vec[i], ndim);
     }
   }
 
@@ -330,6 +345,54 @@ static const sr_de_cfg *sr_de_get_effective_cfg(const sr_de_cfg *cfg,
   return cfg;
 }
 
+static int sr_de_resolve_population(const sr_de_cfg *src, int ndim, int *out)
+{
+  if (!out || ndim <= 0) return -1;
+
+  *out = (src->population > 0) ? src->population
+                               : sr_de_default_population(ndim);
+  if (*out < 4) return -1;
+
+  return 0;
+}
+
+static int sr_de_resolve_limit(int value, int default_value)
+{
+  return (value > 0) ? value : default_value;
+}
+
+static real sr_de_resolve_weight(real weight)
+{
+  if (weight <= (real)0.0) return (real)0.8;
+  if (weight > (real)2.0) return (real)2.0;
+  return weight;
+}
+
+static real sr_de_resolve_crossover(real crossover)
+{
+  if (crossover < (real)0.0) return (real)0.0;
+  if (crossover > (real)1.0) return (real)1.0;
+  return crossover;
+}
+
+static real sr_de_resolve_span(real span)
+{
+  return (span > (real)0.0) ? span : (real)1.0;
+}
+
+static real sr_de_resolve_conv_tol(real conv_tol)
+{
+  return (conv_tol > (real)0.0) ? conv_tol : (real)R_TOLERANCE;
+}
+
+static sr_de_conv_mode sr_de_resolve_conv_mode(sr_de_conv_mode mode)
+{
+  if (mode == SR_DE_CONV_NONE || mode == SR_DE_CONV_ABS) {
+    return mode;
+  }
+  return SR_DE_CONV_NONNEG;
+}
+
 static int sr_de_resolve_cfg(const sr_de_cfg *cfg, int ndim,
                              sr_de_cfg *resolved)
 {
@@ -338,31 +401,38 @@ static int sr_de_resolve_cfg(const sr_de_cfg *cfg, int ndim,
   sr_de_cfg defaults;
   const sr_de_cfg *src = sr_de_get_effective_cfg(cfg, &defaults, ndim);
 
-  resolved->population = (src->population > 0) ? src->population
-                                               : sr_de_default_population(ndim);
-  if (resolved->population < 4) return -1;
-
-  resolved->max_iters = (src->max_iters > 0) ? src->max_iters : MAX_ITER_DE;
-  resolved->max_evals = (src->max_evals > 0) ? src->max_evals : MAX_EVAL_DE;
-
-  resolved->weight = src->weight;
-  if (resolved->weight <= (real)0.0) {
-    resolved->weight = (real)0.8;
-  }
-  if (resolved->weight > (real)2.0) {
-    resolved->weight = (real)2.0;
+  if (sr_de_resolve_population(src, ndim, &resolved->population) != 0) {
+    return -1;
   }
 
-  resolved->crossover = src->crossover;
-  if (resolved->crossover < (real)0.0) {
-    resolved->crossover = (real)0.0;
-  }
-  if (resolved->crossover > (real)1.0) {
-    resolved->crossover = (real)1.0;
-  }
-
-  resolved->init_span = (src->init_span > (real)0.0) ? src->init_span : (real)1.0;
+  resolved->max_iters = sr_de_resolve_limit(src->max_iters, MAX_ITER_DE);
+  resolved->max_evals = sr_de_resolve_limit(src->max_evals, MAX_EVAL_DE);
+  resolved->weight = sr_de_resolve_weight(src->weight);
+  resolved->crossover = sr_de_resolve_crossover(src->crossover);
+  resolved->init_span = sr_de_resolve_span(src->init_span);
+  resolved->conv_tol = sr_de_resolve_conv_tol(src->conv_tol);
+  resolved->conv_mode = sr_de_resolve_conv_mode(src->conv_mode);
   resolved->seed = src->seed;
+
+  return 0;
+}
+
+static int sr_de_evolve_member(sr_de_state *state, int target,
+                               sr_de_selection_ctx *select_ctx,
+                               real (*func)(const real *), int *evals)
+{
+  int a = 0;
+  int b = 0;
+  int c = 0;
+
+  if (sr_de_pick_indices(&state->rng, state->pop, target, &a, &b, &c) != 0) {
+    return -1;
+  }
+
+  sr_de_create_trial(state, target, a, b, c);
+
+  const real trial_val = sr_de_eval_vector(func, state->trial, evals);
+  sr_de_selection(select_ctx, target, state->trial, trial_val);
 
   return 0;
 }
@@ -380,22 +450,24 @@ static int sr_de_run_generation(sr_de_state *state, real (*func)(const real *),
   select_ctx.ndim = state->ndim;
 
   for (int i = 1; i <= state->pop && *evals < state->max_evals; i++) {
-    int a = 0;
-    int b = 0;
-    int c = 0;
-    if (sr_de_pick_indices(&state->rng, state->pop, i, &a, &b, &c) != 0) {
+    if (sr_de_evolve_member(state, i, &select_ctx, func, evals) != 0) {
       return -1;
     }
-
-    sr_de_create_trial(state, i, a, b, c);
-
-    const real trial_val = (*func)(state->trial);
-    (*evals)++;
-
-    sr_de_selection(&select_ctx, i, state->trial, trial_val);
   }
 
   return 0;
+}
+
+static int sr_de_should_stop(const sr_de_state *state, real best_val)
+{
+  if (!state || state->conv_mode == SR_DE_CONV_NONE) return 0;
+  if (state->conv_tol <= (real)0.0) return 0;
+
+  if (state->conv_mode == SR_DE_CONV_ABS) {
+    return sr_de_abs(best_val) <= state->conv_tol;
+  }
+
+  return best_val >= (real)0.0 && best_val <= state->conv_tol;
 }
 
 static int sr_de_run(sr_de_state *state, real (*func)(const real *), real *best,
@@ -415,7 +487,7 @@ static int sr_de_run(sr_de_state *state, real (*func)(const real *), real *best,
       return -1;
     }
 
-    if (*best_val >= (real)0.0 && *best_val <= R_TOLERANCE) {
+    if (sr_de_should_stop(state, *best_val)) {
       break;
     }
   }
@@ -439,6 +511,7 @@ static int sr_de_run(sr_de_state *state, real (*func)(const real *), real *best,
  * - Differential weight (F): 0.8 (clamped to (0, 2])
  * - Crossover probability (CR): 0.9 (clamped to [0, 1])
  * - Initial span: dpos or 1.0
+ * - Convergence tolerance: R_TOLERANCE (mode: non-negative only)
  *
  * @param cfg   Pointer to configuration structure to initialize.
  * @param ndim  Number of dimensions in the optimization problem.
@@ -453,6 +526,8 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos)
   cfg->weight = (real)0.8;
   cfg->crossover = (real)0.9;
   cfg->init_span = (dpos > 0.0) ? dpos : (real)1.0;
+  cfg->conv_tol = (real)R_TOLERANCE;
+  cfg->conv_mode = SR_DE_CONV_NONNEG;
   cfg->seed = 0;
   if (cfg->weight <= (real)0.0) cfg->weight = (real)0.8;
   if (cfg->weight > (real)2.0) cfg->weight = (real)2.0;
@@ -506,6 +581,8 @@ int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
   state.weight = effective_cfg.weight;
   state.crossover = effective_cfg.crossover;
   state.span = effective_cfg.init_span;
+  state.conv_tol = effective_cfg.conv_tol;
+  state.conv_mode = effective_cfg.conv_mode;
   state.pop_vec = NULL;
   state.scores = NULL;
   state.trial = NULL;
@@ -548,6 +625,19 @@ static void sr_de_log_results(FILE *log_stream, int ndim, int evals,
   fprintf(log_stream, "rmin = %.6f\n", (double)best_val);
 }
 
+static const char *sr_de_conv_mode_label(sr_de_conv_mode mode)
+{
+  switch (mode) {
+    case SR_DE_CONV_NONE:
+      return "none";
+    case SR_DE_CONV_ABS:
+      return "abs";
+    case SR_DE_CONV_NONNEG:
+    default:
+      return "nonneg";
+  }
+}
+
 /**
  * @brief Log DE configuration parameters to a file stream.
  *
@@ -557,9 +647,11 @@ static void sr_de_log_results(FILE *log_stream, int ndim, int evals,
 static void sr_de_log_config(FILE *log_stream, const sr_de_cfg *cfg)
 {
   fprintf(log_stream, "=> DIFFERENTIAL EVOLUTION:\n");
-  fprintf(log_stream, "=> pop=%d weight=%.3f cr=%.3f span=%.3f\n",
+  fprintf(log_stream,
+          "=> pop=%d weight=%.3f cr=%.3f span=%.3f conv_tol=%.6f conv_mode=%s\n",
           cfg->population, (double)cfg->weight, (double)cfg->crossover,
-          (double)cfg->init_span);
+          (double)cfg->init_span, (double)cfg->conv_tol,
+          sr_de_conv_mode_label(cfg->conv_mode));
 }
 
 /**

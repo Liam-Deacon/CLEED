@@ -177,6 +177,12 @@ int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
 /**
  * @brief Configuration for differential evolution (DE).
  */
+typedef enum sr_de_conv_mode {
+  SR_DE_CONV_NONE = 0,  /**< Disable convergence-based early stopping. */
+  SR_DE_CONV_NONNEG,    /**< Stop when 0 <= best_val <= conv_tol. */
+  SR_DE_CONV_ABS        /**< Stop when |best_val| <= conv_tol. */
+} sr_de_conv_mode;
+
 typedef struct sr_de_cfg {
   // cppcheck-suppress unusedStructMember
   int population; /**< Population size (default: 10*ndim, min: 20, range: >0) */
@@ -190,6 +196,10 @@ typedef struct sr_de_cfg {
   real crossover; /**< Crossover probability CR (default: 0.9, range: [0, 1]) */
   // cppcheck-suppress unusedStructMember
   real init_span; /**< Initial span per dimension (default: dpos or 1.0, range: >0) */
+  // cppcheck-suppress unusedStructMember
+  real conv_tol;  /**< Convergence tolerance (default: R_TOLERANCE, range: >0) */
+  // cppcheck-suppress unusedStructMember
+  sr_de_conv_mode conv_mode; /**< Convergence check mode (default: NONNEG). */
   // cppcheck-suppress unusedStructMember
   uint64_t seed;  /**< RNG seed (0 = use internal default) */
 } sr_de_cfg;
