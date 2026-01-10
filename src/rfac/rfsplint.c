@@ -9,7 +9,7 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
  * Changes:
- *   GH/1995.08.29 - Creation (copy from splint.c in Numerical Recipes)
+ *   GH/1995.08.29 - Creation (based on standard cubic spline interpolation)
  ********************************************************************/
 
 /*! \file
@@ -36,7 +36,7 @@
  * \param[in] leng number of elements in list.
  *
  *
- * For a description see Num. Rec. Chapter 3.3.
+ * For a description see standard references on cubic spline interpolation.
  *
  *
  * \return y interpolated intensity.

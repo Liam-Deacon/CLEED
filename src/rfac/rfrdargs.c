@@ -39,7 +39,7 @@
  * valid arguments:
  *
  * --print
- * -a <flag>: specify which group ID's appear in output.
+ * -a \<flag\>: specify which group ID's appear in output.
  *      arguments: "al(l)", "av(erage)".
  *      default: "average".
  *      program parameter: all_groups
@@ -127,7 +127,7 @@ rfac_args *rfac_rdargs(int argc, char **argv)
       if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--print"))
       {
         /* 
-         -a <flag>: specify which group ID's appear in output.
+         -a \<flag\>: specify which group ID's appear in output.
                     arguments: "al(l)", "av(erage)".
                     default: "all".
         */

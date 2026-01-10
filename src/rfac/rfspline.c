@@ -9,7 +9,7 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  *
  * Changes:
- *   GH/1995.08.11 - Creation (copy from Numerical Recipes spline.c )
+ *   GH/1995.08.11 - Creation (based on standard cubic spline algorithm)
  ********************************************************************/
 
 /*! \file
@@ -30,7 +30,7 @@
  * The function will generate the structure elements deriv2, which will
  * be used for interpolation in function rfac_splint() .
  *
- * For a description see Numerical Recipes in C Chapter 3.3.
+ * For a description see standard references on cubic spline interpolation.
  * The boundary conditions are set for a natural spline
  * (zero second derivative on both boundaries).
  *
