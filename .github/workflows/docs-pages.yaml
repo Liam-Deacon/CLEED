@@ -24,6 +24,16 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: pip
+          cache-dependency-path: doc/requirements.txt
+
+      - name: Cache apt packages
+        uses: actions/cache@v4
+        id: apt-cache
+        with:
+          path: |
+            /var/cache/apt/archives
+          key: apt-${{ runner.os }}-doxygen-graphviz-v1
 
       - name: Install system dependencies
         run: |
@@ -35,7 +45,17 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r doc/requirements.txt
 
+      - name: Cache Doxygen XML output
+        uses: actions/cache@v4
+        id: doxygen-cache
+        with:
+          path: doc/_build/doxygen/xml
+          key: doxygen-${{ runner.os }}-${{ hashFiles('src/**/*.h', 'src/**/*.c', 'doc/doxyfile.conf') }}
+          restore-keys: |
+            doxygen-${{ runner.os }}-
+
       - name: Generate API documentation with Doxygen
+        if: steps.doxygen-cache.outputs.cache-hit != 'true'
         run: |
           cd doc
           mkdir -p _build/doxygen
