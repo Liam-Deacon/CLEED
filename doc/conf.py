@@ -160,6 +160,10 @@ suppress_warnings = [
     'ref.footnote',
     # Duplicate bibtex labels (same author/year in different contexts)
     'bibtex.duplicate_label',
+    # Undefined reference warnings from Breathe/Doxygen (external symbols, structs)
+    'ref.ref',
+    # Unknown documents (manual chapters that don't exist yet)
+    'ref.doc',
 ]
 
 

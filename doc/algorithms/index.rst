@@ -1,8 +1,8 @@
 .. _algorithms-index:
 
-======================
+=======================
 Optimization Algorithms
-======================
+=======================
 
 This section provides detailed documentation of the optimization algorithms
 implemented in CLEED for LEED-IV structural refinement, including mathematical
