@@ -34,7 +34,7 @@ static int run_de_regression(void)
 
     const real tol = 0.25;
     if (fabs(best[1] - 1.0) > tol || fabs(best[2] + 2.0) > tol) {
-        fprintf(stderr, "unexpected optimum: (%g, %g)\n", (double)best[1], (double)best[2]);
+        fprintf(stderr, "unexpected optimum: (%g, %g)\n", best[1], best[2]);
         return 1;
     }
     CLEED_TEST_ASSERT(best_val >= 0.0);

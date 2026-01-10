@@ -102,8 +102,8 @@ static int sr_de_pick_available(int pop, int skip)
   return available;
 }
 
-static int sr_de_validate_pick_inputs(sr_rng *rng, int pop, int skip,
-                                      int *a, int *b, int *c)
+static int sr_de_validate_pick_inputs(const sr_rng *rng, int pop, int skip,
+                                      const int *a, const int *b, const int *c)
 {
   if (!rng) return -1;
   if (!a) return -1;
@@ -525,19 +525,22 @@ static int sr_de_run(sr_de_state *state, real (*func)(const real *), real *best,
   if (!sr_de_run_inputs_ok(state, func, best, best_val)) return -1;
 
   int local_evals = 0;
+  int stop = 0;
   if (sr_de_init_population(state, best, best_val, func, &local_evals) != 0) {
     return -1;
   }
 
   for (int iter = 0; iter < state->max_iters; iter++) {
     if (local_evals >= state->max_evals) {
-      break;
-    }
-    if (sr_de_run_generation(state, func, best, best_val, &local_evals) != 0) {
+      stop = 1;
+    } else if (sr_de_run_generation(state, func, best, best_val,
+                                    &local_evals) != 0) {
       return -1;
+    } else if (sr_de_should_stop(state, *best_val)) {
+      stop = 1;
     }
 
-    if (sr_de_should_stop(state, *best_val)) {
+    if (stop) {
       break;
     }
   }
