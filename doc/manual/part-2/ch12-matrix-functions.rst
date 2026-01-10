@@ -6,7 +6,7 @@ Chapter 12: Matrix Functions
    verification.
 
 12.1 Introduction
-----------------
+------------------
 
 In contrast to the conventional definition of matrices in C as arrays of pointers to arrays
  of numbers (integer, float, etc.), in our programs matrices are structures ``struct mat_str``
@@ -100,24 +100,24 @@ The storage scheme for rectangular and square matrices is:
 .. math::
 
    R_M(m, n) \mapsto *(rel + (m - 1) * rows + n)
-   	ag{12.1}
+   \tag{12.1}
 
 .. math::
 
    I_M(m, n) \mapsto *(iel + (m - 1) * rows + n)
-   	ag{12.2}
+   \tag{12.2}
 
 diagonal matrices are stored as:
 
 .. math::
 
    R_M(m, m) \mapsto *(rel + m)
-   	ag{12.3}
+   \tag{12.3}
 
 .. math::
 
    I_M(m, m) \mapsto *(iel + m)
-   	ag{12.4}
+   \tag{12.4}
 
 Note that the first element in the arrays ``rel`` and ``iel`` is never used, therefore these
 arrays have the length ``[(n * m + 1) * sizeof(real)]`` for a rectangular or square
@@ -153,8 +153,8 @@ For example the matrix:
 
 .. math::
 
-   egin{pmatrix}
-   1 & 1 + i \
+   \begin{pmatrix}
+   1 & 1 + i \\
    1 - i & i
    \end{pmatrix}
 

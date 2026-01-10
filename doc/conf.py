@@ -35,6 +35,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.graphviz',
+    'sphinx.ext.todo',
     # API documentation from Doxygen
     'breathe',
     # NOTE: exhale removed due to extremely slow builds (40+ min) and
@@ -45,6 +46,10 @@ extensions = [
     # Usability
     'sphinx_copybutton',
 ]
+
+# -- Todo Extension Configuration ------------------------------------------
+# Show TODOs in output (useful for tracking documentation work)
+todo_include_todos = False  # Set to True to show TODO items in output
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -143,6 +148,19 @@ mermaid_init_js = "mermaid.initialize({startOnLoad:true, theme:'neutral'});"
 # For call graphs and other diagrams
 
 graphviz_output_format = 'svg'
+
+
+# -- Suppress Warnings Configuration --------------------------------------
+# Suppress specific warnings that are expected and not actionable
+
+suppress_warnings = [
+    # Duplicate C++ declarations from Breathe (C types appearing in C++ domain)
+    'duplicate_declaration.cpp',
+    # Unreferenced footnotes in manual (OCR transcription artifacts)
+    'ref.footnote',
+    # Duplicate bibtex labels (same author/year in different contexts)
+    'bibtex.duplicate_label',
+]
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -407,6 +425,11 @@ nitpick_ignore = [
     ("cpp:identifier", "miller_hkl_t"),
     ("cpp:identifier", "real"),
     ("cpp:identifier", "sr_optimizer_run_fn"),
+    ("cpp:identifier", "sratom_str"),
+    ("cpp:identifier", "search_str"),
+    ("cpp:identifier", "basis_vector_t"),
+    ("cpp:identifier", "matrix_2x2_t"),
+    ("cpp:identifier", "patt_color_rgb_t"),
     # Project macros (defined in headers)
     ("cpp:identifier", "STRSZ"),
     ("cpp:identifier", "STRSIZE"),
@@ -428,6 +451,8 @@ nitpick_ignore_regex = [
     (r"ref\.ref", r"group__.*"),
     (r"ref\.ref", r".*_8[ch].*"),
     (r"ref\.ref", r"lattice_8h.*"),
+    # Ignore Doxygen struct/type references
+    (r"ref\.ref", r"struct.*"),
     # Ignore document references to manual chapters not yet created
     (r"ref\.doc", r"ch\d+.*"),
     (r"ref\.doc", r"\.\./part-\d+/ch\d+.*"),
