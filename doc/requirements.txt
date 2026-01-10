@@ -1,3 +1,17 @@
+# CLEED Documentation Requirements
+# Install with: pip install -r requirements.txt
+
+# Core Sphinx
 sphinx>=7.2,<9
 sphinx-rtd-theme>=2.0,<4
 
+# API documentation integration (Doxygen XML -> Sphinx)
+breathe>=4.35
+exhale>=0.3
+
+# Scientific documentation extensions
+sphinxcontrib-bibtex>=2.6
+sphinxcontrib-mermaid>=0.9
+
+# Additional useful extensions
+sphinx-copybutton>=0.5

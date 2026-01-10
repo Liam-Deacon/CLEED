@@ -1,17 +1,19 @@
-/*********************************************************************
-GH/10.08.95
-
- Include file for
-
-  - additional data structures and type definitions
-  - constant values
-
-Changes:
-GH/25.09.92
-GH/03.03.93
-GH/10.08.95 - Create (copy from rfdefines.h and rftypes.h)
-
-*********************************************************************/
+/**
+ * @file rfac_def.h
+ * @brief Type definitions and constants for R-factor calculations.
+ *
+ * This file provides:
+ * - Structures for I-V curve storage and comparison
+ * - R-factor result containers
+ * - Physical constants and tolerance values
+ *
+ * @ingroup rfac_core
+ *
+ * Changes:
+ * GH/25.09.92
+ * GH/03.03.93
+ * GH/10.08.95 - Create (copy from rfdefines.h and rftypes.h)
+ */
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
@@ -20,165 +22,213 @@ extern "C" {
 #ifndef RFAC_DEF_H
 #define RFAC_DEF_H
 
+/**
+ * @defgroup rfac_types R-Factor Data Types
+ * @ingroup rfac_core
+ * @brief Structures for I-V curves and R-factor results.
+ * @{
+ */
+
 /*********************************************************************
  structures and types 
 *********************************************************************/
 
-struct rfrswitch    /* indicates which R-factors shall be calculated */
-                    /* If this structure is changed, the functions
-                       rfrsw, rfcmpr, rfoutput have also to be changed */
+/**
+ * @brief Flags indicating which R-factors to calculate.
+ *
+ * If this structure is changed, the functions rfrsw, rfcmpr,
+ * rfoutput must also be updated.
+ */
+struct rfrswitch
 {
- int ek;            /* Energy axis: I(E): 0; I(k): 1 (1.1) */
- int r_1;           /* R1-factor */
- int r_2;           /* R2-factor */
- int r_b;           /* Rb-factor */
- int r_g;           /* Rg-factor */
- int r_p;           /* Pendry's R-factor */
+ int ek;            /**< Energy axis: I(E): 0; I(k): 1 */
+ int r_1;           /**< Calculate R1-factor */
+ int r_2;           /**< Calculate R2-factor */
+ int r_b;           /**< Calculate Rb-factor */
+ int r_g;           /**< Calculate Rg-factor */
+ int r_p;           /**< Calculate Pendry's R-factor */
 };
 
-struct rfref        /* relation between expt. and theo. lists */
+/**
+ * @brief Mapping between experimental and theoretical energy lists.
+ */
+struct rfref
 {
- int i_min;         /* index of smallest energy in theor. list */
- int i_max;         /* index of largest energy in theor. list */
- int *pindex;       /* list of indices in exper. list corresponding to
-                       theoretical energies */
+ int i_min;         /**< Index of smallest energy in theoretical list */
+ int i_max;         /**< Index of largest energy in theoretical list */
+ int *pindex;       /**< List of indices in experimental list corresponding
+                         to theoretical energies */
 };
+
+/**
+ * @brief Single data point in an experimental I-V curve.
+ */
 struct rfelist 
 {
- float energy;      /* energy value in expt. IV curve */
- float intens;      /* intensity value in expt. IV curve */
+ float energy;      /**< Energy value in experimental I-V curve (eV) */
+ float intens;      /**< Intensity value in experimental I-V curve */
 };
 
+/**
+ * @brief Single data point in a theoretical I-V curve.
+ */
 struct rftlist 
 {
- float energy;      /* energy value in theor. IV curve */
- float *pintens;    /* list of intensity values in theor. IV curve */
+ float energy;      /**< Energy value in theoretical I-V curve (eV) */
+ float *pintens;    /**< List of intensity values for different geometries */
 };
 
+/**
+ * @brief Container for all R-factor values for a single beam.
+ */
 struct rfrfac
 {
- int group_id;      /* either AVERAGE_ID or group flag */
- float r_1;         /* R1-factor */
- float r_2;         /* R2-factor */
- float r_b1;        /* Rb1-factor */
- float r_b2;        /* Rb2-factor */
- float r_g;         /* Rg-factor */
- float r_p;         /* Pendry's R-factor */
- float rr;          /* RR factor (confidence level) */
- float i_ratio;     /* ratio of theoretical/experimental curve integral */
- float e_range;     /* total energy range */
+ int group_id;      /**< Either AVERAGE_ID or group flag */
+ float r_1;         /**< R1-factor (absolute difference integral) */
+ float r_2;         /**< R2-factor (squared difference integral) */
+ float r_b1;        /**< Rb1-factor */
+ float r_b2;        /**< Rb2-factor */
+ float r_g;         /**< Rg-factor (goodness of fit) */
+ float r_p;         /**< Pendry's R-factor (logarithmic derivative) */
+ float rr;          /**< RR factor (confidence level) */
+ float i_ratio;     /**< Ratio of theoretical/experimental curve integral */
+ float e_range;     /**< Total energy range (eV) */
 };
 
+/**
+ * @brief Spot identification for a diffraction beam.
+ */
 struct rfspot 
 {
- float index1;      /* 1st index */
- float index2;      /* 2nd index */
- float f_val1;      /* can be used for length in k space e.g. */
- float f_val2;      /* can be used for intensity e.g. */
- int i_val1;        /* arbitrary use */
- int i_val2;        /* arbitrary use */
+ float index1;      /**< First Miller index (h) */
+ float index2;      /**< Second Miller index (k) */
+ float f_val1;      /**< Can be used for length in k space */
+ float f_val2;      /**< Can be used for intensity */
+ int i_val1;        /**< Arbitrary integer value 1 */
+ int i_val2;        /**< Arbitrary integer value 2 */
 };
 
+/**
+ * @brief Complete I-V curve data for a single beam.
+ *
+ * Contains both theoretical and experimental I-V data,
+ * along with metadata and computed R-factors.
+ */
 struct rfivcur 
 {
- int     group_id;           /* assignment to a certain group of 
-                                curves e.g. integral/superstructure */
- float   eng_0;              /* energy of beam appearance (1.1) */
- struct rfspot  spot_id;     /* one labeling set of spot indices */
+ int     group_id;           /**< Assignment to a curve group 
+                                  (integral/superstructure) */
+ float   eng_0;              /**< Energy of beam appearance (eV) */
+ struct rfspot  spot_id;     /**< Spot indices identifying this beam */
 
- struct rftlist *the_list;   /* theo. IV curve */
- int     the_leng;           /* number of data pairs in IV list */
- int     the_ngeo;           /* number of different theoretical IV curves */
- int     the_equidist;       /* indicates equidistant energies */
- int     the_sort;           /* indicates sorted energies */
- int     the_smooth;         /* indicates that smoothing has been done */
- float   the_first_eng;      /* first energy in theo. list */
- float   the_last_eng;       /* last energy in theo. list */
- float   *pthe_max_int;      /* max. intensity value in list */
+ struct rftlist *the_list;   /**< Theoretical I-V curve data */
+ int     the_leng;           /**< Number of data pairs in theoretical list */
+ int     the_ngeo;           /**< Number of different theoretical geometries */
+ int     the_equidist;       /**< Flag: theoretical energies equidistant */
+ int     the_sort;           /**< Flag: theoretical energies sorted */
+ int     the_smooth;         /**< Flag: smoothing has been applied */
+ float   the_first_eng;      /**< First energy in theoretical list (eV) */
+ float   the_last_eng;       /**< Last energy in theoretical list (eV) */
+ float   *pthe_max_int;      /**< Maximum intensity per geometry */
 
- struct rfelist *exp_list;   /* expt. IV curve */
- int     exp_leng;           /* number of data pairs in IV list */
- int     exp_equidist;       /* indicates equidistant energies */
- int     exp_sort;           /* indicates sorted energies */
- int     exp_smooth;         /* indicates that smoothing has been done */
- float   exp_first_eng;      /* first energy in expt. list */
- float   exp_last_eng;       /* last energy in expt. list */
- float   exp_max_int;        /* max. intensity value in list */
+ struct rfelist *exp_list;   /**< Experimental I-V curve data */
+ int     exp_leng;           /**< Number of data pairs in experimental list */
+ int     exp_equidist;       /**< Flag: experimental energies equidistant */
+ int     exp_sort;           /**< Flag: experimental energies sorted */
+ int     exp_smooth;         /**< Flag: smoothing has been applied */
+ float   exp_first_eng;      /**< First energy in experimental list (eV) */
+ float   exp_last_eng;       /**< Last energy in experimental list (eV) */
+ float   exp_max_int;        /**< Maximum intensity in experimental curve */
 
- float   overlap;            /* Energy range */
- struct rfrfac  rfac;        /* R-factors */
+ float   overlap;            /**< Overlapping energy range (eV) */
+ struct rfrfac  rfac;        /**< Computed R-factors for this beam */
 };
 
+/**
+ * @brief Command-line arguments for R-factor program.
+ */
 struct rfargs 
 {
- char  *ctrfile;             /* input control file */
- char  *thefile;             /* input theory file */
- int   *p_geo;               /* list of trial geometries to test */
- float *p_shift;             /* shift of energy axes */
- struct rfrswitch r_switch;  /* calculate an r-factor or not */
- int   all_groups;           /* flag: print R-factors of all group ID's */
- char  *outfile;             /* file for output */
- float vi;                   /* imaginary part of optical potential */
- float ignore_max;           /* ignore features larger than ignore_max
-                                in Rg */
+ char  *ctrfile;             /**< Input control file path */
+ char  *thefile;             /**< Input theory file path */
+ int   *p_geo;               /**< List of trial geometries to test */
+ float *p_shift;             /**< Energy axis shift values (eV) */
+ struct rfrswitch r_switch;  /**< Which R-factors to calculate */
+ int   all_groups;           /**< Flag: print R-factors for all group IDs */
+ char  *outfile;             /**< Output file path */
+ float vi;                   /**< Imaginary part of optical potential (eV) */
+ float ignore_max;           /**< Ignore features larger than this in Rg */
 };
 
+/**
+ * @brief Single R-factor result with geometry/shift info.
+ */
 struct rfpar
 {
- float rf;
- int geo;
- int shift;
+ float rf;                   /**< R-factor value */
+ int geo;                    /**< Geometry index */
+ int shift;                  /**< Energy shift index */
 };
 
+/**
+ * @brief Minimum R-factor values across all geometries/shifts.
+ */
 struct rfmin
 {
- int group_id;
- struct rfpar r_1;
- struct rfpar r_2;
- struct rfpar r_b1;
- struct rfpar r_b2;
- struct rfpar r_g;
- struct rfpar r_p;
+ int group_id;               /**< Group identifier */
+ struct rfpar r_1;           /**< Best R1 value */
+ struct rfpar r_2;           /**< Best R2 value */
+ struct rfpar r_b1;          /**< Best Rb1 value */
+ struct rfpar r_b2;          /**< Best Rb2 value */
+ struct rfpar r_g;           /**< Best Rg value */
+ struct rfpar r_p;           /**< Best Rp value */
 };
+
+/** @} */ /* end of rfac_types group */
+
+/**
+ * @defgroup rfac_constants R-Factor Constants
+ * @ingroup rfac_core
+ * @brief Physical constants and tolerance values.
+ * @{
+ */
 
 /*********************************************************************
  general definitions / constants
 *********************************************************************/
 
-#define M2_H      0.2631894506957162   /* 2*m/h       [eV^-1   A^-2] */
-#define SQRT_M2_H 0.5130199320647456   /* sqrt(2*m/h) [eV^-0.5 A^-1] */
+#define M2_H      0.2631894506957162   /**< 2*m/h [eV^-1 A^-2] */
+#define SQRT_M2_H 0.5130199320647456   /**< sqrt(2*m/h) [eV^-0.5 A^-1] */
 
 /*********************************************************************
  special definitions
 *********************************************************************/
 
-#define N_RFACTORS     7       /* Number of possible R-factors      */
+#define N_RFACTORS     7       /**< Number of possible R-factors */
 
-#define ENG_TOLERANCE  0.1     /* accuracy in comparing energies    */
-#define IND_TOLERANCE  0.02    /* accuracy in comparing indices     */
-#define ZERO_TOLERANCE 1.e-10  /* intensities smaller than this value
-                                  are considered to be zero         */
+#define ENG_TOLERANCE  0.1     /**< Accuracy in comparing energies (eV) */
+#define IND_TOLERANCE  0.02    /**< Accuracy in comparing indices */
+#define ZERO_TOLERANCE 1.e-10  /**< Intensities below this are zero */
 
-#define I_FAIL       -1        /* integer return value if failed    */
-#define F_FAIL       -1.       /* float return value if failed      */
+#define I_FAIL       -1        /**< Integer return value if failed */
+#define F_FAIL       -1.       /**< Float return value if failed */
 
-#define SM_LORENTZ    1        /* flag for Lorentzian smooth        */
-#define ALL_CURVES   NULL      /* flag for rf_cmpr: use all IV curves
-                                  for R-factor calculation          */
-#define DEFAULT_GROUP_ID  1    /* default group ID                  */
-#define AVERAGE_GROUP_ID -1    /* group ID for average over all 
-                                  curves                            */
+#define SM_LORENTZ    1        /**< Flag for Lorentzian smoothing */
+#define ALL_CURVES   NULL      /**< Flag for rf_cmpr: use all I-V curves */
+#define DEFAULT_GROUP_ID  1    /**< Default group ID */
+#define AVERAGE_GROUP_ID -1    /**< Group ID for average over all curves */
 
 /*
  Version 1.1
 */
 
-#define E_AXIS  0    /* use an I(E) curve for R factor calculations */
-#define K_AXIS  1    /* use an I(k) curve for R factor calculations */
+#define E_AXIS  0    /**< Use I(E) curve for R-factor calculations */
+#define K_AXIS  1    /**< Use I(k) curve for R-factor calculations */
 
-#define RG_IGNORE_MAX  400.    /* Ignore Features larger than 100eV (defines
-				  the lower limit in Fourier space,
-				  when calculating Rg-Factor */
+#define RG_IGNORE_MAX  400.    /**< Ignore features larger than 400eV
+                                    (lower limit in Fourier space for Rg) */
+
+/** @} */ /* end of rfac_constants group */
 
 /*********************************************************************
  End of include file

@@ -12,8 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -34,6 +34,15 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx.ext.graphviz',
+    # API documentation from Doxygen
+    'breathe',
+    'exhale',
+    # Scientific documentation
+    'sphinxcontrib.bibtex',
+    'sphinxcontrib.mermaid',
+    # Usability
+    'sphinx_copybutton',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -75,7 +84,7 @@ release = '0.1.0-dev'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', 'api/generated']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -100,6 +109,58 @@ pygments_style = 'sphinx'
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
+
+
+# -- Breathe Configuration ------------------------------------------------
+# Integration with Doxygen-generated XML documentation
+
+breathe_projects = {
+    "CLEED": "_build/doxygen/xml"
+}
+breathe_default_project = "CLEED"
+
+# Show function parameters in API docs
+breathe_default_members = ('members', 'undoc-members')
+
+
+# -- Exhale Configuration -------------------------------------------------
+# Auto-generate API documentation structure from Doxygen XML
+
+exhale_args = {
+    # Required arguments
+    "containmentFolder": "./api/generated",
+    "rootFileName": "library_root.rst",
+    "rootFileTitle": "C API Reference",
+    "doxygenStripFromPath": "../src",
+    # Optional arguments for better organization
+    "createTreeView": True,
+    "exhaleExecutesDoxygen": False,  # We run Doxygen separately
+    "exhaleDoxygenStdin": "",
+    # File generation control
+    "fullToctreeMaxDepth": 2,
+    "listingExclude": [r".*_test\..*"],
+}
+
+
+# -- BibTeX Configuration -------------------------------------------------
+# Scientific references and citations
+
+bibtex_bibfiles = ['references.bib']
+bibtex_default_style = 'unsrt'
+bibtex_reference_style = 'author_year'
+
+
+# -- Mermaid Configuration ------------------------------------------------
+# Diagrams and flowcharts
+
+mermaid_version = "10.6.1"
+mermaid_init_js = "mermaid.initialize({startOnLoad:true, theme:'neutral'});"
+
+
+# -- Graphviz Configuration -----------------------------------------------
+# For call graphs and other diagrams
+
+graphviz_output_format = 'svg'
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -340,3 +401,20 @@ epub_copyright = u'2014, Georg Held, Liam Deacon & collaborators'
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
 }
+
+
+# -- Suppress warnings for missing Doxygen XML ----------------------------
+# This allows building docs even when Doxygen hasn't been run
+
+def setup(app):
+    """Suppress warnings when Doxygen XML is not available."""
+    import os
+    doxygen_xml_path = os.path.join(os.path.dirname(__file__), '_build/doxygen/xml')
+    if not os.path.exists(doxygen_xml_path):
+        # Create a placeholder to prevent Breathe errors
+        os.makedirs(doxygen_xml_path, exist_ok=True)
+        # Create minimal index.xml if it doesn't exist
+        index_xml = os.path.join(doxygen_xml_path, 'index.xml')
+        if not os.path.exists(index_xml):
+            with open(index_xml, 'w') as f:
+                f.write('<?xml version="1.0" encoding="UTF-8"?>\n<doxygenindex></doxygenindex>\n')
