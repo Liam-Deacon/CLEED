@@ -1,0 +1,79 @@
+# Homebrew Formula for CLEED
+# This formula is intended to be hosted in a separate tap repository:
+# https://github.com/Liam-Deacon/homebrew-tap
+#
+# Users install via:
+#   brew tap Liam-Deacon/tap
+#   brew install cleed
+#
+# Or directly:
+#   brew install Liam-Deacon/tap/cleed
+
+class Cleed < Formula
+  desc "Computational Low Energy Electron Diffraction - automated surface structure determination"
+  homepage "https://github.com/Liam-Deacon/CLEED"
+  license "GPL-2.0-or-later"
+
+  # Version and source URL are updated automatically by release workflow
+  # __VERSION__ and __SHA256__ are placeholders replaced during release
+  url "https://github.com/Liam-Deacon/CLEED/archive/refs/tags/v__VERSION__.tar.gz"
+  sha256 "__SHA256__"
+  version "__VERSION__"
+
+  # Bottles (pre-built binaries) - populated by the CI after build
+  # bottle do
+  #   sha256 cellar: :any, arm64_sonoma: "__ARM64_SHA256__"
+  #   sha256 cellar: :any, sonoma: "__X86_64_SHA256__"
+  # end
+
+  depends_on "cmake" => :build
+  depends_on "ninja" => :build
+  depends_on "libtiff"
+  depends_on "libpng"
+
+  # Optional dependencies
+  # depends_on "qt@5" => :optional  # For GUI components
+  # depends_on "gsl" => :optional   # For GSL integration
+
+  def install
+    args = %W[
+      -DCMAKE_BUILD_TYPE=Release
+      -DWITH_QT=OFF
+      -DWITH_OPENCL=OFF
+      -DWITH_PHASESHIFTS=OFF
+      -DINSTALL_DOC=OFF
+      -DBUILD_TESTING=OFF
+      -DCMAKE_INSTALL_PREFIX=#{prefix}
+    ]
+
+    system "cmake", "-S", ".", "-B", "build", "-G", "Ninja", *args
+    system "cmake", "--build", "build", "--parallel"
+    system "cmake", "--install", "build"
+  end
+
+  def caveats
+    <<~EOS
+      CLEED executables have been installed to:
+        #{opt_bin}
+
+      Available programs:
+        - cleed_nsym: Non-symmetrised LEED calculation
+        - cleed_sym: Symmetrised LEED calculation
+        - crfac: R-factor calculation
+        - csearch: Structure optimization search
+        - latt: Lattice generation
+        - ftsmooth: Fourier smoothing
+
+      For documentation, see:
+        https://liam-deacon.github.io/CLEED/
+
+      Example files are installed to:
+        #{share}/cleed/examples
+    EOS
+  end
+
+  test do
+    # Basic smoke test - check that main executable runs
+    assert_match "cleed", shell_output("#{bin}/cleed_nsym -h 2>&1", 0)
+  end
+end
