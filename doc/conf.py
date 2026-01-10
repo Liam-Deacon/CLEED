@@ -12,8 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -34,7 +34,22 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx.ext.graphviz',
+    'sphinx.ext.todo',
+    # API documentation from Doxygen
+    'breathe',
+    # NOTE: exhale removed due to extremely slow builds (40+ min) and
+    # compatibility issues with C codebases. Use Breathe directives directly.
+    # Scientific documentation
+    'sphinxcontrib.bibtex',
+    'sphinxcontrib.mermaid',
+    # Usability
+    'sphinx_copybutton',
 ]
+
+# -- Todo Extension Configuration ------------------------------------------
+# Show TODOs in output (useful for tracking documentation work)
+todo_include_todos = False  # Set to True to show TODO items in output
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -100,6 +115,56 @@ pygments_style = 'sphinx'
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
+
+
+# -- Breathe Configuration ------------------------------------------------
+# Integration with Doxygen-generated XML documentation
+
+breathe_projects = {
+    "CLEED": "_build/doxygen/xml"
+}
+breathe_default_project = "CLEED"
+
+# Show function parameters in API docs
+breathe_default_members = ('members', 'undoc-members')
+
+
+# -- BibTeX Configuration -------------------------------------------------
+# Scientific references and citations
+
+bibtex_bibfiles = ['references.bib']
+bibtex_default_style = 'unsrt'
+bibtex_reference_style = 'label'  # Use citation keys as labels to avoid duplicates
+
+
+# -- Mermaid Configuration ------------------------------------------------
+# Diagrams and flowcharts
+
+mermaid_version = "10.6.1"
+mermaid_init_js = "mermaid.initialize({startOnLoad:true, theme:'neutral'});"
+
+
+# -- Graphviz Configuration -----------------------------------------------
+# For call graphs and other diagrams
+
+graphviz_output_format = 'svg'
+
+
+# -- Suppress Warnings Configuration --------------------------------------
+# Suppress specific warnings that are expected and not actionable
+
+suppress_warnings = [
+    # Duplicate C++ declarations from Breathe (C types appearing in C++ domain)
+    'duplicate_declaration.cpp',
+    # Unreferenced footnotes in manual (OCR transcription artifacts)
+    'ref.footnote',
+    # Duplicate bibtex labels (same author/year in different contexts)
+    'bibtex.duplicate_label',
+    # Undefined reference warnings from Breathe/Doxygen (external symbols, structs)
+    'ref.ref',
+    # Unknown documents (manual chapters that don't exist yet)
+    'ref.doc',
+]
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -340,3 +405,86 @@ epub_copyright = u'2014, Georg Held, Liam Deacon & collaborators'
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
 }
+
+
+# -- Nitpick Configuration ------------------------------------------------
+# Ignore warnings about missing references for C standard library types
+# and project-specific macros that Doxygen doesn't document
+
+nitpick_ignore = [
+    # C standard library types
+    ("cpp:identifier", "size_t"),
+    ("cpp:identifier", "uint64_t"),
+    ("cpp:identifier", "uint32_t"),
+    ("cpp:identifier", "int64_t"),
+    ("cpp:identifier", "int32_t"),
+    ("cpp:identifier", "FILE"),
+    ("cpp:identifier", "va_list"),
+    ("cpp:identifier", "u_short"),
+    ("cpp:identifier", "FILETIME"),
+    # Project-specific types (documented in different headers/as typedefs)
+    ("cpp:identifier", "lattice_t"),
+    ("cpp:identifier", "atom_t"),
+    ("cpp:identifier", "coord_t"),
+    ("cpp:identifier", "miller_hkl_t"),
+    ("cpp:identifier", "real"),
+    ("cpp:identifier", "sr_optimizer_run_fn"),
+    ("cpp:identifier", "sratom_str"),
+    ("cpp:identifier", "search_str"),
+    ("cpp:identifier", "basis_vector_t"),
+    ("cpp:identifier", "matrix_2x2_t"),
+    ("cpp:identifier", "patt_color_rgb_t"),
+    # Project macros (defined in headers)
+    ("cpp:identifier", "STRSZ"),
+    ("cpp:identifier", "STRSIZE"),
+    ("cpp:identifier", "MAX_INPUT_FILES"),
+    ("cpp:identifier", "PATH_MAX"),
+    ("cpp:identifier", "NUM_COLORS"),
+    ("cpp:identifier", "NUM_GRAYS"),
+    ("cpp:identifier", "NUM_SUBS"),
+    ("cpp:identifier", "INP_MAX"),
+    ("cpp:identifier", "VAR_MAX"),
+    ("cpp:identifier", "VFF_DEP_IEEEORDER"),
+    ("cpp:identifier", "VFF_DEP_NSORDER"),
+    ("cpp:identifier", "VFF_DEP_DECORDER"),
+]
+
+# Use regex patterns for common patterns (catches more variations)
+nitpick_ignore_regex = [
+    # Ignore all doxygen group/file references (often not fully resolved)
+    (r"ref\.ref", r"group__.*"),
+    (r"ref\.ref", r".*_8[ch].*"),
+    (r"ref\.ref", r"lattice_8h.*"),
+    # Ignore Doxygen struct/type references
+    (r"ref\.ref", r"struct.*"),
+    # Ignore document references to manual chapters not yet created
+    (r"ref\.doc", r"ch\d+.*"),
+    (r"ref\.doc", r"\.\./part-\d+/ch\d+.*"),
+]
+
+
+# -- Suppress warnings for missing Doxygen XML ----------------------------
+# This allows building docs even when Doxygen hasn't been run
+
+def setup(app):
+    """Emit warning when Doxygen XML is not available."""
+    import os
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    doxygen_xml_path = os.path.join(os.path.dirname(__file__), '_build/doxygen/xml')
+    index_xml = os.path.join(doxygen_xml_path, 'index.xml')
+    
+    if not os.path.exists(index_xml):
+        logger.warning(
+            "Doxygen XML not found at '%s'. "
+            "API documentation will be incomplete. "
+            "Run 'doxygen doxyfile.conf' in the doc/ directory to generate it.",
+            doxygen_xml_path
+        )
+        # Create minimal placeholder to prevent Breathe from failing completely
+        os.makedirs(doxygen_xml_path, exist_ok=True)
+        with open(index_xml, 'w') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            f.write('<!-- Placeholder: Doxygen XML not generated. Run doxygen first. -->\n')
+            f.write('<doxygenindex></doxygenindex>\n')

@@ -24,15 +24,58 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: pip
+          cache-dependency-path: doc/requirements.txt
 
-      - name: Install dependencies
+      - name: Cache apt packages
+        uses: actions/cache@v4
+        id: apt-cache
+        with:
+          path: |
+            /var/cache/apt/archives
+          key: apt-${{ runner.os }}-doxygen-graphviz-v1
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r doc/requirements.txt
 
-      - name: Build docs
+      - name: Cache Doxygen XML output
+        uses: actions/cache@v4
+        id: doxygen-cache
+        with:
+          path: doc/_build/doxygen/xml
+          key: doxygen-${{ runner.os }}-${{ hashFiles('src/**/*.h', 'src/**/*.c', 'doc/doxyfile.conf') }}
+          restore-keys: |
+            doxygen-${{ runner.os }}-
+
+      - name: Generate API documentation with Doxygen
+        if: steps.doxygen-cache.outputs.cache-hit != 'true'
         run: |
-          make -C doc html SPHINXOPTS="--keep-going -n -W"
+          cd doc
+          mkdir -p _build/doxygen
+          doxygen doxyfile.conf
+
+      - name: Cache Sphinx build output
+        uses: actions/cache@v4
+        id: sphinx-cache
+        with:
+          path: |
+            doc/_build/html
+            doc/_build/doctrees
+            doc/api/generated
+          key: sphinx-${{ runner.os }}-${{ hashFiles('doc/**/*.rst', 'doc/conf.py', 'src/**/*.h', 'src/**/*.c') }}
+          restore-keys: |
+            sphinx-${{ runner.os }}-
+
+      - name: Build docs with Sphinx
+        run: |
+          make -C doc html SPHINXOPTS="--keep-going -n -W -j auto"
           touch doc/_build/html/.nojekyll
 
       - name: Upload Pages artifact

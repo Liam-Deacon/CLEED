@@ -45,8 +45,8 @@ extern "C" {
 #define LATTICE_ALLOC_FAILURE 1
 #define LATTICE_STRING_ALLOC_FAILURE 2
 
-/*! \enum latt_type_t
- *  \brief lattice types
+/**
+ * @brief Lattice types.
  */
 typedef enum {
   LAT_FCC=1,
@@ -56,10 +56,10 @@ typedef enum {
   LAT_UNKNOWN
 } latt_type_t;
 
-/*! \typedef lattice_t
- *  \brief lattice struct.
+/**
+ * @brief Lattice struct.
  *
- * Contains all the information for generating a lattice of different 
+ * Contains all the information for generating a lattice of different
  * atoms.
  */
 typedef struct {

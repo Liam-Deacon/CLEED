@@ -32,6 +32,13 @@ extern "C" {
  *
  * These interfaces are used by the SEARCH driver routines (`sr_sa`,
  * `sr_sx`, `sr_po`, `sr_er`) and utilities.
+ *
+ * @ingroup search_core
+ */
+
+/**
+ * @addtogroup search_algos
+ * @{
  */
 
 /** @name Optimisers (derivative-free) */
@@ -226,22 +233,154 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos);
 int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
                    real *best, real *best_val, int *evals);
 
+/** @} */ /* end of search_algos group */
+
+/**
+ * @defgroup search_eval Evaluation Interface
+ * @ingroup search_core
+ * @brief R-factor evaluation and geometry checking functions.
+ * @{
+ */
+
 /* Drivers */
+
+/**
+ * @brief Simulated annealing search driver.
+ * @param ndim Number of search dimensions.
+ * @param dpos Initial displacement for simplex setup.
+ * @param bak_file Backup file path for checkpointing.
+ * @param log_file Log file path for progress output.
+ * @see sr_amebsa
+ * @note Based on Kirkpatrick et al. (1983).
+ */
 void sr_sa(int ndim, real dpos, const char *bak_file, const char *log_file);
+
+/**
+ * @brief Downhill simplex (Nelder-Mead) search driver.
+ * @param ndim Number of search dimensions.
+ * @param dpos Initial displacement for simplex setup.
+ * @param bak_file Backup file path for checkpointing.
+ * @param log_file Log file path for progress output.
+ * @see sr_amoeba
+ * @note Based on Nelder & Mead (1965).
+ */
 void sr_sx(int ndim, real dpos, const char *bak_file, const char *log_file);
+
+/**
+ * @brief Powell's direction-set search driver.
+ * @param ndim Number of search dimensions.
+ * @param bak_file Backup file path for checkpointing.
+ * @param log_file Log file path for progress output.
+ * @see sr_powell
+ * @note Based on Powell (1964).
+ */
 void sr_po(int ndim, const char *bak_file, const char *log_file);
+
+/**
+ * @brief Particle swarm optimization search driver.
+ * @param ndim Number of search dimensions.
+ * @param dpos Initial displacement for particle velocity limits.
+ * @param bak_file Backup file path for checkpointing.
+ * @param log_file Log file path for progress output.
+ * @see sr_pso_optimize
+ * @note Based on Kennedy & Eberhart (1995).
+ */
 void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file);
+
+/**
+ * @brief Differential evolution search driver.
+ * @param ndim Number of search dimensions.
+ * @param dpos Initial displacement for population span.
+ * @param bak_file Backup file path for checkpointing.
+ * @param log_file Log file path for progress output.
+ * @see sr_de_optimize
+ * @note Based on Storn & Price (1997).
+ */
 void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file);
+
+/**
+ * @brief Error-estimation search driver.
+ * @param ndim Number of search dimensions.
+ * @param dpos Initial displacement for error analysis.
+ * @param bak_file Backup file path for checkpointing.
+ * @param log_file Log file path for progress output.
+ */
 void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file);
 
+/** @} */ /* end of search_eval group */
+
+/**
+ * @defgroup search_io File I/O and Geometry
+ * @ingroup search_core
+ * @brief Input/output and geometry validation functions.
+ * @{
+ */
+
 /* file input|output */
+
+/**
+ * @brief Check geometry constraints.
+ * @param par Parameter vector (1-based indexing).
+ * @return R-factor or penalty value.
+ */
 real sr_ckgeo(const real *);
+
+/**
+ * @brief Check rotational symmetry constraints.
+ * @param atoms Atom array.
+ * @param search Search configuration.
+ * @return 0 on success, non-zero on violation.
+ */
 int  sr_ckrot(struct sratom_str *, struct search_str *);
+
+/**
+ * @brief Evaluate R-factor for current geometry.
+ *
+ * This is the objective function called by all optimizers.
+ * It writes the geometry, runs LEED, computes the R-factor.
+ *
+ * @param par Parameter vector (1-based indexing).
+ * @return R-factor value (lower is better).
+ * @see Pendry1980
+ */
 real sr_evalrf(const real *);
+
+/**
+ * @brief Write input file for LEED calculation.
+ * @param par Parameter vector.
+ * @param i_call Calculation iteration count.
+ * @param filename Output filename.
+ * @return 0 on success.
+ */
 int  sr_mkinp(const real *, int, char *);
+
+/**
+ * @brief Write input file for LEED calculation with mirror symmetry.
+ * @param par Parameter vector.
+ * @param i_call Calculation iteration count.
+ * @param filename Output filename.
+ * @return 0 on success.
+ */
 int  sr_mkinp_mir(const real *, int, char *);
+
+/**
+ * @brief Read search input file.
+ * @param inp_file Input filename.
+ * @return 0 on success.
+ */
 int  sr_rdinp(const char *);
+
+/**
+ * @brief Read vertex (simplex) from file.
+ * @param ver_file Input filename.
+ * @param y Function values array.
+ * @param p Vertex matrix.
+ * @param ndim Number of dimensions.
+ * @return Number of vertices read.
+ */
 int  sr_rdver(const char *, real *, real **, int);
+
+/** @} */ /* end of search_io group */
 
 /* debye temperature */
 real leed_inp_debye_temp(real , real , real );

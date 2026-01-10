@@ -25,6 +25,11 @@ extern "C" {
  * - avoid `rand()`/`drand48()` variability across platforms/toolchains
  * - make optimisation behaviour reproducible for regression testing
  * - keep SEARCH free of external RNG dependencies
+ *
+ * @defgroup search_rng Random Number Generation
+ * @ingroup search_core
+ * @brief Deterministic pseudo-random number generator for reproducible searches.
+ * @{
  */
 
 /**
@@ -69,6 +74,8 @@ void sr_rng_seed(sr_rng *rng, uint64_t seed);
  * @return Uniform random value in [0, 1).
  */
 double sr_rng_uniform01(sr_rng *rng);
+
+/** @} */ /* end of search_rng group */
 
 #ifdef __cplusplus
 }

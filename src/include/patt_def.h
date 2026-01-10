@@ -26,8 +26,8 @@ extern "C" {
 #endif
 
 /* formats */
-/*! \enum patt_format_t
- *  \brief Output format of generated LEED pattern.
+/**
+ * @brief Output format of generated LEED pattern.
  */
 typedef enum {
   PATT_PS_OLD,
@@ -38,8 +38,8 @@ typedef enum {
   PATT_UNKNOWN_FORMAT
 } patt_format_t;
 
-/*! \enum patt_color_scheme_t
- *  \brief Color scheme for LEED pattern.
+/**
+ * @brief Color scheme for LEED pattern.
  */
 typedef enum {
   PATT_BLACK_SCHEME,

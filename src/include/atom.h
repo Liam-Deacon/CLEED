@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-/*! \typedef atom_t
- *  \brief basic atom struct.
+/**
+ * @brief Basic atom struct.
  */
 typedef struct {
   char *element;        /*!< Elemental symbol. */

@@ -1,26 +1,28 @@
-/*********************************************************************
-GH/27.09.00
-
-include file for 
- - additional data structures and type definitions
- - constant values
-in the LEED programs
-
-Changes:
-GH/20.09.95 
-ST/16.07.97
-GH/02.09.97 - change beam_str and cryst_str (add. elements),
-              define S0, SX, SY, SXY.
-WB/07.08.98 - add k_rsym (symmetry related beams) to beam_str.
-WB/27.08.98 - include symmetry flags in crystal struct
-GH/03.05.00 - include t_type in atom_str.
-            - include t_type in phs_str.
-LD/28.07.14 - added struct typedefs and doxygen compatible comments
-
-version SYM 1.1 + TEMP 0.5
-GH/27.09.00 - same include file for version SYM 1.1 + TEMP 0.5
-
-*********************************************************************/
+/**
+ * @file leed_def.h
+ * @brief Type definitions and constants for LEED calculations.
+ *
+ * This file provides:
+ * - Physical constants and conversion factors
+ * - Tolerance values and program parameters
+ * - Core data structures for atoms, layers, crystals, beams
+ *
+ * @ingroup leed_core
+ *
+ * Changes:
+ * GH/20.09.95 
+ * ST/16.07.97
+ * GH/02.09.97 - change beam_str and cryst_str (add. elements),
+ *               define S0, SX, SY, SXY.
+ * WB/07.08.98 - add k_rsym (symmetry related beams) to beam_str.
+ * WB/27.08.98 - include symmetry flags in crystal struct
+ * GH/03.05.00 - include t_type in atom_str.
+ *             - include t_type in phs_str.
+ * LD/28.07.14 - added struct typedefs and doxygen compatible comments
+ *
+ * version SYM 1.1 + TEMP 0.5
+ * GH/27.09.00 - same include file for version SYM 1.1 + TEMP 0.5
+ */
 
 #ifndef LEED_DEF_H
 #define LEED_DEF_H
@@ -33,22 +35,29 @@ extern "C" {
 #include "real.h"
 #include "mat_def.h"
 
-/*********************************************************************
- Fundamental constants/conversion factors  
- (Source: CRC Handbook, 73rd Edition)
-*********************************************************************/
+/**
+ * @defgroup leed_constants Physical Constants
+ * @ingroup leed_core
+ * @brief Fundamental constants and conversion factors.
+ *
+ * Source: CRC Handbook, 73rd Edition
+ * @{
+ */
 
-#define HART  27.2113962       /* Hartree in eV */
-#define BOHR  0.529177249      /* Bohr radius in Angstroms */
-#define MEL_U 5.48579903e-4    /* electron mass in amu (atomic mass units) */
-#define U_MEL 1822.88850636    /* 1 amu in multiples of the electron mass */
-#define KB    3.16682941e-6    /* Boltzmann constant in Hartree/K */
+#define HART  27.2113962       /**< Hartree in eV */
+#define BOHR  0.529177249      /**< Bohr radius in Angstroms */
+#define MEL_U 5.48579903e-4    /**< Electron mass in amu (atomic mass units) */
+#define U_MEL 1822.88850636    /**< 1 amu in multiples of the electron mass */
+#define KB    3.16682941e-6    /**< Boltzmann constant in Hartree/K */
 
-/*********************************************************************
- Program parameters
-  - tolerance
-  - threshold values etc.
-*********************************************************************/
+/** @} */ /* end of leed_constants group */
+
+/**
+ * @defgroup leed_tolerances Tolerances and Thresholds
+ * @ingroup leed_core
+ * @brief Program parameters for convergence and precision.
+ * @{
+ */
 
 /* Defaults */
 
@@ -88,6 +97,15 @@ extern "C" {
 #define LD_TOLERANCE   1.e-4   /* convergence criterion for layer doubling */
 #define WAVE_TOLERANCE 1.e-4   /* tolerance for wave amplitudes */
 
+/** @} */ /* end of leed_tolerances group */
+
+/**
+ * @defgroup leed_symmetry Symmetry Flags
+ * @ingroup leed_core
+ * @brief Flags for mirror planes and symmetry operations.
+ * @{
+ */
+
 /* Flags for mirror planes etc. */
 
 #define BULK 0
@@ -119,7 +137,16 @@ extern "C" {
 #define SQ_2MIR    421
 #define SQ_4MIR    441
 
+/** @} */ /* end of leed_symmetry group */
+
 /* current version No. now in file leed_ver.h */
+
+/**
+ * @defgroup leed_crystal Crystal Structure
+ * @ingroup leed_core
+ * @brief Data structures for atoms, layers, and crystal parameters.
+ * @{
+ */
 
 /*********************************************************************
  structures and types 
@@ -128,8 +155,9 @@ extern "C" {
 /*********************************************************************
   struct atom_str contains all properties of a single atom
 *********************************************************************/
-/*! \struct leed_atom_t
- *  \brief contains all properties of a single atom */
+/**
+ * @brief Contains all properties of a single atom.
+ */
 typedef struct atom_str
 {
  int  layer;      /*!< number of layer where the atom belongs to */
@@ -142,8 +170,9 @@ typedef struct atom_str
 /*********************************************************************
   struct layer_str contains all properties of a single layer
 *********************************************************************/
-/*! \struct leed_layer_t
- *  \brief contains all properties of a single layer. */
+/**
+ * @brief Contains all properties of a single layer.
+ */
 typedef struct layer_str
 {
  int  no_of_layer;       /*!< number of layer in array */
@@ -171,8 +200,9 @@ typedef struct layer_str
 /*********************************************************************
   struct cryst_str contains all crystal specific program parameters
 *********************************************************************/
-/*! \struct leed_cryst_t
- *  \brief contains all crystal specific program parameters. */
+/**
+ * @brief Contains all crystal specific program parameters.
+ */
 typedef struct cryst_str
 {
 
@@ -238,11 +268,21 @@ typedef struct cryst_str
  char **comments; /*!< comments */
 } leed_cryst_t;
 
+/** @} */ /* end of leed_crystal group */
+
+/**
+ * @defgroup leed_scattering Scattering Theory
+ * @ingroup leed_core
+ * @brief Phase shifts and scattering matrices.
+ * @{
+ */
+
 /*********************************************************************
   struct phs_str contains all parameters concerning the phase shifts
 *********************************************************************/
-/*! \struct leed_phs_t
- *  \brief contains all crystal specific program parameters. */
+/**
+ * @brief Contains all crystal specific program parameters.
+ */
 typedef struct phs_str
 {
  int  lmax;           /*!< maximum angular momentum quantum number */
@@ -257,11 +297,21 @@ typedef struct phs_str
  char *input_file;    /*!< name of input file */
 } leed_phs_t;
 
+/** @} */ /* end of leed_scattering group */
+
+/**
+ * @defgroup leed_beams Beam Handling
+ * @ingroup leed_core
+ * @brief Reciprocal space beam structures and symmetry relations.
+ * @{
+ */
+
 /*********************************************************************
   struct beam_str contains all parameters of a specific beam in k-space.
 *********************************************************************/
-/*! \struct leed_beam_t
- *  \brief contains all parameters of a specific beam in k-space. */
+/**
+ * @brief Contains all parameters of a specific beam in k-space.
+ */
 typedef struct beam_str 
 {
  real ind_1;     /*!< h beam index in (1x1) basis A (real) */
@@ -295,14 +345,23 @@ typedef struct beam_str
  int  set;         /*!< beam set, where the beam belongs to */
 } leed_beam_t;
 
+/** @} */ /* end of leed_beams group */
+
+/**
+ * @defgroup leed_energy Energy Loop Control
+ * @ingroup leed_core
+ * @brief Structures for energy-dependent calculations.
+ * @{
+ */
+
 /*********************************************************************
   struct var_str contains all parameters that change during the energy 
   loop and the parameters controlling them.
 *********************************************************************/
-/*! \struct leed_var_t
- *  
- * contains all parameters that change during the energy 
- * loop and the parameters controlling them. */
+/**
+ * @brief Contains all parameters that change during the energy
+ *        loop and the parameters controlling them.
+ */
 typedef struct var_str 
 {
  real eng_r;    /*!< current energy in crystal (real  part) */
@@ -326,9 +385,10 @@ typedef struct var_str
 /*********************************************************************
   struct eng_str contains the parameters that control the energy loop.
 *********************************************************************/
-/*! \struct leed_energy_t
- *  \brief contains the parameters that control the energy loop. */
-typedef struct eng_str  /*!< contains all parameters that change during the 
+/**
+ * @brief Contains the parameters that control the energy loop.
+ */
+typedef struct eng_str  /**< contains all parameters that change during the 
                          *   energy loop and the parameters controlling them */
 {
  real ini;      /*!< initial energy */
@@ -338,6 +398,8 @@ typedef struct eng_str  /*!< contains all parameters that change during the
 
 /* Backwards-compatible alias used by several headers/sources. */
 typedef leed_eng_t leed_energy_t;
+
+/** @} */ /* end of leed_energy group */
 
 #endif /* LEED_DEF_H */
 

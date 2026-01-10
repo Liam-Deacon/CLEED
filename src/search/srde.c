@@ -116,18 +116,16 @@ static int sr_de_validate_pick_inputs(const sr_rng *rng, int pop, int skip,
 }
 
 /**
- * @brief Select three distinct random indices for DE mutation.
+ * @brief Select a random index for DE mutation, excluding specified indices.
  *
- * Selects indices a, b, c from [1, pop] such that none equal skip or
- * each other. This is used to form the DE/rand/1 mutant vector.
+ * Selects an index from [1, pop] that does not equal skip, exclude1, or exclude2.
  *
- * @param rng  Pointer to the random number generator state.
- * @param pop  Population size.
- * @param skip Index to exclude (typically the current target vector).
- * @param a    Output: first randomly selected index.
- * @param b    Output: second randomly selected index.
- * @param c    Output: third randomly selected index.
- * @return 0 on success, -1 on invalid parameters.
+ * @param rng      Pointer to the random number generator state.
+ * @param pop      Population size.
+ * @param skip     Index to exclude (typically the current target vector).
+ * @param exclude1 First additional index to exclude.
+ * @param exclude2 Second additional index to exclude.
+ * @return Randomly selected index not matching any excluded values.
  */
 static int sr_de_pick_index(sr_rng *rng, int pop, int skip, int exclude1,
                             int exclude2)
@@ -141,6 +139,20 @@ static int sr_de_pick_index(sr_rng *rng, int pop, int skip, int exclude1,
   return idx;
 }
 
+/**
+ * @brief Select three distinct random indices for DE mutation.
+ *
+ * Selects indices a, b, c from [1, pop] such that none equal skip or
+ * each other. This is used to form the DE/rand/1 mutant vector.
+ *
+ * @param rng  Pointer to the random number generator state.
+ * @param pop  Population size.
+ * @param skip Index to exclude (typically the current target vector).
+ * @param a    Output: first randomly selected index.
+ * @param b    Output: second randomly selected index.
+ * @param c    Output: third randomly selected index.
+ * @return 0 on success, -1 on invalid parameters.
+ */
 static int sr_de_pick_indices(sr_rng *rng, int pop, int skip,
                               int *a, int *b, int *c)
 {
@@ -188,23 +200,13 @@ static void sr_de_copy_vector(real *dest, const real *src, int ndim)
 }
 
 /**
- * @brief Initialize the DE population with random solutions.
+ * @brief Fill a vector with random values within the search span.
  *
- * Each individual is initialized with random values in [-span, +span]
- * for each dimension. The best solution found during initialization
- * is tracked.
+ * Initializes a vector with random values in [-span, +span] for each
+ * dimension using the random state from the DE state.
  *
- * @param rng      Pointer to the random number generator state.
- * @param pop      Population size.
- * @param ndim     Number of dimensions.
- * @param span     Initial search span for each dimension.
- * @param pop_vec  Population matrix (pop × ndim, 1-indexed).
- * @param scores   Objective values for each individual (1-indexed).
- * @param best     Output: best solution vector found.
- * @param best_val Output: best objective value found.
- * @param func     Objective function to minimize.
- * @param evals    In/out evaluation counter.
- * @return 0 on success, -1 on invalid parameters.
+ * @param state Pointer to the DE state containing RNG and parameters.
+ * @param dest  Output vector to fill with random values (1-indexed).
  */
 static void sr_de_fill_vector(sr_de_state *state, real *dest)
 {
@@ -256,16 +258,11 @@ static int sr_de_init_population(sr_de_state *state, real *best, real *best_val,
  * Generates a trial vector by combining the mutant vector (formed from
  * three random individuals) with the target vector using binomial crossover.
  *
- * @param rng     Pointer to the random number generator state.
- * @param pop_vec Population matrix.
- * @param target  Index of the target vector.
- * @param a       Index of first mutant base vector.
- * @param b       Index of second mutant base vector.
- * @param c       Index of third mutant base vector.
- * @param weight  Differential weight (scaling factor F).
- * @param cr      Crossover probability.
- * @param ndim    Number of dimensions.
- * @param trial   Output: trial vector.
+ * @param state  Pointer to the DE state containing population and parameters.
+ * @param target Index of the target vector.
+ * @param a      Index of first mutant base vector.
+ * @param b      Index of second mutant base vector.
+ * @param c      Index of third mutant base vector.
  */
 static void sr_de_create_trial(sr_de_state *state, int target,
                                int a, int b, int c)
@@ -594,31 +591,6 @@ void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos)
   cfg->seed = 0;
 }
 
-/**
- * @brief Run the DE/rand/1/bin optimization algorithm.
- *
- * Performs Differential Evolution optimization to minimize the given
- * objective function. The algorithm evolves a population of candidate
- * solutions using mutation, crossover, and selection operators.
- *
- * @par Algorithm Steps:
- * 1. Initialize population randomly within [-init_span, +init_span]
- * 2. For each generation:
- *    - For each target vector x_i:
- *      - Select three distinct random vectors x_a, x_b, x_c
- *      - Create mutant: v = x_a + F × (x_b - x_c)
- *      - Create trial vector using binomial crossover
- *      - If f(trial) ≤ f(x_i), replace x_i with trial
- * 3. Continue until max iterations, max evaluations, or convergence
- *
- * @param cfg      Configuration structure (NULL for defaults).
- * @param ndim     Number of dimensions.
- * @param func     Objective function to minimize (1-indexed arrays).
- * @param best     Output: best solution vector found.
- * @param best_val Output: best objective value found.
- * @param evals    Output: total number of function evaluations (may be NULL).
- * @return 0 on success, -1 on failure.
- */
 int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
                    real *best, real *best_val, int *evals)
 {
@@ -747,18 +719,6 @@ static void sr_de_build_config(sr_de_cfg *cfg, int ndim, real dpos)
   }
 }
 
-/**
- * @brief DE optimizer entry point for the CLEED search subsystem.
- *
- * This is the main driver function called by the optimizer registry.
- * It configures DE from global settings, runs the optimization, and
- * logs results to the specified log file.
- *
- * @param ndim     Number of search dimensions.
- * @param dpos     Initial displacement for parameter variations.
- * @param bak_file Backup file path (unused, for API compatibility).
- * @param log_file Log file path for recording optimization progress.
- */
 void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
 {
   (void)bak_file;
