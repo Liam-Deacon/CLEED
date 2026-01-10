@@ -75,7 +75,7 @@ jobs:
 
       - name: Build docs with Sphinx
         run: |
-          make -C doc html SPHINXOPTS="--keep-going -n -W"
+          make -C doc html SPHINXOPTS="--keep-going -n -W -j auto"
           touch doc/_build/html/.nojekyll
 
       - name: Upload Pages artifact
