@@ -400,6 +400,13 @@ nitpick_ignore = [
     ("cpp:identifier", "va_list"),
     ("cpp:identifier", "u_short"),
     ("cpp:identifier", "FILETIME"),
+    # Project-specific types (documented in different headers/as typedefs)
+    ("cpp:identifier", "lattice_t"),
+    ("cpp:identifier", "atom_t"),
+    ("cpp:identifier", "coord_t"),
+    ("cpp:identifier", "miller_hkl_t"),
+    ("cpp:identifier", "real"),
+    ("cpp:identifier", "sr_optimizer_run_fn"),
     # Project macros (defined in headers)
     ("cpp:identifier", "STRSZ"),
     ("cpp:identifier", "STRSIZE"),
@@ -413,14 +420,14 @@ nitpick_ignore = [
     ("cpp:identifier", "VFF_DEP_IEEEORDER"),
     ("cpp:identifier", "VFF_DEP_NSORDER"),
     ("cpp:identifier", "VFF_DEP_DECORDER"),
-    ("cpp:identifier", "sr_optimizer_run_fn"),
 ]
 
 # Use regex patterns for common patterns (catches more variations)
 nitpick_ignore_regex = [
-    # Ignore all doxygen group references
+    # Ignore all doxygen group/file references (often not fully resolved)
     (r"ref\.ref", r"group__.*"),
-    (r"ref\.ref", r".*_8h"),
+    (r"ref\.ref", r".*_8[ch].*"),
+    (r"ref\.ref", r"lattice_8h.*"),
     # Ignore document references to manual chapters not yet created
     (r"ref\.doc", r"ch\d+.*"),
     (r"ref\.doc", r"\.\./part-\d+/ch\d+.*"),
