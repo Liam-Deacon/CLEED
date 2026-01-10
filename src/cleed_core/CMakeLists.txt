@@ -16,7 +16,13 @@ target_include_directories(cleedCore PUBLIC ${PROJECT_SOURCE_DIR}/src/include)
 target_include_directories(cleedCoreStatic PUBLIC ${PROJECT_SOURCE_DIR}/src/include)
 
 # Link to core computation libraries.
-target_link_libraries(cleedCore PUBLIC search rfac)
+# On Windows, we use static libraries because the shared libraries (search, rfac)
+# don't export symbols properly and thus don't generate import libraries (.lib).
+if (WIN32)
+    target_link_libraries(cleedCore PUBLIC searchStatic rfacStatic)
+else()
+    target_link_libraries(cleedCore PUBLIC search rfac)
+endif()
 target_link_libraries(cleedCoreStatic PUBLIC searchStatic rfacStatic)
 
 if (WIN32)
