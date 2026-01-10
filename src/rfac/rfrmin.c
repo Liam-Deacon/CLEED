@@ -255,6 +255,7 @@ void rfac_iv_write(const char *iv_file,
  * \param n_leng Number of energies in IV data arrays.
  * \param r_min Minimum RFactor for current dataset.
  * \param shift Shift between theory and experiment IV data for current dataset.
+ * \param de Energy step size for interpolation.
  * \param total_energy_range Sum of energy ranges covered by all IV datasets.
  * \param r_type Enum for type of RFactor calculation used.
  * \param vi The imaginary part of the optical potential.
