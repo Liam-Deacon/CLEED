@@ -210,7 +210,7 @@ void rfac_ivcur_free(rfac_ivcur *ivcur)
  *
  * \param[in] ivcur Pointer to #rfac_ivcur structure to free.
  * \warning \p ivcur array must be terminated with #END_OF_GROUP_ID for
- * the \c group_id member of the final #rfac_iv_cur in the array.
+ * the \c group_id member of the final #rfac_ivcur in the array.
  */
 void rfac_ivcur_free_all(rfac_ivcur *ivcur)
 {
