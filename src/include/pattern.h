@@ -185,6 +185,7 @@ spots_t *pattern_calculate_superstructure_spots(const pattern_t *pat, size_t dom
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
 
+#ifndef CLEED_DISABLE_LEGACY_CPP
 namespace cleed {
 
 /*! \class Pattern
@@ -216,6 +217,7 @@ class Pattern {
 };
 
 } /* namespace cleed */
+#endif /* CLEED_DISABLE_LEGACY_CPP */
 
 #endif /* __cplusplus */
 

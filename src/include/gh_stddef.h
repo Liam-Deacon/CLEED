@@ -31,6 +31,7 @@ extern "C" {
 #include <math.h>
 #include <float.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /*********************************************************************
  output channels
@@ -71,6 +72,14 @@ extern "C" {
 #define CONTROL_LSUM
 #define CONTROL_MATB
 #define CONTROL_ALL
+#endif
+
+#ifndef CONTROL
+#define CONTROL 0
+#endif
+
+#ifndef CONTROL_X
+#define CONTROL_X 0
 #endif
 
 /*********************************************************************
@@ -120,6 +129,55 @@ extern "C" {
 
 #define ODD(n)    ((n)%2)
 #define M1P(n)    (((n)%2)?(-1.):(1.))
+
+/* basic logging helpers */
+#ifndef ERROR_MSG
+#define ERROR_MSG(...) fprintf(STDERR, __VA_ARGS__)
+#endif
+
+#ifndef WARNING_MSG
+#define WARNING_MSG(...) fprintf(STDWAR, __VA_ARGS__)
+#endif
+
+#ifndef CONTROL_MSG
+#ifdef CONTROL
+#define CONTROL_MSG(level, ...) fprintf(STDCTR, __VA_ARGS__)
+#else
+#define CONTROL_MSG(level, ...) (void)(level)
+#endif
+#endif
+
+#ifndef CLEED_SSCANF
+#define CLEED_SSCANF(buf, fmt, ...) sscanf((buf), (fmt), __VA_ARGS__)
+#endif
+
+/* minimal allocation helper */
+#ifndef CLEED_ALLOC_CHECK
+#define CLEED_ALLOC_CHECK(expr)                                    \
+  do                                                               \
+  {                                                                \
+    if ((expr) == NULL)                                            \
+    {                                                              \
+      ERROR_MSG("failed to allocate memory for '%s'\\n", #expr);   \
+      exit(1);                                                     \
+    }                                                              \
+  } while(0)
+#endif
+
+#ifndef CLEED_REALLOC
+#define CLEED_REALLOC(ptr, new_size)                               \
+  do                                                               \
+  {                                                                \
+    void *tmp_ptr = realloc((ptr), (new_size));                    \
+    if (tmp_ptr != NULL)                                           \
+      (ptr) = tmp_ptr;                                             \
+    else                                                           \
+    {                                                              \
+      ERROR_MSG("could not reallocate memory for '%s'\\n", #ptr);   \
+      exit(1);                                                     \
+    }                                                              \
+  } while(0)
+#endif
 
 
 #endif

@@ -111,6 +111,7 @@ double **normal_get_rotation_matrix(const coord_t *normal);
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
 
+#ifndef CLEED_DISABLE_LEGACY_CPP
 namespace cleed {
 
 class Basis {
@@ -148,6 +149,7 @@ class Basis {
 
 
 } /* namespace cleed */ 
+#endif /* CLEED_DISABLE_LEGACY_CPP */
 
 #endif /* ifdef __cplusplus */
 

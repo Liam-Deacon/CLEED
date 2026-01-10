@@ -52,6 +52,8 @@ LD/03.04.14 - Added OpenMP support for multi-threaded calculations
 
 #include <string.h>
 #include <strings.h>
+
+#include "rfac_ver.h"
 /********************************************************************/
 
 char *rf_version(char *version)
@@ -64,3 +66,8 @@ char *rf_version(char *version)
  return (version);
 }
 /********************************************************************/
+
+const char *rfac_version(void)
+{
+ return RFAC_VERSION;
+}

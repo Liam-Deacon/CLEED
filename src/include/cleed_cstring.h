@@ -1,6 +1,10 @@
 #ifndef CLEED_CSTRING_H
 #define CLEED_CSTRING_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Minimal C string declarations for translation units that historically relied
  * on implicit function declarations. This avoids newer Clang treating implicit
@@ -21,5 +25,9 @@ int strncmp(const char *s1, const char *s2, cleed_size_t n);
 char *strcpy(char *dst, const char *src);
 char *strcat(char *dst, const char *src);
 char *strrchr(const char *s, int c);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CLEED_CSTRING_H */

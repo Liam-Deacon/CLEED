@@ -25,6 +25,14 @@ extern "C" {
 #define PROG_MAINTAINER "@RFAC_MAINTAINER@" 
 #define PROG_SHORTDESC "R-Factor program"
 
+static const char RFAC[] = PROG;
+static const char RFAC_COPYRIGHT[] = PROG_COPYRIGHT;
+static const char RFAC_LICENSE[] = PROG_LICENSE;
+static const char RFAC_VERSION[] = PROG_VERSION;
+static const char RFAC_AUTHOR[] = PROG_AUTHOR;
+static const char RFAC_MAINTAINER[] = PROG_MAINTAINER;
+static const char RFAC_SHORTDESC[] = PROG_SHORTDESC;
+
 /* platform information */
 #if defined(WIN32) || defined(_WIN32) \
                    || defined(__WIN32) || defined(__WIN32__)
@@ -38,6 +46,8 @@ extern "C" {
 #else
 #define PROG_PLAT "Unix"
 #endif
+
+#define RFAC_PLAT PROG_PLAT
 
 #endif /* RFAC_VER_H */
 

@@ -10,8 +10,7 @@
 #include "lattice.h"
 #include "test_support.h"
 
-FILE *inf_stream = NULL;
-FILE *ctr_stream = NULL;
+/* inf_stream and ctr_stream are defined in latt_streams.c (latt_core) */
 
 static lattice_t *create_lattice_for_setup(int latt_type)
 {

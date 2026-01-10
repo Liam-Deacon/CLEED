@@ -49,6 +49,7 @@ void coord_printf(FILE *f, const coord_t *pos);
 #ifdef __cplusplus
 }
 
+#ifndef CLEED_DISABLE_LEGACY_CPP
 namespace cleed {
 
 class Coordinate {
@@ -83,6 +84,7 @@ class Coordinate {
 };
 
 } /* namespace cleed */
+#endif /* CLEED_DISABLE_LEGACY_CPP */
 #endif
 
 #endif /* COORD_H */

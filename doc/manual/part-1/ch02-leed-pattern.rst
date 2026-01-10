@@ -61,7 +61,7 @@ This equation also limits the set of observable LEED spots by the condition that
  to the surface normal, :math:`\theta = \arctan(k_{\parallel}/k_\perp)`, decreases for each
  spot except for the specular spot (0,0) whose position does not change.
 
-.. TODO:: Figure (PDF p13)
+.. todo:: Figure (PDF p13)
    shows examples of common surface unit cells and the corresponding LEED patterns.
 
 In many cases (adsorption, reconstruction) the periodicity at the surface is larger than
@@ -120,7 +120,7 @@ Another, less general way is the notation according to Wood [10] where the lengt
  applicable in all cases but it is more frequently used than the matrix notation because
  it is shorter.
 
-.. TODO:: Figure (PDF p14)
+.. todo:: Figure (PDF p14)
    shows examples of common superstructures with the corresponding matrix and Wood notations.
 
 2.2 Spot Profile Analysis
