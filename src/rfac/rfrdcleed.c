@@ -59,7 +59,7 @@ static const size_t LENGTH_OF_NUMBER = 15 ;  /* characters per intensity in inpu
  * \param buffer file buffer containing theoretical input.
  *
  * \param index_list command line for interpreter rfac_intindl() . Syntax:
- * (\<index1\>,\<index2\>) {*\<scale\> +/- (\<index1\>,\<index2\>)*\<scale\>}
+ * (&lt;index1&gt;,&lt;index2&gt;) {*&lt;scale&gt; +/- (&lt;index1&gt;,&lt;index2&gt;)*&lt;scale&gt;}
  *
  * \return pointer to the IV curve (#rfac_iv). The list is
  * terminated by a pair of negative values.

@@ -30,7 +30,7 @@
  * energy values are equidistant and sorted.
  *
  * The order of the input file must be:
- * \<energy\> \<intensity\>
+ * &lt;energy&gt; &lt;intensity&gt;
  * Comments are indicated by a '#'.
  *
  * \param[in] filename string containing the name of the file where the

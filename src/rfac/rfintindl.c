@@ -34,7 +34,7 @@
  * (scaling factor : beam.f_val1).
  *
  * Syntax:
- *  (\<index1\>,\<index2\>) {*\<scale\> +/- (\<index1\>,\<index2\>) * \<scale\> }
+ *  (&lt;index1&gt;,&lt;index2&gt;) {*&lt;scale&gt; +/- (&lt;index1&gt;,&lt;index2&gt;) * &lt;scale&gt; }
  *
  * \param[in] command_line
  *
