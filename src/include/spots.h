@@ -132,8 +132,9 @@ void spots_append(spots_t *spots, spot_t spot);
 
 /*! \fn void spots_set_list(spots_t *spots, spot_t *spot, size_t n_spots)
  *  \brief Assign a \a spot array to the \a spots struct.
- *  \param *spots Pointer to spots_t structure. 
+ *  \param *spots Pointer to spots_t structure.
  *  \param *spot Array of spot_t.
+ *  \param n_spots Number of spots in the array.
  *
  */
 void spots_set_list(spots_t *spots, spot_t *spot, size_t n_spots);
