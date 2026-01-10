@@ -258,16 +258,11 @@ static int sr_de_init_population(sr_de_state *state, real *best, real *best_val,
  * Generates a trial vector by combining the mutant vector (formed from
  * three random individuals) with the target vector using binomial crossover.
  *
- * @param rng     Pointer to the random number generator state.
- * @param pop_vec Population matrix.
- * @param target  Index of the target vector.
- * @param a       Index of first mutant base vector.
- * @param b       Index of second mutant base vector.
- * @param c       Index of third mutant base vector.
- * @param weight  Differential weight (scaling factor F).
- * @param cr      Crossover probability.
- * @param ndim    Number of dimensions.
- * @param trial   Output: trial vector.
+ * @param state  Pointer to the DE state containing population and parameters.
+ * @param target Index of the target vector.
+ * @param a      Index of first mutant base vector.
+ * @param b      Index of second mutant base vector.
+ * @param c      Index of third mutant base vector.
  */
 static void sr_de_create_trial(sr_de_state *state, int target,
                                int a, int b, int c)
