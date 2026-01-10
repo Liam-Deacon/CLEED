@@ -251,7 +251,7 @@ int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
  * @param bak_file Backup file path for checkpointing.
  * @param log_file Log file path for progress output.
  * @see sr_amebsa
- * @cite Kirkpatrick1983
+ * @note Based on Kirkpatrick et al. (1983).
  */
 void sr_sa(int ndim, real dpos, const char *bak_file, const char *log_file);
 
@@ -262,7 +262,7 @@ void sr_sa(int ndim, real dpos, const char *bak_file, const char *log_file);
  * @param bak_file Backup file path for checkpointing.
  * @param log_file Log file path for progress output.
  * @see sr_amoeba
- * @cite NelderMead1965
+ * @note Based on Nelder & Mead (1965).
  */
 void sr_sx(int ndim, real dpos, const char *bak_file, const char *log_file);
 
@@ -272,7 +272,7 @@ void sr_sx(int ndim, real dpos, const char *bak_file, const char *log_file);
  * @param bak_file Backup file path for checkpointing.
  * @param log_file Log file path for progress output.
  * @see sr_powell
- * @cite Powell1964
+ * @note Based on Powell (1964).
  */
 void sr_po(int ndim, const char *bak_file, const char *log_file);
 
@@ -283,7 +283,7 @@ void sr_po(int ndim, const char *bak_file, const char *log_file);
  * @param bak_file Backup file path for checkpointing.
  * @param log_file Log file path for progress output.
  * @see sr_pso_optimize
- * @cite Kennedy1995
+ * @note Based on Kennedy & Eberhart (1995).
  */
 void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file);
 
@@ -294,7 +294,7 @@ void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file);
  * @param bak_file Backup file path for checkpointing.
  * @param log_file Log file path for progress output.
  * @see sr_de_optimize
- * @cite Storn1997
+ * @note Based on Storn & Price (1997).
  */
 void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file);
 
