@@ -44,7 +44,7 @@ static const size_t LENGTH_OF_NUMBER = 15 ;  /* characters per intensity in inpu
  * <number of energies ("#en" followed by an integer number) >
  * <number of beams    ("#bn" followed by an integer number) >
  * <beam indices       ("#bi" followed by an integer and two real numbers) >
- * \<energy\> \<intensity\> \<intensity\> ..... (all in one line)
+ * &lt;energy&gt; &lt;intensity&gt; &lt;intensity&gt; ..... (all in one line)
  *
  * \warning The number of beams must appear before the the first beam
  * index is read.
