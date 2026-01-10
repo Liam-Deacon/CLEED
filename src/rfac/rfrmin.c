@@ -190,6 +190,7 @@ static inline real rfac_iv_get_sum(const real *intensities, size_t n)
  * \param energies Pointer to array of energy values.
  * \param intensities Pointer to array of intensity values.
  * \param n_leng Number of values in \p energies and \p intensities .
+ * \param r_fac The individual RFactor for this curve.
  * \param r_min The minimum RFactor obtained.
  * \param r_type Enum giving the RFactor type.
  * \param spot_id Pointer to #rfac_spot object for spot indexing.
