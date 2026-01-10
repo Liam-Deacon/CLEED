@@ -200,23 +200,13 @@ static void sr_de_copy_vector(real *dest, const real *src, int ndim)
 }
 
 /**
- * @brief Initialize the DE population with random solutions.
+ * @brief Fill a vector with random values within the search span.
  *
- * Each individual is initialized with random values in [-span, +span]
- * for each dimension. The best solution found during initialization
- * is tracked.
+ * Initializes a vector with random values in [-span, +span] for each
+ * dimension using the random state from the DE state.
  *
- * @param rng      Pointer to the random number generator state.
- * @param pop      Population size.
- * @param ndim     Number of dimensions.
- * @param span     Initial search span for each dimension.
- * @param pop_vec  Population matrix (pop × ndim, 1-indexed).
- * @param scores   Objective values for each individual (1-indexed).
- * @param best     Output: best solution vector found.
- * @param best_val Output: best objective value found.
- * @param func     Objective function to minimize.
- * @param evals    In/out evaluation counter.
- * @return 0 on success, -1 on invalid parameters.
+ * @param state Pointer to the DE state containing RNG and parameters.
+ * @param dest  Output vector to fill with random values (1-indexed).
  */
 static void sr_de_fill_vector(sr_de_state *state, real *dest)
 {
