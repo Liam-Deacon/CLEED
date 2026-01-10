@@ -133,7 +133,7 @@ exhale_args = {
     "rootFileTitle": "C API Reference",
     "doxygenStripFromPath": "../src",
     # Optional arguments for better organization
-    "createTreeView": True,
+    "createTreeView": False,  # Disable for faster builds
     "exhaleExecutesDoxygen": False,  # We run Doxygen separately
     "exhaleDoxygenStdin": "",
     # File generation control

@@ -61,6 +61,18 @@ jobs:
           mkdir -p _build/doxygen
           doxygen doxyfile.conf
 
+      - name: Cache Sphinx build output
+        uses: actions/cache@v4
+        id: sphinx-cache
+        with:
+          path: |
+            doc/_build/html
+            doc/_build/doctrees
+            doc/api/generated
+          key: sphinx-${{ runner.os }}-${{ hashFiles('doc/**/*.rst', 'doc/conf.py', 'src/**/*.h', 'src/**/*.c') }}
+          restore-keys: |
+            sphinx-${{ runner.os }}-
+
       - name: Build docs with Sphinx
         run: |
           make -C doc html SPHINXOPTS="--keep-going -n -W"
