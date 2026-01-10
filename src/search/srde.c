@@ -719,18 +719,6 @@ static void sr_de_build_config(sr_de_cfg *cfg, int ndim, real dpos)
   }
 }
 
-/**
- * @brief DE optimizer entry point for the CLEED search subsystem.
- *
- * This is the main driver function called by the optimizer registry.
- * It configures DE from global settings, runs the optimization, and
- * logs results to the specified log file.
- *
- * @param ndim     Number of search dimensions.
- * @param dpos     Initial displacement for parameter variations.
- * @param bak_file Backup file path (unused, for API compatibility).
- * @param log_file Log file path for recording optimization progress.
- */
 void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
 {
   (void)bak_file;
