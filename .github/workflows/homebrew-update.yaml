@@ -17,7 +17,8 @@ jobs:
   update-tap:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # actions/checkout v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ inputs.tag || github.ref }}
 
@@ -80,10 +81,12 @@ jobs:
             exit 0
           fi
           
-          # Clone tap repository
-          git clone "https://${TAP_REPO_TOKEN}@github.com/Liam-Deacon/homebrew-tap.git" tap-repo
+          # Clone tap repository without embedding the token in the URL
+          git -c http.extraheader="AUTHORIZATION: bearer ${TAP_REPO_TOKEN}" \
+            clone https://github.com/Liam-Deacon/homebrew-tap.git tap-repo
           
           # Copy formula
+          mkdir -p tap-repo/Formula
           cp cleed.rb tap-repo/Formula/cleed.rb
           
           cd tap-repo

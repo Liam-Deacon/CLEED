@@ -68,7 +68,7 @@ class Cleed < Formula
         https://liam-deacon.github.io/CLEED/
 
       Example files are installed to:
-        #{share}/cleed/examples
+        #{prefix}/examples
     EOS
   end
 

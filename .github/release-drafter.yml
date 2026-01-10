@@ -92,7 +92,7 @@ autolabeler:
       - "doc/**/*"
       - "docs/**/*"
     branch:
-      - "/^doc(s)?\\/.*/'"
+      - "/^doc(s)?\\/.*/"
   - label: "ci"
     files:
       - ".github/**/*"
@@ -104,14 +104,14 @@ autolabeler:
       - "configure*"
   - label: "feature"
     branch:
-      - "/^feat(ure)?\\/.*/'"
+      - "/^feat(ure)?\\/.*/"
   - label: "fix"
     branch:
-      - "/^fix\\/.*/'"
-      - "/^bugfix\\/.*/'"
+      - "/^fix\\/.*/"
+      - "/^bugfix\\/.*/"
   - label: "chore"
     branch:
-      - "/^chore\\/.*/'"
+      - "/^chore\\/.*/"
 
 # Release template
 template: |

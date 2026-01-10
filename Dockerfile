@@ -20,7 +20,7 @@ RUN cmake -S . -B build -G Ninja \
     -DINSTALL_DOC=OFF \
     -DBUILD_TESTING=OFF
 
-RUN cmake --build build --parallel="$(nproc)" && \
+RUN cmake --build build --parallel $(nproc) && \
     cmake --install build --prefix /opt/cleed
 
 FROM ubuntu:22.04 AS development
