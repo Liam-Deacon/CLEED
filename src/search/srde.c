@@ -766,8 +766,7 @@ void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file)
   /* Run optimization */
   real best_val = 0.0;
   int evals = 0;
-  if (sr_de_optimize(&effective_cfg, ndim, (real (*)(const real *))sr_evalrf,
-                     best, &best_val, &evals) != 0) {
+  if (sr_de_optimize(&effective_cfg, ndim, sr_evalrf, best, &best_val, &evals) != 0) {
     sr_free_vector(best);
     fprintf(STDERR, "*** error (sr_de): optimisation failed\n");
     exit(1);

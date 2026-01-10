@@ -48,9 +48,10 @@ extern "C" {
  * @param nfunk In/out evaluation counter (legacy API).
  * @return 0 on success, non-zero on failure.
  */
-int sr_amoeba(real **p, real *y, int ndim, real ftol, real (*funk)(real *), int *nfunk);
+int sr_amoeba(real **p, real *y, int ndim, real ftol,
+              real (*funk)(const real *), int *nfunk);
 
-typedef real (*sr_amebsa_func)(real *);
+typedef real (*sr_amebsa_func)(const real *);
 
 /**
  * @brief Configuration for @ref sr_amebsa.
@@ -106,7 +107,7 @@ int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
  * @return 0 on success, non-zero on failure.
  */
 int sr_powell(real *p, real **xi, int n, real ftol, int *iter, real *fret,
-              real (*func)(real *));
+              real (*func)(const real *));
 ///@}
 
 /**
@@ -236,7 +237,7 @@ void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file);
 /* file input|output */
 real sr_ckgeo(real *);
 int  sr_ckrot(struct sratom_str *, struct search_str *);
-real sr_evalrf(real *);
+real sr_evalrf(const real *);
 int  sr_mkinp(real *, int, char *);
 int  sr_rdinp(const char *);
 int  sr_rdver(const char *, real *, real **, int);

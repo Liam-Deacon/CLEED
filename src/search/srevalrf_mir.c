@@ -2,7 +2,7 @@
 GH/31.03.03
   file contains function:
 
-  real sr_evalrf(real *par)
+  real sr_evalrf(const real *par)
 
  Calculate IV curves and evaluate R factor
 
@@ -68,7 +68,7 @@ extern struct sratom_str *sr_atoms;
 extern struct search_str *sr_search;
 extern char *sr_project;
 
-real sr_evalrf(real *par)
+real sr_evalrf(const real *par)
 
 /***********************************************************************
 
@@ -131,7 +131,7 @@ char *new_path;
    fprintf(STDCTR, "(sr_evalrf %d) SHORTCUT:", n_eval);
  #endif
 
- rgeo = sr_ckgeo( par );
+ rgeo = sr_ckgeo((real *)par);
 
  #ifdef CONTROL
    #ifdef SHORTCUT
@@ -184,7 +184,7 @@ char *new_path;
 ***********************************************************************/
 
  n_calc ++;
- sr_mkinp_mir(par, n_calc, par_file);
+ sr_mkinp_mir((real *)par, n_calc, par_file);
 
 #ifdef SHORTCUT
 
@@ -379,7 +379,6 @@ char *new_path;
 
  return (rfac + rgeo);
 }
-
 
 
 

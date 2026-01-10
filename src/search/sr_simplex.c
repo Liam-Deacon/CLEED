@@ -128,7 +128,8 @@ static void sr_simplex_build_vertex(sr_simplex_buffers *b, int i, real dpos)
   }
 }
 
-int sr_simplex_build_initial(sr_simplex_buffers *b, real dpos, real (*func)(real *))
+int sr_simplex_build_initial(sr_simplex_buffers *b, real dpos,
+                             real (*func)(const real *))
 {
   if (b == NULL || b->p == NULL || b->y == NULL || b->x == NULL || b->ndim <= 0 || func == NULL) return -1;
 

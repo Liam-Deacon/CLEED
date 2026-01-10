@@ -100,7 +100,8 @@ void sr_simplex_buffers_free(sr_simplex_buffers *b);
  * @param func Objective function to evaluate at each vertex.
  * @return 0 on success, non-zero on invalid inputs.
  */
-int sr_simplex_build_initial(sr_simplex_buffers *b, real dpos, real (*func)(real *));
+int sr_simplex_build_initial(sr_simplex_buffers *b, real dpos,
+                             real (*func)(const real *));
 
 /**
  * @brief Populate simplex buffers by reading a vertex file via sr_rdver().
