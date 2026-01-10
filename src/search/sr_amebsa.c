@@ -30,7 +30,7 @@
 #include "sr_simplex.h"
 
 /* The SEARCH driver keeps a global seed. */
-extern long sa_idum;
+extern uint64_t sa_idum;
 
 static int sr_accept_move(sr_rng *rng, real current, real proposed, real temp)
 {
@@ -75,10 +75,9 @@ static int sr_amebsa_validate_inputs(real **p, real *y, int ndim, real *pb, real
   return 0;
 }
 
-static uint64_t sr_amebsa_seed_from_idum(long idum)
+static uint64_t sr_amebsa_seed_from_idum(uint64_t idum)
 {
-  uint64_t seed = (idum < 0) ? (uint64_t)(-idum) : (uint64_t)idum;
-  return (seed == 0) ? 1 : seed;
+  return idum;
 }
 
 static int sr_amebsa_alloc(sr_amebsa_ctx *ctx)
@@ -178,7 +177,7 @@ static void sr_amebsa_run(sr_amebsa_ctx *ctx)
 static void sr_amebsa_finalize(sr_amebsa_ctx *ctx)
 {
   *ctx->iter_io = ctx->used;
-  sa_idum = (long)(ctx->seed + (uint64_t)ctx->used + 1);
+  sa_idum = ctx->seed + (uint64_t)ctx->used + 1;
   sr_amebsa_init_best(ctx);
 }
 

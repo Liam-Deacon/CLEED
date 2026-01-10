@@ -4,30 +4,20 @@
 File Formats
 ************
 
-This section provides a short orientation to the core CLEED input files.
-For full detail (including keywords and examples), see the canonical PDF manual:
+This section documents the core CLEED input formats. It is a living reference
+that complements the canonical PDF manual:
 
 * :download:`CLEED Reference Manual (PDF) <CLEED_Manual.pdf>`
 
-.. _input_file:
+.. note::
+   CLEED expects matching filename prefixes for ``.inp``, ``.bul`` and ``.ctr``
+   inputs (e.g., ``Ni111_2x2O.inp``, ``Ni111_2x2O.bul``, ``Ni111_2x2O.ctr``).
 
-``*.inp`` (surface input)
-=========================
+.. toctree::
+   :maxdepth: 2
 
-Surface model parameters and search configuration.
-
-.. _bulk_file:
-
-``*.bul`` (bulk input)
-======================
-
-Bulk geometry and non-geometric parameters that are typically not varied during
-optimisation.
-
-.. _control_file:
-
-``*.ctr`` (control file)
-========================
-
-Maps experimental and theoretical I(V) curves for R-factor evaluation (including
-weights / subsets).
+   file_formats/conventions
+   file_formats/inp
+   file_formats/bul
+   file_formats/ctr
+   file_formats/yaml

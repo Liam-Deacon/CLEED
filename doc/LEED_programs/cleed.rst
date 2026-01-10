@@ -50,7 +50,9 @@ coordinates and the minimum possible vertical distance (:code:`MIN_DIST = 1.1`
 vectors in plane wave representation is created on the basis of the final 
 energy and the minimum distance between the layers.
 
-To date there exists two versions of the :code:`cleed` program.
+CLEED ships a unified :code:`cleed` binary that can run in symmetrised or
+non-symmetrised mode. The explicit :code:`cleed_sym` and :code:`cleed_nsym`
+binaries remain available for compatibility.
 
 .. _cleed_sym:
 
@@ -63,6 +65,7 @@ beams which can speed up the calculations significantly (up to a factor
 of 5 with respect to the non-symmetrised version). There are however some 
 restrictions, the most important being that only the case of normal incidence 
 and isotropic vibrations can be treated by the current version.
+This mode is also available via :code:`cleed --sym`.
 
 .. _cleed_nsym:
 
@@ -73,6 +76,7 @@ The non-symmetrised version :code:`cleed_nsym` does not have these restictions.
 It is more flexible and can treat most cases of surface geometries, provided, 
 there is at least one bulk inter-layer distance greater than :code:`MIN_DIST` 
 = 1.1 :math:`\text{\AA}`.
+This mode is also available via :code:`cleed --nsym`.
 
 Both program versions can use the same input files, whereby :code:`cleed_sym` 
 needs some additional information which is ignored by the vanilla 
@@ -88,8 +92,8 @@ Syntax
 
 The general calling syntax of the LEED program is::
 
-    cleed -i <parameter_file> -b <bulk_parameter_file> -o <results_file> 
-      -r <storage_file> -w <storage_file>
+    cleed [--auto|--sym|--nsym] -i <parameter_file> -b <bulk_parameter_file>
+          -o <results_file> [-r <storage_file> -w <storage_file>] [-e]
 
 The first argument (:code:`-i <parameter_file>`) specifying the parameter 
 input file is the only mandatory argument. The file contains all the geometric 
@@ -101,6 +105,32 @@ contains all the parameters which are not
 varied during the optimisation. Consequently, the search program has to produce 
 only the parameter file containing the optimised atom positions of the 
 overlayer in each iteration step of an automated search.
+
+Mode selection
+^^^^^^^^^^^^^^
+
+:code:`--auto`
+
+  Detect symmetry markers (``sr``/``sm``) in the input files and select the
+  appropriate mode (default). Auto-detection checks the bulk file first
+  (``-b``), then the parameter file (``-i``). If no symmetry markers are
+  found or the files are not readable, the calculation falls back to the
+  non-symmetrised mode.
+
+:code:`--sym`
+
+  Force the symmetrised implementation (equivalent to :code:`cleed_sym`).
+
+:code:`--nsym`
+
+  Force the non-symmetrised implementation (equivalent to :code:`cleed_nsym`).
+
+Mode precedence
+^^^^^^^^^^^^^^^
+
+1. Command-line flags (``--auto``, ``--sym``, ``--nsym``)
+2. :envvar:`CLEED_SYM` (if set)
+3. Auto-detection (default)
 
 
 .. _cleed_options:
@@ -141,12 +171,27 @@ Options
   + :code:`rb` : (calculates :math:`R_{B1}` and :math:`R_{B2}`)
 
   + :code:`rp` : calculates the Pendry R factor :math:`R_p`. This provides the level of 
-    agreement on shape of curves, not the intensity by comparing logarithmic 
-    derivatives, :math:`R_p = \frac{1}{I(E)} \times \frac{\delta I(E)}{\delta E}`, and 
-    is the standard in I(V) analysis. The Pendry R factor is problematic with 
+    agreement on shape of curves, not the intensity, by comparing the Pendry-style
+    :math:`Y` function derived from the logarithmic derivative :math:`L(E)`.
+
+    .. math::
+
+       L(E) = \\frac{I'(E)}{I(E)}
+
+       Y_P(E) = \\frac{L}{1 + V_i^2 L^2} = \\frac{I I'}{I^2 + V_i^2 (I')^2}
+
+       R_P = \\frac{\\int (Y_{\\mathrm{exp}} - Y_{\\mathrm{th}})^2 \\, dE}
+                  {\\int (Y_{\\mathrm{exp}}^2 + Y_{\\mathrm{th}}^2) \\, dE}
+
+    The Pendry R factor is problematic with 
     experimental noise as it is sensitive to positions of peaks, not intensity and 
     therefore noisy data will result in extra 'peaks'. The workaround for this 
     is to smooth or average the experimental data using a tool such as :ref:`ftsmooth`.
+
+  + :code:`rs` : calculates the improved reliability factor :math:`R_s`
+    (`Imre et al., 2025 <https://arxiv.org/abs/2511.05448>`_), which smooths the
+    Pendry-style :math:`Y` function at intensity minima. See :ref:`crfac_rs` for the
+    full definition and citation.
 
 :code:`-s <shift1,shift2,shift3>`
 
@@ -161,7 +206,7 @@ Options
 :code:`-v <optical_potential>`
 
   specifies the value of the optical potential :math:`V_i` (in eV) used in the 
-  evaluation of Pendry's R-factor (:math:`R_p`). :math:`2V_i` determines 
+  evaluation of Pendry's and :math:`R_s` factors. :math:`2V_i` determines 
   smallest resolvable features in the IV curves. The default is 4 eV, however 
   in situations where the interlayer spacings are very small, such as for 
   intermetallic compounds, :math:`V_i` may need to be increased (but 
@@ -186,6 +231,12 @@ The program uses environment variables for calling other processes or for file p
 
 :envvar:`CLEED_HOME`
   File to be shown when the :code:`-h` option is chosen if set in the system environment. 
+
+:envvar:`CLEED_SYM`
+  Controls the symmetry mode used by :code:`cleed`. Accepted values are
+  ``auto``, ``yes``, ``no``, ``true``, ``false``, ``1``, and ``0``.
+  Command-line flags (:code:`--auto`, :code:`--sym`, :code:`--nsym`) override
+  this variable.
  
 Each variable has to be set using the :command:`export` or :command:`setenv` UNIX commands, 
 for bash and c shells, respectively, before the program is called for the first 
@@ -202,17 +253,17 @@ Examples
 
 ::
 
-    cleed_nsym -c *.ctr -i *.inp -b *.bul 1>*.out 2>*.err &
+    cleed --nsym -c *.ctr -i *.inp -b *.bul 1>*.out 2>*.err &
     
 This will start :ref:`cleed_nsym` as a detached process. Windows users should 
 add :code:`START /B` to the beginning of the command instead of using :code:`&`.
 
 ::
 
-    cleed_nsym -c *.ctr -i *.inp -b *.bul -v *.ver 1>>*.out 2>>*.err &
+    cleed --nsym -c *.ctr -i *.inp -b *.bul -v *.ver 1>>*.out 2>>*.err &
 
 This will restart :ref:`cleed_nsym` from the last set of vertices and appends 
-output to the :file:`*.out` and :file:`*err` log files.
+output to the :file:`*.out` and :file:`*.err` log files.
     
 .. note::
   In the preceding examples replace any :code:`*.<ext>` with the actual file name of 

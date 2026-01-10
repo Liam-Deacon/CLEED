@@ -104,7 +104,7 @@ struct crargs
  special definitions
 *********************************************************************/
 
-#define N_RFACTORS     6       /* Number of possible R-factors */
+#define N_RFACTORS     7       /* Number of possible R-factors */
 
 #define ENG_TOLERANCE  0.1     /* accuracy in comparing energies */
 #define IND_TOLERANCE  0.02    /* accuracy in comparing indices */
@@ -135,6 +135,7 @@ struct crargs
 #define R1_FACTOR  2  /* R1 factor */
 #define R2_FACTOR  3  /* R2 factor */
 #define RB_FACTOR  4  /* Rb factor */
+#define RS_FACTOR  5  /* R_S factor */
 
 /*********************************************************************
  End of include file

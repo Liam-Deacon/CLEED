@@ -117,11 +117,19 @@ typedef int search_method;
     
     \def SR_GENETIC
     Search code for the genetic algorithm (ga) method.
+
+    \def SR_PSO
+    Search code for the particle swarm optimisation (ps) method.
+
+    \def SR_DIFFERENTIAL_EVOLUTION
+    Search code for the differential evolution (de) method.
 */
 #define SR_SIMPLEX        1     /* enumeration of search algorithm types */
 #define SR_POWELL         2
 #define SR_SIM_ANNEALING  3
 #define SR_GENETIC        4
+#define SR_PSO            5
+#define SR_DIFFERENTIAL_EVOLUTION 6
 
 /*!
     \def SR_SX
@@ -135,6 +143,12 @@ typedef int search_method;
     
     \def SR_GA
     Entry into genetic algorithm search.
+
+    \def SR_PS
+    Entry into particle swarm optimisation search.
+
+    \def SR_DE
+    Entry into differential evolution search.
 */  
 #if defined(USE_GSL) || defined(_USE_GSL)
     /* set search functions to GNU Scientific Library */
@@ -142,6 +156,8 @@ typedef int search_method;
     #define SR_SA    sr_sa_gsl     
     #define SR_PO    sr_po_gsl
     #define SR_GA    sr_ga_gsl
+    #define SR_PS    sr_pso
+    #define SR_DE    sr_de
     #define SR_RDINP sr_rdinp
     #define I_PAR_0  0          /* start index for parameters */
 # else
@@ -150,6 +166,8 @@ typedef int search_method;
     #define SR_SA    sr_sa
     #define SR_PO    sr_po
     #define SR_GA    sr_ga    
+    #define SR_PS    sr_pso
+    #define SR_DE    sr_de
     #define SR_RDINP sr_rdinp
     #define I_PAR_0  1          /* start index for parameters */
 #endif
@@ -183,6 +201,11 @@ typedef int search_method;
                                    input geometry (used to set up the vertex
                                    for sr_amoeba) */
 #define MAX_ITER_AMOEBA 2000    /* max. number of iterations in sr_amoeba */
+#define MAX_ITER_SA     200     /* max. iterations per temperature in sr_sa */
+#define MAX_ITER_PSO    200     /* max. number of iterations in sr_pso */
+#define MAX_EVAL_PSO    2000    /* max. number of evaluations in sr_pso */
+#define MAX_ITER_DE     200     /* max. number of iterations in sr_de */
+#define MAX_EVAL_DE     2000    /* max. number of evaluations in sr_de */
 
 #define MAX_ITER_POWELL 100     /* max. number of iterations in sr_powell */
 #define BRENT_TOLERANCE 2.0e-2  /* tolerance criterion in function brent 

@@ -47,7 +47,7 @@ typedef struct sr_line_ctx {
   real *p0;         /* base point (1..n) */
   real *dir;        /* direction (1..n) */
   real *tmp;        /* scratch (1..n) */
-  real (*func)(real *);   /* objective */
+  real (*func)(const real *);   /* objective */
 } sr_line_ctx;
 
 static real sr_line_eval(real alpha, void *vctx)
@@ -302,7 +302,7 @@ static real sr_brent_minimise(real ax, real bx, real cx,
   return s.fx;
 }
 
-static int sr_linmin(real *p, real *dir, int n, real *fret, real (*func)(real *))
+static int sr_linmin(real *p, real *dir, int n, real *fret, real (*func)(const real *))
 {
   sr_line_ctx ctx;
   ctx.n = n;
@@ -356,7 +356,7 @@ static void sr_powell_free_work(real *p_prev, real *p_extrap, real *dir)
   sr_free_vector(p_prev);
 }
 
-static int sr_powell_minimise_all_directions(real *p, real **xi, int n, real *fret, real (*func)(real *),
+static int sr_powell_minimise_all_directions(real *p, real **xi, int n, real *fret, real (*func)(const real *),
                                              real *dir, int *out_best_dir)
 {
   real biggest_drop = 0.0;
@@ -397,7 +397,7 @@ typedef struct sr_powell_update_ctx {
   real **xi;
   int n;
   real *fret;
-  real (*func)(real *);
+  real (*func)(const real *);
   real *dir;
 } sr_powell_update_ctx;
 
@@ -419,7 +419,7 @@ typedef struct sr_powell_run_ctx {
   int n;
   real ftol;
   real *fret;
-  real (*func)(real *);
+  real (*func)(const real *);
   real *p_prev;
   real *p_extrap;
   real *dir;
@@ -458,7 +458,8 @@ static int sr_powell_iteration(sr_powell_run_ctx *ctx)
 
 static int sr_powell_run(sr_powell_run_ctx *ctx, int *iter)
 {
-  for (*iter = 1; *iter <= MAX_ITER_POWELL; (*iter)++) {
+  const int limit = sr_powell_iter_limit > 0 ? sr_powell_iter_limit : MAX_ITER_POWELL;
+  for (*iter = 1; *iter <= limit; (*iter)++) {
     int rc = sr_powell_iteration(ctx);
     if (rc == 0) continue;
     return (rc == 1) ? 0 : rc;
@@ -467,7 +468,7 @@ static int sr_powell_run(sr_powell_run_ctx *ctx, int *iter)
 }
 
 int sr_powell(real *p, real **xi, int n, real ftol, int *iter,
-              real *fret, real (*func)(real *))
+              real *fret, real (*func)(const real *))
 {
   if (p == NULL) return -1;
   if (xi == NULL) return -1;

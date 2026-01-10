@@ -134,6 +134,7 @@ When filing issues, include:
 - Prefer `.. toctree::` navigation over `.. include::` so pages are addressable and cross-references behave predictably.
 - Avoid tabs; use spaces (tabs can create accidental block quotes / unexpected indentation).
 - See `skills/restructured-text/SKILL.md` for repo-specific conventions and common pitfalls.
+- For schematic structure figures (SVGs) tied to examples, see `skills/structure-figures/SKILL.md`.
 
 ## Suggested escalation path
 

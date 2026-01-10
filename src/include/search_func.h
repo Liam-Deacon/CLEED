@@ -17,6 +17,8 @@ extern "C" {
 #define SEARCH_FUNC_H
 
 #include <stdio.h>
+// cppcheck-suppress missingIncludeSystem
+#include <stdint.h>
 
 /**
  * @file search_func.h
@@ -46,9 +48,10 @@ extern "C" {
  * @param nfunk In/out evaluation counter (legacy API).
  * @return 0 on success, non-zero on failure.
  */
-int sr_amoeba(real **p, real *y, int ndim, real ftol, real (*funk)(real *), int *nfunk);
+int sr_amoeba(real **p, real *y, int ndim, real ftol,
+              real (*funk)(const real *), int *nfunk);
 
-typedef real (*sr_amebsa_func)(real *);
+typedef real (*sr_amebsa_func)(const real *);
 
 /**
  * @brief Configuration for @ref sr_amebsa.
@@ -104,20 +107,139 @@ int sr_amebsa(real **p, real *y, int ndim, real *pb, real *yb,
  * @return 0 on success, non-zero on failure.
  */
 int sr_powell(real *p, real **xi, int n, real ftol, int *iter, real *fret,
-              real (*func)(real *));
+              real (*func)(const real *));
 ///@}
+
+/**
+ * @brief Default configuration values for PSO (Clerc's constriction).
+ */
+#define SR_PSO_DEFAULT_INERTIA  ((real)0.729)
+#define SR_PSO_DEFAULT_C1       ((real)1.49445)
+#define SR_PSO_DEFAULT_C2       ((real)1.49445)
+
+/**
+ * @brief Configuration for particle swarm optimisation (PSO).
+ */
+typedef struct sr_pso_cfg {
+  // cppcheck-suppress unusedStructMember
+  int swarm_size; /**< Number of particles (default: 10*ndim or 10, range: >0) */
+  // cppcheck-suppress unusedStructMember
+  int max_iters;  /**< Maximum iterations (default: 200, range: >0) */
+  // cppcheck-suppress unusedStructMember
+  int max_evals;  /**< Maximum evaluations (default: 10000, range: >0) */
+  real inertia;   /**< Inertia weight (default: 0.729, range: 0.0-1.0) */
+  real c1;        /**< Cognitive coefficient (default: 1.49445, range: >0.0) */
+  real c2;        /**< Social coefficient (default: 1.49445, range: >0.0) */
+  real v_max;     /**< Maximum velocity (default: dpos or 1.0, range: >0.0) */
+  // cppcheck-suppress unusedStructMember
+  uint64_t seed;  /**< RNG seed (default: 0/random, range: any) */
+} sr_pso_cfg;
+
+/**
+ * @brief Initialise PSO defaults based on dimensionality and dpos.
+ *
+ * This function initializes a configuration structure with default values
+ * suitable for most problems. It modifies the `cfg` structure in-place.
+ *
+ * @param cfg Pointer to the configuration structure to initialise. If NULL,
+ *            the function does nothing.
+ * @param ndim Dimensionality of the parameter vector (must be > 0).
+ * @param dpos Initial search range (step size) for parameters. Defaults to
+ *             1.0 if <= 0.0. Used to set `v_max`.
+ *
+ * Default values set:
+ * - swarm_size: max(10, 10 * ndim)
+ * - max_iters: 0 (defer to optimiser default)
+ * - max_evals: 0 (defer to optimiser default)
+ * - inertia: 0.729
+ * - c1 (cognitive): 1.49445
+ * - c2 (social): 1.49445
+ * - v_max: dpos (or 1.0)
+ * - seed: 0
+ *
+ * This function has no return value.
+ */
+void sr_pso_cfg_init(sr_pso_cfg *cfg, int ndim, real dpos);
+
+/**
+ * @brief Particle swarm optimisation (PSO) minimiser.
+ *
+ * @param cfg Configuration (may be NULL for defaults).
+ * @param ndim Dimensionality of the parameter vector.
+ * @param func Objective function.
+ * @param best Output best point (`1..ndim`).
+ * @param best_val Output best function value.
+ * @param evals In/out evaluation counter (may be NULL).
+ * @return 0 on success, non-zero on failure.
+ */
+int sr_pso_optimize(const sr_pso_cfg *cfg, int ndim, real (*func)(const real *),
+                    real *best, real *best_val, int *evals);
+
+/**
+ * @brief Configuration for differential evolution (DE).
+ */
+typedef enum sr_de_conv_mode {
+  SR_DE_CONV_NONE = 0,  /**< Disable convergence-based early stopping. */
+  SR_DE_CONV_NONNEG,    /**< Stop when 0 <= best_val <= conv_tol. */
+  SR_DE_CONV_ABS        /**< Stop when |best_val| <= conv_tol. */
+} sr_de_conv_mode;
+
+typedef struct sr_de_cfg {
+  // cppcheck-suppress unusedStructMember
+  int population; /**< Population size (default: 10*ndim, min: 20, range: >0) */
+  // cppcheck-suppress unusedStructMember
+  int max_iters;  /**< Maximum iterations (default: 0/optimiser default, range: >=0) */
+  // cppcheck-suppress unusedStructMember
+  int max_evals;  /**< Maximum evaluations (default: 0/optimiser default, range: >=0) */
+  // cppcheck-suppress unusedStructMember
+  real weight;    /**< Differential weight F (default: 0.8, range: (0, 2]) */
+  // cppcheck-suppress unusedStructMember
+  real crossover; /**< Crossover probability CR (default: 0.9, range: [0, 1]) */
+  // cppcheck-suppress unusedStructMember
+  real init_span; /**< Initial span per dimension (default: dpos or 1.0, range: >0) */
+  // cppcheck-suppress unusedStructMember
+  real conv_tol;  /**< Convergence tolerance (default: R_TOLERANCE, range: >0) */
+  // cppcheck-suppress unusedStructMember
+  sr_de_conv_mode conv_mode; /**< Convergence check mode (default: NONNEG). */
+  // cppcheck-suppress unusedStructMember
+  uint64_t seed;  /**< RNG seed (0 = use internal default) */
+} sr_de_cfg;
+
+/**
+ * @brief Initialise DE defaults based on dimensionality and dpos.
+ *
+ * Weight (F) is clamped to (0, 2] and crossover (CR) to [0, 1].
+ */
+void sr_de_cfg_init(sr_de_cfg *cfg, int ndim, real dpos);
+
+/**
+ * @brief Differential evolution (DE) minimiser.
+ *
+ * @param cfg Configuration (may be NULL for defaults).
+ * @param ndim Dimensionality of the parameter vector.
+ * @param func Objective function.
+ * @param best Output best point (`1..ndim`).
+ * @param best_val Output best function value.
+ * @param evals In/out evaluation counter (may be NULL).
+ * @return 0 on success, non-zero on failure.
+ */
+int sr_de_optimize(const sr_de_cfg *cfg, int ndim, real (*func)(const real *),
+                   real *best, real *best_val, int *evals);
 
 /* Drivers */
 void sr_sa(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_sx(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_po(int ndim, const char *bak_file, const char *log_file);
+void sr_pso(int ndim, real dpos, const char *bak_file, const char *log_file);
+void sr_de(int ndim, real dpos, const char *bak_file, const char *log_file);
 void sr_er(int ndim, real dpos, const char *bak_file, const char *log_file);
 
 /* file input|output */
-real sr_ckgeo(real *);
+real sr_ckgeo(const real *);
 int  sr_ckrot(struct sratom_str *, struct search_str *);
-real sr_evalrf(real *);
-int  sr_mkinp(real *, int, char *);
+real sr_evalrf(const real *);
+int  sr_mkinp(const real *, int, char *);
+int  sr_mkinp_mir(const real *, int, char *);
 int  sr_rdinp(const char *);
 int  sr_rdver(const char *, real *, real **, int);
 

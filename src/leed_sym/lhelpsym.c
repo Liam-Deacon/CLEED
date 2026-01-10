@@ -17,12 +17,13 @@ Changes:
 
 void usage_sym(FILE *output) {
     fprintf(output,"\tusage: \t%s -i <par_file> -o <res_file>", PROG);
-    fprintf(output," [-b <bul_file> -e]\n"); 
+    fprintf(output," [-b <bul_file> -r <pro_name> -w <pro_name>]\n"); 
     fprintf(output, "Options:\n");
     fprintf(output, "  -i <par_file>        : filepath to parameter input file\n");
     fprintf(output, "  -o <res_file>        : filepath to output file\n");
     fprintf(output, "  -b <bul_file>        : filepath to bulk parameter file\n");
-    fprintf(output, "  -e                   : early return option\n");
+    fprintf(output, "  -r <pro_name>        : read project file for matrices\n");
+    fprintf(output, "  -w <pro_name>        : write project file for matrices\n");
     fprintf(output, "  -h --help            : print help and exit\n");
     fprintf(output, "  -V --version         : print version and information about this program\n");
     fprintf(output, "\n");

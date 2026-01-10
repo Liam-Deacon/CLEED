@@ -26,6 +26,8 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 #include <stdlib.h>
 // cppcheck-suppress missingIncludeSystem
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
+#include <stdint.h>
 
 #include "search.h"
 #include "sr_simplex.h"
@@ -33,12 +35,14 @@ GH/29.12.95 - insert dpos in parameter list: initial displacement
 #define START_TEMP     3.5
 #define EPSILON        0.25
 #define ALPHA          4
+#ifndef MAX_ITER_SA
 #define MAX_ITER_SA  200
+#endif
 #define ITER_SA      100
 
 /**********************************************************************/
 
-long sa_idum = -1;                /* seed for random number generator */
+uint64_t sa_idum = 0;             /* seed for random number generator */
 
 static FILE *sr_sa_open_log_append(const char *log_file)
 {
@@ -87,7 +91,7 @@ static int sr_sa_run_temperature_loop(sr_simplex_buffers *b, int ndim, real *out
 #ifdef CONTROL
     fprintf(STDCTR, "(sr_sa): temperature = %.4f\n", temp);
 #endif
-    int budget = MAX_ITER_SA;
+    int budget = sr_sa_iter_limit > 0 ? sr_sa_iter_limit : MAX_ITER_SA;
     sr_amebsa_cfg cfg;
     cfg.ftol = temp;
     cfg.funk = sr_evalrf;

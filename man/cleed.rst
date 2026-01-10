@@ -68,6 +68,7 @@ needs some additional information which is ignored by the vanilla
 it is strongly recommended to test the same input file with both programs in 
 order to check the consistency. The relative intensities of equivalent beams 
 should be identical down to 10 :sup:`-8`.
+Use :code:`--auto`, :code:`--sym`, or :code:`--nsym` to select the symmetry mode.
 
 Syntax
 ======
@@ -120,6 +121,10 @@ OPTIONS
   'rp' : calculates the Pendry R factor $R sub p$. This provides the level of agreement on shape of curves, not the intensity by comparing logarithmic derivatives, $R sub p = {1 over I(E)} * {delta I(E) over delta E}$, and is the standard in I(V) analysis. The Pendry R factor is problematic with experimental noise as it is sensitive to positions of peaks, not intensity and therefore noisy data will result in extra 'peaks'. The workaround for this is to smooth or average the experimental data using a tool such as 
 **ftsmooth**
 
+  'rs' : calculates the improved reliability factor $R sub s$
+  (`Imre et al., 2025 <https://arxiv.org/abs/2511.05448>`_), which smooths the
+  Pendry-style Y function at intensity minima.
+
 *-s <shift1,shift2,shift3>*
 
   defines the range (shift1 and shift2) and step width (shift3) of the energy shifts between the experimental and theoretical curves.
@@ -131,7 +136,7 @@ OPTIONS
 
 *-v <optical_potential>*
 
-  specifies the value of the optical potential $V sub i$ (in eV) used in the evaluation of Pendry's R-factor ($R sub p$). $2 V sub i$ determines smallest resolvable features in the IV curves. The default is 4 eV, however in situations where the interlayer spacings are very small, such as for intermetallic compounds, $V sub i$ may need to be increased (but should remain <5eV). 
+  specifies the value of the optical potential $V sub i$ (in eV) used in the evaluation of Pendry's and $R sub s$ factors. $2 V sub i$ determines smallest resolvable features in the IV curves. The default is 4 eV, however in situations where the interlayer spacings are very small, such as for intermetallic compounds, $V sub i$ may need to be increased (but should remain <5eV). 
 
 *-V*
  
@@ -153,6 +158,12 @@ specific features. The most important is the use of environment variables.
  for bash and c shells, respectively, before the program is called for the first 
  time. Users of modern Windows operating systems (Win7 and up) may use the 
  ::setx:: command.
+
+ ``CLEED_SYM``
+ Controls the symmetry mode and accepts :code:`auto`, :code:`yes`, :code:`no`,
+ :code:`true`, :code:`false`, :code:`1`, and :code:`0`. Command-line flags
+ override this variable; auto-detection checks the bulk file (``-b``) before
+ the parameter file (``-i``).
 
 
 Examples

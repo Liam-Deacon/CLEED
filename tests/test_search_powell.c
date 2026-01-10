@@ -9,7 +9,7 @@
 
 #include "test_support.h"
 
-static real quadratic_2d(real *x)
+static real quadratic_2d(const real *x)
 {
     const real dx = x[1] - 1.0;
     const real dy = x[2] + 2.0;
@@ -64,4 +64,3 @@ int main(void)
 {
     return run_powell_regression();
 }
-

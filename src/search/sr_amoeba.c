@@ -95,8 +95,9 @@ typedef struct sr_amoeba_ctx {
   real rho;
   real sigma;
   real ftol;
-  real (*funk)(real *);
+  real (*funk)(const real *);
   int *nfunk;
+  int max_evals;
   real **p;
   real *y;
   real *centroid;
@@ -104,7 +105,7 @@ typedef struct sr_amoeba_ctx {
   real *trial2;
 } sr_amoeba_ctx;
 
-static real sr_amoeba_eval(sr_amoeba_ctx *ctx, real *x)
+static real sr_amoeba_eval(sr_amoeba_ctx *ctx, const real *x)
 {
   real v = ctx->funk(x);
   (*ctx->nfunk)++;
@@ -185,7 +186,7 @@ static int sr_amoeba_step(sr_amoeba_ctx *ctx)
   sr_simplex_extremes(ctx->y, ctx->ndim, &ilo, &ihi, &inhi);
 
   if (sr_amoeba_converged(ctx, ilo, ihi)) return 1;
-  if (*ctx->nfunk >= MAX_ITER_AMOEBA) return -2;
+  if (*ctx->nfunk >= ctx->max_evals) return -2;
 
   sr_simplex_centroid_excluding((const real **)ctx->p, ctx->centroid, ctx->ndim, ihi);
   real fr = sr_amoeba_reflect(ctx, ihi);
@@ -214,7 +215,7 @@ static int sr_amoeba_alloc_buffers(sr_amoeba_ctx *ctx, int ndim)
 }
 
 static int sr_amoeba_init(sr_amoeba_ctx *ctx, real **p, real *y, int ndim,
-                          real ftol, real (*funk)(real *), int *nfunk)
+                          real ftol, real (*funk)(const real *), int *nfunk)
 {
   if (ctx == NULL || p == NULL || y == NULL || ndim <= 0 || funk == NULL || nfunk == NULL) return -1;
 
@@ -227,6 +228,7 @@ static int sr_amoeba_init(sr_amoeba_ctx *ctx, real **p, real *y, int ndim,
   ctx->ftol = ftol;
   ctx->funk = funk;
   ctx->nfunk = nfunk;
+  ctx->max_evals = sr_amoeba_eval_limit > 0 ? sr_amoeba_eval_limit : MAX_ITER_AMOEBA;
   ctx->p = p;
   ctx->y = y;
   ctx->centroid = NULL;
@@ -261,7 +263,8 @@ static int sr_amoeba_run(sr_amoeba_ctx *ctx)
   return rc;
 }
 
-int sr_amoeba(real **p, real *y, int ndim, real ftol, real (*funk)(real *), int *nfunk)
+int sr_amoeba(real **p, real *y, int ndim, real ftol,
+              real (*funk)(const real *), int *nfunk)
 {
   sr_amoeba_ctx ctx;
   int rc = sr_amoeba_init(&ctx, p, y, ndim, ftol, funk, nfunk);

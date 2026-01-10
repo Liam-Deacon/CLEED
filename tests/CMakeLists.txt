@@ -9,6 +9,18 @@ add_library(cleed_test_support OBJECT
 )
 target_include_directories(cleed_test_support PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
 
+add_executable(test_cleed_mode
+    test_cleed_mode.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_cleed_mode PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_cleed_mode PRIVATE leedStatic m)
+else()
+    target_link_libraries(test_cleed_mode PRIVATE leed m)
+endif()
+add_test(NAME cleed.mode COMMAND test_cleed_mode)
+
 add_executable(test_lattice_read
     test_lattice_read.c
     $<TARGET_OBJECTS:latt_core>
@@ -84,6 +96,42 @@ else()
 endif()
 add_test(NAME search.parse COMMAND test_search_parse)
 
+add_executable(test_search_optimizer
+    test_search_optimizer.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_optimizer PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_optimizer PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_optimizer PRIVATE search m)
+endif()
+add_test(NAME search.optimizer COMMAND test_search_optimizer)
+
+add_executable(test_search_pso
+    test_search_pso.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_pso PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_pso PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_pso PRIVATE search m)
+endif()
+add_test(NAME search.pso COMMAND test_search_pso)
+
+add_executable(test_search_de
+    test_search_de.c
+    $<TARGET_OBJECTS:cleed_test_support>
+)
+target_include_directories(test_search_de PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_search_de PRIVATE searchStatic m)
+else()
+    target_link_libraries(test_search_de PRIVATE search m)
+endif()
+add_test(NAME search.de COMMAND test_search_de)
+
 add_executable(test_search_vertex_stats
     test_search_vertex_stats.c
     $<TARGET_OBJECTS:cleed_test_support>
@@ -118,6 +166,17 @@ else()
     target_link_libraries(test_rfac_spline PRIVATE rfac m)
 endif()
 add_test(NAME rfac.spline COMMAND test_rfac_spline)
+
+add_executable(test_rfac_rs
+    test_rfac_rs.c
+)
+target_include_directories(test_rfac_rs PRIVATE ${CLEED_TEST_INCLUDE_DIRS})
+if (WIN32)
+    target_link_libraries(test_rfac_rs PRIVATE rfacStatic m)
+else()
+    target_link_libraries(test_rfac_rs PRIVATE rfac m)
+endif()
+add_test(NAME rfac.rs COMMAND test_rfac_rs)
 
 add_executable(fake_csearch_leed
     fakes/fake_csearch_leed.c

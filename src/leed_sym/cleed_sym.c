@@ -37,7 +37,7 @@ version 1.1
 
 /*======================================================================*/
 
-int main(int argc, char *argv[])
+int cleed_sym_main(int argc, char *argv[])
 
 /*********************************************************************
  Perform a LEED calculation for a general case
@@ -630,4 +630,11 @@ FILE *res_stream;
 /* set exit status explicitly */
  exit(0);
 
-} /* end of main */
+} /* end of cleed_sym_main */
+
+#ifndef CLEED_NO_MAIN
+int main(int argc, char *argv[])
+{
+  return cleed_sym_main(argc, argv);
+}
+#endif

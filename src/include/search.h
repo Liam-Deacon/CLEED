@@ -16,6 +16,8 @@ extern "C" {
 *********************************************************************/
 
 #include "gh_stddef.h"
+// cppcheck-suppress missingIncludeSystem
+#include <stdint.h>
 
 #define REAL_IS_DOUBLE
 #include "real.h"
@@ -40,6 +42,23 @@ extern "C" {
 extern struct sratom_str *sr_atoms;
 extern struct search_str *sr_search;
 extern char *sr_project;
+extern int sr_amoeba_eval_limit;
+extern int sr_powell_iter_limit;
+extern int sr_sa_iter_limit;
+extern int sr_pso_eval_limit;
+extern int sr_pso_iter_limit;
+extern int sr_pso_swarm_size;
+extern real sr_pso_inertia;
+extern real sr_pso_c1;
+extern real sr_pso_c2;
+extern real sr_pso_vmax;
+extern int sr_de_eval_limit;
+extern int sr_de_iter_limit;
+extern int sr_de_population;
+extern real sr_de_weight;
+extern real sr_de_crossover;
+extern real sr_de_init_span;
+extern uint64_t sa_idum;
 
 /*********************************************************************
  End of include file 

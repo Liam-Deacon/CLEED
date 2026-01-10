@@ -23,7 +23,13 @@ cleed \- compare experimental and calculated IV curves
 
 In this LEED code, fully dynamical scattering theory has been implemented along the lines of algorithms described by Pendry (layer doubling between successive layers of atoms
 
-Both program versions use the same input files, whereby cleed_sym needs some additional information, which is ignored by vanilla cleed (or sometimes cleed_nsym)
+Both program versions use the same input files, whereby cleed_sym needs some additional information, which is ignored by vanilla cleed (or sometimes cleed_nsym). Use
+.B --auto
+,
+.B --sym
+, or
+.B --nsym
+to select the symmetry mode.
 
 .SH OPTIONS
 
@@ -60,6 +66,8 @@ specifies the R factor type to be calculated. Valid arguments are:
 .br
 \'rp\' : calculates the Pendry R factor Rp. This provides the level of agreement on shape of curves, not the intensity by comparing logarithmic derivatives, Rp = [1 over I(E)] * [delta I(E) over delta E], and is the standard in I(V) analysis. The Pendry R factor is problematic with experimental noise as it is sensitive to positions of peaks, not intensity and therefore noisy data will result in extra 'peaks'. The workaround for this is to smooth or average the experimental data using a tool such as 
 .B ftsmooth
+.br
+\'rs\' : calculates the improved reliability factor Rs (Imre et al., 2025, arXiv:2511.05448), which smooths the Pendry-style Y function at intensity minima.
 .RE
 .IP -s
 .I <shift1,shift2,shift3>
@@ -102,6 +110,15 @@ This variable has to be set using the
 or 
 .I setenv
 UNIX commands, respectively, before the program is called for the first time.
+.RE
+.PP
+.B CLEED_SYM
+.RS
+Controls the symmetry mode when using
+.B cleed
+and accepts auto/yes/no/true/false/1/0. Command-line flags override this
+variable; auto-detection checks the bulk file (-b) before the parameter file
+(-i).
 .RE
 
 .\" Document here situations in which the program can be used, if there are uses that are not obvious.

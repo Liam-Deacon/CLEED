@@ -10,6 +10,12 @@ This page defines the environment variables referenced throughout the manual.
 
    Parent directory of the CLEED distribution.
 
+.. envvar:: CLEED_SYM
+
+   Controls the symmetry mode used by :ref:`cleed`. Accepted values are
+   ``auto``, ``yes``, ``no``, ``true``, ``false``, ``1``, and ``0``.
+   Command-line flags (``--auto``, ``--sym``, ``--nsym``) override this variable.
+
 .. envvar:: PATH
 
    System search path used to locate executables.
@@ -21,12 +27,63 @@ This page defines the environment variables referenced throughout the manual.
 .. envvar:: CSEARCH_LEED
 
    Path to the LEED-IV program executable used by :ref:`csearch` (commonly
-   :ref:`cleed_nsym`).
+   :ref:`cleed` or :ref:`cleed_nsym`).
 
 .. envvar:: CSEARCH_RFAC
 
    Path to the R-factor executable used by :ref:`csearch` (commonly
    :ref:`crfac`).
+
+.. envvar:: CSEARCH_MAX_EVALS
+
+   Optional evaluation budget for :ref:`csearch` (same as ``--max-evals``).
+
+.. envvar:: CSEARCH_MAX_ITERS
+
+   Optional iteration budget for :ref:`csearch` (same as ``--max-iters``).
+
+.. envvar:: CSEARCH_SEED
+
+   Optional deterministic seed for stochastic optimizers (same as ``--seed``).
+
+   Seeds are parsed as unsigned 64-bit integers. A value of 0 uses the built-in
+   default seed for the annealing RNG.
+
+.. envvar:: CSEARCH_PSO_SWARM
+
+   Optional PSO swarm size (same as ``--pso-swarm``).
+
+.. envvar:: CSEARCH_PSO_INERTIA
+
+   Optional PSO inertia weight (same as ``--pso-inertia``).
+
+.. envvar:: CSEARCH_PSO_C1
+
+   Optional PSO cognitive coefficient (same as ``--pso-c1``).
+
+.. envvar:: CSEARCH_PSO_C2
+
+   Optional PSO social coefficient (same as ``--pso-c2``).
+
+.. envvar:: CSEARCH_PSO_VMAX
+
+   Optional PSO velocity clamp (same as ``--pso-vmax``).
+
+.. envvar:: CSEARCH_DE_POP
+
+   Optional DE population size (same as ``--de-pop``).
+
+.. envvar:: CSEARCH_DE_WEIGHT
+
+   Optional DE mutation weight factor (same as ``--de-weight``).
+
+.. envvar:: CSEARCH_DE_CR
+
+   Optional DE crossover probability (same as ``--de-cr``).
+
+.. envvar:: CSEARCH_DE_SPAN
+
+   Optional DE initial parameter span (same as ``--de-span``).
 
 .. envvar:: RF_HELP_FILE
 

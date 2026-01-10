@@ -16,10 +16,97 @@ version 0.1
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+// cppcheck-suppress missingIncludeSystem
+#include <limits.h>
+// cppcheck-suppress missingIncludeSystem
+#include <errno.h>
 #include <math.h>
 #include "search.h"
+#include "search_optimizer.h"
 
 /**********************************************************************/
+
+static const char *sr_consume_arg(int argc, char *argv[], int *i_arg,
+                                  const char *missing_msg)
+{
+  (*i_arg)++;
+  if (*i_arg < argc) {
+    return argv[*i_arg];
+  }
+#ifdef ERROR
+  fprintf(STDERR,"%s", missing_msg);
+#endif
+  exit(1);
+}
+
+static int sr_parse_positive_int(const char *value, const char *invalid_msg)
+{
+  char *end = NULL;
+  long parsed;
+
+  errno = 0;
+  parsed = strtol(value, &end, 10);
+  if (end == value || errno == ERANGE || parsed <= 0 || parsed > INT_MAX) {
+#ifdef ERROR
+    fprintf(STDERR,"%s", invalid_msg);
+#endif
+    exit(1);
+  }
+  return (int)parsed;
+}
+
+static uint64_t sr_parse_seed(const char *value, const char *invalid_msg)
+{
+  char *end = NULL;
+  unsigned long long parsed;
+
+  errno = 0;
+  parsed = strtoull(value, &end, 10);
+  if (end == value || errno == ERANGE) {
+#ifdef ERROR
+    fprintf(STDERR,"%s", invalid_msg);
+#endif
+    exit(1);
+  }
+  return (uint64_t)parsed;
+}
+
+static real sr_parse_positive_real(const char *value, const char *invalid_msg)
+{
+  char *end = NULL;
+  double parsed = strtod(value, &end);
+  if (end == value || parsed <= 0.0) {
+#ifdef ERROR
+    fprintf(STDERR,"%s", invalid_msg);
+#endif
+    exit(1);
+  }
+  return (real)parsed;
+}
+
+static int sr_parse_required_positive_int(int argc, char *argv[], int *i_arg,
+                                          const char *missing_msg,
+                                          const char *invalid_msg)
+{
+  const char *value = sr_consume_arg(argc, argv, i_arg, missing_msg);
+  return sr_parse_positive_int(value, invalid_msg);
+}
+
+static uint64_t sr_parse_required_seed(int argc, char *argv[], int *i_arg,
+                                       const char *missing_msg,
+                                       const char *invalid_msg)
+{
+  const char *value = sr_consume_arg(argc, argv, i_arg, missing_msg);
+  return sr_parse_seed(value, invalid_msg);
+}
+
+static real sr_parse_required_positive_real(int argc, char *argv[], int *i_arg,
+                                            const char *missing_msg,
+                                            const char *invalid_msg)
+{
+  const char *value = sr_consume_arg(argc, argv, i_arg, missing_msg);
+  return sr_parse_positive_real(value, invalid_msg);
+}
 
 int main(int argc, char *argv[])
 {
@@ -28,7 +115,8 @@ int main(int argc, char *argv[])
   int i_par;
   int i_atoms;
   int ndim;
-  int search_type;
+  const sr_optimizer_def *optimizer;
+  sr_optimizer_config opt_cfg;
 
   real delta;
 
@@ -62,13 +150,15 @@ int main(int argc, char *argv[])
   (void)snprintf(inp_file, sizeof(inp_file), "%s", "---");
   (void)snprintf(bak_file, sizeof(bak_file), "%s", "---");
 
-  search_type = SR_SIMPLEX;
+  optimizer = sr_optimizer_by_type(SR_SIMPLEX);
+  sr_optimizer_config_init(&opt_cfg);
+  sr_optimizer_config_from_env(&opt_cfg);
 
   if (!argc) {search_usage(STDERR);exit(1);}
   
   for (i_arg = 1; i_arg < argc; i_arg++)
   {
-    if(*argv[i_arg] != '-')
+    if (argv[i_arg][0] != '-')
     {
       #ifdef ERROR
       fprintf(STDERR,"*** error (SEARCH):\tsyntax error:\n");
@@ -76,103 +166,168 @@ int main(int argc, char *argv[])
       #endif
       exit(1);
     }
-    else
-    {
 
-      /* Read initial displacement */
-      if(strncmp(argv[i_arg], "-d", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg < argc)
-          delta = (real)atof(argv[i_arg]);
-        else 
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): initial displacement value not given\n");
-          #endif
-          exit(1);
-        }
+    /* Read initial displacement */
+    if (strncmp(argv[i_arg], "-d", 2) == 0) {
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): initial displacement value not given\n");
       }
+      delta = (real)atof(value);
+      continue;
+    }
 
-      /* Read parameter input file */
-      if(strncmp(argv[i_arg], "-i", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg < argc)
-            (void)snprintf(inp_file, sizeof(inp_file), "%s", argv[i_arg]);
-        else 
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): no input file specified\n");
-          #endif
-          exit(1);
-        }
+    /* Read parameter input file */
+    if (strncmp(argv[i_arg], "-i", 2) == 0) {
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): no input file specified\n");
       }
+      (void)snprintf(inp_file, sizeof(inp_file), "%s", value);
+      continue;
+    }
 
-      /* Read vertex file */
-      if(strncmp(argv[i_arg], "-v", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg < argc)
-            (void)snprintf(bak_file, sizeof(bak_file), "%s", argv[i_arg]);
-        else
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): no vertex file specified\n");
-          #endif
-          exit(1);
-        }
+    /* Read vertex file */
+    if (strncmp(argv[i_arg], "-v", 2) == 0) {
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): no vertex file specified\n");
       }
+      (void)snprintf(bak_file, sizeof(bak_file), "%s", value);
+      continue;
+    }
 
-      /* Read search type */
-      if(strncmp(argv[i_arg], "-s", 2) == 0)
-      {
-        i_arg++;
-        if (i_arg >= argc) 
-        {
-          #ifdef ERROR
-          fprintf(STDERR,"*** error (SEARCH): no search algorithm specified\n");
-          #endif
-          exit(1);
-        }
-        if((strncmp(argv[i_arg], "si", 2) == 0) || 
-           (strncmp(argv[i_arg], "sx", 2) == 0))
-          search_type = SR_SIMPLEX;
-        else if(strncmp(argv[i_arg], "po", 2) == 0)
-          search_type = SR_POWELL;
-        else if(strncmp(argv[i_arg], "sa", 2) == 0)
-          search_type = SR_SIM_ANNEALING;
-        else if(strncmp(argv[i_arg], "ga", 2) == 0)
-          search_type = SR_GENETIC;
-        else
-        {
-          #ifdef ERROR
-          fprintf(STDERR,
-             "*** error (SEARCH): unknown search type \"%s\" (option -s)\n", 
-             argv[i_arg]);
-          #endif
-          exit(1);
-        }
-        
-      } /* search type */
-      
-      /* help */
-      if ((strcmp(argv[i_arg], "-h") == 0) || 
-          (strcmp(argv[i_arg], "--help") == 0))
-      {
-        search_usage(STDOUT);
-        exit(0);
+    /* Read search type */
+    if (strncmp(argv[i_arg], "-s", 2) == 0) {
+      const char *value = argv[i_arg] + 2;
+      if (*value == '\0') {
+        value = sr_consume_arg(argc, argv, &i_arg,
+            "*** error (SEARCH): no search algorithm specified\n");
       }
-      
-      /* version information */
-      if ((strcmp(argv[i_arg], "-V") == 0) ||
-           (strcmp(argv[i_arg], "--version") == 0))
-      {
-        search_info();
-        exit(0);
+      optimizer = sr_optimizer_by_name(value);
+      if (!optimizer) {
+        #ifdef ERROR
+        fprintf(STDERR,
+           "*** error (SEARCH): unknown search type \"%s\" (option -s)\n",
+           value);
+        #endif
+        exit(1);
       }
+      continue;
+    }
 
-    } /* else */
+    if (strcmp(argv[i_arg], "--max-evals") == 0) {
+      opt_cfg.max_evals = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): max evals value not given\n",
+          "*** error (SEARCH): invalid max evals value\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--max-iters") == 0) {
+      opt_cfg.max_iters = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): max iters value not given\n",
+          "*** error (SEARCH): invalid max iters value\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--seed") == 0) {
+      opt_cfg.seed = sr_parse_required_seed(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): seed value not given\n",
+          "*** error (SEARCH): invalid seed value\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-swarm") == 0) {
+      opt_cfg.pso_swarm_size = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO swarm size not given\n",
+          "*** error (SEARCH): invalid PSO swarm size\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-inertia") == 0) {
+      opt_cfg.pso_inertia = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO inertia not given\n",
+          "*** error (SEARCH): invalid PSO inertia\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-c1") == 0) {
+      opt_cfg.pso_c1 = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO c1 not given\n",
+          "*** error (SEARCH): invalid PSO c1\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-c2") == 0) {
+      opt_cfg.pso_c2 = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO c2 not given\n",
+          "*** error (SEARCH): invalid PSO c2\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--pso-vmax") == 0) {
+      opt_cfg.pso_vmax = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): PSO vmax not given\n",
+          "*** error (SEARCH): invalid PSO vmax\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--de-pop") == 0) {
+      opt_cfg.de_population = sr_parse_required_positive_int(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE population not given\n",
+          "*** error (SEARCH): invalid DE population\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--de-weight") == 0) {
+      opt_cfg.de_weight = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE weight not given\n",
+          "*** error (SEARCH): invalid DE weight\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--de-cr") == 0) {
+      opt_cfg.de_crossover = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE crossover not given\n",
+          "*** error (SEARCH): invalid DE crossover rate\n");
+      continue;
+    }
+
+    if (strcmp(argv[i_arg], "--de-span") == 0) {
+      opt_cfg.de_init_span = sr_parse_required_positive_real(
+          argc, argv, &i_arg,
+          "*** error (SEARCH): DE span not given\n",
+          "*** error (SEARCH): invalid DE span\n");
+      continue;
+    }
+
+    /* help */
+    if ((strcmp(argv[i_arg], "-h") == 0) ||
+        (strcmp(argv[i_arg], "--help") == 0)) {
+      search_usage(STDOUT);
+      exit(0);
+    }
+
+    /* version information */
+    if ((strcmp(argv[i_arg], "-V") == 0) ||
+        (strcmp(argv[i_arg], "--version") == 0)) {
+      search_info();
+      exit(0);
+    }
   
   }  /* for i_arg */
 
@@ -260,58 +415,27 @@ int main(int argc, char *argv[])
 
   fclose(log_stream);
 
+  log_stream = fopen(log_file, "a");
+  if (log_stream == NULL) { OPEN_ERROR(log_file); }
+  fprintf(log_stream, "=> Optimizer: %s\n", optimizer ? optimizer->name : "simplex");
+  sr_optimizer_log_config(log_stream, &opt_cfg);
+  fclose(log_stream);
+
 /***********************************************************************
   Perform the search according to the selected algorithm.
 ***********************************************************************/
 
-  switch(search_type)
+  if (!optimizer) {
+    optimizer = sr_optimizer_by_type(SR_SIMPLEX);
+  }
+  if (sr_optimizer_run(optimizer, &opt_cfg, ndim, delta, bak_file, log_file) != 0)
   {
-/*
-  SIMPLEX METHOD
-*/
-    case(SR_SIMPLEX):
-    {
-      SR_SX(ndim, delta, bak_file, log_file);
-      break;
-    } /* case SR_SIMPLEX */
-
-/*
-  POWELL'S METHOD
-*/
-    case(SR_POWELL):
-    {
-      SR_PO(ndim, bak_file, log_file);
-      break;
-    } /* case SR_POWELL */
-
-/*
-  SIMULATED ANNEALING
-*/
-    case(SR_SIM_ANNEALING):
-    {
-      SR_SA(ndim, delta, bak_file, log_file);
-      break;
-    } /* case SR_SIM_ANNEALING */
-
-/*
-  GENETIC ALGORITHM
-*/
-    case(SR_GENETIC):
-    {
-      SR_NOT_IMPLEMENTED_ERROR("genetic algorithm");
-      break;
-    } /* case SR_GENETIC */
-    
-    default:
-    {
-      #ifdef ERROR
-      fprintf(STDERR,
-             "*** error (SEARCH): unknown search type \"%d\"\n", search_type);
-      #endif
-      exit(1);
-    }
-    
-  }  /* switch */
+    #ifdef ERROR
+    fprintf(STDERR,
+           "*** error (SEARCH): failed to run search type\n");
+    #endif
+    exit(1);
+  }
   
   return 0;
   

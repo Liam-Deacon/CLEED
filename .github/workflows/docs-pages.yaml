@@ -19,9 +19,9 @@ jobs:
     name: Build HTML
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -37,7 +37,7 @@ jobs:
 
       - name: Upload Pages artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: doc/_build/html
 
@@ -53,6 +53,48 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Check GitHub Pages is enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Check if required tools are available
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "::error::jq is not available on this runner"
+            exit 1
+          fi
+          if ! command -v gh >/dev/null 2>&1; then
+            echo "::error::gh CLI is not available on this runner"
+            exit 1
+          fi
+
+          # Check if GitHub Pages is enabled with workflow build type
+          # Capture both stdout and stderr, and exit status in one call
+          PAGES_INFO=$(gh api repos/${{ github.repository }}/pages 2>&1)
+          API_EXIT_CODE=$?
+
+          if [ $API_EXIT_CODE -ne 0 ]; then
+            # Check if it's specifically a 404 (Pages not configured) vs other errors
+            # Note: This pattern matching depends on GitHub's current error text format
+            if echo "$PAGES_INFO" | grep -q "Not Found\|HTTP 404"; then
+              echo "::error::GitHub Pages is not enabled for this repository."
+              echo "::error::To fix: Go to Settings > Pages > Source and select 'GitHub Actions'"
+              echo "::error::Or run: gh api repos/${{ github.repository }}/pages -X POST -f build_type='workflow'"
+              exit 1
+            else
+              echo "::error::Failed to check GitHub Pages status. This may be a transient API error:"
+              echo "::error::$PAGES_INFO"
+              exit 1
+            fi
+          fi
+
+          BUILD_TYPE=$(echo "$PAGES_INFO" | jq -r '.build_type // empty')
+          if [ "$BUILD_TYPE" != "workflow" ]; then
+            echo "::error::GitHub Pages build type is '$BUILD_TYPE', expected 'workflow'."
+            echo "::error::To fix: Go to Settings > Pages > Source and select 'GitHub Actions'"
+            exit 1
+          fi
+          echo "✓ GitHub Pages is enabled with workflow build type"
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
