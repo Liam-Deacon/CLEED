@@ -30,7 +30,7 @@
  *
  * \param[in] eng energy value for which interpolation is to be performed.
  *
- * \param[in,out] *list list of energy/intensity/deriv2 values,
+ * \param[in,out] list pointer to array of energy/intensity/deriv2 values,
  * the latter of which is generated in function cr_spline.
  *
  * \param[in] leng number of elements in list.

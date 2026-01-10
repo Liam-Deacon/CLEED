@@ -25,7 +25,7 @@
 /*!
  * Performs the first stage of a cubic spline.
  *
- * \param[in,out] *list list of energy/intensity values to be
+ * \param[in,out] iv pointer to #rfac_iv with energy/intensity values to be
  * interpolated by cubic spline.
  * The function will generate the structure elements deriv2, which will
  * be used for interpolation in function rfac_splint() .
