@@ -36,10 +36,8 @@
  * \param[in] filename string containing the name of the file where the
  * input should be read from.
  *
- * \return pointer to the IV curve (#rfac_iv). The IV list is terminated
- * by a pair (energy, intensity) of negative values.
- *
- * \retval \c NULL if failed.
+ * \return Pointer to the IV curve (#rfac_iv). The IV list is terminated
+ * by a pair (energy, intensity) of negative values. Returns NULL if failed.
  */
 rfac_iv *rfac_iv_read(const char *filename)
 {

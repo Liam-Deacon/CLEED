@@ -22,8 +22,7 @@ Lines beginning with '#' are interpreted as comments.
 #include "latt.h"
 #include "miller_index.h"
 
-FILE *ctr_stream;
-FILE *inf_stream;
+/* ctr_stream and inf_stream are defined in latt_streams.c, declared extern in lattice.h */
 
 int main(int argc, char *argv[])
 {

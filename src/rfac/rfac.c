@@ -31,7 +31,7 @@
  * \param type #rfactor_type enum
  * \return name of RFactor
  */
-inline const char *rfactor_name(rfactor_type type) {
+const char *rfactor_name(rfactor_type type) {
   switch (type)
   {
     case RP_FACTOR: {return "Rp"; break;}
@@ -43,7 +43,7 @@ inline const char *rfactor_name(rfactor_type type) {
   return "Unknown RFactor type";
 }
 
-inline void rfactor_print(
+void rfactor_print(
     FILE *stream,
     rfactor_type type,
     real r_min,
