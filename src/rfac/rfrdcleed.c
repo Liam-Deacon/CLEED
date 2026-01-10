@@ -58,13 +58,11 @@ static const size_t LENGTH_OF_NUMBER = 15 ;  /* characters per intensity in inpu
  *
  * \param buffer file buffer containing theoretical input.
  *
- * \param index_list command line for interpreter rfac_intindl() . Syntax:
- * @code (index1,index2) {*scale +/- (index1,index2)*scale} @endcode
+ * \param index_list command line for interpreter rfac_intindl().
+ * Syntax: \c "(index1,index2) {*scale +/- (index1,index2)*scale}"
  *
  * \return pointer to the IV curve (#rfac_iv). The list is
- * terminated by a pair of negative values.
- *
- * \retval \c NULL if failed.
+ * terminated by a pair of negative values. Returns NULL if failed.
  */
 rfac_iv *rfac_iv_read_cleed(rfac_ivcur *iv_cur,
     char *buffer, char *index_list)
