@@ -365,7 +365,7 @@ int  sr_mkinp_mir(const real *, int, char *);
 
 /**
  * @brief Read search input file.
- * @param filename Input filename.
+ * @param inp_file Input filename.
  * @return 0 on success.
  */
 int  sr_rdinp(const char *);
