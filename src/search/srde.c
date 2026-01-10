@@ -116,18 +116,16 @@ static int sr_de_validate_pick_inputs(const sr_rng *rng, int pop, int skip,
 }
 
 /**
- * @brief Select three distinct random indices for DE mutation.
+ * @brief Select a random index for DE mutation, excluding specified indices.
  *
- * Selects indices a, b, c from [1, pop] such that none equal skip or
- * each other. This is used to form the DE/rand/1 mutant vector.
+ * Selects an index from [1, pop] that does not equal skip, exclude1, or exclude2.
  *
- * @param rng  Pointer to the random number generator state.
- * @param pop  Population size.
- * @param skip Index to exclude (typically the current target vector).
- * @param a    Output: first randomly selected index.
- * @param b    Output: second randomly selected index.
- * @param c    Output: third randomly selected index.
- * @return 0 on success, -1 on invalid parameters.
+ * @param rng      Pointer to the random number generator state.
+ * @param pop      Population size.
+ * @param skip     Index to exclude (typically the current target vector).
+ * @param exclude1 First additional index to exclude.
+ * @param exclude2 Second additional index to exclude.
+ * @return Randomly selected index not matching any excluded values.
  */
 static int sr_de_pick_index(sr_rng *rng, int pop, int skip, int exclude1,
                             int exclude2)
@@ -141,6 +139,20 @@ static int sr_de_pick_index(sr_rng *rng, int pop, int skip, int exclude1,
   return idx;
 }
 
+/**
+ * @brief Select three distinct random indices for DE mutation.
+ *
+ * Selects indices a, b, c from [1, pop] such that none equal skip or
+ * each other. This is used to form the DE/rand/1 mutant vector.
+ *
+ * @param rng  Pointer to the random number generator state.
+ * @param pop  Population size.
+ * @param skip Index to exclude (typically the current target vector).
+ * @param a    Output: first randomly selected index.
+ * @param b    Output: second randomly selected index.
+ * @param c    Output: third randomly selected index.
+ * @return 0 on success, -1 on invalid parameters.
+ */
 static int sr_de_pick_indices(sr_rng *rng, int pop, int skip,
                               int *a, int *b, int *c)
 {
