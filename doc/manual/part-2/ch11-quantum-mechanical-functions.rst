@@ -141,7 +141,7 @@ The memory requirements of the list created by ``mk_cg_coef`` are for a given va
    * - 16
      - 11,673,288
 
-.. TODO:: Equation verification screenshots (PDF p30-31):
+.. todo:: Equation verification screenshots (PDF p30-31):
 ..   doc/manual/verify/equations/eq-11-cg.png (cg integral + allowed values)
 ..   doc/manual/verify/equations/eq-11-cg-transform.png (cg transformations)
 ..   doc/manual/verify/equations/eq-11-blm.png (blm integral + allowed values)

@@ -127,8 +127,8 @@ The data collection is mostly done at normal incidence of the primary electron b
  taking care that the :math:`I-V` curves of equivalent spots are identical, normal incidence
  conditions can be adjusted within a few tenths of a degree.
 
-.. TODO:: Figure (PDF p9)
+.. todo:: Figure (PDF p9)
    Rear-view LEED optics schematic.
 
-.. TODO:: Figure (PDF p10)
+.. todo:: Figure (PDF p10)
    SPA-LEED Faraday cup arrangement.
