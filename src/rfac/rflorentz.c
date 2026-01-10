@@ -32,9 +32,9 @@ static const double EPSILON = 0.001; /*!< determines the integration range for s
  * Do a Lorentzian smooth for experimental or theoretical IV curve
  * (equidistant or not):
  *
- *   \f$I(E') = c * S { I(E')* vi dE /[(E-E')^2 + vi^2] }$\f
+ *   \f$I(E') = c * S { I(E')* vi dE /[(E-E')^2 + vi^2] }\f$
  *
- *   where \f$c = 1/ S { vi dE /[(E-E')^2 + vi^2] }.
+ *   where \f$c = 1/ S { vi dE /[(E-E')^2 + vi^2] }\f$.
  *
  * If the IV curve is not sorted yet (iv_cur->the/exp_sort = 0), the
  * routine cr_(t)sort will be called to perform sorting.
