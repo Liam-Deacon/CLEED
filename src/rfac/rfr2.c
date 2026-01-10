@@ -43,8 +43,7 @@
  *
  * \note: \p eng must be terminated by #F_END_OF_LIST.
  *
- * \retval R2-factor if successful.
- * \retval #RFAC_FAILURE if failed.
+ * \return R2-factor if successful, or #RFAC_FAILURE if failed.
  */
 real rfac_r2(const real *eng, const real *e_int, const real *t_int)
 {

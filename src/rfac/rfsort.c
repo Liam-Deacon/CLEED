@@ -36,8 +36,7 @@
  * \param iv data structure containing all essential IV data. The curve will be
  * modified after return.
  *
- * \retval #RFAC_SUCCESS if successful.
- * \retval #RFAC_FAILURE if failed.
+ * \return #RFAC_SUCCESS if successful, or #RFAC_FAILURE if failed.
  *
  * \todo implement \ref RFAC_FAILURE.
  */

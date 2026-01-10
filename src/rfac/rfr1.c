@@ -44,8 +44,7 @@
  *
  * \note \p eng must be terminated by #F_END_OF_LIST.
  *
- * \retval R1-factor, if successful.
- * \retval F_FAIL, if failed.
+ * \return R1-factor if successful, F_FAIL if failed.
  */
 real rfac_r1(const real *eng, const real *e_int, const real *t_int)
 {

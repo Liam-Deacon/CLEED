@@ -41,8 +41,7 @@ static const double CNORM = 0.666667; /*!< 2/3 normalisation to uncorrelated cur
  *
  * \note \p eng must be terminated by #F_END_OF_LIST.
  *
- * \return R2-factor if successful.
- * \retval #RFAC_FAILURE, if failed.
+ * \return R2-factor if successful, or #RFAC_FAILURE if failed.
  *
  */
 real rfac_rb(const real *eng, const real *e_int, const real *t_int)
