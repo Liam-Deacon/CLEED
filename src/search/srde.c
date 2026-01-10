@@ -86,14 +86,31 @@ static real sr_de_abs(real value)
   return (value < (real)0.0) ? -value : value;
 }
 
+static int sr_de_skip_excludes(int skip, int pop)
+{
+  if (skip < 1) return 0;
+  if (skip > pop) return 0;
+  return 1;
+}
+
+static int sr_de_pick_available(int pop, int skip)
+{
+  int available = pop;
+  if (sr_de_skip_excludes(skip, pop)) {
+    available -= 1;
+  }
+  return available;
+}
+
 static int sr_de_validate_pick_inputs(sr_rng *rng, int pop, int skip,
                                       int *a, int *b, int *c)
 {
-  if (!rng || !a || !b || !c) return -1;
+  if (!rng) return -1;
+  if (!a) return -1;
+  if (!b) return -1;
+  if (!c) return -1;
   if (pop < 4) return -1;
-
-  const int excluded = (skip >= 1 && skip <= pop) ? 1 : 0;
-  if (pop - excluded < 3) return -1;
+  if (sr_de_pick_available(pop, skip) < 3) return -1;
 
   return 0;
 }
