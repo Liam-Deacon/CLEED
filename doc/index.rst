@@ -18,6 +18,8 @@ Contents:
    background
    manual/index
    environment
+   algorithms/index
+   api/index
    file_formats
    LEED_programs
    aux_programs

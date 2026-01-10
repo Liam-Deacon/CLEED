@@ -6,7 +6,7 @@ Chapter 2: Qualitative Information: The LEED Pattern
    are placeholders pending review.
 
 2.1 LEED Pattern
----------------
+----------------
 
 Since the electrons do not penetrate into the crystal bulk far enough to experience its
  three-dimensional periodicity, the diffraction pattern is determined by the two-dimensional
@@ -153,5 +153,4 @@ This relation holds for each direction parallel to the surface independently. It
  particularly useful for determining the size of adsorbate islands which lead to extra
  superstructure spots. A good introduction (in German) into spot profile analysis is given
  by Henzler and Göpel in Ref. [39].
-
 

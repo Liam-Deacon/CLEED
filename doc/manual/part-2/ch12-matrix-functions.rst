@@ -6,7 +6,7 @@ Chapter 12: Matrix Functions
    verification.
 
 12.1 Introduction
-----------------
+-----------------
 
 In contrast to the conventional definition of matrices in C as arrays of pointers to arrays
  of numbers (integer, float, etc.), in our programs matrices are structures ``struct mat_str``
@@ -143,11 +143,11 @@ be either matrices or single numbers.
 
 The matrix functions described in this section are not thought to be used in the
 "production state" of a LEED program since they produce very large outputs. During the
- development of LEED (or other electron scattering) programs it is however useful, to
- display the contents of matrices in the right format. Two functions are available for this
- purpose. ``int matshow(mat)`` displays the real and imaginary part of complex matrix
- elements while ``int matshowabs(mat)`` displays only the modulus of complex matrix
- elements and therefore reduces the amount of output.
+development of LEED (or other electron scattering) programs it is however useful, to
+display the contents of matrices in the right format. Two functions are available for this
+purpose. ``int matshow(mat)`` displays the real and imaginary part of complex matrix
+elements while ``int matshowabs(mat)`` displays only the modulus of complex matrix
+elements and therefore reduces the amount of output.
 
 For example the matrix:
 
