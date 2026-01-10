@@ -18,6 +18,7 @@ Contents:
    background
    manual/index
    environment
+   cpp_bindings
    file_formats
    LEED_programs
    aux_programs

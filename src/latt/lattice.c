@@ -161,6 +161,15 @@ static int lattice_open_input_stream(const lattice_t *lat, FILE **stream,
     return -1;
   }
 
+  if (inf_stream == NULL)
+  {
+    inf_stream = stderr;
+  }
+  if (ctr_stream == NULL)
+  {
+    ctr_stream = stdout;
+  }
+
   *stream = stdin;
   *should_close = false;
 

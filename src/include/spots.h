@@ -181,6 +181,7 @@ bool spots_show_indexing(const spots_t *spots);
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 } /* extern "C" */
 
+#ifndef CLEED_DISABLE_LEGACY_CPP
 namespace cleed {
 
 /*! \class Spot
@@ -290,6 +291,7 @@ class Spots {
 };
 
 } /* namespace cleed */
+#endif /* CLEED_DISABLE_LEGACY_CPP */
 
 #endif
 

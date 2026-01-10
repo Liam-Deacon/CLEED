@@ -135,6 +135,22 @@ extern "C" {
 
 #endif  /* REAL_IS_FLOAT */
 
+#ifndef CLEED_REAL_FMT
+#ifdef REAL_IS_FLOAT
+#define CLEED_REAL_FMT ""
+#else
+#define CLEED_REAL_FMT "l"
+#endif
+#endif
+
+#ifndef cleed_real_fabs
+#define cleed_real_fabs R_fabs
+#endif
+
+#ifndef cleed_real_sqrt
+#define cleed_real_sqrt R_sqrt
+#endif
+
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }
 #endif

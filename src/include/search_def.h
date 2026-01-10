@@ -21,6 +21,9 @@ extern "C" {
 #ifndef SEARCH_DEF_H
 #define SEARCH_DEF_H
 
+#include "gh_stddef.h"
+#include "real.h"
+
 /*********************************************************************
  structures and types 
 *********************************************************************/
@@ -48,6 +51,8 @@ struct sratom_str
  real *z_par;     /* coefficients used to determine shifts in z */
  real *dr_par;    /* coefficients used to determine shifts in dr */
 };
+
+typedef struct sratom_str search_atom;
 
 struct search_str
 {
@@ -88,6 +93,9 @@ struct search_str
  char rf_type[16];     /* R factor type */
  real rf_range;        /* shift range for R factor */
 };
+
+typedef struct search_str search;
+typedef int search_method;
 
 /*********************************************************************
  special definitions

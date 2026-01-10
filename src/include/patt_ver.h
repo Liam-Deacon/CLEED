@@ -10,6 +10,10 @@ Changes:
 #ifndef PATT_VER_H
 #define PATT_VER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "patt_def.h"
 
 /* additional program information */
@@ -34,6 +38,10 @@ Changes:
 #define PROG_PLAT "Linux"
 #else
 #define PROG_PLAT "Unix"
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* PATT_VER_H */
