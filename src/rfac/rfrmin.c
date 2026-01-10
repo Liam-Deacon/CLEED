@@ -339,7 +339,7 @@ void rfac_ivcur_write(const char *iv_file_prefix,
  *
  * \param[in] eng pointer to list of energies
  * \param[in] t_int pointer to list of theoretical intensities
- * \param[in[ e_int pointer to list of experimental intensities
+ * \param[in] e_int pointer to list of experimental intensities
  */
 void rfac_iv_print_list(const real *eng, const real *t_int, const real *e_int) {
   if (!eng || !t_int || !e_int) return; /* input contains NULL(s) */
