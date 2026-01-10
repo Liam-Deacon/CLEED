@@ -519,30 +519,40 @@ static int sr_de_run_inputs_ok(const sr_de_state *state,
   return 1;
 }
 
+static int sr_de_run_step(sr_de_state *state, real (*func)(const real *),
+                          real *best, real *best_val, int *evals, int *stop)
+{
+  if (!stop) return -1;
+
+  if (*evals >= state->max_evals) {
+    *stop = 1;
+    return 0;
+  }
+
+  if (sr_de_run_generation(state, func, best, best_val, evals) != 0) {
+    return -1;
+  }
+
+  *stop = sr_de_should_stop(state, *best_val);
+  return 0;
+}
+
 static int sr_de_run(sr_de_state *state, real (*func)(const real *), real *best,
                      real *best_val, int *evals)
 {
   if (!sr_de_run_inputs_ok(state, func, best, best_val)) return -1;
 
   int local_evals = 0;
-  int stop = 0;
   if (sr_de_init_population(state, best, best_val, func, &local_evals) != 0) {
     return -1;
   }
 
   for (int iter = 0; iter < state->max_iters; iter++) {
-    if (local_evals >= state->max_evals) {
-      stop = 1;
-    } else if (sr_de_run_generation(state, func, best, best_val,
-                                    &local_evals) != 0) {
+    int stop = 0;
+    if (sr_de_run_step(state, func, best, best_val, &local_evals, &stop) != 0) {
       return -1;
-    } else if (sr_de_should_stop(state, *best_val)) {
-      stop = 1;
     }
-
-    if (stop) {
-      break;
-    }
+    if (stop) break;
   }
 
   if (evals) {
