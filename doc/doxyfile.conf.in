@@ -122,12 +122,17 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 
 INPUT                  = @PROJECT_SOURCE_DIR@/src/include \
-                         @PROJECT_SOURCE_DIR@/src/search \
-                         @PROJECT_SOURCE_DIR@/src/leed \
-                         @PROJECT_SOURCE_DIR@/src/rfac \
-                         @PROJECT_SOURCE_DIR@/src/patt \
-                         @PROJECT_SOURCE_DIR@/src/latt \
-                         @PROJECT_SOURCE_DIR@/src/matrix
+                          @PROJECT_SOURCE_DIR@/src/search \
+                          @PROJECT_SOURCE_DIR@/src/leed_sym \
+                          @PROJECT_SOURCE_DIR@/src/leed_nsym \
+                          @PROJECT_SOURCE_DIR@/src/rfac \
+                          @PROJECT_SOURCE_DIR@/src/patt \
+                          @PROJECT_SOURCE_DIR@/src/latt \
+                          @PROJECT_SOURCE_DIR@/src/mkiv \
+                          @PROJECT_SOURCE_DIR@/src/ftsmooth \
+                          @PROJECT_SOURCE_DIR@/src/debye \
+                          @PROJECT_SOURCE_DIR@/src/aoi_leed \
+                          @PROJECT_SOURCE_DIR@/src/aoi_rfac
 FILE_PATTERNS          = *.c \
                          *.h
 RECURSIVE              = YES
