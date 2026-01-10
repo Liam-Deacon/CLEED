@@ -405,11 +405,6 @@ bool pattern_domain_is_commensurate(const pattern_t *pat, size_t domain)
   }
 }
 
-/*! \fn spots_t *pattern_calculate_substrate_spots(const pattern_t *pat)
- *  \brief Calculate LEED spots substrate 
- *  \param *pat Pointer to pattern_t structure.
- *
- */ 
 spots_t *pattern_calculate_substrate_spots(const pattern_t *pat)
 {
   spots_t *spots;
