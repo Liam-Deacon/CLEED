@@ -14,7 +14,12 @@ endif()
 target_include_directories(cleedIO PUBLIC ${PROJECT_SOURCE_DIR}/src/include)
 target_include_directories(cleedIOStatic PUBLIC ${PROJECT_SOURCE_DIR}/src/include)
 
-target_link_libraries(cleedIO PUBLIC cleedCore)
+# On Windows, use static libraries because shared libs don't export symbols properly.
+if (WIN32)
+    target_link_libraries(cleedIO PUBLIC cleedCoreStatic)
+else()
+    target_link_libraries(cleedIO PUBLIC cleedCore)
+endif()
 target_link_libraries(cleedIOStatic PUBLIC cleedCoreStatic)
 
 if (WIN32)
