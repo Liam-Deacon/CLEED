@@ -86,6 +86,18 @@ static real sr_de_abs(real value)
   return (value < (real)0.0) ? -value : value;
 }
 
+static int sr_de_validate_pick_inputs(sr_rng *rng, int pop, int skip,
+                                      int *a, int *b, int *c)
+{
+  if (!rng || !a || !b || !c) return -1;
+  if (pop < 4) return -1;
+
+  const int excluded = (skip >= 1 && skip <= pop) ? 1 : 0;
+  if (pop - excluded < 3) return -1;
+
+  return 0;
+}
+
 /**
  * @brief Select three distinct random indices for DE mutation.
  *
@@ -115,10 +127,7 @@ static int sr_de_pick_index(sr_rng *rng, int pop, int skip, int exclude1,
 static int sr_de_pick_indices(sr_rng *rng, int pop, int skip,
                               int *a, int *b, int *c)
 {
-  if (!rng || !a || !b || !c || pop < 4) return -1;
-
-  const int excluded = (skip >= 1 && skip <= pop) ? 1 : 0;
-  if (pop - excluded < 3) return -1;
+  if (sr_de_validate_pick_inputs(rng, pop, skip, a, b, c) != 0) return -1;
 
   *a = sr_de_pick_index(rng, pop, skip, 0, 0);
   *b = sr_de_pick_index(rng, pop, skip, *a, 0);
@@ -437,10 +446,22 @@ static int sr_de_evolve_member(sr_de_state *state, int target,
   return 0;
 }
 
+static int sr_de_run_generation_inputs_ok(const sr_de_state *state,
+                                          real (*func)(const real *),
+                                          const real *best,
+                                          const real *best_val,
+                                          const int *evals)
+{
+  if (!state || !func || !best || !best_val || !evals) return 0;
+  return 1;
+}
+
 static int sr_de_run_generation(sr_de_state *state, real (*func)(const real *),
                                 real *best, real *best_val, int *evals)
 {
-  if (!state || !func || !best || !best_val || !evals) return -1;
+  if (!sr_de_run_generation_inputs_ok(state, func, best, best_val, evals)) {
+    return -1;
+  }
 
   sr_de_selection_ctx select_ctx;
   select_ctx.pop_vec = state->pop_vec;
@@ -449,7 +470,10 @@ static int sr_de_run_generation(sr_de_state *state, real (*func)(const real *),
   select_ctx.best_val = best_val;
   select_ctx.ndim = state->ndim;
 
-  for (int i = 1; i <= state->pop && *evals < state->max_evals; i++) {
+  for (int i = 1; i <= state->pop; i++) {
+    if (*evals >= state->max_evals) {
+      break;
+    }
     if (sr_de_evolve_member(state, i, &select_ctx, func, evals) != 0) {
       return -1;
     }
@@ -470,19 +494,28 @@ static int sr_de_should_stop(const sr_de_state *state, real best_val)
   return best_val >= (real)0.0 && best_val <= state->conv_tol;
 }
 
+static int sr_de_run_inputs_ok(const sr_de_state *state,
+                               real (*func)(const real *),
+                               const real *best, const real *best_val)
+{
+  if (!state || !func || !best || !best_val) return 0;
+  return 1;
+}
+
 static int sr_de_run(sr_de_state *state, real (*func)(const real *), real *best,
                      real *best_val, int *evals)
 {
-  if (!state || !func || !best || !best_val) return -1;
+  if (!sr_de_run_inputs_ok(state, func, best, best_val)) return -1;
 
   int local_evals = 0;
   if (sr_de_init_population(state, best, best_val, func, &local_evals) != 0) {
     return -1;
   }
 
-  for (int iter = 0;
-       iter < state->max_iters && local_evals < state->max_evals;
-       iter++) {
+  for (int iter = 0; iter < state->max_iters; iter++) {
+    if (local_evals >= state->max_evals) {
+      break;
+    }
     if (sr_de_run_generation(state, func, best, best_val, &local_evals) != 0) {
       return -1;
     }
