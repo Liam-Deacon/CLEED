@@ -6,7 +6,7 @@ Chapter 12: Matrix Functions
    verification.
 
 12.1 Introduction
-------------------
+-----------------
 
 In contrast to the conventional definition of matrices in C as arrays of pointers to arrays
  of numbers (integer, float, etc.), in our programs matrices are structures ``struct mat_str``
@@ -139,7 +139,7 @@ parameters (operands) depend on the purpose of the particular matrix function. T
 be either matrices or single numbers.
 
 12.4 Display and Control Functions for Matrices
-------------------------------------------------
+-----------------------------------------------
 
 The matrix functions described in this section are not thought to be used in the
 "production state" of a LEED program since they produce very large outputs. During the

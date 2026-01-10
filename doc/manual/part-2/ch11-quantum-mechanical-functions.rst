@@ -13,7 +13,7 @@ primarily Clebsch-Gordan coefficients, spherical harmonics, and spherical Hankel
 functions.
 
 11.2 Clebsch-Gordan Coefficients
----------------------------------
+--------------------------------
 
 (qmcgc.c:)
 

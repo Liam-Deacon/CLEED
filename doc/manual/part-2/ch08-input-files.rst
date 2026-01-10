@@ -86,7 +86,7 @@ Table 8.1: Sample parameter input file for p(sqrt(3) x sqrt(3)) (H2)O / Ru(0001)
   Imaginary part of optical potential (in eV).
 
 ``po: <phasestring> f f f c c c f {f f}``
-  Atom parameters in overlayer (superstructure unit cell):
+  Atom parameters in overlayer (super structure unit cell):
 
   ``<phasestring>``: Name of phase shift file. It can either be specified by the full
   path (starting with a leading slash ``/``) or by the file name body (no leading ``/``)
@@ -100,7 +100,7 @@ Table 8.1: Sample parameter input file for p(sqrt(3) x sqrt(3)) (H2)O / Ru(0001)
 
   ``c c c f {f f}``: three character specifier for input of vibrational displacements:
 
-  ``dmt f f f``: input of Debye temperature (\Theta_D in K), temperature (T in K), mass
+  ``dtm f f f``: input of Debye temperature (\Theta_D in K), temperature (T in K), mass
   (in amu). From these values the isotropic radial root mean square displacement
 
   .. math::
