@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cleed-io"
+version = "0.1.0"
+description = "Modern Input/Output Bridge for CLEED"
+authors = [
+    {name = "CLEED Contributors"}
+]
+dependencies = [
+    "ase>=3.22.0",
+    "numpy",
+    "pyyaml"
+]
+requires-python = ">=3.8"
+
+[project.scripts]
+cleed-convert = "cleed_io.cli:main"
+
+[project.optional-dependencies]
+phaseshifts = ["phaseshifts"]
