@@ -23,7 +23,7 @@ repos:
         files: ^(\.pre-commit-config\.yaml|CONTRIBUTING\.md)$
 
   - repo: https://github.com/pocc/pre-commit-hooks
-    rev: v1.3.5
+    rev: v1.5.0
     hooks:
       - id: cppcheck
         additional_dependencies: [cppcheck==1.5.1]
